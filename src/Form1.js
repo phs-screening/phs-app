@@ -15,17 +15,11 @@ function Form1() {
             <h1>Form 1</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label>Name (as in NRIC): </label>
-                <input
-                    name="nameInput"
-                    ref={register({ required: true })}
-                />
+                <input {...register('nameInput', { required: true })} />
                 <label>Birthday: </label>
-                <input
-                    name="birthdayInput"
-                    ref={register({ required: true })}
-                />
+                <input {...register('birthdayInput', { required: true })} />
                 <label>Citizenship: </label>
-                <select name="citizenshipInput" ref={register}>
+                <select {...register('citizenshipInput')}>
                     <option value="sg">Singapore Citizen</option>
                     <option value="pr">Singapore Permanent Resident</option>
                     <option value="oth">Other</option>
