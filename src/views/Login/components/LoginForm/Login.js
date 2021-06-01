@@ -1,11 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
 import './Login.css';
 
 
-function Login() {
-    const { register, handleSubmit, watch, errors } = useForm();
+function LoginForm() {
+    const { register, handleSubmit, watch } = useForm();
     const onSubmit = data => {
         console.log(data);
     }; // your form submit function which will invoke after successful validation
@@ -27,4 +26,4 @@ function Login() {
     );
 }
 
-export default Login
+export default LoginForm
