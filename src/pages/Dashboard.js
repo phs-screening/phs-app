@@ -1,0 +1,41 @@
+import { Helmet } from 'react-helmet';
+import {
+  Box,
+  Container,
+  Grid
+} from '@material-ui/core';
+import PatientTimeline from 'src/components/dashboard/PatientTimeline';
+
+const Dashboard = () => (
+  <>
+    <Helmet>
+      <title>Patient Dashboard</title>
+    </Helmet>
+    <Box
+      sx={{
+        backgroundColor: 'background.default',
+        minHeight: '100%',
+        py: 3
+      }}
+    >
+      <Container maxWidth={false}>
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            item
+            lg={8}
+            md={12}
+            xl={9}
+            xs={12}
+          >
+            <PatientTimeline />
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
+  </>
+);
+
+export default Dashboard;

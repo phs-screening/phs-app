@@ -1,26 +1,20 @@
-import React from "react";
-import { Router } from 'react-router-dom';
-import { renderRoutes } from 'react-router-config';
-import { createBrowserHistory } from 'history';
-import { ThemeProvider } from '@material-ui/styles';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { useRoutes } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core';
+import GlobalStyles from 'src/components/GlobalStyles';
+import 'src/mixins/chartjs';
+import theme from 'src/theme';
+import routes from 'src/routes';
 
-import theme from './theme';
-import routes from './routes';
-import {
-  ScrollReset,
-} from './components';
+const App = () => {
+  const routing = useRoutes(routes);
 
-const history = createBrowserHistory();
-
-function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
-        <ScrollReset />
-        {renderRoutes(routes)}
-      </Router>
+      <GlobalStyles />
+      {routing}
     </ThemeProvider>
   );
-}
+};
 
 export default App;

@@ -1,0 +1,72 @@
+import React from 'react';
+import Timeline from '@material-ui/lab/Timeline';
+import TimelineItem from '@material-ui/lab/TimelineItem';
+import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
+import TimelineConnector from '@material-ui/lab/TimelineConnector';
+import TimelineContent from '@material-ui/lab/TimelineContent';
+import TimelineDot from '@material-ui/lab/TimelineDot';
+
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+} from '@material-ui/core';
+
+const BasicTimeline = () => (
+  <Timeline>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent>History Taking</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent>Geri</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+      </TimelineSeparator>
+      <TimelineContent>Some other station</TimelineContent>
+    </TimelineItem>
+  </Timeline>
+);
+
+const PatientTimeline = (props) => (
+  <Card {...props}>
+    <CardHeader
+      action={(
+        <Button
+          href="/app/summary"
+          size="small"
+          variant="text"
+        >
+          Summary
+        </Button>
+      )}
+      title="Patient Dashboard"
+    />
+    <Divider />
+    <CardContent>
+      <Box
+        sx={{
+          height: 400,
+          position: 'relative'
+        }}
+      >
+        <BasicTimeline />
+      </Box>
+    </CardContent>
+    <Divider />
+  </Card>
+);
+
+export default PatientTimeline;
