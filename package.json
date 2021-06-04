@@ -51,6 +51,11 @@
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
+    "uniforms": "^1.31.1",
+    "uniforms-bridge-simple-schema": "^2.3.1",
+    "uniforms-bridge-simple-schema-2": "^2.3.1",
+    "uniforms-material": "^1.31.1",
+    "uniforms-unstyled": "^1.31.1",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },

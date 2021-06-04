@@ -10,6 +10,31 @@ import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Registration from 'src/pages/Registration';
 import Settings from 'src/pages/Settings';
+import DoctorSConsultForm from 'src/forms/DoctorSConsultForm';
+import FeedbackForm from 'src/forms/FeedbackForm';
+import FitForm from 'src/forms/FitForm';
+import GeriAmtForm from 'src/forms/GeriAmtForm';
+import GeriEbasDepForm from 'src/forms/GeriEbasDepForm';
+//import GeriFrailScaleForm from 'src/forms/GeriFrailScaleForm';
+import GeriGeriApptForm from 'src/forms/GeriGeriApptForm';
+import GeriOtConsultForm from 'src/forms/GeriOtConsultForm';
+import GeriOtQuestionnaireForm from 'src/forms/GeriOtQuestionnaireForm';
+import GeriParQForm from 'src/forms/GeriParQForm';
+import GeriPhysicalActivityLevelForm from 'src/forms/GeriPhysicalActivityLevelForm';
+import GeriPtConsultForm from 'src/forms/GeriPtConsultForm';
+import GeriSppbForm from 'src/forms/GeriSppbForm';
+import GeriTugForm from 'src/forms/GeriTugForm';
+import GeriVisionForm from 'src/forms/GeriVisionForm';
+import HxCancerForm from 'src/forms/HxCancerForm';
+import HxHcsrForm from 'src/forms/HxHcsrForm';
+import HxNssForm from 'src/forms/HxNssForm';
+import HxSocialForm from 'src/forms/HxSocialForm';
+import PhleboForm from 'src/forms/PhleboForm';
+import PreregForm from 'src/forms/PreregForm';
+import RegForm from 'src/forms/RegForm';
+import SocialServiceForm from 'src/forms/SocialServiceForm';
+import WceForm from 'src/forms/WceForm';
+import SimpleTabs from './forms/Geri';
 
 const routes = [
   {
@@ -22,6 +47,12 @@ const routes = [
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
+      { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
+      { path: 'feedback', element: <FeedbackForm /> },
+      { path: 'fit', element: <FitForm /> },
+      { path: 'geri', element: <SimpleTabs /> },
+      { path: 'prereg', element: <PreregForm /> },
+      { path: 'reg', element: <RegForm /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

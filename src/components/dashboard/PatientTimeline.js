@@ -22,14 +22,21 @@ const BasicTimeline = () => (
         <TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
-      <TimelineContent>History Taking</TimelineContent>
+      <TimelineContent><a href="/app/prereg">Pre-Registration</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
         <TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
-      <TimelineContent>Geri</TimelineContent>
+      <TimelineContent><a href="/app/reg">Registration</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/feedback">Feedback</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
