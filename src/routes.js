@@ -34,7 +34,7 @@ import PreregForm from 'src/forms/PreregForm';
 import RegForm from 'src/forms/RegForm';
 import SocialServiceForm from 'src/forms/SocialServiceForm';
 import WceForm from 'src/forms/WceForm';
-import SimpleTabs from './forms/Geri';
+import GeriTabs from './forms/Geri';
 
 const routes = [
   {
@@ -50,7 +50,7 @@ const routes = [
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
       { path: 'feedback', element: <FeedbackForm /> },
       { path: 'fit', element: <FitForm /> },
-      { path: 'geri', element: <SimpleTabs /> },
+      { path: 'geri', element: <GeriTabs /> },
       { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
       { path: '*', element: <Navigate to="/404" /> }

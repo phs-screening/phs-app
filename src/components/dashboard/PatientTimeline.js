@@ -36,6 +36,13 @@ const BasicTimeline = () => (
         <TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
+      <TimelineContent><a href="/app/geri">Geriatrics</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
       <TimelineContent><a href="/app/feedback">Feedback</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
