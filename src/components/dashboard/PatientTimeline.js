@@ -36,7 +36,49 @@ const BasicTimeline = () => (
         <TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
+      <TimelineContent><a href="/app/hxtaking">History Taking</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/fit">FIT</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/wce">WCE</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/phlebo">Phlebotomy</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
       <TimelineContent><a href="/app/geri">Geriatrics</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/doctorsconsult">Doctor's Consult</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent><a href="/app/socialservice">Social Service</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
@@ -49,7 +91,7 @@ const BasicTimeline = () => (
       <TimelineSeparator>
         <TimelineDot />
       </TimelineSeparator>
-      <TimelineContent>Some other station</TimelineContent>
+      <TimelineContent>END</TimelineContent>
     </TimelineItem>
   </Timeline>
 );
@@ -72,8 +114,8 @@ const PatientTimeline = (props) => (
     <CardContent>
       <Box
         sx={{
-          height: 400,
-          position: 'relative'
+          height: "auto",
+          position: "relative"
         }}
       >
         <BasicTimeline />
