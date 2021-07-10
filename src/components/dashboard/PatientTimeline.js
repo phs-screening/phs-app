@@ -36,6 +36,13 @@ const BasicTimeline = () => (
         <TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
+      <TimelineContent><a href="/app/phlebo">Phlebotomy</a></TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
       <TimelineContent><a href="/app/hxtaking">History Taking</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -51,13 +58,6 @@ const BasicTimeline = () => (
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/wce">WCE</a></TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineSeparator>
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent><a href="/app/phlebo">Phlebotomy</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
