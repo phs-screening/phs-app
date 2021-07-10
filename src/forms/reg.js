@@ -1,31 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import SimpleSchema from 'simpl-schema';
 
-import AutoForm from 'uniforms-material/AutoForm';
-import AutoField from 'uniforms-material/AutoField';
-import TextField from 'uniforms-material/TextField';
-import SubmitField from 'uniforms-material/SubmitField';
-import SelectField from 'uniforms-material/SelectField';
-import HiddenField from 'uniforms-material/HiddenField';
-import NumField from 'uniforms-material/NumField';
-import ListField from 'uniforms-material/ListField';
-import DateField from 'uniforms-material/DateField';
-import RadioField from 'uniforms-material/RadioField';
-import BoolField from 'uniforms-material/BoolField';
-import LongTextField from 'uniforms-material/LongTextField';
-
-import BaseField from 'uniforms/BaseField';
-import nothing from 'uniforms/nothing';
-import {Children} from 'react';
-import { Radio } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
+//import { AutoForm } from 'uniforms';
+import {
+	TextField,
+	SelectField,
+	RadioField,
+	BoolField,
+	LongTextField
+  } from 'uniforms-material';
 
 
 export const schema = new SimpleSchema({
 	registrationQ1: {
 	type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false
 	}, registrationQ2: {
-	type: String, allowedValues: ["Chinese 华裔", "Malay 巫裔", "Indian 印裔", "Eurasian 欧亚裔", "Others 其他 (please specify): (insert textbox here)"], optional: false
+	type: String, allowedValues: ["Chinese 华裔", "Malay 巫裔", "Indian 印裔", "Eurasian 欧亚裔", "Others 其他"], optional: false
 	}, registrationQ3: {
 	type: String, allowedValues: ["Singapore Citizen 新加坡公民", "Singapore Permanent Resident (PR) \n新加坡永久居民"], optional: false
 	}, registrationQ4: {
@@ -41,13 +31,15 @@ export const schema = new SimpleSchema({
 	}, registrationQ9: {
 	type: String, allowedValues: ["Yes", "No"], optional: false
 	}, registrationQ10: {
-	type: String, allowedValues: ["Bukit Batok Medical Clinic \nBlk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic\nBlk 644 Bukit Batok Central,\xa0#01-70", "Lai Medical Clinic\nBlk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic\n518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic\nBlk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery\nBlk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic\n#04-01 Grantral Mall @ Clementi\n3151 Commonwealth Ave West"], optional: false
+	type: String, allowedValues: ["Bukit Batok Medical Clinic \nBlk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic\nBlk 644 Bukit Batok Central,\xa0#01-70", "Lai Medical Clinic\nBlk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic\n518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic\nBlk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery\nBlk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic\n#04-01 Grantral Mall @ Clementi\n3151 Commonwealth Ave West"], optional: true
 	}, registrationQ11: {
 	type: String, allowedValues: ["English", "Mandarin", "Malay", "Tamil"], optional: false
 	}, registrationQ12: {
 	type: Boolean, label: "I have read and acknowledged the eligibility criteria for Phlebotomy. 我知道抽血的合格标准。", optional: false
 	}, registrationQ13: {
 	type: Boolean, label: "I agree and consent to the above.", optional: false
+	}, registrationQ14: {
+	type: String, optional: true
 	}
 	}
 )
@@ -59,7 +51,8 @@ export const layout = (
 		<SelectField name="registrationQ1" />
 		Race 种族
 		<RadioField name="registrationQ2" />
-		Nationality 国籍 <br />Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health<br />screening
+		<LongTextField name="registrationQ14" />
+		Nationality 国籍 <br />Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health screening
 		<RadioField name="registrationQ3" />
 		Marital Status 婚姻状况
 		<SelectField name="registrationQ4" />

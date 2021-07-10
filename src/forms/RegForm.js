@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 
-import AutoForm from 'uniforms-material/AutoForm';
-import SubmitField from 'uniforms-material/SubmitField';
-import ErrorsField from 'uniforms-material/ErrorsField';
+import { AutoForm } from 'uniforms';
+import { SubmitField, ErrorsField } from 'uniforms-material';
 
 import { schema, layout } from './reg.js';
 
 class RegForm extends Component {
 
     render() {
-        const form_schema = schema
+        const form_schema = new SimpleSchema2Bridge(schema)
         const form_layout = layout
         const newForm = () => (
           <AutoForm
