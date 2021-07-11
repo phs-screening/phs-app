@@ -21,6 +21,9 @@ const useStyles = makeStyles(() => createStyles({
     a: {
       textDecoration: 'none'
     },
+    form: {
+      padding: '50px'
+    },
     '#root': {
       height: '100%',
       width: '100%'
