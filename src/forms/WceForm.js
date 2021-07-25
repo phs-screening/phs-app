@@ -9,6 +9,8 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 
 import { schema, layout } from './wce';
 
+import '../Snippet.css';
+
 class WceForm extends Component {
 
     render() {
@@ -37,9 +39,18 @@ class WceForm extends Component {
         );
         
         return (
-          <Paper elevation={2} p={0} m={0}>
-            {newForm()}
-          </Paper>
+          <snippet-container>
+
+              <Paper className="snippet-item" elevation={2} p={0} m={0}>
+                {newForm()}
+              </Paper>
+
+
+              <Paper className="snippet-item" elevation={2} p={0} m={0}>
+                <h2>Snippets appear here</h2>
+              </Paper>
+
+          </snippet-container>
         );
       }
 }
