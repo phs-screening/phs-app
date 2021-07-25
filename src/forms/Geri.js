@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import GeriAmtForm from 'src/forms/GeriAmtForm';
 import GeriEbasDepForm from 'src/forms/GeriEbasDepForm';
-//import GeriFrailScaleForm from 'src/forms/GeriFrailScaleForm'; //not working yet
+import GeriFrailScaleForm from 'src/forms/GeriFrailScaleForm'; //not working yet
 import GeriGeriApptForm from 'src/forms/GeriGeriApptForm';
 import GeriOtConsultForm from 'src/forms/GeriOtConsultForm';
 import GeriOtQuestionnaireForm from 'src/forms/GeriOtQuestionnaireForm';
@@ -101,7 +101,7 @@ export default function GeriTabs() {
         <GeriPhysicalActivityLevelForm />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <GeriPhysicalActivityLevelForm />
+        <GeriFrailScaleForm />
       </TabPanel>
       <TabPanel value={value} index={6}>
         <GeriOtQuestionnaireForm />
