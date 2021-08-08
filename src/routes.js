@@ -30,7 +30,6 @@ const routes = [
       { path: 'summary', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
       { path: 'feedback', element: <FeedbackForm /> },
