@@ -58,34 +58,58 @@ export const schema = new SimpleSchema({
 		type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
 		}, hxNssQ21: {
 		type: String, allowedValues: ["Yes", "No"], optional: false
+		}, hxNssQ24: {
+			type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )
 
 export const layout = (
     <Fragment>
-		<h2>HISTORY TAKING PART 2: NSS HEALTH AND LIFESTYLE QUESTIONNAIRE</h2>
-		<h3>Please go through NSS Questionnaire now.</h3>
-		<h2>1. Past Medical History</h2>
-		1a. Has a doctor ever told you that you have the following condition? Please tick the appropriate box(es) if the answer is "Yes" to any of the conditions listed below, or tick the last box if you have none.
+		<h2>HISTORY TAKING PART 2: PAST MEDICAL HISTORY</h2>
+        <h3 style={{color: "red"}}>Please go through NSS Questionnaire now.</h3>
+		<br/><br/>
+        <h2>1. Past Medical History</h2>
+        1a. Has a doctor ever told you that you have the following condition? Please tick the appropriate box(es) if the answer is "Yes" to any of the conditions listed below, or tick the last box if you have none.
 		<SelectField name="hxNssQ1" checkboxes="true" label="Hx NSS Q1" />
-		For respondent with known hypertension, diabetes, high cholesterol and stroke only.<br />2a. Are you currently on follow up with a doctor for the existing conditions you have indicated?
+		<br/><br/>
+		<p style={{color: "red"}}><b>For respondent with known hypertension, diabetes, high cholesterol and stroke only.</b></p>
+		<br />2a. Are you currently on follow up with a doctor for the existing conditions you have indicated?
+		<br/>
 		<RadioField name="hxNssQ2" label="Hx NSS Q2"/>
+
+		BELOW IS TO BE POP UP
+		<br/>
+
+
 		(Only proceed when answered "Yes" to the previous question)
 		<SelectField name="hxNssQ3" checkboxes="true" label="Hx NSS Q3" />
+		
 		2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?
 		<SelectField name="hxNssQ4" checkboxes="true" label="Hx NSS Q4" />
-		2c. Are you currently being prescribed any medication for any of the conditions below?<TextField name="hxNssQ5" label="Hx NSS Q5" />
-		Hypertension** (High Blood Pressure)
-		<RadioField name="hxNssQ5" label="Hx NSS Q5"/>
+		<br/>
+
+
+
+
+		2c. Are you currently being prescribed any medication for any of the conditions below? Hypertension** (High Blood Pressure)<TextField name="hxNssQ5" label="Hx NSS Q5" />
 		Diabetes** (High Blood Sugar)
 		<RadioField name="hxNssQ6" label="Hx NSS Q6"/>
 		High Cholesterol**
 		<RadioField name="hxNssQ7" label="Hx NSS Q7"/>
-		Stroke** (including transient ischaemic attack)
+		Stroke** <span style={{color: "blue"}}><b>(including transient ischaemic attack)</b></span>
 		<RadioField name="hxNssQ8" label="Hx NSS Q8"/>
+
 		<h3>PLEASE TAKE 2ND BP READING NOW AND RECORD ON FORM A.<br /><br /></h3>
-		<h3>Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> <br />REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)<br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br /><br />HYPERTENSIVE EMERGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND SYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ASK THE DOCTOR TO COME AND REVIEW!<br /> <br />HYPERTENSIVE URGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND ASYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ESCORT TO DC DIRECTLY!<br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />RISK OF HYPERTENSIVE CRISIS<br />• IF SYSTOLIC between 160 - 180 mmHg <br />• IF ASYMPTOMATIC, continue clerking. <br />• IF SYMPTOMATIC, ESCORT TO DC DIRECTLY!<br /><br />If systolic between 140 - 160 mmHg:<br />o Ask for:<br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)<br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up? If non-compliant or not on regular follow-up, refer to DC (chronic HTN, uncontrolled).</h3>
+		<h3>Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> Please tick to highlight if you feel <b>BLOOD PRESSURE</b> requires closer scrutiny by doctors later <br /><br />
+		<RadioField name="hxNssQ24" label="Hx NSS Q24"/>
+		
+		
+		BELOW IS TO BE POP UP
+		<br/>
+		
+		
+		<br />REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)<br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br /><br />HYPERTENSIVE EMERGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND SYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ASK THE DOCTOR TO COME AND REVIEW!<br /> <br />HYPERTENSIVE URGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND ASYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ESCORT TO DC DIRECTLY!<br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />RISK OF HYPERTENSIVE CRISIS<br />• IF SYSTOLIC between 160 - 180 mmHg <br />• IF ASYMPTOMATIC, continue clerking. <br />• IF SYMPTOMATIC, ESCORT TO DC DIRECTLY!<br /><br />If systolic between 140 - 160 mmHg:<br />o Ask for:<br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)<br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up? If non-compliant or not on regular follow-up, refer to DC (chronic HTN, uncontrolled).</h3>
 		<h3>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h3>
 		2d. Are you on any types of medications not listed above? (includes use of traditional medicine)
 		<RadioField name="hxNssQ9" label="Hx NSS Q9"/>

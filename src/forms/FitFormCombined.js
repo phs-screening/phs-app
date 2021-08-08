@@ -23,9 +23,9 @@ function PopupText(props) {
     const [{ value: fitQ1value }] = useField('fitQ1', {});
     if (fitQ1value==="Yes") {
         return (
-            <div>
-                <h3>REFER TO DR CONSULT by indicating on: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation row<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation </h3>
-            </div>
+            <Fragment>
+                <b>REFER TO DR CONSULT</b> by indicating on: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation row<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            </Fragment>
         );
     }
     return null;
@@ -50,14 +50,21 @@ class FitForm extends Component {
             >
                 <Fragment>
                     <h2>PARTICIPANT IDENTIFICATION</h2>
-                    <h3>Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N B. Surname followed by Initials C. Last 4 digits of Participant's NRIC and Letter</h3>
+                    <h3><span style={{color: "red"}}>Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N B. Surname followed by Initials C. Last 4 characters of Participant's NRIC and Letter</span></h3>
                     <h2>1. NSS CANCER SCREENING PRACTICES SURVEY.</h2>
-                    1. For respondent aged 50 and above only, unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
+                    1. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
 
-                    2. For respondent aged 50 and above only, unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
+                    <br/> <span style={{color: "green"}}>HERE IS TO PULL INFO FROM PREV QN </span><br/>
 
-                    <h3>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives. </h3>
-                    Does participant has a history of cancer or his/her family history requires further scrutiny by doctors? (If indicated 'Yes', please refer to doctor's consult by following the steps below.)
+                    <br/>
+                    2. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
+
+                    <br/> <span style={{color: "green"}}>HERE IS TO PULL INFO FROM PREV QN </span><br/>
+                    
+                    <br/>
+                    <h3><span style={{color: "red"}}>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives.</span> </h3>
+                    <br/>
+                    Does participant have a history of cancer or his/her family history requires further scrutiny by doctors? <span style={{color: "red"}}><b>(If indicated 'Yes', please refer to doctor's consult by following the steps below.)</b></span>
                     <RadioField name="fitQ1" label="FIT Q1" />
                     <PopupText />
                     3. Was participant issued 2 FIT kits?
