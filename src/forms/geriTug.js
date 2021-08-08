@@ -16,7 +16,7 @@ export const schema = new SimpleSchema({
 		}, geriTugQ4: {
 		type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
 		}, geriTugQ5: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )

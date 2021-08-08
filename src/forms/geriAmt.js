@@ -7,31 +7,31 @@ import { TextField, RadioField } from 'uniforms-material';
 
 export const schema = new SimpleSchema({
 	geriAmtQ1: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ2: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ3: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ4: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ5: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ6: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ7: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ8: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ9: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ10: {
-		type: Boolean, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
+		type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
 		}, geriAmtQ11: {
 		type: String, allowedValues: ["0 to 6 years of education", "More than 6 years of education"], optional: false
 		}, geriAmtQ12: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriAmtQ13: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )

@@ -7,19 +7,19 @@ import { TextField, SelectField, RadioField } from 'uniforms-material';
 
 export const schema = new SimpleSchema({
 	geriOtQuestionnaireQ1: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtQuestionnaireQ2: {
-		type: Boolean, allowedValues: ["Yes (Please specify : __________)", "No"], optional: false
+		type: String, allowedValues: ["Yes (Please specify : __________)", "No"], optional: false
 		}, geriOtQuestionnaireQ3: {
 		type: String, optional: true
 		}, geriOtQuestionnaireQ4: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtQuestionnaireQ5: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtQuestionnaireQ6: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtQuestionnaireQ7: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtQuestionnaireQ8: {
 		type: Array, optional: true
 		}, "geriOtQuestionnaireQ8.$": {
