@@ -13,6 +13,7 @@ import Settings from 'src/pages/Settings';
 import DoctorSConsultForm from 'src/forms/DoctorSConsultForm';
 import FeedbackForm from 'src/forms/FeedbackForm';
 import FitForm from 'src/forms/FitForm';
+import FitFormCombined from 'src/forms/FitFormCombined';
 import PhleboForm from 'src/forms/PhleboForm';
 import PreregForm from 'src/forms/PreregForm';
 import RegForm from 'src/forms/RegForm';
@@ -33,7 +34,7 @@ const routes = [
       { path: 'settings', element: <Settings /> },
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
       { path: 'feedback', element: <FeedbackForm /> },
-      { path: 'fit', element: <FitForm /> },
+      { path: 'fit', element: <FitFormCombined /> },
       { path: 'geri', element: <GeriTabs /> },
       { path: 'hxtaking', element: <HxTabs /> },
       { path: 'phlebo', element: <PhleboForm />},

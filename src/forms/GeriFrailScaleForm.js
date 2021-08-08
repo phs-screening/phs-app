@@ -7,11 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 
-import { schema, layout } from './wce';
+import { schema, layout } from './geriFrailScale';
 
-import '../Snippet.css';
-
-class WceForm extends Component {
+class GeriFrailScaleForm extends Component {
 
     render() {
         const form_schema = new SimpleSchema2Bridge(schema)
@@ -39,20 +37,11 @@ class WceForm extends Component {
         );
         
         return (
-          <snippet-container>
-
-              <Paper className="snippet-item" elevation={2} p={0} m={0}>
-                {newForm()}
-              </Paper>
-
-
-              <Paper className="snippet-item" elevation={2} p={0} m={0}>
-                <h2>Snippets appear here</h2>
-              </Paper>
-
-          </snippet-container>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
         );
       }
 }
 
-export default WceForm;
+export default GeriFrailScaleForm;
