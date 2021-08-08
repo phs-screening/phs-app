@@ -58,8 +58,10 @@ export const schema = new SimpleSchema({
 		type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
 		}, hxNssQ21: {
 		type: String, allowedValues: ["Yes", "No"], optional: false
+		}, hxNssQ23: {
+		type: String, optional: true
 		}, hxNssQ24: {
-			type: String, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )
@@ -85,7 +87,7 @@ export const layout = (
 		(Only proceed when answered "Yes" to the previous question)
 		<SelectField name="hxNssQ3" checkboxes="true" label="Hx NSS Q3" />
 		
-		2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?
+		<p>2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?</p>
 		<SelectField name="hxNssQ4" checkboxes="true" label="Hx NSS Q4" />
 		<br/>
 
@@ -101,52 +103,105 @@ export const layout = (
 		<RadioField name="hxNssQ8" label="Hx NSS Q8"/>
 
 		<h3>PLEASE TAKE 2ND BP READING NOW AND RECORD ON FORM A.<br /><br /></h3>
-		<h3>Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> Please tick to highlight if you feel <b>BLOOD PRESSURE</b> requires closer scrutiny by doctors later <br /><br />
+		Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> Please tick to highlight if you feel <b>BLOOD PRESSURE</b> requires closer scrutiny by doctors later <br /><br />
 		<RadioField name="hxNssQ24" label="Hx NSS Q24"/>
 		
 		
 		BELOW IS TO BE POP UP
 		<br/>
 		
+		<Fragment>
+		<b>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
+		<br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  
+		<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+		<br /><br />
+		<span style={{color: "red"}}><u>HYPERTENSIVE EMERGENCY</u>
+		<br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark><u>SYMPTOMATIC</u></mark> (make sure pt has rested and 2nd reading was taken)
+		<br /><mark>o ASK THE DOCTOR TO COME AND REVIEW!</mark><br /> 
+		<br />
+		<u>HYPERTENSIVE URGENCY</u>
+		<br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark>ASYMPTOMATIC</mark> (make sure pt has rested and 2nd reading was taken)
+		<br />o ESCORT TO DC DIRECTLY!
+		<br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />
+		<u>RISK OF HYPERTENSIVE CRISIS</u>
+		<br />• IF SYSTOLIC between <mark>160 - 180 mmHg</mark> 
+		<br />• IF <mark>ASYMPTOMATIC</mark>, continue clerking. 
+		<br />• IF <mark>SYMPTOMATIC</mark>, ESCORT TO DC DIRECTLY!
+		<br /><br />
+		<u>If systolic between 140 - 160 mmHg: </u></span>
+		<br />o Ask for:
+		<br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)
+		<br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up?</b>
+        </Fragment>
 		
-		<br />REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)<br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br /><br />HYPERTENSIVE EMERGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND SYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ASK THE DOCTOR TO COME AND REVIEW!<br /> <br />HYPERTENSIVE URGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND ASYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ESCORT TO DC DIRECTLY!<br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />RISK OF HYPERTENSIVE CRISIS<br />• IF SYSTOLIC between 160 - 180 mmHg <br />• IF ASYMPTOMATIC, continue clerking. <br />• IF SYMPTOMATIC, ESCORT TO DC DIRECTLY!<br /><br />If systolic between 140 - 160 mmHg:<br />o Ask for:<br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)<br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up? If non-compliant or not on regular follow-up, refer to DC (chronic HTN, uncontrolled).</h3>
-		<h3>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h3>
-		2d. Are you on any types of medications not listed above? (includes use of traditional medicine)
+		<br/><br/>
+
+		<span style={{color: "blue"}}><h3>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h3></span>
+        <br/><br/>
+		<span style={{color: "blue"}}><b>2d. Are you on any types of medications not listed above? (includes use of traditional medicine)</b></span>
 		<RadioField name="hxNssQ9" label="Hx NSS Q9"/>
 		Please specify:
 		<LongTextField name="hxNssQ10" label="Hx NSS Q10" />
-		2e. Please tick to highlight if you feel 'Past Medical History' requires closer scrutiny by doctors later. (If indicated 'Yes', please complete the question below.)
+
+		<span style={{color: "blue"}}><b>2e. Please tick to highlight if you feel 'Past Medical History' requires closer scrutiny by doctors later. (If indicated 'Yes', please complete the question below.)</b></span>
 		<RadioField name="hxNssQ11" label="Hx NSS Q11"/>
-		<h3>Only complete Q2f if you are referring participant to Doctor's Consultation station.</h3>
-		<h3>2f. Based on participant's history taken thus far, please summarise his/her RELEVANT Past Medical History briefly for the doctors to refer to during doctors consultation.<br />1) Conditions<br />2) Duration <br />3) Control <br />4) Compliance <br />5) Complications <br />6) Follow up route (specifiy whether GP/Polyclinic/FMC/SOC) <br /> <br />If participant is not engaged with any follow-up, ask "what is the reason that you re not following up with your doctor for your existing conditions?" <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility issues, financial issues, fear of doctors/ clinics/ hospitals etc <br /><br />If a participant is not compliant to medications, do probe further on his/her reasons for not consuming medications as prescribed. <br />- Medication not effective? Can be managed without medication? Forget to take? Lost/Ran out of medication?</h3>
-		 
-		<LongTextField name="hxNssQ12" label="Hx NSS Q12" />
-		<h3>Based on participant medical hx, please recommend relevant stations:<br />1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />3) Relevant exhibition booths on page 2 of form A. Indicate accordingly for past history of DM / CVS Disease (including HTN, HLD, IHD) / CVA.<br /><br />For participant with DM, refer to DC if:<br />• Symptomatic, and non-compliant <br />• Asymptomatic, but non-compliant<br />Also, refer to DC if participant has not been diagnosed with DM, but has signs of DM (polyuria, polydipsia, periphery neuropathy, blurring of vision etc)</h3>
-		<h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3>
-		3. Have your immediate family members (parents/ siblings/ children) ever been diagnosed/ told by a doctor that they have any of the chronic condition(s) listed below? Please tick if the answer is "Yes" to any of the conditions. You may select more than one. Please tick the last box if they have none.
+
+		BELOW IS TO BE POP UP
+		<br/>
+
+
+		<Fragment>
+            <h2>Only complete Q2f if you are referring participant to Doctor's Consultation station.</h2>
+            <span style={{color: "blue"}}><b>2f. Based on <u>participant's history taken thus far</u>, please summarise his/her <mark>RELEVANT</mark> Past Medical History briefly for the doctors to refer to during doctors consultation.
+			<br />1) Conditions
+			<br />2) Duration 
+			<br />3) Control 
+			<br />4) Compliance 
+			<br />5) Complications 
+			<br />6) Follow up route (specifiy whether GP/Polyclinic/FMC/SOC)</b></span> <br /> <br />If participant is not engaged with any follow-up, ask "what is the reason that you're not following up with your doctor for your existing conditions?" 
+			<br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility issues, financial issues, fear of doctors/ clinics/ hospitals etc 
+			<br /><br />If a participant is not compliant to medications, do probe further on his/her reasons for not consuming medications as prescribed. 
+			<br />- Medication not effective? Can be managed without medication? Forget to take? Lost/Ran out of medication?
+            <LongTextField name="hxNssQ12" label="Hx NSS Q12" /><br/><br/>
+        </Fragment>
+
+
+
+		<b>Based on participant medical hx, please recommend relevant stations:</b><br />1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />3) Relevant exhibition booths on page 2 of form A. Indicate accordingly for past history of DM / CVS Disease (including HTN, HLD, IHD) / CVA.<br /><br />For participant with DM, refer to DC if:<br />• Symptomatic, and non-compliant <br />• Asymptomatic, but non-compliant<br />Also, refer to DC if participant has not been diagnosed with DM, but has signs of DM (polyuria, polydipsia, periphery neuropathy, blurring of vision etc)
+        <span style={{color: "red"}}><h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3></span>
+        3. Have your immediate family members (parents/ siblings/ children) ever been diagnosed/ told by a doctor that they have any of the chronic condition(s) listed below? Please tick if the answer is "Yes" to any of the conditions. You may select more than one. Please tick the last box if they have none.
 		<SelectField name="hxNssQ13" checkboxes="true" label="Hx NSS Q13" />
+		Please specify:
+        <LongTextField name="hxNssQ23" label="Hx NSS Q23" />
+		<br/><br/>
 		4. Do you smoke?
 		<RadioField name="hxNssQ14" label="Hx NSS Q14"/>
 		<h3>If participant is a smoker, recommend HPB iQuit exhibition booth on Page 2 of Form A.</h3>
 		5. Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)
 		<RadioField name="hxNssQ15" label="Hx NSS Q15"/>
+		<br/><br/>
 		6. Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.
 		<SelectField name="hxNssQ16" checkboxes="true" label="Hx NSS Q16" />
+		<br/>
 		7. Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
 		<RadioField name="hxNssQ17" label="Hx NSS Q17"/>
-		<h3>Counsel for positive diet and lifestyle modification if deemed necessary. Refer to dietitian at Doctor's Consultation station, Indicate: 1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A 2) Write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br /><br />Indicate Smoking/Alcohol Consumption on Page 2 of Form A for exhibition ambassadors if applicable. Smoking cessation engagement by HPB iQuit.<br />Recommend for lifestyle follow up on Page 2 of Form A if you deem necessary.</h3>
-		8. When was the last time you had a blood test to check for hypertension, diabetes and cholesterol? Please answer all.<TextField name="hxNssQ18" label="Hx NSS Q18" />
-		Hypertension
+		<b>Counsel for positive diet and lifestyle modification if deemed necessary. Refer to <span style={{color: "red"}}>dietitian</span> at Doctor's Consultation station, Indicate:</b><br/>
+        1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A<br/>2) Write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br /><br />
+        Indicate Smoking/Alcohol Consumption on Page 2 of Form A for exhibition ambassadors if applicable. Smoking cessation engagement by HPB iQuit.<br />Recommend for lifestyle follow up on Page 2 of Form A if you deem necessary.<br/><br/><br/><br/>
+        8. When was the last time you had a blood test to check for hypertension, diabetes and cholesterol? Please answer all.
+		<br/>
+        Hypertension
 		<RadioField name="hxNssQ18" label="Hx NSS Q18"/>
 		Diabetes
 		<RadioField name="hxNssQ19" label="Hx NSS Q19"/>
 		High Cholesterol
 		<RadioField name="hxNssQ20" label="Hx NSS Q20"/>
-		<h3>Please encourage participants to go for Phlebotomy screening every 3 years if relevant risk factors absent. If present, counsel for yearly screening.</h3>
+		
+		<span style={{color: "red"}}><h3>Please encourage participants to go for Phlebotomy screening every 3 years if relevant risk factors absent. If present, counsel for yearly screening.</h3></span>
+		<br/>
 		9. Has your doctor told you that the blood vessels to your limbs are diseased and have become narrower (periphery artery disease) or that any other major blood vessels in your body have weakened walls that have "ballooned out" (aneurysm)?
 		<RadioField name="hxNssQ21" label="Hx NSS Q21"/>
 		<h3>PLEASE TAKE 3RD BP READING (IF MORE THAN 5MMHG) AND RECORD ON FORM A.</h3>
-		<h3>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h3>
 		
 	</Fragment>
 
