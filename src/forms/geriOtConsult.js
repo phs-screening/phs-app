@@ -8,11 +8,11 @@ export const schema = new SimpleSchema({
 	geriOtConsultQ1: {
 		type: String, optional: false
 		}, geriOtConsultQ2: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtConsultQ3: {
 		type: String, optional: true
 		}, geriOtConsultQ4: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriOtConsultQ5: {
 		type: String, optional: true
 		}, geriOtConsultQ6: {

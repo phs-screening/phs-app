@@ -26,7 +26,7 @@ export const schema = new SimpleSchema({
 		}, geriSppbQ10: {
 		type: String, allowedValues: ["High Falls Risk (score ≤ 6)", "Low Falls Risk (score > 6)"], optional: false
 		}, geriSppbQ11: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )

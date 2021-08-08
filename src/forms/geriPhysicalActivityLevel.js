@@ -14,9 +14,9 @@ export const schema = new SimpleSchema({
 		}, geriPhysicalActivityLevelQ4: {
 		type: String, allowedValues: ["0 (Nothing at all)", "1 (Very light)", "2 (Fairly light)", "3 (Moderate)", "4 (Somewhat hard)", "5 (Hard)", "6.0", "7 (Very Hard)", "8.0"], optional: false
 		}, geriPhysicalActivityLevelQ5: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriPhysicalActivityLevelQ6: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}
 	}
 )

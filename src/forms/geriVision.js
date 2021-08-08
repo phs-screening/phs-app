@@ -7,7 +7,7 @@ import { TextField, SelectField, RadioField } from 'uniforms-material';
 
 export const schema = new SimpleSchema({
 	geriVisionQ1: {
-		type: Boolean, allowedValues: ["Yes (Specify in textbox )", "No"], optional: false
+		type: String, allowedValues: ["Yes (Specify in textbox )", "No"], optional: false
 		}, geriVisionQ2: {
 		type: String, optional: true
 		}, geriVisionQ3: {

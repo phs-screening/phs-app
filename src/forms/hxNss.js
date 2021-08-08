@@ -9,7 +9,7 @@ export const schema = new SimpleSchema({
 	hxNssQ1: {
 		type: Array, optional: false
 		}, "hxNssQ1.$": {
-		type: String, allowedValues: ["Hypertension\n(Please proceed to Q2)", "Diabetes\n(Please proceed to Q2)", "High Cholesterol\n(Please proceed to Q2)", "Stroke (including transient ischaemic attack) \n(Please proceed to Q2)", "Chronic Kidney Disease\n(Please proceed to Q2d)", "No, I don\t have any of the above \n(Please proceed to Q2d)"]
+		type: String, allowedValues: ["Hypertension\n(Please proceed to Q2)", "Diabetes\n(Please proceed to Q2)", "High Cholesterol\n(Please proceed to Q2)", "Stroke (including transient ischaemic attack) \n(Please proceed to Q2)", "Chronic Kidney Disease\n(Please proceed to Q2d)", "No, I don't have any of the above \n(Please proceed to Q2d)"]
 		}, hxNssQ2: {
 		type: String, allowedValues: ["Yes (please answer question below)", "No", "Not Applicable"], optional: false
 		}, hxNssQ3: {
@@ -94,7 +94,7 @@ export const layout = (
 
 
 
-		2c. Are you currently being prescribed any medication for any of the conditions below? Hypertension** (High Blood Pressure)<TextField name="hxNssQ5" label="Hx NSS Q5" />
+		2c. Are you currently being prescribed any medication for any of the conditions below? Hypertension** (High Blood Pressure)<RadioField name="hxNssQ5" label="Hx NSS Q5" />
 		Diabetes** (High Blood Sugar)
 		<RadioField name="hxNssQ6" label="Hx NSS Q6"/>
 		High Cholesterol**

@@ -39,9 +39,9 @@ export const schema = new SimpleSchema({
 		}, geriEbasDepQ16: {
 		type: String, optional: false
 		}, geriEbasDepQ17: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriEbasDepQ18: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriEbasDepQ19: {
 		type: String, optional: true
 		}

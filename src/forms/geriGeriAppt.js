@@ -7,13 +7,13 @@ import { SelectField, RadioField } from 'uniforms-material';
 
 export const schema = new SimpleSchema({
 	geriGeriApptQ1: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriGeriApptQ2: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriGeriApptQ3: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriGeriApptQ4: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: false
+		type: String, allowedValues: ["Yes", "No"], optional: false
 		}, geriGeriApptQ5: {
 		type: Array, optional: true
 		}, "geriGeriApptQ5.$": {
@@ -21,9 +21,9 @@ export const schema = new SimpleSchema({
 		}, geriGeriApptQ6: {
 		type: String, allowedValues: ["Yes, requirement met.", "No, requirement not met."], optional: false
 		}, geriGeriApptQ7: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: true
+		type: String, allowedValues: ["Yes", "No"], optional: true
 		}, geriGeriApptQ8: {
-		type: Boolean, allowedValues: ["Yes", "No"], optional: true
+		type: String, allowedValues: ["Yes", "No"], optional: true
 		}
 	}
 )
