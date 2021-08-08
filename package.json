@@ -32,6 +32,7 @@
     "@material-ui/icons": "^5.0.0-alpha.28",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/styles": "^4.10.0",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "clsx": "^1.1.1",
     "formik": "^2.1.5",
