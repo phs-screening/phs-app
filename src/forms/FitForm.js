@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import SimpleSchema from 'simpl-schema';
-import { useField } from 'uniforms';
 
 import { AutoForm } from 'uniforms';
 import { RadioField } from 'uniforms-material';
@@ -10,6 +9,8 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 
+import PopupText from '../utils/popupText';
+
 const schema = new SimpleSchema({
     fitQ1: {
         type: String, allowedValues: ["Yes", "No"], optional: false
@@ -18,19 +19,6 @@ const schema = new SimpleSchema({
     }
 }
 )
-
-function PopupText(props) {
-    const [{ value: fitQ1value }] = useField('fitQ1', {});
-    if (fitQ1value==="Yes") {
-        return (
-            <Fragment>
-                <b>REFER TO DR CONSULT</b> by indicating on: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation row<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
-            </Fragment>
-        );
-    }
-    return null;
-}
-
 
 class FitForm extends Component {
 
@@ -66,7 +54,9 @@ class FitForm extends Component {
                     <br/>
                     Does participant have a history of cancer or his/her family history requires further scrutiny by doctors? <span style={{color: "red"}}><b>(If indicated 'Yes', please refer to doctor's consult by following the steps below.)</b></span>
                     <RadioField name="fitQ1" label="FIT Q1" />
-                    <PopupText />
+                    <PopupText qnNo="fitQ1" triggerValue="Yes"> 
+                        <b>REFER TO DR CONSULT</b> by indicating on: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation row<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+                    </PopupText>
                     3. Was participant issued 2 FIT kits?
                     <RadioField name="fitQ2" label="FIT Q2" />
 
