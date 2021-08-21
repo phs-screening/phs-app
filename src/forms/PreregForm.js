@@ -9,6 +9,8 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 
 import { schema, layout } from './prereg.js';
 
+import { preRegister } from '../api/api.js';
+
 class PreregForm extends Component {
 
     render() {
@@ -17,13 +19,16 @@ class PreregForm extends Component {
         const newForm = () => (
           <AutoForm
             schema={form_schema}
-            onSubmit={console.log}
-            //onSubmit={this.handleSubmit}
+            onSubmit={async (model) => {
+                console.log(model);
+                const preRegResponse = await preRegister(model);
+                console.log(preRegResponse);
+            }}
             onSubmitSuccess={() => {
                 alert("Successful");
               }}
             onSubmitFailure={() => {
-                alert('Unsuccessful')
+                alert('Unsuccessful');
               }}
           >
             {form_layout}
