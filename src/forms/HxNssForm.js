@@ -9,6 +9,8 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { SelectField, RadioField, LongTextField } from 'uniforms-material';
 
+import PopupText from '../utils/popupText';
+
 const schema = new SimpleSchema({
   hxNssQ1: {
     type: Array, optional: false
@@ -23,7 +25,7 @@ const schema = new SimpleSchema({
   }, hxNssQ4: {
     type: Array, optional: true
   }, "hxNssQ4.$": {
-    type: String, allowedValues: ["Do not see the need for tests", "Challenging to make time to go for appointments", "Difficulties gtting to the clinics", "Financial issues", "Scared of doctor", "Others: (please specify reason) (Free Text)"]
+    type: String, allowedValues: ["Do not see the need for tests", "Challenging to make time to go for appointments", "Difficulties gtting to the clinics", "Financial issues", "Scared of doctor", "Others: (please specify reason)"]
   }, hxNssQ5: {
     type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
   }, hxNssQ6: {
@@ -62,6 +64,8 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
   }, hxNssQ21: {
     type: String, allowedValues: ["Yes", "No"], optional: false
+  }, hxNssQ22: {
+    type: String, optional: true
   }, hxNssQ23: {
     type: String, optional: true
   }, hxNssQ24: {
@@ -92,7 +96,7 @@ class HxNssForm extends Component {
           <h3 style={{ color: "red" }}>Please go through NSS Questionnaire now.</h3>
           <br /><br />
           <h2>1. Past Medical History</h2>
-          1a. Has a doctor ever told you that you have the following condition? Please tick the appropriate box(es) if the answer is "Yes" to any of the conditions listed below, or tick the last box if you have none.
+          1a. Has a doctor ever told you that you have the following condition? Please tick the appropriate box(es) if the answer is "Yes" to any of the conditions listed below, or tick the last box if you have none.<br />
           <SelectField name="hxNssQ1" checkboxes="true" label="Hx NSS Q1" />
           <br /><br />
           <p style={{ color: "red" }}><b>For respondent with known hypertension, diabetes, high cholesterol and stroke only.</b></p>
@@ -100,20 +104,21 @@ class HxNssForm extends Component {
           <br />
           <RadioField name="hxNssQ2" label="Hx NSS Q2" />
 
-          BELOW IS TO BE POP UP
+          <PopupText qnNo="hxNssQ2" triggerValue="Yes (please answer question below)">
+
+            (Only proceed when answered "Yes" to the previous question)
+            <RadioField name="hxNssQ3" checkboxes="true" label="Hx NSS Q3" />
+
+            <PopupText qnNo="hxNssQ3" triggerValue="No, the last appointment was > 1 year ago (Please proceed to Q2b and 2c)">
+              <br />
+              <p>2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?</p>
+              <SelectField name="hxNssQ4" checkboxes="true" label="Hx NSS Q4" />
+              <br />
+              <LongTextField name="hxNssQ22" label="Hx NSS Q22" />
+            </PopupText>
+          </PopupText>
+
           <br />
-
-
-          (Only proceed when answered "Yes" to the previous question)
-          <SelectField name="hxNssQ3" checkboxes="true" label="Hx NSS Q3" />
-
-          <p>2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?</p>
-          <SelectField name="hxNssQ4" checkboxes="true" label="Hx NSS Q4" />
-          <br />
-
-
-
-
           2c. Are you currently being prescribed any medication for any of the conditions below? Hypertension** (High Blood Pressure)<RadioField name="hxNssQ5" label="Hx NSS Q5" />
           Diabetes** (High Blood Sugar)
           <RadioField name="hxNssQ6" label="Hx NSS Q6" />
@@ -127,33 +132,33 @@ class HxNssForm extends Component {
           <RadioField name="hxNssQ24" label="Hx NSS Q24" />
 
 
-          BELOW IS TO BE POP UP
-          <br />
+          <PopupText qnNo="hxNssQ24" triggerValue="Yes">
+            <br />
 
-          <Fragment>
-            <b>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
-              <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
-              <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
-              <br /><br />
-              <span style={{ color: "red" }}><u>HYPERTENSIVE EMERGENCY</u>
-                <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark><u>SYMPTOMATIC</u></mark> (make sure pt has rested and 2nd reading was taken)
-                <br /><mark>o ASK THE DOCTOR TO COME AND REVIEW!</mark><br />
-                <br />
-                <u>HYPERTENSIVE URGENCY</u>
-                <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark>ASYMPTOMATIC</mark> (make sure pt has rested and 2nd reading was taken)
-                <br />o ESCORT TO DC DIRECTLY!
-                <br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />
-                <u>RISK OF HYPERTENSIVE CRISIS</u>
-                <br />• IF SYSTOLIC between <mark>160 - 180 mmHg</mark>
-                <br />• IF <mark>ASYMPTOMATIC</mark>, continue clerking.
-                <br />• IF <mark>SYMPTOMATIC</mark>, ESCORT TO DC DIRECTLY!
+            <Fragment>
+              <b>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
+                <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+                <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
                 <br /><br />
-                <u>If systolic between 140 - 160 mmHg: </u></span>
-              <br />o Ask for:
-              <br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)
-              <br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up?</b>
-          </Fragment>
-
+                <span style={{ color: "red" }}><u>HYPERTENSIVE EMERGENCY</u>
+                  <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark><u>SYMPTOMATIC</u></mark> (make sure pt has rested and 2nd reading was taken)
+                  <br /><mark>o ASK THE DOCTOR TO COME AND REVIEW!</mark><br />
+                  <br />
+                  <u>HYPERTENSIVE URGENCY</u>
+                  <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark>ASYMPTOMATIC</mark> (make sure pt has rested and 2nd reading was taken)
+                  <br />o ESCORT TO DC DIRECTLY!
+                  <br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />
+                  <u>RISK OF HYPERTENSIVE CRISIS</u>
+                  <br />• IF SYSTOLIC between <mark>160 - 180 mmHg</mark>
+                  <br />• IF <mark>ASYMPTOMATIC</mark>, continue clerking.
+                  <br />• IF <mark>SYMPTOMATIC</mark>, ESCORT TO DC DIRECTLY!
+                  <br /><br />
+                  <u>If systolic between 140 - 160 mmHg: </u></span>
+                <br />o Ask for:
+                <br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)
+                <br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up?</b>
+            </Fragment>
+          </PopupText>
           <br /><br />
 
           <span style={{ color: "blue" }}><h3>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h3></span>
@@ -166,48 +171,59 @@ class HxNssForm extends Component {
           <span style={{ color: "blue" }}><b>2e. Please tick to highlight if you feel 'Past Medical History' requires closer scrutiny by doctors later. (If indicated 'Yes', please complete the question below.)</b></span>
           <RadioField name="hxNssQ11" label="Hx NSS Q11" />
 
-          BELOW IS TO BE POP UP
+          <PopupText qnNo="hxNssQ11" triggerValue="Yes">
+            <br />
+
+
+            <Fragment>
+              <h2>Only complete Q2f if you are referring participant to Doctor's Consultation station.</h2>
+              <span style={{ color: "blue" }}><b>2f. Based on <u>participant's history taken thus far</u>, please summarise his/her <mark>RELEVANT</mark> Past Medical History briefly for the doctors to refer to during doctors consultation.
+                <br />1) Conditions
+                <br />2) Duration
+                <br />3) Control
+                <br />4) Compliance
+                <br />5) Complications
+                <br />6) Follow up route (specifiy whether GP/Polyclinic/FMC/SOC)</b></span>
+              <br />
+              <br />If participant is not engaged with any follow-up, ask "what is the reason that you're not following up with your doctor for your existing conditions?"
+              <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility issues, financial issues, fear of doctors/ clinics/ hospitals etc
+              <br /><br />If a participant is not compliant to medications, do probe further on his/her reasons for not consuming medications as prescribed.
+              <br />- Medication not effective? Can be managed without medication? Forget to take? Lost/Ran out of medication?
+              <LongTextField name="hxNssQ12" label="Hx NSS Q12" /><br /><br />
+            </Fragment>
+          </PopupText>
+
+
+          <b>Based on participant medical hx, please recommend relevant stations:</b>
+          <br />1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form A
+          <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+          <br />3) Relevant exhibition booths on page 2 of form A. Indicate accordingly for past history of DM / CVS Disease (including HTN, HLD, IHD) / CVA.<br /><br />For participant with DM, refer to DC if:<br />• Symptomatic, and non-compliant <br />• Asymptomatic, but non-compliant<br />Also, refer to DC if participant has not been diagnosed with DM, but has signs of DM (polyuria, polydipsia, periphery neuropathy, blurring of vision etc)
           <br />
-
-
-          <Fragment>
-            <h2>Only complete Q2f if you are referring participant to Doctor's Consultation station.</h2>
-            <span style={{ color: "blue" }}><b>2f. Based on <u>participant's history taken thus far</u>, please summarise his/her <mark>RELEVANT</mark> Past Medical History briefly for the doctors to refer to during doctors consultation.
-              <br />1) Conditions
-              <br />2) Duration
-              <br />3) Control
-              <br />4) Compliance
-              <br />5) Complications
-              <br />6) Follow up route (specifiy whether GP/Polyclinic/FMC/SOC)</b></span> <br /> <br />If participant is not engaged with any follow-up, ask "what is the reason that you're not following up with your doctor for your existing conditions?"
-            <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility issues, financial issues, fear of doctors/ clinics/ hospitals etc
-            <br /><br />If a participant is not compliant to medications, do probe further on his/her reasons for not consuming medications as prescribed.
-            <br />- Medication not effective? Can be managed without medication? Forget to take? Lost/Ran out of medication?
-            <LongTextField name="hxNssQ12" label="Hx NSS Q12" /><br /><br />
-          </Fragment>
-
-
-
-          <b>Based on participant medical hx, please recommend relevant stations:</b><br />1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />3) Relevant exhibition booths on page 2 of form A. Indicate accordingly for past history of DM / CVS Disease (including HTN, HLD, IHD) / CVA.<br /><br />For participant with DM, refer to DC if:<br />• Symptomatic, and non-compliant <br />• Asymptomatic, but non-compliant<br />Also, refer to DC if participant has not been diagnosed with DM, but has signs of DM (polyuria, polydipsia, periphery neuropathy, blurring of vision etc)
           <span style={{ color: "red" }}><h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3></span>
           3. Have your immediate family members (parents/ siblings/ children) ever been diagnosed/ told by a doctor that they have any of the chronic condition(s) listed below? Please tick if the answer is "Yes" to any of the conditions. You may select more than one. Please tick the last box if they have none.
           <SelectField name="hxNssQ13" checkboxes="true" label="Hx NSS Q13" />
-          Please specify:
+          <br />Please specify:
           <LongTextField name="hxNssQ23" label="Hx NSS Q23" />
           <br /><br />
           4. Do you smoke?
           <RadioField name="hxNssQ14" label="Hx NSS Q14" />
-          <h3>If participant is a smoker, recommend HPB iQuit exhibition booth on Page 2 of Form A.</h3>
+          <PopupText qnNo="hxNssQ14" triggerValue="Yes, at least 1 cigarette (or equivalent) per day on average.">
+            <h3>If participant is a smoker, recommend HPB iQuit exhibition booth on Page 2 of Form A.</h3>
+          </PopupText>
+          <PopupText qnNo="hxNssQ14" triggerValue="Yes, occasionally, less than 1 cigarette (or equivalent) per day on average.">
+            <h3>If participant is a smoker, recommend HPB iQuit exhibition booth on Page 2 of Form A.</h3>
+          </PopupText>
           5. Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)
           <RadioField name="hxNssQ15" label="Hx NSS Q15" />
           <br /><br />
-          6. Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.
+          6. Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.<br />
           <SelectField name="hxNssQ16" checkboxes="true" label="Hx NSS Q16" />
           <br />
           7. Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
           <RadioField name="hxNssQ17" label="Hx NSS Q17" />
           <b>Counsel for positive diet and lifestyle modification if deemed necessary. Refer to <span style={{ color: "red" }}>dietitian</span> at Doctor's Consultation station, Indicate:</b><br />
           1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A<br />2) Write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br /><br />
-          Indicate Smoking/Alcohol Consumption on Page 2 of Form A for exhibition ambassadors if applicable. Smoking cessation engagement by HPB iQuit.<br />Recommend for lifestyle follow up on Page 2 of Form A if you deem necessary.<br /><br /><br /><br />
+          Indicate Smoking/Alcohol Consumption on Page 2 of Form A for exhibition ambassadors if applicable. Smoking cessation engagement by HPB iQuit.<br />Recommend for lifestyle follow up on Page 2 of Form A if you deem necessary.<br /><br />
           8. When was the last time you had a blood test to check for hypertension, diabetes and cholesterol? Please answer all.
           <br />
           Hypertension

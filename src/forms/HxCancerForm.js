@@ -7,7 +7,9 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { SelectField, NumField, RadioField, LongTextField } from 'uniforms-material';
+import { SelectField, NumField, RadioField, LongTextField, BoolField } from 'uniforms-material';
+
+import PopupText from 'src/utils/popupText';
 
 const schema = new SimpleSchema({
   hxCancerQ1: {
@@ -55,17 +57,21 @@ const schema = new SimpleSchema({
   }, hxCancerQ20: {
     type: Number, optional: false
   }, hxCancerQ21: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
-  }, hxCancerQ22: {
-    type: Array, optional: true
-  }, "hxCancerQ22.$": {
-    type: String, allowedValues: ["Yes"]
-  }, hxCancerQ23: {
     type: Number, optional: true
+  }, hxCancerQ22: {
+    type: String, allowedValues: ["Yes", "No"], optional: false
+  }, hxCancerQ23: {
+    type: Boolean, label: "Yes", optional: true
   }, hxCancerQ24: {
+    type: Number, optional: true
+  }, hxCancerQ25: {
     type: Array, optional: false
-  }, "hxCancerQ24.$": {
+  }, "hxCancerQ25.$": {
     type: String, allowedValues: ["FIT (50 and above, FIT not done in past 1 year, Colonoscopy not done in past 10 years, Not diagnosed with colorectal cancer)", "WCE (40 and above, females only)", "Geriatrics (60 and above)", "Doctor\s Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)", "Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)", "Oral Health Screening - participants aged 40-59 with poor dental hygiene", "Exhibition - recommended as per necessary"]
+  }, hxCancerQ26: {
+    type: String, optional: true
+  }, hxCancerQ27: {
+    type: String, allowedValues: ["Yes", "No"], optional: false
   }
 }
 )
@@ -90,70 +96,143 @@ class HxCancerForm extends Component {
         <Fragment>
           <h2>HISTORY TAKING PART 4: CANCER SCREENING</h2>
           <h2>1. HISTORY OF CANCER & FAMILY HISTORY</h2>
-          1. Has a doctor ever told you that you have the following conditions? Do be sensitive when asking for personal history of cancer. (please select all that apply)
-          <SelectField name="hxCancerQ1" checkboxes="true" label="Hx Cancer Q1" />
-          2. Is there positive family history (AMONG FIRST DEGREE RELATIVES) for the following cancers?
-          <SelectField name="hxCancerQ2" checkboxes="true" label="Hx Cancer Q2" />
+          <b><font color="blue">1. Has a doctor ever told you that you have the following conditions?</font>Do be sensitive when asking for personal history of cancer. (please select all that apply)</b><br />
+          <SelectField name="hxCancerQ1" checkboxes="true" label="Hx Cancer Q1" /><br /><br />
+
           Please specify:
-          <LongTextField name="hxCancerQ3" label="Hx Cancer Q3" />
-          3. Any other significant family history? Indicate 'NIL' if none.
-          <LongTextField name="hxCancerQ4" label="Hx Cancer Q4" />
-          Counsel for screening if positive family history of cancer or chronic disease. <br /><br />Based on participant family hx, please recommend FIT/WCE and Doctor's Consultation (if applicable) <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br />3) Recommend relevant exhibition booths on Page 2 of Form A Exhibition - Recommendation<br />
-          <h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3>
-          <h2>2. NSS CANCER SCREENING PRACTICES SURVEY.</h2>
-          1. For respondent aged 50 and above only, unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
-          <RadioField name="hxCancerQ5" label="Hx Cancer Q5" />
-          2. For respondent aged 50 and above only, unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
+          <LongTextField name="hxCancerQ26" label="Hx Cancer Q26" /><br /><br />
+
+          <b><font color="blue">2. Is there positive family history (AMONG FIRST DEGREE RELATIVES) for the following cancers?</font></b>
+          <SelectField name="hxCancerQ2" checkboxes="true" label="Hx Cancer Q2" /><br /><br />
+
+          Please specify:
+          <LongTextField name="hxCancerQ3" label="Hx Cancer Q3" /><br /><br />
+
+          <b><font color="blue">3. Any other significant family history?</font></b> Indicate 'NIL' if none.
+          <LongTextField name="hxCancerQ4" label="Hx Cancer Q4" /><br /><br />
+
+          <b>Counsel for screening if positive family history of cancer or chronic disease. <br /><br />
+
+            Based on participant family hx, please recommend FIT/WCE and Doctor's Consultation (if applicable)</b> <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br />3) Recommend relevant exhibition booths on Page 2 of Form A Exhibition - Recommendation<br /><br /><br />
+
+          <font color="red"><h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3></font>
+          <h2>2. NSS CANCER SCREENING PRACTICES SURVEY.</h2><br /><br />
+          <font color="red"><b>1. For respondent aged 50 and above only,</b></font> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
+          <RadioField name="hxCancerQ5" label="Hx Cancer Q5" /><br /><br />
+          <font color="red"><b>2. For respondent aged 50 and above only,</b></font> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
           <RadioField name="hxCancerQ6" label="Hx Cancer Q6" />
-          Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives. <br />If deemed to be in high risk (positive family history of colorectal cancer in first degree relatives, counsel for colonoscopy every 3 years), refer to risk categorization given.<br />
-          3. For female respondent aged 40 and above only.<br />When was the last time you had your last mammogram? (A mammogram is an x-ray of each breast to look for breast cancer.)
-          <RadioField name="hxCancerQ7" label="Hx Cancer Q7" />
-          4. For female respondent aged 25 and above, who have/had a husband/boyfriend and not had their womb completely surgically removed only.<br />When was the last time you had a PAP smear test? (A PAP smear test is a simple test involving the scrapping of cells fom the mouth of the womb, to check for changes in the cells of your cervix, which may develop into cancer later.)
+          <font color="red"><b>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives. <br />If deemed to be in high risk (positive family history of colorectal cancer in first degree relatives, counsel for colonoscopy every 3 years), refer to risk categorization given.</b></font><br /><br /><br /><br />
+          <font color="red"><b>3. For <u>female</u> respondent aged 40 and above only.</b></font><br />When was the last time you had your last mammogram? (A mammogram is an x-ray of each breast to look for breast cancer.)
+          <RadioField name="hxCancerQ7" label="Hx Cancer Q7" /><br /><br />
+          <font color="red"><b>4. For <u>female</u> respondent aged 25 and above, who have/had a husband/boyfriend and not had their womb completely surgically removed only.</b></font><br />When was the last time you had a PAP smear test? (A PAP smear test is a simple test involving the scrapping of cells fom the mouth of the womb, to check for changes in the cells of your cervix, which may develop into cancer later.)
           <RadioField name="hxCancerQ8" label="Hx Cancer Q8" />
-          <h2>For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and above and if interested, refer to WCE.<br />Please encourage participants to go for HPV test every 5 years. <br />Refer to WCE: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  </h2>
-          If participant has a history of cancer or if participant's family history requires further scrutiny by doctors, refer to doctor's consult. (If indicated 'Yes', please complete the question below.)
+          <b><font color="red">For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and above and if interested, refer to WCE.<br />Please encourage participants to go for HPV test every 5 years. <br />Refer to WCE: </font><br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A</b><br /><br /><br /><br />
+          <b>If participant has a <mark>history of cancer</mark> or if <mark>participant's family history</mark> requires further scrutiny by doctors, refer to doctor's consult. <font color="red">(If indicated 'Yes', please complete the question below.)</font></b>
           <RadioField name="hxCancerQ9" label="Hx Cancer Q9" />
-          <h2>Only complete Q6 if you are referring participant to Doctor's Consultation station.</h2>
-          6. Based on participant's history taken thus far, please summarise his/her RELEVANT Family History briefly for the doctors to refer to during doctors consultation.<br /><br />1) Participant's history of Cancers (if any)<br />2) Positive family history of medical conditions in first-degree relatives:<br />3) Positive family history of Cancers (Cervical, Breast, Colorectal)
-          <LongTextField name="hxCancerQ10" label="Hx Cancer Q10" />
+          <PopupText qnNo="hxCancerQ9" triggerValue="Yes">
+            <h2>Only complete Q6 if you are referring participant to Doctor's Consultation station.</h2>
+            <b><font color="blue">6. Based on participant's history taken thus far, please summarise his/her RELEVANT Family History briefly for the doctors to refer to during doctors consultation.</font><br /><br />1) Participant's history of Cancers (if any)<br />2) Positive family history of medical conditions in first-degree relatives:<br />3) Positive family history of Cancers (Cervical, Breast, Colorectal)</b>
+            <LongTextField name="hxCancerQ10" label="Hx Cancer Q10" />
+          </PopupText>
+          <br />
           <h2>3. VITALS</h2>
-          <h3>Please fill in the participant's BP and BMI based on what you earlier recorded on Form A and copy to NSS form too.</h3>
-          1) BLOOD PRESSURE (Before measuring BP: ensure no caffeine, anxiety, running and smoking in the last 30 minutes.)<br />
-          1st Reading Systolic (units in mmHg)
-          <NumField name="hxCancerQ11" label="Hx Cancer Q11" />
-          1st Reading Diastolic (units in mmHg)
-          <NumField name="hxCancerQ12" label="Hx Cancer Q12" />
-          2nd Reading Systolic (units in mmHg)
-          <NumField name="hxCancerQ13" label="Hx Cancer Q13" />
-          2nd Reading Diastolic (units in mmHg)
-          <NumField name="hxCancerQ14" label="Hx Cancer Q14" />
-		3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg)
-          <NumField name="hxCancerQ15" label="Hx Cancer Q15" />
-		3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg)
-          <NumField name="hxCancerQ16" label="Hx Cancer Q16" />
-          Average Reading Systolic (average of closest 2 readings)
-          <NumField name="hxCancerQ17" label="Hx Cancer Q17" />
-          Average Reading Diastolic (average of closest 2 readings)
-          <NumField name="hxCancerQ18" label="Hx Cancer Q18" />
-          Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> <br />REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)<br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br /><br />HYPERTENSIVE EMERGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND SYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ASK THE DOCTOR TO COME AND REVIEW!<br /> <br />HYPERTENSIVE URGENCY<br />• SYSTOLIC  ≥ 180 AND/OR DIASTOLIC ≥ 110 mmHg AND ASYMPTOMATIC (make sure pt has rested and 2nd reading was taken)<br />o ESCORT TO DC DIRECTLY!<br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br /><br />RISK OF HYPERTENSIVE CRISIS<br />• IF SYSTOLIC between 160 - 180 mmHg <br />• IF ASYMPTOMATIC, continue clerking. <br />• IF SYMPTOMATIC, ESCORT TO DC DIRECTLY!<br /><br />If systolic between 140 - 160 mmHg:<br />o Ask for:<br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)<br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up? If non-compliant or not on regular follow-up, refer to DC (chronic HTN, uncontrolled).<br />
-          <h2>2) BMI</h2>
-          Height (in cm)
-          <NumField name="hxCancerQ19" label="Hx Cancer Q19" />
-          Weight (in kg)
-          <NumField name="hxCancerQ20" label="Hx Cancer Q20" />
-          BMI
-          <NumField name="hxCancerQ21" label="Hx Cancer Q21" />
+          <h3>Please fill in the participant's BP and BMI based on what you earlier recorded on Form A and copy to <font color="red">NSS form too.</font></h3>
+          <b><u>1) BLOOD PRESSURE</u></b> (Before measuring BP: ensure no caffeine, anxiety, running and smoking in the last 30 minutes.)<br />
+          1st Reading Systolic (units in mmHg) <br />
+          <NumField name="hxCancerQ11" label="Hx Cancer Q11" /> <br />
+          1st Reading Diastolic (units in mmHg) <br />
+          <NumField name="hxCancerQ12" label="Hx Cancer Q12" /> <br />
+          <br /><br />
+
+          The below will show when BP is high<br />
+          <Fragment>
+            <font color="red"><b>BP HIGH!</b></font> <br />
+          </Fragment>
+
+
+
+
+
+          2nd Reading Systolic (units in mmHg) <br />
+          <NumField name="hxCancerQ13" label="Hx Cancer Q13" /> <br />
+          2nd Reading Diastolic (units in mmHg) <br />
+          <NumField name="hxCancerQ14" label="Hx Cancer Q14" /> <br />
+
+
+
+          The below will show when BP is high<br />
+          <Fragment>
+            <font color="red"><b>BP HIGH!</b></font> <br />
+          </Fragment>
+
+
+
+          3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>>5mmHg</b>) <br />
+          <NumField name="hxCancerQ15" label="Hx Cancer Q15" /> <br />
+        3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg) <br />
+          <NumField name="hxCancerQ16" label="Hx Cancer Q16" /> <br />
+
+
+
+          The below will show when BP is high<br />
+            <Fragment>
+              <font color="red"><b>BP HIGH!</b></font> <br />
+            </Fragment>
+
+
+
+          Average Reading Systolic (average of closest 2 readings): <br />
+          <NumField name="hxCancerQ17" label="Hx Cancer Q17" /> <br />
+          Average Reading Diastolic (average of closest 2 readings): <br />
+          <NumField name="hxCancerQ18" label="Hx Cancer Q18" /> <br />
+          Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> <br />
+          Please tick to highlight if you feel <b>BLOOD PRESSURE</b> require closer scrutiny by docors later.<br /><br />
+          <RadioField name="hxCancerQ27" label="Hx Cancer Q27" />
+          <PopupText qnNo="hxCancerQ27" triggerValue="Yes">
+              <b>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
+                <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  
+                <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   
+                <br /><br /><font color="red"><u>HYPERTENSIVE EMERGENCY</u>
+                <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC ≥ <mark>110 mmHg</mark> AND <mark><u>SYMPTOMATIC</u></mark> (make sure pt has rested and 2nd reading was taken)
+                <br />o <mark>ASK THE DOCTOR TO COME AND REVIEW!</mark><br /> 
+                <br /><u>HYPERTENSIVE URGENCY</u>
+                <br />• SYSTOLIC  <mark>≥ 180</mark> AND/OR DIASTOLIC <mark>≥ 110 mmHg</mark> AND <mark>ASYMPTOMATIC</mark> (make sure pt has rested and 2nd reading was taken)
+                <br />o ESCORT TO DC DIRECTLY!
+                <br />o Follow the patient, continue clerking the patient afterward if doctor acknowledges patient is well enough to continue the screening<br />
+                <br /><u>RISK OF HYPERTENSIVE CRISIS</u>
+                <br />• IF SYSTOLIC between <mark>160 - 180 mmHg</mark> 
+                <br />• IF <mark>ASYMPTOMATIC</mark>, continue clerking. 
+                <br />• IF <mark>SYMPTOMATIC</mark>, ESCORT TO DC DIRECTLY!<br />
+                <br /><u>If systolic between 140 - 160 mmHg:</u></font>
+                <br />o Ask for:
+                <br />- Has hypertension been pre-diagnosed? If not, refer to DC (possible new HTN diagnosis)
+                <br />- If diagnosed before, ask about compliance and whether he/she goes for regular follow up? If non-compliant or not on regular follow-up, refer to DC (chronic HTN, uncontrolled).<br /></b>
+          </PopupText>
+          <h2><u>2) BMI</u></h2>
+          Height (in cm) <br />
+          <NumField name="hxCancerQ19" label="Hx Cancer Q19" /> <br />
+          Weight (in kg) <br />
+          <NumField name="hxCancerQ20" label="Hx Cancer Q20" /> <br />
+          
+          <h3>
+            BMI:
+          </h3>
+
+
+          <br />
           2a. Has a doctor ever told you that you are overweight or obese before?
-          <RadioField name="hxCancerQ21" label="Hx Cancer Q21" />
+          <RadioField name="hxCancerQ22" label="Hx Cancer Q22" />
           2b. Please tick to highlight if you feel BMI or BP requires closer scrutiny by doctors and dietitians later.
-          <SelectField name="hxCancerQ22" checkboxes="true" label="Hx Cancer Q22" />
-          REFER TO DR CONSULT at: <br />1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation, <br />IF BMI IS:<br />≥ 23 as overweight (if positive for other risk factors) and ≥ 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />
-          <h3>3) Waist Circumference (taken only if cannot measure BMI e.g. wheelchair, prosthetic legs)</h3>
-          Waist Circumference (in cm)
-          <NumField name="hxCancerQ23" label="Hx Cancer Q23" />
+          <BoolField name="hxCancerQ23" />
+          <PopupText qnNo="hxCancerQ23" triggerValue={true}>
+              <b>REFER TO DR CONSULT at:</b> <br />1) <font color="red">Doctor's Consultation station</font>, tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation, <br />IF BMI IS:<br />≥ 23 as overweight (if positive for other risk factors) and ≥ 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />
+          </PopupText>
+          <h3><u>3) Waist Circumference</u> (taken only if cannot measure BMI e.g. wheelchair, prosthetic legs)</h3>
+          Waist Circumference (in cm) <br />
+          <NumField name="hxCancerQ24" label="Hx Cancer Q24" /> <br />
           <h2>HISTORY TAKING PART 5: REFERRALS/MEGA SORTING STATION </h2>
           1. REFERRALS<br />Please reference page 1 of form A for various criteria.
-          <SelectField name="hxCancerQ24" checkboxes="true" label="Hx Cancer Q24" />
+          <SelectField name="hxCancerQ25" checkboxes="true" label="Hx Cancer Q25" />
 
         </Fragment>
 
