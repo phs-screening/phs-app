@@ -40,13 +40,14 @@ const DashboardLayoutContent = experimentalStyled('div')({
 
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-
+  const [patientInfo, setPatientInfo] = useState({});
   return (
     <DashboardLayoutRoot>
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <DashboardSidebar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}
+        patientInfo={patientInfo}
       />
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>

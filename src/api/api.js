@@ -2,7 +2,6 @@ const axios = require('axios').default;
 
 
 export async function preRegister(preRegArgs) {
-    console.log("inside pre register function")
     let gender = preRegArgs.gender;
     let initials = preRegArgs.initials;
     let abbreviatedNric = preRegArgs.abbreviatedNric;
@@ -14,12 +13,6 @@ export async function preRegister(preRegArgs) {
     if (typeof goingForPhlebotomy === 'string' && goingForPhlebotomy !== 'Y' && goingForPhlebotomy !== 'N') {
         return {"result": false, "error": "The value of goingForPhlebotomy must either be \"T\" or \"F\""};
     }
-    console.log({
-        "gender": gender,
-        "initials": initials, 
-        "abbreviatedNric": abbreviatedNric,
-        "goingForPhlebotomy": goingForPhlebotomy
-    });
     // TODO: more exhaustive error handling. consider abstracting it in a validation function, and using schema validation
     try {
         var response = await axios.post(`/api/forms/preRegistrationQ`, {
@@ -30,10 +23,9 @@ export async function preRegister(preRegArgs) {
         });
     } catch(err) {
         // TODO: more granular error handling
-        console.log("errored out " + err);
+        console.log(err);
         return {"result": false, "error": err}
     }
-    console.log(response);
     return {"result": true, "data": response.data};
 }
 

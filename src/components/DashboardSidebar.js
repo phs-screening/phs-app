@@ -17,10 +17,6 @@ import {
 } from 'react-feather';
 import NavItem from './NavItem';
 
-const user = {
-  jobTitle: 'John Patientdoe',
-  name: 'current patient'
-};
 
 const items = [
   {
@@ -40,7 +36,7 @@ const items = [
   },
 ];
 
-const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+const DashboardSidebar = ({ onMobileClose, openMobile, patientInfo }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -69,13 +65,13 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {typeof patientInfo.preRegistrationQ == "undefined" ? "No Patient Selected" : patientInfo.preRegistrationQ.initials}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {typeof patientInfo.patient_id == "undefined" ? "" : "Patient_id " + patientInfo.patient_id}
         </Typography>
       </Box>
       <Divider />
