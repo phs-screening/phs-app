@@ -106,12 +106,18 @@ class HxSocialForm extends Component {
           <LongTextField name="hxSocialQ8" label="Hx Social Q8" />
 
           <br /><br />
-          BELOW IS TO BE POPUP
-          <Fragment>
-            <b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of <b>financial aid.</b>  <br />Indicate for Social Service station on:  <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons for referral on the right column<br /><br />Note the following criteria for your assessment: (wef from 1st Nov 2019)<br />Per-capita monthly income for CHAS: <b>Green Card: Above $2000; Orange Card: $1201- $2000; Blue Card: $1200 and below</b>
-          </Fragment>
+          <PopupText qnNo="hxSocialQ5" triggerValue="Yes, (Please specify):">
+            <PopupText qnNo="hxSocialQ7" triggerValue="Yes, (Please specify):">
+              <b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of <b>financial aid.</b>  
+              <br />Indicate for Social Service station on:  
+              <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A 
+              <br />2) Write reasons for referral on the right column<br />
+              <br />Note the following criteria for your assessment: (wef from 1st Nov 2019)
+              <br />Per-capita monthly income for CHAS: <b>Green Card: Above $2000; Orange Card: $1201- $2000; Blue Card: $1200 and below</b>
+            </PopupText>
+          </PopupText>
           <br /><br />
-
+          
 
 
           <h2>3. SOCIAL ISSUES</h2>
