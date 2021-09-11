@@ -8,8 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, RadioField } from 'uniforms-material';
-import { useField, useForm } from 'uniforms';
-import { Score } from '@material-ui/icons';
+import { useField } from 'uniforms';
 
 const schema = new SimpleSchema({
 	geriAmtQ1: {
