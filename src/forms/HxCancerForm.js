@@ -81,7 +81,18 @@ function CalcBMI() {
   const [{ value: weight }] = useField("hxCancerQ20", {});
   if (height_cm && weight) {
     const height = height_cm / 100;
-    return ((weight/height)/height);
+    return ((weight/height)/height).toFixed(1);
+  }
+  return null;
+}
+
+function IsHighBP(props) {
+  const [{ value: sys }] = useField(props.systolic_qn, {});
+  const [{ value: dias }] = useField(props.diastolic_qn, {});
+  if (sys>140 && dias>90) {
+    return (<Fragment>
+      <font color="red"><b>BP HIGH!</b></font> <br />
+    </Fragment>);
   }
   return null;
 }
@@ -106,7 +117,7 @@ class HxCancerForm extends Component {
         <Fragment>
           <h2>HISTORY TAKING PART 4: CANCER SCREENING</h2>
           <h2>1. HISTORY OF CANCER & FAMILY HISTORY</h2>
-          <b><font color="blue">1. Has a doctor ever told you that you have the following conditions?</font>Do be sensitive when asking for personal history of cancer. (please select all that apply)</b><br />
+          <b><font color="blue">1. Has a doctor ever told you that you have the following conditions?</font> Do be sensitive when asking for personal history of cancer. (please select all that apply)</b><br />
           <SelectField name="hxCancerQ1" checkboxes="true" label="Hx Cancer Q1" /><br /><br />
 
           Please specify:
@@ -152,44 +163,23 @@ class HxCancerForm extends Component {
           <NumField name="hxCancerQ11" label="Hx Cancer Q11" /> <br />
           1st Reading Diastolic (units in mmHg) <br />
           <NumField name="hxCancerQ12" label="Hx Cancer Q12" /> <br />
-          <br /><br />
 
-          The below will show when BP is high<br />
-          <Fragment>
-            <font color="red"><b>BP HIGH!</b></font> <br />
-          </Fragment>
-
-
-
-
-
+          <IsHighBP systolic_qn="hxCancerQ11" diastolic_qn="hxCancerQ12" />
+          <br />
           2nd Reading Systolic (units in mmHg) <br />
           <NumField name="hxCancerQ13" label="Hx Cancer Q13" /> <br />
           2nd Reading Diastolic (units in mmHg) <br />
           <NumField name="hxCancerQ14" label="Hx Cancer Q14" /> <br />
 
-
-
-          The below will show when BP is high<br />
-          <Fragment>
-            <font color="red"><b>BP HIGH!</b></font> <br />
-          </Fragment>
-
-
-
+          <IsHighBP systolic_qn="hxCancerQ13" diastolic_qn="hxCancerQ14" />
+          <br />
           3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>>5mmHg</b>) <br />
           <NumField name="hxCancerQ15" label="Hx Cancer Q15" /> <br />
-        3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg) <br />
+          3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg) <br />
           <NumField name="hxCancerQ16" label="Hx Cancer Q16" /> <br />
-
-
-
-          The below will show when BP is high<br />
-            <Fragment>
-              <font color="red"><b>BP HIGH!</b></font> <br />
-            </Fragment>
-
-
+          
+          <IsHighBP systolic_qn="hxCancerQ15" diastolic_qn="hxCancerQ16" />
+          <br />
 
           Average Reading Systolic (average of closest 2 readings): <br />
           <NumField name="hxCancerQ17" label="Hx Cancer Q17" /> <br />
