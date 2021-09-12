@@ -52,7 +52,7 @@ class GeriPtConsultForm extends Component {
           <RadioField name="geriPtConsultQ4" label="Geri - PT Consult Q4" />
           Reasons for referral to social support (PT):
           <LongTextField name="geriPtConsultQ5" label="Geri - PT Consult Q5" />
-          <h2>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON FORM A</h2>
+          <h2><span style={{color: "red"}}>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON FORM A</span></h2>
 
         </Fragment>
         <ErrorsField />

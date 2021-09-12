@@ -7,7 +7,8 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { TextField, SelectField, RadioField } from 'uniforms-material';
+import { TextField, SelectField, RadioField, NumField } from 'uniforms-material';
+import { useField } from 'uniforms';
 
 const schema = new SimpleSchema({
   geriTugQ1: {
@@ -17,7 +18,7 @@ const schema = new SimpleSchema({
   }, geriTugQ2: {
     type: String, optional: true
   }, geriTugQ3: {
-    type: String, optional: false
+    type: Number, optional: false
   }, geriTugQ4: {
     type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
   }, geriTugQ5: {
@@ -25,6 +26,18 @@ const schema = new SimpleSchema({
   }
 }
 )
+
+function PopupText(props) {
+  const [{ value: qnValue }] = useField(props.qnNo, {});
+  if (qnValue.includes(props.triggerValue)) {
+    return (
+      <Fragment>
+        {props.children}
+      </Fragment>
+    );
+  }
+  return null;
+}
 
 class GeriTugForm extends Component {
 
@@ -45,15 +58,19 @@ class GeriTugForm extends Component {
         <Fragment>
           <h2>3.3b Time-Up and Go (TUG)</h2>
           Walking aid (if any):
+          <br />
           <SelectField name="geriTugQ1" checkboxes="true" label="Geri - TUG Q1" />
-          Please Specify for Others
-          <TextField name="geriTugQ2" label="Geri - TUG Q2" />
+          <br />
+          <PopupText qnNo="geriTugQ1" triggerValue="Others (Please specify in textbox )">
+            Please Specify Walking Aid
+            <TextField name="geriTugQ2" label="Geri - TUG Q2" />
+          </PopupText>
           Time taken (in seconds):
-          <TextField name="geriTugQ3" label="Geri - TUG Q3" />
+          <NumField name="geriTugQ3" label="Geri - TUG Q3" />
           <h3>If > 15 seconds, participant has a high falls risk.</h3>
-          Falls Risk Level:
+          <br/>Falls Risk Level:
           <RadioField name="geriTugQ4" label="Geri - TUG Q4" />
-          *Referral to Physiotherapist and Occupational Therapist Consult
+          <br/>*Referral to Physiotherapist and Occupational Therapist Consult
           <RadioField name="geriTugQ5" label="Geri - TUG Q5" />
 
         </Fragment>

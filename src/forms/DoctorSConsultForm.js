@@ -7,34 +7,35 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { 
-	TextField, 
-	SelectField, 
-	LongTextField } from 'uniforms-material';
+import {
+	LongTextField,
+  BoolField } from 'uniforms-material';
 
 
 const schema = new SimpleSchema({
 	doctorSConsultQ1: {
-		type: String, optional: true
-		}, doctorSConsultQ2: {
-		type: String, optional: true
-		}, doctorSConsultQ3: {
-		type: String, optional: true
-		}, doctorSConsultQ4: {
-		type: Array, optional: true
-		}, "doctorSConsultQ4.$": {
-		type: String, allowedValues: []
-		}, doctorSConsultQ5: {
-		type: String, optional: true
-		}, doctorSConsultQ6: {
-		type: Array, optional: true
-		}, "doctorSConsultQ6.$": {
-		type: String, allowedValues: []
-		}, doctorSConsultQ7: {
-		type: Array, optional: false
-		}, "doctorSConsultQ7.$": {
-		type: String, allowedValues: []
-		}
+    type: String, optional: false
+  }, doctorSConsultQ2: {
+    type: String, optional: false
+  }, doctorSConsultQ3: {
+    type: String, optional: false
+  }, doctorSConsultQ4: {
+    type: Boolean, label: "Yes", optional: true
+  }, doctorSConsultQ5: {
+    type: String, optional: true
+  }, doctorSConsultQ6: {
+    type: Boolean, label: "Yes", optional: true
+  }, doctorSConsultQ7: {
+    type: String, optional: true
+  }, doctorSConsultQ8: {
+    type: Boolean, label: "Yes", optional: true
+  }, doctorSConsultQ9: {
+    type: String, optional: true
+  }, doctorSConsultQ10: {
+    type: Boolean, label: "Yes", optional: true
+  }, doctorSConsultQ11: {
+    type: Boolean, label: "Yes", optional: true
+  }
 	}
 )
 
@@ -56,28 +57,30 @@ class DoctorSConsultForm extends Component {
           >
             
             <Fragment>
-            Doctor's Name:
-            <TextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
-            <br/>
-            MCR No.:
-            <TextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
-            <br/>
-            Doctor's Memo
-            <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3" />
-            <br/>
-            Refer to dietitian?
-            <SelectField name="doctorSConsultQ4" checkboxes="true" label="Doctor's Consult Q4" />
-            <br/>
-            Reason for referral
-            <TextField name="doctorSConsultQ5" label="Doctor's Consult Q5"/>
-            <br/>
-            Does patient require urgent follow up?
-            <SelectField name="doctorSConsultQ6" checkboxes="true" label="Doctor's Consult Q6" />
-            <br/>
-            Completed Doctor’s Consult station. Please check that Form A is filled.
-            <SelectField name="doctorSConsultQ7" checkboxes="true" label="Doctor's Consult Q7" />
-              
-            </Fragment>
+      Doctor's Name:
+      <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
+      MCR No.:
+      <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
+      Doctor's Memo
+      <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3" />
+      Refer to dietitian?
+      <BoolField name="doctorSConsultQ4" />
+      Reason for referral
+      <LongTextField name="doctorSConsultQ5" label="Doctor's Consult Q5"/>
+      Refer to Social Support?
+      <BoolField name="doctorSConsultQ6" />
+      Reason for referral
+      <LongTextField name="doctorSConsultQ7" label="Doctor's Consult Q7"/>
+      Refer to Dental?
+      <BoolField name="doctorSConsultQ8" />
+      Reason for referral
+      <LongTextField name="doctorSConsultQ9" label="Doctor's Consult Q9"/>
+      Does patient require urgent follow up 
+      <BoolField name="doctorSConsultQ10" />
+      Completed Doctor’s Consult station. Please check that Form A is filled.
+      <BoolField name="doctorSConsultQ11" />
+      
+    </Fragment>
 
             <ErrorsField />
             <div>

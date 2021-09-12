@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, RadioField } from 'uniforms-material';
+import { useField } from 'uniforms';
 
 const schema = new SimpleSchema({
 	geriAmtQ1: {
@@ -39,6 +40,42 @@ const schema = new SimpleSchema({
 		}
 	}
 )
+
+function GetScore(props) {
+  let score = 0
+  const [{ value: q1 }] = useField('geriAmtQ1', {});
+  const [{ value: q2 }] = useField('geriAmtQ2', {});
+  const [{ value: q3 }] = useField('geriAmtQ3', {});
+  const [{ value: q4 }] = useField('geriAmtQ4', {});
+  const [{ value: q5 }] = useField('geriAmtQ5', {});
+  const [{ value: q6 }] = useField('geriAmtQ6', {});
+  const [{ value: q7 }] = useField('geriAmtQ7', {});
+  const [{ value: q8 }] = useField('geriAmtQ8', {});
+  const [{ value: q9 }] = useField('geriAmtQ9', {});
+  const [{ value: q10 }] = useField('geriAmtQ10', {});
+  if (q1 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q2 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q3 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q4 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q5 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q6 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q7 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q8 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q9 === 'Yes (Answered correctly)')
+    score += 1;
+  if (q10 === 'Yes (Answered correctly)')
+    score += 1;
+  
+  return score;
+};
 
 class GeriAmtForm extends Component {
 
@@ -91,8 +128,12 @@ class GeriAmtForm extends Component {
               <h3>10) Recall memory phase 请您把刚才我要您记住的地址重复一遍。</h3>
               Was Q10 answered correctly?
               <RadioField name="geriAmtQ10" />
-              AMT Total Score: __/10 <TextField name="geriAmtQ11"/>
-              What is your education level?
+              AMT Total Score: <GetScore />/10
+              <br />
+              <br />
+              
+              What is your education level?<br />
+              <img src='/images/geri-amt/edu.png' alt='Education' /> <br />
               <RadioField name="geriAmtQ11" />
               Need referral to cognitive - 2nd Tier Screening ?
               <RadioField name="geriAmtQ12" />
