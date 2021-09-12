@@ -47,7 +47,7 @@ const schema = new SimpleSchema({
 )
 
 function GetScore(props) {
-  var score = 0
+  let score = 0
   const [{ value: q1 }] = useField('geriEbasDepQ1', {});
   const [{ value: q2 }] = useField('geriEbasDepQ2', {});
   const [{ value: q3 }] = useField('geriEbasDepQ3', {});
