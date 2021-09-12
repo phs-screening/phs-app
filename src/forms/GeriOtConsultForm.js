@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { RadioField, LongTextField } from 'uniforms-material';
+import { RadioField, LongTextField, SelectField } from 'uniforms-material';
 
 const schema = new SimpleSchema({
   geriOtConsultQ1: {
@@ -21,7 +21,9 @@ const schema = new SimpleSchema({
   }, geriOtConsultQ5: {
     type: String, optional: true
   }, geriOtConsultQ6: {
-    type: String, allowedValues: ["HDB EASE", "SWCDC Safe and Bright Homes", "Own Vendors"], optional: true
+    type: Array, optional: true
+  }, "geriOtConsultQ6.$": {
+    type: String, allowedValues: ["HDB EASE", "SWCDC Safe and Bright Homes", "Own Vendors"],
   }
 }
 )
@@ -56,8 +58,8 @@ class GeriOtConsultForm extends Component {
           Reasons for referral to social support (OT):
           <LongTextField name="geriOtConsultQ5" label="Geri - OT Consult Q5" />
           Which of the following programmes would you recommend the participant for? (Please select the most appropriate programme)
-          <RadioField name="geriOtConsultQ6" label="Geri - OT Consult Q6" />
-          <h2>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER 'REGISTRATION'.</h2>
+          <SelectField name="geriOtConsultQ6" checkboxes="true" label="Geri - OT Consult Q6" />
+          <h2><span style={{color: "red"}}>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER 'REGISTRATION'.</span></h2>
 
         </Fragment>
 

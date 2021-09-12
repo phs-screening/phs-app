@@ -7,7 +7,8 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { SelectField, RadioField } from 'uniforms-material';
+import { SelectField, RadioField, BoolField } from 'uniforms-material';
+import PopupText from 'src/utils/popupText';
 
 const schema = new SimpleSchema({
   geriGeriApptQ1: {
@@ -19,9 +20,7 @@ const schema = new SimpleSchema({
   }, geriGeriApptQ4: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriGeriApptQ5: {
-    type: Array, optional: true
-  }, "geriGeriApptQ5.$": {
-    type: String, allowedValues: ["Done"]
+    type: Boolean, label: "Done", optional: true
   }, geriGeriApptQ6: {
     type: String, allowedValues: ["Yes, requirement met.", "No, requirement not met."], optional: false
   }, geriGeriApptQ7: {
@@ -51,26 +50,40 @@ class GeriGeriApptForm extends Component {
 
         <Fragment>
           <h2>4. Geriatrics Appointment</h2>
-          <h3>1. If visual acuity ≥ 6/12: </h3>
-          1) Check if participant is a CHAS card holder (Needs to present CHAS card on site)
-          <RadioField name="geriGeriApptQ1" label="Geri - Geri Appt Q1" />
-          2) Check if participant is a SWCDC Resident (Link: http://sis.pa-apps.sg/NASApp/sim/SearchResults.jsp)
-          <RadioField name="geriGeriApptQ2" label="Geri - Geri Appt Q2" />
-          <h3>If YES to both, please give either SWCDC Eye Voucher OR Pearl's Optical Voucher:</h3>
-          SWCDC Eye Voucher given? - to be given if qn 1 and 2 answers are BOTH 'Yes'
-          <RadioField name="geriGeriApptQ3" label="Geri - Geri Appt Q3" />
-          Pearl's Optical Voucher given? - to be given if either qn 1 or qn 2 (or both) answers is 'No'
-          <RadioField name="geriGeriApptQ4" label="Geri - Geri Appt Q4" />
-          <h3>2. If participant is recommended for social support:</h3>
-          Persuade participant to go to social support booth and explain that AIC can help
-          <SelectField name="geriGeriApptQ5" checkboxes="true" label="Geri - Geri Appt Q5" />
+          {/*<DisplayIf condition={() => (
+        (typeof(info["Geri - Vision"]) !== "undefined" && info["Geri - Vision"].geriVisionQ3 >= 12) ||
+        (typeof(info["Geri - Vision"]) !== "undefined" && info["Geri - Vision"].geriVisionQ4 >= 12)
+      )}>*/}
+      <span style={{color: "green"}}>THE BELOW APPEARS WHEN GERI VISION FORM MEETS CRITERIA (WIP)</span>
+          <Fragment>
+            <h3>Visual acuity is ≥ 6/12: </h3>
+            Pearl's Optical Voucher given?
+            <RadioField name="geriGeriApptQ4" label="Geri - Geri Appt Q4" />
+          </Fragment>
+
+          <span style={{color: "green"}}>THE BELOW APPEARS WHEN GERI EBAS-DEP, PT CONSULT, OT CONSULT MEET CRITERIA (WIP)</span>
+          {/*<DisplayIf condition={() => (
+        (typeof(info["Geri - EBAS-DEP"]) !== "undefined" && info["Geri - EBAS-DEP"].geriEbasDepQ10 === "Yes") ||
+        (typeof(info["Geri - EBAS-DEP"]) !== "undefined" && info["Geri - EBAS-DEP"].geriEbasDepQ11 === "Yes") ||
+        (typeof(info["Geri - PT Consult"]) !== "undefined" && info["Geri - PT Consult"].geriPtConsultQ4 === "Yes") ||
+        (typeof(info["Geri - OT Consult"]) !== "undefined" && info["Geri - OT Consult"].geriOtConsultQ4 === "Yes")
+      )}>*/}
+          <Fragment>
+            <h3>Participant is recommended for social support:</h3>
+            Persuade participant to go to social support booth and explain that AIC can help
+            <BoolField name="geriGeriApptQ5" />
+          </Fragment>
+
+
           <h3>3. Eligibility for SWCDC Safe and Bright Homes Programme </h3>
-          1) Participants will be eligible for the SWCDC Safe and Bright Homes Programme if they meet the following criteria:<br />i) SWCDC Resident (Link: http://sis.pa-apps.sg/NASApp/sim/SearchResults.jsp)<br />ii) Requires home modification (determined by SAOT) - Refer to Form A<br />
+          1) Participants will be eligible for the SWCDC Safe and Bright Homes Programme if they meet the following criteria:<br />i) SWCDC Resident (Link: <a href="https://sis.pa-apps.sg/NASApp/sim/AdvancedSearch.aspx">https://sis.pa-apps.sg/NASApp/sim/AdvancedSearch.aspx</a>)<br />ii) Requires home modification (determined by SAOT) - Refer to Form A<br />
           <RadioField name="geriGeriApptQ6" label="Geri - Geri Appt Q6" />
-          2) Do you wish to sign up for the SWCDC Safe and Bright Homes Programme?<br /><br />Persuade participant to sign up for SWCDC Safe and Bright Homes. <br />Description of the programme: “The Safe and Bright Homes programme aims to develop safer and more energy-efficient homes for senior citizens and persons with disabilities. Safety (e.g. bathroom grab bars, non-slip mats etc), energy and water conservation features (energy-saving bulbs, water thimbles and cistern bags etc) will be installed in selected homes of needy residents. Workshops will also be conducted to teach them how to troubleshoot common household problems. The programme will be spread out over 10 sessions, for about 10 months.”
-          <RadioField name="geriGeriApptQ7" label="Geri - Geri Appt Q7" />
-          3) Sign up form for SWCDC filled in?
-          <RadioField name="geriGeriApptQ8" label="Geri - Geri Appt Q8" />
+          <PopupText qnNo="geriGeriApptQ6" triggerValue="Yes, requirement met.">
+            2) Do you wish to sign up for the SWCDC Safe and Bright Homes Programme?<br /><br />Persuade participant to sign up for SWCDC Safe and Bright Homes. <br />Description of the programme: “The Safe and Bright Homes programme aims to develop safer and more energy-efficient homes for senior citizens and persons with disabilities. Safety (e.g. bathroom grab bars, non-slip mats etc), energy and water conservation features (energy-saving bulbs, water thimbles and cistern bags etc) will be installed in selected homes of needy residents. Workshops will also be conducted to teach them how to troubleshoot common household problems. The programme will be spread out over 10 sessions, for about 10 months.”
+            <RadioField name="geriGeriApptQ7" label="Geri - Geri Appt Q7" />
+            3) Sign up form for SWCDC filled in?
+            <RadioField name="geriGeriApptQ8" label="Geri - Geri Appt Q8" />
+          </PopupText>
 
         </Fragment>
 
