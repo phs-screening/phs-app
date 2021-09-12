@@ -98,12 +98,9 @@ class GeriSppbForm extends Component {
         Score for 8' WALK (out of 4):
         <RadioField name="geriSppbQ8" label="Geri - SPPB Q8"/>
       </b></font>
-      
         <h3>
           <font color="blue">Total score (Max Score: 12): 
-          
             <GetSppbScore />
-          
           </font>
         </h3>
       

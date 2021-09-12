@@ -31,7 +31,7 @@ const schema = new SimpleSchema({
 }
 )
 
-function GetFrailScore(model) {
+function GetFrailScore() {
   let score = 0;
   const [{ value: q1 }] = useField('geriFrailScaleQ1', {});
   const [{ value: q2 }] = useField('geriFrailScaleQ2', {});
