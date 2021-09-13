@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -16,6 +16,7 @@ import {
   UserPlus as UserPlusIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
+import { FormContext } from '../App.js'
 
 
 const items = [
@@ -36,7 +37,7 @@ const items = [
   },
 ];
 
-const DashboardSidebar = ({ onMobileClose, openMobile, patientInfo }) => {
+const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -44,6 +45,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile, patientInfo }) => {
       onMobileClose();
     }
   }, [location.pathname]);
+
+  const patientId = useContext(FormContext);
 
   const content = (
     <Box
@@ -65,13 +68,13 @@ const DashboardSidebar = ({ onMobileClose, openMobile, patientInfo }) => {
           color="textPrimary"
           variant="h5"
         >
-          {typeof patientInfo.preRegistrationQ == "undefined" ? "No Patient Selected" : patientInfo.preRegistrationQ.initials}
+          {/*typeof patientId.preRegistrationQ == "undefined" ? "No Patient Selected" : patientInfo.preRegistrationQ.initials*/}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {typeof patientInfo.patient_id == "undefined" ? "" : "Patient_id " + patientInfo.patient_id}
+          {typeof patientId == "undefined" ? "" : "Patient_id " + patientId}
         </Typography>
       </Box>
       <Divider />
