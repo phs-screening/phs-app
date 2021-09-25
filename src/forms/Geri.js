@@ -69,7 +69,7 @@ export default function GeriTabs() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" color="default">
         <Tabs value={value} onChange={handleChange} variant="scrollable" aria-label="simple tabs example">
           <Tab label="AMT" {...a11yProps(0)} />
           <Tab label="Ebas Dep" {...a11yProps(1)} />

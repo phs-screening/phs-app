@@ -61,7 +61,7 @@ export default function HxTabs() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" color="default">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="HCSR" {...a11yProps(0)} />
           <Tab label="NSS" {...a11yProps(1)} />
