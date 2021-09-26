@@ -100,7 +100,7 @@ class WceForm extends Component {
         </Paper>
 
 
-        <Paper className="snippet-item" elevation={2} p={0} m={0}>
+        <Paper className="snippet-item" elevation={2} p={0} m={0} sx={{padding: "50px"}}>
           <h2>Snippets appear here</h2>
         </Paper>
 
