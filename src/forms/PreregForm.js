@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +10,9 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 
 import { schema, layout } from './prereg.js';
 
+import { preRegister } from '../api/api.js';
+
+
 class PreregForm extends Component {
 
     render() {
@@ -17,14 +21,17 @@ class PreregForm extends Component {
         const newForm = () => (
           <AutoForm
             schema={form_schema}
-            onSubmit={console.log}
-            //onSubmit={this.handleSubmit}
-            onSubmitSuccess={() => {
-                alert("Successful");
-              }}
-            onSubmitFailure={() => {
-                alert('Unsuccessful')
-              }}
+            onSubmit={async (model) => {
+              const response = await preRegister(model);
+              console.log(response);
+              if (response.result) {
+                alert(`Successfully pre-registered patient with id ${response.data.patient_id}.`);
+                // TODO: update state with user id on success
+                window.location = '/app/dashboard';
+              } else {
+                alert(`Unsuccessful. ${response.error}`);
+              }
+            }}
           >
             {form_layout}
             <ErrorsField />

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -16,11 +16,8 @@ import {
   UserPlus as UserPlusIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
+import { FormContext } from '../App.js'
 
-const user = {
-  jobTitle: 'John Patientdoe',
-  name: 'current patient'
-};
 
 const items = [
   {
@@ -49,6 +46,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     }
   }, [location.pathname]);
 
+  const patientId = useContext(FormContext);
+
   const content = (
     <Box
       sx={{
@@ -69,13 +68,13 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {/*typeof patientId.preRegistrationQ == "undefined" ? "No Patient Selected" : patientInfo.preRegistrationQ.initials*/}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {typeof patientId == "undefined" ? "" : "Patient_id " + patientId}
         </Typography>
       </Box>
       <Divider />

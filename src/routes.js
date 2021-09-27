@@ -24,7 +24,7 @@ import HxTabs from './forms/HistoryTaking';
 const routes = [
   {
     path: 'app',
-    element: <DashboardLayout />,
+    element: <DashboardLayout/>,
     children: [
       { path: 'registration', element: <Registration /> },
       { path: 'summary', element: <Account /> },
