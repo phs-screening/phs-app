@@ -120,6 +120,7 @@ class GeriAmtForm extends Component {
               Was Q7 answered correctly?
               <RadioField name="geriAmtQ7" />
               <h3>8) What is his/her job? (show picture)<br />请问图片里的人士很有可能是从事哪种行业？</h3>
+              <img src='/images/geri-amt/q8.png' alt='Doctor' /> <br />
               Was Q8 answered correctly?
               <RadioField name="geriAmtQ8" />
               <h3>9) Count backwards from 20 to 1. 请您从二十开始，倒数到一。</h3>

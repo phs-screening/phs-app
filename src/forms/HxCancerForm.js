@@ -124,6 +124,7 @@ class HxCancerForm extends Component {
           <LongTextField name="hxCancerQ26" label="Hx Cancer Q26" /><br /><br />
 
           <b><font color="blue">2. Is there positive family history (AMONG FIRST DEGREE RELATIVES) for the following cancers?</font></b>
+          <br />
           <SelectField name="hxCancerQ2" checkboxes="true" label="Hx Cancer Q2" /><br /><br />
 
           Please specify:
@@ -137,17 +138,17 @@ class HxCancerForm extends Component {
             Based on participant family hx, please recommend FIT/WCE and Doctor's Consultation (if applicable)</b> <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation   <br />3) Recommend relevant exhibition booths on Page 2 of Form A Exhibition - Recommendation<br /><br /><br />
 
           <font color="red"><h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3></font>
-          <h2>2. NSS CANCER SCREENING PRACTICES SURVEY.</h2><br /><br />
+          <h2>2. NSS CANCER SCREENING PRACTICES SURVEY.</h2><br />
           <font color="red"><b>1. For respondent aged 50 and above only,</b></font> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
           <RadioField name="hxCancerQ5" label="Hx Cancer Q5" /><br /><br />
           <font color="red"><b>2. For respondent aged 50 and above only,</b></font> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
           <RadioField name="hxCancerQ6" label="Hx Cancer Q6" />
-          <font color="red"><b>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives. <br />If deemed to be in high risk (positive family history of colorectal cancer in first degree relatives, counsel for colonoscopy every 3 years), refer to risk categorization given.</b></font><br /><br /><br /><br />
+          <font color="red"><b>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives. <br />If deemed to be in high risk (positive family history of colorectal cancer in first degree relatives, counsel for colonoscopy every 3 years), refer to risk categorization given.</b></font><br /><br /><br />
           <font color="red"><b>3. For <u>female</u> respondent aged 40 and above only.</b></font><br />When was the last time you had your last mammogram? (A mammogram is an x-ray of each breast to look for breast cancer.)
           <RadioField name="hxCancerQ7" label="Hx Cancer Q7" /><br /><br />
           <font color="red"><b>4. For <u>female</u> respondent aged 25 and above, who have/had a husband/boyfriend and not had their womb completely surgically removed only.</b></font><br />When was the last time you had a PAP smear test? (A PAP smear test is a simple test involving the scrapping of cells fom the mouth of the womb, to check for changes in the cells of your cervix, which may develop into cancer later.)
           <RadioField name="hxCancerQ8" label="Hx Cancer Q8" />
-          <b><font color="red">For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and above and if interested, refer to WCE.<br />Please encourage participants to go for HPV test every 5 years. <br />Refer to WCE: </font><br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A</b><br /><br /><br /><br />
+          <b><font color="red">For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and above and if interested, refer to WCE.<br />Please encourage participants to go for HPV test every 5 years. <br />Refer to WCE: </font><br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A</b><br /><br /><br />
           <b>If participant has a <mark>history of cancer</mark> or if <mark>participant's family history</mark> requires further scrutiny by doctors, refer to doctor's consult. <font color="red">(If indicated 'Yes', please complete the question below.)</font></b>
           <RadioField name="hxCancerQ9" label="Hx Cancer Q9" />
           <PopupText qnNo="hxCancerQ9" triggerValue="Yes">
@@ -186,8 +187,8 @@ class HxCancerForm extends Component {
           Average Reading Diastolic (average of closest 2 readings): <br />
           <NumField name="hxCancerQ18" label="Hx Cancer Q18" /> <br />
           Hypertension criteria:<br />○ Younger participants: > 140/90<br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe albuminuria): > 130/80<br />○ DM: > 130/80<br /> <br />
-          Please tick to highlight if you feel <b>BLOOD PRESSURE</b> require closer scrutiny by docors later.<br /><br />
-          <RadioField name="hxCancerQ27" label="Hx Cancer Q27" />
+          Please tick to highlight if you feel <b>BLOOD PRESSURE</b> require closer scrutiny by docors later.<br />
+          <RadioField name="hxCancerQ27" label="Hx Cancer Q27" /><br />
           <PopupText qnNo="hxCancerQ27" triggerValue="Yes">
               <b>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
                 <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A  
@@ -230,10 +231,12 @@ class HxCancerForm extends Component {
           <h3><u>3) Waist Circumference</u> (taken only if cannot measure BMI e.g. wheelchair, prosthetic legs)</h3>
           Waist Circumference (in cm) <br />
           <NumField name="hxCancerQ24" label="Hx Cancer Q24" /> <br />
+          <br />
           <h2>HISTORY TAKING PART 5: REFERRALS/MEGA SORTING STATION </h2>
           1. REFERRALS<br />Please reference page 1 of form A for various criteria.
           <SelectField name="hxCancerQ25" checkboxes="true" label="Hx Cancer Q25" />
-
+          <br />
+          
         </Fragment>
 
         <ErrorsField />
