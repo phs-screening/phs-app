@@ -11,7 +11,8 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {LoginContext} from '../App.js'
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -20,20 +21,31 @@ const Login = () => {
   const navigate = useNavigate();
   const [accountOptions, setAccountOptions] = useState(["Guest", "Admin"]);
   const [accountOption, setAccountOption] = useState("Guest");
+  const {isLogin} = useContext(LoginContext);
+  const {setProfile} = useContext(LoginContext);
   const handleLogin = async (values) => {
       try {
-          console.log(values)
           const payload = {username: values.email, password: values.password, type: accountOption}
           const credentials = Realm.Credentials.function(payload);
           // Authenticate the user
           const user = await mongoDB.logIn(credentials);
-          console.log(user)
+          isLogin(true)
+          const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
+          if (accountOption === accountOptions[1]) {
+              //admin
+              const userProfile = mongoConnection.db("phs").collection("admin_profiles")
+              const profile = await userProfile.findOne({username: values.email})
+              setProfile(profile)
+          } else {
+              const userProfile = mongoConnection.db("phs").collection("guest_profiles")
+              const profile = await userProfile.findOne({username: values.email})
+              setProfile(profile)
+          }
           navigate('/app/registration', { replace: true });
-          // const mongoClient = mongoDB.currentUser.mongoClient("mongodb-atlas");
-          // mongoClient.db("phs").collection("data").insertOne({name: "test"});
-          // `App.currentUser` updates to match the logged in user
+
           return user
       } catch(err) {
+          console.log(err)
           alert("Invalid Username or Password!")
       }
 

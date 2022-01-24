@@ -20,6 +20,7 @@ import SocialServiceForm from 'src/forms/SocialServiceForm';
 import WceForm from 'src/forms/WceForm';
 import GeriTabs from './forms/Geri';
 import HxTabs from './forms/HistoryTaking';
+import ManageVolunteers from 'src/pages/ManageVolunteers';
 
 const routes = [
   {
@@ -40,6 +41,7 @@ const routes = [
       { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
+      { path: 'manage', element: <ManageVolunteers /> },
       { path: 'wce', element: <WceForm /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
@@ -51,7 +53,7 @@ const routes = [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Navigate to="/login"/> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }
