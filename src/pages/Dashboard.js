@@ -25,9 +25,9 @@ const Dashboard = () =>{
         }
     }
 
-    useEffect(() => {
-        testLogin()
-    }, [])
+    // useEffect(() => {
+    //     testLogin()
+    // }, [])
 
     return (
 
