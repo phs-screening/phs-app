@@ -5,8 +5,8 @@ import GlobalStyles from 'src/components/GlobalStyles';
 import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
-import React, { useState } from 'react';
-import mongoDB from "./services/mongoDB";
+import React, {useContext, useEffect, useState} from 'react';
+import mongoDB, {getProfile, isLoggedin} from "./services/mongoDB";
 import './App.css';
 export const FormContext = React.createContext()
 export const LoginContext = React.createContext({
@@ -21,9 +21,15 @@ export const LoginContext = React.createContext({
 });
 
 const App = () => {
+const waitProfile = async () => {
+    const profile = await getProfile();
+    return profile
+}
+  const {setProfile} = useContext(LoginContext);
   const [patientId, setPatientId] = useState(-1)
-  const [login, isLogin] = useState(mongoDB.currentUser === null)
-  const [profile, setProfile] = useState(false)
+  const [login, isLogin] = useState(isLoggedin())
+  const [profile, setProfiles] = useState()
+
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id);
