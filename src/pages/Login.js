@@ -11,7 +11,8 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {LoginContext} from '../App.js'
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -20,23 +21,54 @@ const Login = () => {
   const navigate = useNavigate();
   const [accountOptions, setAccountOptions] = useState(["Guest", "Admin"]);
   const [accountOption, setAccountOption] = useState("Guest");
+  const {isLogin} = useContext(LoginContext);
+  const {setProfile} = useContext(LoginContext);
+  const [loading, isLoading] = useState(false);
   const handleLogin = async (values) => {
       try {
-          console.log(values)
-          const payload = {username: values.email, password: values.password, type: accountOption}
-          const credentials = Realm.Credentials.function(payload);
-          // Authenticate the user
-          const user = await mongoDB.logIn(credentials);
-          console.log(user)
+          // fix uid?
+         isLoading(true)
+          if (accountOption === accountOptions[1]) {
+              //admin
+              const credentials = Realm.Credentials.emailPassword(values.email, values.password)
+              // Authenticate the user
+              const user = await mongoDB.logIn(credentials);
+              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
+              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const profile = await userProfile.findOne({username: values.email})
+              console.log(profile)
+              console.log(user.profile.email)
+              console.log(user.profile.name)
+              setProfile(profile)
+              isLogin(true)
+          } else {
+              const credentials = Realm.Credentials.function({username: values.email, password: values.password})
+              // Authenticate the user
+              const user = await mongoDB.logIn(credentials);
+              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
+              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const profile = await userProfile.findOne({username: values.email})
+              isLogin(true)
+              setProfile(profile)
+          }
+          isLoading(false)
           navigate('/app/registration', { replace: true });
-          // const mongoClient = mongoDB.currentUser.mongoClient("mongodb-atlas");
-          // mongoClient.db("phs").collection("data").insertOne({name: "test"});
-          // `App.currentUser` updates to match the logged in user
-          return user
+
       } catch(err) {
+          console.log(err)
+          isLoading(false)
           alert("Invalid Username or Password!")
       }
-
+      isLoading(false)
+  }
+  const handleReset = async (values) => {
+      const email = values.email
+      try {
+          await mongoDB.emailPasswordAuth.sendResetPasswordEmail(email)
+          alert("Email sent to your account!")
+      } catch (e) {
+          alert("Invalid Email!")
+      }
   }
 
   return (
@@ -140,9 +172,24 @@ const Login = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in now
+                      {loading ? "Logging in...":"Sign in now"}
                   </Button>
                 </Box>
+                  {accountOption === accountOptions[1] && <Box sx={{ py: 1 }}>
+                      <Button
+                          color="primary"
+                          // disabled={isSubmitting}
+                          fullWidth
+                          size="large"
+                          type="button"
+                          variant="contained"
+                          onClick={() => {
+                              handleReset(values)}
+                          }
+                      >
+                          Reset Password
+                      </Button>
+                  </Box>}
               </form>
             )}
           </Formik>

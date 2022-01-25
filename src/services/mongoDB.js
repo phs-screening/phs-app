@@ -8,6 +8,25 @@ const app = new Realm.App({ id: REALM_APP_ID });
 
 export default app;
 
+export const getName = () => {
+    return app.currentUser.profile.name === undefined ? app.currentUser.profile.email : app.currentUser.profile.name
+}
+
+export const isLoggedin = () => {
+    return app.currentUser !== null
+}
+
+export const getProfile = async (type) => {
+    if (isLoggedin()) {
+            const profile = await app.currentUser.mongoClient("mongodb-atlas")
+                .db("phs").collection("profiles").findOne({username: getName()})
+        console.log(getName())
+            return profile
+    }
+
+    return null;
+}
+
 
 // exports = async function(loginPayload) {
 //     // General auth function on login page / sharer page / chat page
