@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import mongoDB from "../services/mongoDB";
+import mongoDB, {hashPassword, profilesCollection} from "../services/mongoDB";
 import * as Realm from "realm-web";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -14,6 +14,7 @@ import {
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import app from "../services/mongoDB";
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -38,8 +39,7 @@ const Login = () => {
               const credentials = Realm.Credentials.emailPassword(values.email, values.password)
               // Authenticate the user
               const user = await mongoDB.logIn(credentials);
-              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const userProfile = profilesCollection()
               const profile = await userProfile.findOne({username: values.email})
               console.log(profile)
               console.log(user.profile.email)
@@ -47,20 +47,20 @@ const Login = () => {
               setProfile(profile)
               isLogin(true)
           } else {
-              const encoder = new TextEncoder()
-              const encodePassword = encoder.encode(values.password)
-              const hashPassword = await crypto.subtle.digest('SHA-256', encodePassword);
-              const hashArray = Array.from(new Uint8Array(hashPassword))
-              const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+              const hashHex = await hashPassword(values.password)
               const credentials = Realm.Credentials.function({username: values.email, password: hashHex})
               // Authenticate the user
               const user = await mongoDB.logIn(credentials);
-              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const userProfile = profilesCollection()
               const profile = await userProfile.findOne({username: values.email})
               isLogin(true)
               setProfile(profile)
           }
+          const userProfile = profilesCollection()
+          await userProfile.updateOne({
+              username: values.email,
+
+          },{$set: {lastLogin: new Date()}})
           isLoading(false)
           navigate('/app/registration', { replace: true });
 

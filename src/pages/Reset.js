@@ -7,12 +7,13 @@ import { Formik } from 'formik';
 import {
     Box,
     Button,
-    Container,
+    Container, IconButton, InputAdornment,
     TextField,
     Typography
 } from '@material-ui/core';
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -24,6 +25,10 @@ const Reset = () => {
     const [accountOption, setAccountOption] = useState("Guest");
     const {isLogin} = useContext(LoginContext);
     const {setProfile} = useContext(LoginContext);
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
     const handleLogin = async (values) => {
         try {
             // fix uid?
@@ -132,9 +137,22 @@ const Reset = () => {
                                     name="password"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     value={values.password}
                                     variant="outlined"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                                 <Box sx={{ py: 2 }}>
                                     <Button
