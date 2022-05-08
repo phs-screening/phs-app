@@ -1,14 +1,18 @@
 import React, {useState} from "react";
 import {
-     Box, Typography, TextField, Button
+    Box, Typography, TextField, Button, InputAdornment, IconButton
 } from '@material-ui/core';
 import * as Yup from "yup";
 import {Formik} from "formik";
 import mongoDB from "../services/mongoDB";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 //Create multiple accounts at once
 const ManageVolunteers = () => {
     const [loading, isLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const handleCreateAccount = async (values) => {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
@@ -18,10 +22,15 @@ const ManageVolunteers = () => {
             const searchUnique = await guestProfiles.findOne({username:values.email})
 
             if (searchUnique === null) {
+                const encoder = new TextEncoder()
+                const encodePassword = encoder.encode(values.password)
+                const hashPassword = await crypto.subtle.digest('SHA-256', encodePassword);
+                const hashArray = Array.from(new Uint8Array(hashPassword))
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 
                 await guestProfiles.insertOne({
                     username: values.email,
-                    password: values.password,
+                    password: hashHex,
                 })
 
                 alert("Account Created!")
@@ -93,9 +102,22 @@ const ManageVolunteers = () => {
                                 name="password"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={values.password}
                                 variant="outlined"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                             <Box sx={{ py: 2 }}>
                                 {loading ? <div>Creating Account..</div> :<Button

@@ -12,19 +12,26 @@ import InputIcon from '@material-ui/icons/Input';
 import Logo from './Logo';
 import {useEffect, useState} from "react";
 import {getName, getProfile, isLoggedin} from "../services/mongoDB";
+import { useNavigate } from 'react-router-dom';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
-  console.log('');
+  const navigate = useNavigate()
+  const notLoggedIn = () => {
+    navigate('/login', { replace: true })
+    alert("You are not logged In!")
+  }
   const [profile, setProfile] = useState(undefined)
   const [admin, isAdmin] = useState(false)
   const [name, setName] = useState(isLoggedin()
   ? getName()
-  : "You are not logged in! Changes will not be saved!")
+  : notLoggedIn())
 
   useEffect(async () => {
     const profile = await getProfile()
     setProfile(profile)
-    isAdmin(profile.is_admin)
+    if (profile !== null) {
+      isAdmin(profile.is_admin)
+    }
   }, [])
 
 

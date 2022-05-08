@@ -1,5 +1,6 @@
 import * as Realm from "realm-web";
 
+
 const REALM_APP_ID = "phsmain-myacz";
 // Deployment: phsmain-myacz
 // Development: application-0-rzpjv
@@ -13,14 +14,24 @@ export const getName = () => {
 }
 
 export const isLoggedin = () => {
-    return app.currentUser !== null
+    return app.currentUser !== null && app.currentUser.accessToken
 }
+
+export const logOut = () => {
+    return app.currentUser.logOut()
+}
+
+export const guestUserCount = async () => {
+    const query = await app.currentUser.mongoClient("mongodb-atlas")
+        .db("phs").collection("profiles").count({is_admin: null})
+    return query
+}
+
 
 export const getProfile = async (type) => {
     if (isLoggedin()) {
             const profile = await app.currentUser.mongoClient("mongodb-atlas")
                 .db("phs").collection("profiles").findOne({username: getName()})
-        console.log(getName())
             return profile
     }
 
