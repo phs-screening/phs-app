@@ -1,18 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import mongoDB from "../services/mongoDB";
+import mongoDB, {hashPassword, profilesCollection} from "../services/mongoDB";
 import * as Realm from "realm-web";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography
+    Box,
+    Button,
+    Container, IconButton, InputAdornment,
+    TextField,
+    Typography
 } from '@material-ui/core';
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
+import {Visibility, VisibilityOff} from "@material-ui/icons";
+import app from "../services/mongoDB";
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -24,6 +26,10 @@ const Login = () => {
   const {isLogin} = useContext(LoginContext);
   const {setProfile} = useContext(LoginContext);
   const [loading, isLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   const handleLogin = async (values) => {
       try {
           // fix uid?
@@ -33,8 +39,7 @@ const Login = () => {
               const credentials = Realm.Credentials.emailPassword(values.email, values.password)
               // Authenticate the user
               const user = await mongoDB.logIn(credentials);
-              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const userProfile = profilesCollection()
               const profile = await userProfile.findOne({username: values.email})
               console.log(profile)
               console.log(user.profile.email)
@@ -42,15 +47,20 @@ const Login = () => {
               setProfile(profile)
               isLogin(true)
           } else {
-              const credentials = Realm.Credentials.function({username: values.email, password: values.password})
+              const hashHex = await hashPassword(values.password)
+              const credentials = Realm.Credentials.function({username: values.email, password: hashHex})
               // Authenticate the user
               const user = await mongoDB.logIn(credentials);
-              const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-              const userProfile = mongoConnection.db("phs").collection("profiles")
+              const userProfile = profilesCollection()
               const profile = await userProfile.findOne({username: values.email})
               isLogin(true)
               setProfile(profile)
           }
+          const userProfile = profilesCollection()
+          await userProfile.updateOne({
+              username: values.email,
+
+          },{$set: {lastLogin: new Date()}})
           isLoading(false)
           navigate('/app/registration', { replace: true });
 
@@ -60,6 +70,10 @@ const Login = () => {
           alert("Invalid Username or Password!")
       }
       isLoading(false)
+  }
+
+  const togglePassword = () => {
+
   }
   const handleReset = async (values) => {
       const email = values.email
@@ -159,10 +173,25 @@ const Login = () => {
                   name="password"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={values.password}
                   variant="outlined"
+                  InputProps={{
+                      endAdornment: (
+                      <InputAdornment position="end">
+                      <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                      </InputAdornment>
+                      )
+                  }}
                 />
+
+
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"

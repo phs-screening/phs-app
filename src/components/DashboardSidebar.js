@@ -17,6 +17,8 @@ import {
 } from 'react-feather';
 import NavItem from './NavItem';
 import { FormContext } from '../App.js'
+import { useNavigate } from 'react-router-dom';
+import {logOut} from "../services/mongoDB";
 
 
 const items = [
@@ -39,6 +41,7 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -47,6 +50,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const patientId = useContext(FormContext);
+  const handleLogOut = () => {
+      logOut().then(() => navigate('/login', { replace: true })).catch(() => alert("Error Logging Out"))
+  }
 
   const content = (
     <Box
@@ -108,7 +114,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           <Button
             color="primary"
             component="a"
-            href="/login"
+            onClick={()=> handleLogOut()}
             variant="contained"
           >
             Sign Out
