@@ -1,10 +1,11 @@
-const axios = require('axios').default;
+import mongoDB from "../services/mongoDB";
 
+const axios = require('axios').default;
 
 export async function preRegister(preRegArgs) {
     let gender = preRegArgs.gender;
-    let initials = preRegArgs.initials;
-    let abbreviatedNric = preRegArgs.abbreviatedNric;
+    let initials = preRegArgs.initials.trim().toUpperCase();
+    let abbreviatedNric = preRegArgs.abbreviatedNric.toUpperCase();
     let goingForPhlebotomy = preRegArgs.goingForPhlebotomy;
     // validate params
     if (gender == null || initials == null || abbreviatedNric == null || goingForPhlebotomy == null) {
@@ -14,19 +15,40 @@ export async function preRegister(preRegArgs) {
         return {"result": false, "error": "The value of goingForPhlebotomy must either be \"T\" or \"F\""};
     }
     // TODO: more exhaustive error handling. consider abstracting it in a validation function, and using schema validation
+    let data = {
+        "gender": gender,
+        "initials": initials, 
+        "abbreviatedNric": abbreviatedNric,
+        "goingForPhlebotomy": goingForPhlebotomy
+    }
+    let isSuccess = false;
+    let errorMsg = "";
     try {
-        var response = await axios.post(`/api/forms/preRegistrationQ`, {
-            "gender": gender,
-            "initials": initials, 
-            "abbreviatedNric": abbreviatedNric,
-            "goingForPhlebotomy": goingForPhlebotomy
-        });
+        const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+        const patientsRecord = mongoConnection.db("phs").collection("patients");
+        const record = await patientsRecord.find({abbreviatedNric, initials});
+        if (record.length === 0) {
+            const qNum = await mongoDB.currentUser.functions.getNextQueueNo();
+            await patientsRecord.insertOne({queueNo: qNum, ...data});
+            data = {patientId: qNum, ...data};
+            isSuccess = true;
+        } else {
+            errorMsg = "There exists a patient with the same abbreviated NRIC and initials.\n"
+                + "Please check that the patient has not registered yet.\nReport to the admin"
+                + " if there is no mistake as we need a way to identify the patients.";
+        }
+        // var response = await axios.post(`/api/forms/preRegistrationQ`, {
+        //     "gender": gender,
+        //     "initials": initials, 
+        //     "abbreviatedNric": abbreviatedNric,
+        //     "goingForPhlebotomy": goingForPhlebotomy
+        // });
     } catch(err) {
         // TODO: more granular error handling
         console.log(err);
         return {"result": false, "error": err}
     }
-    return {"result": true, "data": response.data};
+    return {"result": isSuccess, "data": data, "error": errorMsg};
 }
 
 // Provides general information about the kinds of forms that are supported

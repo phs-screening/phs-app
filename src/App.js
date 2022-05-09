@@ -7,8 +7,8 @@ import theme from 'src/theme';
 import routes from 'src/routes';
 import React, {useContext, useEffect, useState} from 'react';
 import mongoDB, {getProfile, isLoggedin} from "./services/mongoDB";
+import { FormContext } from './api/utils';
 import './App.css';
-export const FormContext = React.createContext()
 export const LoginContext = React.createContext({
   login : false,
   isLogin: (status) => {
@@ -40,7 +40,7 @@ const waitProfile = async () => {
 
   return (
       <LoginContext.Provider value={{login, isLogin, profile, setProfile}} >
-        <FormContext.Provider value={patientId}>
+        <FormContext.Provider value={{patientId, updatePatientId}}>
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               {routing}

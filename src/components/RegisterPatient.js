@@ -14,14 +14,19 @@ import { Search as SearchIcon } from 'react-feather';
 
 const RegisterPatient = props => {
   const [values, setValues] = useState({
-    queueNumber: ''
+    queueNumber: 1
   });
 
   const handleChange = (event) => {
-    setValues({
-      [event.target.name]: event.target.value
-    });
-    console.log("updated value")
+    const value = event.target.value;
+    if (value >= 0 || value === "") {
+      setValues({
+        [event.target.name]: event.target.value
+      });
+      console.log("updated value")
+    } else {
+      event.target.value = 0; 
+    }
   };
 
   const handleSubmit = () => {

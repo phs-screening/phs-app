@@ -16,7 +16,7 @@ import {
   UserPlus as UserPlusIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
-import { FormContext } from '../App.js'
+import { FormContext } from 'src/api/utils';
 import { useNavigate } from 'react-router-dom';
 import {logOut} from "../services/mongoDB";
 
@@ -49,7 +49,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     }
   }, [location.pathname]);
 
-  const patientId = useContext(FormContext);
+  const {patientId, updatePatientId} = useContext(FormContext);
   const handleLogOut = () => {
       logOut().then(() => navigate('/login', { replace: true })).catch(() => alert("Error Logging Out"))
   }
@@ -80,7 +80,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textSecondary"
           variant="body2"
         >
-          {typeof patientId == "undefined" ? "" : "Patient_id " + patientId}
+          {patientId === -1 ? "No Patient Selected" : "Patient_id " + patientId}
         </Typography>
       </Box>
       <Divider />
