@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';
@@ -11,11 +11,12 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { schema, layout } from './prereg.js';
 
 import { preRegister } from '../api/api.js';
-
+import { FormContext } from '../api/utils.js';
 
 class PreregForm extends Component {
-
     render() {
+        const {patientId, updatePatientId} = this.context;
+        const { navigate } = this.props;
         const form_schema = new SimpleSchema2Bridge(schema)
         const form_layout = layout
         const newForm = () => (
@@ -25,9 +26,10 @@ class PreregForm extends Component {
               const response = await preRegister(model);
               console.log(response);
               if (response.result) {
-                alert(`Successfully pre-registered patient with id ${response.data.patient_id}.`);
-                // TODO: update state with user id on success
-                window.location = '/app/dashboard';
+                alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
+                updatePatientId(response.data.patientId);
+                // window.location = '/app/dashboard';
+                navigate('/app/dashboard', { replace: true });
               } else {
                 alert(`Unsuccessful. ${response.error}`);
               }
@@ -50,5 +52,10 @@ class PreregForm extends Component {
         );
       }
 }
+PreregForm.contextType = FormContext;
 
-export default PreregForm;
+export default function Preregform(props) {
+  const navigate = useNavigate();
+
+  return <PreregForm {...props} navigate={navigate} />;
+}

@@ -6,8 +6,22 @@ import {
 } from '@material-ui/core';
 import PatientTimeline from 'src/components/dashboard/PatientTimeline';
 import {Helmet} from "react-helmet";
+import { FormContext } from 'src/api/utils';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () =>{
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (patientId === -1) {
+        alert("You need to enter the queue number for the patient you are attending to!")
+        navigate('/app/registration', { replace: true });
+    } else {
+      // TODO: query patients collection and pass it as props to child component
+    }
+
+}, [])
 
     return (
 
