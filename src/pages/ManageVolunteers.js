@@ -5,7 +5,7 @@ import {
 import * as Yup from "yup";
 import {Formik} from "formik";
 import mongoDB, {hashPassword, isAdmin, profilesCollection} from "../services/mongoDB";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
+import {Visibility, VisibilityOff, Search} from "@material-ui/icons";
 import {useNavigate} from "react-router-dom";
 
 //Create multiple accounts at once
@@ -20,8 +20,11 @@ const ManageVolunteers = () => {
     const handleClickShowPasswordReset = () => setShowPasswordReset(!showPasswordReset);
     const handleMouseDownPasswordReset = () => setShowPasswordReset(!showPasswordReset);
     const [resetPassword, setResetPassword] = useState([]);
+    const [loadingReset, isLoadingReset] = useState(false);
     const [indexReset, setIndexReset] = useState(-1);
     const [refresh, setRefresh] = useState(false);
+    const [search, setSearch] = useState("");
+    const [loadingDelete, isLoadingDelete] = useState(false);
 
     useEffect(async () => {
         if (await isAdmin()) {
@@ -51,11 +54,11 @@ const ManageVolunteers = () => {
                     password: hashHex,
                 })
 
-                alert("Account Created!")
+                alert("Account Created: " + values.email)
                 setRefresh(!refresh)
                 isLoading(false)
             } else {
-                alert("Username taken! Try another username")
+                alert("Username " + values.email + " taken! Try another username!")
                 isLoading(false)
             }
         } catch (e) {
@@ -72,14 +75,16 @@ const ManageVolunteers = () => {
         }
     }
 
-    const listItemManageVolunteers = guestUsers.sort(sortUsers).map((guest, index) => {
+    const listItemManageVolunteers = guestUsers.sort(sortUsers)
+        .filter(x => x.username.toLowerCase().trim().substr(0, search.length).includes(search.toLowerCase().trim()))
+        .map((guest, index) => {
         return <li style={styles.manageVolunteersItem}>
             <div style={styles.manageVolunteersDetails}>
                 <div >
                     {guest.username}
                 </div>
                 <div>
-                    Last Login: {guest.lastLogin ?  guest.lastLogin.toDateString() : "Has not Logged In"}
+                    Last Login: {guest.lastLogin ?  guest.lastLogin.toString() : "Has not Logged In"}
                 </div>
             </div>
 
@@ -94,7 +99,7 @@ const ManageVolunteers = () => {
                 >
                     Reset Password
                 </Button>
-                <Button
+               <Button
                     color="primary"
                     // disabled={isSubmitting}
                     style={styles.manageVolunteersItemButton}
@@ -105,6 +110,7 @@ const ManageVolunteers = () => {
                 >
                     Delete Account
                 </Button>
+
             </div>
 
 
@@ -113,30 +119,44 @@ const ManageVolunteers = () => {
 
 
     const deleteAccount = async (index) => {
+        isLoadingDelete(true)
         try {
             await profilesCollection().deleteOne({
                 username: guestUsers[index].username,
             }).then(() => {
-                alert("Account Successfully deleted!")
                 setRefresh(!refresh)
+                isLoadingDelete(false)
+                alert("Account Successfully deleted: " + guestUsers[index].username)
             })
         } catch (e) {
             alert("Error Deleting Account!: " + e)
+            isLoadingDelete(false)
         }
     }
 
     const handleResetPassword = async () => {
+        if (resetPassword.length === 0) {
+            alert("Password Cannot be Empty!")
+            return;
+        }
+        isLoadingReset(true)
         const hashHex = await hashPassword(resetPassword)
         try {
             await profilesCollection().updateOne({
                 username: guestUsers[indexReset].username,
 
-            },{$set: {password: hashHex}}).then(() => alert("password successfully reset!"))
+            },{$set: {password: hashHex}}).then(() => {
+                isLoadingReset(false)
+                setResetPassword("")
+                alert("password successfully reset for: " + guestUsers[indexReset].username)})
         } catch (e) {
             alert("Error resetting password!, No user selected!: " + e)
+            isLoadingReset(false)
+            setResetPassword("")
         }
 
     }
+
 
     return (
         <div style={styles.page}>
@@ -150,8 +170,8 @@ const ManageVolunteers = () => {
                         email: Yup.string().max(255).required('Username is required'),
                         password: Yup.string().max(255).required('Password is required')
                     })}
-                    onSubmit={(values) => {
-                        handleCreateAccount(values)
+                    onSubmit={(values, {resetForm}) => {
+                        handleCreateAccount(values).then(() => resetForm())
                     }}
                 >
                     {({
@@ -235,14 +255,37 @@ const ManageVolunteers = () => {
                     color="textPrimary"
                     variant="h2"
                 >
-                    Manage Volunteer Accounts
+                    Manage Volunteer Accounts ({guestUsers.length})
                 </Typography>
+            </Box>
 
+            <Box sx={{ px: 7, mb: 3 }}>
+                <div>
+                    Search Volunteer Accounts
+                </div>
+                <TextField
+                    fullWidth
+                    label="Search"
+                    margin="normal"
+                    name="search"
+                    value={search}
+                    variant="outlined"
+                    onChange={(x) => {
+                        setSearch(x.target.value)
+                    }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                    <Search/>
+                            </InputAdornment>
+                        )
+                    }}
+                />
             </Box>
 
             <Box sx={{ px: 7, mb: 3 }}>
                 <ul style={styles.manageVolunteers}>
-                    {listItemManageVolunteers}
+                    {loadingDelete ? <div> Deleting Account... </div>: listItemManageVolunteers}
                 </ul>
             </Box>
 
@@ -278,7 +321,7 @@ const ManageVolunteers = () => {
                         )
                     }}
                 />
-                <Button
+                {loadingReset ? <div> Resetting ... </div> : <Button
                     color="primary"
                     // disabled={isSubmitting}
                     size="large"
@@ -287,7 +330,8 @@ const ManageVolunteers = () => {
                     onClick={handleResetPassword}
                 >
                     CONFIRM
-                </Button>
+                </Button>}
+
             </Box>
         </div>
     )

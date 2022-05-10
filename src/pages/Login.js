@@ -14,10 +14,6 @@ import {
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
 import {Visibility, VisibilityOff} from "@material-ui/icons";
-import app from "../services/mongoDB";
-
-// TODO
-// Explore using hash function to store passwords on DB
 
 const Login = () => {
   const navigate = useNavigate();
@@ -72,9 +68,6 @@ const Login = () => {
       isLoading(false)
   }
 
-  const togglePassword = () => {
-
-  }
   const handleReset = async (values) => {
       const email = values.email
       try {
@@ -136,7 +129,7 @@ const Login = () => {
                     gutterBottom
                     variant="body2"
                   >
-                    PHS 2021
+                    PHS {new Date().getFullYear()}
                   </Typography>
 
                     <select
