@@ -1,6 +1,5 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';

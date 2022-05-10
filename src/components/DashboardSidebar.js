@@ -20,12 +20,12 @@ import { FormContext } from 'src/api/utils';
 import { useNavigate } from 'react-router-dom';
 import {logOut} from "../services/mongoDB";
 
-
+const title1 = 'Patient Dashboard';
 const items = [
   {
     href: '/app/dashboard',
     icon: BarChartIcon,
-    title: 'Patient Dashboard'
+    title: title1
   },
   {
     href: '/app/registration',
@@ -77,8 +77,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           {/*typeof patientId.preRegistrationQ == "undefined" ? "No Patient Selected" : patientInfo.preRegistrationQ.initials*/}
         </Typography>
         <Typography
-          color="textSecondary"
-          variant="body2"
+          color={patientId === -1 ? "textSecondary" : "primary.main"}
+          variant={patientId === -1 ? "body2" : "h5"}
         >
           {patientId === -1 ? "No Patient Selected" : "Patient_id " + patientId}
         </Typography>
@@ -92,6 +92,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
               key={item.title}
               title={item.title}
               icon={item.icon}
+              shouldDisable={patientId === -1 && item.title === title1}
             />
           ))}
         </List>
