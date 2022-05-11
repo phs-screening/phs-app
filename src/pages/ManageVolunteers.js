@@ -205,6 +205,11 @@ const ManageVolunteers = () => {
                                 type=""
                                 value={values.email}
                                 variant="outlined"
+                                inputProps={{
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
+                                }}
                             />
                             <TextField
                                 // error={Boolean(touched.password && errors.password)}
@@ -229,7 +234,10 @@ const ManageVolunteers = () => {
                                                 {showPassword ? <Visibility /> : <VisibilityOff />}
                                             </IconButton>
                                         </InputAdornment>
-                                    )
+                                    ),
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
                                 }}
                             />
                             <Box sx={{ py: 2 }}>
@@ -261,7 +269,7 @@ const ManageVolunteers = () => {
 
             <Box sx={{ px: 7, mb: 3 }}>
                 <div>
-                    Search Volunteer Accounts
+                    Search Volunteer Account
                 </div>
                 <TextField
                     fullWidth
@@ -278,7 +286,10 @@ const ManageVolunteers = () => {
                             <InputAdornment position="end">
                                     <Search/>
                             </InputAdornment>
-                        )
+                        ),
+                        form: {
+                            autocomplete: 'off',
+                        },
                     }}
                 />
             </Box>
@@ -318,7 +329,10 @@ const ManageVolunteers = () => {
                                     {showPasswordReset ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>
-                        )
+                        ),
+                        form: {
+                            autocomplete: 'off',
+                        },
                     }}
                 />
                 {loadingReset ? <div> Resetting ... </div> : <Button
