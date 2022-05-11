@@ -206,6 +206,7 @@ const ManageVolunteers = () => {
                                 value={values.email}
                                 variant="outlined"
                                 inputProps={{
+                                    autocomplete: 'new-password',
                                     form: {
                                         autocomplete: 'off',
                                     },
@@ -269,7 +270,7 @@ const ManageVolunteers = () => {
 
             <Box sx={{ px: 7, mb: 3 }}>
                 <div>
-                    Search Volunteer Account
+                    Search Volunteer Accounts
                 </div>
                 <TextField
                     fullWidth
@@ -330,6 +331,7 @@ const ManageVolunteers = () => {
                                 </IconButton>
                             </InputAdornment>
                         ),
+                        autocomplete: 'new-password',
                         form: {
                             autocomplete: 'off',
                         },
