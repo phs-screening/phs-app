@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import mongoDB from "../services/mongoDB";
 import {
   Box,
   Container,
@@ -9,8 +10,30 @@ import {Helmet} from "react-helmet";
 import { FormContext } from 'src/api/utils';
 import { useNavigate } from 'react-router-dom';
 
+function generateStatusArray(record) {
+  const entries = 10;
+  if (record) {
+    return [
+      true, // pre-registration, always true 
+      record.registrationForm !== undefined, // registration
+      record.phlebotomyForm !== undefined, // phlebotomy
+      record.historyTakingForm !== undefined, // history taking
+      record.fitForm !== undefined, // fit
+      record.wceForm !== undefined, // wce
+      record.geriatricsForm !== undefined, // geriatrics
+      record.doctorConsultForm !== undefined, // doctor's consult
+      record.socialServiceForm !== undefined, // social service
+      record.feedbackForm !== undefined // feedback
+    ]
+  } else {
+    return new Array(entries).fill(false);;
+  }
+}
+
+
 const Dashboard = () =>{
   const {patientId, updatePatientId} = useContext(FormContext);
+  const [formsStatus, setFormsStatus] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +42,23 @@ const Dashboard = () =>{
         navigate('/app/registration', { replace: true });
     } else {
       // TODO: query patients collection and pass it as props to child component
+      const createFormsStatus = async () => {
+        try {
+          const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+          const patientsRecord = mongoConnection.db("phs").collection("patients");
+          // patientId must be valid for this component to even render without error
+          // hence, if there is no record, likely there is implementation bug
+          const record = await patientsRecord.findOne({queueNo: patientId});
+          setFormsStatus(generateStatusArray(record));
+        } catch(err) {
+          alert(err);
+          navigate('/app/registration', { replace: true });
+        }
+        
+      };
+      createFormsStatus();
     }
-
-}, [])
+}, [patientId, navigate])
 
     return (
 
@@ -48,7 +85,7 @@ const Dashboard = () =>{
             xl={9}
             xs={12}
           >
-            <PatientTimeline />
+            <PatientTimeline formDone={formsStatus}/>
           </Grid>
         </Grid>
       </Container>

@@ -28,74 +28,74 @@ var formDone = [
   false
 ];
 
-const BasicTimeline = () => (
+const BasicTimeline = (props) => (
   <Timeline>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[0] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[0] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/prereg">Pre-Registration</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[1] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[1] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/reg">Registration</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[2] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[2] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/phlebo">Phlebotomy</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[3] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[3] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/hxtaking">History Taking</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[4] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[4] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/fit">FIT</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[5] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[5] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/wce">WCE</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[6] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[6] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/geri">Geriatrics</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[7] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[7] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/doctorsconsult">Doctor's Consult</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[8] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[8] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/socialservice">Social Service</a></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[9] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {props.formDone[9] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent><a href="/app/feedback">Feedback</a></TimelineContent>
@@ -131,7 +131,7 @@ const PatientTimeline = (props) => (
           position: "relative"
         }}
       >
-        <BasicTimeline />
+        <BasicTimeline formDone={props.formDone}/>
       </Box>
     </CardContent>
     <Divider />
