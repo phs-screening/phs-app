@@ -205,6 +205,12 @@ const ManageVolunteers = () => {
                                 type=""
                                 value={values.email}
                                 variant="outlined"
+                                inputProps={{
+                                    autocomplete: 'new-password',
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
+                                }}
                             />
                             <TextField
                                 // error={Boolean(touched.password && errors.password)}
@@ -229,7 +235,10 @@ const ManageVolunteers = () => {
                                                 {showPassword ? <Visibility /> : <VisibilityOff />}
                                             </IconButton>
                                         </InputAdornment>
-                                    )
+                                    ),
+                                    form: {
+                                        autocomplete: 'off',
+                                    },
                                 }}
                             />
                             <Box sx={{ py: 2 }}>
@@ -278,7 +287,10 @@ const ManageVolunteers = () => {
                             <InputAdornment position="end">
                                     <Search/>
                             </InputAdornment>
-                        )
+                        ),
+                        form: {
+                            autocomplete: 'off',
+                        },
                     }}
                 />
             </Box>
@@ -318,7 +330,11 @@ const ManageVolunteers = () => {
                                     {showPasswordReset ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>
-                        )
+                        ),
+                        autocomplete: 'new-password',
+                        form: {
+                            autocomplete: 'off',
+                        },
                     }}
                 />
                 {loadingReset ? <div> Resetting ... </div> : <Button
