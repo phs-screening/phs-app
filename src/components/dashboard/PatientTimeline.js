@@ -82,7 +82,7 @@ if (loading) {
         {formDone[0] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
-      <TimelineContent><a href="/app/prereg">Pre-Registration</a></TimelineContent>
+      <TimelineContent><p>Pre-Registration</p></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>

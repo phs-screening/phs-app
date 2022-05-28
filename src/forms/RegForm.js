@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { register } from '../api/api.js';
+import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { schema, layout } from './reg.js';
 
@@ -23,7 +23,8 @@ class RegForm extends Component {
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
-              const response = await register(model, patientId);
+              const response = await submitForm(model, patientId, "registrationForm");
+              // TODO: error handling
               // if (response.result) {
               //   alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
               //   updatePatientId(response.data.patientId);

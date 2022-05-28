@@ -45,22 +45,22 @@ export async function preRegister(preRegArgs) {
     return {"result": isSuccess, "data": data, "error": errorMsg};
 }
 
-export async function register(regArgs, patientId) {
+export async function submitForm(args, patientId, formCollection) {
     try {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
         const patientsRecord = mongoConnection.db("phs").collection("patients");
         const record = await patientsRecord.findOne({queueNo: patientId});
         if (record) {
-            const registrationForms = mongoConnection.db("phs").collection("registrationForms");
-            if (record.registrationForm === undefined) {
+            const registrationForms = mongoConnection.db("phs").collection(formCollection);
+            if (record[formCollection] === undefined) {
                 // first time form is filled, create document for form
-                const { _id } = await registrationForms.insertOne(regArgs);
-                await patientsRecord.updateOne({queueNo: patientId}, {$set : {"registrationForm" : _id}});
+                await registrationForms.insertOne({_id: patientId, ...args});
+                await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
             } else {
                 // replace form
-                registrationForms.replaceOne({_id: record.registrationForm}, regArgs);
+                registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
             }
-        } else {
+        } else {    
             // TODO: throw error, not possible that no document is found
             // unless malicious user tries to change link to directly access reg page
             // Can check in every form page if there is valid patientId instead
