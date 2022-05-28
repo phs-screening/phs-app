@@ -15,7 +15,7 @@ class RegForm extends Component {
     static contextType = FormContext
 
     render() {
-      const {patientId, updatePatientId} = this.context;
+        const {patientId, updatePatientId} = this.context;
         const { navigate } = this.props;
         const form_schema = new SimpleSchema2Bridge(schema)
         const form_layout = layout
