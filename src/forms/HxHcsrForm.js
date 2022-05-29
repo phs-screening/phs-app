@@ -51,12 +51,14 @@ class HxHcsrForm extends Component {
     const form_schema = new SimpleSchema2Bridge(schema);
     const {patientId, updatePatientId} = this.context;
     const { changeTab, nextTab } = this.props;
-    console.log(this.props);
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "doctorConsultForm");
+          const response = await submitForm(model, patientId, "hxHcsrForm");
+          if (!response.result) {
+            alert(response.error);
+          }
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}

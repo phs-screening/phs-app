@@ -83,13 +83,17 @@ class HxNssForm extends Component {
   render() {
     const form_schema = new SimpleSchema2Bridge(schema);
     const {patientId, updatePatientId} = this.context;
-    const { navigate } = this.props;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
           const response = await submitForm(model, patientId, "hxNssForm");
-          navigate('/app/dashboard', { replace: true });
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
 
@@ -263,7 +267,5 @@ class HxNssForm extends Component {
 HxNssForm.contextType = FormContext;
 
 export default function HxNssform(props) {
-  const navigate = useNavigate();
-
-  return <HxNssForm {...props} navigate={navigate} />;
+  return <HxNssForm {...props} />;
 }

@@ -111,7 +111,10 @@ class HxCancerForm extends Component {
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxHcsrForm");
+          const response = await submitForm(model, patientId, "hxCancerForm");
+          if (!response.result) {
+            alert(response.error);
+          }
           navigate('/app/dashboard', { replace: true });
         }}
       >
