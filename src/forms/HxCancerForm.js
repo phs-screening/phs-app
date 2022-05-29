@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -9,6 +10,8 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { SelectField, NumField, RadioField, LongTextField, BoolField } from 'uniforms-material';
 import { useField } from 'uniforms';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
 
 const schema = new SimpleSchema({
@@ -98,19 +101,18 @@ function IsHighBP(props) {
 }
 
 class HxCancerForm extends Component {
+  static contextType = FormContext
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { navigate } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "hxHcsrForm");
+          navigate('/app/dashboard', { replace: true });
         }}
       >
 
@@ -253,4 +255,10 @@ class HxCancerForm extends Component {
   }
 }
 
-export default HxCancerForm;
+HxCancerForm.contextType = FormContext;
+
+export default function HxCancerform(props) {
+  const navigate = useNavigate();
+
+  return <HxCancerForm {...props} navigate={navigate} />;
+}

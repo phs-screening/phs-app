@@ -25,10 +25,26 @@ function generateStatusArray(record) {
       true, // pre-registration, always true 
       record.registrationForm !== undefined, // registration
       record.phlebotomyForm !== undefined, // phlebotomy
-      record.historyTakingForm !== undefined, // history taking
+      // historyTaking form consists of 4 forms
+      record.hxHcsrForm !== undefined
+          && record.hxNssForm !==  undefined
+          && record.hxSocialForm !== undefined
+          && record.hxCancerForm !== undefined,
       record.fitForm !== undefined, // fit
       record.wceForm !== undefined, // wce
-      record.geriatricsForm !== undefined, // geriatrics
+      // geriatrics form consists of 12 forms
+      record.geriAmtForm !== undefined
+          && record.geriEbasDepForm !== undefined
+          && record.geriVisionForm !== undefined
+          && record.geriParQForm !== undefined
+          && record.geriPhysicalActivityLevelForm !== undefined
+          && record.geriFrailScaleForm !== undefined
+          && record.geriOtQuestionnaireForm !== undefined
+          && record.geriSppbForm !== undefined
+          && record.geriTugForm !== undefined
+          && record.geriPtConsultForm !== undefined
+          && record.geriOtConsultForm !== undefined
+          && record.geriGeriApptForm !== undefined,
       record.doctorConsultForm !== undefined, // doctor's consult
       record.socialServiceForm !== undefined, // social service
       record.feedbackForm !== undefined // feedback
