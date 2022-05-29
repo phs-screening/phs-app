@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -13,6 +14,8 @@ import {
   RadioField,
   LongTextField
 } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
   feedbackFormQ1: {
@@ -88,19 +91,18 @@ const schema = new SimpleSchema({
 )
 
 class FeedbackForm extends Component {
+  static contextType = FormContext
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { navigate } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "feedbackForm");
+          navigate('/app/dashboard', { replace: true });
         }}
       >
 
@@ -233,4 +235,10 @@ class FeedbackForm extends Component {
   }
 }
 
-export default FeedbackForm;
+FeedbackForm.contextType = FormContext;
+
+export default function Feedbackform(props) {
+  const navigate = useNavigate();
+
+  return <FeedbackForm {...props} navigate={navigate} />;
+}

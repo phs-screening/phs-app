@@ -17,11 +17,8 @@ const Dashboard = () =>{
     if (patientId === -1) {
         alert("You need to enter the queue number for the patient you are attending to!")
         navigate('/app/registration', { replace: true });
-    } else {
-      // TODO: query patients collection and pass it as props to child component
     }
-
-}, [])
+}, [navigate, patientId])
 
     return (
 
@@ -48,7 +45,7 @@ const Dashboard = () =>{
             xl={9}
             xs={12}
           >
-            <PatientTimeline />
+            <PatientTimeline patientId={patientId} />
           </Grid>
         </Grid>
       </Container>

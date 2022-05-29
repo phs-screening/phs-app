@@ -37,18 +37,39 @@ export async function preRegister(preRegArgs) {
                 + "Please check that the patient has not registered yet.\nReport to the admin"
                 + " if there is no mistake as we need a way to identify the patients.";
         }
-        // var response = await axios.post(`/api/forms/preRegistrationQ`, {
-        //     "gender": gender,
-        //     "initials": initials, 
-        //     "abbreviatedNric": abbreviatedNric,
-        //     "goingForPhlebotomy": goingForPhlebotomy
-        // });
     } catch(err) {
         // TODO: more granular error handling
         console.log(err);
         return {"result": false, "error": err}
     }
     return {"result": isSuccess, "data": data, "error": errorMsg};
+}
+
+export async function submitForm(args, patientId, formCollection) {
+    try {
+        const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+        const patientsRecord = mongoConnection.db("phs").collection("patients");
+        const record = await patientsRecord.findOne({queueNo: patientId});
+        if (record) {
+            const registrationForms = mongoConnection.db("phs").collection(formCollection);
+            if (record[formCollection] === undefined) {
+                // first time form is filled, create document for form
+                await registrationForms.insertOne({_id: patientId, ...args});
+                await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+            } else {
+                // replace form
+                registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
+            }
+        } else {    
+            // TODO: throw error, not possible that no document is found
+            // unless malicious user tries to change link to directly access reg page
+            // Can check in every form page if there is valid patientId instead
+            // cannot use useEffect since the form component is class component
+            console.log("An error has occurred");
+        }
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 // Provides general information about the kinds of forms that are supported

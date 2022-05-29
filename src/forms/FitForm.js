@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema from 'simpl-schema';
 
 import { AutoForm } from 'uniforms';
 import { RadioField } from 'uniforms-material';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
@@ -21,20 +24,19 @@ const schema = new SimpleSchema({
 )
 
 class FitForm extends Component {
+    static contextType = FormContext
 
     render() {
-        const form_schema = new SimpleSchema2Bridge(schema)
+        const form_schema = new SimpleSchema2Bridge(schema);
+        const {patientId, updatePatientId} = this.context;
+        const { navigate } = this.props;
         const newForm = () => (
             <AutoForm
                 schema={form_schema}
-                onSubmit={console.log}
-                //onSubmit={this.handleSubmit}
-                onSubmitSuccess={() => {
-                    alert("Successful");
-                }}
-                onSubmitFailure={() => {
-                    alert('Unsuccessful')
-                }}
+                onSubmit={async (model) => {
+                    const response = await submitForm(model, patientId, "fitForm");
+                    navigate('/app/dashboard', { replace: true });
+                  }}
             >
                 <Fragment>
                     <h2>PARTICIPANT IDENTIFICATION</h2>
@@ -79,4 +81,10 @@ class FitForm extends Component {
     }
 }
 
-export default FitForm;
+FitForm.contextType = FormContext;
+
+export default function Fitform(props) {
+  const navigate = useNavigate();
+
+  return <FitForm {...props} navigate={navigate} />;
+}
