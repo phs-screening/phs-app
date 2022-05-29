@@ -28,7 +28,6 @@ class PreregForm extends Component {
               if (response.result) {
                 alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
                 updatePatientId(response.data.patientId);
-                // window.location = '/app/dashboard';
                 navigate('/app/dashboard', { replace: true });
               } else {
                 alert(`Unsuccessful. ${response.error}`);
