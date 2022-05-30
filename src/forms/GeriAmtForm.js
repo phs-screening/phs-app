@@ -9,6 +9,8 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, RadioField } from 'uniforms-material';
 import { useField } from 'uniforms';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
 	geriAmtQ1: {
@@ -78,20 +80,23 @@ function GetScore(props) {
 };
 
 class GeriAmtForm extends Component {
+    static contextType = FormContext
 
     render() {
-        const form_schema = new SimpleSchema2Bridge(schema)
+        const form_schema = new SimpleSchema2Bridge(schema);
+        const {patientId, updatePatientId} = this.context;
+        const { changeTab, nextTab } = this.props;
         const newForm = () => (
           <AutoForm
             schema={form_schema}
-            onSubmit={console.log}
-            //onSubmit={this.handleSubmit}
-            onSubmitSuccess={() => {
-                alert("Successful");
-              }}
-            onSubmitFailure={() => {
-                alert('Unsuccessful')
-              }}
+            onSubmit={async (model) => {
+              const response = await submitForm(model, patientId, "geriAmtForm");
+              if (!response.result) {
+                alert(response.error);
+              }
+              const event = null; // not interested in this value
+              changeTab(event, nextTab);
+            }}
           >
 
             <Fragment>
@@ -158,4 +163,8 @@ class GeriAmtForm extends Component {
       }
 }
 
-export default GeriAmtForm;
+GeriAmtForm.contextType = FormContext;
+
+export default function GeriAmtform(props) {
+  return <GeriAmtForm {...props} />;
+}

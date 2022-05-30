@@ -10,6 +10,8 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, RadioField, LongTextField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import PopupText from 'src/utils/popupText';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
   geriEbasDepQ1: {
@@ -28,8 +30,9 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
   }, geriEbasDepQ8: {
     type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-  }, geriEbasDepQ9: {
-    type: Number, optional: false
+  // There is no Q9???
+  // }, geriEbasDepQ9: {
+  //   type: Number, optional: false
   }, geriEbasDepQ10: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriEbasDepQ11: {
@@ -78,19 +81,22 @@ function GetScore(props) {
 };
 
 class GeriEbasDepForm extends Component {
+  static contextType = FormContext;
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "geriEbasDepForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
 
@@ -175,4 +181,8 @@ class GeriEbasDepForm extends Component {
   }
 }
 
-export default GeriEbasDepForm;
+GeriEbasDepForm.contextType = FormContext;
+
+export default function GeriEbasDepform(props) {
+  return <GeriEbasDepForm {...props} />;
+}

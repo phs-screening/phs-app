@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -9,15 +10,19 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { SelectField, RadioField, BoolField } from 'uniforms-material';
 import PopupText from 'src/utils/popupText';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
-  geriGeriApptQ1: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriGeriApptQ2: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriGeriApptQ3: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriGeriApptQ4: {
+  // geriGeriApptQ1: {
+  //   type: String, allowedValues: ["Yes", "No"], optional: false
+  // }, geriGeriApptQ2: {
+  //   type: String, allowedValues: ["Yes", "No"], optional: false
+  // }, geriGeriApptQ3: {
+  //   type: String, allowedValues: ["Yes", "No"], optional: false
+  //},
+  // Q1 - 3 missing
+  geriGeriApptQ4: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriGeriApptQ5: {
     type: Boolean, label: "Done", optional: true
@@ -32,19 +37,21 @@ const schema = new SimpleSchema({
 )
 
 class GeriGeriApptForm extends Component {
+  static contextType = FormContext
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { navigate } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "geriGeriApptForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          navigate('/app/dashboard', { replace: true });
         }}
       >
 
@@ -104,4 +111,10 @@ class GeriGeriApptForm extends Component {
   }
 }
 
-export default GeriGeriApptForm;
+GeriGeriApptForm.contextType = FormContext;
+
+export default function HxCancerform(props) {
+  const navigate = useNavigate();
+
+  return <GeriGeriApptForm {...props} navigate={navigate} />;
+}

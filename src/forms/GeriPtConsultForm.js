@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
   geriPtConsultQ1: {
@@ -25,19 +27,22 @@ const schema = new SimpleSchema({
 )
 
 class GeriPtConsultForm extends Component {
+  static contextType = FormContext;
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "geriPtConsultForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
         <Fragment>
@@ -72,4 +77,8 @@ class GeriPtConsultForm extends Component {
   }
 }
 
-export default GeriPtConsultForm;
+GeriPtConsultForm.contextType = FormContext;
+
+export default function GeriPtConsultform(props) {
+  return <GeriPtConsultForm {...props} />;
+}

@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, NumField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 import { useField } from 'uniforms';
 
 const schema = new SimpleSchema({
@@ -27,8 +29,9 @@ const schema = new SimpleSchema({
     type: Number, optional: true
   }, geriSppbQ8: {
     type: String, allowedValues: ["0       (Could not do)", "1       (> 5.7s )", "2       (4.1 – 5.7s )", "3       (3.2 – 4.0s )", "4       (< 3.1s )"], optional: false
-  }, geriSppbQ9: {
-    type: String, optional: false
+  // There is no Q9???
+  // }, geriSppbQ9: {
+  //   type: String, optional: false
   }, geriSppbQ10: {
     type: String, allowedValues: ["High Falls Risk (score ≤ 6)", "Low Falls Risk (score > 6)"], optional: false
   }, geriSppbQ11: {
@@ -59,19 +62,22 @@ function GetSppbScore() {
 }
 
 class GeriSppbForm extends Component {
+  static contextType = FormContext;
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "geriSppbForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
         <Fragment>
@@ -128,4 +134,8 @@ class GeriSppbForm extends Component {
   }
 }
 
-export default GeriSppbForm;
+GeriSppbForm.contextType = FormContext;
+
+export default function GeriSppbform(props) {
+  return <GeriSppbForm {...props} />;
+}
