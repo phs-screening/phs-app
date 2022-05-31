@@ -7,12 +7,20 @@ import Paper from '@material-ui/core/Paper';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { schema, layout } from './reg.js';
 
 class RegForm extends Component {
     static contextType = FormContext
+
+    constructor(props) {
+      super(props);
+      this.state = {
+        loading: false
+      };
+    }
 
     render() {
         const {patientId, updatePatientId} = this.context;
@@ -23,6 +31,9 @@ class RegForm extends Component {
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
+              this.setState({
+                loading: true
+              });
               const response = await submitForm(model, patientId, "registrationForm");
               // TODO: error handling
               // if (response.result) {
@@ -32,13 +43,18 @@ class RegForm extends Component {
               // } else {
               //   alert(`Unsuccessful. ${response.error}`);
               // }
+              this.setState({
+                loading: false
+              });
+              alert("Successfully submitted form")
               navigate('/app/dashboard', { replace: true });
             }}
           >
             {form_layout}
             <ErrorsField />
             <div>
-              <SubmitField inputRef={(ref) => this.formRef = ref} />
+              {this.state.loading ? <CircularProgress />
+              : <SubmitField inputRef={(ref) => this.formRef = ref} />}
             </div>
             
             <br /><Divider />
