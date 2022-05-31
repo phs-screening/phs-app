@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidQueueNo } from "../services/mongoDB";
 import { FormContext } from '../api/utils.js';
@@ -21,6 +21,19 @@ const RegisterPatient = props => {
   });
   const {patientId, updatePatientId} = useContext(FormContext);
   const navigate = useNavigate();
+  const ref = useRef();
+
+  useEffect(() => {
+    const listener = event => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        ref.current.click();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -106,6 +119,7 @@ const RegisterPatient = props => {
             onChange={handleChange}
           />
           <Button
+            ref={ref}
             color="primary"
             size="large"
             type="submit"
