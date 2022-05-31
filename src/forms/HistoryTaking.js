@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { element } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -10,6 +10,7 @@ import HxCancerForm from 'src/forms/HxCancerForm';
 import HxHcsrForm from 'src/forms/HxHcsrForm';
 import HxNssForm from 'src/forms/HxNssForm';
 import HxSocialForm from 'src/forms/HxSocialForm';
+import { ScrollTopContext } from '../api/utils.js';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,8 +55,10 @@ const useStyles = makeStyles((theme) => ({
 export default function HxTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { scrollTop } = React.useContext(ScrollTopContext);
 
   const handleChange = (event, newValue) => {
+    scrollTop();
     setValue(newValue);
   };
 
@@ -70,13 +73,13 @@ export default function HxTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <HxHcsrForm />
+        <HxHcsrForm changeTab={handleChange} nextTab={1} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <HxNssForm />
+        <HxNssForm changeTab={handleChange} nextTab={2} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <HxSocialForm />
+        <HxSocialForm changeTab={handleChange} nextTab={3} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <HxCancerForm />

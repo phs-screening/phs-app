@@ -56,16 +56,23 @@ export async function submitForm(args, patientId, formCollection) {
                 // first time form is filled, create document for form
                 await registrationForms.insertOne({_id: patientId, ...args});
                 await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+                return { "result" : true };
             } else {
                 // replace form
-                registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
+                // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
+                // throw error message
+                const errorMsg = "This form has already been submitted. If you need to make "
+                        + "any changes, please contact the admin."
+                return { "result" : false, "error" : errorMsg };
             }
         } else {    
             // TODO: throw error, not possible that no document is found
             // unless malicious user tries to change link to directly access reg page
             // Can check in every form page if there is valid patientId instead
             // cannot use useEffect since the form component is class component
-            console.log("An error has occurred");
+            const errorMsg = "An error has occurred."
+            // You will be directed to the registration page." logic not done
+            return { "result" : false, "error" : errorMsg };
         }
     } catch(err) {
         console.log(err);

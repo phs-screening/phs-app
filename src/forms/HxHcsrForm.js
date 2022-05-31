@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 import PopupText from '../utils/popupText';
 
@@ -43,19 +45,22 @@ const schema = new SimpleSchema({
 )
 
 class HxHcsrForm extends Component {
+  static contextType = FormContext
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "hxHcsrForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
 
@@ -164,4 +169,8 @@ class HxHcsrForm extends Component {
   }
 }
 
-export default HxHcsrForm;
+HxHcsrForm.contextType = FormContext;
+
+export default function HxHcsrform(props) {
+  return <HxHcsrForm {...props} />;
+}
