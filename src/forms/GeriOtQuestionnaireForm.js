@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -11,6 +11,7 @@ import { LongTextField, RadioField } from 'uniforms-material';
 import PopupText from 'src/utils/popupText';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriOtQuestionnaireQ1: {
@@ -39,19 +40,60 @@ const schema = new SimpleSchema({
 }
 )
 
-class GeriOtQuestionnaireForm extends Component {
-  static contextType = FormContext;
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const loadDataGeriOtQuestionnaire = (savedData) => {
+  return savedData ?
+      new SimpleSchema({
+            geriOtQuestionnaireQ1: {
+              defaultValue : savedData.geriOtQuestionnaireQ1,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriOtQuestionnaireQ2: {
+          defaultValue : savedData.geriOtQuestionnaireQ2,
+              type: String, allowedValues: ["Yes (Specify in textbox )", "No"], optional: false
+            }, geriOtQuestionnaireQ3: {
+          defaultValue : savedData.geriOtQuestionnaireQ3,
+              type: String, optional: true, custom: function () {
+                if (this.field('geriOtQuestionnaireQ2').isSet && this.field('geriOtQuestionnaireQ2').value === "Yes (Specify in textbox )") {
+                  if (!this.isSet || this.value.length === 0) {
+                    return SimpleSchema.ErrorTypes.REQUIRED
+                  }
+                }
+              }
+            }, geriOtQuestionnaireQ4: {
+          defaultValue : savedData.geriOtQuestionnaireQ4,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriOtQuestionnaireQ5: {
+          defaultValue : savedData.geriOtQuestionnaireQ5,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriOtQuestionnaireQ6: {
+          defaultValue : savedData.geriOtQuestionnaireQ6,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriOtQuestionnaireQ7: {
+          defaultValue : savedData.geriOtQuestionnaireQ7,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriOtQuestionnaireQ8: {
+          defaultValue : savedData.geriOtQuestionnaireQ8,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }
+          }
+      )
+      :schema
+}
+const formName = "geriOtQuestionnaireForm"
+const GeriOtQuestionnaireForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataGeriOtQuestionnaire(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
 
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriOtQuestionnaireForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -89,7 +131,7 @@ class GeriOtQuestionnaireForm extends Component {
         </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -101,7 +143,6 @@ class GeriOtQuestionnaireForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriOtQuestionnaireForm.contextType = FormContext;

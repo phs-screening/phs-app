@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema from 'simpl-schema';
 
@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 
 import PopupText from '../utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
     fitQ1: {
@@ -23,18 +24,37 @@ const schema = new SimpleSchema({
 }
 )
 
-class FitForm extends Component {
-    static contextType = FormContext
+const loadDataFit = (savedData) => {
+    return savedData ?  new SimpleSchema({
+            fitQ1: {
+                defaultValue : savedData.fitQ1,
+                type: String, allowedValues: ["Yes", "No"], optional: false
+            }, fitQ2: {
+                defaultValue : savedData.fitQ2,
+                type: String, allowedValues: ["Yes", "No"], optional: false
+            }
+        }
+        )
+        : schema
+}
 
-    render() {
-        const form_schema = new SimpleSchema2Bridge(schema);
-        const {patientId, updatePatientId} = this.context;
-        const { navigate } = this.props;
+const formName = "fitForm"
+const FitForm = (props) =>  {
+    const {patientId, updatePatientId} = useContext(FormContext);
+    const navigate = useNavigate();
+    const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+
+    useEffect(async () => {
+        const savedData = await getSavedData(patientId, formName);
+        const getSchema = savedData ? await loadDataFit(savedData) : schema
+        setForm_schema(new SimpleSchema2Bridge(getSchema))
+    }, [])
+
         const newForm = () => (
             <AutoForm
                 schema={form_schema}
                 onSubmit={async (model) => {
-                    const response = await submitForm(model, patientId, "fitForm");
+                    const response = await submitForm(model, patientId, formName);
                     navigate('/app/dashboard', { replace: true });
                   }}
             >
@@ -66,7 +86,7 @@ class FitForm extends Component {
 
                 <ErrorsField />
                 <div>
-                    <SubmitField inputRef={(ref) => this.formRef = ref} />
+                    <SubmitField inputRef={(ref) => {}} />
                 </div>
 
                 <br /><Divider />
@@ -78,7 +98,6 @@ class FitForm extends Component {
                 {newForm()}
             </Paper>
         );
-    }
 }
 
 FitForm.contextType = FormContext;

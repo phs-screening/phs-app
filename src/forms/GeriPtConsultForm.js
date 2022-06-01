@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -10,6 +10,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriPtConsultQ1: {
@@ -25,19 +26,43 @@ const schema = new SimpleSchema({
   }
 }
 )
+const loadDataGeriPt = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriPtConsultQ1: {
+          defaultValue : savedData.geriPtConsultQ1,
+          type: String, optional: false
+        }, geriPtConsultQ2: {
+      defaultValue : savedData.geriPtConsultQ2,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriPtConsultQ3: {
+      defaultValue : savedData.geriPtConsultQ3,
+          type: String, optional: true
+        }, geriPtConsultQ4: {
+      defaultValue : savedData.geriPtConsultQ4,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriPtConsultQ5: {
+      defaultValue : savedData.geriPtConsultQ5,
+          type: String, optional: true
+        }
+      }
+  ):schema
+}
 
-class GeriPtConsultForm extends Component {
-  static contextType = FormContext;
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "geriPtConsultForm"
+const GeriPtConsultForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataGeriPt(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriPtConsultForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -62,7 +87,7 @@ class GeriPtConsultForm extends Component {
         </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -74,7 +99,6 @@ class GeriPtConsultForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriPtConsultForm.contextType = FormContext;

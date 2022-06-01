@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext} from 'react';
 import SimpleSchema from 'simpl-schema';
 
 //import { AutoForm } from 'uniforms';
@@ -10,10 +10,58 @@ import {
 	LongTextField
   } from 'uniforms-material';
 
-
+export const loadDataReg = (savedData) => {
+	const savedSchema = savedData ? new SimpleSchema({
+		registrationQ1: {
+			defaultValue: savedData.registrationQ1,
+			type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false,
+		}, registrationQ2: {
+			defaultValue: savedData.registrationQ2,
+			type: String, allowedValues: ["Chinese 华裔", "Malay 巫裔", "Indian 印裔", "Eurasian 欧亚裔", "Others 其他"], optional: false
+		}, registrationQ3: {
+			defaultValue: savedData.registrationQ3,
+			type: String, allowedValues: ["Singapore Citizen 新加坡公民", "Singapore Permanent Resident (PR) \n新加坡永久居民"], optional: false
+		}, registrationQ4: {
+			defaultValue: savedData.registrationQ4,
+			type: String, allowedValues: ["Single 单身", "Married 已婚", "Widowed 已寡", "Separated 已分居", "Divorced 已离婚"], optional: false
+		}, registrationQ5: {
+			defaultValue: savedData.registrationQ5,
+			type: String, optional: false
+		}, registrationQ6: {
+			defaultValue: savedData.registrationQ6,
+			type: String, allowedValues: ["Buki Batok East", "Clementi", "Yuhua", "Central Jurong", "Taman Jurong", "Jurong Spring", "Others"], optional: false
+		}, registrationQ7: {
+			defaultValue: savedData.registrationQ7,
+			type: String, allowedValues: ["Below 1,100 per month (少于 1,100)", "1,100 - 1,799 per month (每月1,100 - 1,799)", "1,800 - 2,799 per month (每月1,800 - 2,799)", "2,800 & above (2,800 或以上)"], optional: false
+		}, registrationQ8: {
+			defaultValue: savedData.registrationQ8,
+			type: String, allowedValues: ["CHAS Orange", "CHAS Blue", "Merdeka Generation", "No CHAS"], optional: false
+		}, registrationQ9: {
+			defaultValue: savedData.registrationQ9,
+			type: String, allowedValues: ["Yes", "No"], optional: false
+		}, registrationQ10: {
+			defaultValue: savedData.registrationQ10,
+			type: String, allowedValues: ["Bukit Batok Medical Clinic \nBlk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic\nBlk 644 Bukit Batok Central,\xa0#01-70", "Lai Medical Clinic\nBlk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic\n518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic\nBlk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery\nBlk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic\n#04-01 Grantral Mall @ Clementi\n3151 Commonwealth Ave West"], optional: true
+		}, registrationQ11: {
+			defaultValue: savedData.registrationQ11,
+			type: String, allowedValues: ["English", "Mandarin", "Malay", "Tamil"], optional: false
+		}, registrationQ12: {
+			defaultValue: savedData.registrationQ12,
+			type: Boolean, label: "I have read and acknowledged the eligibility criteria for Phlebotomy. 我知道抽血的合格标准。", optional: false
+		}, registrationQ13: {
+			defaultValue: savedData.registrationQ13,
+			type: Boolean, label: "I agree and consent to the above.", optional: false
+		}, registrationQ14: {
+			defaultValue: savedData.registrationQ14,
+			type: String, optional: true
+		}
+	}) : schema
+	return savedSchema
+}
 export const schema = new SimpleSchema({
 	registrationQ1: {
-	type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false
+		defaultValue: "Mr",
+	type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false,
 	}, registrationQ2: {
 	type: String, allowedValues: ["Chinese 华裔", "Malay 巫裔", "Indian 印裔", "Eurasian 欧亚裔", "Others 其他"], optional: false
 	}, registrationQ3: {
@@ -48,9 +96,9 @@ export const layout = (
     <Fragment>
 		<h2>Registration</h2>
 		Salutation 称谓
-		<SelectField name="registrationQ1" />
+		<SelectField name="registrationQ1"/>
 		Race 种族
-		<RadioField name="registrationQ2" />
+		<RadioField name="registrationQ2"/>
 		<LongTextField name="registrationQ14" />
 		Nationality 国籍 <br />Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health screening
 		<RadioField name="registrationQ3" />

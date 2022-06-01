@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -14,6 +14,7 @@ import { FormContext } from '../api/utils.js';
 
 import '../Snippet.css';
 import PopupText from 'src/utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   wceQ1: {
@@ -32,18 +33,49 @@ const schema = new SimpleSchema({
 }
 )
 
-class WceForm extends Component {
-  static contextType = FormContext
+const loadDataWce = (savedData) => {
+  return savedData ?
+      new SimpleSchema({
+            wceQ1: {
+              defaultValue : savedData.wceQ1,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, wceQ2: {
+          defaultValue : savedData.wceQ2,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, wceQ3: {
+          defaultValue : savedData.wceQ3,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, wceQ4: {
+          defaultValue : savedData.wceQ4,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, wceQ5: {
+          defaultValue : savedData.wceQ5,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, wceQ6: {
+          defaultValue : savedData.wceQ6,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }
+          }
+      )
+      :schema
+}
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { navigate } = this.props;
+const formName = "wceForm"
+const WceForm = (props) =>  {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const navigate = useNavigate();
+
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataWce(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "wceForm");
+          const response = await submitForm(model, patientId, formName);
           navigate('/app/dashboard', { replace: true });
         }}
       >
@@ -87,7 +119,7 @@ class WceForm extends Component {
     </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -108,7 +140,6 @@ class WceForm extends Component {
 
       </snippet-container>
     );
-  }
 }
 
 WceForm.contextType = FormContext;

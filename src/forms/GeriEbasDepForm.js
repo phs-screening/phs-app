@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -12,6 +12,7 @@ import { useField } from 'uniforms';
 import PopupText from 'src/utils/popupText';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriEbasDepQ1: {
@@ -49,6 +50,55 @@ const schema = new SimpleSchema({
 }
 )
 
+const loadDataGeriEbasDep = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriEbasDepQ1: {
+          defaultValue : savedData.geriEbasDepQ1,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ2: {
+      defaultValue : savedData.geriEbasDepQ2,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ3: {
+      defaultValue : savedData.geriEbasDepQ3,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ4: {
+      defaultValue : savedData.geriEbasDepQ4,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ5: {
+      defaultValue : savedData.geriEbasDepQ5,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ6: {
+      defaultValue : savedData.geriEbasDepQ6,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ7: {
+      defaultValue : savedData.geriEbasDepQ7,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+        }, geriEbasDepQ8: {
+      defaultValue : savedData.geriEbasDepQ8,
+          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
+          // There is no Q9???
+          // }, geriEbasDepQ9: {
+          //   type: Number, optional: false
+        }, geriEbasDepQ10: {
+      defaultValue : savedData.geriEbasDepQ10,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriEbasDepQ11: {
+      defaultValue : savedData.geriEbasDepQ11,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriEbasDepQ12: {
+      defaultValue : savedData.geriEbasDepQ12,
+          type: String, optional: true, custom: function () {
+            if (this.field('geriEbasDepQ11').isSet && this.field('geriEbasDepQ11').value === "Yes") {
+              if (!this.isSet || this.value.length === 0) {
+                return SimpleSchema.ErrorTypes.REQUIRED
+              }
+            }
+          }
+        }
+      }
+  ):schema
+}
+
 function GetScore(props) {
   let score = 0
   const [{ value: q1 }] = useField('geriEbasDepQ1', {});
@@ -79,19 +129,22 @@ function GetScore(props) {
   
   return score;
 };
+const formName = "geriEbasDepForm"
+const GeriEbasDepForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataGeriEbasDep(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
 
-class GeriEbasDepForm extends Component {
-  static contextType = FormContext;
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriEbasDepForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -166,7 +219,7 @@ class GeriEbasDepForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -178,7 +231,6 @@ class GeriEbasDepForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriEbasDepForm.contextType = FormContext;

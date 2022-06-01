@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -10,6 +10,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField, SelectField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriOtConsultQ1: {
@@ -30,18 +31,55 @@ const schema = new SimpleSchema({
 }
 )
 
-class GeriOtConsultForm extends Component {
-  static contextType = FormContext;
+const loadDataGeriOt = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriOtConsultQ1: {
+          defaultValue : savedData.geriOtConsultQ1,
+          type: String, optional: false
+        }, geriOtConsultQ2: {
+          defaultValue : savedData.geriOtConsultQ2,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriOtConsultQ3: {
+          defaultValue : savedData.geriOtConsultQ3,
+          type: String, optional: true
+        }, geriOtConsultQ4: {
+          defaultValue : savedData.geriOtConsultQ4,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriOtConsultQ5: {
+          defaultValue : savedData.geriOtConsultQ5,
+          type: String, optional: true
+        }, geriOtConsultQ6: {
+          defaultValue : savedData.geriOtConsultQ6,
+          type: Array, optional: true
+        }, "geriOtConsultQ6.$": {
+          type: String, allowedValues: ["HDB EASE", "SWCDC Safe and Bright Homes", "Own Vendors"],
+        }
+      }
+      )
+      :schema
+}
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "geriOtConsultForm"
+const GeriOtConsultForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+  const { changeTab, nextTab } = props;
+  const displayArray = (item) => {
+    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
+  }
+
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+    const getSchema = savedData ? await loadDataGeriOt(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriOtConsultForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -63,6 +101,8 @@ class GeriOtConsultForm extends Component {
           Reasons for referral to social support (OT):
           <LongTextField name="geriOtConsultQ5" label="Geri - OT Consult Q5" />
           Which of the following programmes would you recommend the participant for? (Please select the most appropriate programme)
+          <h2> {saveData !== null ? "ORIGINAL Q6: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.geriOtConsultQ6) : ""}</h2>
           <SelectField name="geriOtConsultQ6" checkboxes="true" label="Geri - OT Consult Q6" />
           <h2><span style={{color: "red"}}>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER 'REGISTRATION'.</span></h2>
 
@@ -70,7 +110,7 @@ class GeriOtConsultForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -82,7 +122,6 @@ class GeriOtConsultForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriOtConsultForm.contextType = FormContext;

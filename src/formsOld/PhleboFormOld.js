@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
+import React, { Component, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -11,7 +11,6 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { BoolField } from 'uniforms-material';
-import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   phlebotomyQ1: {
@@ -22,38 +21,18 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataPhelbo = (savedData) => {
-  return savedData ?
-      new SimpleSchema({
-            phlebotomyQ1: {
-              defaultValue: savedData.phlebotomyQ1,
-              type: Boolean, label: "Yes", optional: true
-            }, phlebotomyQ2: {
-          defaultValue: savedData.phlebotomyQ2,
-              type: Boolean, label: "Yes", optional: true
-            }
-          }
-      )
-      : schema
-}
+class PhleboForm extends Component {
+  static contextType = FormContext
 
-const formName = "phlebotomyForm"
-const PhleboForm = () => {
-  const {patientId, updatePatientId} = useContext(FormContext);
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate();
-
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataPhelbo(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
-  }, [])
-
+  render() {
+    const form_schema = new SimpleSchema2Bridge(schema)
+    const {patientId, updatePatientId} = this.context;
+    const { navigate } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, formName);
+          const response = await submitForm(model, patientId, "phlebotomyForm");
           navigate('/app/dashboard', { replace: true });
         }}
       >
@@ -66,7 +45,7 @@ const PhleboForm = () => {
         </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => {}} />
+          <SubmitField inputRef={(ref) => this.formRef = ref} />
         </div>
 
         <br /><Divider />
@@ -78,7 +57,7 @@ const PhleboForm = () => {
         {newForm()}
       </Paper>
     );
-
+  }
 }
 
 PhleboForm.contextType = FormContext;
