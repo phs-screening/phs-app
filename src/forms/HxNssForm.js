@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -13,6 +13,8 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 import PopupText from '../utils/popupText';
+import {getSavedData} from "../services/mongoDB";
+import {loadDataReg} from "./reg";
 
 const schema = new SimpleSchema({
   hxNssQ1: {
@@ -77,18 +79,118 @@ const schema = new SimpleSchema({
 }
 )
 
-class HxNssForm extends Component {
-  static contextType = FormContext
+// work around for check boxes
+const loadDataHxNss = (savedData) => {
+  return savedData ?
+      new SimpleSchema({
+            hxNssQ1: {
+              defaultValue : savedData.hxNssQ1,
+              type: Array, optional: false
+            }, "hxNssQ1.$": {
+              type: String, allowedValues: ["Hypertension\n(Please proceed to Q2)", "Diabetes\n(Please proceed to Q2)", "High Cholesterol\n(Please proceed to Q2)", "Stroke (including transient ischaemic attack) \n(Please proceed to Q2)", "Chronic Kidney Disease\n(Please proceed to Q2d)", "No, I don't have any of the above \n(Please proceed to Q2d)"]
+            }, hxNssQ2: {
+          defaultValue : savedData.hxNssQ2,
+              type: String, allowedValues: ["Yes (please answer question below)", "No", "Not Applicable"], optional: false
+            }, hxNssQ3: {
+          defaultValue : savedData.hxNssQ3,
+              type: Array, optional: true
+            }, "hxNssQ3.$": {
+              type: String, allowedValues: ["Yes, on current follow up with General Practioner (GP) \n(Please proceed to Q2c)", "Yes, on current follow up with Family Medicine Centre\n(Please proceed to Q2c)", "Yes, on current follow up with Polyclinic \n(Please proceed to Q2c)", "Yes, on current follow up with Specialist Outpatient Clinic (SOC)\n(Please proceed to Q2c)", "No, the last appointment was > 1 year ago (Please proceed to Q2b and 2c)"]
+            }, hxNssQ4: {
+          defaultValue : savedData.hxNssQ4,
+              type: Array, optional: true
+            }, "hxNssQ4.$": {
+              type: String, allowedValues: ["Do not see the need for tests", "Challenging to make time to go for appointments", "Difficulties gtting to the clinics", "Financial issues", "Scared of doctor", "Others: (please specify reason)"]
+            }, hxNssQ5: {
+          defaultValue : savedData.hxNssQ5,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, hxNssQ6: {
+          defaultValue : savedData.hxNssQ6,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, hxNssQ7: {
+          defaultValue : savedData.hxNssQ7,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, hxNssQ8: {
+          defaultValue : savedData.hxNssQ8,
+              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+            }, hxNssQ9: {
+          defaultValue : savedData.hxNssQ9,
+              type: String, allowedValues: ["Yes, (Please specify):", "None"], optional: false
+            }, hxNssQ10: {
+          defaultValue : savedData.hxNssQ10,
+              type: String, optional: true
+            }, hxNssQ11: {
+          defaultValue : savedData.hxNssQ11,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, hxNssQ12: {
+          defaultValue : savedData.hxNssQ12,
+              type: String, optional: true
+            }, hxNssQ13: {
+          defaultValue : savedData.hxNssQ13,
+              type: Array, optional: false
+            }, "hxNssQ13.$": {
+              type: String, allowedValues: ["Cancer", "Coronary Heart disease (caused by narrowed blood vessels supplying the heart muscle) or Heart attack, (Please specify):", "Diabetes", "Hypertension", "High Cholesterol", "Stroke (including transient ischaemic attack)", "No, they do not have any of the above."]
+            }, hxNssQ14: {
+          defaultValue : savedData.hxNssQ14,
+              type: String, allowedValues: ["Yes, at least 1 cigarette (or equivalent) per day on average.", "Yes, occasionally, less than 1 cigarette (or equivalent) per day on average.", "No, I have never smoked.", "No, I have completely quit smoking."], optional: false
+            }, hxNssQ15: {
+          defaultValue : savedData.hxNssQ15,
+              type: String, allowedValues: ["Less than 2 standard drinks per day on average.", "More than 2 standard drinks per day on average.", "No", "Quit Alcoholic Drinks"], optional: false
+            }, hxNssQ16: {
+          defaultValue : savedData.hxNssQ16,
+              type: Array, optional: false
+            }, "hxNssQ16.$": {
+              type: String, allowedValues: ["No (Skip to Q7)", "Yes (Proceed to answer below)", "Vegetables (1 serving/day)", "Vegetables (2 or more servings/day)", "Fruits (1 serving/day)", "Fruits (2 or more servings/day)", "Whole grain and cereals"]
+            }, hxNssQ17: {
+          defaultValue : savedData.hxNssQ17,
+              type: String, allowedValues: ["Yes (At least 20 mins each time, for 3 or more days per week.)", "Yes (At least 20 mins each time, for less than 3 days per week.)", "No participation of at least 20 min each time."], optional: false
+            }, hxNssQ18: {
+          defaultValue : savedData.hxNssQ18,
+              type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
+            }, hxNssQ19: {
+          defaultValue : savedData.hxNssQ19,
+              type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
+            }, hxNssQ20: {
+          defaultValue : savedData.hxNssQ20,
+              type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
+            }, hxNssQ21: {
+          defaultValue : savedData.hxNssQ21,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }, hxNssQ22: {
+          defaultValue : savedData.hxNssQ22,
+              type: String, optional: true
+            }, hxNssQ23: {
+          defaultValue : savedData.hxNssQ23,
+              type: String, optional: true
+            }, hxNssQ24: {
+          defaultValue : savedData.hxNssQ24,
+              type: String, allowedValues: ["Yes", "No"], optional: false
+            }
+          }
+      )
+      : schema
+}
+const formName = "hxNssForm"
+const HxNssForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+    const { changeTab, nextTab } = props;
+  const displayArray = (item) => {
+    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
+  }
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+    const getSchema = savedData ? await loadDataHxNss(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxNssForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -103,6 +205,8 @@ class HxNssForm extends Component {
           <br /><br />
           <h2>1. Past Medical History</h2>
           1a. Has a doctor ever told you that you have the following condition? Please tick the appropriate box(es) if the answer is "Yes" to any of the conditions listed below, or tick the last box if you have none.<br />
+          <h2> {saveData !== null ? "ORIGINAL Q1: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxNssQ1) : ""}</h2>
           <SelectField name="hxNssQ1" checkboxes="true" label="Hx NSS Q1" />
           <br /><br />
           <p style={{ color: "red" }}><b>For respondent with known hypertension, diabetes, high cholesterol and stroke only.</b></p>
@@ -113,11 +217,15 @@ class HxNssForm extends Component {
           <PopupText qnNo="hxNssQ2" triggerValue="Yes (please answer question below)">
 
             (Only proceed when answered "Yes" to the previous question)
+            <h2> {saveData !== null ? "ORIGINAL Q3: " : ""}</h2>
+            <h2> {saveData !== null ? displayArray(saveData.hxNssQ3) : ""}</h2>
             <RadioField name="hxNssQ3" checkboxes="true" label="Hx NSS Q3" />
 
             <PopupText qnNo="hxNssQ3" triggerValue="No, the last appointment was > 1 year ago (Please proceed to Q2b and 2c)">
               <br />
               <p>2b. What is the reason that you are not following up with your doctor for your existing conditions such as diabetes, high cholesterol, high blood pressure and stroke?</p>
+              <h2> {saveData !== null ? "ORIGINAL Q4: ": ""}</h2>
+              <h2>  {saveData !== null ? displayArray(saveData.hxNssQ4) : ""}</h2>
               <SelectField name="hxNssQ4" checkboxes="true" label="Hx NSS Q4" />
               <br />
               <LongTextField name="hxNssQ22" label="Hx NSS Q22" />
@@ -207,6 +315,8 @@ class HxNssForm extends Component {
           <br />
           <span style={{ color: "red" }}><h3>CONTINUE REFERRING TO NSS QUESTIONNAIRE. </h3></span>
           3. Have your immediate family members (parents/ siblings/ children) ever been diagnosed/ told by a doctor that they have any of the chronic condition(s) listed below? Please tick if the answer is "Yes" to any of the conditions. You may select more than one. Please tick the last box if they have none.
+          <h2> {saveData !== null ? "ORIGINAL Q13: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxNssQ13) : ""}</h2>
           <SelectField name="hxNssQ13" checkboxes="true" label="Hx NSS Q13" />
           <br />Please specify:
           <LongTextField name="hxNssQ23" label="Hx NSS Q23" />
@@ -223,6 +333,8 @@ class HxNssForm extends Component {
           <RadioField name="hxNssQ15" label="Hx NSS Q15" />
           <br /><br />
           6. Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.<br />
+          <h2> {saveData !== null ? "ORIGINAL Q16: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxNssQ16) : ""}</h2>
           <SelectField name="hxNssQ16" checkboxes="true" label="Hx NSS Q16" />
           <br />
           7. Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
@@ -249,7 +361,7 @@ class HxNssForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -261,7 +373,6 @@ class HxNssForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 HxNssForm.contextType = FormContext;

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -12,6 +12,7 @@ import { SelectField, RadioField, BoolField } from 'uniforms-material';
 import PopupText from 'src/utils/popupText';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   // geriGeriApptQ1: {
@@ -35,19 +36,52 @@ const schema = new SimpleSchema({
   }
 }
 )
+const loadDataGeriGeriAppt = (savedData) => {
+    return savedData ? new SimpleSchema({
+            // geriGeriApptQ1: {
+            //   type: String, allowedValues: ["Yes", "No"], optional: false
+            // }, geriGeriApptQ2: {
+            //   type: String, allowedValues: ["Yes", "No"], optional: false
+            // }, geriGeriApptQ3: {
+            //   type: String, allowedValues: ["Yes", "No"], optional: false
+            //},
+            // Q1 - 3 missing
+            geriGeriApptQ4: {
+                defaultValue: savedData.geriGeriApptQ4,
+                type: String, allowedValues: ["Yes", "No"], optional: false
+            }, geriGeriApptQ5: {
+                defaultValue: savedData.geriGeriApptQ5,
+                type: Boolean, label: "Done", optional: true
+            }, geriGeriApptQ6: {
+                defaultValue: savedData.geriGeriApptQ6,
+                type: String, allowedValues: ["Yes, requirement met.", "No, requirement not met."], optional: false
+            }, geriGeriApptQ7: {
+                defaultValue: savedData.geriGeriApptQ7,
+                type: String, allowedValues: ["Yes", "No"], optional: true
+            }, geriGeriApptQ8: {
+                defaultValue: savedData.geriGeriApptQ8,
+                type: String, allowedValues: ["Yes", "No"], optional: true
+            }
+        }
+        )
+        :schema
+}
 
-class GeriGeriApptForm extends Component {
-  static contextType = FormContext
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { navigate } = this.props;
+const formName = "geriGeriApptForm"
+const GeriGeriApptForm = (props) => {
+    const {patientId, updatePatientId} = useContext(FormContext);
+    const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const navigate = useNavigate();
+    useEffect(async () => {
+        const savedData = await getSavedData(patientId, formName);
+        const getSchema = savedData ? await loadDataGeriGeriAppt(savedData) : schema
+        setForm_schema(new SimpleSchema2Bridge(getSchema))
+    }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriGeriApptForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -96,7 +130,7 @@ class GeriGeriApptForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -108,7 +142,6 @@ class GeriGeriApptForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriGeriApptForm.contextType = FormContext;

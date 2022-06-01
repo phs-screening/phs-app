@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -11,6 +11,7 @@ import { RadioField, NumField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { useField } from 'uniforms';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriSppbQ1: {
@@ -40,6 +41,47 @@ const schema = new SimpleSchema({
 }
 )
 
+const loadDataGeriSppb = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriSppbQ1: {
+          defaultValue : savedData.geriSppbQ1,
+          type: Number, optional: true
+        }, geriSppbQ2: {
+          defaultValue : savedData.geriSppbQ2,
+          type: String, allowedValues: ["0       (If not able to complete 5 chair stands)", "1       (> 16.7s )", "2       (16.6 – 13.7s )", "3       (13.6 – 11.2s )", "4       (< 11.1s )"], optional: false
+        }, geriSppbQ3: {
+          defaultValue : savedData.geriSppbQ3,
+          type: Number, optional: true
+        }, geriSppbQ4: {
+          defaultValue : savedData.geriSppbQ4,
+          type: Number, optional: true
+        }, geriSppbQ5: {
+          defaultValue : savedData.geriSppbQ5,
+          type: Number, optional: true
+        }, geriSppbQ6: {
+          defaultValue : savedData.geriSppbQ6,
+          type: String, allowedValues: ["0        (Side by side < 10s or unable)", "1       (Side by side 10s AND < 10s semi tandem)", "2       (Semi tandem 10s AND tandem < 3s)", "3       (Semi tandem 10s AND tandem < 10s but > 3s)", "4       (Tandem >= 10s)", "Refused to do"], optional: false
+        }, geriSppbQ7: {
+          defaultValue : savedData.geriSppbQ7,
+          type: Number, optional: true
+        }, geriSppbQ8: {
+          defaultValue : savedData.geriSppbQ8,
+          type: String, allowedValues: ["0       (Could not do)", "1       (> 5.7s )", "2       (4.1 – 5.7s )", "3       (3.2 – 4.0s )", "4       (< 3.1s )"], optional: false
+          // There is no Q9???
+          // }, geriSppbQ9: {
+          //   type: String, optional: false
+        }, geriSppbQ10: {
+          defaultValue : savedData.geriSppbQ10,
+          type: String, allowedValues: ["High Falls Risk (score ≤ 6)", "Low Falls Risk (score > 6)"], optional: false
+        }, geriSppbQ11: {
+          defaultValue : savedData.geriSppbQ11,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }
+      }
+      )
+      :schema
+}
+
 function GetSppbScore() {
   let score = 0;
   const [{ value: q2 }] = useField('geriSppbQ2', {});
@@ -61,18 +103,21 @@ function GetSppbScore() {
   return score;
 }
 
-class GeriSppbForm extends Component {
-  static contextType = FormContext;
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "geriSppbForm"
+const GeriSppbForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataGeriSppb(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriSppbForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -119,7 +164,7 @@ class GeriSppbForm extends Component {
     </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -131,7 +176,6 @@ class GeriSppbForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriSppbForm.contextType = FormContext;

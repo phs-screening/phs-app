@@ -57,6 +57,16 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
         >
           Manage Volunteers
         </Button>}
+        {admin && <Button
+            color="primary"
+            size="large"
+            type="submit"
+            variant="contained"
+            href="/app/edit"
+            sx={{marginLeft: 2}}
+        >
+          Edit Forms
+        </Button>}
 
         <Box sx={{ flexGrow: 1 }} />
         <Hidden lgDown>

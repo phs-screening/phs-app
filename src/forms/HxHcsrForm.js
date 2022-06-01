@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -12,6 +12,7 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 import PopupText from '../utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   hxHcsrQ1: {
@@ -43,19 +44,68 @@ const schema = new SimpleSchema({
   }
 }
 )
+const loadDataHxHcsr = (savedData) => {
+  return savedData ?
+      new SimpleSchema({
+            hxHcsrQ1: {
+              defaultValue: savedData.hxHcsrQ1,
+              type: String, optional: false
+            }, hxHcsrQ2: {
+          defaultValue: savedData.hxHcsrQ2,
+              type: String, optional: false
+            }, hxHcsrQ3: {
+          defaultValue: savedData.hxHcsrQ3,
+              type: String, optional: false
+            }, hxHcsrQ4: {
+          defaultValue: savedData.hxHcsrQ4,
+              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
+            }, hxHcsrQ5: {
+          defaultValue: savedData.hxHcsrQ5,
+              type: String, optional: true
+            }, hxHcsrQ6: {
+          defaultValue: savedData.hxHcsrQ6,
+              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
+            }, hxHcsrQ7: {
+          defaultValue: savedData.hxHcsrQ7,
+              type: String, optional: true
+            }, hxHcsrQ8: {
+          defaultValue: savedData.hxHcsrQ8,
+              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
+            }, hxHcsrQ9: {
+          defaultValue: savedData.hxHcsrQ9,
+              type: String, optional: true
+            }, hxHcsrQ11: {
+          defaultValue: savedData.hxHcsrQ11,
+              type: String,
+              allowedValues: ["Yes", "No"],
+              optional: false
+            }, hxHcsrQ12: {
+          defaultValue: savedData.hxHcsrQ12,
+              type: String,
+              allowedValues: ["Yes", "No"],
+              optional: false
+            }
+          }
+      )
+      : schema
+}
 
-class HxHcsrForm extends Component {
-  static contextType = FormContext
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "hxHcsrForm"
+const HxHcsrForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataHxHcsr(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxHcsrForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -154,7 +204,7 @@ class HxHcsrForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -166,7 +216,6 @@ class HxHcsrForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 HxHcsrForm.contextType = FormContext;

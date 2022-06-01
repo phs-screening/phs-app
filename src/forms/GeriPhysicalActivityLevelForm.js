@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -10,6 +10,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { LongTextField, RadioField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriPhysicalActivityLevelQ1: {
@@ -28,19 +29,47 @@ const schema = new SimpleSchema({
 }
 )
 
-class GeriPhysicalActivityLevelForm extends Component {
-  static contextType = FormContext;
+const loadDataHGeriPhysicalActivityLevel = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriPhysicalActivityLevelQ1: {
+          defaultValue : savedData.geriPhysicalActivityLevelQ1,
+          type: String, optional: false
+        }, geriPhysicalActivityLevelQ2: {
+      defaultValue : savedData.geriPhysicalActivityLevelQ2,
+          type: String, optional: false
+        }, geriPhysicalActivityLevelQ3: {
+      defaultValue : savedData.geriPhysicalActivityLevelQ3,
+          type: String, optional: false
+        }, geriPhysicalActivityLevelQ4: {
+      defaultValue : savedData.geriPhysicalActivityLevelQ4,
+          type: String, allowedValues: ["0 (Nothing at all)", "1 (Very light)", "2 (Fairly light)", "3 (Moderate)", "4 (Somewhat hard)", "5 (Hard)", "6.0", "7 (Very Hard)", "8.0"], optional: false
+        }, geriPhysicalActivityLevelQ5: {
+      defaultValue : savedData.geriPhysicalActivityLevelQ5,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriPhysicalActivityLevelQ6: {
+      defaultValue : savedData.geriPhysicalActivityLevelQ6,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }
+      }
+  ): schema
+}
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "geriPhysicalActivityLevelForm"
+const GeriPhysicalActivityLevelForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    const getSchema = savedData ? await loadDataHGeriPhysicalActivityLevel(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
 
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriPhysicalActivityLevelForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -70,7 +99,7 @@ class GeriPhysicalActivityLevelForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {} }/>
         </div>
 
         <br /><Divider />
@@ -82,7 +111,6 @@ class GeriPhysicalActivityLevelForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriPhysicalActivityLevelForm.contextType = FormContext;

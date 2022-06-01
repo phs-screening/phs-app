@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -11,6 +11,7 @@ import { TextField, SelectField, RadioField, NumField } from 'uniforms-material'
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriTugQ1: {
@@ -29,6 +30,31 @@ const schema = new SimpleSchema({
 }
 )
 
+const loadDataGeriTug = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriTugQ1: {
+          defaultValue : savedData.geriTugQ1,
+          type: Array, optional: true
+        }, "geriTugQ1.$": {
+          type: String, allowedValues: ["Walking frame", "Walking frame with wheels", "Crutches/ Elbow crutches", "Quadstick (Narrow/ Broad)", "Walking stick", "Umbrella", "Others (Please specify in textbox )"]
+        }, geriTugQ2: {
+          defaultValue : savedData.geriTugQ2,
+          type: String, optional: true
+        }, geriTugQ3: {
+          defaultValue : savedData.geriTugQ3,
+          type: Number, optional: false
+        }, geriTugQ4: {
+          defaultValue : savedData.geriTugQ4,
+          type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
+        }, geriTugQ5: {
+          defaultValue : savedData.geriTugQ5,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }
+      }
+      )
+      :schema
+}
+
 function PopupText(props) {
   const [{ value: qnValue }] = useField(props.qnNo, {});
   if (qnValue.includes(props.triggerValue)) {
@@ -41,18 +67,26 @@ function PopupText(props) {
   return null;
 }
 
-class GeriTugForm extends Component {
-  static contextType = FormContext;
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "geriTugForm"
+const GeriTugForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+  const { changeTab, nextTab } = props;
+  const displayArray = (item) => {
+    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
+  }
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+    const getSchema = savedData ? await loadDataGeriTug(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriTugForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -64,6 +98,8 @@ class GeriTugForm extends Component {
           <h2>3.3b Time-Up and Go (TUG)</h2>
           Walking aid (if any):
           <br />
+          <h2> {saveData !== null ? "ORIGINAL Q1: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.geriTugQ1) : ""}</h2>
           <SelectField name="geriTugQ1" checkboxes="true" label="Geri - TUG Q1" />
           <br />
           <PopupText qnNo="geriTugQ1" triggerValue="Others (Please specify in textbox )">
@@ -81,7 +117,7 @@ class GeriTugForm extends Component {
         </Fragment>
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -93,7 +129,6 @@ class GeriTugForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriTugForm.contextType = FormContext;

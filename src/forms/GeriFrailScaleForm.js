@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -11,6 +11,7 @@ import { RadioField, SelectField, NumField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriFrailScaleQ1: {
@@ -32,6 +33,34 @@ const schema = new SimpleSchema({
   }
 }
 )
+const loadDataGeriFrailScale = (savedData) => {
+  return savedData ? new SimpleSchema({
+        geriFrailScaleQ1: {
+          defaultValue : savedData.geriFrailScaleQ1,
+          type: String, allowedValues: ["1", "0"], optional: false
+        }, geriFrailScaleQ2: {
+      defaultValue : savedData.geriFrailScaleQ2,
+          type: String, allowedValues: ["1", "0"], optional: false
+        }, geriFrailScaleQ3: {
+      defaultValue : savedData.geriFrailScaleQ3,
+          type: String, allowedValues: ["1", "0"], optional: false
+        }, geriFrailScaleQ4: {
+      defaultValue : savedData.geriFrailScaleQ4,
+          type: Array, optional: false
+        }, "geriFrailScaleQ4.$": {
+          type: String, allowedValues: ["Hypertension", "Diabetes", "Cancer (other than a minor skin cancer)", "Chronic lung disease", "Heart attack", "Congestive heart failure", "Angina", "Asthma", "Arthritis", "Stroke", "Kidney disease", "NIL"]
+        }, geriFrailScaleQ5: {
+      defaultValue : savedData.geriFrailScaleQ5,
+          type: Number, optional: false
+        }, geriFrailScaleQ6: {
+      defaultValue : savedData.geriFrailScaleQ6,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriFrailScaleQ7: {
+          type: Number, optional: true
+        }
+      }
+  ): schema
+}
 
 function GetFrailScore() {
   let score = 0;
@@ -50,19 +79,28 @@ function GetFrailScore() {
 
   return score;
 }
+const formName = "geriFrailScaleForm"
+const GeriFrailScaleForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+  const { changeTab, nextTab } = props;
+  const displayArray = (item) => {
+    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
+  }
 
-class GeriFrailScaleForm extends Component {
-  static contextType = FormContext;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+    const getSchema = savedData ? await loadDataGeriFrailScale(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriFrailScaleForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
@@ -82,6 +120,8 @@ class GeriFrailScaleForm extends Component {
           <br />3. Ambulation: By yourself and not using aids, do you have any difficulty walking several hundred yards? (approx. > 300m)<br />1 = Yes<br />0 = No <br />
           <RadioField name="geriFrailScaleQ3" label="Geri - Frail Scale Q3" /><br />
           <br />4. Illnesses: For 11 illnesses, participants are asked, “Did a doctor ever tell you that you have [illness]?” <br />The illnesses include hypertension, diabetes, cancer (other than a minor skin cancer), chronic lung disease, heart attack, congestive heart failure, angina, asthma, arthritis, stroke, and kidney disease.<br /><br />The total illnesses (0–11) are recorded as <br />0–4 = 0 and 5–11 = 1.<br />
+          <h2> {saveData !== null ? "ORIGINAL Q4: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.geriFrailScaleQ4) : ""}</h2>
           <SelectField name="geriFrailScaleQ4" checkboxes="true" label="Geri - Frail Scale Q4" /><br />
           <br />5. Loss of weight: How much do you weigh with your clothes on but without shoes? [current weight] <br />One year ago, in October 2018, how much did you weigh without your shoes and with your clothes on? [weight 1 year ago]. <br /><br />Percent weight change is computed as: <br />[[weight 1 year ago - current weight]/weight 1 year ago]] * 100.<br />What is the percentage (%) weight change?<br /><br />Percent change > 5 (representing a 5% loss of weight) is scored as 1 and &lt; 5 as 0.<br /><br />If participant cannot remember his/her weight, ask if there was any significant loss in weight the past year.<br />
           <NumField name="geriFrailScaleQ5" label="Geri - Frail Scale Q5" />
@@ -98,7 +138,7 @@ class GeriFrailScaleForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -110,7 +150,6 @@ class GeriFrailScaleForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriFrailScaleForm.contextType = FormContext;

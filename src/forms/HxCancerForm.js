@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -13,6 +13,7 @@ import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   hxCancerQ1: {
@@ -79,6 +80,101 @@ const schema = new SimpleSchema({
 }
 )
 
+const loadDataHxCancer = (savedData) => {
+  return savedData ? new SimpleSchema({
+        hxCancerQ1: {
+          defaultValue : savedData.hxCancerQ1,
+          type: Array, optional: false
+        }, "hxCancerQ1.$": {
+          type: String, allowedValues: ["Ischaemic Heart Disease (Including Coronary Artery Diseases) 缺血性心脏病（包括心脏血管阻塞)", "Cervical Cancer 子宫颈癌, (Please specify age of diagnosis): (Free text)", "Breast Cancer 乳癌, (Please specify age of diagnosis): (Free text)", "Colorectal Cancer 大肠癌, (Please specify age of diagnosis): (Free text)", "Others, (Please Specify condition and age of diagnosis): (Free text)", "No, I don\t have any of the above"]
+        }, hxCancerQ2: {
+          defaultValue : savedData.hxCancerQ2,
+          type: Array, optional: false
+        }, "hxCancerQ2.$": {
+          type: String, allowedValues: ["Cervical Cancer 子宫颈癌, (Please specify age of diagnosis):", "Breast Cancer 乳癌, (Please specify age of diagnosis):", "Colorectal Cancer 大肠癌, (Please specify age of diagnosis):", "Others, (Please Specify condition and age of diagnosis):", "No"]
+        }, hxCancerQ3: {
+          defaultValue : savedData.hxCancerQ3,
+          type: String, optional: true
+        }, hxCancerQ4: {
+          defaultValue : savedData.hxCancerQ4,
+          type: String, optional: false
+        }, hxCancerQ5: {
+          defaultValue : savedData.hxCancerQ5,
+          type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: true
+        }, hxCancerQ6: {
+          defaultValue : savedData.hxCancerQ6,
+          type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: true
+        }, hxCancerQ7: {
+          defaultValue : savedData.hxCancerQ7,
+          type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: true
+        }, hxCancerQ8: {
+          defaultValue : savedData.hxCancerQ8,
+          type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: true
+        }, hxCancerQ9: {
+          defaultValue : savedData.hxCancerQ9,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, hxCancerQ10: {
+          defaultValue : savedData.hxCancerQ10,
+          type: String, optional: true
+        }, hxCancerQ11: {
+          defaultValue : savedData.hxCancerQ11,
+          type: Number, optional: false
+        }, hxCancerQ12: {
+          defaultValue : savedData.hxCancerQ12,
+          type: Number, optional: false
+        }, hxCancerQ13: {
+          defaultValue : savedData.hxCancerQ13,
+          type: Number, optional: false
+        }, hxCancerQ14: {
+          defaultValue : savedData.hxCancerQ14,
+          type: Number, optional: false
+        }, hxCancerQ15: {
+          defaultValue : savedData.hxCancerQ15,
+          type: Number, optional: true
+        }, hxCancerQ16: {
+          defaultValue : savedData.hxCancerQ16,
+          type: Number, optional: true
+        }, hxCancerQ17: {
+          defaultValue : savedData.hxCancerQ17,
+          type: Number, optional: false
+        }, hxCancerQ18: {
+          defaultValue : savedData.hxCancerQ18,
+          type: Number, optional: false
+        }, hxCancerQ19: {
+          defaultValue : savedData.hxCancerQ19,
+          type: Number, optional: false
+        }, hxCancerQ20: {
+          defaultValue : savedData.hxCancerQ20,
+          type: Number, optional: false
+        }, hxCancerQ21: {
+          defaultValue : savedData.hxCancerQ21,
+          type: Number, optional: true
+        }, hxCancerQ22: {
+          defaultValue : savedData.hxCancerQ22,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }, hxCancerQ23: {
+          defaultValue : savedData.hxCancerQ23,
+          type: Boolean, label: "Yes", optional: true
+        }, hxCancerQ24: {
+          defaultValue : savedData.hxCancerQ24,
+          type: Number, optional: true
+        }, hxCancerQ25: {
+          defaultValue : savedData.hxCancerQ25,
+          type: Array, optional: false
+        }, "hxCancerQ25.$": {
+          type: String, allowedValues: ["FIT (50 and above, FIT not done in past 1 year, Colonoscopy not done in past 10 years, Not diagnosed with colorectal cancer)", "WCE (40 and above, females only)", "Geriatrics (60 and above)", "Doctor\s Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)", "Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)", "Oral Health Screening - participants aged 40-59 with poor dental hygiene", "Exhibition - recommended as per necessary"]
+        }, hxCancerQ26: {
+          defaultValue : savedData.hxCancerQ26,
+          type: String, optional: true
+        }, hxCancerQ27: {
+          defaultValue : savedData.hxCancerQ27,
+          type: String, allowedValues: ["Yes", "No"], optional: false
+        }
+      }
+      )
+      : schema
+}
+
 function CalcBMI() {
   const [{ value: height_cm }] = useField("hxCancerQ19", {});
   const [{ value: weight }] = useField("hxCancerQ20", {});
@@ -100,18 +196,28 @@ function IsHighBP(props) {
   return null;
 }
 
-class HxCancerForm extends Component {
-  static contextType = FormContext
+const formName = "hxCancerForm"
+const HxCancerForm = () => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const navigate = useNavigate();
+  const [saveData, setSaveData] = useState(null)
+  const displayArray = (item) => {
+    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
+  }
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { navigate } = this.props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+    const getSchema = savedData ? await loadDataHxCancer(savedData) : schema
+    setForm_schema(new SimpleSchema2Bridge(getSchema))
+  }, [])
+
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxCancerForm");
+          const response = await submitForm(model, patientId, formName );
           if (!response.result) {
             alert(response.error);
           }
@@ -123,12 +229,16 @@ class HxCancerForm extends Component {
           <h2>HISTORY TAKING PART 4: CANCER SCREENING</h2>
           <h2>1. HISTORY OF CANCER & FAMILY HISTORY</h2>
           <b><font color="blue">1. Has a doctor ever told you that you have the following conditions?</font> Do be sensitive when asking for personal history of cancer. (please select all that apply)</b><br />
+          <h2> {saveData !== null ? "ORIGINAL Q1: "  : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxCancerQ1) : ""}</h2>
           <SelectField name="hxCancerQ1" checkboxes="true" label="Hx Cancer Q1" /><br /><br />
 
           Please specify:
           <LongTextField name="hxCancerQ26" label="Hx Cancer Q26" /><br /><br />
 
           <b><font color="blue">2. Is there positive family history (AMONG FIRST DEGREE RELATIVES) for the following cancers?</font></b>
+          <h2> {saveData !== null ? "ORIGINAL Q2: " : ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxCancerQ2) : ""}</h2>
           <SelectField name="hxCancerQ2" checkboxes="true" label="Hx Cancer Q2" /><br /><br />
 
           Please specify:
@@ -237,13 +347,15 @@ class HxCancerForm extends Component {
           <NumField name="hxCancerQ24" label="Hx Cancer Q24" /> <br />
           <h2>HISTORY TAKING PART 5: REFERRALS/MEGA SORTING STATION </h2>
           1. REFERRALS<br />Please reference page 1 of form A for various criteria.
+          <h2> {saveData !== null ? "ORIGINAL Q25: ": ""}</h2>
+          <h2> {saveData !== null ? displayArray(saveData.hxCancerQ25) : ""}</h2>
           <SelectField name="hxCancerQ25" checkboxes="true" label="Hx Cancer Q25" />
 
         </Fragment>
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -255,7 +367,6 @@ class HxCancerForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 HxCancerForm.contextType = FormContext;
