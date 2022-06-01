@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { experimentalStyled } from '@material-ui/core';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import { ScrollTopContext } from '../api/utils'
 
 const DashboardLayoutRoot = experimentalStyled('div')(
   ({ theme }) => ({
@@ -38,8 +39,11 @@ const DashboardLayoutContent = experimentalStyled('div')({
   overflow: 'auto'
 });
 
+
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const ref = useRef(null);
+  const scrollTop = () => ref.current.scrollTop = 0;
   return (
     <DashboardLayoutRoot>
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
@@ -49,8 +53,10 @@ const DashboardLayout = () => {
       />
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
-          <DashboardLayoutContent>
-            <Outlet />
+          <DashboardLayoutContent ref={ref}>
+            <ScrollTopContext.Provider value={{scrollTop}}>
+              <Outlet />
+            </ScrollTopContext.Provider>
           </DashboardLayoutContent>
         </DashboardLayoutContainer>
       </DashboardLayoutWrapper>

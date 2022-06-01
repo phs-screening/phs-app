@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -8,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, RadioField, LongTextField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 import PopupText from 'src/utils/popupText';
 
@@ -45,19 +48,22 @@ const schema = new SimpleSchema({
 )
 
 class HxSocialForm extends Component {
+  static contextType = FormContext
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "hxSocialForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
 
@@ -167,4 +173,8 @@ class HxSocialForm extends Component {
   }
 }
 
-export default HxSocialForm;
+HxSocialForm.contextType = FormContext;
+
+export default function HxSocialform(props) {
+  return <HxSocialForm {...props} />;
+}

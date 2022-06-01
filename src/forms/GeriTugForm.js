@@ -9,6 +9,8 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, SelectField, RadioField, NumField } from 'uniforms-material';
 import { useField } from 'uniforms';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
 const schema = new SimpleSchema({
   geriTugQ1: {
@@ -40,19 +42,22 @@ function PopupText(props) {
 }
 
 class GeriTugForm extends Component {
+  static contextType = FormContext;
 
   render() {
-    const form_schema = new SimpleSchema2Bridge(schema)
+    const form_schema = new SimpleSchema2Bridge(schema);
+    const {patientId, updatePatientId} = this.context;
+    const { changeTab, nextTab } = this.props;
     const newForm = () => (
       <AutoForm
         schema={form_schema}
-        onSubmit={console.log}
-        //onSubmit={this.handleSubmit}
-        onSubmitSuccess={() => {
-          alert("Successful");
-        }}
-        onSubmitFailure={() => {
-          alert('Unsuccessful')
+        onSubmit={async (model) => {
+          const response = await submitForm(model, patientId, "geriTugForm");
+          if (!response.result) {
+            alert(response.error);
+          }
+          const event = null; // not interested in this value
+          changeTab(event, nextTab);
         }}
       >
         <Fragment>
@@ -91,4 +96,8 @@ class GeriTugForm extends Component {
   }
 }
 
-export default GeriTugForm;
+GeriTugForm.contextType = FormContext;
+
+export default function GeriTugform(props) {
+  return <GeriTugForm {...props} />;
+}

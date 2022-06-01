@@ -25,10 +25,26 @@ function generateStatusArray(record) {
       true, // pre-registration, always true 
       record.registrationForm !== undefined, // registration
       record.phlebotomyForm !== undefined, // phlebotomy
-      record.historyTakingForm !== undefined, // history taking
+      // historyTaking form consists of 4 forms
+      record.hxHcsrForm !== undefined
+          && record.hxNssForm !==  undefined
+          && record.hxSocialForm !== undefined
+          && record.hxCancerForm !== undefined,
       record.fitForm !== undefined, // fit
       record.wceForm !== undefined, // wce
-      record.geriatricsForm !== undefined, // geriatrics
+      // geriatrics form consists of 12 forms
+      record.geriAmtForm !== undefined
+          && record.geriEbasDepForm !== undefined
+          && record.geriVisionForm !== undefined
+          && record.geriParQForm !== undefined
+          && record.geriPhysicalActivityLevelForm !== undefined
+          && record.geriFrailScaleForm !== undefined
+          && record.geriOtQuestionnaireForm !== undefined
+          && record.geriSppbForm !== undefined
+          && record.geriTugForm !== undefined
+          && record.geriPtConsultForm !== undefined
+          && record.geriOtConsultForm !== undefined
+          && record.geriGeriApptForm !== undefined,
       record.doctorConsultForm !== undefined, // doctor's consult
       record.socialServiceForm !== undefined, // social service
       record.feedbackForm !== undefined // feedback
@@ -82,7 +98,7 @@ if (loading) {
         {formDone[0] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
-      <TimelineContent><p>Pre-Registration</p></TimelineContent>
+      <TimelineContent><p>Pre-Registration [Completed]</p></TimelineContent>
     </TimelineItem>
     <TimelineItem>
       <TimelineSeparator>
@@ -90,10 +106,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+        {formDone[1] ? <p>Registration [Completed]</p>
+          : <a
           href="/app/reg"
           onClick={(event) => navigateTo(event, navigate, "reg")}>Registration
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -105,11 +122,12 @@ if (loading) {
       </TimelineSeparator>
       <TimelineContent>
       {goingForPhlebotomy
-          ? <a
+          ? (formDone[2] ? <p>Phlebotomy [Completed]</p>
+              :<a
               href="/app/phlebo"
               onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy
-            </a>
-          : <p>[Not required] Phlebotomy</p>
+              </a>)
+          : <p>Phlebotomy [Not going]</p>
       }
       </TimelineContent>
     </TimelineItem>
@@ -119,10 +137,12 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+      {formDone[3] ? <p>History Taking [Completed]</p>
+        : <a
           href="/app/hxtaking"
           onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking
         </a>
+      }
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -131,10 +151,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+      {formDone[4] ? <p>FIT [Completed]</p>
+        : <a
           href="/app/fit"
           onClick={(event) => navigateTo(event, navigate, "fit")}>FIT
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -143,10 +164,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+      {formDone[5] ? <p>WCE [Completed]</p>
+        : <a
           href="/app/wce"
           onClick={(event) => navigateTo(event, navigate, "wce")}>WCE
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -155,10 +177,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+      {formDone[6] ? <p>Geriatrics [Completed]</p>
+        : <a
           href="/app/geri"
           onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -167,10 +190,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+        {formDone[7] ? <p>Doctor's Consult [Completed]</p>
+        : <a
           href="/app/doctorsconsult"
           onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult
-          </a>
+          </a>}
         </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -179,10 +203,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+        {formDone[8] ? <p>Social Service [Completed]</p>
+        : <a
           href="/app/socialservice"
           onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -191,10 +216,11 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        <a
+        {formDone[9] ? <p>Geriatrics [Completed]</p>
+        : <a
           href="/app/feedback"
           onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback
-        </a>
+        </a>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>

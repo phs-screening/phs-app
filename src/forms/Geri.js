@@ -18,6 +18,7 @@ import GeriPtConsultForm from 'src/forms/GeriPtConsultForm';
 import GeriSppbForm from 'src/forms/GeriSppbForm';
 import GeriTugForm from 'src/forms/GeriTugForm';
 import GeriVisionForm from 'src/forms/GeriVisionForm';
+import { ScrollTopContext } from '../api/utils.js';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,8 +63,10 @@ const useStyles = makeStyles((theme) => ({
 export default function GeriTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { scrollTop } = React.useContext(ScrollTopContext);
 
   const handleChange = (event, newValue) => {
+    scrollTop();
     setValue(newValue);
   };
 
@@ -86,37 +89,37 @@ export default function GeriTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <GeriAmtForm />
+        <GeriAmtForm changeTab={handleChange} nextTab={1} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <GeriEbasDepForm />
+        <GeriEbasDepForm changeTab={handleChange} nextTab={2} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <GeriVisionForm />
+        <GeriVisionForm changeTab={handleChange} nextTab={3} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <GeriParQForm />
+        <GeriParQForm changeTab={handleChange} nextTab={4} />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <GeriPhysicalActivityLevelForm />
+        <GeriPhysicalActivityLevelForm changeTab={handleChange} nextTab={5} />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <GeriFrailScaleForm />
+        <GeriFrailScaleForm changeTab={handleChange} nextTab={6} />
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <GeriOtQuestionnaireForm />
+        <GeriOtQuestionnaireForm changeTab={handleChange} nextTab={7} />
       </TabPanel>
       <TabPanel value={value} index={7}>
-        <GeriSppbForm />
+        <GeriSppbForm changeTab={handleChange} nextTab={8} />
       </TabPanel>
       <TabPanel value={value} index={8}>
-        <GeriTugForm />
+        <GeriTugForm changeTab={handleChange} nextTab={9} />
       </TabPanel>
       <TabPanel value={value} index={9}>
-        <GeriPtConsultForm />
+        <GeriPtConsultForm changeTab={handleChange} nextTab={10} />
       </TabPanel>
       <TabPanel value={value} index={10}>
-        <GeriOtConsultForm />
+        <GeriOtConsultForm changeTab={handleChange} nextTab={11} />
       </TabPanel>
       <TabPanel value={value} index={11}>
         <GeriGeriApptForm />
