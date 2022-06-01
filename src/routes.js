@@ -22,6 +22,7 @@ import WceForm from 'src/forms/WceForm';
 import GeriTabs from './forms/Geri';
 import HxTabs from './forms/HistoryTaking';
 import ManageVolunteers from 'src/pages/ManageVolunteers';
+import Edit from 'src/pages/EditForms';
 
 const routes = [
   {
@@ -43,6 +44,7 @@ const routes = [
       { path: 'reg', element: <RegForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
       { path: 'manage', element: <ManageVolunteers /> },
+      { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceForm /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

@@ -8,7 +8,6 @@ import mongoDB, {hashPassword, isAdmin, profilesCollection} from "../services/mo
 import {Visibility, VisibilityOff, Search} from "@material-ui/icons";
 import {useNavigate} from "react-router-dom";
 
-//Create multiple accounts at once
 const ManageVolunteers = () => {
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);

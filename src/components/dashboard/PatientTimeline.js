@@ -6,7 +6,7 @@ import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import { useNavigate } from 'react-router-dom';
-import mongoDB from "../../services/mongoDB"
+import mongoDB, {getProfile, isAdmin} from "../../services/mongoDB"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
@@ -65,8 +65,9 @@ const BasicTimeline = (props) => {
   const [loading, setLoading] = useState(true);
   const [goingForPhlebotomy, setGoingForPhlebotomy] = useState();
   const [formDone, setFormDone] = useState([]);
+  const [admin, isAdmins] = useState(false)
 
-  useEffect(() => {
+  useEffect(async () => {
     const createFormsStatus = async () => {
       try {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
@@ -83,6 +84,7 @@ const BasicTimeline = (props) => {
       }
     };
     createFormsStatus();
+    isAdmins(await isAdmin())
   }, [navigate, props.patientId]);
 if (loading) {
   return (<div style={{
@@ -106,11 +108,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        {formDone[1] ? <p>Registration [Completed]</p>
-          : <a
-          href="/app/reg"
-          onClick={(event) => navigateTo(event, navigate, "reg")}>Registration
-        </a>}
+        {!formDone[1] ? <a
+            href="/app/reg"
+            onClick={(event) => navigateTo(event, navigate, "reg")}>Registration [Incomplete]
+        </a> : admin ? <a
+            href="/app/reg"
+            onClick={(event) => navigateTo(event, navigate, "reg")}>Registration [Edit]
+        </a> : <p>Registration [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -122,11 +126,13 @@ if (loading) {
       </TimelineSeparator>
       <TimelineContent>
       {goingForPhlebotomy
-          ? (formDone[2] ? <p>Phlebotomy [Completed]</p>
-              :<a
+          ? (!formDone[2] ? <a
               href="/app/phlebo"
-              onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy
-              </a>)
+              onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy [Incomplete]
+              </a> : admin ? <a
+              href="/app/phlebo"
+              onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy [Edit]
+          </a>: <p>Phlebotomy [Completed]</p>)
           : <p>Phlebotomy [Not going]</p>
       }
       </TimelineContent>
@@ -137,11 +143,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-      {formDone[3] ? <p>History Taking [Completed]</p>
-        : <a
+      {!formDone[3] ? <a
           href="/app/hxtaking"
-          onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking
-        </a>
+          onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking [Incomplete]
+        </a> : admin ? <a
+          href="/app/hxtaking"
+          onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking [Edit]
+      </a> : <p>History Taking [Completed]</p>
       }
       </TimelineContent>
     </TimelineItem>
@@ -151,11 +159,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-      {formDone[4] ? <p>FIT [Completed]</p>
-        : <a
+      {!formDone[4] ? <a
           href="/app/fit"
-          onClick={(event) => navigateTo(event, navigate, "fit")}>FIT
-        </a>}
+          onClick={(event) => navigateTo(event, navigate, "fit")}>FIT [Incomplete]
+        </a> : admin ? <a
+          href="/app/fit"
+          onClick={(event) => navigateTo(event, navigate, "fit")}>FIT [Edit]
+      </a>: <p>FIT [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -164,11 +174,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-      {formDone[5] ? <p>WCE [Completed]</p>
-        : <a
+      {!formDone[5] ? <a
           href="/app/wce"
-          onClick={(event) => navigateTo(event, navigate, "wce")}>WCE
-        </a>}
+          onClick={(event) => navigateTo(event, navigate, "wce")}>WCE [Incomplete]
+        </a> : admin ? <a
+          href="/app/wce"
+          onClick={(event) => navigateTo(event, navigate, "wce")}>WCE [Edit]
+      </a>: <p>WCE [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -177,11 +189,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-      {formDone[6] ? <p>Geriatrics [Completed]</p>
-        : <a
+      {!formDone[6] ? <a
           href="/app/geri"
-          onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics
-        </a>}
+          onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics [Incomplete]
+        </a> : admin ? <a
+          href="/app/geri"
+          onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics [Edit]
+      </a>: <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -190,11 +204,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        {formDone[7] ? <p>Doctor's Consult [Completed]</p>
-        : <a
+        {!formDone[7] ? <a
           href="/app/doctorsconsult"
-          onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult
-          </a>}
+          onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult [Incomplete]
+          </a> : admin ? <a
+            href="/app/doctorsconsult"
+            onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult [Edit]
+        </a>: <p>Doctor's Consult [Completed]</p>}
         </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -203,11 +219,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        {formDone[8] ? <p>Social Service [Completed]</p>
-        : <a
+        {!formDone[8] ? <a
           href="/app/socialservice"
-          onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service
-        </a>}
+          onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service [Incomplete]
+        </a> : admin ? <a
+            href="/app/socialservice"
+            onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service [Edit]
+        </a> : <p>Social Service [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
@@ -216,11 +234,13 @@ if (loading) {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        {formDone[9] ? <p>Geriatrics [Completed]</p>
-        : <a
+        {!formDone[9] ? <a
           href="/app/feedback"
-          onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback
-        </a>}
+          onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback [Incomplete]
+        </a> : admin ? <a
+            href="/app/feedback"
+            onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback [Edit]
+        </a> : <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
     <TimelineItem>
