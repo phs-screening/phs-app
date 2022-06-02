@@ -10,7 +10,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
-import {schema, layout, loadDataReg} from './reg.js';
+import {schema, layout} from './reg.js';
 import {getSavedData} from "../services/mongoDB";
 const formName = "registrationForm"
 const RegForm = () => {
@@ -18,12 +18,12 @@ const RegForm = () => {
     const [loading, isLoading] = useState(false)
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const [saveData, setSaveData] = useState(null)
     const form_layout = layout
 
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const getSchema = savedData ? await loadDataReg(savedData) : schema
-        setForm_schema(new SimpleSchema2Bridge(getSchema))
+        setSaveData(savedData)
     }, [])
 
 
@@ -45,6 +45,7 @@ const RegForm = () => {
           alert("Successfully submitted form")
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
         {form_layout}
         <ErrorsField />

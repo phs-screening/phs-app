@@ -22,31 +22,16 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataPhelbo = (savedData) => {
-  return savedData ?
-      new SimpleSchema({
-            phlebotomyQ1: {
-              defaultValue: savedData.phlebotomyQ1,
-              type: Boolean, label: "Yes", optional: true
-            }, phlebotomyQ2: {
-          defaultValue: savedData.phlebotomyQ2,
-              type: Boolean, label: "Yes", optional: true
-            }
-          }
-      )
-      : schema
-}
-
 const formName = "phlebotomyForm"
 const PhleboForm = () => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
   const navigate = useNavigate();
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataPhelbo(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
 
     const newForm = () => (
@@ -56,6 +41,7 @@ const PhleboForm = () => {
           const response = await submitForm(model, patientId, formName);
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
         <Fragment>
           Blood sample collected?

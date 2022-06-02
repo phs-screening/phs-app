@@ -29,40 +29,15 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataHGeriPhysicalActivityLevel = (savedData) => {
-  return savedData ? new SimpleSchema({
-        geriPhysicalActivityLevelQ1: {
-          defaultValue : savedData.geriPhysicalActivityLevelQ1,
-          type: String, optional: false
-        }, geriPhysicalActivityLevelQ2: {
-      defaultValue : savedData.geriPhysicalActivityLevelQ2,
-          type: String, optional: false
-        }, geriPhysicalActivityLevelQ3: {
-      defaultValue : savedData.geriPhysicalActivityLevelQ3,
-          type: String, optional: false
-        }, geriPhysicalActivityLevelQ4: {
-      defaultValue : savedData.geriPhysicalActivityLevelQ4,
-          type: String, allowedValues: ["0 (Nothing at all)", "1 (Very light)", "2 (Fairly light)", "3 (Moderate)", "4 (Somewhat hard)", "5 (Hard)", "6.0", "7 (Very Hard)", "8.0"], optional: false
-        }, geriPhysicalActivityLevelQ5: {
-      defaultValue : savedData.geriPhysicalActivityLevelQ5,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriPhysicalActivityLevelQ6: {
-      defaultValue : savedData.geriPhysicalActivityLevelQ6,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }
-      }
-  ): schema
-}
-
 const formName = "geriPhysicalActivityLevelForm"
 const GeriPhysicalActivityLevelForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
+    const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataHGeriPhysicalActivityLevel(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
 
     const newForm = () => (
@@ -76,6 +51,7 @@ const GeriPhysicalActivityLevelForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>

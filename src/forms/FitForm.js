@@ -24,30 +24,17 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataFit = (savedData) => {
-    return savedData ?  new SimpleSchema({
-            fitQ1: {
-                defaultValue : savedData.fitQ1,
-                type: String, allowedValues: ["Yes", "No"], optional: false
-            }, fitQ2: {
-                defaultValue : savedData.fitQ2,
-                type: String, allowedValues: ["Yes", "No"], optional: false
-            }
-        }
-        )
-        : schema
-}
 
 const formName = "fitForm"
 const FitForm = (props) =>  {
     const {patientId, updatePatientId} = useContext(FormContext);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const [saveData, setSaveData] = useState(null)
 
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const getSchema = savedData ? await loadDataFit(savedData) : schema
-        setForm_schema(new SimpleSchema2Bridge(getSchema))
+        setSaveData(savedData)
     }, [])
 
         const newForm = () => (
@@ -57,6 +44,7 @@ const FitForm = (props) =>  {
                     const response = await submitForm(model, patientId, formName);
                     navigate('/app/dashboard', { replace: true });
                   }}
+                model={saveData}
             >
                 <Fragment>
                     <h2>PARTICIPANT IDENTIFICATION</h2>

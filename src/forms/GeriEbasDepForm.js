@@ -50,54 +50,6 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataGeriEbasDep = (savedData) => {
-  return savedData ? new SimpleSchema({
-        geriEbasDepQ1: {
-          defaultValue : savedData.geriEbasDepQ1,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ2: {
-      defaultValue : savedData.geriEbasDepQ2,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ3: {
-      defaultValue : savedData.geriEbasDepQ3,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ4: {
-      defaultValue : savedData.geriEbasDepQ4,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ5: {
-      defaultValue : savedData.geriEbasDepQ5,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ6: {
-      defaultValue : savedData.geriEbasDepQ6,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ7: {
-      defaultValue : savedData.geriEbasDepQ7,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-        }, geriEbasDepQ8: {
-      defaultValue : savedData.geriEbasDepQ8,
-          type: String, allowedValues: ["1 (Abnormal)", "0 (Normal)"], optional: false
-          // There is no Q9???
-          // }, geriEbasDepQ9: {
-          //   type: Number, optional: false
-        }, geriEbasDepQ10: {
-      defaultValue : savedData.geriEbasDepQ10,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriEbasDepQ11: {
-      defaultValue : savedData.geriEbasDepQ11,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriEbasDepQ12: {
-      defaultValue : savedData.geriEbasDepQ12,
-          type: String, optional: true, custom: function () {
-            if (this.field('geriEbasDepQ11').isSet && this.field('geriEbasDepQ11').value === "Yes") {
-              if (!this.isSet || this.value.length === 0) {
-                return SimpleSchema.ErrorTypes.REQUIRED
-              }
-            }
-          }
-        }
-      }
-  ):schema
-}
 
 function GetScore(props) {
   let score = 0
@@ -134,10 +86,10 @@ const GeriEbasDepForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
+  const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataGeriEbasDep(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
 
     const newForm = () => (
@@ -151,6 +103,7 @@ const GeriEbasDepForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>
