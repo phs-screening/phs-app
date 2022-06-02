@@ -44,62 +44,16 @@ const schema = new SimpleSchema({
   }
 }
 )
-const loadDataHxHcsr = (savedData) => {
-  return savedData ?
-      new SimpleSchema({
-            hxHcsrQ1: {
-              defaultValue: savedData.hxHcsrQ1,
-              type: String, optional: false
-            }, hxHcsrQ2: {
-          defaultValue: savedData.hxHcsrQ2,
-              type: String, optional: false
-            }, hxHcsrQ3: {
-          defaultValue: savedData.hxHcsrQ3,
-              type: String, optional: false
-            }, hxHcsrQ4: {
-          defaultValue: savedData.hxHcsrQ4,
-              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
-            }, hxHcsrQ5: {
-          defaultValue: savedData.hxHcsrQ5,
-              type: String, optional: true
-            }, hxHcsrQ6: {
-          defaultValue: savedData.hxHcsrQ6,
-              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
-            }, hxHcsrQ7: {
-          defaultValue: savedData.hxHcsrQ7,
-              type: String, optional: true
-            }, hxHcsrQ8: {
-          defaultValue: savedData.hxHcsrQ8,
-              type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
-            }, hxHcsrQ9: {
-          defaultValue: savedData.hxHcsrQ9,
-              type: String, optional: true
-            }, hxHcsrQ11: {
-          defaultValue: savedData.hxHcsrQ11,
-              type: String,
-              allowedValues: ["Yes", "No"],
-              optional: false
-            }, hxHcsrQ12: {
-          defaultValue: savedData.hxHcsrQ12,
-              type: String,
-              allowedValues: ["Yes", "No"],
-              optional: false
-            }
-          }
-      )
-      : schema
-}
-
 
 const formName = "hxHcsrForm"
 const HxHcsrForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const [saveData, setSaveData] = useState(null)
     const { changeTab, nextTab } = props;
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataHxHcsr(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+      setSaveData(savedData)
   }, [])
     const newForm = () => (
       <AutoForm
@@ -112,6 +66,7 @@ const HxHcsrForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>

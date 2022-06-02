@@ -24,31 +24,15 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataSocialService = (savedData) => {
-  return savedData ? new SimpleSchema({
-        socialServiceQ1: {
-          defaultValue : savedData.socialServiceQ1,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, socialServiceQ2: {
-      defaultValue : savedData.socialServiceQ2,
-          type: String, optional: false
-        }, socialServiceQ3: {
-      defaultValue : savedData.socialServiceQ3,
-          type: String, optional: false
-        }
-      }
-  ):schema
-}
-
 const formName = "socialServiceForm"
 const SocialServiceForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
+  const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataSocialService(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
 
     const newForm = () => (
@@ -58,6 +42,7 @@ const SocialServiceForm = (props) => {
           const response = await submitForm(model, patientId, formName);
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
         <Fragment>
           <h2>Social Service Station</h2>

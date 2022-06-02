@@ -36,46 +36,16 @@ const schema = new SimpleSchema({
   }
 }
 )
-const loadDataGeriGeriAppt = (savedData) => {
-    return savedData ? new SimpleSchema({
-            // geriGeriApptQ1: {
-            //   type: String, allowedValues: ["Yes", "No"], optional: false
-            // }, geriGeriApptQ2: {
-            //   type: String, allowedValues: ["Yes", "No"], optional: false
-            // }, geriGeriApptQ3: {
-            //   type: String, allowedValues: ["Yes", "No"], optional: false
-            //},
-            // Q1 - 3 missing
-            geriGeriApptQ4: {
-                defaultValue: savedData.geriGeriApptQ4,
-                type: String, allowedValues: ["Yes", "No"], optional: false
-            }, geriGeriApptQ5: {
-                defaultValue: savedData.geriGeriApptQ5,
-                type: Boolean, label: "Done", optional: true
-            }, geriGeriApptQ6: {
-                defaultValue: savedData.geriGeriApptQ6,
-                type: String, allowedValues: ["Yes, requirement met.", "No, requirement not met."], optional: false
-            }, geriGeriApptQ7: {
-                defaultValue: savedData.geriGeriApptQ7,
-                type: String, allowedValues: ["Yes", "No"], optional: true
-            }, geriGeriApptQ8: {
-                defaultValue: savedData.geriGeriApptQ8,
-                type: String, allowedValues: ["Yes", "No"], optional: true
-            }
-        }
-        )
-        :schema
-}
 
 const formName = "geriGeriApptForm"
 const GeriGeriApptForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
+    const [saveData, setSaveData] = useState(null)
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const getSchema = savedData ? await loadDataGeriGeriAppt(savedData) : schema
-        setForm_schema(new SimpleSchema2Bridge(getSchema))
+        setSaveData(savedData)
     }, [])
     const newForm = () => (
       <AutoForm
@@ -87,6 +57,7 @@ const GeriGeriApptForm = (props) => {
           }
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
 
         <Fragment>

@@ -42,56 +42,16 @@ const schema = new SimpleSchema({
 	}
 )
 
-const loadDataDoctorSConsult = (savedData) => {
-    return savedData ? new SimpleSchema({
-            doctorSConsultQ1: {
-                defaultValue : savedData.doctorSConsultQ1,
-                type: String, optional: false
-            }, doctorSConsultQ2: {
-                defaultValue : savedData.doctorSConsultQ2,
-                type: String, optional: false
-            }, doctorSConsultQ3: {
-                defaultValue : savedData.doctorSConsultQ3,
-                type: String, optional: false
-            }, doctorSConsultQ4: {
-                defaultValue : savedData.doctorSConsultQ4,
-                type: Boolean, label: "Yes", optional: true
-            }, doctorSConsultQ5: {
-                defaultValue : savedData.doctorSConsultQ5,
-                type: String, optional: true
-            }, doctorSConsultQ6: {
-                defaultValue : savedData.doctorSConsultQ6,
-                type: Boolean, label: "Yes", optional: true
-            }, doctorSConsultQ7: {
-                defaultValue : savedData.doctorSConsultQ7,
-                type: String, optional: true
-            }, doctorSConsultQ8: {
-                defaultValue : savedData.doctorSConsultQ8,
-                type: Boolean, label: "Yes", optional: true
-            }, doctorSConsultQ9: {
-                defaultValue : savedData.doctorSConsultQ9,
-                type: String, optional: true
-            }, doctorSConsultQ10: {
-                defaultValue : savedData.doctorSConsultQ10,
-                type: Boolean, label: "Yes", optional: true
-            }, doctorSConsultQ11: {
-                defaultValue : savedData.doctorSConsultQ11,
-                type: Boolean, label: "Yes", optional: true
-            }
-        }
-        )
-        : schema
-}
 
 const formName = "doctorConsultForm"
 const DoctorSConsultForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
+    const [saveData, setSaveData] = useState(null)
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const getSchema = savedData ? await loadDataDoctorSConsult(savedData) : schema
-        setForm_schema(new SimpleSchema2Bridge(getSchema))
+        setSaveData(savedData)
     }, [])
         const newForm = () => (
           <AutoForm
@@ -100,6 +60,7 @@ const DoctorSConsultForm = (props) => {
               const response = await submitForm(model, patientId, formName);
               navigate('/app/dashboard', { replace: true });
             }}
+            model={saveData}
           >
             
             <Fragment>

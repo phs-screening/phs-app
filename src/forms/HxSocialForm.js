@@ -48,66 +48,16 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataHxSocial = (savedData) => {
-  return savedData ? new SimpleSchema({
-        hxSocialQ1: {
-          defaultValue : savedData.hxSocialQ1,
-          type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
-        }, hxSocialQ2: {
-          defaultValue : savedData.hxSocialQ2,
-          type: String, optional: true
-        }, hxSocialQ3: {
-          defaultValue : savedData.hxSocialQ3,
-          type: String, allowedValues: ["1200 and below per month", "1,201 - 2,000 per month", "2,001 - 3,999 per month", "4,000 - 5,999 per month", "6,000 - 9,999 per month", "10,000 & above", "NIL"], optional: false
-        }, hxSocialQ4: {
-          defaultValue : savedData.hxSocialQ4,
-          type: String, optional: false
-        }, hxSocialQ5: {
-          defaultValue : savedData.hxSocialQ5,
-          type: String, allowedValues: ["Yes, (Please specify):", "No, I do not qualify", "No, I qualify but...(Please specify the reasons for not applying if you qualify):"], optional: false
-        }, hxSocialQ6: {
-          defaultValue : savedData.hxSocialQ6,
-          type: String, optional: true
-        }, hxSocialQ7: {
-          defaultValue : savedData.hxSocialQ7,
-          type: String, allowedValues: ["Yes, (Please specify):", "No"], optional: false
-        }, hxSocialQ8: {
-          defaultValue : savedData.hxSocialQ8,
-          type: String, optional: true
-        }, hxSocialQ9: {
-          defaultValue : savedData.hxSocialQ9,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, hxSocialQ10: {
-          defaultValue : savedData.hxSocialQ10,
-          type: String, allowedValues: ["Yes", "No"], optional: true
-        }, hxSocialQ11: {
-          defaultValue : savedData.hxSocialQ11,
-          type: String, allowedValues: ["Yes", "No"], optional: true
-        }, hxSocialQ12: {
-          defaultValue : savedData.hxSocialQ12,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, hxSocialQ13: {
-          defaultValue : savedData.hxSocialQ13,
-          type: String, allowedValues: ["Healthy", "Moderate", "Poor"], optional: false
-        }, hxSocialQ14: {
-          defaultValue : savedData.hxSocialQ14,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }
-      }
-      )
-      : schema
-}
-
 const formName = "hxSocialForm"
 const HxSocialForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
+  const [saveData, setSaveData] = useState(null)
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataHxSocial(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
     const newForm = () => (
       <AutoForm
@@ -120,6 +70,7 @@ const HxSocialForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>

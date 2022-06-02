@@ -26,37 +26,16 @@ const schema = new SimpleSchema({
   }
 }
 )
-const loadDataGeriPt = (savedData) => {
-  return savedData ? new SimpleSchema({
-        geriPtConsultQ1: {
-          defaultValue : savedData.geriPtConsultQ1,
-          type: String, optional: false
-        }, geriPtConsultQ2: {
-      defaultValue : savedData.geriPtConsultQ2,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriPtConsultQ3: {
-      defaultValue : savedData.geriPtConsultQ3,
-          type: String, optional: true
-        }, geriPtConsultQ4: {
-      defaultValue : savedData.geriPtConsultQ4,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriPtConsultQ5: {
-      defaultValue : savedData.geriPtConsultQ5,
-          type: String, optional: true
-        }
-      }
-  ):schema
-}
 
 const formName = "geriPtConsultForm"
 const GeriPtConsultForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
+    const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataGeriPt(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+    setSaveData(savedData)
   }, [])
     const newForm = () => (
       <AutoForm
@@ -69,6 +48,7 @@ const GeriPtConsultForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
         <Fragment>
           <h2>3.4a PT Consult</h2>

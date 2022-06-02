@@ -44,53 +44,6 @@ const schema = new SimpleSchema({
 	}
 )
 
-const loadDataGeriAmt = (savedData) => {
-    return savedData ? new SimpleSchema({
-            geriAmtQ1: {
-                defaultValue: savedData.geriAmtQ1,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ2: {
-                defaultValue: savedData.geriAmtQ2,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ3: {
-                defaultValue: savedData.geriAmtQ3,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ4: {
-                defaultValue: savedData.geriAmtQ4,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ5: {
-                defaultValue: savedData.geriAmtQ5,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ6: {
-                defaultValue: savedData.geriAmtQ6,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ7: {
-                defaultValue: savedData.geriAmtQ7,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ8: {
-                defaultValue: savedData.geriAmtQ8,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ9: {
-                defaultValue: savedData.geriAmtQ9,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ10: {
-                defaultValue: savedData.geriAmtQ10,
-                type: String, allowedValues: ["Yes (Answered correctly)", "No (Answered incorrectly)"], optional: false
-            }, geriAmtQ11: {
-                defaultValue: savedData.geriAmtQ11,
-                type: String, allowedValues: ["0 to 6 years of education", "More than 6 years of education"], optional: false
-            }, geriAmtQ12: {
-                defaultValue: savedData.geriAmtQ12,
-                type: String, allowedValues: ["Yes", "No"], optional: false
-            }, geriAmtQ13: {
-                defaultValue: savedData.geriAmtQ13,
-                type: String, allowedValues: ["Yes", "No"], optional: false
-            }
-        }
-        )
-        :schema
-}
-
 function GetScore(props) {
   let score = 0
   const [{ value: q1 }] = useField('geriAmtQ1', {});
@@ -131,10 +84,10 @@ const GeriAmtForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const { changeTab, nextTab } = props;
+    const [saveData, setSaveData] = useState(null)
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const getSchema = savedData ? await loadDataGeriAmt(savedData) : schema
-        setForm_schema(new SimpleSchema2Bridge(getSchema))
+        setSaveData(savedData)
     }, [])
         const newForm = () => (
           <AutoForm
@@ -147,6 +100,7 @@ const GeriAmtForm = (props) => {
               const event = null; // not interested in this value
               changeTab(event, nextTab);
             }}
+            model={saveData}
           >
 
             <Fragment>

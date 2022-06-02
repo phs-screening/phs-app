@@ -33,46 +33,15 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataGeriParQ = (savedData) => {
-  return savedData ?  new SimpleSchema({
-        geriParQQ1: {
-          defaultValue : savedData.geriParQQ1,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ2: {
-      defaultValue : savedData.geriParQQ2,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ3: {
-      defaultValue : savedData.geriParQQ3,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ4: {
-      defaultValue : savedData.geriParQQ4,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ5: {
-      defaultValue : savedData.geriParQQ5,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ6: {
-      defaultValue : savedData.geriParQQ6,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ7: {
-      defaultValue : savedData.geriParQQ7,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriParQQ8: {
-      defaultValue : savedData.geriParQQ8,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }
-      }
-  ):schema
-}
-
 const formName = "geriParQForm"
 const GeriParQForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
+    const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataGeriParQ(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+      setSaveData(savedData)
   }, [])
 
     const newForm = () => (
@@ -86,6 +55,7 @@ const GeriParQForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>

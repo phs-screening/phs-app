@@ -30,31 +30,6 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataGeriTug = (savedData) => {
-  return savedData ? new SimpleSchema({
-        geriTugQ1: {
-          defaultValue : savedData.geriTugQ1,
-          type: Array, optional: true
-        }, "geriTugQ1.$": {
-          type: String, allowedValues: ["Walking frame", "Walking frame with wheels", "Crutches/ Elbow crutches", "Quadstick (Narrow/ Broad)", "Walking stick", "Umbrella", "Others (Please specify in textbox )"]
-        }, geriTugQ2: {
-          defaultValue : savedData.geriTugQ2,
-          type: String, optional: true
-        }, geriTugQ3: {
-          defaultValue : savedData.geriTugQ3,
-          type: Number, optional: false
-        }, geriTugQ4: {
-          defaultValue : savedData.geriTugQ4,
-          type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
-        }, geriTugQ5: {
-          defaultValue : savedData.geriTugQ5,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }
-      }
-      )
-      :schema
-}
-
 function PopupText(props) {
   const [{ value: qnValue }] = useField(props.qnNo, {});
   if (qnValue.includes(props.triggerValue)) {
@@ -73,14 +48,9 @@ const GeriTugForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState(null)
   const { changeTab, nextTab } = props;
-  const displayArray = (item) => {
-    return item !== undefined ? item.map((x, index) => <p key={index}> {index + 1 + ". " + x} </p>) : "None"
-  }
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
     setSaveData(savedData)
-    const getSchema = savedData ? await loadDataGeriTug(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
   }, [])
     const newForm = () => (
       <AutoForm
@@ -93,13 +63,12 @@ const GeriTugForm = (props) => {
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
         <Fragment>
           <h2>3.3b Time-Up and Go (TUG)</h2>
           Walking aid (if any):
           <br />
-          <h2> {saveData !== null ? "ORIGINAL Q1: " : ""}</h2>
-          <h2> {saveData !== null ? displayArray(saveData.geriTugQ1) : ""}</h2>
           <SelectField name="geriTugQ1" checkboxes="true" label="Geri - TUG Q1" />
           <br />
           <PopupText qnNo="geriTugQ1" triggerValue="Others (Please specify in textbox )">

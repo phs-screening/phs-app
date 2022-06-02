@@ -33,43 +33,17 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataWce = (savedData) => {
-  return savedData ?
-      new SimpleSchema({
-            wceQ1: {
-              defaultValue : savedData.wceQ1,
-              type: String, allowedValues: ["Yes", "No"], optional: false
-            }, wceQ2: {
-          defaultValue : savedData.wceQ2,
-              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
-            }, wceQ3: {
-          defaultValue : savedData.wceQ3,
-              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
-            }, wceQ4: {
-          defaultValue : savedData.wceQ4,
-              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
-            }, wceQ5: {
-          defaultValue : savedData.wceQ5,
-              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
-            }, wceQ6: {
-          defaultValue : savedData.wceQ6,
-              type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
-            }
-          }
-      )
-      :schema
-}
 
 const formName = "wceForm"
 const WceForm = (props) =>  {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
+    const [saveData, setSaveData] = useState(null)
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
-    const getSchema = savedData ? await loadDataWce(savedData) : schema
-    setForm_schema(new SimpleSchema2Bridge(getSchema))
+      setSaveData(savedData)
   }, [])
     const newForm = () => (
       <AutoForm
@@ -78,6 +52,7 @@ const WceForm = (props) =>  {
           const response = await submitForm(model, patientId, formName);
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
         <Fragment>
       <h2>PARTICIPANT IDENTIFICATION</h2>
