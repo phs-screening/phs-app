@@ -31,34 +31,6 @@ const schema = new SimpleSchema({
 }
 )
 
-const loadDataGeriOt = (savedData) => {
-  return savedData ? new SimpleSchema({
-        geriOtConsultQ1: {
-          defaultValue : savedData.geriOtConsultQ1,
-          type: String, optional: false
-        }, geriOtConsultQ2: {
-          defaultValue : savedData.geriOtConsultQ2,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriOtConsultQ3: {
-          defaultValue : savedData.geriOtConsultQ3,
-          type: String, optional: true
-        }, geriOtConsultQ4: {
-          defaultValue : savedData.geriOtConsultQ4,
-          type: String, allowedValues: ["Yes", "No"], optional: false
-        }, geriOtConsultQ5: {
-          defaultValue : savedData.geriOtConsultQ5,
-          type: String, optional: true
-        }, geriOtConsultQ6: {
-          defaultValue : savedData.geriOtConsultQ6,
-          type: Array, optional: true
-        }, "geriOtConsultQ6.$": {
-          type: String, allowedValues: ["HDB EASE", "SWCDC Safe and Bright Homes", "Own Vendors"],
-        }
-      }
-      )
-      :schema
-}
-
 const formName = "geriOtConsultForm"
 const GeriOtConsultForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
