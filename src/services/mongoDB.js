@@ -72,7 +72,7 @@ export const isValidQueueNo = async (queueNo) => {
 export const getSavedData = async (patientId, collectionName) => {
     const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
     const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({_id : patientId});
-    return savedData
+    return savedData === null ? {} : savedData
 }
 
 // exports = async function(loginPayload) {
