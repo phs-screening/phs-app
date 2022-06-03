@@ -8,7 +8,6 @@ import mongoDB, {hashPassword, isAdmin, profilesCollection} from "../services/mo
 import {Visibility, VisibilityOff, Search} from "@material-ui/icons";
 import {useNavigate} from "react-router-dom";
 
-//Create multiple accounts at once
 const ManageVolunteers = () => {
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
@@ -106,7 +105,7 @@ const ManageVolunteers = () => {
                     size="small"
                     type="submit"
                     variant="contained"
-                    onClick={() => deleteAccount(index)}
+                    onClick={() => deleteAccount(guest.username)}
                 >
                     Delete Account
                 </Button>
@@ -118,15 +117,15 @@ const ManageVolunteers = () => {
     })
 
 
-    const deleteAccount = async (index) => {
+    const deleteAccount = async (username) => {
         isLoadingDelete(true)
         try {
             await profilesCollection().deleteOne({
-                username: guestUsers[index].username,
+                username: username,
             }).then(() => {
                 setRefresh(!refresh)
                 isLoadingDelete(false)
-                alert("Account Successfully deleted: " + guestUsers[index].username)
+                alert("Account Successfully deleted: " + username)
             })
         } catch (e) {
             alert("Error Deleting Account!: " + e)

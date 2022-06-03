@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -11,6 +11,7 @@ import { RadioField, SelectField, NumField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   geriFrailScaleQ1: {
@@ -50,25 +51,31 @@ function GetFrailScore() {
 
   return score;
 }
+const formName = "geriFrailScaleForm"
+const GeriFrailScaleForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+  const { changeTab, nextTab } = props;
 
-class GeriFrailScaleForm extends Component {
-  static contextType = FormContext;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+  }, [])
+
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "geriFrailScaleForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>
@@ -98,7 +105,7 @@ class GeriFrailScaleForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -110,7 +117,6 @@ class GeriFrailScaleForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 GeriFrailScaleForm.contextType = FormContext;

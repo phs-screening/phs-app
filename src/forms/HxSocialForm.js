@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -13,6 +13,7 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 import PopupText from 'src/utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   hxSocialQ1: {
@@ -47,24 +48,29 @@ const schema = new SimpleSchema({
 }
 )
 
-class HxSocialForm extends Component {
-  static contextType = FormContext
+const formName = "hxSocialForm"
+const HxSocialForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props;
+  const [saveData, setSaveData] = useState(null)
 
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxSocialForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>
@@ -158,7 +164,7 @@ class HxSocialForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -170,7 +176,6 @@ class HxSocialForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 HxSocialForm.contextType = FormContext;

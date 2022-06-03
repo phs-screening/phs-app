@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -12,6 +12,7 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 import PopupText from '../utils/popupText';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   hxHcsrQ1: {
@@ -44,24 +45,28 @@ const schema = new SimpleSchema({
 }
 )
 
-class HxHcsrForm extends Component {
-  static contextType = FormContext
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { changeTab, nextTab } = this.props;
+const formName = "hxHcsrForm"
+const HxHcsrForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const [saveData, setSaveData] = useState(null)
+    const { changeTab, nextTab } = props;
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+      setSaveData(savedData)
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "hxHcsrForm");
+          const response = await submitForm(model, patientId, formName);
           if (!response.result) {
             alert(response.error);
           }
           const event = null; // not interested in this value
           changeTab(event, nextTab);
         }}
+        model={saveData}
       >
 
         <Fragment>
@@ -154,7 +159,7 @@ class HxHcsrForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -166,7 +171,6 @@ class HxHcsrForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 HxHcsrForm.contextType = FormContext;

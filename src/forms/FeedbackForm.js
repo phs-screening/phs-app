@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -16,6 +16,7 @@ import {
 } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import {getSavedData} from "../services/mongoDB";
 
 const schema = new SimpleSchema({
   feedbackFormQ1: {
@@ -90,20 +91,24 @@ const schema = new SimpleSchema({
 }
 )
 
-class FeedbackForm extends Component {
-  static contextType = FormContext
-
-  render() {
-    const form_schema = new SimpleSchema2Bridge(schema);
-    const {patientId, updatePatientId} = this.context;
-    const { navigate } = this.props;
+const formName = "feedbackForm"
+const FeedbackForm = (props) => {
+  const {patientId, updatePatientId} = useContext(FormContext);
+  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [saveData, setSaveData] = useState(null)
+  const navigate = useNavigate();
+  useEffect(async () => {
+    const savedData = await getSavedData(patientId, formName);
+    setSaveData(savedData)
+  }, [])
     const newForm = () => (
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
-          const response = await submitForm(model, patientId, "feedbackForm");
+          const response = await submitForm(model, patientId, formName);
           navigate('/app/dashboard', { replace: true });
         }}
+        model={saveData}
       >
 
         <Fragment>
@@ -220,7 +225,7 @@ class FeedbackForm extends Component {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => this.formRef = ref} />
+          <SubmitField inputRef={(ref) => {}} />
         </div>
 
         <br /><Divider />
@@ -232,7 +237,6 @@ class FeedbackForm extends Component {
         {newForm()}
       </Paper>
     );
-  }
 }
 
 FeedbackForm.contextType = FormContext;

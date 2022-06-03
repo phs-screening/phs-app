@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useContext} from 'react';
 import SimpleSchema from 'simpl-schema';
 
 //import { AutoForm } from 'uniforms';
@@ -10,10 +10,10 @@ import {
 	LongTextField
   } from 'uniforms-material';
 
-
 export const schema = new SimpleSchema({
 	registrationQ1: {
-	type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false
+		defaultValue: "Mr",
+	type: String, allowedValues: ["Mr", "Ms", "Mrs", "Dr"], optional: false,
 	}, registrationQ2: {
 	type: String, allowedValues: ["Chinese 华裔", "Malay 巫裔", "Indian 印裔", "Eurasian 欧亚裔", "Others 其他"], optional: false
 	}, registrationQ3: {
@@ -48,9 +48,9 @@ export const layout = (
     <Fragment>
 		<h2>Registration</h2>
 		Salutation 称谓
-		<SelectField name="registrationQ1" />
+		<SelectField name="registrationQ1"/>
 		Race 种族
-		<RadioField name="registrationQ2" />
+		<RadioField name="registrationQ2"/>
 		<LongTextField name="registrationQ14" />
 		Nationality 国籍 <br />Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health screening
 		<RadioField name="registrationQ3" />

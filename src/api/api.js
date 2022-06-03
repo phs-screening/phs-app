@@ -1,4 +1,4 @@
-import mongoDB from "../services/mongoDB";
+import mongoDB, {getName, isAdmin} from "../services/mongoDB";
 
 const axios = require('axios').default;
 
@@ -58,12 +58,23 @@ export async function submitForm(args, patientId, formCollection) {
                 await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
                 return { "result" : true };
             } else {
-                // replace form
-                // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
-                // throw error message
-                const errorMsg = "This form has already been submitted. If you need to make "
-                        + "any changes, please contact the admin."
-                return { "result" : false, "error" : errorMsg };
+                if (await isAdmin()) {
+                    args.lastEdited = new Date()
+                    args.lastEditedBy = getName()
+                    await registrationForms.updateOne({_id : patientId}, {$set : {...args}})
+                    // replace form
+                    // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
+                    // throw error message
+                    // const errorMsg = "This form has already been submitted. If you need to make "
+                    //         + "any changes, please contact the admin."
+                    return { "result" : true };
+
+                } else {
+                    const errorMsg = "This form has already been submitted. If you need to make "
+                            + "any changes, please contact the admin."
+                    return { "result" : false, "error" : errorMsg };
+                }
+
             }
         } else {    
             // TODO: throw error, not possible that no document is found
