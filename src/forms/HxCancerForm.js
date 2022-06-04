@@ -5,12 +5,13 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { SelectField, NumField, RadioField, LongTextField, BoolField } from 'uniforms-material';
 import { useField } from 'uniforms';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
 import {getSavedData} from "../services/mongoDB";
@@ -84,8 +85,7 @@ function CalcBMI() {
   const [{ value: height_cm }] = useField("hxCancerQ19", {});
   const [{ value: weight }] = useField("hxCancerQ20", {});
   if (height_cm && weight) {
-    const height = height_cm / 100;
-    return ((weight/height)/height).toFixed(1);
+    return calculateBMI(height_cm, weight);
   }
   return null;
 }
@@ -103,6 +103,7 @@ function IsHighBP(props) {
 
 const formName = "hxCancerForm"
 const HxCancerForm = () => {
+  const [loading, isLoading] = useState(false);
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
@@ -117,11 +118,16 @@ const HxCancerForm = () => {
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
+          isLoading(true);
           const response = await submitForm(model, patientId, formName );
           if (!response.result) {
             alert(response.error);
+            isLoading(false);
+          } else {
+            isLoading(false);
+            alert("Successfully submitted form");
+            navigate('/app/dashboard', { replace: true });
           }
-          navigate('/app/dashboard', { replace: true });
         }}
         model={saveData}
       >
@@ -250,7 +256,8 @@ const HxCancerForm = () => {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => {}} />
+          {loading ? <CircularProgress />
+          : <SubmitField inputRef={(ref) => {}} />}
         </div>
 
         <br /><Divider />

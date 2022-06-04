@@ -5,15 +5,19 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import {
 	LongTextField,
   BoolField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
+import { hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
 
 const schema = new SimpleSchema({
 	doctorSConsultQ1: {
@@ -48,16 +52,39 @@ const DoctorSConsultForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
+    const [loading, isLoading] = useState(false);
+    const [loadingSidePanel, isLoadingSidePanel] = useState(true);
     const [saveData, setSaveData] = useState(null)
+    // forms to retrieve for side panel
+    const [hcsr, setHcsr] = useState({})
+    const [nss, setNss] = useState({})
+    const [social, setSocial] = useState({})
+    const [cancer, setCancer] = useState({})
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
+        const loadPastForms = async () => {
+          const hcsrData = await getSavedData(patientId, hxHcsrForm);
+          const nssData = await getSavedData(patientId, hxNssForm);
+          const socialData = await getSavedData(patientId, hxSocialForm);
+          const cancerData = await getSavedData(patientId, hxCancerForm);
+          setHcsr(hcsrData)
+          setNss(nssData)
+          setSocial(socialData)
+          setCancer(cancerData)
+          isLoadingSidePanel(false);
+        }
         setSaveData(savedData)
+        loadPastForms();
+
     }, [])
         const newForm = () => (
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
+              isLoading(true)
               const response = await submitForm(model, patientId, formName);
+              isLoading(false)
+              alert("Successfully submitted form")
               navigate('/app/dashboard', { replace: true });
             }}
             model={saveData}
@@ -91,7 +118,8 @@ const DoctorSConsultForm = (props) => {
 
             <ErrorsField />
             <div>
-              <SubmitField inputRef={(ref) => {}} />
+              {loading ? <CircularProgress />
+              : <SubmitField inputRef={(ref) => {}} />}
             </div>
             
             <br /><Divider />
@@ -100,7 +128,68 @@ const DoctorSConsultForm = (props) => {
         
         return (
           <Paper elevation={2} p={0} m={0}>
-            {newForm()}
+            <Grid display="flex" flexDirection="row" >
+              <Grid xs={9}>  
+                <Paper elevation={2} p={0} m={0}>
+                  {newForm()}
+                </Paper>
+              </Grid>
+              <Grid
+                  p={1}
+                  width="30%"
+                  display="flex"
+                  flexDirection="column"
+                  alignItems={loadingSidePanel ? "center" : "left"}>
+              {loadingSidePanel ? <CircularProgress />
+                : 
+                <div>
+                  {title("Health Concerns")}
+                  {underlined("Summarised reasons for referral to Doctor Consultation")}
+                  {hcsr ? blueText(hcsr.hxHcsrQ2) : null}
+                  {title("Systems Review")}
+                  {underlined("Summarised systems review")}
+                  {hcsr ? blueText(hcsr.hxHcsrQ3) : null}
+                  {title("Urinary/Faecal incontinence")}
+                  {underlined("Urinary/Faecal incontinence")}
+                  {hcsr ? blueText(hcsr.hxHcsrQ4) : null}
+                  {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : null}
+                  {title("Vision problems")}
+                  {underlined("Vision Problems")}
+                  {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
+                  {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : null}
+                  {title("Hearing problems")}
+                  {underlined("Hearing Problems")}
+                  {hcsr ? blueText(hcsr.hxHcsrQ8) : null}
+                  {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : null}
+                  {title("Past Medical History")}
+                  {underlined("Summary of Relevant Past Medical History")}
+                  {nss ? blueText(nss.hxNssQ12) : null}
+                  {title("Smoking History")}
+                  {underlined("Smoking frequency")}
+                  {nss ? blueText(nss.hxNssQ14) : null}
+                  {title("Alcohol history")}
+                  {underlined("Alcohol consumption")}
+                  {nss ? blueText(nss.hxNssQ15) : null}
+                  {title("Family History")}
+                  {underlined("Summary of Relevant Family History")}
+                  {nss ? blueText(nss.hxNssQ13) : null}
+                  {nss && nss.hcNssQ23 ? blueText(nss.hxNssQ23) : null}
+                  {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : null}
+                  {title("Blood Pressure")}
+                  {underlined("Average Blood Pressure")}
+                  {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : null}
+                  {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : null}
+                  {title("BMI")}
+                  {underlined("BMI")}
+                  {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : null}
+                  {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : null}
+                  {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
+                    ? blueText("BMI: " + calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20))
+                    : null}
+                </div>
+              }
+              </Grid>
+            </Grid>
           </Paper>
         );
 }

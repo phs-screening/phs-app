@@ -10,12 +10,15 @@ import {
   Typography,
   TextField,
   InputAdornment,
-  SvgIcon
+  SvgIcon,
+  CircularProgress
 } from '@material-ui/core';
+
 import { Search as SearchIcon } from 'react-feather';
 
 
 const RegisterPatient = props => {
+  const [loading, isLoading] = useState(false);
   const [values, setValues] = useState({
     queueNumber: 1
   });
@@ -41,7 +44,6 @@ const RegisterPatient = props => {
       setValues({
         [event.target.name]: parseInt(value)
       });
-      console.log("updated value")
     } else {
       event.target.value = 0; 
     }
@@ -49,15 +51,18 @@ const RegisterPatient = props => {
 
 
   const handleSubmit = async () => {
+    isLoading(true);
     const value = values.queueNumber;
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     const isValid = await isValidQueueNo(value);
     if (isValid) {
       updatePatientId(value);
+      isLoading(false);
       navigate('/app/dashboard', { replace: true });
     } else {
       // if response is unsuccessful/id does not exist, show error style/popup.
       alert("Unsuccessful. There is no patient with this queue number.")
+      isLoading(false);
     }
   };
 
@@ -118,7 +123,8 @@ const RegisterPatient = props => {
             variant="outlined"
             onChange={handleChange}
           />
-          <Button
+          {loading ? <CircularProgress />
+          : <Button
             ref={ref}
             color="primary"
             size="large"
@@ -127,7 +133,7 @@ const RegisterPatient = props => {
             onClick={handleSubmit}
           >
           Go
-          </Button>
+          </Button>}
         </Box>
       </CardContent>
     </Card>

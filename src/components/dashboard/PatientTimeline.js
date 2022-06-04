@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
@@ -7,6 +7,7 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import { useNavigate } from 'react-router-dom';
 import mongoDB, {getProfile, isAdmin} from "../../services/mongoDB"
+import { ScrollTopContext } from '../../api/utils.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
@@ -54,8 +55,9 @@ function generateStatusArray(record) {
   }
 }
 
-function navigateTo(event, navigate, page) {
+function navigateTo(event, navigate, page, scrollTop) {
   event.preventDefault();
+  scrollTop();
   const path = "/app/" + page;
   navigate(path, { replace: true });
 }
@@ -66,6 +68,7 @@ const BasicTimeline = (props) => {
   const [goingForPhlebotomy, setGoingForPhlebotomy] = useState();
   const [formDone, setFormDone] = useState([]);
   const [admin, isAdmins] = useState(false)
+  const { scrollTop } = useContext(ScrollTopContext);
 
   useEffect(async () => {
     const createFormsStatus = async () => {
@@ -110,10 +113,10 @@ if (loading) {
       <TimelineContent>
         {!formDone[1] ? <a
             href="/app/reg"
-            onClick={(event) => navigateTo(event, navigate, "reg")}>Registration [Incomplete]
+            onClick={(event) => navigateTo(event, navigate, "reg", scrollTop)}>Registration [Incomplete]
         </a> : admin ? <a
             href="/app/reg"
-            onClick={(event) => navigateTo(event, navigate, "reg")}>Registration [Edit]
+            onClick={(event) => navigateTo(event, navigate, "reg", scrollTop)}>Registration [Edit]
         </a> : <p>Registration [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
@@ -128,10 +131,10 @@ if (loading) {
       {goingForPhlebotomy
           ? (!formDone[2] ? <a
               href="/app/phlebo"
-              onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy [Incomplete]
+              onClick={(event) => navigateTo(event, navigate, "phlebo", scrollTop)}>Phlebotomy [Incomplete]
               </a> : admin ? <a
               href="/app/phlebo"
-              onClick={(event) => navigateTo(event, navigate, "phlebo")}>Phlebotomy [Edit]
+              onClick={(event) => navigateTo(event, navigate, "phlebo", scrollTop)}>Phlebotomy [Edit]
           </a>: <p>Phlebotomy [Completed]</p>)
           : <p>Phlebotomy [Not going]</p>
       }
@@ -145,10 +148,10 @@ if (loading) {
       <TimelineContent>
       {!formDone[3] ? <a
           href="/app/hxtaking"
-          onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "hxtaking", scrollTop)}>History Taking [Incomplete]
         </a> : admin ? <a
           href="/app/hxtaking"
-          onClick={(event) => navigateTo(event, navigate, "hxtaking")}>History Taking [Edit]
+          onClick={(event) => navigateTo(event, navigate, "hxtaking", scrollTop)}>History Taking [Edit]
       </a> : <p>History Taking [Completed]</p>
       }
       </TimelineContent>
@@ -161,10 +164,10 @@ if (loading) {
       <TimelineContent>
       {!formDone[4] ? <a
           href="/app/fit"
-          onClick={(event) => navigateTo(event, navigate, "fit")}>FIT [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "fit", scrollTop)}>FIT [Incomplete]
         </a> : admin ? <a
           href="/app/fit"
-          onClick={(event) => navigateTo(event, navigate, "fit")}>FIT [Edit]
+          onClick={(event) => navigateTo(event, navigate, "fit", scrollTop)}>FIT [Edit]
       </a>: <p>FIT [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
@@ -176,10 +179,10 @@ if (loading) {
       <TimelineContent>
       {!formDone[5] ? <a
           href="/app/wce"
-          onClick={(event) => navigateTo(event, navigate, "wce")}>WCE [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "wce", scrollTop)}>WCE [Incomplete]
         </a> : admin ? <a
           href="/app/wce"
-          onClick={(event) => navigateTo(event, navigate, "wce")}>WCE [Edit]
+          onClick={(event) => navigateTo(event, navigate, "wce", scrollTop)}>WCE [Edit]
       </a>: <p>WCE [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
@@ -191,10 +194,10 @@ if (loading) {
       <TimelineContent>
       {!formDone[6] ? <a
           href="/app/geri"
-          onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "geri", scrollTop)}>Geriatrics [Incomplete]
         </a> : admin ? <a
           href="/app/geri"
-          onClick={(event) => navigateTo(event, navigate, "geri")}>Geriatrics [Edit]
+          onClick={(event) => navigateTo(event, navigate, "geri", scrollTop)}>Geriatrics [Edit]
       </a>: <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
@@ -206,10 +209,10 @@ if (loading) {
       <TimelineContent>
         {!formDone[7] ? <a
           href="/app/doctorsconsult"
-          onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "doctorsconsult", scrollTop)}>Doctor's Consult [Incomplete]
           </a> : admin ? <a
             href="/app/doctorsconsult"
-            onClick={(event) => navigateTo(event, navigate, "doctorsconsult")}>Doctor's Consult [Edit]
+            onClick={(event) => navigateTo(event, navigate, "doctorsconsult", scrollTop)}>Doctor's Consult [Edit]
         </a>: <p>Doctor's Consult [Completed]</p>}
         </TimelineContent>
     </TimelineItem>
@@ -221,10 +224,10 @@ if (loading) {
       <TimelineContent>
         {!formDone[8] ? <a
           href="/app/socialservice"
-          onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "socialservice", scrollTop)}>Social Service [Incomplete]
         </a> : admin ? <a
             href="/app/socialservice"
-            onClick={(event) => navigateTo(event, navigate, "socialservice")}>Social Service [Edit]
+            onClick={(event) => navigateTo(event, navigate, "socialservice", scrollTop)}>Social Service [Edit]
         </a> : <p>Social Service [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
@@ -236,10 +239,10 @@ if (loading) {
       <TimelineContent>
         {!formDone[9] ? <a
           href="/app/feedback"
-          onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback [Incomplete]
+          onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Incomplete]
         </a> : admin ? <a
             href="/app/feedback"
-            onClick={(event) => navigateTo(event, navigate, "feedback")}>Feedback [Edit]
+            onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Edit]
         </a> : <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
