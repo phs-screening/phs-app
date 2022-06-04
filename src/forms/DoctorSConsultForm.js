@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
@@ -14,6 +15,7 @@ import {
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
+import { hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
 
 const schema = new SimpleSchema({
 	doctorSConsultQ1: {
@@ -49,9 +51,22 @@ const DoctorSConsultForm = (props) => {
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
     const [saveData, setSaveData] = useState(null)
+    // forms to retrieve for side panel
+    const [hcsr, setHcsr] = useState({})
+    const [nss, setNss] = useState({})
+    const [social, setSocial] = useState({})
+    const [cancer, setCancer] = useState({})
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
+        const hcsrData = await getSavedData(patientId, hxHcsrForm);
+        const nssData = await getSavedData(patientId, hxNssForm);
+        const socialData = await getSavedData(patientId, hxSocialForm);
+        const cancerData = await getSavedData(patientId, hxCancerForm);
         setSaveData(savedData)
+        setHcsr(hcsrData)
+        setNss(nssData)
+        setSocial(socialData)
+        setCancer(cancerData)
     }, [])
         const newForm = () => (
           <AutoForm
@@ -100,7 +115,19 @@ const DoctorSConsultForm = (props) => {
         
         return (
           <Paper elevation={2} p={0} m={0}>
-            {newForm()}
+            <Grid display="flex" flexDirection="row" >
+              <Grid xs={9}>  
+                <Paper elevation={2} p={0} m={0}>
+                  {newForm()}
+                </Paper>
+              </Grid>
+              <Grid p={1} display="flex" flexDirection="column" >
+                <h2>Health Concerns</h2>
+                <p>Summarised reasons for referral to Doctor Consultation</p>
+                <p>{hcsr ? hcsr.hxHcsrQ2 : ''}</p>
+                <h2>Systems Review</h2>
+              </Grid>
+            </Grid>
           </Paper>
         );
 }

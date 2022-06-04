@@ -4,8 +4,6 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
@@ -61,17 +59,9 @@ const RegForm = () => {
     );
 
     return (
-      <Grid display="flex" flexDirection="row" >
-            <Grid xs={9}>  
-            <Paper elevation={2} p={0} m={0}>
-              {newForm()}
-            </Paper>
-            </Grid>
-            <Grid p={1} display="flex" flexDirection="column" >
-              <h2>Last 4 characters of NRIC</h2>
-              <p>111A</p>
-            </Grid>
-          </Grid>
+      <Paper elevation={2} p={0} m={0}>
+        {newForm()}
+      </Paper>
     );
 }
 
