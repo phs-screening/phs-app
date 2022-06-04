@@ -164,3 +164,9 @@ export async function upsertIndividualFormData(userID, form_name, form_data) {
     }
     return {"result": true, "data": response.data};
 }
+
+// pure functions
+export function calculateBMI(heightInCm, weightInKg) {
+    const height = heightInCm / 100;
+    return ((weightInKg / height) / height).toFixed(1);
+}
