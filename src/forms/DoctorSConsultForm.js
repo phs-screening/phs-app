@@ -52,7 +52,8 @@ const DoctorSConsultForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [loading, isLoading] = useState(false);
+    const [loadingSidePanel, isLoadingSidePanel] = useState(true);
     const [saveData, setSaveData] = useState(null)
     // forms to retrieve for side panel
     const [hcsr, setHcsr] = useState({})
@@ -61,22 +62,29 @@ const DoctorSConsultForm = (props) => {
     const [cancer, setCancer] = useState({})
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
-        const hcsrData = await getSavedData(patientId, hxHcsrForm);
-        const nssData = await getSavedData(patientId, hxNssForm);
-        const socialData = await getSavedData(patientId, hxSocialForm);
-        const cancerData = await getSavedData(patientId, hxCancerForm);
+        const loadPastForms = async () => {
+          const hcsrData = await getSavedData(patientId, hxHcsrForm);
+          const nssData = await getSavedData(patientId, hxNssForm);
+          const socialData = await getSavedData(patientId, hxSocialForm);
+          const cancerData = await getSavedData(patientId, hxCancerForm);
+          setHcsr(hcsrData)
+          setNss(nssData)
+          setSocial(socialData)
+          setCancer(cancerData)
+          isLoadingSidePanel(false);
+        }
         setSaveData(savedData)
-        setHcsr(hcsrData)
-        setNss(nssData)
-        setSocial(socialData)
-        setCancer(cancerData)
-        setLoading(false);
+        loadPastForms();
+
     }, [])
         const newForm = () => (
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
+              isLoading(true)
               const response = await submitForm(model, patientId, formName);
+              isLoading(false)
+              alert("Successfully submitted form")
               navigate('/app/dashboard', { replace: true });
             }}
             model={saveData}
@@ -110,7 +118,8 @@ const DoctorSConsultForm = (props) => {
 
             <ErrorsField />
             <div>
-              <SubmitField inputRef={(ref) => {}} />
+              {loading ? <CircularProgress />
+              : <SubmitField inputRef={(ref) => {}} />}
             </div>
             
             <br /><Divider />
@@ -130,8 +139,8 @@ const DoctorSConsultForm = (props) => {
                   width="30%"
                   display="flex"
                   flexDirection="column"
-                  alignItems={loading ? "center" : "left"}>
-              {loading ? <CircularProgress />
+                  alignItems={loadingSidePanel ? "center" : "left"}>
+              {loadingSidePanel ? <CircularProgress />
                 : 
                 <div>
                   {title("Health Concerns")}
