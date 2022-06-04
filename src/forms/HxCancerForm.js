@@ -10,7 +10,7 @@ import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { SelectField, NumField, RadioField, LongTextField, BoolField } from 'uniforms-material';
 import { useField } from 'uniforms';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
 import {getSavedData} from "../services/mongoDB";
@@ -84,8 +84,7 @@ function CalcBMI() {
   const [{ value: height_cm }] = useField("hxCancerQ19", {});
   const [{ value: weight }] = useField("hxCancerQ20", {});
   if (height_cm && weight) {
-    const height = height_cm / 100;
-    return ((weight/height)/height).toFixed(1);
+    return calculateBMI(height_cm, weight);
   }
   return null;
 }
