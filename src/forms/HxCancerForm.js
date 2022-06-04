@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
@@ -102,6 +103,7 @@ function IsHighBP(props) {
 
 const formName = "hxCancerForm"
 const HxCancerForm = () => {
+  const [loading, isLoading] = useState(false);
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
@@ -116,11 +118,16 @@ const HxCancerForm = () => {
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
+          isLoading(true);
           const response = await submitForm(model, patientId, formName );
           if (!response.result) {
             alert(response.error);
+            isLoading(false);
+          } else {
+            isLoading(false);
+            alert("Successfully submitted form");
+            navigate('/app/dashboard', { replace: true });
           }
-          navigate('/app/dashboard', { replace: true });
         }}
         model={saveData}
       >
@@ -249,7 +256,8 @@ const HxCancerForm = () => {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => {}} />
+          {loading ? <CircularProgress />
+          : <SubmitField inputRef={(ref) => {}} />}
         </div>
 
         <br /><Divider />
