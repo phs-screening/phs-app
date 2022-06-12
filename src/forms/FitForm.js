@@ -11,6 +11,7 @@ import { FormContext } from '../api/utils.js';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import PopupText from '../utils/popupText';
 import {getSavedData} from "../services/mongoDB";
@@ -28,6 +29,7 @@ const schema = new SimpleSchema({
 const formName = "fitForm"
 const FitForm = (props) =>  {
     const {patientId, updatePatientId} = useContext(FormContext);
+    const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const [saveData, setSaveData] = useState(null)
@@ -41,8 +43,20 @@ const FitForm = (props) =>  {
             <AutoForm
                 schema={form_schema}
                 onSubmit={async (model) => {
+                    isLoading(true);
                     const response = await submitForm(model, patientId, formName);
-                    navigate('/app/dashboard', { replace: true });
+                    if (response.result) {
+                      isLoading(false);
+                      setTimeout(() => {
+                        alert("Successfully submitted form");
+                        navigate('/app/dashboard', { replace: true });
+                      }, 80);
+                    } else {
+                      isLoading(false);
+                      setTimeout(() => {
+                        alert(`Unsuccessful. ${response.error}`);
+                      }, 80);
+                    }
                   }}
                 model={saveData}
             >
@@ -74,7 +88,8 @@ const FitForm = (props) =>  {
 
                 <ErrorsField />
                 <div>
-                    <SubmitField inputRef={(ref) => {}} />
+                    {loading ? <CircularProgress />
+                    : <SubmitField inputRef={(ref) => {}} />}
                 </div>
 
                 <br /><Divider />

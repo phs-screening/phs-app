@@ -12,10 +12,11 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {schema, layout} from './reg.js';
 import {getSavedData} from "../services/mongoDB";
+
 const formName = "registrationForm"
 const RegForm = () => {
     const {patientId, updatePatientId} = useContext(FormContext);
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const [saveData, setSaveData] = useState(null)
@@ -33,17 +34,18 @@ const RegForm = () => {
         onSubmit={async (model) => {
           isLoading(true)
           const response = await submitForm(model, patientId, formName);
-          // TODO: error handling
-          // if (response.result) {
-          //   alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
-          //   updatePatientId(response.data.patientId);
-          //   navigate('/app/dashboard', { replace: true });
-          // } else {
-          //   alert(`Unsuccessful. ${response.error}`);
-          // }
-          isLoading(false)
-          alert("Successfully submitted form")
-          navigate('/app/dashboard', { replace: true });
+          if (response.result) {
+            isLoading(false);
+            setTimeout(() => {
+              alert("Successfully submitted form");
+              navigate('/app/dashboard', { replace: true });
+            }, 80);
+          } else {
+            isLoading(false);
+            setTimeout(() => {
+              alert(`Unsuccessful. ${response.error}`);
+            }, 80);
+          }
         }}
         model={saveData}
       >

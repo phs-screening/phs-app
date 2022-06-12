@@ -4,6 +4,7 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
@@ -36,6 +37,7 @@ const schema = new SimpleSchema({
 const formName = "geriParQForm"
 const GeriParQForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
+  const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
     const [saveData, setSaveData] = useState(null)
@@ -48,12 +50,21 @@ const GeriParQForm = (props) => {
       <AutoForm
         schema={form_schema}
         onSubmit={async (model) => {
+          isLoading(true);
           const response = await submitForm(model, patientId, formName);
-          if (!response.result) {
-            alert(response.error);
+          if (response.result) {
+            const event = null; // not interested in this value
+            isLoading(false);
+            setTimeout(() => {
+              alert("Successfully submitted form");
+              changeTab(event, nextTab);
+            }, 80);
+          } else {
+            isLoading(false);
+            setTimeout(() => {
+              alert(`Unsuccessful. ${response.error}`);
+            }, 80);
           }
-          const event = null; // not interested in this value
-          changeTab(event, nextTab);
         }}
         model={saveData}
       >
@@ -82,7 +93,8 @@ const GeriParQForm = (props) => {
 
         <ErrorsField />
         <div>
-          <SubmitField inputRef={(ref) => {}} />
+          {loading ? <CircularProgress />
+          : <SubmitField inputRef={(ref) => {}} />}
         </div>
 
         <br /><Divider />

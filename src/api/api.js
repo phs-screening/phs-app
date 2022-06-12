@@ -87,6 +87,7 @@ export async function submitForm(args, patientId, formCollection) {
         }
     } catch(err) {
         console.log(err);
+        return { "result" : false, "error" : err };
     }
 }
 
