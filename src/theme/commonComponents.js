@@ -3,7 +3,7 @@ import Divider from '@material-ui/core/Divider';
 const size = 18;
 
 export function title(text) {
-    return (<div><Divider /><h2>{text}</h2><br /></div>)
+    return (<div><Divider /><h2>{text}</h2></div>)
 }
 
 export function underlined(text) {
@@ -12,8 +12,8 @@ export function underlined(text) {
 
 export function blueText(text) {
     if (Array.isArray(text)) {
-        return text.map(x => <div><p style={{color: 'blue'}}>{x}</p><br /></div>);
+        return text.map(x => <div><p style={{color: 'blue', margin: 2}}>{x}</p></div>);
     } else {
-        return (<div><p style={{color: 'blue'}}>{text}</p><br /></div>);
+        return (<div style={{margin: 2}}><p style={{color: 'blue'}}>{text}</p></div>);
     }
 }
