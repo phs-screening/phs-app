@@ -81,11 +81,20 @@ const DoctorSConsultForm = (props) => {
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
-              isLoading(true)
+              isLoading(true);
               const response = await submitForm(model, patientId, formName);
-              isLoading(false)
-              alert("Successfully submitted form")
-              navigate('/app/dashboard', { replace: true });
+              if (response.result) {
+                isLoading(false);
+                setTimeout(() => {
+                  alert("Successfully submitted form");
+                  navigate('/app/dashboard', { replace: true });
+                }, 80);
+              } else {
+                isLoading(false);
+                setTimeout(() => {
+                  alert(`Unsuccessful. ${response.error}`);
+                }, 80);
+              }
             }}
             model={saveData}
           >

@@ -67,14 +67,18 @@ const HxSocialForm = (props) => {
         onSubmit={async (model) => {
           isLoading(true);
           const response = await submitForm(model, patientId, formName);
-          if (!response.result) {
-            alert(response.error);
-            isLoading(false);
-          } else {
+          if (response.result) {
             const event = null; // not interested in this value
             isLoading(false);
-            alert("Successfully submitted form");
-            changeTab(event, nextTab);
+            setTimeout(() => {
+              alert("Successfully submitted form");
+              changeTab(event, nextTab);
+            }, 80);
+          } else {
+            isLoading(false);
+            setTimeout(() => {
+              alert(`Unsuccessful. ${response.error}`);
+            }, 80);
           }
         }}
         model={saveData}

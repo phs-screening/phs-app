@@ -119,14 +119,18 @@ const HxCancerForm = () => {
         schema={form_schema}
         onSubmit={async (model) => {
           isLoading(true);
-          const response = await submitForm(model, patientId, formName );
-          if (!response.result) {
-            alert(response.error);
+          const response = await submitForm(model, patientId, formName);
+          if (response.result) {
             isLoading(false);
+            setTimeout(() => {
+              alert("Successfully submitted form");
+              navigate('/app/dashboard', { replace: true });
+            }, 80);
           } else {
             isLoading(false);
-            alert("Successfully submitted form");
-            navigate('/app/dashboard', { replace: true });
+            setTimeout(() => {
+              alert(`Unsuccessful. ${response.error}`);
+            }, 80);
           }
         }}
         model={saveData}

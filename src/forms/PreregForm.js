@@ -4,6 +4,7 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
@@ -14,6 +15,13 @@ import { preRegister } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 class PreregForm extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isLoading : false 
+      };
+    }
+
     render() {
         const {patientId, updatePatientId} = this.context;
         const { navigate } = this.props;
@@ -23,22 +31,31 @@ class PreregForm extends Component {
           <AutoForm
             schema={form_schema}
             onSubmit={async (model) => {
+              this.setState({isLoading: true});
               const response = await preRegister(model);
               console.log(response);
               if (response.result) {
-                alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
-                updatePatientId(response.data.patientId);
-                navigate('/app/dashboard', { replace: true });
+                this.setState({isLoading: false});
+                setTimeout(() => {
+                  alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
+                  updatePatientId(response.data.patientId);
+                  navigate('/app/dashboard', { replace: true });
+                }, 80);
               } else {
-                alert(`Unsuccessful. ${response.error}`);
+                this.setState({isLoading: false});
+                setTimeout(() => {
+                  alert(`Unsuccessful. ${response.error}`);
+                }, 80);
+
               }
             }}
           >
             {form_layout}
             <ErrorsField />
             <div>
-              <SubmitField inputRef={(ref) => this.formRef = ref} />
-            </div>
+            {this.state.isLoading ? <CircularProgress />
+              : <SubmitField inputRef={(ref) => {}} />}
+        </div>
             
             <br /><Divider />
           </AutoForm>
