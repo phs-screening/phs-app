@@ -99,7 +99,8 @@ const DoctorSConsultForm = (props) => {
             model={saveData}
           >
             
-            <Fragment>
+    <Fragment>
+
       Doctor's Name:
       <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
       MCR No.:

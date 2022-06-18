@@ -48,7 +48,8 @@ function generateStatusArray(record) {
           && record.geriGeriApptForm !== undefined,
       record.doctorConsultForm !== undefined, // doctor's consult
       record.socialServiceForm !== undefined, // social service
-      record.feedbackForm !== undefined // feedback
+      record.feedbackForm !== undefined, // feedback
+	  record.overviewForm !== undefined
     ]
   } else {
     return new Array(entries).fill(false);;
@@ -105,6 +106,7 @@ if (loading) {
       </TimelineSeparator>
       <TimelineContent><p>Pre-Registration [Completed]</p></TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[1] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -120,6 +122,7 @@ if (loading) {
         </a> : <p>Registration [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[2]
@@ -140,6 +143,7 @@ if (loading) {
       }
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[3] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -156,6 +160,7 @@ if (loading) {
       }
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[4] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -171,6 +176,7 @@ if (loading) {
       </a>: <p>FIT [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[5] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -186,6 +192,7 @@ if (loading) {
       </a>: <p>WCE [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[6] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -201,6 +208,7 @@ if (loading) {
       </a>: <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[7] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -216,6 +224,7 @@ if (loading) {
         </a>: <p>Doctor's Consult [Completed]</p>}
         </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[8] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -231,6 +240,7 @@ if (loading) {
         </a> : <p>Social Service [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         {formDone[9] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
@@ -246,6 +256,23 @@ if (loading) {
         </a> : <p>Geriatrics [Completed]</p>}
       </TimelineContent>
     </TimelineItem>
+
+    <TimelineItem>
+      <TimelineSeparator>
+        {formDone[9] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent>
+        {!formDone[9] ? <a
+          href="/app/overview"
+          onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview
+        </a> : admin ? <a
+            href="/app/overview"
+            onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview [View only]
+        </a> : <p>Feedback [Completed]</p>}
+      </TimelineContent>
+    </TimelineItem>
+
     <TimelineItem>
       <TimelineSeparator>
         <TimelineDot />
