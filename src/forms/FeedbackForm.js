@@ -16,7 +16,7 @@ import {
   RadioField,
   LongTextField
 } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { calculateBMI, submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { getSavedData, getSavedPatientData } from "../services/mongoDB";
 import { doctorConsultForm, socialServiceForm, geriOtConsultForm, geriPtConsultForm, wceForm, fitForm, geriVisionForm, registrationForm, hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
@@ -333,6 +333,7 @@ const FeedbackForm = (props) => {
 			<br></br>
 			{bold("4. BMI")}
 			{underlined("BMI")}
+			{cancer ? blueText(calculateBMI(Number(cancer.hxCancerQ19), Number(cancer.hxCancerQ20))) : '-'}
 
 			<br></br>
 			{bold("5. Hx Taking")}
