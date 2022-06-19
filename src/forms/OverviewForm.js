@@ -17,7 +17,7 @@ import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
-import { regForm, hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
+import { hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
 
 const schema = new SimpleSchema({
   socialServiceQ1: {
@@ -36,10 +36,10 @@ const OverviewForm = (props) => {
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
+	const [loadingPrevData, isLoadingPrevData] = useState(true);
     const [saveData, setSaveData] = useState(null)
     // forms to retrieve for side panel
     const [hcsr, setHcsr] = useState({})
-	const [reg, setReg] = useState({})
     const [nss, setNss] = useState({})
     const [social, setSocial] = useState({})
     const [cancer, setCancer] = useState({})
@@ -50,12 +50,11 @@ const OverviewForm = (props) => {
           const nssData = await getSavedData(patientId, hxNssForm);
           const socialData = await getSavedData(patientId, hxSocialForm);
           const cancerData = await getSavedData(patientId, hxCancerForm);
-		  const regData = await getSavedData(patientId, regForm);
           setHcsr(hcsrData)
           setNss(nssData)
           setSocial(socialData)
           setCancer(cancerData)
-		  setReg(regData)
+		  isLoadingPrevData(false);
         }
         setSaveData(savedData)
         loadPastForms();
@@ -96,19 +95,21 @@ const OverviewForm = (props) => {
   
   return (
 	<Paper elevation={2} p={0} m={0}>
-		<div>
-			{title("Health Concerns")}
-			{underlined("Summarised reasons for referral to Doctor Consultation")}
-			{hcsr ? reg.registrationQ1 : null}
-		</div>
+		{loadingPrevData ? <CircularProgress/>
+		:
+			<div>
+				{title("Health Concerns")}
+				{underlined("Summarised reasons for referral to Doctor Consultation")}
+				{hcsr ? hcsr.hxHcsrQ2 : null}
+			</div>
+		}
 	</Paper>
   );
 }
 
-Overviewform.contextType = FormContext;
+OverviewForm.contextType = FormContext;
 
 export default function Overviewform(props) {
 	const navigate = useNavigate();
-	window.alert('it is calling the funciton')
 	return <OverviewForm {...props} navigate={navigate} />;
 }

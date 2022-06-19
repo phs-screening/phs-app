@@ -1,10 +1,11 @@
-import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
+import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
@@ -17,7 +18,9 @@ import {
 } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
-import {getSavedData} from "../services/mongoDB";
+import { getSavedData, getSavedPatientData } from "../services/mongoDB";
+import { doctorConsultForm, socialServiceForm, geriOtConsultForm, geriPtConsultForm, wceForm, fitForm, geriVisionForm, registrationForm, hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
+import { bold, underlined, blueText, underlinedWithBreak } from 'src/theme/commonComponents.js';
 
 const schema = new SimpleSchema({
   feedbackFormQ1: {
@@ -96,12 +99,59 @@ const formName = "feedbackForm"
 const FeedbackForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
+  const [loadingPrevData, isLoadingPrevData] = useState(true);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState(null);
+
+  // All the forms 
+  const [details, setDetails] = useState({})
+  const [hcsr, setHcsr] = useState({})
+  const [nss, setNss] = useState({})
+  const [social, setSocial] = useState({})
+  const [vision, setVision] = useState({})
+  const [cancer, setCancer] = useState({})
+  const [fit, setFit] = useState({})
+  const [wce, setWce] = useState({})
+  const [patients, setPatients] = useState({})
+  const [geriPtConsult, setGeriPtConsult] = useState({})
+  const [geriOtConsult, setGeriOtConsult] = useState({})
+  const [socialService, setSocialService] = useState({})
+  const [doctorSConsult, setDoctorSConsult] = useState({})
+
   const navigate = useNavigate();
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
+    const loadPastForms = async () => {
+        const hcsrData = await getSavedData(patientId, hxHcsrForm);
+        const nssData = await getSavedData(patientId, hxNssForm);
+        const socialData = await getSavedData(patientId, hxSocialForm);
+        const cancerData = await getSavedData(patientId, hxCancerForm);
+		const visionData = await getSavedData(patientId, geriVisionForm)
+		const fitData = await getSavedData(patientId, fitForm)
+		const wceData = await getSavedData(patientId, wceForm)
+		const patientsData = await getSavedPatientData(patientId, 'patients')
+		const geriPtConsultData = await getSavedData(patientId, geriPtConsultForm)
+		const geriOtConsultData = await getSavedData(patientId, geriOtConsultForm)
+		const socialServiceData = await getSavedData(patientId, socialServiceForm)
+		const doctorConsultData = await getSavedData(patientId, doctorConsultForm)
+
+        setHcsr(hcsrData)
+        setNss(nssData)
+		setVision(visionData)
+        setSocial(socialData)
+        setCancer(cancerData)
+		setFit(fitData)
+		setWce(wceData)
+		setPatients(patientsData)
+		setGeriPtConsult(geriPtConsultData)
+		setGeriOtConsult(geriOtConsultData)
+		setSocialService(socialServiceData)
+		setDoctorSConsult(doctorConsultData)
+
+        isLoadingPrevData(false);
+    }
     setSaveData(savedData)
+    loadPastForms();
   }, [])
     const newForm = () => (
       <AutoForm
@@ -126,7 +176,7 @@ const FeedbackForm = (props) => {
       >
 
         <Fragment>
-          <h2>PHS 2021 Screening Feedback Form
+          <h2>PHS 2022 Screening Feedback Form
             <br />公共健康服务 2021 检验反馈表</h2>
           <h3>We would like to know how you felt about our health screening, as well as how you came to know about it :) Your feedback will go a long way in helping us improve our event!
             <br /> 我们想寻求您对我们公共健康服务 2019 的感受，并且告诉我们您在什么情况下得知这活动的详情! </h3>
@@ -248,7 +298,150 @@ const FeedbackForm = (props) => {
     );
 
     return (
-      <Paper elevation={2} p={0} m={0}>
+      <Paper elevation={2} pt={0} m={0}>
+		{loadingPrevData ? <CircularProgress/>
+		:
+		<Box m={6} pt={3}>
+		<div>
+			{bold("Form Summary")}
+			{bold("Please make sure that the information is correct.")}
+
+			<br></br>
+			{bold("1. Personal Particulars")}
+			{underlined("Name")}
+			{patients ? blueText(patients.initials) : '-'}
+			<br></br>
+			{underlined("Gender")}
+			{patients ? blueText(patients.gender) : '-'}
+			<br></br>
+			{underlined("NRIC")}
+			{patients ? blueText(patients.abbreviatedNric) : '-'}
+
+			<br></br>
+			{bold("2. Health Concerns")}
+			{underlined("Participant's presenting complaints/concerns (if any)")}
+			{hcsr ? blueText(hcsr.hxHcsrQ2) : '-'}
+
+			<br></br>
+			{bold("3. Blood Pressure")}
+			{underlined("Average Blood Pressure (Systolic)")}
+			{cancer ? blueText(cancer.hxCancerQ17) : '-'}
+			<br></br>
+			{underlined("Average Blood Pressure (Diastolic)")}
+			{cancer ? blueText(cancer.hxCancerQ18) : '-'}
+
+			<br></br>
+			{bold("4. BMI")}
+			{underlined("BMI")}
+
+			<br></br>
+			{bold("5. Hx Taking")}
+			{underlined("Height (in cm)")}
+			{cancer ? blueText(cancer.hxCancerQ19) : '-'}
+			<br></br>
+			{underlined("Weight (in kg)")}
+			{cancer ? blueText(cancer.hxCancerQ20) : '-'}
+			<br></br>
+			{underlined("Waist circumferences (in cm)")}
+			{cancer ? blueText(cancer.hxCancerQ24) : '-'}
+
+			<br></br>
+			{bold("6. Incontinence")}
+			{underlined("Do you have any problem passing urine or motion? Please specify if yes.")}
+			{hcsr ? blueText(hcsr.hxHcsrQ4) : '-'}
+			{hcsr ? blueText(hcsr.hxHcsrQ5) : '-'}
+
+			<br></br>
+			{bold("7. Vision")}
+			{underlined("Do you have any vision problems? Please specify if yes")}
+			{hcsr ? blueText(hcsr.hxHcsrQ6) : '-'}
+			{hcsr ? blueText(hcsr.hxHcsrQ7) : '-'}
+
+			<br></br>
+			{bold("8. Geriatrics")}
+			{underlined("Visual acuity (w/o pinhole occluder) - Right Eye 6/" + blueText(vision.geriVisionQ3))}
+			<br></br>
+			{underlined("Visual acuity (w/o pinhole occluder) - Left Eye 6/" + blueText(vision.geriVisionQ4))}
+			<br></br>
+			{underlined("Visual acuity (with pinhole occluder) - Right Eye 6/" + blueText(vision.geriVisionQ5))}
+			<br></br>
+			{underlined("Visual acuity (with pinhole occluder) - Left Eye 6/" + blueText(vision.geriVisionQ6))}
+
+			<br></br>
+			{bold("9. Hearing")}
+			{underlined("Do you have any hearing problems? Please specify if yes.")}
+			{hcsr ? blueText(hcsr.hxHcsrQ8) : '-'}
+			{hcsr ? blueText(hcsr.hxHcsrQ9) : '-'}
+
+			<br></br>
+			{bold("10. Past Medical History")}
+			{underlined("Summary of participant's past medical history")}
+			{nss ? blueText(nss.hxNssQ12) : '-'}
+			
+			<br></br>
+			{bold("11. Social History")}
+			{underlined("Do you smoke?")}
+			{nss ? blueText(nss.hxNssQ14) : '-'}
+			<br></br>
+			{underlined("Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)")}
+			{nss ? blueText(nss.hxNssQ15) : '-'}
+
+			<br></br>
+			{bold("12. FIT kits")}
+			{underlined("Was the participant isseud 2 FIT kits")}
+			{fit ? blueText(fit.wceQn2) : '-'}
+
+			<br></br>
+			{bold("13. WCE Station")}
+			{underlined("Indicated interest for HPV Test under SCS?")}
+			{wce ? blueText(wce.wceQ4) : '-'}
+			<br></br>
+			{underlined("Indicated interest for Mammogram under SCS?")}
+			{wce ? blueText(wce.wceQ5) : '-'}
+			<br></br>
+			{underlined("Registered for Mammogram under NHGD?")}
+			{wce ? blueText(wce.wceQ6) : '-'}
+
+			<br></br>
+			{bold("14. Geriatrics")}
+			{underlined("Was the participant referred for Social Service? (PT):")}
+			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ4) : '-'}
+			<br></br>
+			{underlined("Reasons for referral to social service (PT):")}
+			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ5) : '-'}
+			<br></br>
+			{underlined("Was the participant referred for Social Service? (OT):")}
+			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ4) : '-'}
+			<br></br>
+			{underlined("Reasons for referral to social support exhibition booth/ AIC (OT):")}
+			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ5) : '-'}
+			<br></br>
+			{underlined("Which of the programmes did the OT recommend for the participant to go? (if applicable)")}
+			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ6) : '-'}
+
+			<br></br>
+			{bold("15. Social Service")}
+			{underlined("Did the participant visit the social service station?")}
+			{socialService ? blueText(socialService.socialServiceQ1) : '-'}
+
+			<br></br>
+			{bold("16. Doctor's Consult")}
+			{underlined("Did this patient consult an on-site doctor today?")}
+			{doctorSConsult ? (doctorSConsult.doctorSConsultQ11 ? blueText("True") : blueText("False")) : '-'}
+			<br></br>
+			{underlined("Does this patient require urgent follow-up?")}
+			{doctorSConsult ? (doctorSConsult.doctorSConsultQ10 ? blueText("True") : blueText("False")) : '-'}
+			<br></br>
+			{underlined("Doctor's memo (if applicable):")}
+			{doctorSConsult ? (doctorSConsult.doctorSConsultQ3 ? blueText("True") : blueText("False")) : '-'}
+			<br></br>
+			{underlined("Was the patient referred to the dietitian?")}
+			{doctorSConsult ? (doctorSConsult.doctorSConsultQ4 ? blueText("True") : blueText("False")) : '-'}
+			<br></br>
+
+		</div>
+		</Box>
+		}
         {newForm()}
       </Paper>
     );
@@ -258,6 +451,5 @@ FeedbackForm.contextType = FormContext;
 
 export default function Feedbackform(props) {
   const navigate = useNavigate();
-
   return <FeedbackForm {...props} navigate={navigate} />;
 }

@@ -75,6 +75,12 @@ export const getSavedData = async (patientId, collectionName) => {
     return savedData === null ? {} : savedData
 }
 
+export const getSavedPatientData = async (patientId, collectionName) => {
+    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
+    const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
+    return savedData === null ? {} : savedData
+}
+
 // exports = async function(loginPayload) {
 //     // General auth function on login page / sharer page / chat page
 //
