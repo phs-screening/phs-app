@@ -51,7 +51,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^4.0.3",
     "realm-web": "^1.5.1",
     "uniforms": "^3.5.1",
     "uniforms-bridge-simple-schema": "^3.5.1",
