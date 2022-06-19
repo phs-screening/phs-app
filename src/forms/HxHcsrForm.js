@@ -187,6 +187,4 @@ const HxHcsrForm = (props) => {
 
 HxHcsrForm.contextType = FormContext;
 
-export default function HxHcsrform(props) {
-  return <HxHcsrForm {...props} />;
-}
+export default HxHcsrForm;
