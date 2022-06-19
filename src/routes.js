@@ -18,6 +18,7 @@ import PhleboForm from 'src/forms/PhleboForm';
 import PreregForm from 'src/forms/PreregForm';
 import RegForm from 'src/forms/RegForm';
 import SocialServiceForm from 'src/forms/SocialServiceForm';
+import OverviewForm from 'src/forms/OverviewForm';
 import WceForm from 'src/forms/WceForm';
 import GeriTabs from './forms/Geri';
 import HxTabs from './forms/HistoryTaking';
@@ -43,6 +44,7 @@ const routes = [
       { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
+	  { path: 'overview', element: <OverviewForm /> },
       { path: 'manage', element: <ManageVolunteers /> },
       { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceForm /> },
