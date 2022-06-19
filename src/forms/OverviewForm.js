@@ -17,7 +17,7 @@ import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
-import { hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
+import allForms from "./forms.json";
 
 const schema = new SimpleSchema({
   socialServiceQ1: {
@@ -46,10 +46,10 @@ const OverviewForm = (props) => {
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
         const loadPastForms = async () => {
-          const hcsrData = await getSavedData(patientId, hxHcsrForm);
-          const nssData = await getSavedData(patientId, hxNssForm);
-          const socialData = await getSavedData(patientId, hxSocialForm);
-          const cancerData = await getSavedData(patientId, hxCancerForm);
+          const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm);
+          const nssData = await getSavedData(patientId, allForms.hxNssForm);
+          const socialData = await getSavedData(patientId, allForms.hxSocialForm);
+          const cancerData = await getSavedData(patientId, allForms.hxCancerForm);
           setHcsr(hcsrData)
           setNss(nssData)
           setSocial(socialData)

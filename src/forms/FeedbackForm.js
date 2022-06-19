@@ -19,7 +19,7 @@ import {
 import { calculateBMI, submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { getSavedData, getSavedPatientData } from "../services/mongoDB";
-import { doctorConsultForm, socialServiceForm, geriOtConsultForm, geriPtConsultForm, wceForm, fitForm, geriVisionForm, registrationForm, hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
+import allForms from "./forms.json";
 import { bold, underlined, blueText, underlinedWithBreak } from 'src/theme/commonComponents.js';
 
 const schema = new SimpleSchema({
@@ -122,18 +122,18 @@ const FeedbackForm = (props) => {
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
     const loadPastForms = async () => {
-        const hcsrData = await getSavedData(patientId, hxHcsrForm);
-        const nssData = await getSavedData(patientId, hxNssForm);
-        const socialData = await getSavedData(patientId, hxSocialForm);
-        const cancerData = await getSavedData(patientId, hxCancerForm);
-		const visionData = await getSavedData(patientId, geriVisionForm)
-		const fitData = await getSavedData(patientId, fitForm)
-		const wceData = await getSavedData(patientId, wceForm)
+        const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm);
+        const nssData = await getSavedData(patientId, allForms.hxNssForm);
+        const socialData = await getSavedData(patientId, allForms.hxSocialForm);
+        const cancerData = await getSavedData(patientId, allForms.hxCancerForm);
+		const visionData = await getSavedData(patientId, allForms.geriVisionForm)
+		const fitData = await getSavedData(patientId, allForms.fitForm)
+		const wceData = await getSavedData(patientId, allForms.wceForm)
 		const patientsData = await getSavedPatientData(patientId, 'patients')
-		const geriPtConsultData = await getSavedData(patientId, geriPtConsultForm)
-		const geriOtConsultData = await getSavedData(patientId, geriOtConsultForm)
-		const socialServiceData = await getSavedData(patientId, socialServiceForm)
-		const doctorConsultData = await getSavedData(patientId, doctorConsultForm)
+		const geriPtConsultData = await getSavedData(patientId, allForms.geriPtConsultForm)
+		const geriOtConsultData = await getSavedData(patientId, allForms.geriOtConsultForm)
+		const socialServiceData = await getSavedData(patientId, allForms.socialServiceForm)
+		const doctorConsultData = await getSavedData(patientId, allForms.doctorConsultForm)
 
         setHcsr(hcsrData)
         setNss(nssData)
