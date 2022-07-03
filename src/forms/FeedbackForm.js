@@ -122,31 +122,37 @@ const FeedbackForm = (props) => {
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
     const loadPastForms = async () => {
-        const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm);
-        const nssData = await getSavedData(patientId, allForms.hxNssForm);
-        const socialData = await getSavedData(patientId, allForms.hxSocialForm);
-        const cancerData = await getSavedData(patientId, allForms.hxCancerForm);
-		const visionData = await getSavedData(patientId, allForms.geriVisionForm)
-		const fitData = await getSavedData(patientId, allForms.fitForm)
-		const wceData = await getSavedData(patientId, allForms.wceForm)
-		const patientsData = await getSavedPatientData(patientId, 'patients')
-		const geriPtConsultData = await getSavedData(patientId, allForms.geriPtConsultForm)
-		const geriOtConsultData = await getSavedData(patientId, allForms.geriOtConsultForm)
-		const socialServiceData = await getSavedData(patientId, allForms.socialServiceForm)
-		const doctorConsultData = await getSavedData(patientId, allForms.doctorConsultForm)
+        const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
+        const nssData = getSavedData(patientId, allForms.hxNssForm);
+        const socialData = getSavedData(patientId, allForms.hxSocialForm);
+        const cancerData = getSavedData(patientId, allForms.hxCancerForm);
+		const visionData = getSavedData(patientId, allForms.geriVisionForm)
+		const fitData = getSavedData(patientId, allForms.fitForm)
+		const wceData = getSavedData(patientId, allForms.wceForm)
+		const patientsData = getSavedPatientData(patientId, 'patients')
+		const geriPtConsultData = getSavedData(patientId, allForms.geriPtConsultForm)
+		const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
+		const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
+		const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
 
-        setHcsr(hcsrData)
-        setNss(nssData)
-		setVision(visionData)
-        setSocial(socialData)
-        setCancer(cancerData)
-		setFit(fitData)
-		setWce(wceData)
-		setPatients(patientsData)
-		setGeriPtConsult(geriPtConsultData)
-		setGeriOtConsult(geriOtConsultData)
-		setSocialService(socialServiceData)
-		setDoctorSConsult(doctorConsultData)
+        Promise.all([hcsrData, nssData, socialData, cancerData, visionData, fitData, wceData,
+          patientsData, geriPtConsultData, geriOtConsultData, socialServiceData, doctorConsultData])
+            .then((result) => {
+              setHcsr(result[0])
+              setNss(result[1])
+              setVision(result[2])
+              setSocial(result[3])
+              setCancer(result[4])
+              setFit(result[5])
+              setWce(result[6])
+              setPatients(result[7])
+              setGeriPtConsult(result[8])
+              setGeriOtConsult(result[9])
+              setSocialService(result[10])
+              setDoctorSConsult(result[11])
+            })
+
+
 
         isLoadingPrevData(false);
     }
