@@ -140,9 +140,9 @@ const FeedbackForm = (props) => {
             .then((result) => {
               setHcsr(result[0])
               setNss(result[1])
-              setVision(result[2])
-              setSocial(result[3])
-              setCancer(result[4])
+              setSocial(result[2])
+              setCancer(result[3])
+              setVision(result[4])
               setFit(result[5])
               setWce(result[6])
               setPatients(result[7])
