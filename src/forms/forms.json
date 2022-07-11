@@ -1,4 +1,5 @@
 {
+    "dietitiansConsultForm" : "dietitiansConsultForm",
     "doctorConsultForm": "doctorConsultForm",
     "feedbackForm": "feedbackForm",
     "fitForm": "fitForm",
@@ -20,6 +21,7 @@
     "hxSocialForm": "hxSocialForm",
     "phleboForm": "phleboForm",
     "registrationForm": "registrationForm",
+    "oralHealthForm": "oralHealthForm",
 	"overviewForm": "overviewForm",
     "socialServiceForm": "socialServiceForm",
     "wceForm": "wceForm"

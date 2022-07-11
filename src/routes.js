@@ -12,6 +12,8 @@ import Register from 'src/pages/Register';
 import Registration from 'src/pages/Registration';
 import Settings from 'src/pages/Settings';
 import DoctorSConsultForm from 'src/forms/DoctorSConsultForm';
+import DietitiansConsultForm from 'src/forms/DietitiansConsultForm';
+import OralHealthForm from 'src/forms/OralHealthForm';
 import FeedbackForm from 'src/forms/FeedbackForm';
 import FitForm from 'src/forms/FitForm';
 import PhleboForm from 'src/forms/PhleboForm';
@@ -43,7 +45,9 @@ const routes = [
       { path: 'phlebo', element: <PhleboForm />},
       { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
+      { path: 'dietitiansconsultation', element: <DietitiansConsultForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
+      { path: 'oralhealth', element: <OralHealthForm /> },
 	  { path: 'overview', element: <OverviewForm /> },
       { path: 'manage', element: <ManageVolunteers /> },
       { path: 'edit', element: <Edit /> },
