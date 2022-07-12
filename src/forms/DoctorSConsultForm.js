@@ -61,19 +61,23 @@ const DoctorSConsultForm = (props) => {
     const [social, setSocial] = useState({})
     const [cancer, setCancer] = useState({})
     useEffect(async () => {
-        const savedData = await getSavedData(patientId, formName);
         const loadPastForms = async () => {
-          const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm);
-          const nssData = await getSavedData(patientId, allForms.hxNssForm);
-          const socialData = await getSavedData(patientId, allForms.hxSocialForm);
-          const cancerData = await getSavedData(patientId, allForms.hxCancerForm);
-          setHcsr(hcsrData)
-          setNss(nssData)
-          setSocial(socialData)
-          setCancer(cancerData)
-          isLoadingSidePanel(false);
+          const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
+          const nssData = getSavedData(patientId, allForms.hxNssForm);
+          const socialData = getSavedData(patientId, allForms.hxSocialForm);
+          const cancerData = getSavedData(patientId, allForms.hxCancerForm);
+            const savedData = getSavedData(patientId, formName);
+          Promise.all([hcsrData, nssData, socialData, cancerData, savedData])
+              .then((result) => {
+                  setHcsr(result[0])
+                  setNss(result[1])
+                  setSocial(result[2])
+                  setCancer(result[3])
+                  isLoadingSidePanel(false);
+                  setSaveData(result[4])
+              })
         }
-        setSaveData(savedData)
+
         loadPastForms();
 
     }, [])
