@@ -12,6 +12,7 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {schema, layout} from './reg.js';
 import {getSavedData} from "../services/mongoDB";
+import './fieldPadding.css'
 
 const formName = "registrationForm"
 const RegForm = () => {
@@ -31,6 +32,7 @@ const RegForm = () => {
     const newForm = () => (
       <AutoForm
         schema={form_schema}
+        className="fieldPadding"
         onSubmit={async (model) => {
           isLoading(true)
           const response = await submitForm(model, patientId, formName);

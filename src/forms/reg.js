@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useContext} from 'react';
+import React, {Fragment} from 'react';
 import SimpleSchema from 'simpl-schema';
 
 //import { AutoForm } from 'uniforms';
