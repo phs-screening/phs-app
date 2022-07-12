@@ -39,7 +39,6 @@ export async function preRegister(preRegArgs) {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
         const patientsRecord = mongoConnection.db("phs").collection("patients");
         const record = await patientsRecord.find({fullNric});
-        console.log(record)
         if (record.length === 0) {
             const qNum = await mongoDB.currentUser.functions.getNextQueueNo();
             await patientsRecord.insertOne({queueNo: qNum, ...data});
@@ -52,7 +51,6 @@ export async function preRegister(preRegArgs) {
         }
     } catch(err) {
         // TODO: more granular error handling
-        console.log(err);
         return {"result": false, "error": err}
     }
     return {"result": isSuccess, "data": data, "error": errorMsg};
