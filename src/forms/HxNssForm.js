@@ -15,6 +15,7 @@ import { FormContext } from '../api/utils.js';
 
 import PopupText from '../utils/popupText';
 import {getSavedData} from "../services/mongoDB";
+import "./fieldPadding.css"
 
 const schema = new SimpleSchema({
   hxNssQ1: {
@@ -94,6 +95,7 @@ const HxNssForm = (props) => {
     const newForm = () => (
       <AutoForm
         schema={form_schema}
+        className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
           const response = await submitForm(model, patientId, formName);

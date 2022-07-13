@@ -13,6 +13,7 @@ import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { useField } from 'uniforms';
 import {getSavedData} from "../services/mongoDB";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   geriSppbQ1: {
@@ -77,6 +78,7 @@ const GeriSppbForm = (props) => {
     const newForm = () => (
       <AutoForm
         schema={form_schema}
+        className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
           const response = await submitForm(model, patientId, formName);
