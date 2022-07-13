@@ -321,7 +321,7 @@ const FeedbackForm = (props) => {
 			{patients ? blueText(patients.gender) : '-'}
 			<br></br>
 			{underlined("NRIC")}
-			{patients ? blueText(patients.abbreviatedNric) : '-'}
+			{patients ? blueText(patients.fullNric) : '-'}
 
 			<br></br>
 			{bold("2. Health Concerns")}
