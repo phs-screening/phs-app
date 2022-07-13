@@ -4,6 +4,7 @@ import SimpleSchema from 'simpl-schema';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
@@ -11,6 +12,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
 
@@ -34,11 +36,13 @@ const GeriPtConsultForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true);
   const { changeTab, nextTab } = props;
     const [saveData, setSaveData] = useState(null)
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
     setSaveData(savedData)
+    isLoadingSidePanel(false);
   }, [])
     const newForm = () => (
       <AutoForm
@@ -91,7 +95,31 @@ const GeriPtConsultForm = (props) => {
 
     return (
       <Paper elevation={2} p={0} m={0}>
-        {newForm()}
+        <Grid display="flex" flexDirection="row" >
+          <Grid xs={9}>  
+            <Paper elevation={2} p={0} m={0}>
+              {newForm()}
+            </Paper>
+          </Grid>
+          <Grid
+              p={1}
+              width="30%"
+              display="flex"
+              flexDirection="column"
+              alignItems={loadingSidePanel ? "center" : "left"}>
+          {loadingSidePanel ? <CircularProgress />
+            : 
+            <div>
+              {title("PAR-Q Results")}
+              {title("Physical Activity Level Results")}
+              {title("Frail Scale Results")}
+              {title("SPPB Scores")}
+              {title("TUG Results")}
+              
+            </div>
+          }
+          </Grid>
+        </Grid>
       </Paper>
     );
 }
