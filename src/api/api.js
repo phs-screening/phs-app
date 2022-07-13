@@ -5,7 +5,7 @@ const axios = require('axios').default;
 export async function preRegister(preRegArgs) {
     let gender = preRegArgs.gender;
     let fullName = preRegArgs.fullName.trim();
-    let fullNric = preRegArgs.fullNric.trim();
+    let fullNric = preRegArgs.fullNric.trim().toUpperCase();
     let fullAddress = preRegArgs.fullAddress.trim();
     let fullPostal = preRegArgs.fullPostal.trim()
     let dateOfBirth = preRegArgs.dateOfBirth.trim();
