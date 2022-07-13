@@ -6,7 +6,19 @@ export function title(text) {
     return (<div><Divider /><h2>{text}</h2></div>)
 }
 
+export function bold(text) {
+    return (<h2>{text}</h2>)
+}
+
+export function divider() {
+	return (<div></div>)
+}
+
 export function underlined(text) {
+    return (<p style={{textDecorationLine: 'underline', fontSize: size}}>{text}<br /></p>);
+}
+
+export function underlinedWithBreak(text) {
     return (<p style={{textDecorationLine: 'underline', fontSize: size}}>{text}</p>);
 }
 

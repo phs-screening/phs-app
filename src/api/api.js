@@ -4,11 +4,18 @@ const axios = require('axios').default;
 
 export async function preRegister(preRegArgs) {
     let gender = preRegArgs.gender;
-    let initials = preRegArgs.initials.trim().toUpperCase();
-    let abbreviatedNric = preRegArgs.abbreviatedNric.toUpperCase();
+    let fullName = preRegArgs.fullName.trim();
+    let fullNric = preRegArgs.fullNric.trim().toUpperCase();
+    let fullAddress = preRegArgs.fullAddress.trim();
+    let fullPostal = preRegArgs.fullPostal.trim()
+    let dateOfBirth = preRegArgs.dateOfBirth.trim();
+    let contactNumber = preRegArgs.contactNumber.trim();
+    let preferredLanguage = preRegArgs.preferredLanguage.trim()
     let goingForPhlebotomy = preRegArgs.goingForPhlebotomy;
     // validate params
-    if (gender == null || initials == null || abbreviatedNric == null || goingForPhlebotomy == null) {
+    if (gender == null || fullName == null || fullNric == null || fullAddress == null ||
+        fullPostal == null || dateOfBirth == null || contactNumber == null || preferredLanguage == null
+        || goingForPhlebotomy == null) {
         return {"result": false, "error": "Function Arguments canot be undefined."};
     }
     if (typeof goingForPhlebotomy === 'string' && goingForPhlebotomy !== 'Y' && goingForPhlebotomy !== 'N') {
@@ -17,8 +24,13 @@ export async function preRegister(preRegArgs) {
     // TODO: more exhaustive error handling. consider abstracting it in a validation function, and using schema validation
     let data = {
         "gender": gender,
-        "initials": initials, 
-        "abbreviatedNric": abbreviatedNric,
+        "initials": fullName,
+        "fullNric": fullNric,
+        "fullAddress": fullAddress,
+        "fullPostal": fullPostal,
+        "dateOfBirth": dateOfBirth,
+        "contactNumber": contactNumber,
+        "preferredLanguage" :preferredLanguage,
         "goingForPhlebotomy": goingForPhlebotomy
     }
     let isSuccess = false;
@@ -26,20 +38,19 @@ export async function preRegister(preRegArgs) {
     try {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
         const patientsRecord = mongoConnection.db("phs").collection("patients");
-        const record = await patientsRecord.find({abbreviatedNric, initials});
+        const record = await patientsRecord.find({fullNric});
         if (record.length === 0) {
             const qNum = await mongoDB.currentUser.functions.getNextQueueNo();
             await patientsRecord.insertOne({queueNo: qNum, ...data});
             data = {patientId: qNum, ...data};
             isSuccess = true;
         } else {
-            errorMsg = "There exists a patient with the same abbreviated NRIC and initials.\n"
+            errorMsg = "There exists a patient with the same NRIC.\n"
                 + "Please check that the patient has not registered yet.\nReport to the admin"
                 + " if there is no mistake as we need a way to identify the patients.";
         }
     } catch(err) {
         // TODO: more granular error handling
-        console.log(err);
         return {"result": false, "error": err}
     }
     return {"result": isSuccess, "data": data, "error": errorMsg};

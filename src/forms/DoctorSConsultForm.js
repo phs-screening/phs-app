@@ -17,7 +17,8 @@ import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
-import { hxCancerForm, hxHcsrForm, hxNssForm, hxSocialForm } from "./forms.json";
+import allForms from "./forms.json";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
 	doctorSConsultQ1: {
@@ -61,25 +62,30 @@ const DoctorSConsultForm = (props) => {
     const [social, setSocial] = useState({})
     const [cancer, setCancer] = useState({})
     useEffect(async () => {
-        const savedData = await getSavedData(patientId, formName);
         const loadPastForms = async () => {
-          const hcsrData = await getSavedData(patientId, hxHcsrForm);
-          const nssData = await getSavedData(patientId, hxNssForm);
-          const socialData = await getSavedData(patientId, hxSocialForm);
-          const cancerData = await getSavedData(patientId, hxCancerForm);
-          setHcsr(hcsrData)
-          setNss(nssData)
-          setSocial(socialData)
-          setCancer(cancerData)
-          isLoadingSidePanel(false);
+          const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
+          const nssData = getSavedData(patientId, allForms.hxNssForm);
+          const socialData = getSavedData(patientId, allForms.hxSocialForm);
+          const cancerData = getSavedData(patientId, allForms.hxCancerForm);
+            const savedData = getSavedData(patientId, formName);
+          Promise.all([hcsrData, nssData, socialData, cancerData, savedData])
+              .then((result) => {
+                  setHcsr(result[0])
+                  setNss(result[1])
+                  setSocial(result[2])
+                  setCancer(result[3])
+                  isLoadingSidePanel(false);
+                  setSaveData(result[4])
+              })
         }
-        setSaveData(savedData)
+
         loadPastForms();
 
     }, [])
         const newForm = () => (
           <AutoForm
             schema={form_schema}
+            className='fieldPadding'
             onSubmit={async (model) => {
               isLoading(true);
               const response = await submitForm(model, patientId, formName);
@@ -99,7 +105,8 @@ const DoctorSConsultForm = (props) => {
             model={saveData}
           >
             
-            <Fragment>
+    <Fragment>
+
       Doctor's Name:
       <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
       MCR No.:

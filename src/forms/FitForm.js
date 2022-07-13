@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import PopupText from '../utils/popupText';
 import {getSavedData} from "../services/mongoDB";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
     fitQ1: {
@@ -42,6 +43,7 @@ const FitForm = (props) =>  {
         const newForm = () => (
             <AutoForm
                 schema={form_schema}
+                className="fieldPadding"
                 onSubmit={async (model) => {
                     isLoading(true);
                     const response = await submitForm(model, patientId, formName);
