@@ -18,6 +18,7 @@ import { FormContext } from '../api/utils.js';
 import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
 import allForms from "./forms.json";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
         doctorSConsultQ1: {
@@ -80,6 +81,7 @@ const OralHealthForm = (props) => {
     const newForm = () => (
         <AutoForm
             schema={form_schema}
+            className='fieldPadding'
             onSubmit={async (model) => {
                 isLoading(true);
                 const response = await submitForm(model, patientId, formName);

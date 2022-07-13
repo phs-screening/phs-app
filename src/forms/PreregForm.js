@@ -13,6 +13,7 @@ import { schema, layout } from './prereg.js';
 
 import { preRegister } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
+import './fieldPadding.css'
 
 class PreregForm extends Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class PreregForm extends Component {
         const newForm = () => (
           <AutoForm
             schema={form_schema}
+            className="fieldPadding"
             onSubmit={async (model) => {
               this.setState({isLoading: true});
               const response = await preRegister(model);

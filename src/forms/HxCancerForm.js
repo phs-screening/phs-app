@@ -15,6 +15,7 @@ import { submitForm, calculateBMI } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
 import {getSavedData} from "../services/mongoDB";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   hxCancerQ1: {
@@ -117,6 +118,7 @@ const HxCancerForm = () => {
     const newForm = () => (
       <AutoForm
         schema={form_schema}
+        className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
           const response = await submitForm(model, patientId, formName);

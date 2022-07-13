@@ -12,6 +12,7 @@ import { RadioField, LongTextField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   geriPtConsultQ1: {
@@ -42,6 +43,7 @@ const GeriPtConsultForm = (props) => {
     const newForm = () => (
       <AutoForm
         schema={form_schema}
+        className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
           const response = await submitForm(model, patientId, formName);
