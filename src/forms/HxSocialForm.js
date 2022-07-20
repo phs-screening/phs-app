@@ -16,6 +16,8 @@ import { FormContext } from '../api/utils.js';
 import PopupText from 'src/utils/popupText';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
+import allForms from "./forms.json";
+import {blueText} from "../theme/commonComponents";
 
 const schema = new SimpleSchema({
   hxSocialQ1: {
@@ -57,10 +59,16 @@ const HxSocialForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
   const [saveData, setSaveData] = useState(null)
+  const [regForm, setRegForm] = useState({})
 
   useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName);
-    setSaveData(savedData)
+    const savedData = getSavedData(patientId, formName);
+    const regFormData = getSavedData(patientId, allForms.registrationForm)
+    Promise.all([savedData, regFormData]).then(result => {
+      setSaveData(result[0])
+      setRegForm(result[1])
+    })
+
   }, [])
     const newForm = () => (
       <AutoForm
@@ -99,9 +107,9 @@ const HxSocialForm = (props) => {
 
 
           1. Current CHAS status?<br />
-          <span style={{ color: "red" }}>Pull data from reg form</span><br />
+          {regForm && regForm.registrationQ8 ? blueText(regForm.registrationQ8) : blueText("nil")}
           2. Pioneer / Merderka Generation Card?<br />
-          <span style={{ color: "red" }}>Pull data from reg form</span><br />
+          {regForm && regForm.registrationQ9 ? blueText(regForm.registrationQ9) : blueText("nil")}
 
 
 

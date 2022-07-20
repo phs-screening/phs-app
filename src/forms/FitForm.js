@@ -16,6 +16,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PopupText from '../utils/popupText';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
+import allForms from "./forms.json"
+import {blueText} from "../theme/commonComponents";
+import {blue} from "@material-ui/core/colors";
 
 const schema = new SimpleSchema({
     fitQ1: {
@@ -34,10 +37,17 @@ const FitForm = (props) =>  {
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const [saveData, setSaveData] = useState(null)
+    const [hxCancer, setHxCancer] = useState({})
 
     useEffect(async () => {
-        const savedData = await getSavedData(patientId, formName);
-        setSaveData(savedData)
+        const savedData = getSavedData(patientId, formName);
+        const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
+
+        Promise.all([savedData, hxCancerData]).then(result => {
+            setSaveData(result[0])
+            setHxCancer(result[1])
+        })
+
     }, [])
 
         const newForm = () => (
@@ -68,12 +78,12 @@ const FitForm = (props) =>  {
                     <h2>1. NSS CANCER SCREENING PRACTICES SURVEY.</h2>
                     1. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
 
-                    <br/> <span style={{color: "green"}}>HERE IS TO PULL INFO FROM PREV QN </span><br/>
+                    {hxCancer && hxCancer.hxCancerQ5 ? blueText(hxCancer.hxCancerQ5) : blueText("nil")}
 
                     <br/>
                     2. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
 
-                    <br/> <span style={{color: "green"}}>HERE IS TO PULL INFO FROM PREV QN </span><br/>
+                    {hxCancer && hxCancer.hxCancerQ6 ? blueText(hxCancer.hxCancerQ6) : blueText("nil")}
                     
                     <br/>
                     <h3><span style={{color: "red"}}>Please encourage participants to go for FIT every year if participant is above 50, asymptomatic and no positive family history of colorectal cancer in first degree relatives.</span> </h3>

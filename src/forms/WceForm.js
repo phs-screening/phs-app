@@ -17,6 +17,8 @@ import '../Snippet.css';
 import PopupText from 'src/utils/popupText';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
+import allForms from './forms.json'
+import {blueText} from "../theme/commonComponents";
 
 const schema = new SimpleSchema({
   wceQ1: {
@@ -43,10 +45,23 @@ const WceForm = (props) =>  {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
     const [saveData, setSaveData] = useState(null)
+  const [reg, setReg] = useState({})
+  const [hxSocial, setHxSocial] = useState({})
+  const [hxCancer, setHxCancer] = useState({})
 
   useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName);
-      setSaveData(savedData)
+    const savedData = getSavedData(patientId, formName);
+    const regData = getSavedData(patientId, allForms.registrationForm)
+    const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+    const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
+
+    Promise.all([savedData, regData, hxSocialData, hxCancerData]).then(result => {
+      setSaveData(result[0])
+      setReg(result[1])
+      setHxSocial(result[2])
+      setHxCancer(result[3])
+    })
+
   }, [])
     const newForm = () => (
       <AutoForm
@@ -76,19 +91,17 @@ const WceForm = (props) =>  {
       <h2>1. FINANCIAL STATUS<br /></h2>
       <font color="red"><b>Please refer to page 1 of Form A for following questions.</b></font>
       1. Current CHAS status?
-      <h2><font color="green">DISPLAY INFO FROM REG</ font></h2>
-      2. Pioneer / Merdeka Generation Card? 
-      <h2><font color="green">DISPLAY INFO FROM REG
-      </ font></h2>
+          {reg && reg.registrationQ8 ? blueText(reg.registrationQ8) : blueText("nil")}
+      2. Pioneer / Merdeka Generation Card?
+          {reg && reg.registrationQ9? blueText(reg.registrationQ9) : blueText("nil")}
       3. Are you currently on any other Government Financial Assistance, other than CHAS and PG (e.g. Public Assistance Scheme)?
-      <h2><font color="green">
-        DISPLAY INFO FROM HX SOCIAL
-      </font></h2>
+          {hxSocial && hxSocial.hxSocialQ1? blueText(hxSocial.hxSocialQ1) : blueText("nil")}
+          {hxSocial && hxSocial.hxSocialQ2? blueText(hxSocial.hxSocialQ2) : blueText("nil")}
       <h2>2. NSS CANCER SCREENING PRACTICES SURVEY.</h2>
       1. <font color="red"><b>For female respondent aged 40 and above only.</b></font><br />When was the last time you had your last mammogram? (A mammogram is an x-ray of each breast to look for breast cancer.)
-      <h2><font color="green">DISPLAY INFO FROM HX CANCER</font></h2>
+          {hxCancer && hxCancer.hxCancerQ7 ? blueText(hxCancer.hxCancerQ7) : blueText("nil")}
       2. <font color="red"><b></b>For female respondent aged 25 and above, who have/had a husband/boyfriend and not had their womb completely surgically removed only.</font><br />When was the last time you had a PAP smear test? (A PAP smear test is a simple test involving the scrapping of cells fom the mouth of the womb, to check for changes in the cells of your cervix, which may develop into cancer later.)
-      <h2><font color="green">DISPLAY INFO FROM HX CANCER</font></h2>
+          {hxCancer && hxCancer.hxCancerQ8 ? blueText(hxCancer.hxCancerQ8) : blueText("nil")}
       <font color="red"><b>For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and above, seek doctor's advice.<br />Please encourage participants to go for HPV test every 5 years.</b></font> <br />
       Does participant has a history of cancer or his/her family history requires further scrutiny by doctors? <font color="red"><b>(If indicated 'Yes', please refer to doctor's consult by following the steps below.)</b></font>
       <RadioField name="wceQ1" label="WCE Q1"/>
@@ -126,9 +139,9 @@ const WceForm = (props) =>  {
         </Paper>
 
 
-        <Paper className="snippet-item" elevation={2} p={0} m={0}>
-          <h2>Snippets appear here</h2>
-        </Paper>
+        {/*<Paper className="snippet-item" elevation={2} p={0} m={0}>*/}
+        {/*  <h2>Snippets appear here</h2>*/}
+        {/*</Paper>*/}
 
       </snippet-container>
     );

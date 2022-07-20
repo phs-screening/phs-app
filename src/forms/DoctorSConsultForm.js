@@ -19,6 +19,7 @@ import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
 import allForms from "./forms.json";
 import './fieldPadding.css'
+import {blue} from "@material-ui/core/colors";
 
 const schema = new SimpleSchema({
 	doctorSConsultQ1: {
@@ -61,21 +62,30 @@ const DoctorSConsultForm = (props) => {
     const [nss, setNss] = useState({})
     const [social, setSocial] = useState({})
     const [cancer, setCancer] = useState({})
+    const [geriOtQ, setGeriOtQ] = useState({})
+    const [geriOt, setGeriOt] = useState({})
+    const [geriPt, setGeriPt] = useState({})
     useEffect(async () => {
         const loadPastForms = async () => {
           const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
           const nssData = getSavedData(patientId, allForms.hxNssForm);
           const socialData = getSavedData(patientId, allForms.hxSocialForm);
           const cancerData = getSavedData(patientId, allForms.hxCancerForm);
+          const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
+            const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
+            const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
             const savedData = getSavedData(patientId, formName);
-          Promise.all([hcsrData, nssData, socialData, cancerData, savedData])
+          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData])
               .then((result) => {
                   setHcsr(result[0])
                   setNss(result[1])
                   setSocial(result[2])
                   setCancer(result[3])
+                  setGeriOtQ(result[4])
+                  setGeriOt(result[5])
+                  setGeriPt(result[6])
                   isLoadingSidePanel(false);
-                  setSaveData(result[4])
+                  setSaveData(result[7])
               })
         }
 
@@ -159,9 +169,15 @@ const DoctorSConsultForm = (props) => {
               {loadingSidePanel ? <CircularProgress />
                 : 
                 <div>
+                    {title("Health Concerns")}
+                    {underlined("Requires scrutiny by doctor?")}
+                    {hcsr ? blueText(hcsr.hxHcsrQ11) : null}
                   {title("Health Concerns")}
                   {underlined("Summarised reasons for referral to Doctor Consultation")}
                   {hcsr ? blueText(hcsr.hxHcsrQ2) : null}
+                    {title("Systems Review")}
+                    {underlined("Requires scrutiny by doctor?")}
+                    {hcsr ? blueText(hcsr.hxHcsrQ12) : null}
                   {title("Systems Review")}
                   {underlined("Summarised systems review")}
                   {hcsr ? blueText(hcsr.hxHcsrQ3) : null}
@@ -169,6 +185,8 @@ const DoctorSConsultForm = (props) => {
                   {underlined("Urinary/Faecal incontinence")}
                   {hcsr ? blueText(hcsr.hxHcsrQ4) : null}
                   {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : null}
+                    {underlined("Urinary Incontinence or nocturia (at least 3 or more times at night)?")}
+                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ6) : null}
                   {title("Vision problems")}
                   {underlined("Vision Problems")}
                   {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
@@ -179,7 +197,7 @@ const DoctorSConsultForm = (props) => {
                   {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : null}
                   {title("Past Medical History")}
                   {underlined("Summary of Relevant Past Medical History")}
-                  {nss ? blueText(nss.hxNssQ12) : null}
+                  {nss && nss.hxNssQ12 ? blueText(nss.hxNssQ12.toString()) : blueText("nil")}
                   {title("Smoking History")}
                   {underlined("Smoking frequency")}
                   {nss ? blueText(nss.hxNssQ14) : null}
@@ -188,13 +206,18 @@ const DoctorSConsultForm = (props) => {
                   {nss ? blueText(nss.hxNssQ15) : null}
                   {title("Family History")}
                   {underlined("Summary of Relevant Family History")}
-                  {nss ? blueText(nss.hxNssQ13) : null}
-                  {nss && nss.hcNssQ23 ? blueText(nss.hxNssQ23) : null}
                   {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : null}
                   {title("Blood Pressure")}
+                    {underlined("Requires scrutiny by doctor?")}
+                    {cancer && cancer.hxCancerQ27 ? blueText(cancer.hxCancerQ27) : null}
+                    {underlined("Dizziness on standing up from a seated or laid down position?")}
+                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ5) : null}
                   {underlined("Average Blood Pressure")}
                   {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : null}
                   {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : null}
+                    {title("BMI")}
+                    {underlined("Requires scrutiny by doctor?")}
+                    {cancer && cancer.hxCancerQ23 ? blueText(cancer.hxCancerQ23.toString()) : null}
                   {title("BMI")}
                   {underlined("BMI")}
                   {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : null}
@@ -202,6 +225,12 @@ const DoctorSConsultForm = (props) => {
                   {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
                     ? blueText("BMI: " + calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20))
                     : null}
+                    {underlined("Waist circumference (cm)")}
+                    {cancer ? blueText(cancer.hxCancerQ24) : null}
+                    {title("OT consult")}
+                    {geriOt ? blueText(geriOt.geriOtConsultQ3 ) : null}
+                    {title("PT consult")}
+                    {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : null}
                 </div>
               }
               </Grid>
