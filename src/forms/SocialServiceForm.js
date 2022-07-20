@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, BoolField} from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
 import {calculateBMI, submitForm} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
@@ -26,7 +26,11 @@ const schema = new SimpleSchema({
     type: String, optional: false
   }, socialServiceQ3: {
     type: String, optional: false
-  }
+  }, socialServiceQ4: {
+        type: Boolean, label: "Yes", optional: true
+    }, socialServiceQ5: {
+      type: String, optional: true
+    }
 }
 )
 
@@ -98,6 +102,10 @@ const SocialServiceForm = (props) => {
           <LongTextField name="socialServiceQ2" label="Social Service Q2" />
           3. Brief summary of what will be done for the participant (Eg name of scheme participant wants to apply for)
           <LongTextField name="socialServiceQ3" label="Social Service Q3" />
+            4. Is follow-up required?
+            <BoolField name="socialServiceQ4" />
+            5. Brief summary of follow-up for the participant
+            <LongTextField name="socialServiceQ5" label="Social Service Q5" />
 
         </Fragment>
         <ErrorsField />
@@ -134,7 +142,7 @@ const SocialServiceForm = (props) => {
                     {reg && reg.registrationQ9 ? blueText(reg.registrationQ9) : blueText("nil")}
                     {underlined("Is the participant on any Government Financial Assistance?")}
                     {hxSocial && hxSocial.hxSocialQ1 ? blueText(hxSocial.hxSocialQ1) : blueText("nil")}
-                    {hxSocial && hxSocial.hxSocialQ2 ? blueText(hxSocial.hxSocialQ2) : blueText("nil")}
+                    {hxSocial && hxSocial.hxSocialQ2 ? blueText(hxSocial.hxSocialQ2) : blueText("no")}
                     {underlined("Household Income Per Month")}
                     {hxSocial && hxSocial.hxSocialQ3 ? blueText(hxSocial.hxSocialQ3) : blueText("nil")}
                     {underlined("Number of Household Members (Including Participant)")}
@@ -156,8 +164,8 @@ const SocialServiceForm = (props) => {
                     {hxSocial && hxSocial.hxSocialQ12 ? blueText(hxSocial.hxSocialQ12) : blueText("nil")}
                     {title("Referrals")}
                     {underlined("Reasons for referral from Doctor's Consult:")}
-                    {doctorConsult && doctorConsult.doctorSConsultQ6 ? blueText(doctorConsult.doctorSConsultQ6) : blueText("nil")}
-                    {doctorConsult && doctorConsult.doctorSConsultQ7 ? blueText(doctorConsult.doctorSConsultQ7) : blueText("nil")}
+                    {doctorConsult && doctorConsult.doctorSConsultQ6 ? blueText(doctorConsult.doctorSConsultQ6.toString()) : blueText("nil")}
+                    {doctorConsult && doctorConsult.doctorSConsultQ6 && doctorConsult.doctorSConsultQ7 ? blueText(doctorConsult.doctorSConsultQ7) : blueText("nil")}
                     {underlined("Failed EBAS-DEP?")}
                     {geriEbas && geriEbas.geriEbasDepQ10 ? blueText(geriEbas.geriEbasDepQ10) : blueText("nil")}
                     {underlined("Potential financial/ family difficulties?")}
