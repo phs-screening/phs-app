@@ -19,31 +19,14 @@ import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
 import allForms from "./forms.json";
 import './fieldPadding.css'
+import {blue} from "@material-ui/core/colors";
 
 const schema = new SimpleSchema({
-        doctorSConsultQ1: {
-            type: String, optional: false
-        }, doctorSConsultQ2: {
-            type: String, optional: false
-        }, doctorSConsultQ3: {
-            type: String, optional: false
-        }, doctorSConsultQ4: {
+        oralHealthQ1: {
             type: Boolean, label: "Yes", optional: true
-        }, doctorSConsultQ5: {
-            type: String, optional: true
-        }, doctorSConsultQ6: {
-            type: Boolean, label: "Yes", optional: true
-        }, doctorSConsultQ7: {
-            type: String, optional: true
-        }, doctorSConsultQ8: {
-            type: Boolean, label: "Yes", optional: true
-        }, doctorSConsultQ9: {
-            type: String, optional: true
-        }, doctorSConsultQ10: {
-            type: Boolean, label: "Yes", optional: true
-        }, doctorSConsultQ11: {
-            type: Boolean, label: "Yes", optional: true
-        }
+        }, oralHealthQ2: {
+        type: Boolean, label: "Yes", optional: true
+    }
     }
 )
 
@@ -57,21 +40,32 @@ const OralHealthForm = (props) => {
     const [loadingSidePanel, isLoadingSidePanel] = useState(true);
     const [saveData, setSaveData] = useState(null)
     // forms to retrieve for side panel
-    const [hcsr, setHcsr] = useState({})
-    const [nss, setNss] = useState({})
-    const [social, setSocial] = useState({})
-    const [cancer, setCancer] = useState({})
+    const [doctorConsult, setDoctorConsult] = useState({})
+    const [hxSocial, sethxSocial] = useState({})
+    const [hxHcsr, setHxHcsr] = useState({})
+    const [geriOt, setGeriOt] = useState({})
+    const [hxNss, setHxNss] = useState({})
+    const [hxCancer, setHxCancer] = useState({})
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
         const loadPastForms = async () => {
-            const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm);
-            const nssData = await getSavedData(patientId, allForms.hxNssForm);
-            const socialData = await getSavedData(patientId, allForms.hxSocialForm);
-            const cancerData = await getSavedData(patientId, allForms.hxCancerForm);
-            setHcsr(hcsrData)
-            setNss(nssData)
-            setSocial(socialData)
-            setCancer(cancerData)
+            const doctorsConsultData = getSavedData(patientId, allForms.doctorConsultForm)
+            const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+            const hxHcsrData = getSavedData(patientId, allForms.hxHcsrForm)
+            const geriOtData  = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
+            const hxNssData = getSavedData(patientId, allForms.hxNssForm)
+            const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
+
+
+            Promise.all([doctorsConsultData, hxSocialData, hxHcsrData, geriOtData, hxNssData, hxCancerData]).then((result) => {
+                setDoctorConsult(result[0])
+                sethxSocial(result[1])
+                setHxHcsr(result[2])
+                setGeriOt(result[3])
+                setHxNss(result[4])
+                setHxCancer(result[5])
+            })
+
             isLoadingSidePanel(false);
         }
         setSaveData(savedData)
@@ -103,28 +97,10 @@ const OralHealthForm = (props) => {
 
             <Fragment>
 
-                Doctor's Name:
-                <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
-                MCR No.:
-                <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
-                Doctor's Memo
-                <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3" />
-                Refer to dietitian?
-                <BoolField name="doctorSConsultQ4" />
-                Reason for referral
-                <LongTextField name="doctorSConsultQ5" label="Doctor's Consult Q5"/>
-                Refer to Social Support?
-                <BoolField name="doctorSConsultQ6" />
-                Reason for referral
-                <LongTextField name="doctorSConsultQ7" label="Doctor's Consult Q7"/>
-                Refer to Dental?
-                <BoolField name="doctorSConsultQ8" />
-                Reason for referral
-                <LongTextField name="doctorSConsultQ9" label="Doctor's Consult Q9"/>
-                Does patient require urgent follow up
-                <BoolField name="doctorSConsultQ10" />
-                Completed Doctor’s Consult station. Please check that Form A is filled.
-                <BoolField name="doctorSConsultQ11" />
+                Will participant undergo follow-up by NUS Dentistry?
+                <BoolField name="oralHealthQ1" />
+                Completed Oral Health station. Please check that Form A is filled.
+                <BoolField name="oralHealthQ2" />
 
             </Fragment>
 
@@ -155,49 +131,74 @@ const OralHealthForm = (props) => {
                     {loadingSidePanel ? <CircularProgress />
                         :
                         <div>
+                            {title("Referral from Doctor's Consult ")}
+                            {underlined("Reasons for referral:")}
+                            {doctorConsult && doctorConsult.doctorSConsultQ8 ? blueText(doctorConsult.doctorSConsultQ8.toString()) : null}
+                            {doctorConsult ? blueText(doctorConsult.doctorSConsultQ9) : null}
+                            {title("Referral from History Taking ")}
+                            {underlined("Participant's Oral Health Brief Assessment:")}
+                            {hxSocial ? blueText(hxSocial.hxSocialQ13) : null}
+                            {title("Referral from History Taking ")}
+                            {underlined("Interest in Oral Health Screening: ")}
+                            {hxSocial ? blueText(hxSocial.hxSocialQ14) : null}
+                            {title("Health Concern")}
+                            {underlined("Requires scrutiny by doctor? ")}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ11) : null}
                             {title("Health Concerns")}
                             {underlined("Summarised reasons for referral to Doctor Consultation")}
-                            {hcsr ? blueText(hcsr.hxHcsrQ2) : null}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ2) : null}
+                            {title("Systems Review")}
+                            {underlined("Requires scrutiny by doctor? ")}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ12) : null}
                             {title("Systems Review")}
                             {underlined("Summarised systems review")}
-                            {hcsr ? blueText(hcsr.hxHcsrQ3) : null}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ3) : null}
                             {title("Urinary/Faecal incontinence")}
                             {underlined("Urinary/Faecal incontinence")}
-                            {hcsr ? blueText(hcsr.hxHcsrQ4) : null}
-                            {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : null}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ4) : null}
+                            {hxHcsr && hxHcsr.hxHcsrQ5 ? blueText(hxHcsr.hxHcsrQ5) : null}
+                            {underlined("Urinary Incontinence or nocturia (at least 3 or more times at night)?")}
+                            {geriOt ? blueText(geriOt.geriOtQuestionnaireQ6) : null}
                             {title("Vision problems")}
                             {underlined("Vision Problems")}
-                            {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
-                            {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : null}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ6) : null}
+                            {hxHcsr && hxHcsr.hxHcsrQ7 ? blueText(hxHcsr.hxHcsrQ7) : null}
                             {title("Hearing problems")}
                             {underlined("Hearing Problems")}
-                            {hcsr ? blueText(hcsr.hxHcsrQ8) : null}
-                            {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : null}
+                            {hxHcsr ? blueText(hxHcsr.hxHcsrQ8) : null}
+                            {hxHcsr && hxHcsr.hxHcsrQ9 ? blueText(hxHcsr.hxHcsrQ9) : null}
                             {title("Past Medical History")}
                             {underlined("Summary of Relevant Past Medical History")}
-                            {nss ? blueText(nss.hxNssQ12) : null}
+                            {hxNss && hxNss.hxNssQ12? blueText(hxNss.hxNssQ12) : blueText("nil")}
                             {title("Smoking History")}
                             {underlined("Smoking frequency")}
-                            {nss ? blueText(nss.hxNssQ14) : null}
+                            {hxNss ? blueText(hxNss.hxNssQ14) : null}
                             {title("Alcohol history")}
                             {underlined("Alcohol consumption")}
-                            {nss ? blueText(nss.hxNssQ15) : null}
+                            {hxNss ? blueText(hxNss.hxNssQ15) : null}
                             {title("Family History")}
-                            {underlined("Summary of Relevant Family History")}
-                            {nss ? blueText(nss.hxNssQ13) : null}
-                            {nss && nss.hcNssQ23 ? blueText(nss.hxNssQ23) : null}
-                            {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : null}
+                            {hxCancer && hxCancer.hxCancerQ10 ? blueText(hxCancer.hxCancerQ10) : null}
+                            {title("Blood Pressure")}
+                            {underlined("Requires scrutiny by doctor?")}
+                            {hxCancer && hxCancer.hxCancerQ27 ? blueText(hxCancer.hxCancerQ27) : null}
+                            {underlined("Dizziness on standing up from a seated or laid down position?")}
+                            {geriOt && geriOt.geriOtQuestionnaireQ5 ? blueText(geriOt.geriOtQuestionnaireQ5) : null}
                             {title("Blood Pressure")}
                             {underlined("Average Blood Pressure")}
-                            {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : null}
-                            {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : null}
+                            {hxCancer ? blueText("Average Reading Systolic: " + hxCancer.hxCancerQ17) : null}
+                            {hxCancer ? blueText("Average Reading Diastolic: " + hxCancer.hxCancerQ18) : null}
+                            {title("BMI")}
+                            {underlined("Requires scrutiny by doctor?")}
+                            {hxCancer && hxCancer.hxCancerQ23 ? blueText(hxCancer.hxCancerQ23.toString()) : blueText("no")}
                             {title("BMI")}
                             {underlined("BMI")}
-                            {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : null}
-                            {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : null}
-                            {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
-                                ? blueText("BMI: " + calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20))
+                            {hxCancer ? blueText("Height: " + hxCancer.hxCancerQ19 + "cm") : null}
+                            {hxCancer ? blueText("Weight: " + hxCancer.hxCancerQ20 + "kg") : null}
+                            {hxCancer && hxCancer.hxCancerQ19 && hxCancer.hxCancerQ20
+                                ? blueText("BMI: " + calculateBMI(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20))
                                 : null}
+                            {underlined("Waist circumference (cm)")}
+                            {hxCancer ? blueText(hxCancer.hxCancerQ24) : null}
                         </div>
                     }
                 </Grid>
