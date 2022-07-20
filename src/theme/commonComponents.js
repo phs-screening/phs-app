@@ -26,7 +26,6 @@ export function blueText(text) {
     if (Array.isArray(text)) {
         return text.map(x => <div><p style={{color: 'blue', margin: 2, whiteSpace: "pre-wrap"}}>{x}</p></div>);
     } else {
-        console.log(text)
         return (<div style={{margin: 2}}><p style={{color: 'blue', whiteSpace: "pre-wrap"}}>{text}</p></div>);
     }
 }

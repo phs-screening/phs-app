@@ -28,8 +28,10 @@ const schema = new SimpleSchema({
         }, dietitiansConsultQ3: {
             type: String, optional: true
         }, dietitiansConsultQ4: {
+        type: String, optional: true
+        },dietitiansConsultQ5: {
             type: Boolean, label: "Yes", optional: true
-        }, dietitiansConsultQ5: {
+        }, dietitiansConsultQ6: {
             type: String, optional: true
         }
     }
@@ -46,13 +48,24 @@ const DietitiansConsultForm = (props) => {
     const [saveData, setSaveData] = useState(null)
     // forms to retrieve for side panel
     const [doctorConsult, setDoctorConsult] = useState({})
+    const [hxCancer, setHxCancer] = useState({})
+    const [hxNss, setHxNss] = useState({})
 
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
         const loadPastForms = async () => {
-            const doctorConsultData = await getSavedData(patientId, allForms.doctorConsultForm);
-            setDoctorConsult(doctorConsultData)
+            const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm);
+            const hxCancerData = getSavedData(patientId, allForms.hxCancerForm);
+            const hxNssData = getSavedData(patientId, allForms.hxNssForm)
+
+            Promise.all([doctorConsultData, hxCancerData, hxNssData]).then(result => {
+                setDoctorConsult(result[0])
+                setHxCancer(result[1])
+                setHxNss(result[2])
+
+            })
             isLoadingSidePanel(false);
+
         }
         setSaveData(savedData)
         loadPastForms();
@@ -89,10 +102,12 @@ const DietitiansConsultForm = (props) => {
                 <LongTextField name="dietitiansConsultQ2" label="Dietitian's Consult Q2"/>
                 Dietitian's Notes:
                 <LongTextField name="dietitiansConsultQ3" label="Dietitian's Consult Q3" />
+                Notes for participant (if applicable):
+                <LongTextField name="dietitiansConsultQ4" label="Dietitian's Consult Q4" />
                 Does the patient require urgent follow up?
-                <BoolField name="dietitiansConsultQ4" />
+                <BoolField name="dietitiansConsultQ5" />
                 Reasons for urgent follow up:
-                <LongTextField name="dietitiansConsultQ5" label="Dietitian's Consult Q5"/>
+                <LongTextField name="dietitiansConsultQ6" label="Dietitian's Consult Q6"/>
 
             </Fragment>
 
@@ -123,9 +138,41 @@ const DietitiansConsultForm = (props) => {
                     {loadingSidePanel ? <CircularProgress />
                         :
                         <div>
-                            {title("Reasons for referral")}
-                            {underlined("Reasons for referral from Doctor's Consult ")}
+                            {title("Doctor's Consult ")}
+                            {underlined("Reasons for referral from Doctor's Consult")}
                             {doctorConsult ? blueText(doctorConsult.doctorSConsultQ5) : null}
+                            {title("Blood Pressure ")}
+                            {underlined("Average Reading Systolic (average of closest 2 readings)")}
+                            Systolic BP:
+                            {hxCancer ? blueText(hxCancer.hxCancerQ17) : null}
+                            {underlined("Average Reading Diastolic (average of closest 2 readings)")}
+                            Diastolic BP:
+                            {hxCancer ? blueText(hxCancer.hxCancerQ18)  : null}
+                            {title("BMI")}
+                            {underlined("Requires scrutiny by doctor?")}
+                            {hxCancer ? hxCancer.hxCancerQ23 ? blueText(hxCancer.hxCancerQ23.toString()) : "false" : null}
+                            {title("BMI")}
+                            {underlined("Height (in cm)")}
+                            {hxCancer ? blueText(hxCancer.hxCancerQ19)  : null}
+                            {underlined("Weight (in kg)")}
+                            {hxCancer ? blueText(hxCancer.hxCancerQ20)  : null}
+                            {underlined("BMI")}
+                            {hxCancer ? blueText(calculateBMI(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20))  : null}
+                            {title("Waist circumference (cm)")}
+                            {underlined("Waist Circumference (in cm)")}
+                            {hxCancer ? blueText(hxCancer.hxCancerQ24)  : null}
+                            {title("Smoking History ")}
+                            {underlined("Smoking frequency")}
+                            {hxNss ? blueText(hxNss.hxNssQ14)  : null}
+                            {title("Alcohol history ")}
+                            {underlined("Alcohol consumption")}
+                            {hxNss ? blueText(hxNss.hxNssQ15)  : null}
+                            {title("Diet")}
+                            {underlined("Does participant consciously try to the more fruits, vegetables, whole grain & cereals?")}
+                            {hxNss ? blueText(hxNss.hxNssQ16)  : null}
+                            {title("Diet")}
+                            {underlined("Does the participant exercise in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throuhgout the week?")}
+                            {hxNss ? blueText(hxNss.hxNssQ17)  : null}
                         </div>
                     }
                 </Grid>
