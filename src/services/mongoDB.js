@@ -1,9 +1,6 @@
 import * as Realm from "realm-web";
 
-
-const REALM_APP_ID = "phsmain-myacz";
-// Deployment: phsmain-myacz
-// Development: application-0-rzpjv
+const REALM_APP_ID = process.env.REACT_APP_MONGO_KEY;
 
 const app = new Realm.App({ id: REALM_APP_ID });
 
