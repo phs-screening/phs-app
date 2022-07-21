@@ -172,13 +172,11 @@ const DoctorSConsultForm = (props) => {
                     {title("Health Concerns")}
                     {underlined("Requires scrutiny by doctor?")}
                     {hcsr ? blueText(hcsr.hxHcsrQ11) : null}
-                  {title("Health Concerns")}
                   {underlined("Summarised reasons for referral to Doctor Consultation")}
                   {hcsr ? blueText(hcsr.hxHcsrQ2) : null}
                     {title("Systems Review")}
                     {underlined("Requires scrutiny by doctor?")}
                     {hcsr ? blueText(hcsr.hxHcsrQ12) : null}
-                  {title("Systems Review")}
                   {underlined("Summarised systems review")}
                   {hcsr ? blueText(hcsr.hxHcsrQ3) : null}
                   {title("Urinary/Faecal incontinence")}
@@ -218,7 +216,6 @@ const DoctorSConsultForm = (props) => {
                     {title("BMI")}
                     {underlined("Requires scrutiny by doctor?")}
                     {cancer && cancer.hxCancerQ23 ? blueText(cancer.hxCancerQ23.toString()) : null}
-                  {title("BMI")}
                   {underlined("BMI")}
                   {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : null}
                   {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : null}

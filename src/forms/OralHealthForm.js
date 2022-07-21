@@ -141,16 +141,14 @@ const OralHealthForm = (props) => {
                             {title("Referral from History Taking ")}
                             {underlined("Interest in Oral Health Screening: ")}
                             {hxSocial ? blueText(hxSocial.hxSocialQ14) : null}
-                            {title("Health Concern")}
+                            {title("Health Concerns")}
                             {underlined("Requires scrutiny by doctor? ")}
                             {hxHcsr ? blueText(hxHcsr.hxHcsrQ11) : null}
-                            {title("Health Concerns")}
                             {underlined("Summarised reasons for referral to Doctor Consultation")}
                             {hxHcsr ? blueText(hxHcsr.hxHcsrQ2) : null}
                             {title("Systems Review")}
                             {underlined("Requires scrutiny by doctor? ")}
                             {hxHcsr ? blueText(hxHcsr.hxHcsrQ12) : null}
-                            {title("Systems Review")}
                             {underlined("Summarised systems review")}
                             {hxHcsr ? blueText(hxHcsr.hxHcsrQ3) : null}
                             {title("Urinary/Faecal incontinence")}
@@ -183,14 +181,12 @@ const OralHealthForm = (props) => {
                             {hxCancer && hxCancer.hxCancerQ27 ? blueText(hxCancer.hxCancerQ27) : null}
                             {underlined("Dizziness on standing up from a seated or laid down position?")}
                             {geriOt && geriOt.geriOtQuestionnaireQ5 ? blueText(geriOt.geriOtQuestionnaireQ5) : null}
-                            {title("Blood Pressure")}
                             {underlined("Average Blood Pressure")}
                             {hxCancer ? blueText("Average Reading Systolic: " + hxCancer.hxCancerQ17) : null}
                             {hxCancer ? blueText("Average Reading Diastolic: " + hxCancer.hxCancerQ18) : null}
                             {title("BMI")}
                             {underlined("Requires scrutiny by doctor?")}
                             {hxCancer && hxCancer.hxCancerQ23 ? blueText(hxCancer.hxCancerQ23.toString()) : blueText("no")}
-                            {title("BMI")}
                             {underlined("BMI")}
                             {hxCancer ? blueText("Height: " + hxCancer.hxCancerQ19 + "cm") : null}
                             {hxCancer ? blueText("Weight: " + hxCancer.hxCancerQ20 + "kg") : null}

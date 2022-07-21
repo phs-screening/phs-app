@@ -151,7 +151,6 @@ const DietitiansConsultForm = (props) => {
                             {title("BMI")}
                             {underlined("Requires scrutiny by doctor?")}
                             {hxCancer ? hxCancer.hxCancerQ23 ? blueText(hxCancer.hxCancerQ23.toString()) : "false" : null}
-                            {title("BMI")}
                             {underlined("Height (in cm)")}
                             {hxCancer ? blueText(hxCancer.hxCancerQ19)  : null}
                             {underlined("Weight (in kg)")}
@@ -170,7 +169,6 @@ const DietitiansConsultForm = (props) => {
                             {title("Diet")}
                             {underlined("Does participant consciously try to the more fruits, vegetables, whole grain & cereals?")}
                             {hxNss ? blueText(hxNss.hxNssQ16)  : null}
-                            {title("Diet")}
                             {underlined("Does the participant exercise in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throuhgout the week?")}
                             {hxNss ? blueText(hxNss.hxNssQ17)  : null}
                         </div>
