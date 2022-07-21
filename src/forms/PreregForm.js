@@ -35,7 +35,6 @@ class PreregForm extends Component {
             onSubmit={async (model) => {
               this.setState({isLoading: true});
               const response = await preRegister(model);
-              console.log(response);
               if (response.result) {
                 this.setState({isLoading: false});
                 setTimeout(() => {

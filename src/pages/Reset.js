@@ -41,9 +41,6 @@ const Reset = () => {
                 const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
                 const userProfile = mongoConnection.db("phs").collection("profiles")
                 const profile = await userProfile.findOne({username: values.email})
-                console.log(profile)
-                console.log(user.profile.email)
-                console.log(user.profile.name)
                 setProfile(profile)
                 isLogin(true)
             } else {
@@ -59,7 +56,6 @@ const Reset = () => {
             navigate('/app/registration', { replace: true });
 
         } catch(err) {
-            console.log(err)
             alert("Invalid Username or Password!")
         }
     }

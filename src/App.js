@@ -33,7 +33,6 @@ const waitProfile = async () => {
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id);
-    console.log("new id: " + new_id);
   }
 
   const routing = useRoutes(routes);

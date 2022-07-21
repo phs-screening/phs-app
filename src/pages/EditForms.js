@@ -32,7 +32,6 @@ const ManageVolunteers = () => {
             setValues({
                 [event.target.name]: parseInt(value)
             });
-            console.log("updated value")
         } else {
             event.target.value = 0;
         }

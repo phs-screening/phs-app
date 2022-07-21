@@ -37,9 +37,6 @@ const Login = () => {
               const user = await mongoDB.logIn(credentials);
               const userProfile = profilesCollection()
               const profile = await userProfile.findOne({username: values.email})
-              console.log(profile)
-              console.log(user.profile.email)
-              console.log(user.profile.name)
               setProfile(profile)
               isLogin(true)
           } else {
@@ -61,7 +58,6 @@ const Login = () => {
           navigate('/app/registration', { replace: true });
 
       } catch(err) {
-          console.log(err)
           isLoading(false)
           alert("Invalid Username or Password!")
       }
