@@ -67,7 +67,7 @@ export default function HxTabs() {
       <AppBar position="static" color="default">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="HCSR" {...a11yProps(0)} />
-          <Tab label="NSS" {...a11yProps(1)} />
+          <Tab label="PMHx" {...a11yProps(1)} />
           <Tab label="Social" {...a11yProps(2)} />
           <Tab label="Cancer" {...a11yProps(3)} />
         </Tabs>

@@ -98,9 +98,7 @@ const HxSocialForm = (props) => {
           <font color="blue"><h2>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h2></font>
 
           <h2>HISTORY TAKING PART 3: SOCIAL HISTORY</h2>
-          <h3>1. DIET AND EXERCISE
-            <span style={{ color: "red" }}><br />(Taken in NSS Questionnaire portion earlier on)</span></h3>
-          <h3>2. FINANCIAL STATUS
+          <h3>1. FINANCIAL STATUS
             <span style={{ color: "red" }}><br />Please refer to page 1 of Form A for following questions.</span></h3>
 
 
@@ -108,30 +106,27 @@ const HxSocialForm = (props) => {
 
           1. Current CHAS status?<br />
           {regForm && regForm.registrationQ8 ? blueText(regForm.registrationQ8) : blueText("nil")}
+          <br/>
           2. Pioneer / Merderka Generation Card?<br />
           {regForm && regForm.registrationQ9 ? blueText(regForm.registrationQ9) : blueText("nil")}
-
-
-
-
+          <br/>
           3. Are you currently on any other Government Financial Assistance, other than CHAS and PG (e.g. Public Assistance Scheme)?
           <RadioField name="hxSocialQ1" label="Hx Social Q1" />
 
           Please specify
           <LongTextField name="hxSocialQ2" label="Hx Social Q2" />
 
-          <h3 style={{ color: "red" }}>PLEASE REFER TO PAGE 2 OF NSS FORM FOR RESPONSES. PLEASE ASK MORE as NECESSARY. </h3>
-          4a. What is the average earnings of participant's household per month? (Refer to NSS Form Page 2, Put 'NIL' if participant unable to provide)
+          <br/> <br/>
+          4a. What is the average earnings of participant's household per month?
           <RadioField name="hxSocialQ3" label="Hx Social Q3" /><br /><br />
           4b. Number of household members (including yourself):
           <LongTextField name="hxSocialQ4" label="Hx Social Q4" /><br /><br />
           4c. Do you want to apply for CHAS card? (if you are currently not on CHAS but qualify) <br />
           <img src='/images/hx/chas.jpg' alt='CHAS' /> <br />
-          <RadioField name="hxSocialQ5" label="Hx Social Q5" /><br /><br />
-
+          <RadioField name="hxSocialQ5" label="Hx Social Q5" />
           Please specify
           <LongTextField name="hxSocialQ6" label="Hx Social Q6" />
-
+          < br/><br/>
           5. Do you need advice on financial schemes that are available in Singapore or require further financial assistance?
           <RadioField name="hxSocialQ7" label="Hx Social Q7" />
 
@@ -141,9 +136,9 @@ const HxSocialForm = (props) => {
           <br /><br />
           <PopupText qnNo="hxSocialQ5" triggerValue="Yes, (Please specify):">
             <PopupText qnNo="hxSocialQ7" triggerValue="Yes, (Please specify):">
-              <b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of <b>financial aid.</b>  
+              <p><b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of <b>financial aid.</b>  </p>
               <br />Indicate for Social Service station on:  
-              <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A 
+              <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
               <br />2) Write reasons for referral on the right column<br />
               <br />Note the following criteria for your assessment: (wef from 1st Nov 2019)
               <br />Per-capita monthly income for CHAS: <b>Green Card: Above $2000; Orange Card: $1201- $2000; Blue Card: $1200 and below</b>
@@ -165,20 +160,22 @@ const HxSocialForm = (props) => {
           4. Do you require social support?
           <RadioField name="hxSocialQ12" label="Hx Social Q12" />
           <PopupText qnNo="hxSocialQ12" triggerValue="Yes">
-            <b>REFER TO SOCIAL SERVICE STATION if participant has social issues that require further consult.<br />Indicate for Social Service station on:  </b><br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons for referral on the right column
+            <b>REFER TO SOCIAL SERVICE STATION if participant has social issues that require further consult.<br />Indicate for Social Service station on:  </b>1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons for referral on the right column
           </PopupText>
 
           <br /><br />
           <h2>4. ORAL ISSUES</h2>
-          <b>Please do a quick inspection of participant's oral health status:</b> <br />1. Lips, Tongue, Gums & Tissues (Healthy - pink and moist)<br />2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures, No food particles/tartar in mouth)<br />3. Saliva status (free-flowing) and Any dental pain <br />
+          <b>Please do a quick inspection of participant's oral health status:</b> 1. Lips, Tongue, Gums & Tissues (Healthy - pink and moist)<br />2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures, No food particles/tartar in mouth)<br />3. Saliva status (free-flowing) and Any dental pain <br />
+          <br />
           1. How is the participant's Oral Health?
           <RadioField name="hxSocialQ13" label="Hx Social Q13" />
+          <br />
           2. Would you like to go through free Oral Health screening by NUS Dentistry dentists and students?
           <RadioField name="hxSocialQ14" label="Hx Social Q14" />
           <PopupText qnNo="hxSocialQ14" triggerValue="Yes">
             <b>REFER TO NUS DENTISTRY ORAL SCREENING if participant has <mark>poor dental hygiene</mark> and <mark>interested</mark> to go through dental screening for participants aged <mark>40-59</mark>. <span style={{ color: "red" }}>For participants 60 and above, functional screening includes oral screening.</span>
             <br />Indicate for Dentistry on: </b> 
-            <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A 
+            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
             <br />2) Write reasons for referral on the right column<br /><br />
           </PopupText>
         </Fragment>
