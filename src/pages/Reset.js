@@ -66,6 +66,7 @@ const Reset = () => {
         try {
             await mongoDB.emailPasswordAuth.resetPassword(urlParamToken, urlParamTokenID, newPassword)
             alert("Password Reset")
+            navigate('/login', { replace: true });
         } catch (e) {
             alert("Invalid Link! Contact Dev")
         }
