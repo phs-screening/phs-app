@@ -121,7 +121,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/reg"
             onClick={(event) => navigateTo(event, navigate, "reg", scrollTop)}>Registration [Edit]
-        </a> : <p>Registration [Completed]</p>}
+        </a> : <a
+            href="/app/reg"
+            onClick={(event) => navigateTo(event, navigate, "reg", scrollTop)}>Registration [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -140,7 +143,10 @@ if (loading) {
               </a> : admin ? <a
               href="/app/phlebo"
               onClick={(event) => navigateTo(event, navigate, "phlebo", scrollTop)}>Phlebotomy [Edit]
-          </a>: <p>Phlebotomy [Completed]</p>)
+          </a>: <a
+              href="/app/phlebo"
+              onClick={(event) => navigateTo(event, navigate, "phlebo", scrollTop)}>Phlebotomy [Completed]
+          </a>)
           : <p>Phlebotomy [Not going]</p>
       }
       </TimelineContent>
@@ -158,7 +164,10 @@ if (loading) {
         </a> : admin ? <a
           href="/app/hxtaking"
           onClick={(event) => navigateTo(event, navigate, "hxtaking", scrollTop)}>History Taking [Edit]
-      </a> : <p>History Taking [Completed]</p>
+      </a> : <a
+          href="/app/hxtaking"
+          onClick={(event) => navigateTo(event, navigate, "hxtaking", scrollTop)}>History Taking [Completed]
+      </a>
       }
       </TimelineContent>
     </TimelineItem>
@@ -175,7 +184,10 @@ if (loading) {
         </a> : admin ? <a
           href="/app/fit"
           onClick={(event) => navigateTo(event, navigate, "fit", scrollTop)}>FIT [Edit]
-      </a>: <p>FIT [Completed]</p>}
+      </a>: <a
+          href="/app/fit"
+          onClick={(event) => navigateTo(event, navigate, "fit", scrollTop)}>FIT [Completed]
+      </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -191,7 +203,10 @@ if (loading) {
         </a> : admin ? <a
           href="/app/wce"
           onClick={(event) => navigateTo(event, navigate, "wce", scrollTop)}>WCE [Edit]
-      </a>: <p>WCE [Completed]</p>}
+      </a>: <a
+          href="/app/wce"
+          onClick={(event) => navigateTo(event, navigate, "wce", scrollTop)}>WCE [Completed]
+      </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -207,7 +222,10 @@ if (loading) {
         </a> : admin ? <a
           href="/app/geri"
           onClick={(event) => navigateTo(event, navigate, "geri", scrollTop)}>Geriatrics [Edit]
-      </a>: <p>Geriatrics [Completed]</p>}
+      </a>: <a
+          href="/app/geri"
+          onClick={(event) => navigateTo(event, navigate, "geri", scrollTop)}>Geriatrics [Completed]
+      </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -223,7 +241,10 @@ if (loading) {
           </a> : admin ? <a
             href="/app/doctorsconsult"
             onClick={(event) => navigateTo(event, navigate, "doctorsconsult", scrollTop)}>Doctor's Consult [Edit]
-        </a>: <p>Doctor's Consult [Completed]</p>}
+        </a>: <a
+            href="/app/doctorsconsult"
+            onClick={(event) => navigateTo(event, navigate, "doctorsconsult", scrollTop)}>Doctor's Consult [Completed]
+        </a>}
         </TimelineContent>
     </TimelineItem>
 
@@ -239,7 +260,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/dietitiansconsultation"
             onClick={(event) => navigateTo(event, navigate, "dietitiansconsultation", scrollTop)}>Dietitian’s Consultation [Edit]
-        </a> : <p>Dietitian’s Consultation [Completed]</p>}
+        </a> : <a
+            href="/app/dietitiansconsultation"
+            onClick={(event) => navigateTo(event, navigate, "dietitiansconsultation", scrollTop)}>Dietitian’s Consultation [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -255,7 +279,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/socialservice"
             onClick={(event) => navigateTo(event, navigate, "socialservice", scrollTop)}>Social Service [Edit]
-        </a> : <p>Social Service [Completed]</p>}
+        </a> : <a
+            href="/app/socialservice"
+            onClick={(event) => navigateTo(event, navigate, "socialservice", scrollTop)}>Social Service [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -271,7 +298,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/oralhealth"
             onClick={(event) => navigateTo(event, navigate, "oralhealth", scrollTop)}>Oral Health [Edit]
-        </a> : <p>Oral Health [Completed]</p>}
+        </a> : <a
+            href="/app/oralhealth"
+            onClick={(event) => navigateTo(event, navigate, "oralhealth", scrollTop)}>Oral Health [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -287,7 +317,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/feedback"
             onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Edit]
-        </a> : <p>Geriatrics [Completed]</p>}
+        </a> : <a
+            href="/app/feedback"
+            onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
@@ -303,7 +336,10 @@ if (loading) {
         </a> : admin ? <a
             href="/app/overview"
             onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview [View only]
-        </a> : <p>Feedback [Completed]</p>}
+        </a> : <a
+            href="/app/overview"
+            onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview [Completed]
+        </a>}
       </TimelineContent>
     </TimelineItem>
 
