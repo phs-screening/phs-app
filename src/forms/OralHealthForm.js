@@ -168,6 +168,12 @@ const OralHealthForm = (props) => {
                             {title("Past Medical History")}
                             {underlined("Summary of Relevant Past Medical History")}
                             {hxNss && hxNss.hxNssQ12? blueText(hxNss.hxNssQ12) : blueText("nil")}
+                            {underlined("Drug allergies?")}
+                            {hxNss && hxNss.hxNssQ1 ? blueText(hxNss.hxNssQ1.toString()) : blueText("nil")}
+                            {hxNss && hxNss.hxNssQ2 ? blueText(hxNss.hxNssQ2.toString()) : blueText("nil")}
+                            {underlined("Currently on any alternative medicine?")}
+                            {hxNss && hxNss.hxNssQ9 ? blueText(hxNss.hxNssQ9.toString()) : blueText("nil")}
+                            {hxNss && hxNss.hxNssQ10 ? blueText(hxNss.hxNssQ10.toString()) : blueText("nil")}
                             {title("Smoking History")}
                             {underlined("Smoking frequency")}
                             {hxNss ? blueText(hxNss.hxNssQ14) : null}
