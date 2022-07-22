@@ -27,7 +27,7 @@ export const schema = new SimpleSchema({
 	}, registrationQ7: {
 	type: String, allowedValues: ["Below 1,100 per month (少于 1,100)", "1,100 - 1,799 per month (每月1,100 - 1,799)", "1,800 - 2,799 per month (每月1,800 - 2,799)", "2,800 & above (2,800 或以上)"], optional: false
 	}, registrationQ8: {
-	type: String, allowedValues: ["CHAS Orange", "CHAS Blue", "Merdeka Generation", "No CHAS"], optional: false
+	type: String, allowedValues: ["CHAS Orange", "CHAS Green", "CHAS Blue", "Merdeka Generation", "No CHAS"], optional: false
 	}, registrationQ9: {
 	type: String, allowedValues: ["Yes", "No"], optional: false
 	}, registrationQ10: {
