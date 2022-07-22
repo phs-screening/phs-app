@@ -196,6 +196,12 @@ const DoctorSConsultForm = (props) => {
                   {title("Past Medical History")}
                   {underlined("Summary of Relevant Past Medical History")}
                   {nss && nss.hxNssQ12 ? blueText(nss.hxNssQ12.toString()) : blueText("nil")}
+                    {underlined("Drug allergies?")}
+                    {nss && nss.hxNssQ1 ? blueText(nss.hxNssQ1.toString()) : blueText("nil")}
+                    {nss && nss.hxNssQ2 ? blueText(nss.hxNssQ2.toString()) : blueText("nil")}
+                    {underlined("Currently on any alternative medicine?")}
+                    {nss && nss.hxNssQ9 ? blueText(nss.hxNssQ9.toString()) : blueText("nil")}
+                    {nss && nss.hxNssQ10 ? blueText(nss.hxNssQ10.toString()) : blueText("nil")}
                   {title("Smoking History")}
                   {underlined("Smoking frequency")}
                   {nss ? blueText(nss.hxNssQ14) : null}
