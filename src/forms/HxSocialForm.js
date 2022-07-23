@@ -95,8 +95,6 @@ const HxSocialForm = (props) => {
       >
 
         <Fragment>
-          <font color="blue"><h2>THE FOLLOWING QUESTIONS ARE NOT PART OF NSS QUESTIONNAIRE. PLEASE ASK THE PARTICIPANT ACCORDINGLY. </h2></font>
-
           <h2>HISTORY TAKING PART 3: SOCIAL HISTORY</h2>
           <h3>1. FINANCIAL STATUS
             <span style={{ color: "red" }}><br />Please refer to page 1 of Form A for following questions.</span></h3>
