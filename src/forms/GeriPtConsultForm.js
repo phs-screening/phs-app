@@ -205,10 +205,9 @@ const GeriPtConsultForm = (props) => {
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ2 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ2) : blueText("nil")}
                     {underlined("What do you do for exercise?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ3 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ3) : blueText("nil")}
-                    {underlined("Using the following scale, can you rate the level of exertion when you exercise? (Borg Scale - Rate Perceived Exertion [RPE])\n" +
-                        "\n")}
+                    {underlined("Using the following scale, can you rate the level of exertion when you exercise? (Borg Scale - Rate Perceived Exertion [RPE])")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ4 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ4) : blueText("nil")}
-                    {underlined("Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?\n")}
+                    {underlined("Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ5 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ5) : blueText("nil")}
                     {title("Frail Scale Results ")}
                     {underlined("1. Fatigue: How much of the time during the past 4 weeks did you feel tired?\n" +
@@ -218,22 +217,21 @@ const GeriPtConsultForm = (props) => {
                         "4 = A little of the time\n" +
                         "5 = None of the time\n" +
                         "\n" +
-                        "Responses of “1” or “2” are scored as 1 and all others as 0.\n")}
+                        "Responses of “1” or “2” are scored as 1 and all others as 0.")}
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ1 ? blueText(geriFrailScale.geriFrailScaleQ1) : blueText("nil")}
                     {underlined("2. Resistance: By yourself and not using aids, do you have any difficulty walking up 10 steps without resting?\n" +
                         "1 = Yes\n" +
-                        "0 = No \n")}
+                        "0 = No ")}
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ2 ? blueText(geriFrailScale.geriFrailScaleQ2) : blueText("nil")}
                     {underlined("3. Ambulation: By yourself and not using aids, do you have any difficulty walking several hundred yards? (approx. > 300m)\n" +
                         "1 = Yes\n" +
-                        "0 = No \n" +
-                        "\n")}
+                        "0 = No")}
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ3 ? blueText(geriFrailScale.geriFrailScaleQ3) : blueText("nil")}
                     {underlined("4. Illnesses: For 11 illnesses, participants are asked, “Did a doctor ever tell you that you have [illness]?” \n" +
                         "The illnesses include hypertension, diabetes, cancer (other than a minor skin cancer), chronic lung disease, heart attack, congestive heart failure, angina, asthma, arthritis, stroke, and kidney disease.\n" +
                         "\n" +
                         "The total illnesses (0–11) are recorded as \n" +
-                        "0–4 = 0 and 5–11 = 1.\n")}
+                        "0–4 = 0 and 5–11 = 1.")}
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ4 ? blueText(geriFrailScale.geriFrailScaleQ4) : blueText("nil")}
                     {underlined("5. What is the percentage (%) weight change? ")}
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ5 ? blueText(geriFrailScale.geriFrailScaleQ5) : blueText("nil")}
