@@ -69,11 +69,6 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
         </Button>}
 
         <Box sx={{ flexGrow: 1 }} />
-        <Hidden lgDown>
-          <IconButton color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
         <Hidden lgUp>
           <IconButton
             color="inherit"
