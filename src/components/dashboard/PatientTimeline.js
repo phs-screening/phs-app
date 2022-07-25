@@ -78,7 +78,8 @@ const BasicTimeline = (props) => {
       try {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
         const patientsRecord = mongoConnection.db("phs").collection("patients");
-        // patientId must be valid for this component to even render without error
+        // patientId must be valid for this component to even render
+        // checks done in parent component Dashboard.js
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({queueNo: props.patientId});
         setGoingForPhlebotomy(record.goingForPhlebotomy === "Y");

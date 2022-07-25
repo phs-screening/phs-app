@@ -11,12 +11,15 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () =>{
   const {patientId, updatePatientId} = useContext(FormContext);
+  const [isValid, setValid] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (patientId === -1) {
         alert("You need to enter the queue number for the patient you are attending to!")
         navigate('/app/registration', { replace: true });
+    } else {
+      setValid(true);
     }
 }, [navigate, patientId])
 
@@ -45,7 +48,7 @@ const Dashboard = () =>{
             xl={9}
             xs={12}
           >
-            <PatientTimeline patientId={patientId} />
+            {isValid ? <PatientTimeline patientId={patientId} /> : null}
           </Grid>
         </Grid>
       </Container>
