@@ -65,6 +65,7 @@ const DoctorSConsultForm = (props) => {
     const [geriOtQ, setGeriOtQ] = useState({})
     const [geriOt, setGeriOt] = useState({})
     const [geriPt, setGeriPt] = useState({})
+    const [geriVision, setGeriVision] = useState({})
     useEffect(async () => {
         const loadPastForms = async () => {
           const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
@@ -74,8 +75,9 @@ const DoctorSConsultForm = (props) => {
           const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
             const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
             const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
+            const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
             const savedData = getSavedData(patientId, formName);
-          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData])
+          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData, geriVisionData])
               .then((result) => {
                   setHcsr(result[0])
                   setNss(result[1])
@@ -86,6 +88,7 @@ const DoctorSConsultForm = (props) => {
                   setGeriPt(result[6])
                   isLoadingSidePanel(false);
                   setSaveData(result[7])
+                  setGeriVision(result[8])
               })
         }
 
@@ -192,9 +195,24 @@ const DoctorSConsultForm = (props) => {
                     {underlined("Urinary Incontinence or nocturia (at least 3 or more times at night)?")}
                     {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ6) : null}
                   {title("Vision problems")}
-                  {underlined("Vision Problems")}
+                  {underlined("Vision Problems (From history taking)")}
                   {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
                   {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : null}
+                    {underlined("Referred from Geriatric Vision Screening (if VA with pinhole ≥ 6/12)")}
+                    {geriVision && geriVision.geriVisionQ9 ? (geriVision.geriVisionQ9.length === 0 ? blueText("nil") : blueText(geriVision.geriVisionQ9)) : blueText("nil")}
+                    {underlined("Previous eye condition or surgery:")}
+                    {geriVision && geriVision.geriVisionQ1 ? blueText(geriVision.geriVisionQ1) : blueText("nil")}
+                    {geriVision && geriVision.geriVisionQ2 ? blueText(geriVision.geriVisionQ2) : blueText("nil")}
+                    {underlined("Visual acuity (w/o pinhole occluder) - Right Eye 6/__")}
+                    {geriVision && geriVision.geriVisionQ3 ? blueText(geriVision.geriVisionQ3) : blueText("nil")}
+                    {underlined("Visual acuity (w/o pinhole occluder) - Left Eye 6/__")}
+                    {geriVision && geriVision.geriVisionQ4 ? blueText(geriVision.geriVisionQ4) : blueText("nil")}
+                    {underlined("Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__")}
+                    {geriVision && geriVision.geriVisionQ5 ? blueText(geriVision.geriVisionQ5) : blueText("nil")}
+                    {underlined("Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__")}
+                    {geriVision && geriVision.geriVisionQ6 ? blueText(geriVision.geriVisionQ6) : blueText("nil")}
+
+
                   {title("Hearing problems")}
                   {underlined("Hearing Problems")}
                   {hcsr ? blueText(hcsr.hxHcsrQ8) : null}

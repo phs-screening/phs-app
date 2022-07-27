@@ -35,9 +35,9 @@ const schema = new SimpleSchema({
   }, "geriVisionQ8.$": {
     type: String, allowedValues: ["Referred to OT Consult"]
   }, geriVisionQ9: {
-    type: Array, optional: true
-  }, "geriVisionQ9.$": {
-    type: String, allowedValues: ["Referred to Doctor's Consult"]
+        type: Array, optional: true
+      }, "geriVisionQ9.$": {
+        type: String, allowedValues: ["Referred to Doctor's Consult"]
   }
 }
 )
