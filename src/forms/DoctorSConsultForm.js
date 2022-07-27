@@ -121,22 +121,28 @@ const DoctorSConsultForm = (props) => {
       <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
       MCR No.:
       <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
+        <br/><br/>
       Doctor's Memo
       <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3" />
+        <br/><br/>
       Refer to dietitian?
       <BoolField name="doctorSConsultQ4" />
       Reason for referral
       <LongTextField name="doctorSConsultQ5" label="Doctor's Consult Q5"/>
+        <br/><br/>
       Refer to Social Support?
       <BoolField name="doctorSConsultQ6" />
       Reason for referral
       <LongTextField name="doctorSConsultQ7" label="Doctor's Consult Q7"/>
+        <br/><br/>
       Refer to Dental?
       <BoolField name="doctorSConsultQ8" />
       Reason for referral
       <LongTextField name="doctorSConsultQ9" label="Doctor's Consult Q9"/>
+        <br/><br/>
       Does patient require urgent follow up 
       <BoolField name="doctorSConsultQ10" />
+        <br/>
       Completed Doctor’s Consult station. Please check that Form A is filled.
       <BoolField name="doctorSConsultQ11" />
       
@@ -205,6 +211,8 @@ const DoctorSConsultForm = (props) => {
                   {title("Smoking History")}
                   {underlined("Smoking frequency")}
                   {nss ? blueText(nss.hxNssQ14) : null}
+                    {underlined("Pack years:")}
+                    {nss ? blueText(nss.hxNssQ3) : null}
                   {title("Alcohol history")}
                   {underlined("Alcohol consumption")}
                   {nss ? blueText(nss.hxNssQ15) : null}
@@ -231,8 +239,10 @@ const DoctorSConsultForm = (props) => {
                     {underlined("Waist circumference (cm)")}
                     {cancer ? blueText(cancer.hxCancerQ24) : null}
                     {title("OT consult")}
+                    {underlined("Reasons for referral")}
                     {geriOt ? blueText(geriOt.geriOtConsultQ3 ) : null}
                     {title("PT consult")}
+                    {underlined("Reasons for referral")}
                     {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : null}
                 </div>
               }

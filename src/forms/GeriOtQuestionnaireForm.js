@@ -78,7 +78,7 @@ const GeriOtQuestionnaireForm = (props) => {
         model={saveData}
       >
         <Fragment>
-          <h2>3.2 OT Questionnaire SECTION</h2>
+          <h2>OT Questionnaire SECTION</h2>
           1. Have you fallen or had a near fall in the last year?
           <RadioField name="geriOtQuestionnaireQ1" label="Geri - OT Questionnaire Q1" />
           <h4>If yes, refer occupational therapist consultation</h4>

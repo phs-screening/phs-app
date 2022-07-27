@@ -43,7 +43,15 @@ const schema = new SimpleSchema({
     type: String,
     allowedValues: ["Yes", "No"],
     optional: false
-  }
+  }, hxHcsrQ13 : {
+        type: String, allowedValues: ["Yes", "No"], optional: false
+      }, hxHcsrQ14 : {
+        type: String, optional: true
+      }, hxHcsrQ15 : {
+        type: String, allowedValues: ["Yes", "No"], optional: false
+      }, hxHcsrQ16 : {
+        type: String, optional: true
+      }
 }
 )
 
@@ -172,8 +180,21 @@ const HxHcsrForm = (props) => {
           <LongTextField name="hxHcsrQ9" label="Hx HCSR Q9" />
           <br />
           <PopupText qnNo="hxHcsrQ8" triggerValue="Yes, (Please specify):">
-            <b>REFER TO <span style={{ color: "red" }}>DR CONSULT</span> if have hearing problem for <span style={{ color: "red" }}>40-59</span>. Please give the participant the PHS Hearing Questionnaire {new Date().getFullYear()}, remind them to complete it by themselves before passing it to the doctors at doctor's consult. For 60 and above, indicate for Geriatrics - Geriatrics Functional Screening includes audiometry screening.</b>1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />3) Please write relevant medical/social history of participant under history taking box<br /><br />
+            <b>REFER TO <span style={{ color: "red" }}>DR CONSULT</span> if have hearing problem for <span style={{ color: "red" }}>40-59</span>. For 60 and above, indicate for Geriatrics - Geriatrics Functional Screening includes audiometry screening.</b>1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br />3) Please write relevant medical/social history of participant under history taking box<br /><br />
           </PopupText>
+          <br />
+          2d. For geriatric participants, has the senior seen an ENT specialist before?
+          <RadioField name="hxHcsrQ13" label="Hx HCSR Q13" />
+          Please specify:
+          <LongTextField name="hxHcsrQ14" label="Hx HCSR Q14" />
+          <br />
+          2e. For geraitric participants, are they currently using any hearing aids?
+          <RadioField name="hxHcsrQ15" label="Hx HCSR Q15" />
+          Please specify:
+          <LongTextField name="hxHcsrQ16" label="Hx HCSR Q16" />
+          <br />
+
+
 
 
         </Fragment>

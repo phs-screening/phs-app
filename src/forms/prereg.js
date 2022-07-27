@@ -46,7 +46,7 @@ export const layout = (
     Contact Number (e.g. 12345678)
     <LongTextField name="contactNumber" />
     Preferred Language (e.g. English)
-    <LongTextField name="preferredLanguage" />
+    <LongTextField name="preferredLanguage" /> <br/>
     Going for Phlebotomy?<br /><br /><i>Conditions:<br />1) Fasted for minimum 8 hours <br />          Note: Water is allowed, coffee/tea is not. Medications are fine. <br />2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.<br />3) Have not done a blood test within 1 year.</i>
     <RadioField name="goingForPhlebotomy" />
     

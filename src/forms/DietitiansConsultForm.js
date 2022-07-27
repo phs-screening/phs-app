@@ -163,6 +163,8 @@ const DietitiansConsultForm = (props) => {
                             {title("Smoking History ")}
                             {underlined("Smoking frequency")}
                             {hxNss ? blueText(hxNss.hxNssQ14)  : null}
+                            {underlined("Pack years:")}
+                            {hxNss ? blueText(hxNss.hxNssQ3) : null}
                             {title("Alcohol history ")}
                             {underlined("Alcohol consumption")}
                             {hxNss ? blueText(hxNss.hxNssQ15)  : null}

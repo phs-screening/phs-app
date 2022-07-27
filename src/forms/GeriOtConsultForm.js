@@ -112,7 +112,7 @@ const GeriOtConsultForm = (props) => {
 
         <Fragment>
           <h2>3.4b OT Consult</h2>
-          Memo:
+          Memo (for participant):
           <LongTextField name="geriOtConsultQ1" label="Geri - OT Consult Q1" />
           To be referred for doctor's consult (OT)?
           <RadioField name="geriOtConsultQ2" label="Geri - OT Consult Q2" />

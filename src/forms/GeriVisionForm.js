@@ -79,7 +79,8 @@ const GeriVisionForm = (props) => {
         model={saveData}
       >
         <Fragment>
-          <h2>2. VISION SCREENING</h2>
+          <h2>VISION SCREENING</h2>
+          <br/>
           1. Previous eye condition or surgery
           <RadioField name="geriVisionQ1" label="Geri - Vision Q1" />
           <PopupText qnNo="geriVisionQ1" triggerValue="Yes (Specify in textbox )">
@@ -88,6 +89,7 @@ const GeriVisionForm = (props) => {
               <LongTextField name="geriVisionQ2" label="Geri - Vision Q2" />
             </Fragment>
           </PopupText>
+          <br/>
           
           2. Visual acuity (w/o pinhole occluder) - Right Eye 6/__ <br />
           <NumField name="geriVisionQ3" label="Geri - Vision Q3" /> <br />
@@ -97,13 +99,10 @@ const GeriVisionForm = (props) => {
           <NumField name="geriVisionQ5" label="Geri - Vision Q5" /> <br />
           5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__ <br />
           <NumField name="geriVisionQ6" label="Geri - Vision Q6" /> <br />
-          6. Eye Functional Test *only applicable if vision is worse than 6/60
-          <RadioField name="geriVisionQ7" label="Geri - Vision Q7" />
-          <br />Please <b>refer to Occupational Therapist Consult</b> if visual acuity is <b>≥ 6/12</b>
+          <br /> <p>Participant's details recorded down for referral to L2 Eye Screening by NUHS if pinhole VA  <b><u>≥ 6/12</u></b></p>
           <br /><SelectField name="geriVisionQ8" checkboxes="true" label="Geri - Vision Q8" />
-          <br />Please <b>refer to L2 Eye Screening (Eye Bus/ NUHS)</b> if pinhole visual acuity <u><b>is > 6/12</b></u><br />
-          If participant is required to go for L2 Eye Screening, encourage participant to go to Eye Bus/ NUHS after Screening Review.
-          <br /><RadioField name="geriVisionQ9" label="Geri - Vision Q9" />
+          <br /> <p>Please <b>refer to Doctor’s Consult if pinhole</b> visual acuity is <b><u>≥ 6/12</u></b></p>
+          <br /><SelectField name="geriVisionQ9" checkboxes="true" label="Geri - Vision Q9" />
           
         </Fragment>
         <ErrorsField />

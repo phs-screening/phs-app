@@ -92,8 +92,8 @@ const GeriFrailScaleForm = (props) => {
       >
 
         <Fragment>
-          <h2>3.1 PHYSICAL ACTIVITY SECTION</h2>
-          <h2>3.1.3. FRAIL SCALE</h2>
+          <h2>PHYSICAL ACTIVITY SECTION</h2>
+          <h2>FRAIL SCALE</h2>
           <h3>For each for the following question, assign a score of <br />1 or 0 depending on the participant's answer.</h3>
           <br />1. Fatigue: How much of the time during the past 4 weeks did you feel tired?<br />1 = All of the time<br />2 = Most of the time<br />3 = Some of the time<br />4 = A little of the time<br />5 = None of the time<br /><br />Responses of “1” or “2” are scored as 1 and all others as 0.<br />
           <RadioField name="geriFrailScaleQ1" label="Geri - Frail Scale Q1" /><br />

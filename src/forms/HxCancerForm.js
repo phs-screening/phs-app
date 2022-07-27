@@ -73,7 +73,13 @@ const schema = new SimpleSchema({
   }, hxCancerQ25: {
     type: Array, optional: false
   }, "hxCancerQ25.$": {
-    type: String, allowedValues: ["FIT (50 and above, FIT not done in past 1 year, Colonoscopy not done in past 10 years, Not diagnosed with colorectal cancer)", "WCE (40 and above, females only)", "Geriatrics (60 and above)", "Doctor\s Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)", "Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)", "Oral Health Screening - participants aged 40-59 with poor dental hygiene", "Exhibition - recommended as per necessary"]
+    type: String, allowedValues: ["FIT (50 and above, FIT not done in past 1 year, Colonoscopy not done in past 10 years, Not diagnosed with colorectal cancer)",
+        "WCE (40 and above, females only)",
+        "Geriatrics (60 and above)",
+        "Doctor's Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)",
+        "Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)",
+        "Oral Health Screening - Refer to eligibility criteria for Oral Health",
+        "Exhibition - recommended as per necessary"]
   }, hxCancerQ26: {
     type: String, optional: true
   }, hxCancerQ27: {

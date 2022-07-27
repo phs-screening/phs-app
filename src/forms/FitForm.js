@@ -74,14 +74,15 @@ const FitForm = (props) =>  {
             >
                 <Fragment>
                     <h2>PARTICIPANT IDENTIFICATION</h2>
-                    <h3><span style={{color: "red"}}>Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N B. Surname followed by Initials C. Last 4 characters of Participant's NRIC and Letter</span></h3>
-                    <h2>1. NSS CANCER SCREENING PRACTICES SURVEY.</h2>
-                    1. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)
+                    <h3><span style={{color: "red"}}>Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N <br />B. Surname followed by Initials <br/> C. Last 4 characters of Participant's NRIC and Letter</span></h3> <br/>
+
+                    <h2>CANCER SCREENING </h2> <br/>
+                    <p><span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)</p>
 
                     {hxCancer && hxCancer.hxCancerQ5 ? blueText(hxCancer.hxCancerQ5) : blueText("nil")}
 
                     <br/>
-                    2. <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
+                    <span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a tube is inserted in the rectum to view the colon for signs of cancer or other health problems.)
 
                     {hxCancer && hxCancer.hxCancerQ6 ? blueText(hxCancer.hxCancerQ6) : blueText("nil")}
                     
@@ -93,7 +94,8 @@ const FitForm = (props) =>  {
                     <PopupText qnNo="fitQ1" triggerValue="Yes"> 
                         <b>REFER TO DR CONSULT</b> by indicating on: <br />1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation row<br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
                     </PopupText>
-                    3. Was participant issued 2 FIT kits?
+                    <br />
+                    Was participant issued 2 FIT kits?
                     <RadioField name="fitQ2" label="FIT Q2" />
 
                 </Fragment>

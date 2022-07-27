@@ -143,7 +143,7 @@ const GeriPtConsultForm = (props) => {
       >
         <Fragment>
           <h2>3.4a PT Consult</h2>
-          Memo:
+          Memo (for participant):
           <LongTextField name="geriPtConsultQ1" label="Geri - PT Consult Q1" />
           To be referred for doctor's consult (PT)?
           <RadioField name="geriPtConsultQ2" label="Geri - PT Consult Q2" />

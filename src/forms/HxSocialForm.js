@@ -171,8 +171,10 @@ const HxSocialForm = (props) => {
           2. Would you like to go through free Oral Health screening by NUS Dentistry dentists and students?
           <RadioField name="hxSocialQ14" label="Hx Social Q14" />
           <PopupText qnNo="hxSocialQ14" triggerValue="Yes">
-            <b>REFER TO NUS DENTISTRY ORAL SCREENING if participant has <mark>poor dental hygiene</mark> and <mark>interested</mark> to go through dental screening for participants aged <mark>40-59</mark>. <span style={{ color: "red" }}>For participants 60 and above, functional screening includes oral screening.</span>
-            <br />Indicate for Dentistry on: </b> 
+            <b>REFER TO NUS DENTISTRY ORAL SCREENING if participant has poor dental hygiene and interested to go through dental screening. <br/> On 20th August,  <span style={{ color: "red" }}>ALL</span> participants with suspected dental issues will be referred to NUS DENTISTRY ORAL SCREENING.
+              <br />On 21st August,  refer <span style={{ color: "red" }}>participants aged 60 and above to GERIATRIC FUNCTIONAL SCREENING (includes oral screening).</span> Refer participants aged 40-59 to NUS DENTISTRY ORAL SCREENING.
+
+              <br/><br />Indicate for Dentistry on: </b>
             1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
             <br />2) Write reasons for referral on the right column<br /><br />
           </PopupText>

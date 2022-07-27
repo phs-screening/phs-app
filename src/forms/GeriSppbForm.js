@@ -99,40 +99,52 @@ const GeriSppbForm = (props) => {
         model={saveData}
       >
         <Fragment>
-      <h2>3.3a SHORT PHYSICAL PERFORMANCE BATTERY (SPPB)</h2>
+      <h2>SHORT PHYSICAL PERFORMANCE BATTERY (SPPB)</h2>
+          <br />
       1) REPEATED CHAIR STANDS<br />Time taken in seconds (only if 5 chair stands were completed):
       <NumField name="geriSppbQ1" label="Geri - SPPB Q1"/>
+          <br />
       <font color="blue"><b>
         Score for REPEATED CHAIR STANDS (out of 4):
         <RadioField name="geriSppbQ2" label="Geri - SPPB Q2"/>
       </b></font>
+          <br />
       2a) BALANCE Side-by-side Stand <br />Time held for in seconds:
       <NumField name="geriSppbQ3" label="Geri - SPPB Q3"/>
+          <br />
       2b) BALANCE Semi-tandem Stand <br />Time held for in seconds:
       <NumField name="geriSppbQ4" label="Geri - SPPB Q4"/>
+          <br />
       2c) BALANCE Tandem Stand <br />Time held for in seconds:
       <NumField name="geriSppbQ5" label="Geri - SPPB Q5"/>
+          <br />
       <font color="blue"><b>
         Score for BALANCE (out of 4):
         <RadioField name="geriSppbQ6" label="Geri - SPPB Q6"/>
       </b></font>
+          <br />
       3) 8’ WALK <br />Time taken in seconds:
       <NumField name="geriSppbQ7" label="Geri - SPPB Q7"/>
+          <br />
       <font color="blue"><b>
         Score for 8' WALK (out of 4):
         <RadioField name="geriSppbQ8" label="Geri - SPPB Q8"/>
       </b></font>
+          <br />
         <h3>
           <font color="blue">Total score (Max Score: 12): 
             <GetSppbScore />
           </font>
         </h3>
+          <br />
       
       <h3>If total score ≤ 6, participant has a high falls risk.</h3>
       Falls Risk Level: 
       <RadioField name="geriSppbQ10" label="Geri - SPPB Q10"/>
+          <br />
       <font color="red">*Referral to Physiotherapist and Occupational Therapist Consult</font>
       <RadioField name="geriSppbQ11" label="Geri - SPPB Q11"/>
+          <br />
       
     </Fragment>
         <ErrorsField />

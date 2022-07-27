@@ -30,7 +30,9 @@ const schema = new SimpleSchema({
         type: Boolean, label: "Yes", optional: true
     }, socialServiceQ5: {
       type: String, optional: true
-    }
+    }, socialServiceQ6: {
+            type: Boolean, label: "Yes", optional: true
+        }
 }
 )
 
@@ -102,9 +104,11 @@ const SocialServiceForm = (props) => {
           <LongTextField name="socialServiceQ2" label="Social Service Q2" />
           3. Brief summary of what will be done for the participant (Eg name of scheme participant wants to apply for)
           <LongTextField name="socialServiceQ3" label="Social Service Q3" />
-            4. Is follow-up required?
+            4. SACS referral form filled-up?
+            <BoolField name="socialServiceQ6" />
+            5. Is follow-up required?
             <BoolField name="socialServiceQ4" />
-            5. Brief summary of follow-up for the participant
+            6. Brief summary of follow-up for the participant
             <LongTextField name="socialServiceQ5" label="Social Service Q5" />
 
         </Fragment>
@@ -138,7 +142,7 @@ const SocialServiceForm = (props) => {
                     {title("Financial Status")}
                     {underlined("CHAS Status")}
                     {reg && reg.registrationQ8 ? blueText(reg.registrationQ8) : blueText("nil")}
-                    {underlined("Pioneer Generation Status")}
+                    {underlined("Pioneer/ Merdeka Generation Status")}
                     {reg && reg.registrationQ9 ? blueText(reg.registrationQ9) : blueText("nil")}
                     {underlined("Is the participant on any Government Financial Assistance?")}
                     {hxSocial && hxSocial.hxSocialQ1 ? blueText(hxSocial.hxSocialQ1) : blueText("nil")}

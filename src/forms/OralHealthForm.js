@@ -138,7 +138,6 @@ const OralHealthForm = (props) => {
                             {title("Referral from History Taking ")}
                             {underlined("Participant's Oral Health Brief Assessment:")}
                             {hxSocial ? blueText(hxSocial.hxSocialQ13) : null}
-                            {title("Referral from History Taking ")}
                             {underlined("Interest in Oral Health Screening: ")}
                             {hxSocial ? blueText(hxSocial.hxSocialQ14) : null}
                             {title("Health Concerns")}
@@ -177,6 +176,8 @@ const OralHealthForm = (props) => {
                             {title("Smoking History")}
                             {underlined("Smoking frequency")}
                             {hxNss ? blueText(hxNss.hxNssQ14) : null}
+                            {underlined("Pack years:")}
+                            {hxNss ? blueText(hxNss.hxNssQ3) : null}
                             {title("Alcohol history")}
                             {underlined("Alcohol consumption")}
                             {hxNss ? blueText(hxNss.hxNssQ15) : null}
