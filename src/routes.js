@@ -13,7 +13,6 @@ import Settings from 'src/pages/Settings';
 import DoctorSConsultForm from 'src/forms/DoctorSConsultForm';
 import DietitiansConsultForm from 'src/forms/DietitiansConsultForm';
 import OralHealthForm from 'src/forms/OralHealthForm';
-import FeedbackForm from 'src/forms/FeedbackForm';
 import FitForm from 'src/forms/FitForm';
 import PhleboForm from 'src/forms/PhleboForm';
 import PreregForm from 'src/forms/PreregForm';
@@ -25,6 +24,7 @@ import GeriTabs from './forms/Geri';
 import HxTabs from './forms/HistoryTaking';
 import ManageVolunteers from 'src/pages/ManageVolunteers';
 import Edit from 'src/pages/EditForms';
+import SummaryForm from 'src/forms/SummaryForm'
 
 const routes = [
   {
@@ -32,12 +32,11 @@ const routes = [
     element: <DashboardLayout/>,
     children: [
       { path: 'registration', element: <Registration /> },
-      { path: 'summary', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'settings', element: <Settings /> },
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
-      { path: 'feedback', element: <FeedbackForm /> },
+	  { path: 'summary', element: <SummaryForm /> },
       { path: 'fit', element: <FitForm /> },
       { path: 'geri', element: <GeriTabs /> },
       { path: 'hxtaking', element: <HxTabs /> },

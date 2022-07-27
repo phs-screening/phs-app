@@ -50,8 +50,6 @@ function generateStatusArray(record) {
       record.dietitiansConsultForm !== undefined, // dietitian's consult
       record.socialServiceForm !== undefined, // social service,
       record.oralHealthForm !== undefined, // Oral Health
-      record.feedbackForm !== undefined, // feedback
-	  record.overviewForm !== undefined
     ]
   } else {
     return new Array(entries).fill(false);;
@@ -307,38 +305,19 @@ if (loading) {
 
     <TimelineItem>
       <TimelineSeparator>
-        {formDone[11] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
+        {formDone[10] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
         {!formDone[11] ? <a
-          href="/app/feedback"
-          onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Incomplete]
+          href="/app/summary"
+          onClick={(event) => navigateTo(event, navigate, "summary", scrollTop)}>Summary [View Only]
         </a> : admin ? <a
-            href="/app/feedback"
-            onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Edit]
+            href="/app/summary"
+            onClick={(event) => navigateTo(event, navigate, "summary", scrollTop)}>Summary [View Only]
         </a> : <a
-            href="/app/feedback"
-            onClick={(event) => navigateTo(event, navigate, "feedback", scrollTop)}>Feedback [Completed]
-        </a>}
-      </TimelineContent>
-    </TimelineItem>
-
-    <TimelineItem>
-      <TimelineSeparator>
-        {formDone[9] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent>
-        {!formDone[9] ? <a
-          href="/app/overview"
-          onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview
-        </a> : admin ? <a
-            href="/app/overview"
-            onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview [View only]
-        </a> : <a
-            href="/app/overview"
-            onClick={(event) => navigateTo(event, navigate, "overview", scrollTop)}>Overview [Completed]
+            href="/app/summary"
+            onClick={(event) => navigateTo(event, navigate, "summary", scrollTop)}>Summary [View Only]
         </a>}
       </TimelineContent>
     </TimelineItem>
@@ -355,15 +334,6 @@ if (loading) {
 const PatientTimeline = (props) => (
   <Card {...props}>
     <CardHeader
-      action={(
-        <Button
-          href="/app/summary"
-          size="small"
-          variant="text"
-        >
-          Summary
-        </Button>
-      )}
       title="Patient Dashboard"
     />
     <Divider />

@@ -36,7 +36,6 @@ const SummaryForm = (props) => {
   const [oralHealth, setOralHealth] = useState({})
 
   useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName);
     const loadPastForms = async () => {
 		const registrationData = getSavedData(patientId, allForms.registrationForm)
         const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
@@ -85,7 +84,6 @@ const SummaryForm = (props) => {
 
         isLoadingPrevData(false);
     }
-    setSaveData(savedData)
     loadPastForms();
   }, [])
 
