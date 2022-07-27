@@ -7,7 +7,6 @@ import Dashboard from 'src/pages/Dashboard';
 import Login from 'src/pages/Login';
 import Reset from 'src/pages/Reset';
 import NotFound from 'src/pages/NotFound';
-import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Registration from 'src/pages/Registration';
 import Settings from 'src/pages/Settings';
