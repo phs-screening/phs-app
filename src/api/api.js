@@ -1,4 +1,6 @@
 import mongoDB, {getName, isAdmin} from "../services/mongoDB";
+import {blueText, redText} from 'src/theme/commonComponents.js';
+import { blue } from "@material-ui/core/colors";
 
 const axios = require('axios').default;
 
@@ -176,8 +178,87 @@ export async function upsertIndividualFormData(userID, form_name, form_data) {
     return {"result": true, "data": response.data};
 }
 
-// pure functions
+// Calcuates the BMI 
 export function calculateBMI(heightInCm, weightInKg) {
     const height = heightInCm / 100;
-    return ((weightInKg / height) / height).toFixed(1);
+    const bmi = ((weightInKg / height) / height).toFixed(1).toString();
+
+	if (bmi >= 23.0) {
+		return redText(bmi + "\nBMI is overweight");
+	} else if (bmi <= 18.6) {
+		return redText(bmi + "\nBMI is underweight");
+	} else {
+		return blueText(bmi);
+	}
 }
+
+// Formats the response for the geri vision section
+export function formatGeriVision(acuity, questionNo) {
+	const acuityInNumber = Number(acuity)
+	var result;
+	var additionalInfo;
+
+	switch (questionNo) {
+		case 3:
+		case 4:
+			if (acuityInNumber >= 6) {
+				additionalInfo = "\nSee VA with pinhole"
+				result = "Visual acuity (w/o pinhole occluder) - Right Eye 6/" + acuity
+				result = redText(result + additionalInfo)
+			} else {
+				result = "Visual acuity (w/o pinhole occluder) - Left Eye 6/" + acuity
+				result = blueText(result)
+			}
+
+			return result;
+		case 5:
+		case 6:
+			if (acuityInNumber >= 6) {
+				result = "Visual acuity (with pinhole occluder) - Right Eye 6/" + acuity
+				additionalInfo = "\nNon-refractive error, participant should have consulted on-site doctor"
+			} else {
+				result = "Visual acuity (with pinhole occluder) - Left Eye 6/" + acuity
+				additionalInfo = "\nRefractive error, participant should have received spectacles vouchers"
+			}
+			result = redText(result + additionalInfo)
+
+			return result;
+	}
+	
+}
+
+export function formatWceStation(gender, question, answer) {
+	if (gender == "Male") {
+		return "-";
+	}
+
+	var result = answer
+	switch (question) {
+		case 2:
+		case 3:
+			result += "\nIf participant is interested in WCE, check whether they have"
+				      + "completed the station. Referring to the responses below, please check with them if the relevant appointments have been made based on their indicated interests."
+			break;
+		case 4:
+			if (answer == "Yes") {
+				result += "\nKindly remind participant that SCS will be contacting them."
+			}
+			break;
+		case 5:
+			if (answer == "Yes") {
+				result += "\nKindly remind participant that SCS will be contacting them."
+			}
+			break;
+		case 6:
+			if (answer == "Yes") {
+				result += "\nKindly remind participant that NHGD will be contacting them."
+			}
+			break;
+	}
+
+	result = blueText(result)
+	return result;
+}
+
+
+

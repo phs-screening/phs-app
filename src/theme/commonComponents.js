@@ -29,3 +29,11 @@ export function blueText(text) {
         return (<div style={{margin: 2}}><p style={{color: 'blue', whiteSpace: "pre-wrap"}}>{text}</p></div>);
     }
 }
+
+export function redText(text) {
+    if (Array.isArray(text)) {
+        return text.map(x => <div><p style={{color: 'red', margin: 2, whiteSpace: "pre-wrap"}}>{x}</p></div>);
+    } else {
+        return (<div style={{margin: 2}}><p style={{color: 'red', whiteSpace: "pre-wrap"}}>{text}</p></div>);
+    }
+}
