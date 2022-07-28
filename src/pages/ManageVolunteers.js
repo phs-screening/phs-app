@@ -20,7 +20,7 @@ const ManageVolunteers = () => {
     const handleMouseDownPasswordReset = () => setShowPasswordReset(!showPasswordReset);
     const [resetPassword, setResetPassword] = useState([]);
     const [loadingReset, isLoadingReset] = useState(false);
-    const [indexReset, setIndexReset] = useState(-1);
+    const [nameReset, setNameReset] = useState(null);
     const [refresh, setRefresh] = useState(false);
     const [search, setSearch] = useState("");
     const [loadingDelete, isLoadingDelete] = useState(false);
@@ -94,7 +94,7 @@ const ManageVolunteers = () => {
                     size="small"
                     type="submit"
                     variant="contained"
-                    onClick={() => setIndexReset(index)}
+                    onClick={() => {setNameReset(guest.username)}}
                 >
                     Reset Password
                 </Button>
@@ -142,12 +142,12 @@ const ManageVolunteers = () => {
         const hashHex = await hashPassword(resetPassword)
         try {
             await profilesCollection().updateOne({
-                username: guestUsers[indexReset].username,
+                username: nameReset,
 
             },{$set: {password: hashHex}}).then(() => {
                 isLoadingReset(false)
                 setResetPassword("")
-                alert("password successfully reset for: " + guestUsers[indexReset].username)})
+                alert("password successfully reset for: " + nameReset)})
         } catch (e) {
             alert("Error resetting password!, No user selected!: " + e)
             isLoadingReset(false)
@@ -303,7 +303,7 @@ const ManageVolunteers = () => {
             <Box sx={{ px: 7, mb: 3 }}>
                 <div>
                     Resetting Password for: <span style={styles.boldVolunteerName}>
-                    {indexReset === -1 ? "None" : guestUsers[indexReset].username}
+                    {nameReset === null ? "None" : nameReset}
                 </span>
                 </div>
                 <TextField
