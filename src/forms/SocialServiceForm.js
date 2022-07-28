@@ -49,6 +49,7 @@ const SocialServiceForm = (props) => {
   const [geriEbas, setGeriEbas] = useState({})
   const [geriOt, setGeriOt] = useState({})
   const [geriPt, setGeriPt] = useState({})
+  const [geriAppt, setGeriAppt] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true);
 
   useEffect(async () => {
@@ -59,8 +60,9 @@ const SocialServiceForm = (props) => {
     const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
     const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
     const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
+    const geriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
 
-    Promise.all([savedData, regData, hxSocialData, doctorConsultData, geriEbasDepData, geriOtData, geriPtData])
+    Promise.all([savedData, regData, hxSocialData, doctorConsultData, geriEbasDepData, geriOtData, geriPtData, geriApptData])
         .then(result => {
           setSaveData(result[0])
           setReg(result[1])
@@ -69,6 +71,7 @@ const SocialServiceForm = (props) => {
           setGeriEbas(result[4])
           setGeriOt(result[5])
           setGeriPt(result[6])
+          setGeriAppt(result[7])
           isLoadingSidePanel(false)
         })
 
@@ -180,7 +183,10 @@ const SocialServiceForm = (props) => {
                     {geriOt && geriOt.geriOtConsultQ5 ? blueText(geriOt.geriOtConsultQ5) : blueText("nil")}
                     {underlined("Reasons for referral from PT consult")}
                     {geriPt && geriPt.geriPtConsultQ5 ? blueText(geriPt.geriPtConsultQ5) : blueText("nil")}
-
+                    {underlined("Participant's details collected for HDB EASE (Geri Appointment)?")}
+                    {geriAppt && geriAppt.geriGeriApptQ11 ? blueText(geriAppt.geriGeriApptQ11) : blueText("nil")}
+                      {underlined("Participant signed up for SWCDC's Safe & Sustainable Homes (Geri Appointment)?")}
+                      {geriAppt && geriAppt.geriGeriApptQ8 ? blueText(geriAppt.geriGeriApptQ8) : blueText("nil")}
 
                   </div>
               }

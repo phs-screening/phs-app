@@ -31,9 +31,9 @@ const schema = new SimpleSchema({
   }, geriOtQuestionnaireQ4: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriOtQuestionnaireQ5: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
+    type: String, allowedValues: ["Yes", "No"], optional: true
   }, geriOtQuestionnaireQ6: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
+    type: String, allowedValues: ["Yes", "No"], optional: true
   }, geriOtQuestionnaireQ7: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriOtQuestionnaireQ8: {

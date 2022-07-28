@@ -31,13 +31,13 @@ const schema = new SimpleSchema({
   }, "hxNssQ4.$": {
     type: String, allowedValues: ["Do not see the need for tests", "Challenging to make time to go for appointments", "Difficulties gtting to the clinics", "Financial issues", "Scared of doctor", "Others: (please specify reason)"]
   }, hxNssQ5: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, hxNssQ6: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, hxNssQ7: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, hxNssQ8: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, hxNssQ9: {
     type: String, allowedValues: ["Yes, (Please specify):", "None"], optional: false
   }, hxNssQ10: {
@@ -47,7 +47,7 @@ const schema = new SimpleSchema({
   }, hxNssQ12: {
     type: String, optional: true
   }, hxNssQ13: {
-    type: Array, optional: false
+    type: Array, optional: true
   }, "hxNssQ13.$": {
     type: String, allowedValues: ["Cancer", "Coronary Heart disease (caused by narrowed blood vessels supplying the heart muscle) or Heart attack, (Please specify):", "Diabetes", "Hypertension", "High Cholesterol", "Stroke (including transient ischaemic attack)", "No, they do not have any of the above."]
   }, hxNssQ14: {
