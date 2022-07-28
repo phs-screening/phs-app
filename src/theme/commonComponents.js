@@ -37,3 +37,7 @@ export function redText(text) {
         return (<div style={{margin: 2}}><p style={{color: 'red', whiteSpace: "pre-wrap"}}>{text}</p></div>);
     }
 }
+
+export function blueRedText(blueText, redText) {
+    return (<div><div style={{margin: 2}}><p style={{color: 'blue', whiteSpace: "pre-wrap"}}>{blueText}</p></div><div style={{margin: 2}}><p style={{color: 'red', whiteSpace: "pre-wrap"}}>{redText}</p></div></div>);
+}

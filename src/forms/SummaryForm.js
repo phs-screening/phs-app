@@ -6,7 +6,7 @@ import { calculateBMI, formatGeriVision, formatWceStation, geriVisionForm, preRe
 import { FormContext } from '../api/utils.js';
 import { getSavedData, getSavedPatientData } from "../services/mongoDB";
 import allForms from "./forms.json";
-import { bold, underlined, blueText, redText} from 'src/theme/commonComponents.js';
+import { bold, underlined, blueText, redText, blueRedText} from 'src/theme/commonComponents.js';
 
 const formName = "summaryForm"
 const SummaryForm = (props) => {
@@ -108,7 +108,7 @@ const SummaryForm = (props) => {
 			{patients ? blueText(patients.gender) : '-'}
 			<br></br>
 			{underlined("NRIC")}
-			{patients ? blueText(patients.abbreviatedNric) : '-'}
+			{patients ? blueText(patients.fullNric) : '-'}
 			<br></br>
 
 			<br></br>
@@ -134,11 +134,11 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("4. Health Concerns")}
-			{underlined("Participant's presenting complaints/concerns (if any)")}
+			{underlined("Participant's presenting complaints/concerns requires scruitiny by doctor: (if any)")}
 			{hcsr ? blueText(hcsr.hxHcsrQ11) : '-'}
 			<br></br>
 			{underlined("Participant's presenting complaints/concerns (if any)")}
-			{hcsr ? blueText(hcsr.hxHcsrQ12) : '-'}
+			{hcsr ? blueText(hcsr.hxHcsrQ2) : '-'}
 			<br></br>
 
 			<br></br>
@@ -165,16 +165,20 @@ const SummaryForm = (props) => {
 			{cancer ? blueText(cancer.hxCancerQ9) : '-'}
 			<br></br>
 			{underlined("Summary of participant's past medical history:")}
-			{cancer ? blueText(cancer.hxCancerQ12) : '-'}
+			{cancer ? blueText(cancer.hxCancerQ10) : '-'}
 			<br></br>
 
 			<br></br>
 			{bold("8. Blood Pressure")}
 			{underlined("Average Blood Pressure (Systolic)")}
-			{cancer ? (parseInt(cancer.hxCancerQ17) >= 130 ? redText(cancer.hxCancerQ17) : blueText(cancer.hxCancerQ17)) : '-'} 
+			{cancer ? (parseInt(cancer.hxCancerQ17) >= 130 ? redText(cancer.hxCancerQ17 + "\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension")
+														   : blueText(cancer.hxCancerQ17)) 
+					: '-'} 
 			<br></br>
 			{underlined("Average Blood Pressure (Diastolic)")}
-			{cancer ? (parseInt(cancer.hxCancerQ18) >= 85 ? redText(cancer.hxCancerQ18) : blueText(cancer.hxCancerQ18)) : '-'} 
+			{cancer ? (parseInt(cancer.hxCancerQ18) >= 85 ? redText(cancer.hxCancerQ18 + "\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension") 
+												          : blueText(cancer.hxCancerQ18)) 
+					: '-'} 
 			<br></br>
 
 			<br></br>
@@ -195,20 +199,22 @@ const SummaryForm = (props) => {
 			<br></br>
 			{bold("10. Incontinence")}
 			{underlined("Do you have any problem passing urine or motion? Please specify if yes.")}
-			{hcsr ? (hcsr.hxHcsrQ4 == "Yes"
-					? redText(hcsr.hxHcsrQ4 + "\nCheck if participant is referred to Society for Continence Singapore (SFCS) booth at Exhibition. If no, tick on PHS Passport and indicate.")
+			{hcsr ? (hcsr.hxHcsrQ4 == "Yes, (Please specify):"
+					? blueRedText(hcsr.hxHcsrQ4, "Check if participant is referred to Society for Continence Singapore (SFCS) booth at Exhibition. If no, tick on PHS Passport and indicate.")
 					: blueText(hcsr.hxHcsrQ4))
 				  : "-"}
-			{hcsr ? hcsr.hxHcsrQ5 : "-"}
+			{hcsr ? blueText(hcsr.hxHcsrQ5) : "-"}
 			<br></br>
 
 			<br></br>
 			{bold("11. Vision")}
 			{underlined("Do you have any vision problems? Please specify if yes")}
-			{hcsr ? hcsr.hxHcsrQ6 == "Yes"
-					? redText(hcsr.hxHcsrQ6 + "\nIf participant is non-Geri and received the Doctor's Memo , Kindly advice them to visit polyclinic with the Doctor's Memo")
+			{hcsr ? hcsr.hxHcsrQ6 == "Yes, (Please specify):"
+					? blueRedText(hcsr.hxHcsrQ6, "If participant is non-Geri and received the Doctor's Memo , Kindly advice them to visit polyclinic with the Doctor's Memo")
 					: blueText(hcsr.hxHcsrQ6)
 				  : blueText(hcsr.hxHcsrQ6)}
+			<br></br>
+			{underlined("Please specify:")}
 			{hcsr ? blueText(hcsr.hxHcsrQ7) : '-'}
 			<br></br>
 			{formatGeriVision(vision.geriVisionQ3, 3)}
@@ -223,11 +229,13 @@ const SummaryForm = (props) => {
 			<br></br>
 			{bold("12. Hearing")}
 			{underlined("Do you have any hearing problems? Please specify if yes.")}
-			{hcsr ? hcsr.hxHcsrQ8 == "Yes"
-					?  blueText(hcsr.hxHcsrQ8 + "\nIf it is a Geri participant, inform them that HPB will follow-up with them. "
-											  + "If it is a non-Geri participant, advice them to visit a polyclinic to follow-up with their hearing issue") 
+			{hcsr ? hcsr.hxHcsrQ8 == "Yes, (Please specify):"
+					?  blueRedText(hcsr.hxHcsrQ8, "If it is a Geri participant, inform them that HPB will follow-up with them. "
+											 	  + "If it is a non-Geri participant, advice them to visit a polyclinic to follow-up with their hearing issue") 
 					: blueText(hcsr.hxHcsrQ8)
 				: "-"}
+			<br></br>
+			{underlined("Please specify:")}
 			{hcsr ? blueText(hcsr.hxHcsrQ9) : '-'}
 			<br></br>
 
@@ -235,7 +243,7 @@ const SummaryForm = (props) => {
 			{bold("13. Social History")}
 			{underlined("Does participant smoke?")}
 			{nss ? nss.hxNssQ14 == "Yes"
-					? redText(nss.hxNssQ14 + "Kindly advise participant to consider smoking cessation. If participant is interested, refer him/her to HPB's I Quit Programme")
+					? blueRedText(nss.hxNssQ14, "Kindly advise participant to consider smoking cessation. If participant is interested, refer him/her to HPB's I Quit Programme")
 					: blueText(nss.hxNssQ14)
 				: '-'}
 			<br></br>
@@ -247,8 +255,8 @@ const SummaryForm = (props) => {
 			{bold("14. FIT kits")}
 			{underlined("Was the participant issued 2 FIT kits")}
 			{fit ? fit.fitQ2 == "Yes"
-					?  blueText(fit.fitQ2 + "\nKindly remind the participant to adhere to the instructions regarding"
-										   + "FIT kit application and sending. Teach the participant how to use the kit if he/she is unsure or has forgotten") 
+					?  blueRedText(fit.fitQ2, "Kindly remind the participant to adhere to the instructions regarding"
+										      + "FIT kit application and sending. Teach the participant how to use the kit if he/she is unsure or has forgotten") 
 					:  redText(fit.fitQ2)
 				: "-"}
 			<br></br>
@@ -277,28 +285,28 @@ const SummaryForm = (props) => {
 			{geriAmt ? blueText(geriAmt.geriAmtQ12) : "-"}
 			<br></br>
 			{underlined("Referred to G-RACE for MMSE on-site?")}
-			{geriAmt ? blueText(geriAmt.geriAmtQ13) : "-"}
+			{geriAmt ? blueText(geriAmt.geriAmtQ13ation) : "-"}
 			<br></br>
 			{underlined("Referred to Social Service for failing EBAS?")}
-			{geriEbasDep ? blueText(geriEbasDep.geriEbasDepQ10) : "-"}
+			{geriEbasDep ? blueRedText(geriEbasDep.geriEbasDepQ10, "Please check if participant has visited the Social Service Station.") : "-"}
 			<br></br>
 			{underlined("Referred to Social Service for potential financial/ family difficulties?")}
-			{geriEbasDep ? blueText(geriEbasDep.geriEbasDepQ11) : "-"}
+			{geriEbasDep ? blueRedText(geriEbasDep.geriEbasDepQ11, "Please check if participant has visited the Social Service Station.") : "-"}
 			<br></br>
 			{underlined("Reasons for referral to Social Service:")}
-			{geriEbasDep ? blueText(geriEbasDep.geriEbasDepQ12) : "-"}
+			{geriEbasDep ? blueRedText(geriEbasDep.geriEbasDepQ12) : "-"}
 			<br></br>
 			{underlined("Memo from PT:")}
-			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ1) : "-"}
+			{geriPtConsult ? blueRedText(geriPtConsult.geriPtConsultQ1) : "-"}
 			<br></br>
 			{underlined("Was participant referred for Doctor's Consult?")}
-			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ2) : "-"}
+			{geriPtConsult ? blueRedText(geriPtConsult.geriPtConsultQ2, "Please check if participant has visited the Doctor's Consult Station.") : "-"}
 			<br></br>
 			{underlined("Reasons for referral:")}
 			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ3) : "-"}
 			<br></br>
 			{underlined("Was the participant referred for Social Service?")}
-			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ4) : "-"}
+			{geriPtConsult ? blueRedText(geriPtConsult.geriPtConsultQ4, "Please check if participant has visited the Social Service Station.") : "-"}
 			<br></br>
 			{underlined("Reasons for referral:")}
 			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ5) : "-"}
@@ -307,13 +315,13 @@ const SummaryForm = (props) => {
 			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ1) : "-"}
 			<br></br>
 			{underlined("Was participant referred for Doctor's Consult?")}
-			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ2) : "-"}
+			{geriOtConsult ? blueRedText(geriOtConsult.geriOtConsultQ2, "Please check if participant has visited the Doctor's Consult Station.") : "-"}
 			<br></br>
 			{underlined("Reasons for referral:")}
 			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ3) : "-"}
 			<br></br>
 			{underlined("Was the participant referred for Social Service?:")}
-			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ4) : "-"}
+			{geriOtConsult ? blueRedText(geriOtConsult.geriOtConsultQ4, "Please check if participant has visited the Social Service Station.") : "-"}
 			<br></br>
 			{underlined("Reasons for referral:")}
 			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ5) : "-"}
@@ -331,14 +339,14 @@ const SummaryForm = (props) => {
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ7) : "-"}
 			<br></br>
 			{underlined("Sign up form for SWCDC filled in?")}
-			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ8) : "-"}
+			{geriGeriAppt ? blueRedText(geriGeriAppt.geriGeriApptQ8, "Please advise the participant that SWCDC will process their application and contact them separately.") : "-"}
 			<br></br>
 
 			<br></br>
 			{bold("17. Doctor's Consult")}
 			{underlined("Did this patient consult an on-site doctor today?")}
 			{doctorSConsult ? doctorSConsult.doctorSConsultQ11 
-								? blueText(doctorSConsult.doctorSConsultQ11 + '\nPlease check with participant if they have received a memo from the on-site Doctor.')
+								? blueRedText(doctorSConsult.doctorSConsultQ11, '\nPlease check with participant if they have received a memo from the on-site Doctor.')
 								: blueText(doctorSConsult.doctorSConsultQ11)
 							: "-"}
 			<br></br>
@@ -350,13 +358,13 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Does this patient require urgent follow-up?")}
 			{doctorSConsult ? doctorSConsult.doctorSConsultQ10 
-								? blueText(doctorSConsult.doctorSConsultQ10 + '\nIf the on-site doctor has advised that you need urgent follow-up or you need to visit a GP/polyclinic/hospital, please do as instructed.')
+								? blueRedText(doctorSConsult.doctorSConsultQ10 + '\nIf the on-site doctor has advised that you need urgent follow-up or you need to visit a GP/polyclinic/hospital, please do as instructed.')
 								: blueText(doctorSConsult.doctorSConsultQ10) 
 							: "-"}
 			<br></br>
 			{underlined("Was the participant referred for Dietitian's Consult?")}
 			{doctorSConsult ? doctorSConsult.doctorSConsultQ4
-								? blueText("Yes")
+								? blueRedText("Yes", "Please check if participant visited the Dietitian's Consult Station.")
 								: blueText("No") 
 							: '-'}
 			<br></br>
@@ -365,7 +373,7 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Was participant referred for Social Service?")}
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ6)
-								? blueText("Yes")
+								? blueRedText("Yes", "Please check if participant visited the Dietitian's Consult Station.")
 								: blueText("No")
 							: '-'}
 			<br></br>
@@ -374,7 +382,7 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Was participant referred for Social Service?")}
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ8)
-								? blueText("Yes")
+								? blueText("Yes", "Please check if participant visited the Oral Health Station.")
 								: blueText("No") 
 							: '-'}
 			<br></br>
@@ -401,13 +409,27 @@ const SummaryForm = (props) => {
 			{underlined("Reasons for urgent follow-up:")}
 			{dietitiansConsult ? blueText(dietitiansConsult.dietitiansConsultQ6) : '-'}
 			<br></br>
+			{socialService ? socialService.socialServiceQ1 == "Yes"
+							? redText("Kindly encourage the participant to follow through with recommendations from the Dietitian.")
+							: ""
+						   : ""}
+			<br></br>
 
 			{bold("19. Social Service")}
 			{underlined("Did this participant visit the social service station today?")}
-			{socialService ? blueText(socialService.socialServiceQ1) : '-'}
+			{socialService ? socialService.socialServiceQ1
+							? blueRedText(socialService.socialServiceQ1, "Please check form A and above sections if the participant is flagged for Social Service Station.") 
+							: blueText(socialService.socialServiceQ1)
+						: '-'}
 			<br></br>
 			{underlined("What will be done for the participant?")}
 			{socialService ? blueText(socialService.socialServiceQ3) : '-'}
+			<br></br>
+			{underlined("SACS referral form filled-up?")}
+			{socialService ? socialService.socialServiceQ6
+							? blueRedText(socialService.socialServiceQ6, "Please check form A and above sections if the participant is flagged for Social Service Station.") 
+							: blueText(socialService.socialServiceQ6)
+						: '-'}
 			<br></br>
 			{underlined("Is follow-up required?")}
 			{socialService ? socialService.socialServiceQ4
@@ -417,6 +439,11 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Brief summary of follow-up for the participant:")}
 			{socialService ? blueText(socialService.socialServiceQ5) : '-'}
+			<br></br>
+			{socialService ? socialService.socialServiceQ1 == "Yes"
+							? redText("Kindly encourage the participant to follow through with recommendations from AIC.")
+							: ""
+						   : ""}
 			<br></br>
 
 			{bold("20. Oral Health")}
@@ -428,7 +455,7 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Will participant undergo follow-up by NUS Dentistry ")}
 			{oralHealth ? oralHealth.oralHealthQ1	
-							? blueText("Yes. Kindly remind participants that NUS Dentistry will contact you regarding your future oral health appointments.")
+							? blueRedText("Yes", "Kindly remind participants that NUS Dentistry will contact you regarding your future oral health appointments.")
 							: blueText("No.")
 						: '-'}
 			<br></br>
@@ -449,6 +476,8 @@ const SummaryForm = (props) => {
 			<br></br>
 			{oralHealth ? blueText(oralHealth.oralHealthQ2) : '-'}
 			<br></br>
+			{redText("All participants will receive a more detailed health report from PHS within 4-6 weeks of the screening."
+					 + "If you have gone for phlebotomy, you will receive the blood test results from NUHS within 4 - 6 weeks of the screening.\n\n\n\n")}
 		</div>
 		</Fragment>
 		}

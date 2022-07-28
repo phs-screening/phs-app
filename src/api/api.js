@@ -1,5 +1,5 @@
 import mongoDB, {getName, isAdmin} from "../services/mongoDB";
-import {blueText, redText} from 'src/theme/commonComponents.js';
+import {blueText, redText, blueRedText} from 'src/theme/commonComponents.js';
 import { blue } from "@material-ui/core/colors";
 
 const axios = require('axios').default;
@@ -228,35 +228,36 @@ export function formatGeriVision(acuity, questionNo) {
 }
 
 export function formatWceStation(gender, question, answer) {
-	if (gender == "Male") {
+	if (gender == "Male" || gender == "Not Applicable") {
 		return "-";
 	}
 
-	var result = answer
+	var result = answer;
+	var additionalInfo;
 	switch (question) {
 		case 2:
 		case 3:
-			result += "\nIf participant is interested in WCE, check whether they have"
-				      + "completed the station. Referring to the responses below, please check with them if the relevant appointments have been made based on their indicated interests."
+			additionalInfo = "If participant is interested in WCE, check whether they have"
+				      		 + "completed the station. Referring to the responses below, please check with them if the relevant appointments have been made based on their indicated interests."
 			break;
 		case 4:
 			if (answer == "Yes") {
-				result += "\nKindly remind participant that SCS will be contacting them."
+				additionalInfo = "Kindly remind participant that SCS will be contacting them."
 			}
 			break;
 		case 5:
 			if (answer == "Yes") {
-				result += "\nKindly remind participant that SCS will be contacting them."
+				additionalInfo = "Kindly remind participant that SCS will be contacting them."
 			}
 			break;
 		case 6:
 			if (answer == "Yes") {
-				result += "\nKindly remind participant that NHGD will be contacting them."
+				additionalInfo = "Kindly remind participant that NHGD will be contacting them."
 			}
 			break;
 	}
 
-	result = blueText(result)
+	result = blueRedText(result, additionalInfo);
 	return result;
 }
 
