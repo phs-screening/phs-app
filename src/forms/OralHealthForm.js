@@ -138,6 +138,7 @@ const OralHealthForm = (props) => {
                             {title("Referral from History Taking ")}
                             {underlined("Participant's Oral Health Brief Assessment:")}
                             {hxSocial ? blueText(hxSocial.hxSocialQ13) : null}
+                            {hxSocial ? blueText(hxSocial.hxSocialQ15) : null}
                             {underlined("Interest in Oral Health Screening: ")}
                             {hxSocial ? blueText(hxSocial.hxSocialQ14) : null}
                             {title("Health Concerns")}

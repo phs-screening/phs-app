@@ -192,8 +192,6 @@ const DoctorSConsultForm = (props) => {
                   {underlined("Urinary/Faecal incontinence")}
                   {hcsr ? blueText(hcsr.hxHcsrQ4) : null}
                   {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : null}
-                    {underlined("Urinary Incontinence or nocturia (at least 3 or more times at night)?")}
-                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ6) : null}
                   {title("Vision problems")}
                   {underlined("Vision Problems (From history taking)")}
                   {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
@@ -240,8 +238,6 @@ const DoctorSConsultForm = (props) => {
                   {title("Blood Pressure")}
                     {underlined("Requires scrutiny by doctor?")}
                     {cancer && cancer.hxCancerQ27 ? blueText(cancer.hxCancerQ27) : null}
-                    {underlined("Dizziness on standing up from a seated or laid down position?")}
-                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ5) : null}
                   {underlined("Average Blood Pressure")}
                   {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : null}
                   {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : null}

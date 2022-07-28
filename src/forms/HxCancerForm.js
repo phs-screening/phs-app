@@ -78,7 +78,7 @@ const schema = new SimpleSchema({
         "Geriatrics (60 and above)",
         "Doctor's Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)",
         "Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)",
-        "Oral Health Screening - Refer to eligibility criteria for Oral Health",
+        "Oral Health Education - Refer to eligibility criteria for Oral Health",
         "Exhibition - recommended as per necessary"]
   }, hxCancerQ26: {
     type: String, optional: true

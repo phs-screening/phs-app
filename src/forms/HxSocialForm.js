@@ -48,7 +48,9 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Healthy", "Moderate", "Poor"], optional: false
   }, hxSocialQ14: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }
+  }, hxSocialQ15: {
+        type: String, optional: true
+}
 }
 )
 
@@ -168,10 +170,32 @@ const HxSocialForm = (props) => {
           1. How is the participant's Oral Health?
           <RadioField name="hxSocialQ13" label="Hx Social Q13" />
           <br />
-          2. Would you like to go through free Oral Health screening by NUS Dentistry dentists and students?
+          Please specify:
+          <LongTextField name="hxSocialQ15" label="Hx Social Q15" />
+          <br />
+          Indications for referral to Oral Health Education Booth (any one of the following):
+          <br />
+          1. History:
+          <br />- Smoker
+          <br />- DM
+          <br /> - Denture wearer
+          <br />- Currently in pain
+          <br />
+          <br />2. Quick examination:
+          <br />- red, swollen gums
+          <br />- severely receded gums
+          <br />- bleeding/pus from gums
+          <br />- obvious plaque/calculus deposits
+          <br /> - obvious decay
+          <br />- dry mouth/bad breath
+          <br />
+          <br />3. Participant has any dental queries/ concerns:
+          <br />
+          <br />
+          2. Would you like to go through free Oral Health Education by NUS Dentistry dentists and students?
           <RadioField name="hxSocialQ14" label="Hx Social Q14" />
           <PopupText qnNo="hxSocialQ14" triggerValue="Yes">
-            <b>REFER TO NUS DENTISTRY ORAL SCREENING if participant has poor dental hygiene and interested to go through dental screening. <br/> On 20th August,  <span style={{ color: "red" }}>ALL</span> participants with suspected dental issues will be referred to NUS DENTISTRY ORAL SCREENING.
+            <b>REFER TO NUS DENTISTRY ORAL HEALTH EDUCATION if participant has poor dental hygiene and interested to go through dental screening. <br/> On 20th August,  <span style={{ color: "red" }}>ALL</span> participants with suspected dental issues will be referred to NUS DENTISTRY ORAL SCREENING.
               <br />On 21st August,  refer <span style={{ color: "red" }}>participants aged 60 and above to GERIATRIC FUNCTIONAL SCREENING (includes oral screening).</span> Refer participants aged 40-59 to NUS DENTISTRY ORAL SCREENING.
 
               <br/><br />Indicate for Dentistry on: </b>
