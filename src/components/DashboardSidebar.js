@@ -33,7 +33,7 @@ const items = [
     title: 'Change Patient'
   },
   {
-    href: '/app/products',
+    href: '/app/summary',
     icon: ShoppingBagIcon,
     title: 'Patient Summary'
   },
