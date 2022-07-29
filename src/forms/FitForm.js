@@ -36,7 +36,7 @@ const FitForm = (props) =>  {
     const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-    const [saveData, setSaveData] = useState(null)
+    const [saveData, setSaveData] = useState({})
     const [hxCancer, setHxCancer] = useState({})
 
     useEffect(async () => {

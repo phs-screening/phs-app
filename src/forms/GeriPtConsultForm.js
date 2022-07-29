@@ -88,7 +88,7 @@ const GeriPtConsultForm = (props) => {
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
-    const [saveData, setSaveData] = useState(null)
+    const [saveData, setSaveData] = useState({})
   const [geriParq, setGeriParq] = useState({})
   const [geriPhysicalActivity, setGeriPhysicalActivity] = useState({})
   const [geriFrailScale, setGeriFrailScale] = useState({})

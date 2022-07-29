@@ -70,7 +70,7 @@ const GeriSppbForm = (props) => {
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState({})
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);
     setSaveData(savedData)

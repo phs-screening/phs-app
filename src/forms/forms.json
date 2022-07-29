@@ -13,6 +13,8 @@
     "geriPhysicalActivityLevelForm": "geriPhysicalActivityLevelForm",
     "geriPtConsultForm": "geriPtConsultForm",
     "geriSppbForm": "geriSppbForm",
+    "geriMMSEForm" : "geriMMSEForm",
+    "geriAudiometryForm" : "geriAudiometryForm",
 	"phlebotomyForm": "phlebotomyForm",
     "geriTugForm": "geriTugForm",
     "geriVisionForm": "geriVisionForm",

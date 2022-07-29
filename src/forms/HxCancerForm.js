@@ -114,7 +114,7 @@ const HxCancerForm = () => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState({})
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);

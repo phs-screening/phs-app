@@ -60,7 +60,7 @@ const HxSocialForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props;
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState({})
   const [regForm, setRegForm] = useState({})
 
   useEffect(async () => {

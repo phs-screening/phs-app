@@ -38,7 +38,7 @@ const OralHealthForm = (props) => {
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
     const [loadingSidePanel, isLoadingSidePanel] = useState(true);
-    const [saveData, setSaveData] = useState(null)
+    const [saveData, setSaveData] = useState({})
     // forms to retrieve for side panel
     const [doctorConsult, setDoctorConsult] = useState({})
     const [hxSocial, sethxSocial] = useState({})

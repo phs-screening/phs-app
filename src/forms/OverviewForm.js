@@ -37,7 +37,7 @@ const OverviewForm = (props) => {
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
 	const [loadingPrevData, isLoadingPrevData] = useState(true);
-    const [saveData, setSaveData] = useState(null)
+    const [saveData, setSaveData] = useState({})
     // forms to retrieve for side panel
     const [hcsr, setHcsr] = useState({})
     const [nss, setNss] = useState({})

@@ -44,7 +44,7 @@ const WceForm = (props) =>  {
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
-    const [saveData, setSaveData] = useState(null)
+    const [saveData, setSaveData] = useState({})
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
   const [hxCancer, setHxCancer] = useState({})

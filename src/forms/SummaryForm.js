@@ -12,7 +12,7 @@ const formName = "summaryForm"
 const SummaryForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [loadingPrevData, isLoadingPrevData] = useState(true);
-  const [saveData, setSaveData] = useState(null);
+  const [saveData, setSaveData] = useState({});
 
   // All the forms 
   const [hcsr, setHcsr] = useState({})

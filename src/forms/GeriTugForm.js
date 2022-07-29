@@ -49,7 +49,7 @@ const GeriTugForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props;
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName);

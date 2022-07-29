@@ -59,7 +59,7 @@ const GeriOtConsultForm = (props) => {
   const {patientId, updatePatientId} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState(null)
+  const [saveData, setSaveData] = useState({})
   const [geriVision, setGeriVision] = useState({})
   const [geriOtQ, setGeriOtQ] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
