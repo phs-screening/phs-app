@@ -25,7 +25,7 @@ const schema = new SimpleSchema({
   }, geriTugQ3: {
     type: Number, optional: false
   }, geriTugQ4: {
-    type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
+    type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriTugQ5: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriTugQ6: {
