@@ -104,7 +104,7 @@ const SummaryForm = (props) => {
 			{registration ? blueText(registration.registrationQ1) : '-'}
 			<br></br>
 			{underlined("Name")}
-			{patients ? blueText(patients.initials) : '-'}
+			{patients ? blueText(patients.fullName) : '-'}
 			<br></br>
 			{underlined("Gender")}
 			{patients ? blueText(patients.gender) : '-'}

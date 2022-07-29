@@ -108,7 +108,10 @@ if (loading) {
         {formDone[0] ? <TimelineDot color="primary"/> : <TimelineDot color="grey"/>}
         <TimelineConnector />
       </TimelineSeparator>
-      <TimelineContent><p>Pre-Registration [Completed]</p></TimelineContent>
+      <TimelineContent>{admin ? <a
+          href="/app/prereg"
+          onClick={(event) => navigateTo(event, navigate, "prereg", scrollTop)}>Pre-Registration [Edit]
+      </a> : "Pre-Registration [Completed]"}</TimelineContent>
     </TimelineItem>
 
     <TimelineItem>

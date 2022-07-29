@@ -17,7 +17,7 @@ export const schema = new SimpleSchema({
         }, fullPostal: {
         type: String, optional: false, regEx: /^[0-9]{6}$/
         }, dateOfBirth: {
-        type: String, optional: false, regEx: /^[0-9]{2}[/][0-9]{2}[/][0-9]{4}$/
+        type: String, optional: false, regEx: /^[0-3]{1}[0-9]{1}[/][0-1]{1}[0-9]{1}[/][0-9]{4}$/
         }, contactNumber: {
         type: String, optional: false, regEx: /^[0-9]{8}$/
         }, preferredLanguage: {

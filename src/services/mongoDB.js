@@ -72,40 +72,13 @@ export const getSavedData = async (patientId, collectionName) => {
     return savedData === null ? {} : savedData
 }
 
+export const getPreRegData = async (patientId, collectionName) => {
+    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
+    const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
+    return savedData === null ? {} : savedData
+}
 export const getSavedPatientData = async (patientId, collectionName) => {
     const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
     const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
     return savedData === null ? {} : savedData
 }
-
-// exports = async function(loginPayload) {
-//     // General auth function on login page / sharer page / chat page
-//
-//
-//     // Get a handle for the app.users collection
-//     const users = context.services
-//         .get("mongodb-atlas")
-//         .db("sage_production")
-//         .collection("all_profiles");
-//     // Parse out custom data from the FunctionCredential
-//     const username  = loginPayload.username;
-//     const otp = loginPayload.OTP;
-//     // Query for an existing user document with the specified username
-//     const user = await users.findOne({ chat_id:username});
-//     if (user) {
-//         if (user.OTP === otp) {
-//             return {"id":user.chat_id.toString(), "name" : user.chat_id.toString() }
-//         } else {
-//             throw "error";
-//         }
-//         // if ("000000" === otp) {
-//         //   return {"id":user.chat_id, "name" : user.chat_id}
-//         // } else {
-//         //   throw "error";
-//         // }
-//
-//     } else {
-//         throw "error";
-//     }
-// };
-

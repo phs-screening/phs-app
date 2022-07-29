@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 
@@ -11,50 +11,77 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 
 import { schema, layout } from './prereg.js';
 
-import { preRegister } from '../api/api.js';
+import {preRegister, submitPreRegForm} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import './fieldPadding.css'
+import {getPreRegData, isAdmin} from "../services/mongoDB";
 
-class PreregForm extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        isLoading : false 
-      };
-    }
+const formName = "patients"
+const PreregForm = (props) => {
+    const {patientId, updatePatientId} = useContext(FormContext);
+    const navigate = useNavigate();
+    const [loading, isLoading] = useState(false);
+    const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+    const form_layout = layout
+    const [saveData, setSaveData] = useState({})
 
-    render() {
-        const {patientId, updatePatientId} = this.context;
-        const { navigate } = this.props;
-        const form_schema = new SimpleSchema2Bridge(schema)
-        const form_layout = layout
+    useEffect(async () => {
+        const savedData = await getPreRegData(patientId, formName);
+        if (!await isAdmin()) {
+            if (savedData.fullNric !== undefined) {
+                alert("You are not an admin!")
+                navigate('/app/dashboard', { replace: true });
+            }
+        }
+        setSaveData(savedData)
+    }, [])
+
         const newForm = () => (
           <AutoForm
             schema={form_schema}
             className="fieldPadding"
             onSubmit={async (model) => {
-              this.setState({isLoading: true});
-              const response = await preRegister(model);
-              if (response.result) {
-                this.setState({isLoading: false});
-                setTimeout(() => {
-                  alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
-                  updatePatientId(response.data.patientId);
-                  navigate('/app/dashboard', { replace: true });
-                }, 80);
-              } else {
-                this.setState({isLoading: false});
-                setTimeout(() => {
-                  alert(`Unsuccessful. ${response.error}`);
-                }, 80);
+                if (saveData.fullNric !== undefined) { // updating reg
+                    isLoading(true)
+                    const response = await submitPreRegForm(model, patientId, formName);
+                    if (response.result) {
+                        isLoading(false);
+                        setTimeout(() => {
+                            alert("Successfully submitted form");
+                            navigate('/app/dashboard', { replace: true });
+                        }, 80);
+                    } else {
+                        isLoading(false);
+                        setTimeout(() => {
+                            alert(`Unsuccessful. ${response.error}`);
+                        }, 80);
+                    }
+                } else { // initial reg
+                    isLoading(true)
+                    const response = await preRegister(model);
+                    if (response.result) {
+                        isLoading(false)
+                        setTimeout(() => {
+                            alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
+                            updatePatientId(response.data.patientId);
+                            navigate('/app/dashboard', { replace: true });
+                        }, 80);
+                    } else {
+                        isLoading(false)
+                        setTimeout(() => {
+                            alert(`Unsuccessful. ${response.error}`);
+                        }, 80);
 
-              }
+                    }
+                }
+
             }}
+            model={saveData}
           >
             {form_layout}
             <ErrorsField />
             <div>
-            {this.state.isLoading ? <CircularProgress />
+            {loading ? <CircularProgress />
               : <SubmitField inputRef={(ref) => {}} />}
         </div>
             
@@ -67,7 +94,7 @@ class PreregForm extends Component {
             {newForm()}
           </Paper>
         );
-      }
+
 }
 PreregForm.contextType = FormContext;
 

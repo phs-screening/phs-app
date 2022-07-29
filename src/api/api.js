@@ -26,7 +26,7 @@ export async function preRegister(preRegArgs) {
     // TODO: more exhaustive error handling. consider abstracting it in a validation function, and using schema validation
     let data = {
         "gender": gender,
-        "initials": fullName,
+        "fullName": fullName,
         "fullNric": fullNric,
         "fullAddress": fullAddress,
         "fullPostal": fullPostal,
@@ -100,6 +100,32 @@ export async function submitForm(args, patientId, formCollection) {
         }
     } catch(err) {
         return { "result" : false, "error" : err };
+    }
+}
+
+export async function submitPreRegForm(args, patientId, formCollection) {
+    try {
+        const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+        const patientsRecord = mongoConnection.db("phs").collection(formCollection);
+        const record = await patientsRecord.findOne({queueNo: patientId});
+        if (record) {
+            if (await isAdmin()) {
+                args.lastEdited = new Date()
+                args.lastEditedBy = getName()
+                await patientsRecord.updateOne({queueNo : patientId}, {$set : {...args}})
+                return { "result" : true };
+            } else {
+                const errorMsg = "This form has already been submitted. If you need to make "
+                    + "any changes, please contact the admin."
+                return { "result" : false, "error" : errorMsg };
+            }
+
+        } else {
+            const errorMsg = "An error has occurred."
+            return { "result" : false, "error" : errorMsg };
+        }
+    } catch (e) {
+        return { "result" : false, "error" : e };
     }
 }
 
