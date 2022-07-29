@@ -28,6 +28,10 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriPtConsultQ5: {
     type: String, optional: true
+  }, geriPtConsultQ6: {
+        type: String, allowedValues: ["Yes", "No"], optional: false
+  }, geriPtConsultQ7: {
+    type: String, optional: true
   }
 }
 )
@@ -145,16 +149,24 @@ const GeriPtConsultForm = (props) => {
           <h2>3.4a PT Consult</h2>
           Memo (for participant):
           <LongTextField name="geriPtConsultQ1" label="Geri - PT Consult Q1" />
+          <br/>
           To be referred for doctor's consult (PT)?
           <RadioField name="geriPtConsultQ2" label="Geri - PT Consult Q2" />
+          <br/>
           Reasons for referral to Doctor's consult (PT):
           <LongTextField name="geriPtConsultQ3" label="Geri - PT Consult Q3" />
-          To be referred for social support (For HDB EASE Sign-up) (PT):
+          <br/>
+          To be referred to Geriatric Appointment (For HDB EASE Sign-up) (PT):
+          <RadioField name="geriPtConsultQ6" label="Geri - PT Consult Q6" />
+          Reasons for referral (PT):
+          <LongTextField name="geriPtConsultQ7" label="Geri - PT Consult Q7" />
+          <br/>
+          To be referred for social support (PT):
           <RadioField name="geriPtConsultQ4" label="Geri - PT Consult Q4" />
           Reasons for referral to social support (PT):
           <LongTextField name="geriPtConsultQ5" label="Geri - PT Consult Q5" />
           <h2><span style={{color: "red"}}>IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE EDIT ON FORM A</span></h2>
-
+          <br/>
         </Fragment>
         <ErrorsField />
         <div>

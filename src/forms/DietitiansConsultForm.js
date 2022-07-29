@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, RadioField} from 'uniforms-material';
 import {
     LongTextField,
     BoolField } from 'uniforms-material';
@@ -33,7 +33,9 @@ const schema = new SimpleSchema({
             type: Boolean, label: "Yes", optional: true
         }, dietitiansConsultQ6: {
             type: String, optional: true
-        }
+        }, dietitiansConsultQ7: {
+        type: String, allowedValues: ["Yes", "No"], optional: false
+    }
     }
 )
 
@@ -95,6 +97,8 @@ const DietitiansConsultForm = (props) => {
         >
 
             <Fragment>
+                Has the participant visited the Dietitian's Consult station?
+                <RadioField name="dietitiansConsultQ7" label="Dietitian's Consult Q7" />
 
                 Dietitian's Name:
                 <LongTextField name="dietitiansConsultQ1" label="Dietitian's Consult Q1"/>

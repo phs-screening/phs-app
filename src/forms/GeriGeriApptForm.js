@@ -30,11 +30,19 @@ const schema = new SimpleSchema({
   }, geriGeriApptQ5: {
     type: Boolean, label: "Done", optional: true
   }, geriGeriApptQ6: {
-    type: String, allowedValues: ["Yes, requirement met.", "No, requirement not met."], optional: false
+    type: String, allowedValues: ["Yes", "No"], optional: true
   }, geriGeriApptQ7: {
     type: String, allowedValues: ["Yes", "No"], optional: true
   }, geriGeriApptQ8: {
     type: String, allowedValues: ["Yes", "No"], optional: true
+  }, geriGeriApptQ9: {
+    type: String, allowedValues: ["Yes", "No"], optional: true
+    }, geriGeriApptQ10: {
+        type: String, allowedValues: ["Yes", "No"], optional: true
+    },geriGeriApptQ11: {
+        type: String, allowedValues: ["Yes", "No"], optional: true
+    }, geriGeriApptQ12: {
+      type: String, allowedValues: ["Yes", "No"], optional: true
   }
 }
 )
@@ -74,41 +82,57 @@ const GeriGeriApptForm = (props) => {
       >
 
         <Fragment>
-          <h2>4. Geriatrics Appointment</h2>
-          {/*<DisplayIf condition={() => (
-        (typeof(info["Geri - Vision"]) !== "undefined" && info["Geri - Vision"].geriVisionQ3 >= 12) ||
-        (typeof(info["Geri - Vision"]) !== "undefined" && info["Geri - Vision"].geriVisionQ4 >= 12)
-      )}>*/}
-      <span style={{color: "green"}}>THE BELOW APPEARS WHEN GERI VISION FORM MEETS CRITERIA (WIP)</span>
-          <Fragment>
-            <h3>Visual acuity is ≥ 6/12: </h3>
-            Pearl's Optical Voucher given?
-            <RadioField name="geriGeriApptQ4" label="Geri - Geri Appt Q4" />
-          </Fragment>
+          <h2>Geriatrics Appointment</h2>
+            <br/>
+            <h3>Functional screening </h3>
+            Did participant attend geriatric functional screening organised by HPB-AIC?
+            <RadioField name="geriGeriApptQ12" label="Geri - Geri Appt Q12" />
+            <br/>
+            <h3>Vision</h3>
+            State eligibility criteria for SWCDC Eye vouchers (100 pax)
+            <br/>
+            <br/>
 
-          <span style={{color: "green"}}>THE BELOW APPEARS WHEN GERI EBAS-DEP, PT CONSULT, OT CONSULT MEET CRITERIA (WIP)</span>
-          {/*<DisplayIf condition={() => (
-        (typeof(info["Geri - EBAS-DEP"]) !== "undefined" && info["Geri - EBAS-DEP"].geriEbasDepQ10 === "Yes") ||
-        (typeof(info["Geri - EBAS-DEP"]) !== "undefined" && info["Geri - EBAS-DEP"].geriEbasDepQ11 === "Yes") ||
-        (typeof(info["Geri - PT Consult"]) !== "undefined" && info["Geri - PT Consult"].geriPtConsultQ4 === "Yes") ||
-        (typeof(info["Geri - OT Consult"]) !== "undefined" && info["Geri - OT Consult"].geriOtConsultQ4 === "Yes")
-      )}>*/}
-          <Fragment>
-            <h3>Participant is recommended for social support:</h3>
-            Persuade participant to go to social support booth and explain that AIC can help
-            <BoolField name="geriGeriApptQ5" />
-          </Fragment>
+            <Fragment>
+                SWCDC Eye Voucher given?
+                <RadioField name="geriGeriApptQ4" label="Geri - Geri Appt Q4" />
+            </Fragment>
+            <br/>
+            <h3>SWCDC's Safe & Sustainable Homes </h3>
+            State eligibility criteria.
+            <br/>
+            <br/>
 
 
-          <h3>3. Eligibility for SWCDC Safe and Bright Homes Programme </h3>
-          1) Participants will be eligible for the SWCDC Safe and Bright Homes Programme if they meet the following criteria:<br />i) SWCDC Resident (Link: <a href="https://sis.pa-apps.sg/NASApp/sim/AdvancedSearch.aspx">https://sis.pa-apps.sg/NASApp/sim/AdvancedSearch.aspx</a>)<br />ii) Requires home modification (determined by SAOT) - Refer to Form A<br />
+
+            Is participant eligible for SWCDC's Safe & Sustaniable homes?
           <RadioField name="geriGeriApptQ6" label="Geri - Geri Appt Q6" />
-          <PopupText qnNo="geriGeriApptQ6" triggerValue="Yes, requirement met.">
-            2) Do you wish to sign up for the SWCDC Safe and Bright Homes Programme?<br /><br />Persuade participant to sign up for SWCDC Safe and Bright Homes. <br />Description of the programme: “The Safe and Bright Homes programme aims to develop safer and more energy-efficient homes for senior citizens and persons with disabilities. Safety (e.g. bathroom grab bars, non-slip mats etc), energy and water conservation features (energy-saving bulbs, water thimbles and cistern bags etc) will be installed in selected homes of needy residents. Workshops will also be conducted to teach them how to troubleshoot common household problems. The programme will be spread out over 10 sessions, for about 10 months.”
+            <br/>
+            Does participant wish to sign up for SWCDC's Safe & Sustaniable homes?
             <RadioField name="geriGeriApptQ7" label="Geri - Geri Appt Q7" />
-            3) Sign up form for SWCDC filled in?
+            <br/>
+            Sign up form for SWCDC's Safe & Sustainable homes filled up?
             <RadioField name="geriGeriApptQ8" label="Geri - Geri Appt Q8" />
-          </PopupText>
+            <br/>
+
+            <h3>HDB EASE</h3>
+            State eligibilty criteria
+            <br/><br/>
+            Is participant eligible for HDB EASE?
+            <RadioField name="geriGeriApptQ9" label="Geri - Geri Appt Q9" />
+            <br/>
+            Does participant wish to sign up for HDB EASE?
+            <RadioField name="geriGeriApptQ10" label="Geri - Geri Appt Q10" />
+            <br/>
+            Participant's details collected for follow-up by HDB?
+            <RadioField name="geriGeriApptQ11" label="Geri - Geri Appt Q11" />
+            <br/>
+            <Fragment>
+                <h3>If participant is recommended for social support:</h3>
+                Persuade participant to go to social support booth and explain that AIC can help
+                <BoolField name="geriGeriApptQ5" />
+            </Fragment>
+            <br/>
 
         </Fragment>
 

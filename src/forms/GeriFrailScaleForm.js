@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { RadioField, SelectField, NumField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
@@ -31,7 +31,7 @@ const schema = new SimpleSchema({
   }, geriFrailScaleQ6: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriFrailScaleQ7: {
-    type: Number, optional: true
+    type: String, optional: true
   }
 }
 )
@@ -111,9 +111,13 @@ const GeriFrailScaleForm = (props) => {
               <GetFrailScore />
             </font>
           </h3>
+          <br/>
+          Notes:
+          <LongTextField name="geriFrailScaleQ7" label="Geri - Frail Scale Q7" />
+          <br/>
           <font color="red">*Referral to Physiotherapist Consult</font>
           <RadioField name="geriFrailScaleQ6" label="Geri - Frail Scale Q6" />
-
+          <br/>
         </Fragment>
 
         <ErrorsField />

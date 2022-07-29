@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { TextField, SelectField, RadioField, NumField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
@@ -28,7 +28,9 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["High Falls Risk (> 15sec)", "Low Falls Risk (≤ 15 sec)"], optional: false
   }, geriTugQ5: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }
+  }, geriTugQ6: {
+        type: String, optional: true
+      }
 }
 )
 
@@ -80,7 +82,8 @@ const GeriTugForm = (props) => {
         model={saveData}
       >
         <Fragment>
-          <h2>3.3b Time-Up and Go (TUG)</h2>
+          <h2>Single Leg Balance Test (SLBT)</h2>
+          <br/>
           Walking aid (if any):
           <br />
           <SelectField name="geriTugQ1" checkboxes="true" label="Geri - TUG Q1" />
@@ -91,9 +94,13 @@ const GeriTugForm = (props) => {
           </PopupText>
           Time taken (in seconds):
           <NumField name="geriTugQ3" label="Geri - TUG Q3" />
-          <h3>If > 15 seconds, participant has a high falls risk.</h3>
-          <br/>Falls Risk Level:
+
+          <br/>
+          Failed SLBT?
           <RadioField name="geriTugQ4" label="Geri - TUG Q4" />
+          <br/>
+          Notes:
+          <LongTextField name="geriTugQ6" label="Geri - TUG Q6" />
           <br/>*Referral to Physiotherapist and Occupational Therapist Consult
           <RadioField name="geriTugQ5" label="Geri - TUG Q5" />
 

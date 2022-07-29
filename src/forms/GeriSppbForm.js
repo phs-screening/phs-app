@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { RadioField, NumField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
@@ -39,6 +39,8 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["High Falls Risk (score ≤ 6)", "Low Falls Risk (score > 6)"], optional: false
   }, geriSppbQ11: {
     type: String, allowedValues: ["Yes", "No"], optional: false
+  }, geriSppbQ12: {
+    type: String, optional: true
   }
 }
 )
@@ -145,6 +147,10 @@ const GeriSppbForm = (props) => {
       <font color="red">*Referral to Physiotherapist and Occupational Therapist Consult</font>
       <RadioField name="geriSppbQ11" label="Geri - SPPB Q11"/>
           <br />
+          Notes:
+          <LongTextField name="geriSppbQ12" label="Geri - SPPB Q12" />
+
+          <br/>
       
     </Fragment>
         <ErrorsField />

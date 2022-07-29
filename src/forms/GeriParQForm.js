@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { RadioField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
@@ -31,7 +31,9 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriParQQ8: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }
+  },geriParQQ9 : {
+        type: String, optional: true
+      }
 }
 )
 
@@ -96,9 +98,12 @@ const GeriParQForm = (props) => {
           7.     Do you know of any other reason why you should not do physical activity?<br />(If yes, refer to PT consult)
           <RadioField name="geriParQQ7" label="Geri - PAR-Q Q7" />
           <br />
+          Notes:
+          <LongTextField name="geriParQQ9" label="Geri - PAR-Q Q9" />
+          <br/>
           <span style={{color: "red"}}>*Referral to Physiotherapist Consult</span>
           <RadioField name="geriParQQ8" label="Geri - PAR-Q Q8" />
-
+        <br/>
         </Fragment>
 
         <ErrorsField />

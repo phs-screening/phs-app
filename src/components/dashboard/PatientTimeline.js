@@ -37,6 +37,7 @@ function generateStatusArray(record) {
       record.geriAmtForm !== undefined
           && record.geriEbasDepForm !== undefined
           && record.geriVisionForm !== undefined
+          && record.geriVisionForm !== undefined
           && record.geriParQForm !== undefined
           && record.geriPhysicalActivityLevelForm !== undefined
           && record.geriFrailScaleForm !== undefined
@@ -45,7 +46,9 @@ function generateStatusArray(record) {
           && record.geriTugForm !== undefined
           && record.geriPtConsultForm !== undefined
           && record.geriOtConsultForm !== undefined
-          && record.geriGeriApptForm !== undefined,
+          && record.geriGeriApptForm !== undefined
+        && record.geriMMSEForm !== undefined
+        && record.geriAudiometryForm !== undefined,
       record.doctorConsultForm !== undefined, // doctor's consult
       record.dietitiansConsultForm !== undefined, // dietitian's consult
       record.socialServiceForm !== undefined, // social service,

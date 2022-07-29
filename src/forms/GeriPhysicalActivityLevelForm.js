@@ -27,7 +27,9 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriPhysicalActivityLevelQ6: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }
+  }, geriPhysicalActivityLevelQ7: {
+        type: String, optional: true
+      }
 }
 )
 
@@ -87,6 +89,9 @@ const GeriPhysicalActivityLevelForm = (props) => {
           5.     Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?<br /><b>*If yes, to REFER FOR PHYSIOTHERAPIST CONSULATION</b>
           <RadioField name="geriPhysicalActivityLevelQ5" label="Geri - Physical Activity Level Q5" />
           <br />
+          Notes:
+          <LongTextField name="geriPhysicalActivityLevelQ7" label="Geri - Physical Activity Level Q7" />
+          <br/>
           <span style={{color: "red"}}>*Referral to Physiotherapist Consult</span>
           <RadioField name="geriPhysicalActivityLevelQ6" label="Geri - Physical Activity Level Q6" />
 
