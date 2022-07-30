@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { LongTextField, RadioField } from 'uniforms-material';
+import { LongTextField, RadioField, SelectField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
@@ -25,15 +25,17 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Light Intensity", "Moderate Intensity", "Vigorous Intensity", "Unsure"], optional: false
   }, geriPhysicalActivityLevelQ5: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriPhysicalActivityLevelQ6: {
-    type: String, allowedValues: ["No fall", "1 fall", "2 or more falls"], optional: false
-  }, geriPhysicalActivityLevelQ7: {
-    type: String, allowedValues: ["No", "Yes"], optional: false
   }, geriPhysicalActivityLevelQ8: {
-    type: String, optional: true
+    type: String, allowedValues: ["No fall", "1 fall", "2 or more falls"], optional: false
   }, geriPhysicalActivityLevelQ9: {
-    type: String, optional: true
+    type: String, allowedValues: ["No", "Yes"], optional: false
   }, geriPhysicalActivityLevelQ10: {
+    type: String, optional: true
+  }, geriPhysicalActivityLevelQ7: {
+    type: String, optional: true
+  }, geriPhysicalActivityLevelQ6: {
+    type: Array, optional: false
+  }, "geriPhysicalActivityLevelQ6.$": {
     type: String, allowedValues: ["< 150min of mod intensity per week", "unsure about qns 1-4", "yes to qn 5", "nil - regular advice"], optional: false
   }
 }
@@ -96,20 +98,21 @@ const GeriPhysicalActivityLevelForm = (props) => {
           <RadioField name="geriPhysicalActivityLevelQ5" label="Geri - Physical Activity Level Q5" />
           <br />
           6.     Do you have any history of falls in the past 1 year? If yes, how many falls?<br />
-          <RadioField name="geriPhysicalActivityLevelQ6" label="Geri - Physical Activity Level Q6" />
+          <RadioField name="geriPhysicalActivityLevelQ8" label="Geri - Physical Activity Level Q8" />
           <br />
           7.     If yes, were any of the falls injurious?<br /><p>If participant had 2 or more falls, or 1 fall with injury, <b>REFER TO DOCTOR'S CONSULTATION</b></p>
-          <RadioField name="geriPhysicalActivityLevelQ7" label="Geri - Physical Activity Level Q7" />
+          <RadioField name="geriPhysicalActivityLevelQ9" label="Geri - Physical Activity Level Q9" />
           <br />
           Please elaborate below on the injuries and whether there was medical treatment e.g. seeing Dr/ED dept.<br />
-          <LongTextField name="geriPhysicalActivityLevelQ8" label="Geri - Physical Activity Level Q8" />
+          <LongTextField name="geriPhysicalActivityLevelQ10" label="Geri - Physical Activity Level Q10" />
           <br />
           Notes:
-          <LongTextField name="geriPhysicalActivityLevelQ9" label="Geri - Physical Activity Level Q9" />
+          <LongTextField name="geriPhysicalActivityLevelQ7" label="Geri - Physical Activity Level Q7" />
           <br/>
           <font color="red">
           <span>*Referral to Physiotherapist Consult</span>
-          <RadioField name="geriPhysicalActivityLevelQ10" label="Geri - Physical Activity Level Q10" />
+          <br />
+          <SelectField name="geriPhysicalActivityLevelQ6" checkboxes="true" label="Geri - Physical Activity Level Q6" />
           </font>
 
         </Fragment>
