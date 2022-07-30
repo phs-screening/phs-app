@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { AutoForm } from 'uniforms';
 import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { RadioField, NumField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateSppbScore } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { useField } from 'uniforms';
 import {getSavedData} from "../services/mongoDB";
@@ -48,24 +48,10 @@ const schema = new SimpleSchema({
 )
 
 function GetSppbScore() {
-  let score = 0;
   const [{ value: q2 }] = useField('geriSppbQ2', {});
   const [{ value: q6 }] = useField('geriSppbQ6', {});
   const [{ value: q8 }] = useField('geriSppbQ8', {});
-  
-  if (q2 !== undefined) {
-    score += parseInt(q2.slice(0))
-  }
-  if (q6 !== undefined) {
-    const num = parseInt(q6.slice(0))
-    if (!Number.isNaN(num)) {
-      score += num
-    }
-  }
-  if (q8 !== undefined) {
-    score += parseInt(q8.slice(0))
-  }
-  return score;
+  return calculateSppbScore(q2, q6, q8);
 }
 
 const formName = "geriSppbForm"

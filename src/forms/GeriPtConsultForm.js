@@ -8,8 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { RadioField, LongTextField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { RadioField, LongTextField, SelectField } from 'uniforms-material';
+import { submitForm, calculateSppbScore } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
@@ -23,6 +23,10 @@ const schema = new SimpleSchema({
   }, geriPtConsultQ2: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriPtConsultQ3: {
+    type: Array, optional: true
+  }, "geriPtConsultQ3.$": {
+    type: String, allowedValues: ["Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)", "Reduced functional mobility (i.e. Short Physical Performance Battery <10)", "Others (please specify:)"], optional: true
+  }, geriPtConsultQ8: {
     type: String, optional: true
   }, geriPtConsultQ4: {
     type: String, allowedValues: ["Yes", "No"], optional: false
@@ -154,7 +158,10 @@ const GeriPtConsultForm = (props) => {
           <RadioField name="geriPtConsultQ2" label="Geri - PT Consult Q2" />
           <br/>
           Reasons for referral to Doctor's consult (PT):
-          <LongTextField name="geriPtConsultQ3" label="Geri - PT Consult Q3" />
+          <SelectField name="geriPtConsultQ3" checkboxes="true" label="Geri - PT Consult Q3" />
+          <br/>
+          Please specify (if others):
+          <LongTextField name="geriPtConsultQ8" label="Geri - PT Consult Q8" />
           <br/>
           To be referred to Geriatric Appointment (For HDB EASE Sign-up) (PT):
           <RadioField name="geriPtConsultQ6" label="Geri - PT Consult Q6" />
@@ -195,96 +202,51 @@ const GeriPtConsultForm = (props) => {
               {loadingSidePanel ? <CircularProgress />
                   :
                   <div>
-                    {title("PAR-Q Results")}
-                    {underlined("Has your doctor ever said that you have a heart condition and that you should only do physical activity recommended by a doctor?")}
-                    {geriParq && geriParq.geriParQQ1 ? blueText(geriParq.geriParQQ1) : blueText("nil")}
-                    {underlined("Do you feel pain in your chest when you do physical activity?")}
-                    {geriParq && geriParq.geriParQQ2 ? blueText(geriParq.geriParQQ2) : blueText("nil")}
-                    {underlined("In the past month, have you had chest pain when you were not doing physical activity?")}
-                    {geriParq && geriParq.geriParQQ3 ? blueText(geriParq.geriParQQ3) : blueText("nil")}
-                    {underlined("Do you lose your balance because of dizziness or do you ever lose consciousness?")}
-                    {geriParq && geriParq.geriParQQ4 ? blueText(geriParq.geriParQQ4) : blueText("nil")}
-                    {underlined("Do you have a bone or joint problem (for example, back, knee or hip) that could be made worse by a change in your physical activity?")}
-                    {geriParq && geriParq.geriParQQ5 ? blueText(geriParq.geriParQQ5) : blueText("nil")}
-                    {underlined("Is your doctor currently prescribing drugs (for example, water pills) for your blood pressure or heart condition?    ")}
-                    {geriParq && geriParq.geriParQQ6 ? blueText(geriParq.geriParQQ6) : blueText("nil")}
-                    {underlined("Do you know of any other reason why you should not do physical activity?")}
-                    {geriParq && geriParq.geriParQQ7 ? blueText(geriParq.geriParQQ7) : blueText("nil")}
-                    {title("Physical Activity Level Results ")}
+                  {title("Physical Activity Level Results ")}
                     {underlined("How often do you exercise in a week?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ1 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ1) : blueText("nil")}
                     {underlined("How long do you exercise each time?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ2 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ2) : blueText("nil")}
                     {underlined("What do you do for exercise?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ3 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ3) : blueText("nil")}
-                    {underlined("Using the following scale, can you rate the level of exertion when you exercise? (Borg Scale - Rate Perceived Exertion [RPE])")}
+                    {underlined("How would you rate the level of exertion when you exercise?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ4 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ4) : blueText("nil")}
                     {underlined("Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?")}
                     {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ5 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ5) : blueText("nil")}
-                    {title("Frail Scale Results ")}
-                    {underlined("1. Fatigue: How much of the time during the past 4 weeks did you feel tired?\n" +
-                        "1 = All of the time\n" +
-                        "2 = Most of the time\n" +
-                        "3 = Some of the time\n" +
-                        "4 = A little of the time\n" +
-                        "5 = None of the time\n" +
-                        "\n" +
-                        "Responses of “1” or “2” are scored as 1 and all others as 0.")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ1 ? blueText(geriFrailScale.geriFrailScaleQ1) : blueText("nil")}
-                    {underlined("2. Resistance: By yourself and not using aids, do you have any difficulty walking up 10 steps without resting?\n" +
-                        "1 = Yes\n" +
-                        "0 = No ")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ2 ? blueText(geriFrailScale.geriFrailScaleQ2) : blueText("nil")}
-                    {underlined("3. Ambulation: By yourself and not using aids, do you have any difficulty walking several hundred yards? (approx. > 300m)\n" +
-                        "1 = Yes\n" +
-                        "0 = No")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ3 ? blueText(geriFrailScale.geriFrailScaleQ3) : blueText("nil")}
-                    {underlined("4. Illnesses: For 11 illnesses, participants are asked, “Did a doctor ever tell you that you have [illness]?” \n" +
-                        "The illnesses include hypertension, diabetes, cancer (other than a minor skin cancer), chronic lung disease, heart attack, congestive heart failure, angina, asthma, arthritis, stroke, and kidney disease.\n" +
-                        "\n" +
-                        "The total illnesses (0–11) are recorded as \n" +
-                        "0–4 = 0 and 5–11 = 1.")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ4 ? blueText(geriFrailScale.geriFrailScaleQ4) : blueText("nil")}
-                    {underlined("5. What is the percentage (%) weight change? ")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ5 ? blueText(geriFrailScale.geriFrailScaleQ5) : blueText("nil")}
-                    Total Score:
-                    {geriFrailScale ? getTotalFrailScaleScore(geriFrailScale) : null}
+                    {underlined("History of falls in past 1 year? If yes, how many falls?")}
+                    {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ8 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ8) : blueText("nil")}
+                    {underlined("If yes, were any of the falls injurious?")}
+                    {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ9 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ9) : blueText("nil")}
+                    {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ10 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ10) : blueText("nil")}
                     {underlined("Notes:")}
-                    {geriFrailScale && geriFrailScale.geriFrailScaleQ7 ? blueText(geriFrailScale.geriFrailScaleQ7) : blueText("nil")}
-                    {title("SPPB Scores")}
-                    {underlined("1) REPEATED CHAIR STANDS: " +
-                        "Time taken in seconds (only if 5 chair stands were completed):")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText("nil")}
-                    {underlined("Score for REPEATED CHAIR STANDS (out of 4):")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
-                    {underlined("2a) BALANCE Side-by-side Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText("nil")}
-                    {underlined("2b) BALANCE Semi-tandem Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText("nil")}
-                    {underlined("2b) BALANCE Semi-tandem Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText("nil")}
-                    {underlined("2c) BALANCE Tandem Stand Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
-                    {underlined("Score for BALANCE (out of 4:")}
+                    {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ7 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ7) : blueText("nil")}
+                    {underlined("Reasons for referral to PT Consult:")}
+                    {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ6 ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ6) : blueText("nil")}
+                  {title("SPPB Scores")}
+                    {underlined("Short Physical Performance Battery Score (out of 12):")}
+                    {geriSppb ? blueText(calculateSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
+                    {underlined("Gait speed (Time taken in seconds):")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ7) : blueText("nil")}
-                    {underlined("3) 8’ WALK \n" +
-                        "Time taken in seconds:")}
+                    {underlined("Gait speed Score (out of 4):")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText("nil")}
-                    {underlined("Sum up the scores of the sections highlighted In blue. Total score: (Max Score:12)")}
-                    {geriSppb ? blueText(GetSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
+                    {underlined("Chair rise (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText("nil")}
+                    {underlined("Number of chairs completed:")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ13) : blueText("nil")}
+                    {underlined("5 Chair rise Score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
+                    {underlined("Side to Side (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText("nil")}
+                    {underlined("Semi-tandem Stand (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText("nil")}
+                    {underlined("Tandem Stand (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText("nil")}
+                    {underlined("Balance score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
                     {underlined("Falls Risk Level: ")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText("nil")}
-                    {title("SLBT Results")}
-                    {underlined("Walking aid (if any): ")}
-                    {geriTug ? blueText(geriTug.geriTugQ1) : blueText("nil")}
-                    {underlined("Time taken (in seconds):")}
-                    {geriTug ? blueText(geriTug.geriTugQ3) : blueText("nil")}
-                    {underlined("Failed SLBT?")}
-                    {geriTug ? blueText(geriTug.geriTugQ4) : blueText("nil")}
-
+                    {underlined("Notes:")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ12) : blueText("nil")}
                   </div>
               }
             </Grid>
