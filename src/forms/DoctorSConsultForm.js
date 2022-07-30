@@ -13,7 +13,7 @@ import { SubmitField, ErrorsField } from 'uniforms-material';
 import {
 	LongTextField,
   BoolField } from 'uniforms-material';
-import { submitForm, calculateBMI } from '../api/api.js';
+import { submitForm, calculateBMI, calculateSppbScore } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { title, underlined, blueText } from '../theme/commonComponents';
 import {getSavedData} from "../services/mongoDB";
@@ -66,6 +66,7 @@ const DoctorSConsultForm = (props) => {
     const [geriOt, setGeriOt] = useState({})
     const [geriPt, setGeriPt] = useState({})
     const [geriVision, setGeriVision] = useState({})
+    const [geriSppb, setGeriSppb] = useState({})
     useEffect(async () => {
         const loadPastForms = async () => {
           const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
@@ -76,8 +77,9 @@ const DoctorSConsultForm = (props) => {
             const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
             const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
             const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
+            const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
             const savedData = getSavedData(patientId, formName);
-          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData, geriVisionData])
+          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData, geriVisionData, geriSppbData])
               .then((result) => {
                   setHcsr(result[0])
                   setNss(result[1])
@@ -89,6 +91,7 @@ const DoctorSConsultForm = (props) => {
                   isLoadingSidePanel(false);
                   setSaveData(result[7])
                   setGeriVision(result[8])
+                  setGeriSppb(result[9])
               })
         }
 
@@ -180,22 +183,22 @@ const DoctorSConsultForm = (props) => {
                 <div>
                     {title("Health Concerns")}
                     {underlined("Requires scrutiny by doctor?")}
-                    {hcsr ? blueText(hcsr.hxHcsrQ11) : null}
+                    {hcsr ? blueText(hcsr.hxHcsrQ11) : blueText("nil")}
                   {underlined("Summarised reasons for referral to Doctor Consultation")}
-                  {hcsr ? blueText(hcsr.hxHcsrQ2) : null}
+                  {hcsr ? blueText(hcsr.hxHcsrQ2) : blueText("nil")}
                     {title("Systems Review")}
                     {underlined("Requires scrutiny by doctor?")}
-                    {hcsr ? blueText(hcsr.hxHcsrQ12) : null}
+                    {hcsr ? blueText(hcsr.hxHcsrQ12) : blueText("nil")}
                   {underlined("Summarised systems review")}
-                  {hcsr ? blueText(hcsr.hxHcsrQ3) : null}
+                  {hcsr ? blueText(hcsr.hxHcsrQ3) : blueText("nil")}
                   {title("Urinary/Faecal incontinence")}
                   {underlined("Urinary/Faecal incontinence")}
-                  {hcsr ? blueText(hcsr.hxHcsrQ4) : null}
-                  {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : null}
+                  {hcsr ? blueText(hcsr.hxHcsrQ4) : blueText("nil")}
+                  {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : blueText("nil")}
                   {title("Vision problems")}
                   {underlined("Vision Problems (From history taking)")}
-                  {hcsr ? blueText(hcsr.hxHcsrQ6) : null}
-                  {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : null}
+                  {hcsr ? blueText(hcsr.hxHcsrQ6) : blueText("nil")}
+                  {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : blueText("nil")}
                     {underlined("Referred from Geriatric Vision Screening (if VA with pinhole ≥ 6/12)")}
                     {geriVision && geriVision.geriVisionQ9 ? (geriVision.geriVisionQ9.length === 0 ? blueText("nil") : blueText(geriVision.geriVisionQ9)) : blueText("nil")}
                     {underlined("Previous eye condition or surgery:")}
@@ -213,8 +216,8 @@ const DoctorSConsultForm = (props) => {
 
                   {title("Hearing problems")}
                   {underlined("Hearing Problems")}
-                  {hcsr ? blueText(hcsr.hxHcsrQ8) : null}
-                  {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : null}
+                  {hcsr ? blueText(hcsr.hxHcsrQ8) : blueText("nil")}
+                  {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : blueText("nil")}
                   {title("Past Medical History")}
                   {underlined("Summary of Relevant Past Medical History")}
                   {nss && nss.hxNssQ12 ? blueText(nss.hxNssQ12.toString()) : blueText("nil")}
@@ -226,38 +229,47 @@ const DoctorSConsultForm = (props) => {
                     {nss && nss.hxNssQ10 ? blueText(nss.hxNssQ10.toString()) : blueText("nil")}
                   {title("Smoking History")}
                   {underlined("Smoking frequency")}
-                  {nss ? blueText(nss.hxNssQ14) : null}
+                  {nss ? blueText(nss.hxNssQ14) : blueText("nil")}
                     {underlined("Pack years:")}
-                    {nss ? blueText(nss.hxNssQ3) : null}
+                    {nss ? blueText(nss.hxNssQ3) : blueText("nil")}
                   {title("Alcohol history")}
                   {underlined("Alcohol consumption")}
-                  {nss ? blueText(nss.hxNssQ15) : null}
+                  {nss ? blueText(nss.hxNssQ15) : blueText("nil")}
                   {title("Family History")}
                   {underlined("Summary of Relevant Family History")}
-                  {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : null}
+                  {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : blueText("nil")}
                   {title("Blood Pressure")}
                     {underlined("Requires scrutiny by doctor?")}
-                    {cancer && cancer.hxCancerQ27 ? blueText(cancer.hxCancerQ27) : null}
+                    {cancer && cancer.hxCancerQ27 ? blueText(cancer.hxCancerQ27) : blueText("nil")}
                   {underlined("Average Blood Pressure")}
-                  {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : null}
-                  {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : null}
+                  {cancer ? blueText("Average Reading Systolic: " + cancer.hxCancerQ17) : blueText("nil")}
+                  {cancer ? blueText("Average Reading Diastolic: " + cancer.hxCancerQ18) : blueText("nil")}
                     {title("BMI")}
                     {underlined("Requires scrutiny by doctor?")}
-                    {cancer && cancer.hxCancerQ23 ? blueText(cancer.hxCancerQ23.toString()) : null}
+                    {cancer && cancer.hxCancerQ23 ? blueText(cancer.hxCancerQ23.toString()) : blueText("nil")}
                   {underlined("BMI")}
-                  {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : null}
-                  {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : null}
+                  {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : blueText("nil")}
+                  {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : blueText("nil")}
                   {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
                     ? blueText("BMI: " + calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20))
-                    : null}
+                    : blueText("nil")}
                     {underlined("Waist circumference (cm)")}
-                    {cancer ? blueText(cancer.hxCancerQ24) : null}
+                    {cancer ? blueText(cancer.hxCancerQ24) : blueText("nil")}
                     {title("OT consult")}
                     {underlined("Reasons for referral")}
-                    {geriOt ? blueText(geriOt.geriOtConsultQ3 ) : null}
+                    {geriOt ? blueText(geriOt.geriOtConsultQ3 ) : blueText("nil")}
                     {title("PT consult")}
                     {underlined("Reasons for referral")}
-                    {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : null}
+                    {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : blueText("nil")}
+                    {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : blueText("nil")}
+                    {underlined("Short Physical Performance Battery Score (out of 12):")}
+                    {geriSppb ? blueText(calculateSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
+                    {underlined("Gait speed Score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText("nil")}
+                    {underlined("5 Chair rise Score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
+                    {underlined("Balance score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
                 </div>
               }
               </Grid>
