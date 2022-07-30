@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { LongTextField, RadioField } from 'uniforms-material';
+import { LongTextField, RadioField, SelectField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
@@ -16,20 +16,28 @@ import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   geriPhysicalActivityLevelQ1: {
-    type: String, optional: false
+    type: String, allowedValues: ["Nil", "1-2x/ week", "3-4x/ week", "5x/ week or more"], optional: false
   }, geriPhysicalActivityLevelQ2: {
-    type: String, optional: false
+    type: String, allowedValues: ["Nil", "<15 min", "< 15-30 min", "30 min or more"], optional: false
   }, geriPhysicalActivityLevelQ3: {
     type: String, optional: false
   }, geriPhysicalActivityLevelQ4: {
-    type: String, allowedValues: ["0 (Nothing at all)", "1 (Very light)", "2 (Fairly light)", "3 (Moderate)", "4 (Somewhat hard)", "5 (Hard)", "6.0", "7 (Very Hard)", "8.0"], optional: false
+    type: String, allowedValues: ["Light Intensity", "Moderate Intensity", "Vigorous Intensity", "Unsure"], optional: false
   }, geriPhysicalActivityLevelQ5: {
     type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriPhysicalActivityLevelQ6: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
+  }, geriPhysicalActivityLevelQ8: {
+    type: String, allowedValues: ["No fall", "1 fall", "2 or more falls"], optional: false
+  }, geriPhysicalActivityLevelQ9: {
+    type: String, allowedValues: ["No", "Yes"], optional: false
+  }, geriPhysicalActivityLevelQ10: {
+    type: String, optional: true
   }, geriPhysicalActivityLevelQ7: {
-        type: String, optional: true
-      }
+    type: String, optional: true
+  }, geriPhysicalActivityLevelQ6: {
+    type: Array, optional: false
+  }, "geriPhysicalActivityLevelQ6.$": {
+    type: String, allowedValues: ["< 150min of mod intensity per week", "unsure about qns 1-4", "yes to qn 5", "nil - regular advice"], optional: false
+  }
 }
 )
 
@@ -74,26 +82,38 @@ const GeriPhysicalActivityLevelForm = (props) => {
           <h2>PHYSICAL ACTIVITY LEVELS</h2>
           <br/>
           1.     How often do you exercise in a week?<br />*If &lt; 3x/week and would like to start exercising more, suggest physiotherapist consultation
-          <LongTextField name="geriPhysicalActivityLevelQ1" label="Geri - Physical Activity Level Q1" />
+          <RadioField name="geriPhysicalActivityLevelQ1" label="Geri - Physical Activity Level Q1" />
           <br />
           2.     How long do you exercise each time?<br />*If &lt; 30minutes per session and would like to increase, suggest physiotherapist consultation.
-          <LongTextField name="geriPhysicalActivityLevelQ2" label="Geri - Physical Activity Level Q2" />
+          <RadioField name="geriPhysicalActivityLevelQ2" label="Geri - Physical Activity Level Q2" />
           <br />
           3.     What do you do for exercise?<br />*Take down salient points. <br />*Dangerous/ inappropriate exercises are defined to the participants as exercises that cause pain or difficulty to to the participant in performing.<br />*If exercises are dangerous or deemed inappropriate, to REFER FOR PHYSIOTHERAPIST CONSULATION.
           <LongTextField name="geriPhysicalActivityLevelQ3" label="Geri - Physical Activity Level Q3" />
           <br />
-          4.     Using the following scale, can you rate the level of exertion when you exercise?<br />(Borg Scale – Rate Perceived Exertion (RPE))<br /><b>*If &lt;3, to suggest physiotherapist consultation. If &gt;7, to REFER FOR PHYSIOTHERAPIST CONSULATION. </b><br />
-          <img src='/images/geri-physical-activity-level/borg-scale.png' alt='Borg Scale' /> <br />
+          4.     Using the following scale, can you rate the level of exertion when you exercise?<br /><p><b>PT to note:</b> if participant:</p>1)    Achieves less than 150 min moderate intensity per week OR<br />2)    Unsure about any of the 4 questions above. <br />
+          <img src='/images/geri-physical-activity-level/intensity.jpg' alt='Intensity' /> <br />
           <RadioField name="geriPhysicalActivityLevelQ4" label="Geri - Physical Activity Level Q4" />
           <br />
           5.     Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?<br /><b>*If yes, to REFER FOR PHYSIOTHERAPIST CONSULATION</b>
           <RadioField name="geriPhysicalActivityLevelQ5" label="Geri - Physical Activity Level Q5" />
           <br />
+          6.     Do you have any history of falls in the past 1 year? If yes, how many falls?<br />
+          <RadioField name="geriPhysicalActivityLevelQ8" label="Geri - Physical Activity Level Q8" />
+          <br />
+          7.     If yes, were any of the falls injurious?<br /><p>If participant had 2 or more falls, or 1 fall with injury, <b>REFER TO DOCTOR'S CONSULTATION</b></p>
+          <RadioField name="geriPhysicalActivityLevelQ9" label="Geri - Physical Activity Level Q9" />
+          <br />
+          Please elaborate below on the injuries and whether there was medical treatment e.g. seeing Dr/ED dept.<br />
+          <LongTextField name="geriPhysicalActivityLevelQ10" label="Geri - Physical Activity Level Q10" />
+          <br />
           Notes:
           <LongTextField name="geriPhysicalActivityLevelQ7" label="Geri - Physical Activity Level Q7" />
           <br/>
-          <span style={{color: "red"}}>*Referral to Physiotherapist Consult</span>
-          <RadioField name="geriPhysicalActivityLevelQ6" label="Geri - Physical Activity Level Q6" />
+          <font color="red">
+          <span>*Referral to Physiotherapist Consult</span>
+          <br />
+          <SelectField name="geriPhysicalActivityLevelQ6" checkboxes="true" label="Geri - Physical Activity Level Q6" />
+          </font>
 
         </Fragment>
 

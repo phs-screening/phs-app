@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { AutoForm } from 'uniforms';
 import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
 import { RadioField, NumField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateSppbScore } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { useField } from 'uniforms';
 import {getSavedData} from "../services/mongoDB";
@@ -17,6 +17,8 @@ import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   geriSppbQ1: {
+    type: Number, optional: true
+  }, geriSppbQ13: {
     type: Number, optional: true
   }, geriSppbQ2: {
     type: String, allowedValues: ["0       (If not able to complete 5 chair stands)", "1       (> 16.7s )", "2       (16.6 – 13.7s )", "3       (13.6 – 11.2s )", "4       (< 11.1s )"], optional: false
@@ -31,12 +33,12 @@ const schema = new SimpleSchema({
   }, geriSppbQ7: {
     type: Number, optional: true
   }, geriSppbQ8: {
-    type: String, allowedValues: ["0       (Could not do)", "1       (> 5.7s )", "2       (4.1 – 5.7s )", "3       (3.2 – 4.0s )", "4       (< 3.1s )"], optional: false
+    type: String, allowedValues: ["0       (Could not do)", "1       (> 6.52s )", "2       (4.66 – 6.52s )", "3       (3.62 – 4.65s )", "4       (< 3.62s )"], optional: false
   // There is no Q9???
   // }, geriSppbQ9: {
   //   type: String, optional: false
   }, geriSppbQ10: {
-    type: String, allowedValues: ["High Falls Risk (score ≤ 6)", "Low Falls Risk (score > 6)"], optional: false
+    type: String, allowedValues: ["High Fall Risk (0-3)", "Moderate Fall Risk (4-9)", "Low Fall Risk (10-12)"], optional: false
   }, geriSppbQ11: {
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriSppbQ12: {
@@ -46,24 +48,10 @@ const schema = new SimpleSchema({
 )
 
 function GetSppbScore() {
-  let score = 0;
   const [{ value: q2 }] = useField('geriSppbQ2', {});
   const [{ value: q6 }] = useField('geriSppbQ6', {});
   const [{ value: q8 }] = useField('geriSppbQ8', {});
-  
-  if (q2 !== undefined) {
-    score += parseInt(q2.slice(0))
-  }
-  if (q6 !== undefined) {
-    const num = parseInt(q6.slice(0))
-    if (!Number.isNaN(num)) {
-      score += num
-    }
-  }
-  if (q8 !== undefined) {
-    score += parseInt(q8.slice(0))
-  }
-  return score;
+  return calculateSppbScore(q2, q6, q8);
 }
 
 const formName = "geriSppbForm"
@@ -106,6 +94,9 @@ const GeriSppbForm = (props) => {
       1) REPEATED CHAIR STANDS<br />Time taken in seconds (only if 5 chair stands were completed):
       <NumField name="geriSppbQ1" label="Geri - SPPB Q1"/>
           <br />
+      Number of chairs completed:
+      <NumField name="geriSppbQ13" label="Geri - SPPB Q13"/>
+          <br />
       <font color="blue"><b>
         Score for REPEATED CHAIR STANDS (out of 4):
         <RadioField name="geriSppbQ2" label="Geri - SPPB Q2"/>
@@ -125,11 +116,11 @@ const GeriSppbForm = (props) => {
         <RadioField name="geriSppbQ6" label="Geri - SPPB Q6"/>
       </b></font>
           <br />
-      3) 8’ WALK <br />Time taken in seconds:
+      3) 3m WALK <br />Time taken in seconds:
       <NumField name="geriSppbQ7" label="Geri - SPPB Q7"/>
           <br />
       <font color="blue"><b>
-        Score for 8' WALK (out of 4):
+        Score for 3m WALK (out of 4):
         <RadioField name="geriSppbQ8" label="Geri - SPPB Q8"/>
       </b></font>
           <br />
@@ -140,8 +131,7 @@ const GeriSppbForm = (props) => {
         </h3>
           <br />
       
-      <h3>If total score ≤ 6, participant has a high falls risk.</h3>
-      Falls Risk Level: 
+      Fall Risk Level: 
       <RadioField name="geriSppbQ10" label="Geri - SPPB Q10"/>
           <br />
       <font color="red">*Referral to Physiotherapist and Occupational Therapist Consult</font>

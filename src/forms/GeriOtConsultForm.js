@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {AutoForm, useField} from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { RadioField, LongTextField, SelectField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import { submitForm, calculateSppbScore } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
@@ -181,42 +181,30 @@ const GeriOtConsultForm = (props) => {
                     NA: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ31): blueText("nil")}
                     Total: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ32): blueText("nil")}
                     {title("SPPB Scores")}
-                    {underlined("1) REPEATED CHAIR STANDS: " +
-                        "Time taken in seconds (only if 5 chair stands were completed):")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText("nil")}
-                    {underlined("Score for REPEATED CHAIR STANDS (out of 4):")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
-                    {underlined("2a) BALANCE Side-by-side Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText("nil")}
-                    {underlined("2b) BALANCE Semi-tandem Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText("nil")}
-                    {underlined("2b) BALANCE Semi-tandem Stand \n" +
-                        "Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText("nil")}
-                    {underlined("2c) BALANCE Tandem Stand Time held for in seconds:")}
-                    {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
-                    {underlined("Score for BALANCE (out of 4:")}
+                    {underlined("Short Physical Performance Battery Score (out of 12):")}
+                    {geriSppb ? blueText(calculateSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
+                    {underlined("Gait speed (Time taken in seconds):")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ7) : blueText("nil")}
-                    {underlined("3) 8’ WALK \n" +
-                        "Time taken in seconds:")}
+                    {underlined("Gait speed Score (out of 4):")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText("nil")}
-                    {underlined("Sum up the scores of the sections highlighted In blue. Total score: (Max Score:12)")}
-                    {geriSppb ? blueText(GetSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
+                    {underlined("Chair rise (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText("nil")}
+                    {underlined("Number of chairs completed:")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ13) : blueText("nil")}
+                    {underlined("5 Chair rise Score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
+                    {underlined("Side to Side (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText("nil")}
+                    {underlined("Semi-tandem Stand (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText("nil")}
+                    {underlined("Tandem Stand (Time taken in seconds):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText("nil")}
+                    {underlined("Balance score (out of 4):")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
                     {underlined("Falls Risk Level: ")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText("nil")}
-                    {underlined("Notes")}
+                    {underlined("Notes:")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ12) : blueText("nil")}
-                    {title("SLBT Results")}
-                    {underlined("Walking aid (if any): ")}
-                    {geriTug ? blueText(geriTug.geriTugQ1) : blueText("nil")}
-                    {underlined("Time taken (in seconds):")}
-                    {geriTug ? blueText(geriTug.geriTugQ3) : blueText("nil")}
-                    {underlined("Falls Risk Level: ")}
-                    {geriTug ? blueText(geriTug.geriTugQ4) : blueText("nil")}
-                    {underlined("Notes")}
-                    {geriTug ? blueText(geriTug.geriTugQ6) : blueText("nil")}
                   </div>
               }
             </Grid>

@@ -287,5 +287,22 @@ export function formatWceStation(gender, question, answer) {
 	return result;
 }
 
+export function calculateSppbScore(q2, q6, q8) {
+    let score = 0;
+    if (q2 !== undefined) {
+        score += parseInt(q2.slice(0))
+      }
+      if (q6 !== undefined) {
+        const num = parseInt(q6.slice(0))
+        if (!Number.isNaN(num)) {
+          score += num
+        }
+      }
+      if (q8 !== undefined) {
+        score += parseInt(q8.slice(0))
+      }
+      return score;
+}
+
 
 
