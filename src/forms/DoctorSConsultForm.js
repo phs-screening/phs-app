@@ -251,7 +251,7 @@ const DoctorSConsultForm = (props) => {
                   {cancer ? blueText("Height: " + cancer.hxCancerQ19 + "cm") : blueText("nil")}
                   {cancer ? blueText("Weight: " + cancer.hxCancerQ20 + "kg") : blueText("nil")}
                   {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
-                    ? blueText("BMI: " + calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20))
+                    ? calculateBMI(cancer.hxCancerQ19, cancer.hxCancerQ20)
                     : blueText("nil")}
                     {underlined("Waist circumference (cm)")}
                     {cancer ? blueText(cancer.hxCancerQ24) : blueText("nil")}
