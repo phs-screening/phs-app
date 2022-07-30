@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {AutoForm, useField} from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
+import {SubmitField, ErrorsField, NumField} from 'uniforms-material';
 import { LongTextField, RadioField } from 'uniforms-material';
 import PopupText from 'src/utils/popupText';
 import { submitForm } from '../api/api.js';
@@ -74,13 +74,19 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No", "NA (nil pets / animals at home)"], optional: false
   }, geriOtQuestionnaireQ28: {
     type: String, optional: true
-  }, geriOtQuestionnaireQ32: {
+  }, geriOtQuestionnaireQ29: {
     type: String, optional: false
+  }, geriOtQuestionnaireQ30: {
+    type: String, optional: false
+  },geriOtQuestionnaireQ31: {
+    type: String, optional: false
+  },geriOtQuestionnaireQ32: {
+    type: Number, optional: false
   }
     }
 )
 
-const GetScores = (type) => {
+const GetScores = () => {
   const score = [0, 0, 0]; //yes , no , NA
   const arrayValues = []
   arrayValues[0] = useField('geriOtQuestionnaireQ1', {});
@@ -126,9 +132,15 @@ const GetScores = (type) => {
 
   return (
       <div>
-        <b>Yes:</b> {score[0]}<br/>
-        <b>No:</b> {score[1]}<br/>
-        <b>NA:</b> {score[2]}
+        <b>Yes (calculated):</b> {score[0]}<br/>
+        <b>Yes :</b>
+        <NumField name="geriOtQuestionnaireQ29" label="geriOtQuestionnaire-Q29" step={1} />
+        <b>No (calculated):</b> {score[1]}<br/>
+        <b>No :</b>
+        <NumField name="geriOtQuestionnaireQ30" label="geriOtQuestionnaire-Q30" step={1} />
+        <b>NA (calculated):</b> {score[2]} < br/>
+        <b>NA :</b>
+        <NumField name="geriOtQuestionnaireQ31" label="geriOtQuestionnaire-Q31" step={1} />
       </div>
   )
 
@@ -154,6 +166,8 @@ const GeriOtQuestionnaireForm = (props) => {
         className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
+          // add 3 calculated fields
+
           const response = await submitForm(model, patientId, formName);
           if (response.result) {
             const event = null; // not interested in this value
@@ -327,7 +341,7 @@ const GeriOtQuestionnaireForm = (props) => {
           <GetScores /> <br/>
 
           <b>Total (Record it as "YES" / 25 - "NA"):</b>
-          <LongTextField name="geriOtQuestionnaireQ32" label="geriOtQuestionnaire-Q32" />
+          <NumField name="geriOtQuestionnaireQ32" label="geriOtQuestionnaire-Q32" step={1} />
           <br/>
         </Fragment>
         <ErrorsField />
