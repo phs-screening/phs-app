@@ -249,6 +249,8 @@ const GeriPtConsultForm = (props) => {
                     {geriFrailScale && geriFrailScale.geriFrailScaleQ5 ? blueText(geriFrailScale.geriFrailScaleQ5) : blueText("nil")}
                     Total Score:
                     {geriFrailScale ? getTotalFrailScaleScore(geriFrailScale) : null}
+                    {underlined("Notes:")}
+                    {geriFrailScale && geriFrailScale.geriFrailScaleQ7 ? blueText(geriFrailScale.geriFrailScaleQ7) : blueText("nil")}
                     {title("SPPB Scores")}
                     {underlined("1) REPEATED CHAIR STANDS: " +
                         "Time taken in seconds (only if 5 chair stands were completed):")}
@@ -275,12 +277,12 @@ const GeriPtConsultForm = (props) => {
                     {geriSppb ? blueText(GetSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
                     {underlined("Falls Risk Level: ")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText("nil")}
-                    {title("TUG Results")}
+                    {title("SLBT Results")}
                     {underlined("Walking aid (if any): ")}
                     {geriTug ? blueText(geriTug.geriTugQ1) : blueText("nil")}
                     {underlined("Time taken (in seconds):")}
                     {geriTug ? blueText(geriTug.geriTugQ3) : blueText("nil")}
-                    {underlined("Falls Risk Level: ")}
+                    {underlined("Failed SLBT?")}
                     {geriTug ? blueText(geriTug.geriTugQ4) : blueText("nil")}
 
                   </div>

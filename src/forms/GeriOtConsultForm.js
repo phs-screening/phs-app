@@ -168,32 +168,18 @@ const GeriOtConsultForm = (props) => {
               {loadingSidePanel ? <CircularProgress />
                   :
                   <div>
-                    {title("Vision - Snellen's Test Results ")}
-                    {underlined("Previous eye condition or surgery:")}
-                    {geriVision && geriVision.geriVisionQ1 ? blueText(geriVision.geriVisionQ1) : blueText("nil")}
-                    {geriVision && geriVision.geriVisionQ2 ? blueText(geriVision.geriVisionQ2) : blueText("nil")}
-                    {underlined("Visual acuity (w/o pinhole occluder) - Right Eye 6/__")}
-                    {geriVision && geriVision.geriVisionQ3 ? blueText(geriVision.geriVisionQ3) : blueText("nil")}
-                    {underlined("Visual acuity (w/o pinhole occluder) - Left Eye 6/__")}
-                    {geriVision && geriVision.geriVisionQ4 ? blueText(geriVision.geriVisionQ4) : blueText("nil")}
-                    {underlined("Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__")}
-                    {geriVision && geriVision.geriVisionQ5 ? blueText(geriVision.geriVisionQ5) : blueText("nil")}
-                    {underlined("Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__")}
-                    {geriVision && geriVision.geriVisionQ6 ? blueText(geriVision.geriVisionQ6) : blueText("nil")}
-                    {underlined("Eye Functional Test *only applicable if vision is worse than 6/60")}
-                    {geriVision && geriVision.geriVisionQ7 ? blueText(geriVision.geriVisionQ7) : blueText("nil")}
                     {title("OT Questionnaire Results")}
-                    {underlined("Have you fallen or had a near fall in the last year?")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ1 ? blueText(geriOtQ.geriOtQuestionnaireQ1) : blueText("nil")}
-                    {underlined("Has any medication you've taken caused you drowsiness/ giddiness?")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ2 ? blueText(geriOtQ.geriOtQuestionnaireQ2) : blueText("nil")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ3 ? blueText(geriOtQ.geriOtQuestionnaireQ3) : blueText("nil")}
-                    {underlined("Do you use anything to support yourself (e.g. walking aid, umbrella) when moving about your daily activities?")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ4 ? blueText(geriOtQ.geriOtQuestionnaireQ4) : blueText("nil")}
-                    {underlined("Do you frequently experience dizziness when standing up from a seated or laid down position?")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ5 ? blueText(geriOtQ.geriOtQuestionnaireQ5) : blueText("nil")}
-                    {underlined("Do you experience urinary incontinence or nocturia (go toilet 3 or more times at night)?")}
-                    {geriOtQ && geriOtQ.geriOtQuestionnaireQ6 ? blueText(geriOtQ.geriOtQuestionnaireQ6) : blueText("nil")}
+                    {underlined("Notes (Q1 - 9, Living room/ Home entrance):")}
+                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ10): blueText("nil")}
+                    {underlined("Notes (Q10 - 15, Toilet):")}
+                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ17): blueText("nil")}
+                    {underlined("Notes (Q16 - 25, Kitchen and Living Environment):")}
+                    {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ28): blueText("nil")}
+                    {underlined("Scores")}
+                    Yes: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ29): blueText("nil")}
+                    No: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ30): blueText("nil")}
+                    NA: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ31): blueText("nil")}
+                    Total: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ32): blueText("nil")}
                     {title("SPPB Scores")}
                     {underlined("1) REPEATED CHAIR STANDS: " +
                         "Time taken in seconds (only if 5 chair stands were completed):")}
@@ -220,13 +206,17 @@ const GeriOtConsultForm = (props) => {
                     {geriSppb ? blueText(GetSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}
                     {underlined("Falls Risk Level: ")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText("nil")}
-                    {title("TUG Results")}
+                    {underlined("Notes")}
+                    {geriSppb ? blueText(geriSppb.geriSppbQ12) : blueText("nil")}
+                    {title("SLBT Results")}
                     {underlined("Walking aid (if any): ")}
                     {geriTug ? blueText(geriTug.geriTugQ1) : blueText("nil")}
                     {underlined("Time taken (in seconds):")}
                     {geriTug ? blueText(geriTug.geriTugQ3) : blueText("nil")}
                     {underlined("Falls Risk Level: ")}
                     {geriTug ? blueText(geriTug.geriTugQ4) : blueText("nil")}
+                    {underlined("Notes")}
+                    {geriTug ? blueText(geriTug.geriTugQ6) : blueText("nil")}
                   </div>
               }
             </Grid>
