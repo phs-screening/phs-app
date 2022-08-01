@@ -23,7 +23,7 @@ export const schema = new SimpleSchema({
 	}, registrationQ5: {
 	type: String, optional: false
 	}, registrationQ6: {
-	type: String, allowedValues: ["Buki Batok East", "Clementi", "Yuhua", "Central Jurong", "Taman Jurong", "Jurong Spring", "Others"], optional: false
+	type: String, allowedValues: ["Jurong", "Yuhua", "Bukit Batok", "Pioneer", "West Coast", "Hong Kah North", "Others"], optional: false
 	}, registrationQ7: {
 	type: String, allowedValues: ["Below 1,100 per month (少于 1,100)", "1,100 - 1,799 per month (每月1,100 - 1,799)", "1,800 - 2,799 per month (每月1,800 - 2,799)", "2,800 & above (2,800 或以上)"], optional: false
 	}, registrationQ8: {
@@ -64,7 +64,7 @@ export const layout = (
 		Occupation 工作
 		<TextField name="registrationQ5" />
 		<br />
-		GRC/SMC Subdivision [https://www.parliament.gov.sg/mps/find-my-mp]
+		<p>GRC/SMC Subdivision <a href="https://www.parliament.gov.sg/mps/find-my-mp" target="_blank">[https://www.parliament.gov.sg/mps/find-my-mp]</a></p>
 		<SelectField name="registrationQ6" />
 		<br/>
 		Household Income Per Capita
@@ -84,7 +84,7 @@ export const layout = (
 		<RadioField name="registrationQ11" />
 		<br />
 		<h2>Phlebotomy Eligibility</h2>
-		Before entering our screening, do note the following eligibility criteria for Phlebotomy <br />1) Fasted for minimum 10 hours <br />          Note: Water is allowed, coffee/tea is not. Medications are fine. <br />2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.<br />3) Have not done a blood test within 1 year.<br /><br />Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This information is available in our publicity material. Please approach our registration volunteers should you have any queries. We are happy to explain further. Thank you!<br /><br />抽血合格标准:<br />1) 十个小时内没有吃东西或喝饮料. 可以喝水, 吃药。不能喝咖啡, 喝茶。<br />2) 在过去的一年内沒有验过血。<br />3) 没有糖尿病, 高血压, 高胆固醇。
+		Before entering our screening, do note the following eligibility criteria for Phlebotomy <br />1) Fasted for minimum 8 hours <br />          Note: Water is allowed, coffee/tea is not. Medications are fine. <br />2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.<br />3) Have not done a blood test within 1 year.<br /><br />Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This information is available in our publicity material. Please approach our registration volunteers should you have any queries. We are happy to explain further. Thank you!<br /><br />抽血合格标准:<br />1) 十个小时内没有吃东西或喝饮料. 可以喝水, 吃药。不能喝咖啡, 喝茶。<br />2) 在过去的一年内沒有验过血。<br />3) 没有糖尿病, 高血压, 高胆固醇。
 		<BoolField name="registrationQ12" />
 		<br />
 		<h2>Compliance to PDPA 同意书</h2>
