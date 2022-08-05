@@ -44,7 +44,9 @@ const schema = new SimpleSchema({
     type: Boolean, label: "Yes", optional: true
   }, doctorSConsultQ11: {
     type: Boolean, label: "Yes", optional: true
-  }
+  }, doctorSConsultQ12: {
+        type: Boolean, label: "Yes", optional: true
+    }
 	}
 )
 
@@ -60,38 +62,39 @@ const DoctorSConsultForm = (props) => {
     // forms to retrieve for side panel
     const [hcsr, setHcsr] = useState({})
     const [nss, setNss] = useState({})
-    const [social, setSocial] = useState({})
     const [cancer, setCancer] = useState({})
-    const [geriOtQ, setGeriOtQ] = useState({})
     const [geriOt, setGeriOt] = useState({})
     const [geriPt, setGeriPt] = useState({})
     const [geriVision, setGeriVision] = useState({})
     const [geriSppb, setGeriSppb] = useState({})
+    const [geriPhysical, setGeriPhysical] = useState({})
+    const [geriAppt, setGeriAppt] = useState({})
     useEffect(async () => {
         const loadPastForms = async () => {
           const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
           const nssData = getSavedData(patientId, allForms.hxNssForm);
-          const socialData = getSavedData(patientId, allForms.hxSocialForm);
           const cancerData = getSavedData(patientId, allForms.hxCancerForm);
-          const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
             const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
             const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
             const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
             const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
+            const geriPhysicalData = getSavedData(patientId,allForms.geriPhysicalActivityLevelForm)
+            const geriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
             const savedData = getSavedData(patientId, formName);
-          Promise.all([hcsrData, nssData, socialData, cancerData, geriOtQData, geriOtData, geriPtData, savedData, geriVisionData, geriSppbData])
+          Promise.all([hcsrData, nssData, cancerData, geriOtData, geriPtData, savedData, geriVisionData, geriSppbData
+          , geriPhysicalData, geriApptData])
               .then((result) => {
                   setHcsr(result[0])
                   setNss(result[1])
-                  setSocial(result[2])
-                  setCancer(result[3])
-                  setGeriOtQ(result[4])
-                  setGeriOt(result[5])
-                  setGeriPt(result[6])
+                  setCancer(result[2])
+                  setGeriOt(result[3])
+                  setGeriPt(result[4])
                   isLoadingSidePanel(false);
-                  setSaveData(result[7])
-                  setGeriVision(result[8])
-                  setGeriSppb(result[9])
+                  setSaveData(result[5])
+                  setGeriVision(result[6])
+                  setGeriSppb(result[7])
+                  setGeriPhysical(result[8])
+                  setGeriAppt(result[9])
               })
         }
 
@@ -138,6 +141,9 @@ const DoctorSConsultForm = (props) => {
         <br/><br/>
       Refer to Social Support?
       <BoolField name="doctorSConsultQ6" />
+        Functional Assessment Report (Pg 2-3) completed for HDB EASE application?
+        <BoolField name="doctorSConsultQ12" />
+
       Reason for referral
       <LongTextField name="doctorSConsultQ7" label="Doctor's Consult Q7"/>
         <br/><br/>
@@ -270,6 +276,17 @@ const DoctorSConsultForm = (props) => {
                     {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText("nil")}
                     {underlined("Balance score (out of 4):")}
                     {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText("nil")}
+                    {underlined("Number of falls in past 1 year:")}
+                    {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ8) : blueText("nil")}
+                    {underlined("Were any of the falls injurious?")}
+                    {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ9) : blueText("nil")}
+                    {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ10) : blueText("nil")}
+                    {underlined("Eligible for HDB EASE?")}
+                    {geriAppt ? blueText(geriAppt.geriGeriApptQ9) : blueText("nil")}
+                    {underlined("Interested in signing up?")}
+                    {geriAppt ? blueText(geriAppt.geriGeriApptQ10) : blueText("nil")}
+                    {underlined("Requires Functional Assessment Report Completion?")}
+                    {geriAppt ? blueText(geriAppt.geriGeriApptQ11) : blueText("nil")}
                 </div>
               }
               </Grid>
