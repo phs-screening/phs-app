@@ -21,54 +21,26 @@ import {Visibility, VisibilityOff} from "@material-ui/icons";
 const Reset = () => {
     const navigate = useNavigate();
     let location = useLocation()
-    const [accountOptions, setAccountOptions] = useState(["Guest", "Admin"]);
-    const [accountOption, setAccountOption] = useState("Guest");
-    const {isLogin} = useContext(LoginContext);
-    const {setProfile} = useContext(LoginContext);
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-    const handleLogin = async (values) => {
-        try {
-            // fix uid?
-
-            if (accountOption === accountOptions[1]) {
-                //admin
-                const credentials = Realm.Credentials.emailPassword(values.email, values.password)
-                // Authenticate the user
-                const user = await mongoDB.logIn(credentials);
-                const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-                const userProfile = mongoConnection.db("phs").collection("profiles")
-                const profile = await userProfile.findOne({username: values.email})
-                setProfile(profile)
-                isLogin(true)
-            } else {
-                const credentials = Realm.Credentials.function({username: values.email, password: values.password})
-                // Authenticate the user
-                const user = await mongoDB.logIn(credentials);
-                const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
-                const userProfile = mongoConnection.db("phs").collection("profiles")
-                const profile = await userProfile.findOne({username: values.email})
-                isLogin(true)
-                setProfile(profile)
-            }
-            navigate('/app/registration', { replace: true });
-
-        } catch(err) {
-            alert("Invalid Username or Password!")
-        }
-    }
     const handleReset = async (values) => {
         const urlParamToken = new URLSearchParams(location.search).get("token")
         const urlParamTokenID = new URLSearchParams(location.search).get("tokenId")
         const newPassword = values.password
-        try {
-            await mongoDB.emailPasswordAuth.resetPassword(urlParamToken, urlParamTokenID, newPassword)
-            alert("Password Reset")
-            navigate('/login', { replace: true });
-        } catch (e) {
-            alert("Invalid Link! Contact Dev")
+        // regex check
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+        if (!pattern.test(values.password)) {
+            alert("Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long")
+        } else {
+            try {
+                await mongoDB.emailPasswordAuth.resetPassword(urlParamToken, urlParamTokenID, newPassword)
+                alert("Password Reset")
+                navigate('/login', { replace: true });
+            } catch (e) {
+                alert("Invalid Link! Contact Dev")
+            }
         }
     }
 
