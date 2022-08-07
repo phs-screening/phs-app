@@ -69,7 +69,7 @@ const SummaryForm = (props) => {
         Promise.all([hcsrData, nssData, socialData, cancerData, visionData, fitData, wceData,
           patientsData, geriPtConsultData, geriOtConsultData, socialServiceData, doctorConsultData, 
 		  registrationData, phlebotomyData, geriEbasDepData, geriGeriApptData, geriAmtData, dietitiansConsultData, oralHealthData,
-		  geriMmseData, geriVision, geriAudiometry])
+		  geriMmseData, geriVision, geriAudiometryData])
             .then((result) => {
               setHcsr(result[0])
               setNss(result[1])
@@ -134,10 +134,9 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Completed phlebotomy:")}
 			{phlebotomy ? phlebotomy.phlebotomyQ1
-							? blueRedText("Yes",  "If participant wears a red wrist band, kindly remind him that NUHS/ NTFH will follow-up with the"
-												  + " participant. If participant wears a yellow wrist band, kindly remind him that PHS will follow-up"
-												  + " with them via mailing the results directly to them or to their preferred GP clinics. These instructions"
-												  + " are subjected to changes and hence, verify with the updated protocols.")
+							? blueRedText("Yes", "Kindly remind him that PHS will follow-up with them via mailing the results directly"
+												 + " to them or to their preferred GP clinics. These instructions are subjected to changes and hence, verify with the updated"
+												 + " protocols.")
 							: blueText("No") 
 						: '-'}
 			<br></br>
@@ -206,10 +205,10 @@ const SummaryForm = (props) => {
 			{cancer ? blueText(cancer.hxCancerQ20) : '-'}
 			<br></br>
 			{underlined("Waist Circumference (in cm)")}
-			{cancer ? Number(cancer.hxCancerQ24) > 90 && patients.gender == "Male"
-						? redText(cancer.hxCancerQ24)
-						: Number(cancer.hxCancerQ24) > 80 && patients.gender == "Female"
-							? redText(cancer.hxCancerQ24)
+			{cancer ? Number(cancer.hxCancerQ24) >= 90 && patients.gender == "Male"
+						? redText(cancer.hxCancerQ24 + "\nYour waist circumference is above the normal range. The normal range is less than 90 cm for males." )
+						: Number(cancer.hxCancerQ24) >= 80 && patients.gender == "Female"
+							? redText(cancer.hxCancerQ24 + "\nYour waist circumference is above the normal range. The normal range is less than 80 cm for females.")
 							: blueText(cancer.hxCancerQ24)
 					: '-'}
 			<br></br>
@@ -221,7 +220,8 @@ const SummaryForm = (props) => {
 			{bold("10. Incontinence")}
 			{underlined("Do you have any problem passing urine or motion? Please specify if yes.")}
 			{hcsr ? (hcsr.hxHcsrQ4 == "Yes, (Please specify):"
-					? blueRedText(hcsr.hxHcsrQ4, "Check if participant is referred to Society for Continence Singapore (SFCS) booth at Exhibition. If no, tick on PHS Passport and indicate.")
+					? blueRedText(hcsr.hxHcsrQ4, "Check if participant is referred to Society for Continence Singapore (SFCS) booth at Exhibition."
+												 + "If no, tick on PHS Passport and indicate.")
 					: blueText(hcsr.hxHcsrQ4))
 				  : "-"}
 			{hcsr ? blueText(hcsr.hxHcsrQ5) : "-"}
@@ -238,21 +238,13 @@ const SummaryForm = (props) => {
 			{underlined("Please specify:")}
 			{hcsr ? blueText(hcsr.hxHcsrQ7) : '-'}
 			<br></br>
-			{formatGeriVision(vision.geriVisionQ3, 3)}
-			<br></br>
-			{formatGeriVision(vision.geriVisionQ4, 4)}
-			<br></br>
-			{formatGeriVision(vision.geriVisionQ5, 5)}
-			<br></br>
-			{formatGeriVision(vision.geriVisionQ6, 6)}
-			<br></br>
 
 			<br></br>
 			{bold("12. Hearing")}
 			{underlined("Do you have any hearing problems? Please specify if yes.")}
-			{hcsr ? hcsr.hxHcsrQ8 == "No"
+			{hcsr ? hcsr.hxHcsrQ8 == "No" || typeof hcsr.hxHcsrQ8 == "undefined"
 					? blueText(hcsr.hxHcsrQ8)
-					:  blueRedText(hcsr.hxHcsrQ8, "If it is a Geri participant, inform them that HPB will follow-up with them. "
+					:  blueRedText(hcsr.hxHcsrQ8, "If it is a Geri participant, inform them that HPB/NUHS will follow-up with them. "
 											 	  + "If it is a non-Geri participant, advice them to visit a polyclinic to follow-up with their hearing issue") 
 				: "-"}
 			<br></br>
@@ -302,12 +294,26 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("16. Geriatrics")}
+			<br></br>
+			{bold("a. Geriatrics - AMT")}
 			{underlined("Did participant fail AMT?")}
 			{geriAmt ? blueText(geriAmt.geriAmtQ12) : "-"}
 			<br></br>
 			{underlined("Referred to G-RACE for MMSE on-site?")}
 			{geriAmt ? blueText(geriAmt.geriAmtQ13ation) : "-"}
 			<br></br>
+			{bold("b. Geriatrics - MMSE")}
+			{underlined("Need referral to G-RACE associated polyclinics/ partners?")}
+			{geriMmse ? blueText(geriMmse.geriMMSEQ2) : "-"}
+			<br></br>
+			{underlined("Referral made to G-RACE associated polyclinics/ partners?")}
+			{geriMmse ? geriMmse.geriMMSEQ3 == "Yes"
+						? blueRedText(geriMmse.geriMMSEQ3, "Please advise the participant to follow through"
+														   + "with G-RACE and affiliated polyclinics/ partners.")
+						: blueText(geriMmse.geriMMSEQ3)
+					  : '-'}
+			<br></br>
+			{bold("c. Geriatrics - EBAS")}
 			{underlined("Referred to Social Service for failing EBAS?")}
 			{geriEbasDep ? geriEbasDep.geriEbasDepQ10 == "Yes"
 							? blueRedText(geriEbasDep.geriEbasDepQ10, "Please check if participant has visited the Social Service Station.")
@@ -323,6 +329,7 @@ const SummaryForm = (props) => {
 			{underlined("Reasons for referral to Social Service:")}
 			{geriEbasDep ? blueRedText(geriEbasDep.geriEbasDepQ12) : "-"}
 			<br></br>
+			{bold("d. Geriatrics - PT consult")}
 			{underlined("Memo from PT:")}
 			{geriPtConsult ? blueRedText(geriPtConsult.geriPtConsultQ1) : "-"}
 			<br></br>
@@ -344,6 +351,7 @@ const SummaryForm = (props) => {
 			{underlined("Reasons for referral:")}
 			{geriPtConsult ? blueText(geriPtConsult.geriPtConsultQ5) : "-"}
 			<br></br>
+			{bold("e. Geriatrics - OT consult")}
 			{underlined("Memo from OT:")}
 			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ1) : "-"}
 			<br></br>
@@ -368,6 +376,16 @@ const SummaryForm = (props) => {
 			{underlined("Which of the programmes did the OT recommend for the participant to go? (if applicable)")}
 			{geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ6) : "-"}
 			<br></br>
+			{bold("f. Geriatrics - Vision")}
+			{underlined("Visual acuity (VA) scores")}
+			{formatGeriVision(vision.geriVisionQ3, 3)}
+			<br></br>
+			{formatGeriVision(vision.geriVisionQ4, 4)}
+			<br></br>
+			{formatGeriVision(vision.geriVisionQ5, 5)}
+			<br></br>
+			{formatGeriVision(vision.geriVisionQ6, 6)}
+			<br></br>
 			{underlined("Participant's details recorded down for referral to L2 Eye Screening by NUHS?")}
 			{geriOtConsult ? typeof geriVision.geriVisionQ8 != "undefined" && geriVision.geriVisionQ8[0] == "Referred to OT Consult"
 							? blueRedText(geriVision.geriVisionQ8[0],  "Please advise the participant that they may be followed-up by NUHS for subsequent vision screening.")
@@ -380,22 +398,31 @@ const SummaryForm = (props) => {
 							: blueText(geriVision.geriVisionQ9)
 						   : '-'}
 			<br></br>
+			{bold("g. Geriatrics - Audiometry")}
 			{underlined("Did participant visit Audiometry Station by NUS Audiology team?")}
 			{geriOtConsult ? blueText(geriAudiometry.geriAudiometryQ1) : "-"}
 			<br></br>
 			{underlined("Did participant fail the Audiometry Station?")}
 			{geriOtConsult ? blueText(geriAudiometry.geriAudiometryQ2) : "-"}
 			<br></br>
-			{underlined("Did participant fail the Audiometry Station?")}
-			{geriOtConsult ? blueText(geriAudiometry.geriAudiometryQ13) : "-"}
+			{underlined("Participant referred for L2 Screening by NUH Mobile Hearing Clinic?")}
+			{geriOtConsult ? geriAudiometry.geriAudiometryQ3 == "Yes"
+							? blueRedText(geriAudiometry.geriAudiometryQ3, "Please advise the participant that they may be followed-up by NUHS for subsequent audiometry"
+																		   + " screening.")
+							: blueText(geriAudiometry.geriAudiometryQ3) 
+						   : "-"}
 			<br></br>
 			{underlined("Did participant attend geriatric functional screening organised by the HPB-AIC?")}
-			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ12) : "-"}
+			{geriGeriAppt ? geriGeriAppt.geriGeriApptQ12 == "Yes"
+							? blueRedText(geriGeriAppt.geriGeriApptQ12, "Please advise the participant that they may be followed-up by HDB regarding"
+							                                            + "their application status.") 
+							: blueText(geriGeriAppt.geriGeriApptQ12)
+						   : "-"}
 			<br></br>
 			{underlined("Were spectacle vouchers given to participant for VA ≥ 6/12?")}
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ4) : "-"}
 			<br></br>
-			{underlined("Eligible for SWCDC Safe & Bright Homes Programme?")}
+			{underlined("Eligible for SWCDC Safe & Sustainable Homes Programme?")}
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ6) : "-"}
 			<br></br>
 			{underlined("Interest in signing up?")}
@@ -410,16 +437,16 @@ const SummaryForm = (props) => {
 			{underlined("Interest in signing up?")}
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ10) : "-"}
 			<br></br>
-			{underlined("Participant's details collected for HDB EASE?")}
-			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ11) : "-"}
+			{underlined("Referred to Social Service for HDB EASE Application?")}
+			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ13) : "-"}
 			<br></br>
 
 			<br></br>
 			{bold("17. Doctor's Consult")}
 			{underlined("Did this patient consult an on-site doctor today?")}
-			{doctorSConsult ? doctorSConsult.doctorSConsultQ11 
-								? blueRedText(doctorSConsult.doctorSConsultQ11, '\nPlease check with participant if they have received a memo from the on-site Doctor.')
-								: blueText(doctorSConsult.doctorSConsultQ11)
+			{doctorSConsult ? doctorSConsult.doctorSConsultQ11 || typeof doctorSConsult.doctorSConsultQ11 == 'undefined'
+								? blueRedText("Yes", 'Please check with participant if they have received a memo from the on-site Doctor.')
+								: blueText("No")
 							: "-"}
 			<br></br>
 			{underlined("Doctor's name:")}
@@ -445,16 +472,16 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Was participant referred for Social Service?")}
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ6)
-								? blueRedText("Yes", "Please check if participant visited the Dietitian's Consult Station.")
+								? blueRedText("Yes", "Please check if participant visited the Social Service Station.")
 								: blueText("No")
 							: '-'}
 			<br></br>
 			{underlined("Reasons for referral:")}
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ7) : '-'}
 			<br></br>
-			{underlined("Was participant referred for Social Service?")}
+			{underlined("Was participant referred for Oral Health Station?")}
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ8)
-								? blueText("Yes", "Please check if participant visited the Oral Health Station.")
+								? blueRedText("Yes", "Please check if participant visited the Oral Health Station.")
 								: blueText("No") 
 							: '-'}
 			<br></br>
@@ -496,7 +523,7 @@ const SummaryForm = (props) => {
 
 			{bold("19. Social Service")}
 			{underlined("Did this participant visit the social service station today?")}
-			{socialService ? socialService.socialServiceQ1
+			{socialService ? socialService.socialServiceQ1 == "No"
 							? blueRedText(socialService.socialServiceQ1, "Please check form A and above sections if the participant is flagged for Social Service Station.") 
 							: blueText(socialService.socialServiceQ1)
 						: '-'}
@@ -506,8 +533,8 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("SACS referral form filled-up?")}
 			{socialService ? socialService.socialServiceQ6
-							? blueRedText(socialService.socialServiceQ6, "Please advise the participant that they may be followed-up by SACS regarding their application status for the programmes.")
-							: blueText(socialService.socialServiceQ6)
+							? blueRedText("Yes", "Please advise the participant that they may be followed-up by SACS regarding their application status for the programmes.")
+							: blueText("No")
 						: '-'}
 			<br></br>
 			{underlined("Is follow-up required?")}
@@ -523,6 +550,24 @@ const SummaryForm = (props) => {
 							? redText("Kindly encourage the participant to follow through with recommendations from AIC.")
 							: ""
 						   : ""}
+			<br></br>
+			{underlined("Completed HDB EASE application?")}
+			{socialService ? socialService.socialServiceQ7
+							? blueRedText("Yes", socialService.socialServiceQ7, "Upon receipt of the application and the relevant documents (if required),"
+																                + "the HDB Branch managing your estate will reply to you within 7 working days.")
+							: blueText("No")
+						   : "-"}
+			{underlined("Completed CHAS application?")}
+			{socialService ? socialService.socialServiceQ8
+							? blueRedText("Yes", "Inform participant that application takes 15 working days from the"
+												  + "date of receipt of the completed application to process. Successful applicants"
+												  + "and their household members will receive a CHAS card that indicates the subsidy"
+												  + "tier they are eligible for, as well as a welcome pack with information on the"
+												  + "use of the card.")
+							: blueText("No")
+						   : "-"}
+			{underlined("Reasons for not completing above (if any):")}
+			{socialService ? blueText(socialService.socialServiceQ9) : '-'}
 			<br></br>
 
 			{bold("20. Oral Health")}

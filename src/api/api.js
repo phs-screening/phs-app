@@ -521,10 +521,9 @@ export function addDoctorSConsult(doc, doctorSConsult, k) {
 		doc.line(10, calculateY(k), 10 + doc.getTextWidth("Doctor's Consultation"), calculateY(k));
 		doc.setFont(undefined, 'normal');
 
-		var dSC = doc.splitTextToSize(kNewlines(k = k + 2) + "We hope you have visited your family doctor with the Doctor’s Memo"
-		                                                   + " obtained from our screening. He/She will be able to advise you"
-														   + " on your next steps with regards to the health issue(s) raised"
-														   + " in the memo.", 180)
+		var dSC = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to visit your family doctor with the Doctor’s Memo obtained"
+														   + " from our screening. He/She will be able to advise you on your next steps with regards"
+														   + " to the health issue(s) raised in the memo.", 180)
 		doc.text(10, 10, dSC);
 		k = k + 1;
 	}
@@ -546,16 +545,37 @@ export function addSocialService(doc, socialService, k) {
 
 	if (socialService.socialServiceQ1 == "Yes") {
 		var socialServiceQ1 = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to follow through with the recommendations from Agency of Integrated Care (AIC)"
-																	   + "so that you receive the help that you need.", 180);
+																	   + " so that you receive the help that you need.", 180);
 		doc.text(10, 10, socialServiceQ1);
 		k++;
 	}	
 
 	if (socialService.socialServiceQ6) {
 		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 2) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
-																	   + "application status for their programmes.", 180);
+																	   + " application status for their programmes.", 180);
 		doc.text(10, 10, socialServiceQ6);
 		k++;
+	}
+
+	if (socialService.socialServiceQ7) {
+		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 2) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
+																       + " HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date."
+																	   + " You may expect the process from applying for EASE (Direct Application) to having the improvement items installed in your flat to"
+																	   + " be completed within a month.", 180);
+		doc.text(10, 10, socialServiceQ7);
+		doc.addPage();
+    	k = 0;
+		k++;
+	}
+
+	if (socialService.socialServiceQ8) {
+		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 2) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
+																	   + " household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information"
+																	   + " on the use of the card. If you have not received the outcome after 15 working days, you can visit the CHAS online application page and login using"
+																	   + " your SingPass. You can also call the CHAS hotline at 1800-275-2427 (1800-ASK-CHAS) to check on your application status or if you need assistance in applying"
+																	   + " for CHAS.", 180)
+		doc.text(10, 10, socialServiceQ8);
+		k = k + 5;
 	}
 
 	return k;
@@ -602,17 +622,18 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGer
 		doc.text(10, 10, kNewlines(k = k + 1) + "- South West CDC for Safe & Sustainable Homes programme");
 	}
 
-	if (geriGeriAppt.geriGeriApptQ11 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- HDB Enhancement for Active Seniors (EASE)");
-	}
-
 	var geriatrics = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to follow through with the"
 															  + " recommendations from Physiotherapy and Occupational Therapy to lead a more"
 															  + " active and healthier lifestyle.", 180);
+	
+	var otherGeriatrics = doc.splitTextToSize(kNewlines(k = k + 2) + "We advice that you increase your lighting, declutter commonly used spaces to"
+																   + " prevent falls. As recommended by the Occupational Therapists as of any other arrangements"
+																   + " mentioned during the interview.", 180);
+						
 	doc.text(10, 10, geriatrics);
-	doc.addPage();
-    k = 0;
+	doc.text(10, 10, otherGeriatrics);
 
+	k++;
 	return k;
 }
 
