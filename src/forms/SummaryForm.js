@@ -412,6 +412,7 @@ const SummaryForm = (props) => {
 							: blueText(geriAudiometry.geriAudiometryQ3) 
 						   : "-"}
 			<br></br>
+			{bold("h. Geriatrics - Appointment")}
 			{underlined("Did participant attend geriatric functional screening organised by the HPB-AIC?")}
 			{geriGeriAppt ? geriGeriAppt.geriGeriApptQ12 == "Yes"
 							? blueRedText(geriGeriAppt.geriGeriApptQ12, "Please advise the participant that they may be followed-up by HDB regarding"
