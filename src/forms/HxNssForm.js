@@ -60,14 +60,6 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["No (Skip to Q7)", "Yes (Proceed to answer below)", "Vegetables (1 serving/day)", "Vegetables (2 or more servings/day)", "Fruits (1 serving/day)", "Fruits (2 or more servings/day)", "Whole grain and cereals"]
   }, hxNssQ17: {
     type: String, allowedValues: ["Yes (At least 20 mins each time, for 3 or more days per week.)", "Yes (At least 20 mins each time, for less than 3 days per week.)", "No participation of at least 20 min each time."], optional: false
-  }, hxNssQ18: {
-    type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
-  }, hxNssQ19: {
-    type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
-  }, hxNssQ20: {
-    type: String, allowedValues: ["1 year ago or less", "More than 1 year to 2 years", "More than 2 years to 3 years", "More than 3 years to 4 years", "More than 4 years to 5 years", "More than 5 years", "Never been checked"], optional: false
-  }, hxNssQ21: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
   }, hxNssQ22: {
     type: String, optional: true
   }, hxNssQ23: {
@@ -180,6 +172,7 @@ const HxNssForm = (props) => {
             <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility issues, financial issues, fear of doctors/ clinics/ hospitals etc
             <br /><br />If a participant is not compliant to medications, do probe further on his/her reasons for not consuming medications as prescribed.
             <br />- Medication not effective? Can be managed without medication? Forget to take? Lost/Ran out of medication?
+            <br /><br />If a participant does not elicit any Past Medical History, ask if they regularly go for screenings/blood tests etc.
             <LongTextField name="hxNssQ12" label="Hx NSS Q12" /><br /><br />
           </Fragment>
 
@@ -214,20 +207,6 @@ const HxNssForm = (props) => {
           <b>Counsel for positive diet and lifestyle modification if deemed necessary. Refer to <span style={{ color: "red" }}>dietitian</span> at Doctor's Consultation station, Indicate:</b>
           1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A<br />2) Write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br /><br />
 
-          <br />
-          When was the last time you had a blood test to check for hypertension, diabetes and cholesterol? Please answer all.
-          <br />
-          Hypertension
-          <RadioField name="hxNssQ18" label="Hx NSS Q18" />
-          Diabetes
-          <RadioField name="hxNssQ19" label="Hx NSS Q19" />
-          High Cholesterol
-          <RadioField name="hxNssQ20" label="Hx NSS Q20" />
-
-          <span style={{ color: "red" }}><h3>Please encourage participants to go for Phlebotomy screening every 3 years if relevant risk factors absent. If present, counsel for yearly screening.</h3></span>
-          <br />
-          Has your doctor told you that the blood vessels to your limbs are diseased and have become narrower (periphery artery disease) or that any other major blood vessels in your body have weakened walls that have "ballooned out" (aneurysm)?
-          <RadioField name="hxNssQ21" label="Hx NSS Q21" />
           <h3>PLEASE TAKE 3RD BP READING (IF MORE THAN 5MMHG) AND RECORD ON FORM A.</h3>
 
         </Fragment>

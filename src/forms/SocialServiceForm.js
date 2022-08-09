@@ -32,6 +32,12 @@ const schema = new SimpleSchema({
       type: String, optional: true
     }, socialServiceQ6: {
             type: Boolean, label: "Yes", optional: true
+  }, socialServiceQ7: {
+            type: Boolean, label: "Yes", optional: true
+        }, socialServiceQ8: {
+            type: Boolean, label: "Yes", optional: true
+        }, socialServiceQ9: {
+            type: String, optional: true
         }
 }
 )
@@ -113,6 +119,12 @@ const SocialServiceForm = (props) => {
             <BoolField name="socialServiceQ4" />
             6. Brief summary of follow-up for the participant
             <LongTextField name="socialServiceQ5" label="Social Service Q5" />
+            7. Completed application for HDB EASE?
+            <BoolField name="socialServiceQ7" />
+            8. Completed CHAS application?
+            <BoolField name="socialServiceQ8" />
+            9. If application is unsuccessful, document the reasons below and further follow-up action.
+            <LongTextField name="socialServiceQ9" label="Social Service Q9" />
 
         </Fragment>
         <ErrorsField />
@@ -183,10 +195,17 @@ const SocialServiceForm = (props) => {
                     {geriOt && geriOt.geriOtConsultQ5 ? blueText(geriOt.geriOtConsultQ5) : blueText("nil")}
                     {underlined("Reasons for referral from PT consult")}
                     {geriPt && geriPt.geriPtConsultQ5 ? blueText(geriPt.geriPtConsultQ5) : blueText("nil")}
-                    {underlined("Participant's details collected for HDB EASE (Geri Appointment)?")}
-                    {geriAppt && geriAppt.geriGeriApptQ11 ? blueText(geriAppt.geriGeriApptQ11) : blueText("nil")}
+                      {underlined("Referred to Social Service for HDB EASE application?")}
+                      {geriAppt && geriAppt.geriGeriApptQ13 ? blueText(geriAppt.geriGeriApptQ13) : blueText("nil")}
+                      {underlined("Eligible for HDB EASE?")}
+                      {geriAppt && geriAppt.geriGeriApptQ9 ? blueText(geriAppt.geriGeriApptQ9) : blueText("nil")}
+                      {underlined("Interested in signing up?")}
+                      {geriAppt && geriAppt.geriGeriApptQ10 ? blueText(geriAppt.geriGeriApptQ10) : blueText("nil")}
+                      {underlined("Functional Assessment Report completed?")}
+                      {doctorConsult && doctorConsult.doctorSConsultQ12 ? blueText(doctorConsult.doctorSConsultQ12.toString()) : blueText("nil")}
                       {underlined("Participant signed up for SWCDC's Safe & Sustainable Homes (Geri Appointment)?")}
                       {geriAppt && geriAppt.geriGeriApptQ8 ? blueText(geriAppt.geriGeriApptQ8) : blueText("nil")}
+
 
                   </div>
               }

@@ -46,16 +46,22 @@ const ManageVolunteers = () => {
             const searchUnique = await guestProfiles.findOne({username:values.email})
 
             if (searchUnique === null) {
-                const hashHex = await hashPassword(values.password)
+                const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+                if (!pattern.test(values.password)) {
+                    alert("Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long")
+                    isLoading(false)
+                } else {
+                    const hashHex = await hashPassword(values.password)
 
-                await guestProfiles.insertOne({
-                    username: values.email,
-                    password: hashHex,
-                })
+                    await guestProfiles.insertOne({
+                        username: values.email,
+                        password: hashHex,
+                    })
 
-                alert("Account Created: " + values.email)
-                setRefresh(!refresh)
-                isLoading(false)
+                    alert("Account Created: " + values.email)
+                    setRefresh(!refresh)
+                    isLoading(false)
+                }
             } else {
                 alert("Username " + values.email + " taken! Try another username!")
                 isLoading(false)

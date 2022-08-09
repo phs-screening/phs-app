@@ -43,7 +43,9 @@ const schema = new SimpleSchema({
         type: String, allowedValues: ["Yes", "No"], optional: true
     }, geriGeriApptQ12: {
       type: String, allowedValues: ["Yes", "No"], optional: true
-  }
+  }, geriGeriApptQ13: {
+            type: String, allowedValues: ["Yes", "No"], optional: true
+        }
 }
 )
 
@@ -116,7 +118,13 @@ const GeriGeriApptForm = (props) => {
             <br/>
 
             <h3>HDB EASE</h3>
-            State eligibilty criteria
+            SC flat owners qualify for EASE (Direct Application) if a family member in the household:
+            <br/>• is 65 years old and above; or
+            <br/>• aged between 60 and 64 years and requires assistance for one or more of the Activities of Daily Living (ADL)*
+
+           <br/><br/> * ADL refers to daily self-care activities within an individual's place of residence. These activities include washing/ bathing, dressing, feeding, toileting, mobility, and transferring.
+
+            <br/><br/>Note: Age criterion is not applicable for EASE under HIP.
             <br/><br/>
             Is participant eligible for HDB EASE?
             <RadioField name="geriGeriApptQ9" label="Geri - Geri Appt Q9" />
@@ -124,8 +132,11 @@ const GeriGeriApptForm = (props) => {
             Does participant wish to sign up for HDB EASE?
             <RadioField name="geriGeriApptQ10" label="Geri - Geri Appt Q10" />
             <br/>
-            Participant's details collected for follow-up by HDB?
+            Participant (aged 60-64 years old, inclusive) referred to Doctor's Consult for Functional Assessment Report completion?
             <RadioField name="geriGeriApptQ11" label="Geri - Geri Appt Q11" />
+            <br/>
+            To be referred to Social Service for HDB EASE application?
+            <RadioField name="geriGeriApptQ13" label="Geri - Geri Appt Q13" />
             <br/>
             <Fragment>
                 <h3>If participant is recommended for social support:</h3>
