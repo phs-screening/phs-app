@@ -27,19 +27,33 @@ const waitProfile = async () => {
 }
   const {setProfile} = useContext(LoginContext);
   const [patientId, setPatientId] = useState(-1)
+  const [patientInfo, setPatientInfo] = useState({})
   const [login, isLogin] = useState(isLoggedin())
   const [profile, setProfiles] = useState()
 
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id);
+    console.log(new_id)
+  }
+
+  const updatePatientInfo = (new_info) => {
+    setPatientInfo(new_info);
+    // need to do checks as data is named differently locally and in database
+    if ("queueNo" in new_info) {
+      updatePatientId(new_info.queueNo);
+    } else if ("patientId" in new_info) {
+      updatePatientId(new_info.patientId);
+    } else {
+      updatePatientId(-1);
+    }
   }
 
   const routing = useRoutes(routes);
 
   return (
       <LoginContext.Provider value={{login, isLogin, profile, setProfile}} >
-        <FormContext.Provider value={{patientId, updatePatientId}}>
+        <FormContext.Provider value={{patientId, updatePatientId, patientInfo, updatePatientInfo}}>
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               {routing}

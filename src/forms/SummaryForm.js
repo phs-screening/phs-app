@@ -114,14 +114,11 @@ const SummaryForm = (props) => {
 			{underlined("Salutation")}
 			{registration ? blueText(registration.registrationQ1) : '-'}
 			<br></br>
-			{underlined("Name")}
-			{patients ? blueText(patients.fullName) : '-'}
+			{underlined("Initials")}
+			{patients ? blueText(patients.initials) : '-'}
 			<br></br>
 			{underlined("Gender")}
 			{patients ? blueText(patients.gender) : '-'}
-			<br></br>
-			{underlined("NRIC")}
-			{patients ? blueText(patients.fullNric) : '-'}
 			<br></br>
 
 			<br></br>
@@ -587,12 +584,6 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("21. Mailing Details")}
-			{underlined("Full addresss:")}
-			{patients ? blueText(patients.fullAddress) : '-'}
-			<br></br>
-			{underlined("Postal code:")}
-			{patients ? blueText(patients.fullPostal) : ''}
-			<br></br>
 			{underlined("Preferred clinic:")}
 			{registration ? blueText(registration.registrationQ10) : '-'}
 			<br></br>

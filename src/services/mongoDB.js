@@ -59,12 +59,12 @@ export const isAdmin = async (type) => {
     return false;
 }
 
-export const isValidQueueNo = async (queueNo) => {
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
-    const patientsRecord = mongoConnection.db("phs").collection("patients");
-    const record = await patientsRecord.findOne({queueNo});
-    return record !== null;
-}
+// export const isValidQueueNo = async (queueNo) => {
+//     const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
+//     const patientsRecord = mongoConnection.db("phs").collection("patients");
+//     const record = await patientsRecord.findOne({queueNo});
+//     return record !== null;
+// }
 
 export const getSavedData = async (patientId, collectionName) => {
     const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");

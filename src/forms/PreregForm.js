@@ -18,7 +18,7 @@ import {getPreRegData, isAdmin} from "../services/mongoDB";
 
 const formName = "patients"
 const PreregForm = (props) => {
-    const {patientId, updatePatientId} = useContext(FormContext);
+    const {patientId, updatePatientInfo} = useContext(FormContext);
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -63,7 +63,7 @@ const PreregForm = (props) => {
                         isLoading(false)
                         setTimeout(() => {
                             alert(`Successfully pre-registered patient with queue number ${response.data.patientId}.`);
-                            updatePatientId(response.data.patientId);
+                            updatePatientInfo(response.data);
                             navigate('/app/dashboard', { replace: true });
                         }, 80);
                     } else {

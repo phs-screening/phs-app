@@ -49,7 +49,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     }
   }, [location.pathname]);
 
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, patientInfo} = useContext(FormContext);
   const handleLogOut = () => {
       logOut().then(() => navigate('/login', { replace: true })).catch(() => alert("Error Logging Out"))
   }
@@ -80,7 +80,19 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color={patientId === -1 ? "textSecondary" : "primary.main"}
           variant={patientId === -1 ? "body2" : "h5"}
         >
-          {patientId === -1 ? "No Patient Selected" : "Patient_id " + patientId}
+          {patientId === -1 ? "No Patient Selected" : "Patient_id: " + patientId}
+        </Typography>
+        <Typography
+          color={patientId === -1 ? "textSecondary" : "primary.main"}
+          variant={patientId === -1 ? "body2" : "h5"}
+        >
+          {patientId === -1 ? null : "Initials: " + patientInfo.initials}
+        </Typography>
+        <Typography
+          color={patientId === -1 ? "textSecondary" : "primary.main"}
+          variant={patientId === -1 ? "body2" : "h5"}
+        >
+          {patientId === -1 ? null : "Age: " + patientInfo.age}
         </Typography>
       </Box>
       <Divider />

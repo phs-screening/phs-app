@@ -8,18 +8,10 @@ import { RadioField, LongTextField } from 'uniforms-material';
 export const schema = new SimpleSchema({
         gender: {
           type: String, allowedValues: ["Male", "Female"], optional: false
-        }, fullName: {
+        }, initials: {
           type: String, optional: false
-        }, fullNric: {
-          type: String, optional: false, regEx: /^[a-zA-Z][0-9]{7}[a-zA-Z]$/
-        }, fullAddress: {
-            type: String, optional: false
-        }, fullPostal: {
-        type: String, optional: false, regEx: /^[0-9]{6}$/
-        }, dateOfBirth: {
-        type: String, optional: false, regEx: /^[0-3]{1}[0-9]{1}[/][0-1]{1}[0-9]{1}[/][0-9]{4}$/
-        }, contactNumber: {
-        type: String, optional: false, regEx: /^[0-9]{8}$/
+        }, age: {
+        type: Number, optional: false
         }, preferredLanguage: {
         type: String, optional: false, regEx: /^[a-zA-Z]+$/
         },goingForPhlebotomy: {
@@ -33,18 +25,10 @@ export const layout = (
     <h2>Pre-Registration</h2>
     Gender
     <RadioField name="gender" />
-    Full Name (E.g. John Tan Soo Keng, Alan Simon Lee)
-    <LongTextField name="fullName" />
-    Full NRIC (e.g. S1234567E)
-    <LongTextField name="fullNric" />
-    Full Address (e.g. 12 ABC Road #01-01)
-    <LongTextField name="fullAddress" />
-    Postal Code (e.g. 123456)
-    <LongTextField name="fullPostal" />
-    Date of Birth (e.g. 01/01/1950)
-    <LongTextField name="dateOfBirth" />
-    Contact Number (e.g. 12345678)
-    <LongTextField name="contactNumber" />
+    Initials (E.g. Alan Simon Lee as S.L Alan)
+    <LongTextField name="initials" />
+    Age
+    <LongTextField name="age" />
     Preferred Language (e.g. English)
     <LongTextField name="preferredLanguage" /> <br/>
     Going for Phlebotomy?<br /><br /><i>Conditions:<br />1) Fasted for minimum 8 hours <br />          Note: Water is allowed, coffee/tea is not. Medications are fine. <br />2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.<br />3) Have not done a blood test within 1 year.</i>
