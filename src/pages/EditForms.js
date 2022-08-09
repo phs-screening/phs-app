@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {
     Box, Typography, TextField, Button, InputAdornment, SvgIcon
 } from '@material-ui/core';
-import {isAdmin, isValidQueueNo} from "../services/mongoDB";
+import {isAdmin, getPreRegData} from "../services/mongoDB";
 import {useNavigate} from "react-router-dom";
 import {Search as SearchIcon} from "react-feather";
 import {FormContext} from "../api/utils";
@@ -10,7 +10,7 @@ import {FormContext} from "../api/utils";
 const ManageVolunteers = () => {
     const navigate = useNavigate();
     const ref = useRef();
-    const {patientId, updatePatientId} = useContext(FormContext);
+    const {updatePatientInfo} = useContext(FormContext);
     const [values, setValues] = useState({
         queueNumber: 1
     });
@@ -41,9 +41,9 @@ const ManageVolunteers = () => {
     const handleSubmit = async () => {
         const value = values.queueNumber;
         // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-        const isValid = await isValidQueueNo(value);
-        if (isValid) {
-            updatePatientId(value);
+        const data = await getPreRegData(value, "patients");
+        if (data !== {}) {
+            updatePatientInfo(data);
             navigate('/app/dashboard', { replace: true });
         } else {
             // if response is unsuccessful/id does not exist, show error style/popup.

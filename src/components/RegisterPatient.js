@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isValidQueueNo } from "../services/mongoDB";
+import { getPreRegData } from "../services/mongoDB";
 import { FormContext } from '../api/utils.js';
 import {
   Box,
@@ -22,7 +22,7 @@ const RegisterPatient = props => {
   const [values, setValues] = useState({
     queueNumber: 1
   });
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, updatePatientInfo} = useContext(FormContext);
   const navigate = useNavigate();
   const ref = useRef();
 
@@ -54,9 +54,9 @@ const RegisterPatient = props => {
     isLoading(true);
     const value = values.queueNumber;
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-    const isValid = await isValidQueueNo(value);
-    if (isValid) {
-      updatePatientId(value);
+    const data = await getPreRegData(value, "patients");
+    if (data !== {}) {
+      updatePatientInfo(data);
       isLoading(false);
       navigate('/app/dashboard', { replace: true });
     } else {

@@ -6,17 +6,12 @@ const axios = require('axios').default;
 
 export async function preRegister(preRegArgs) {
     let gender = preRegArgs.gender;
-    let fullName = preRegArgs.fullName.trim();
-    let fullNric = preRegArgs.fullNric.trim().toUpperCase();
-    let fullAddress = preRegArgs.fullAddress.trim();
-    let fullPostal = preRegArgs.fullPostal.trim()
-    let dateOfBirth = preRegArgs.dateOfBirth.trim();
-    let contactNumber = preRegArgs.contactNumber.trim();
+    let initials = preRegArgs.initials.trim();
+    let age = preRegArgs.age;
     let preferredLanguage = preRegArgs.preferredLanguage.trim()
     let goingForPhlebotomy = preRegArgs.goingForPhlebotomy;
     // validate params
-    if (gender == null || fullName == null || fullNric == null || fullAddress == null ||
-        fullPostal == null || dateOfBirth == null || contactNumber == null || preferredLanguage == null
+    if (gender == null || initials == null || age == null || preferredLanguage == null
         || goingForPhlebotomy == null) {
         return {"result": false, "error": "Function Arguments canot be undefined."};
     }
@@ -26,12 +21,8 @@ export async function preRegister(preRegArgs) {
     // TODO: more exhaustive error handling. consider abstracting it in a validation function, and using schema validation
     let data = {
         "gender": gender,
-        "fullName": fullName,
-        "fullNric": fullNric,
-        "fullAddress": fullAddress,
-        "fullPostal": fullPostal,
-        "dateOfBirth": dateOfBirth,
-        "contactNumber": contactNumber,
+        "initials": initials,
+        "age": age,
         "preferredLanguage" :preferredLanguage,
         "goingForPhlebotomy": goingForPhlebotomy
     }
@@ -40,17 +31,10 @@ export async function preRegister(preRegArgs) {
     try {
         const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
         const patientsRecord = mongoConnection.db("phs").collection("patients");
-        const record = await patientsRecord.find({fullNric});
-        if (record.length === 0) {
-            const qNum = await mongoDB.currentUser.functions.getNextQueueNo();
-            await patientsRecord.insertOne({queueNo: qNum, ...data});
-            data = {patientId: qNum, ...data};
-            isSuccess = true;
-        } else {
-            errorMsg = "There exists a patient with the same NRIC.\n"
-                + "Please check that the patient has not registered yet.\nReport to the admin"
-                + " if there is no mistake as we need a way to identify the patients.";
-        }
+		const qNum = await mongoDB.currentUser.functions.getNextQueueNo();
+		await patientsRecord.insertOne({queueNo: qNum, ...data});
+		data = {patientId: qNum, ...data};
+		isSuccess = true;
     } catch(err) {
         // TODO: more granular error handling
         return {"result": false, "error": err}
@@ -356,8 +340,6 @@ export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctor
 
 export function patient(doc, reg, patients, k) {
 	doc.text(10, 10, reg.registrationQ5 ? kNewlines(k) + reg.registrationQ5 : kNewlines(k) + "Mr/Mrs");
-	doc.text(10, 10, kNewlines(k = k + 1) + patients.fullAddress);
-	doc.text(10, 10, kNewlines(k = k + 1) + patients.fullPostal);
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "Public Health Service 2022 (PHS 2022) Health Screening Report");
@@ -365,7 +347,7 @@ export function patient(doc, reg, patients, k) {
 
 	doc.setFont(undefined, 'normal');
 	// Thanks note
-	var thanksNote = doc.splitTextToSize(kNewlines(k = k + 2) + "Dear " + patients.initials + ' (' + patients.fullNric + '),\n'
+	var thanksNote = doc.splitTextToSize(kNewlines(k = k + 2) + "Dear " + patients.initials + ',\n'
 													  		  + "Thank you for participating in our health screening at Jurong East on 20th/21st August this year."
 												 	  		  + " Here are your screening results*:", 180);
 	doc.text(10, 10, thanksNote)
