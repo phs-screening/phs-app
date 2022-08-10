@@ -44,11 +44,11 @@ const schema = new SimpleSchema({
     allowedValues: ["Yes", "No"],
     optional: false
   }, hxHcsrQ13 : {
-        type: String, allowedValues: ["Yes", "No"], optional: false
+        type: String, allowedValues: ["Yes", "No"], optional: true
       }, hxHcsrQ14 : {
         type: String, optional: true
       }, hxHcsrQ15 : {
-        type: String, allowedValues: ["Yes", "No"], optional: false
+        type: String, allowedValues: ["Yes", "No"], optional: true
       }, hxHcsrQ16 : {
         type: String, optional: true
       }
