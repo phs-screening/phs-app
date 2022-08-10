@@ -28,7 +28,7 @@ const PreregForm = (props) => {
     useEffect(async () => {
         const savedData = await getPreRegData(patientId, formName);
         if (!await isAdmin()) {
-            if (savedData.fullNric !== undefined) {
+            if ("initials" in savedData) {
                 alert("You are not an admin!")
                 navigate('/app/dashboard', { replace: true });
             }
@@ -41,13 +41,14 @@ const PreregForm = (props) => {
             schema={form_schema}
             className="fieldPadding"
             onSubmit={async (model) => {
-                if (saveData.fullNric !== undefined) { // updating reg
+                if ("initials" in saveData) { // updating reg
                     isLoading(true)
                     const response = await submitPreRegForm(model, patientId, formName);
                     if (response.result) {
                         isLoading(false);
                         setTimeout(() => {
                             alert("Successfully submitted form");
+                            updatePatientInfo(response.data);
                             navigate('/app/dashboard', { replace: true });
                         }, 80);
                     } else {
