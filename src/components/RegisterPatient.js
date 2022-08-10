@@ -55,7 +55,7 @@ const RegisterPatient = props => {
     const value = values.queueNumber;
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     const data = await getPreRegData(value, "patients");
-    if (data !== {}) {
+    if ("initials" in data) {
       updatePatientInfo(data);
       isLoading(false);
       navigate('/app/dashboard', { replace: true });

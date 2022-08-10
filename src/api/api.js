@@ -97,7 +97,7 @@ export async function submitPreRegForm(args, patientId, formCollection) {
                 args.lastEdited = new Date()
                 args.lastEditedBy = getName()
                 await patientsRecord.updateOne({queueNo : patientId}, {$set : {...args}})
-                return { "result" : true };
+                return { "result" : true, "data" : args };
             } else {
                 const errorMsg = "This form has already been submitted. If you need to make "
                     + "any changes, please contact the admin."

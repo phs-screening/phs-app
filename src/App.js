@@ -34,7 +34,6 @@ const waitProfile = async () => {
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id);
-    console.log(new_id)
   }
 
   const updatePatientInfo = (new_info) => {
