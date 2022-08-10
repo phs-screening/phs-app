@@ -91,7 +91,22 @@ const GeriGeriApptForm = (props) => {
             <RadioField name="geriGeriApptQ12" label="Geri - Geri Appt Q12" />
             <br/>
             <h3>Vision</h3>
-            State eligibility criteria for SWCDC Eye vouchers (100 pax)
+            <b><u>EyeWear@South West</u></b>
+            <p><b>Description:</b> A scheme that aims to help needy residents with free eye screening service provided by professionally qualified optometrists and vouchers to subsidise the cost of any prescription spectacles or eyewear. Beneficiaries are entitled to free eye screening services and $150 off their glasses. </p>
+            <br/>
+            Participating optical partners:
+            <br/>1. Capitol Optical
+            <br/>2. Nanyang Optical
+            <br/>3. Optical 88
+            <br/>4. Owndays
+            <br/>5. Spectacle Hut
+            <br/><br/>
+            <b>Eligibility criteria:</b>
+            1. Resident of South West District;
+            <br/>2. Singapore Citizen or at least one (1) immediate family member is a Singapore Citizen;
+            <br/>3. Total Gross Monthly Household Income of $3,500 or Per Capita Household Income (PCHI) of $875, whichever is lower; and
+            <br/>4. Discretion of the Grassroots Leaders/Volunteers for residents with exceptional family and financial difficulties.
+
             <br/>
             <br/>
 

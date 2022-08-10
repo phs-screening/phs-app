@@ -319,9 +319,9 @@ const GeriOtQuestionnaireForm = (props) => {
           23. Are the paths in your house and outside your house in good condition and free of
           clutter?
           <p><b>Definition:</b> No cracked / loose pathway / neighbors plants or furniture on walkways</p>
-          24. Are you using non-slip / well fitting slippers/shoes at home?
           <RadioField name="geriOtQuestionnaireQ25" label="geriOtQuestionnaire-Q25" />
           <br/>
+          24. Are you using non-slip / well fitting slippers/shoes at home?
           <p><b>Definition:</b> Supportive, firmly fitting shoes / slippers with low heels and non-slip
             soles.</p>
           No shoes = NO"
