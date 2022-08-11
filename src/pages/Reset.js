@@ -14,6 +14,7 @@ import {
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import {regexPasswordPattern as pattern} from "../api/api";
 
 // TODO
 // Explore using hash function to store passwords on DB
@@ -30,7 +31,7 @@ const Reset = () => {
         const urlParamTokenID = new URLSearchParams(location.search).get("tokenId")
         const newPassword = values.password
         // regex check
-        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+
         if (!pattern.test(values.password)) {
             alert("Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long")
         } else {

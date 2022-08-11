@@ -664,3 +664,5 @@ export function addRecommendation(doc, k) {
 																  + " in the future.", 180);
 	doc.text(10, 10, recommendation)
 }
+
+export const regexPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/

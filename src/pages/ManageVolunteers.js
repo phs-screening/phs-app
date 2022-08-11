@@ -7,6 +7,7 @@ import {Formik} from "formik";
 import mongoDB, {hashPassword, isAdmin, profilesCollection} from "../services/mongoDB";
 import {Visibility, VisibilityOff, Search} from "@material-ui/icons";
 import {useNavigate} from "react-router-dom";
+import {regexPasswordPattern as pattern} from "../api/api";
 
 const ManageVolunteers = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ManageVolunteers = () => {
     const [showPasswordReset, setShowPasswordReset] = useState(false);
     const handleClickShowPasswordReset = () => setShowPasswordReset(!showPasswordReset);
     const handleMouseDownPasswordReset = () => setShowPasswordReset(!showPasswordReset);
-    const [resetPassword, setResetPassword] = useState([]);
+    const [resetPassword, setResetPassword] = useState("");
     const [loadingReset, isLoadingReset] = useState(false);
     const [nameReset, setNameReset] = useState(null);
     const [refresh, setRefresh] = useState(false);
@@ -46,7 +47,6 @@ const ManageVolunteers = () => {
             const searchUnique = await guestProfiles.findOne({username:values.email})
 
             if (searchUnique === null) {
-                const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
                 if (!pattern.test(values.password)) {
                     alert("Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long")
                     isLoading(false)
@@ -142,6 +142,11 @@ const ManageVolunteers = () => {
     const handleResetPassword = async () => {
         if (resetPassword.length === 0) {
             alert("Password Cannot be Empty!")
+            return;
+        }
+
+        if (!pattern.test(resetPassword)) {
+            alert("Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long")
             return;
         }
         isLoadingReset(true)
