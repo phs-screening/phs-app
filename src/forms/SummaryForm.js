@@ -412,8 +412,8 @@ const SummaryForm = (props) => {
 			{bold("h. Geriatrics - Appointment")}
 			{underlined("Did participant attend geriatric functional screening organised by the HPB-AIC?")}
 			{geriGeriAppt ? geriGeriAppt.geriGeriApptQ12 == "Yes"
-							? blueRedText(geriGeriAppt.geriGeriApptQ12, "Please advise the participant that they may be followed-up by HDB regarding"
-							                                            + "their application status.") 
+							? blueRedText(geriGeriAppt.geriGeriApptQ12, "Please advise the participant that they may be followed-up by HPB regarding"
+							                                            + " their application status.") 
 							: blueText(geriGeriAppt.geriGeriApptQ12)
 						   : "-"}
 			<br></br>
@@ -551,19 +551,21 @@ const SummaryForm = (props) => {
 			<br></br>
 			{underlined("Completed HDB EASE application?")}
 			{socialService ? socialService.socialServiceQ7
-							? blueRedText("Yes", socialService.socialServiceQ7, "Upon receipt of the application and the relevant documents (if required),"
-																                + "the HDB Branch managing your estate will reply to you within 7 working days.")
+							? blueRedText("Yes", "Upon receipt of the application and the relevant documents (if required),"
+											      + " the HDB Branch managing your estate will reply to you within 7 working days.")
 							: blueText("No")
 						   : "-"}
+			<br></br>
 			{underlined("Completed CHAS application?")}
 			{socialService ? socialService.socialServiceQ8
 							? blueRedText("Yes", "Inform participant that application takes 15 working days from the"
-												  + "date of receipt of the completed application to process. Successful applicants"
-												  + "and their household members will receive a CHAS card that indicates the subsidy"
-												  + "tier they are eligible for, as well as a welcome pack with information on the"
-												  + "use of the card.")
+												  + " date of receipt of the completed application to process. Successful applicants"
+												  + " and their household members will receive a CHAS card that indicates the subsidy"
+												  + " tier they are eligible for, as well as a welcome pack with information on the"
+												  + " use of the card.")
 							: blueText("No")
 						   : "-"}
+			<br></br>
 			{underlined("Reasons for not completing above (if any):")}
 			{socialService ? blueText(socialService.socialServiceQ9) : '-'}
 			<br></br>
@@ -593,7 +595,7 @@ const SummaryForm = (props) => {
 			{oralHealth ? blueText(oralHealth.oralHealthQ2) : '-'}
 			<br></br>
 			{redText("All participants will receive a more detailed health report from PHS within 4-6 weeks of the screening."
-					 + "If you have gone for phlebotomy, you will receive the blood test results from NUHS within 4 - 6 weeks of the screening.\n\n\n\n")}
+					 + " If you have gone for phlebotomy, you will receive the blood test results from NUHS within 4 - 6 weeks of the screening.\n\n\n\n")}
 		</div>
 		<div>
 			<button onClick={() => generate_pdf(registration, patients, cancer, phlebotomy, fit, wce, doctorSConsult, socialService, geriMmse, geriVision, geriAudiometry, geriGeriAppt, dietitiansConsult, oralHealth)}>
