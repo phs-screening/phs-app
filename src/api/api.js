@@ -340,15 +340,15 @@ export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctor
 }
 
 export function patient(doc, reg, patients, k) {
-	doc.text(10, 10, reg.registrationQ5 ? kNewlines(k) + reg.registrationQ5 : kNewlines(k) + "Mr/Mrs");
-
+	const salutation = typeof reg.registrationQ1 == 'undefined' ? 'Mr/Mrs'
+														        : reg.registrationQ1;
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "Public Health Service 2022 (PHS 2022) Health Screening Report");
 	doc.line(10, calculateY(k), 10 + doc.getTextWidth("Public Health Service 2022 (PHS 2022) Health Screening Report"), calculateY(k));
 
 	doc.setFont(undefined, 'normal');
 	// Thanks note
-	var thanksNote = doc.splitTextToSize(kNewlines(k = k + 2) + "Dear " + patients.initials + ',\n'
+	var thanksNote = doc.splitTextToSize(kNewlines(k = k + 2) + "Dear " + salutation + ' ' + patients.initials + ',\n'
 													  		  + "Thank you for participating in our health screening at Jurong East on 20th/21st August this year."
 												 	  		  + " Here are your screening results*:", 180);
 	doc.text(10, 10, thanksNote)
@@ -533,6 +533,10 @@ export function addSocialService(doc, socialService, k) {
 		k++;
 	}	
 
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 2) + "SACS");
+	doc.line(10, calculateY(k), 10 + doc.getTextWidth("SACS"), calculateY(k));
+	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ6) {
 		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 2) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
 																	   + " application status for their programmes.", 180);
@@ -540,6 +544,10 @@ export function addSocialService(doc, socialService, k) {
 		k++;
 	}
 
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 2) + "HDB EASE");
+	doc.line(10, calculateY(k), 10 + doc.getTextWidth("HDB EASE"), calculateY(k));
+	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ7) {
 		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 2) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
 																       + " HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date."
@@ -551,6 +559,10 @@ export function addSocialService(doc, socialService, k) {
 		k++;
 	}
 
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 2) + "CHAS Application");
+	doc.line(10, calculateY(k), 10 + doc.getTextWidth("CHAS Application"), calculateY(k));
+	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ8) {
 		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 2) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
 																	   + " household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information"
@@ -606,10 +618,10 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGer
 	}
 
 	var geriatrics = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to follow through with the"
-															  + " recommendations from Physiotherapy and Occupational Therapy to lead a more"
-															  + " active and healthier lifestyle.", 180);
+															  + " recommendations from Physiotherapy lead a more active"
+															  + " and healthier lifestyle.", 180);
 	
-	var otherGeriatrics = doc.splitTextToSize(kNewlines(k = k + 2) + "We advice that you increase your lighting, declutter commonly used spaces to"
+	var otherGeriatrics = doc.splitTextToSize(kNewlines(k = k + 3) + "We advice that you increase your lighting, declutter commonly used spaces to"
 																   + " prevent falls. As recommended by the Occupational Therapists as of any other arrangements"
 																   + " mentioned during the interview.", 180);
 						
