@@ -9,6 +9,7 @@ import {
 	BoolField,
 	LongTextField
   } from 'uniforms-material';
+import {regQ10Options} from "../api/api";
 
 export const schema = new SimpleSchema({
 	registrationQ1: {
@@ -31,7 +32,7 @@ export const schema = new SimpleSchema({
 	}, registrationQ9: {
 	type: String, allowedValues: ["Pioneer generation card holder", "Merdeka generation card holder", "None"], optional: false
 	}, registrationQ10: {
-	type: String, allowedValues: ["Bukit Batok Medical Clinic \nBlk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic\nBlk 644 Bukit Batok Central,\xa0#01-70", "Lai Medical Clinic\nBlk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic\n518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic\nBlk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery\nBlk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic\n#04-01 Grantral Mall @ Clementi\n3151 Commonwealth Ave West"], optional: true
+	type: String, allowedValues: regQ10Options, optional: true
 	}, registrationQ11: {
 	type: String, allowedValues: ["English", "Mandarin", "Malay", "Tamil"], optional: false
 	}, registrationQ12: {

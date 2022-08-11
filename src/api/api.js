@@ -1,6 +1,7 @@
 import mongoDB, {getName, isAdmin} from "../services/mongoDB";
 import {blueText, redText, blueRedText} from 'src/theme/commonComponents.js';
 import {jsPDF} from 'jspdf';
+import allForms from '../forms/forms.json'
 
 const axios = require('axios').default;
 
@@ -86,6 +87,56 @@ export async function submitForm(args, patientId, formCollection) {
         return { "result" : false, "error" : err };
     }
 }
+
+export const regQ10Options = ["Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic Blk 644 Bukit Batok Central,#01-70", "Lai Medical Clinic Blk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic 518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic Blk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery Blk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic #04-01 Grantral Mall @ Clementi 3151 Commonwealth Ave West"]
+export async function submitFormReg(args, patientId) {
+	const formCollection = allForms.registrationForm
+	try {
+		const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+		const patientsRecord = mongoConnection.db("phs").collection("patients");
+		const record = await patientsRecord.findOne({queueNo: patientId});
+		if (record) {
+			const registrationForms = mongoConnection.db("phs").collection(formCollection);
+			if (record[formCollection] === undefined) {
+				// first time form is filled, create document for form
+				const canSelectOption = await mongoDB.currentUser.functions.getRegQ10No(regQ10Options.indexOf(args.registrationQ10));
+				console.log(canSelectOption)
+				await registrationForms.insertOne({_id: patientId, ...args});
+				await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+				return { "result" : true };
+			} else {
+				if (await isAdmin()) {
+					args.lastEdited = new Date()
+					args.lastEditedBy = getName()
+					await registrationForms.updateOne({_id : patientId}, {$set : {...args}})
+					// replace form
+					// registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
+					// throw error message
+					// const errorMsg = "This form has already been submitted. If you need to make "
+					//         + "any changes, please contact the admin."
+					return { "result" : true };
+
+				} else {
+					const errorMsg = "This form has already been submitted. If you need to make "
+						+ "any changes, please contact the admin."
+					return { "result" : false, "error" : errorMsg };
+				}
+
+			}
+		} else {
+			// TODO: throw error, not possible that no document is found
+			// unless malicious user tries to change link to directly access reg page
+			// Can check in every form page if there is valid patientId instead
+			// cannot use useEffect since the form component is class component
+			const errorMsg = "An error has occurred."
+			// You will be directed to the registration page." logic not done
+			return { "result" : false, "error" : errorMsg };
+		}
+	} catch(err) {
+		return { "result" : false, "error" : err };
+	}
+}
+
 
 export async function submitPreRegForm(args, patientId, formCollection) {
     try {

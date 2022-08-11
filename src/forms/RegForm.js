@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { submitForm } from '../api/api.js';
+import {submitFormReg} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {schema, layout} from './reg.js';
 import {getSavedData} from "../services/mongoDB";
@@ -35,7 +35,7 @@ const RegForm = () => {
         className="fieldPadding"
         onSubmit={async (model) => {
           isLoading(true)
-          const response = await submitForm(model, patientId, formName);
+          const response = await submitFormReg(model, patientId);
           if (response.result) {
             isLoading(false);
             setTimeout(() => {
