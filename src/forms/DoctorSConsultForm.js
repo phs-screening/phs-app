@@ -131,9 +131,6 @@ const DoctorSConsultForm = (props) => {
       MCR No.:
       <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
         <br/><br/>
-      {/*Doctor's Memo*/}
-      {/*<LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3" />*/}
-      {/*  <br/><br/>*/}
       Refer to dietitian?
       <BoolField name="doctorSConsultQ4" />
       Reason for referral
