@@ -102,8 +102,8 @@ const DietitiansConsultForm = (props) => {
 
                 Dietitian's Name:
                 <LongTextField name="dietitiansConsultQ1" label="Dietitian's Consult Q1"/>
-                Dietitian's License No:
-                <LongTextField name="dietitiansConsultQ2" label="Dietitian's Consult Q2"/>
+                {/*Dietitian's License No:*/}
+                {/*<LongTextField name="dietitiansConsultQ2" label="Dietitian's Consult Q2"/>*/}
                 Dietitian's Notes:
                 <LongTextField name="dietitiansConsultQ3" label="Dietitian's Consult Q3" />
                 Notes for participant (if applicable):
