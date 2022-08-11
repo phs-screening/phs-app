@@ -48,7 +48,7 @@ function PopupText(props) {
 
 const formName = "geriTugForm"
 const GeriTugForm = (props) => {
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})

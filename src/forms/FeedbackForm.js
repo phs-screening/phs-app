@@ -2,7 +2,7 @@ import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { calculateBMI, formatGeriVision, formatWceStation, geriVisionForm, preRegister, submitForm } from '../api/api.js';
+import { calculateBMI, formatGeriVision, formatWceStation } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import { getSavedData, getSavedPatientData } from "../services/mongoDB";
 import allForms from "./forms.json";
@@ -10,7 +10,7 @@ import { bold, underlined, blueText, redText} from 'src/theme/commonComponents.j
 
 const formName = "summaryForm"
 const SummaryForm = (props) => {
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId} = useContext(FormContext);
   const [loadingPrevData, isLoadingPrevData] = useState(true);
   const [saveData, setSaveData] = useState({});
 

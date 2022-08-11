@@ -14,6 +14,7 @@ import {
 import {useContext, useState} from "react";
 import {LoginContext} from '../App.js'
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import {FormContext} from "../api/utils";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Login = () => {
   const {setProfile} = useContext(LoginContext);
   const [loading, isLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const {updateIsAdmin} = useContext(FormContext);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
@@ -39,6 +41,7 @@ const Login = () => {
               const profile = await userProfile.findOne({username: values.email})
               setProfile(profile)
               isLogin(true)
+              updateIsAdmin(true)
           } else {
               const hashHex = await hashPassword(values.password)
               const credentials = Realm.Credentials.function({username: values.email, password: hashHex})

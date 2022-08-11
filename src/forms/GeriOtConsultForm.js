@@ -60,7 +60,7 @@ function GetSppbScore(q2, q6, q8) {
 
 const formName = "geriOtConsultForm"
 const GeriOtConsultForm = (props) => {
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})

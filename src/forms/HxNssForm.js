@@ -73,7 +73,7 @@ const schema = new SimpleSchema({
 const formName = "hxNssForm"
 const HxNssForm = (props) => {
   const [loading, isLoading] = useState(false);
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props;

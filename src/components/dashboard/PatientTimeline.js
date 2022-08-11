@@ -6,8 +6,8 @@ import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import { useNavigate } from 'react-router-dom';
-import mongoDB, {getProfile, isAdmin} from "../../services/mongoDB"
-import { ScrollTopContext } from '../../api/utils.js';
+import mongoDB from "../../services/mongoDB"
+import {FormContext, ScrollTopContext} from '../../api/utils.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
@@ -72,6 +72,7 @@ const BasicTimeline = (props) => {
   const [goingForPhlebotomy, setGoingForPhlebotomy] = useState();
   const [formDone, setFormDone] = useState([]);
   const [admin, isAdmins] = useState(false)
+  const {isAdmin} = useContext(FormContext);
   const { scrollTop } = useContext(ScrollTopContext);
 
   useEffect(async () => {
@@ -92,7 +93,7 @@ const BasicTimeline = (props) => {
       }
     };
     createFormsStatus();
-    isAdmins(await isAdmin())
+    isAdmins(isAdmin)
   }, [navigate, props.patientId]);
 if (loading) {
   return (<div style={{

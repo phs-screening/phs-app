@@ -26,7 +26,7 @@ const schema = new SimpleSchema({
 
 const formName = "phlebotomyForm"
 const PhleboForm = () => {
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})

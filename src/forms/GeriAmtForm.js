@@ -12,7 +12,7 @@ import { TextField, RadioField } from 'uniforms-material';
 import { useField } from 'uniforms';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
-import {getSavedData} from "../services/mongoDB";
+import {getSavedData, isAdmin} from "../services/mongoDB";
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
@@ -83,7 +83,7 @@ function GetScore(props) {
 };
 const formName = "geriAmtForm"
 const GeriAmtForm = (props) => {
-    const {patientId, updatePatientId} = useContext(FormContext);
+    const {patientId, isAdmin} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const { changeTab, nextTab } = props;

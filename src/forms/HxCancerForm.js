@@ -111,7 +111,7 @@ function IsHighBP(props) {
 const formName = "hxCancerForm"
 const HxCancerForm = () => {
   const [loading, isLoading] = useState(false);
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
   const [saveData, setSaveData] = useState({})

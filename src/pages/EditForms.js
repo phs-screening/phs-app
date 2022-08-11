@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {
     Box, Typography, TextField, Button, InputAdornment, SvgIcon
 } from '@material-ui/core';
-import {isAdmin, getPreRegData} from "../services/mongoDB";
+import {getPreRegData} from "../services/mongoDB";
 import {useNavigate} from "react-router-dom";
 import {Search as SearchIcon} from "react-feather";
 import {FormContext} from "../api/utils";
@@ -10,14 +10,14 @@ import {FormContext} from "../api/utils";
 const ManageVolunteers = () => {
     const navigate = useNavigate();
     const ref = useRef();
-    const {updatePatientInfo} = useContext(FormContext);
+    const {updatePatientInfo, isAdmin} = useContext(FormContext);
     const [values, setValues] = useState({
         queueNumber: 1
     });
 
 
     useEffect(async () => {
-        if (await isAdmin()) {
+        if (isAdmin) {
 
         } else {
             alert("Only Admins have access to this Page!")

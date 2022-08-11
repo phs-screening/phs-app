@@ -16,7 +16,7 @@ import './fieldPadding.css'
 
 const formName = "registrationForm"
 const RegForm = () => {
-    const {patientId, updatePatientId} = useContext(FormContext);
+    const {patientId, isAdmin} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))

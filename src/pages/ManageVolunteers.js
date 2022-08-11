@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     Box, Typography, TextField, Button, InputAdornment, IconButton
 } from '@material-ui/core';
 import * as Yup from "yup";
 import {Formik} from "formik";
-import mongoDB, {hashPassword, isAdmin, profilesCollection} from "../services/mongoDB";
+import mongoDB, {hashPassword, profilesCollection} from "../services/mongoDB";
 import {Visibility, VisibilityOff, Search} from "@material-ui/icons";
 import {useNavigate} from "react-router-dom";
 import {regexPasswordPattern as pattern} from "../api/api";
+import {FormContext} from "../api/utils";
 
 const ManageVolunteers = () => {
     const navigate = useNavigate();
@@ -25,9 +26,10 @@ const ManageVolunteers = () => {
     const [refresh, setRefresh] = useState(false);
     const [search, setSearch] = useState("");
     const [loadingDelete, isLoadingDelete] = useState(false);
+    const {isAdmin} = useContext(FormContext);
 
     useEffect(async () => {
-        if (await isAdmin()) {
+        if (isAdmin) {
             const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas")
             const guestProfiles = await mongoConnection.db("phs").collection("profiles")
                 .find({is_admin: {$ne : true}})

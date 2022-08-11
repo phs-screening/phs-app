@@ -32,7 +32,7 @@ const schema = new SimpleSchema({
 
 const formName = "fitForm"
 const FitForm = (props) =>  {
-    const {patientId, updatePatientId} = useContext(FormContext);
+    const {patientId, isAdmin} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))

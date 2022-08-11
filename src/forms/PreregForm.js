@@ -14,11 +14,11 @@ import { schema, layout } from './prereg.js';
 import {preRegister, submitPreRegForm} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import './fieldPadding.css'
-import {getPreRegData, isAdmin} from "../services/mongoDB";
+import {getPreRegData} from "../services/mongoDB";
 
 const formName = "patients"
 const PreregForm = (props) => {
-    const {patientId, updatePatientInfo} = useContext(FormContext);
+    const {patientId, updatePatientInfo, isAdmin} = useContext(FormContext);
     const navigate = useNavigate();
     const [loading, isLoading] = useState(false);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -27,7 +27,7 @@ const PreregForm = (props) => {
 
     useEffect(async () => {
         const savedData = await getPreRegData(patientId, formName);
-        if (!await isAdmin()) {
+        if (!isAdmin) {
             if ("initials" in savedData) {
                 alert("You are not an admin!")
                 navigate('/app/dashboard', { replace: true });

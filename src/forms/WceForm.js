@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
-import { TextField, SelectField, RadioField } from 'uniforms-material';
+import { RadioField } from 'uniforms-material';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
@@ -40,7 +40,7 @@ const schema = new SimpleSchema({
 
 const formName = "wceForm"
 const WceForm = (props) =>  {
-  const {patientId, updatePatientId} = useContext(FormContext);
+  const {patientId, isAdmin} = useContext(FormContext);
   const [loading, isLoading] = useState(false);
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate();
