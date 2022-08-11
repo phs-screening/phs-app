@@ -1,6 +1,7 @@
 import mongoDB, {getName, isAdmin} from "../services/mongoDB";
 import {blueText, redText, blueRedText} from 'src/theme/commonComponents.js';
 import {jsPDF} from 'jspdf';
+import forms from '../forms/forms.json'
 
 const axios = require('axios').default;
 
@@ -666,3 +667,41 @@ export function addRecommendation(doc, k) {
 }
 
 export const regexPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+
+export const deleteFromAllDatabase = async () => {
+	console.log("here")
+	const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+	const mongoDBConnection = mongoConnection.db("phs")
+
+	// await mongoDBConnection.collection("patients").deleteMany({})
+	// await mongoDBConnection.collection(forms.geriPtConsultForm).deleteMany({})
+	// await mongoDBConnection.collection(forms.dietitiansConsultForm).deleteMany({})
+	// mongoDBConnection.collection(forms.doctorConsultForm).deleteMany({})
+	// mongoDBConnection.collection(forms.fitForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriAmtForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriEbasDepForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriFrailScaleForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriGeriApptForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriOtConsultForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriOtQuestionnaireForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriParQForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriMmseForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriPhysicalActivityLevelForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriAudiometryForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriPtConsultForm).deleteMany({})
+	await mongoDBConnection.collection(forms.geriSppbForm).deleteMany({})
+	// mongoDBConnection.collection(forms.phlebotomyForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriTugForm).deleteMany({})
+	// mongoDBConnection.collection(forms.geriVisionForm).deleteMany({})
+	// mongoDBConnection.collection(forms.hxCancerForm).deleteMany({})
+	// mongoDBConnection.collection(forms.hxHcsrForm).deleteMany({})
+	// mongoDBConnection.collection(forms.hxNssForm).deleteMany({})
+	// mongoDBConnection.collection(forms.hxSocialForm).deleteMany({})
+	// mongoDBConnection.collection(forms.phleboForm).deleteMany({})
+	// mongoDBConnection.collection(forms.registrationForm).deleteMany({})
+	// mongoDBConnection.collection(forms.oralHealthForm).deleteMany({})
+	// mongoDBConnection.collection(forms.socialServiceForm).deleteMany({})
+	// mongoDBConnection.collection(forms.wceForm).deleteMany({})
+
+
+}

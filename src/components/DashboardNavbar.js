@@ -13,6 +13,7 @@ import Logo from './Logo';
 import {useEffect, useState} from "react";
 import {getName, getProfile, isLoggedin} from "../services/mongoDB";
 import { useNavigate } from 'react-router-dom';
+import {deleteFromAllDatabase} from "../api/api";
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const navigate = useNavigate()
