@@ -51,10 +51,7 @@ export const getProfile = async (type) => {
 
 export const isAdmin = async (type) => {
     if (isLoggedin()) {
-        const profile = await app.currentUser.mongoClient("mongodb-atlas")
-            .db("phs").collection("profiles").findOne({username: getName()})
-
-        return profile.is_admin
+        return app.currentUser.profile.email !== undefined
     }
     return false;
 }
