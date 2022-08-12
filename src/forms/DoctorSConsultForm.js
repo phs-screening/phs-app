@@ -128,8 +128,8 @@ const DoctorSConsultForm = (props) => {
 
       Doctor's Name:
       <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
-      MCR No.:
-      <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
+        Doctor's Memo:
+      <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3"/>
         <br/><br/>
       Refer to dietitian?
       <BoolField name="doctorSConsultQ4" />
