@@ -25,7 +25,7 @@ import './fieldPadding.css'
 
 const formName = "registrationForm"
 const RegForm = () => {
-    const options = ["Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114", "Kang An Clinic Blk 644 Bukit Batok Central, #01-70", "Lai Medical Clinic Blk 213 Bukit Batok Street 21, #01-209", "Lakeside Family Clinic 518A Jurong West St 52 # 01-02", "Boon Lay Corporation Clinic Blk 350 Jurong East Ave 1, #01-1225", "EJ. Tan Clinic & Surgery Blk 104 Jurong East Street 13, #01-100", "Frontier Family Medicine Clinic #04-01 Grantral Mall @ Clementi 3151 Commonwealth Ave West"]
+    const options = ["Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114, S650207", "Drs Tang & Partners Pte. Ltd. Blk 64, Yung Kuang Road, #01-115, S610064", "Lai Medical Clinic Blk 213, Bukit Batok St. 21, #01-209, S650213", "Lakeside Family Medicine Clinic Blk 518A, Jurong West St. 52, #01-02, S641518", "Lee Family Clinic Pte. Ltd. Blk 762, Jurong West St 75, #02-262, S640762", "Mei Ling Clinic Blk 158, Mei Ling St, #01-80, S140158", "West Coast Clinic & Surgery Blk 772, Clementi West St. 2, #01-162, S120722" ]
     const {patientId, updatePatientId} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
