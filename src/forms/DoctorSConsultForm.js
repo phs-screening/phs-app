@@ -25,7 +25,7 @@ const schema = new SimpleSchema({
 	doctorSConsultQ1: {
     type: String, optional: false
   }, doctorSConsultQ2: {
-    type: String, optional: false
+    type: String, optional: true
   }, doctorSConsultQ3: {
     type: String, optional: false
   }, doctorSConsultQ4: {
