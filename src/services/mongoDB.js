@@ -79,3 +79,9 @@ export const getSavedPatientData = async (patientId, collectionName) => {
     const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
     return savedData === null ? {} : savedData
 }
+
+export const getReg18Counter = async () => {
+    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
+    const savedData = await mongoConnection.db("phs").collection("queueCounters").findOne({_id : "registrationQ10"});
+    return savedData === null ? null : savedData
+}
