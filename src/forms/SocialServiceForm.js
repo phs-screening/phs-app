@@ -189,7 +189,7 @@ const SocialServiceForm = (props) => {
                     {geriEbas && geriEbas.geriEbasDepQ10 ? blueText(geriEbas.geriEbasDepQ10) : blueText("nil")}
                     {underlined("Potential financial/ family difficulties?")}
                     {geriEbas && geriEbas.geriEbasDepQ11 ? blueText(geriEbas.geriEbasDepQ11) : blueText("nil")}
-                    {underlined("Reasons for referral from Geri-EBAS:")}
+                    {underlined("Reasons for referral from Geri-EBAS & AMT:")}
                     {geriEbas && geriEbas.geriEbasDepQ12 ? blueText(geriEbas.geriEbasDepQ12) : blueText("nil")}
                     {underlined("Reasons for referral from OT consult")}
                     {geriOt && geriOt.geriOtConsultQ5 ? blueText(geriOt.geriOtConsultQ5) : blueText("nil")}

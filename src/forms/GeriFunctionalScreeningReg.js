@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect, useState} from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 
@@ -7,34 +7,38 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
-import { RadioField } from 'uniforms-material';
+import { SubmitField, ErrorsField } from 'uniforms-material';
+import { LongTextField, SelectField, RadioField, NumField } from 'uniforms-material';
+import PopupText from 'src/utils/popupText';
 import { submitForm } from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
-    geriMMSEQ1: {
-        type: String, optional: false
-    }, geriMMSEQ2: {
-        type: String, allowedValues: ["Yes", "No"], optional: false
-    }, geriMMSEQ3: {
-        type: String, allowedValues: ["Yes", "No"], optional: false
-    }, geriMMSEQ4: {
+    geriFunctionalScreeningRegFormQ1: {
+            type: String, allowedValues: ["Yes", "No"], optional: false
+        }, geriFunctionalScreeningRegFormQ2: {
+        type: String, allowedValues: ["HPB", "PHS", "None"], optional: false
+    }, geriFunctionalScreeningRegFormQ3: {
+        type: String, optional: true
+    }, geriFunctionalScreeningRegFormQ4: {
+        type: String, allowedValues: ["Yes", "No"], optional: true
+    }, geriFunctionalScreeningRegFormQ5: {
         type: String, optional: true
     }
     }
 )
 
 
-const formName = "geriMMSEForm"
-const GeriMMSEForm = (props) => {
+const formName = "geriFunctionalScreeningRegForm"
+const GeriFunctionalScreeningRegForm = (props) => {
     const {patientId, updatePatientId} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
     const { changeTab, nextTab } = props;
     const [saveData, setSaveData] = useState({})
+
     useEffect(async () => {
         const savedData = await getSavedData(patientId, formName);
         setSaveData(savedData)
@@ -63,19 +67,24 @@ const GeriMMSEForm = (props) => {
             model={saveData}
         >
             <Fragment>
-                <h2>MINI-MENTAL STATE EXAMINATION (MMSE)</h2>
-                <br />
-                MMSE score (_/_):
-                <LongTextField name="geriMMSEQ1" label="geriMMSE - Q1" />
-                <br />
-                Need referral to G-RACE associated polyclinics/ partners?
-                <RadioField name="geriMMSEQ2" label="geriMMSE - Q2" />
-                <br />
-                Referral made?
-                <RadioField name="geriMMSEQ3" label="geriMMSE - Q3" />
-                Polyclinic:
-                <LongTextField name="geriMMSEQ4" label="geriMMSE - Q4" />
-                <br />
+                <h2>Functional Screening Registration</h2>
+                <br/>
+                Explained HPB FS and PHS FS?
+                <RadioField name="geriFunctionalScreeningRegFormQ1" label = "geriFunctionalScreeningRegForm - Q1"/>
+                <br/>
+                Which functional screening does the participant prefer?
+                <RadioField name="geriFunctionalScreeningRegFormQ2" label = "geriFunctionalScreeningRegForm - Q2"/>
+                <br/>
+                If participant prefers HPB screening, which event will they be going to? (event; date):
+                <LongTextField name="geriFunctionalScreeningRegFormQ3" label = "geriFunctionalScreeningRegForm - Q3"/>
+                <br/>
+                Helped participant sign up on HPB FormSG?
+                <RadioField name="geriFunctionalScreeningRegFormQ4" label = "geriFunctionalScreeningRegForm - Q4"/>
+                <br/>
+                Additional notes:
+                <LongTextField name="geriFunctionalScreeningRegFormQ5" label = "geriFunctionalScreeningRegForm - Q5"/>
+
+
             </Fragment>
             <ErrorsField />
             <div>
@@ -94,8 +103,8 @@ const GeriMMSEForm = (props) => {
     );
 }
 
-GeriMMSEForm.contextType = FormContext;
+GeriFunctionalScreeningRegForm.contextType = FormContext;
 
-export default function GeriMMSEform(props) {
-    return <GeriMMSEForm {...props} />;
+export default function GeriFunctionalScreeningRegform(props) {
+    return <GeriFunctionalScreeningRegForm {...props} />;
 }

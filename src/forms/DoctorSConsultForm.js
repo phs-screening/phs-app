@@ -69,6 +69,7 @@ const DoctorSConsultForm = (props) => {
     const [geriSppb, setGeriSppb] = useState({})
     const [geriPhysical, setGeriPhysical] = useState({})
     const [geriAppt, setGeriAppt] = useState({})
+    const [geriAudio, setGeriAudio] = useState({})
     useEffect(async () => {
         const loadPastForms = async () => {
           const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
@@ -80,9 +81,10 @@ const DoctorSConsultForm = (props) => {
             const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
             const geriPhysicalData = getSavedData(patientId,allForms.geriPhysicalActivityLevelForm)
             const geriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
+            const geriAudioData = getSavedData(patientId, allForms.geriAudiometryForm)
             const savedData = getSavedData(patientId, formName);
           Promise.all([hcsrData, nssData, cancerData, geriOtData, geriPtData, savedData, geriVisionData, geriSppbData
-          , geriPhysicalData, geriApptData])
+          , geriPhysicalData, geriApptData, geriAudioData])
               .then((result) => {
                   setHcsr(result[0])
                   setNss(result[1])
@@ -95,6 +97,7 @@ const DoctorSConsultForm = (props) => {
                   setGeriSppb(result[7])
                   setGeriPhysical(result[8])
                   setGeriAppt(result[9])
+                  setGeriAudio(result[10])
               })
         }
 
@@ -207,6 +210,9 @@ const DoctorSConsultForm = (props) => {
                     {underlined("Previous eye condition or surgery:")}
                     {geriVision && geriVision.geriVisionQ1 ? blueText(geriVision.geriVisionQ1) : blueText("nil")}
                     {geriVision && geriVision.geriVisionQ2 ? blueText(geriVision.geriVisionQ2) : blueText("nil")}
+                    {underlined("Is participant currently on any eye review/ consulting an eye specialist?")}
+                    {geriVision && geriVision.geriVisionQ10 ? blueText(geriVision.geriVisionQ10) : blueText("nil")}
+                    {geriVision && geriVision.geriVisionQ11 ? blueText(geriVision.geriVisionQ11) : blueText("nil")}
                     {underlined("Visual acuity (w/o pinhole occluder) - Right Eye 6/__")}
                     {geriVision && geriVision.geriVisionQ3 ? blueText(geriVision.geriVisionQ3) : blueText("nil")}
                     {underlined("Visual acuity (w/o pinhole occluder) - Left Eye 6/__")}
@@ -221,6 +227,13 @@ const DoctorSConsultForm = (props) => {
                   {underlined("Hearing Problems")}
                   {hcsr ? blueText(hcsr.hxHcsrQ8) : blueText("nil")}
                   {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : blueText("nil")}
+                    { title("Audiometry")}
+                    {underlined("Referred from Geriatric Audiometry Screening?")}
+                    {geriAudio && geriAudio.geriAudiometryQ11 ? blueText(geriAudio.geriAudiometryQ11) : blueText("nil")}
+                    {underlined("Significant findings and recommended course of action?")}
+                    {geriAudio && geriAudio.geriAudiometryQ12 ? blueText(geriAudio.geriAudiometryQ12) : blueText("nil")}
+
+
                   {title("Past Medical History")}
                   {underlined("Summary of Relevant Past Medical History")}
                   {nss && nss.hxNssQ12 ? blueText(nss.hxNssQ12.toString()) : blueText("nil")}

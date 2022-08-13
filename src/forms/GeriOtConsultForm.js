@@ -125,9 +125,9 @@ const GeriOtConsultForm = (props) => {
           Reasons for referral to Doctor's consult (OT):
           <LongTextField name="geriOtConsultQ3" label="Geri - OT Consult Q3" />
           <br/>
-          To be referred to Geriatric Appointment (For HDB EASE Sign-up) (PT):
+          To be referred to Geriatric Appointment (For HDB EASE Sign-up) (OT):
           <RadioField name="geriOtConsultQ7" label="Geri - OT Consult Q7" />
-          Reasons for referral (PT):
+          Reasons for referral (OT):
           <LongTextField name="geriOtConsultQ8" label="Geri - OT Consult Q8" />
           <br/>
           To be referred for social support (OT):

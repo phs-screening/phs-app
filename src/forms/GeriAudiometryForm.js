@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AutoForm } from 'uniforms';
-import {SubmitField, ErrorsField, LongTextField} from 'uniforms-material';
+import {SubmitField, ErrorsField, LongTextField, SelectField} from 'uniforms-material';
 import { RadioField, NumField } from 'uniforms-material';
 import {calculateBMI, submitForm} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
@@ -22,9 +22,35 @@ const schema = new SimpleSchema({
     geriAudiometryQ1: {
         type: String, allowedValues: ["Yes", "No"], optional: false
     }, geriAudiometryQ2: {
-        type: String, allowedValues: ["Yes", "No"], optional: false
+        type: String, allowedValues: ["Pass", "Refer"], optional: true
     }, geriAudiometryQ3: {
-        type: String, allowedValues: ["Yes", "No"], optional: false
+        type: String, allowedValues: ["Pass", "Refer"], optional: true
+    }, geriAudiometryQ4: {
+        type: String, allowedValues: ["Pass", "Refer"], optional: true
+    }, geriAudiometryQ5: {
+        type: Array, optional: true
+    }, "geriAudiometryQ5.$": {
+        type: String, allowedValues: ["500Hz", "1000Hz", "2000Hz", "4000Hz"]
+    }, geriAudiometryQ6: {
+        type: Array, optional: true
+    }, "geriAudiometryQ6.$": {
+        type: String, allowedValues: ["500Hz", "1000Hz", "2000Hz", "4000Hz"]
+    }, geriAudiometryQ7: {
+        type: Array, optional: true
+    }, "geriAudiometryQ7.$": {
+        type: String, allowedValues: ["500Hz", "1000Hz", "2000Hz", "4000Hz"]
+    }, geriAudiometryQ8: {
+        type: Array, optional: true
+    }, "geriAudiometryQ8.$": {
+        type: String, allowedValues: ["500Hz", "1000Hz", "2000Hz", "4000Hz"]
+    }, geriAudiometryQ9: {
+        type: String, allowedValues: ["Yes", "No"], optional: true
+    }, geriAudiometryQ10: {
+        type: String, optional: true
+    }, geriAudiometryQ11: {
+        type: String, allowedValues: ["Yes", "No"], optional: true
+    }, geriAudiometryQ12: {
+        type: String, optional: true
     }
     }
 )
@@ -81,11 +107,39 @@ const GeriAudiometryForm = (props) => {
                 Did participant visit Audiometry Booth by NUS audiology team?
                 <RadioField name="geriAudiometryQ1" label="geriAudiometry - Q1" />
                 <br />
-                Did participant fail the Audiometry Station?
+                Visual Ear Examination (Left Ear):
                 <RadioField name="geriAudiometryQ2" label="geriAudiometry - Q2" />
-                <br/>
-                Is participant referred for L2 Screening by NUH Mobile Hearing Clinic?
+                Visual Ear Examination (Right Ear)
                 <RadioField name="geriAudiometryQ3" label="geriAudiometry - Q3" />
+                <br/>
+                Practice Tone (500Hz at 60dB in “better” ear):
+                <RadioField name="geriAudiometryQ4" label="geriAudiometry - Q4" />
+                <br/>
+                Pure Tone Screening at 25dB for Left Ear:
+                (Tick checkbox for Response, DO NOT tick checkbox if NO response):
+                <SelectField name="geriAudiometryQ5" checkboxes="true" label="geriAudiometry - Q5" />
+                Pure Tone Screening at 25dB for Right Ear:
+                (Tick checkbox for Response, DO NOT tick checkbox if NO response):
+                <SelectField name="geriAudiometryQ6" checkboxes="true" label="geriAudiometry - Q6" />
+                <br/>
+                Pure Tone Screening at 40dB for Left Ear:
+                (Tick checkbox for Response, DO NOT tick checkbox if NO response):
+                <SelectField name="geriAudiometryQ7" checkboxes="true" label="geriAudiometry - Q7" />
+                Pure Tone Screening at 40dB for Right Ear:
+                (Tick checkbox for Response, DO NOT tick checkbox if NO response):
+                <SelectField name="geriAudiometryQ8" checkboxes="true" label="geriAudiometry - Q8" />
+                <br/>
+                When senior is found to have abnormal hearing results, please ask the following
+                questions:
+                <br/>
+                Do you have an upcoming appointment with your ear specialist or audiologist?
+                <RadioField name="geriAudiometryQ9" label="geriAudiometry - Q9" />
+                If yes, please specify:
+                <LongTextField name="geriAudiometryQ10" label="geriAudiometry - Q10"/>
+                Referred to Doctor's Consult?
+                <RadioField name="geriAudiometryQ11" label="geriAudiometry - Q11" />
+                Please document significant findings from audiometry test and recommended course of action for participant:
+                <LongTextField name="geriAudiometryQ12" label="geriAudiometry - Q12"/>
                 <br/>
             </Fragment>
             <ErrorsField />

@@ -45,6 +45,10 @@ const schema = new SimpleSchema({
       type: String, allowedValues: ["Yes", "No"], optional: true
   }, geriGeriApptQ13: {
             type: String, allowedValues: ["Yes", "No"], optional: true
+        }, geriGeriApptQ14: {
+            type: String, allowedValues: ["Yes", "No"], optional: true
+        }, geriGeriApptQ15: {
+            type: String, allowedValues: ["Yes", "No"], optional: true
         }
 }
 )
@@ -87,8 +91,10 @@ const GeriGeriApptForm = (props) => {
           <h2>Geriatrics Appointment</h2>
             <br/>
             <h3>Functional screening </h3>
-            Did participant attend geriatric functional screening organised by HPB-AIC?
+            Did participant attend PHS vision and hearing screening?
             <RadioField name="geriGeriApptQ12" label="Geri - Geri Appt Q12" />
+            Did participant apply for HPB functional screening?
+            <RadioField name="geriGeriApptQ14" label="Geri - Geri Appt Q14" />
             <br/>
             <h3>Vision</h3>
             <b><u>EyeWear@South West</u></b>
@@ -155,6 +161,8 @@ const GeriGeriApptForm = (props) => {
             <br/>
             <Fragment>
                 <h3>If participant is recommended for social support:</h3>
+                Are pages 1-2 of SACS referral form filled up for the participant?
+                <RadioField name="geriGeriApptQ15" label="Geri - Geri Appt Q15" />
                 Persuade participant to go to social support booth and explain that AIC can help
                 <BoolField name="geriGeriApptQ5" />
             </Fragment>

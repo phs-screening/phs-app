@@ -166,6 +166,9 @@ const GeriEbasDepForm = (props) => {
           
           <br />
           <h3>A score of 3 or greater indicates the probable presence of a depressive disorder which may need treatment and the patient should be assessed in more detail. Please refer to Social Support if score is 3 OR GREATER.</h3>
+          <p>Please note that "Yes"/ Abnormal response to Q8 is considered a positive test, regardless of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,<b> PLEASE REFER to Social Service.</b> </p>
+          <br/>
+
           To be referred for social support (failed EBAS-DEP) - from Geriatrics EBAS
           <br />
           <RadioField name="geriEbasDepQ10" label="Geri - EBAS-DEP Q10" />
@@ -173,12 +176,12 @@ const GeriEbasDepForm = (props) => {
           To be referred for social support (for potential financial/ family difficulties) - from Geriatrics EBAS
           <RadioField name="geriEbasDepQ11" label="Geri - EBAS-DEP Q11" />
           <br/>
-          <PopupText qnNo="geriEbasDepQ11" triggerValue="Yes">
-            <Fragment>
-              Reasons for referral to social support - from Geriatrics EBAS:
-              <LongTextField name="geriEbasDepQ12" label="Geri - EBAS-DEP Q12" />
-            </Fragment>
-          </PopupText>
+          <Fragment>
+            Reasons for referral to social support - from Geriatrics EBAS & AMT:
+            <br/>Please document cognitive and social issues here.
+            <LongTextField name="geriEbasDepQ12" label="Geri - EBAS-DEP Q12" />
+          </Fragment>
+
 
           <font color="red"><h2>IF THE PATIENT NEEDS TO GO TO SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE INDICATE ON FORM A.</h2></font>
           <br/>

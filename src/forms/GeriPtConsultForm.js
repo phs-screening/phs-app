@@ -32,10 +32,6 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No"], optional: false
   }, geriPtConsultQ5: {
     type: String, optional: true
-  }, geriPtConsultQ6: {
-        type: String, allowedValues: ["Yes", "No"], optional: false
-  }, geriPtConsultQ7: {
-    type: String, optional: true
   }
 }
 )
@@ -163,10 +159,6 @@ const GeriPtConsultForm = (props) => {
           Please specify (if others):
           <LongTextField name="geriPtConsultQ8" label="Geri - PT Consult Q8" />
           <br/>
-          To be referred to Geriatric Appointment (For HDB EASE Sign-up) (PT):
-          <RadioField name="geriPtConsultQ6" label="Geri - PT Consult Q6" />
-          Reasons for referral (PT):
-          <LongTextField name="geriPtConsultQ7" label="Geri - PT Consult Q7" />
           <br/>
           To be referred for social support (PT):
           <RadioField name="geriPtConsultQ4" label="Geri - PT Consult Q4" />

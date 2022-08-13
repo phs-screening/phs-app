@@ -31,14 +31,18 @@ const schema = new SimpleSchema({
   }, geriVisionQ7: {
     type: String, allowedValues: ["CF2M", "CF1M", "HM", "LP", "NLP", "NIL"], optional: true
   }, geriVisionQ8: {
-    type: Array, optional: true
+    type: Array, optional: false
   }, "geriVisionQ8.$": {
-    type: String, allowedValues: ["Referred to OT Consult"]
+    type: String, allowedValues: ["Refractive", "Non-refractive", "None"]
   }, geriVisionQ9: {
         type: Array, optional: true
       }, "geriVisionQ9.$": {
         type: String, allowedValues: ["Referred to Doctor's Consult"]
-  }
+  }, geriVisionQ10: {
+        type: String, allowedValues: ["Yes", "No"], optional: false
+      }, geriVisionQ11: {
+        type: String, optional: true
+      },
 }
 )
 
@@ -99,8 +103,13 @@ const GeriVisionForm = (props) => {
           <NumField name="geriVisionQ5" label="Geri - Vision Q5" /> <br />
           5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__ <br />
           <NumField name="geriVisionQ6" label="Geri - Vision Q6" /> <br />
-          <br /> <p>Participant's details recorded down for referral to L2 Eye Screening by NUHS if pinhole VA  <b><u>≥ 6/12</u></b></p>
-          <br /><SelectField name="geriVisionQ8" checkboxes="true" label="Geri - Vision Q8" />
+          6. Is participant currently on any eye review/ consulting any eye specialist?
+          <RadioField name="geriVisionQ10" label = "Geri - Vision Q10" />
+          Please specify:
+          <LongTextField name="geriVisionQ11" label = "Geri - Vision Q11" />
+
+          <br /> <p>7. Type of vision error?</p>
+          <RadioField name="geriVisionQ8"  label="Geri - Vision Q8" />
           <br /> <p>Please <b>refer to Doctor’s Consult if pinhole</b> visual acuity is <b><u>≥ 6/12</u></b></p>
           <br /><SelectField name="geriVisionQ9" checkboxes="true" label="Geri - Vision Q9" />
           

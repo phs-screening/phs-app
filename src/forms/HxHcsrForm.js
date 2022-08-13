@@ -188,7 +188,11 @@ const HxHcsrForm = (props) => {
           Please specify:
           <LongTextField name="hxHcsrQ14" label="Hx HCSR Q14" />
           <br />
-          2e. For geraitric participants, are they currently using any hearing aids?
+          2e. For geraitric participants, did he/she answer yes to any of the following questions?
+          <br/>a. Have you had your hearing aids for more than 5 years?
+          <br/>b. Has it been 3 years or more since you used your hearing aids (i.e. did not use
+          the hearing aids for more than 3 years)?
+          <br/>c. Are your hearing aids spoilt/not working?
           <RadioField name="hxHcsrQ15" label="Hx HCSR Q15" />
           Please specify:
           <LongTextField name="hxHcsrQ16" label="Hx HCSR Q16" />
