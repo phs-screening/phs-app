@@ -149,8 +149,10 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("4. Health Concerns")}
-			{underlined("Participant's presenting complaints/concerns requires scruitiny by doctor: (if any)")}
-			{hcsr ? blueText(hcsr.hxHcsrQ11) : '-'}
+			{underlined("Participant's presenting complaints/concerns requires scrutiny by doctor: (if any)")}
+			{hcsr.hxHcsrQ11 == "Yes"
+				? blueRedText(hcsr.hxHcsrQ11, "Please check if participant has visited the Doctor's Consult Station.")
+				: blueText(hcsr.hxHcsrQ11)}
 			<br></br>
 			{underlined("Participant's presenting complaints/concerns (if any)")}
 			{hcsr ? blueText(hcsr.hxHcsrQ2) : '-'}
@@ -158,8 +160,10 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("5. Systems Review")}
-			{underlined("Participant's presenting complaints/ concerns requires scruitiny by doctor:")} 
-			{hcsr ? blueText(hcsr.hxHcsrQ12) : '-'}
+			{underlined("Participant's presenting complaints/ concerns requires scrutiny by doctor:")} 
+			{hcsr.hxHcsrQ12
+				? blueRedText(hcsr.hxHcsrQ12, "Please check if participant has visited the Doctor's Consult Station.")
+				: blueText(hcsr.hxHcsrQ12)}
 			<br></br>
 			{underlined("Participant's system review")}
 			{hcsr ? blueText(hcsr.hxHcsrQ3) : '-'}
@@ -167,8 +171,10 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("6. Past Medical History")}
-			{underlined("Participant's past medical history requires scruitiny by doctor:")}
-			{nss ? blueText(nss.hxNssQ11) : '-'}
+			{underlined("Participant's past medical history requires scrutiny by doctor:")}
+			{nss.hxNssQ11 == "Yes"
+				? blueRedText(nss.hxNssQ11, "Please check if participant has visited the Doctor's Consult Station.")
+				: blueText(nss.hxNssQ11)}
 			<br></br>
 			{underlined("Summary of participants's past medical history")}
 			{nss ? blueText(nss.hxNssQ12) : '-'}
@@ -176,8 +182,10 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("7. Family History")}
-			{underlined("Participant's past medical history requires scruitiny by doctor:")}
-			{cancer ? blueText(cancer.hxCancerQ9) : '-'}
+			{underlined("Participant's past medical history requires scrutiny by doctor:")}
+			{cancer.hxCancerQ9 == "Yes"
+				? blueRedText(cancer.hxCancerQ9, "Please check if participant has visited the Doctor's Consult Station.")
+				: blueText(cancer.hxCancerQ9)}
 			<br></br>
 			{underlined("Summary of participant's past medical history:")}
 			{cancer ? blueText(cancer.hxCancerQ10) : '-'}
