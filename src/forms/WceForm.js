@@ -22,17 +22,17 @@ import {blueText} from "../theme/commonComponents";
 
 const schema = new SimpleSchema({
   wceQ1: {
-    type: String, allowedValues: ["Yes", "No"], optional: false
+    type: String, allowedValues: ["Yes", "No"], optional: true
   }, wceQ2: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, wceQ3: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, wceQ4: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, wceQ5: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }, wceQ6: {
-    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: false
+    type: String, allowedValues: ["Yes", "No", "Not Applicable"], optional: true
   }
 }
 )
