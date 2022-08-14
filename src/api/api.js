@@ -610,10 +610,9 @@ export function addSocialService(doc, socialService, k) {
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "SACS");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("SACS"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ6) {
-		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 2) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
+		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 1) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
 																	   + " application status for their programmes.", 180);
 		doc.text(10, 10, socialServiceQ6);
 		k++;
@@ -624,10 +623,9 @@ export function addSocialService(doc, socialService, k) {
 	k++;
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "HDB EASE");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("HDB EASE"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ7) {
-		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 2) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
+		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 1) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
 																       + " HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date."
 																	   + " You may expect the process from applying for EASE (Direct Application) to having the improvement items installed in your flat to"
 																	   + " be completed within a month.", 180);
@@ -637,10 +635,9 @@ export function addSocialService(doc, socialService, k) {
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "CHAS Application");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("CHAS Application"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ8) {
-		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 2) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
+		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 1) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
 																	   + " household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information"
 																	   + " on the use of the card. If you have not received the outcome after 15 working days, you can visit the CHAS online application page and login using"
 																	   + " your SingPass. You can also call the CHAS hotline at 1800-275-2427 (1800-ASK-CHAS) to check on your application status or if you need assistance in applying"
