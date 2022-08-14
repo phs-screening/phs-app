@@ -81,7 +81,7 @@ const schema = new SimpleSchema({
   },geriOtQuestionnaireQ31: {
     type: String, optional: false
   },geriOtQuestionnaireQ32: {
-    type: Number, optional: false
+    type: String, optional: false
   }
     }
 )
@@ -341,7 +341,7 @@ const GeriOtQuestionnaireForm = (props) => {
           <GetScores /> <br/>
 
           <b>Total (Record it as "YES" / 25 - "NA"):</b>
-          <NumField name="geriOtQuestionnaireQ32" label="geriOtQuestionnaire-Q32" step={1} />
+          <LongTextField name="geriOtQuestionnaireQ32" label="geriOtQuestionnaire-Q32" />
           <br/>
         </Fragment>
         <ErrorsField />
