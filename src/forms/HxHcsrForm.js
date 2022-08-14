@@ -92,10 +92,9 @@ const HxHcsrForm = (props) => {
 
         <Fragment>
           <h2>PARTICIPANT IDENTIFICATION</h2>
-          <h3 style={{ color: "red" }}>Please verify participant's identity using his/her NRIC before proceeding <br />
-            A. S/N AND<br />
-            B. Surname followed by Initials AND<br />
-            C. Last 4 characters of Participant's NRIC</h3>
+          <h3 style={{ color: "red" }}>Please verify participant's identity using his/her
+            <br/>A. APP ID on wristband  AND
+            <br/>B. INITIALS </h3>
           <br />
           <br />
 
@@ -169,9 +168,12 @@ const HxHcsrForm = (props) => {
           <LongTextField name="hxHcsrQ7" label="Hx HCSR Q7" />
           <br />
           <PopupText qnNo="hxHcsrQ6" triggerValue="Yes, (Please specify):">
-            <b>REFER TO <span style={{ color: "red" }}>DR CONSULT</span> if have vision problems for 40-59. For 60 and above, indicate for Geriatrics - Geriatrics Functional Screening includes vision screening.</b>1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation<br /><br />
+            <b>REFER TO  <span style={{ color: "red" }}>DR CONSULT</span> if have vision problems for 40-59. For 60 and above, indicate for Geriatrics
+              Indicate on:</b>
+            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+            <br/>2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
           </PopupText>
-          <br />
+          <br /><br/><br/>
 
           2c. Do you have any hearing problems? Please specify if yes. <br />
 
@@ -188,7 +190,7 @@ const HxHcsrForm = (props) => {
           Please specify:
           <LongTextField name="hxHcsrQ14" label="Hx HCSR Q14" />
           <br />
-          2e. For geraitric participants, did he/she answer yes to any of the following questions?
+          2e. For geriatric participants, did he/she answer yes to any of the following questions?
           <br/>a. Have you had your hearing aids for more than 5 years?
           <br/>b. Has it been 3 years or more since you used your hearing aids (i.e. did not use
           the hearing aids for more than 3 years)?

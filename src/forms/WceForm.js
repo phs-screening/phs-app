@@ -87,7 +87,9 @@ const WceForm = (props) =>  {
       >
         <Fragment>
       <h2>PARTICIPANT IDENTIFICATION</h2>
-      <h3><font color="red">Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N <br/>B. Surname followed by Initials <br/> C. Last 4 characters of Participant's NRIC and Letter</font></h3> <br/>
+      <h3><font color="red">Please verify participant's identity using his/her
+          <br/>A. APP ID on wristband  AND
+          <br/>B. INITIALS </font></h3> <br/>
       <h2>1. FINANCIAL STATUS<br /></h2>
       <font color="red"><b>Please refer to page 1 of Form A for following questions.</b></font>
           <br/>

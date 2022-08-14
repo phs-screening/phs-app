@@ -74,7 +74,9 @@ const FitForm = (props) =>  {
             >
                 <Fragment>
                     <h2>PARTICIPANT IDENTIFICATION</h2>
-                    <h3><span style={{color: "red"}}>Please verify participant's identity using his/her NRIC before proceeding <br />A. S/N <br />B. Surname followed by Initials <br/> C. Last 4 characters of Participant's NRIC and Letter</span></h3> <br/>
+                    <h3><span style={{color: "red"}}>Please verify participant's identity using his/her
+                        <br/>A. APP ID on wristband  AND
+                        <br/>B. INITIALS </span></h3> <br/>
 
                     <h2>CANCER SCREENING </h2> <br/>
                     <p><span style={{color: "red"}}><b>For respondent aged 50 and above only,</b></span> unless positive family history for colorectal cancer.<br />When was the last time you had a blood stool test? (A blood stool test is a test to determine whether the stool contains blood.)</p>

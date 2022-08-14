@@ -75,9 +75,6 @@ const RegForm = () => {
             <br />
             <p>GRC/SMC Subdivision <a href="https://www.parliament.gov.sg/mps/find-my-mp" target="_blank">[https://www.parliament.gov.sg/mps/find-my-mp]</a></p>
             <SelectField name="registrationQ6" />
-            <br/>
-            Household Income Per Capita
-            <SelectField name="registrationQ7" />
             <br />
             CHAS Status 社保援助计划
             <SelectField name="registrationQ8" />
@@ -86,7 +83,8 @@ const RegForm = () => {
             <RadioField name="registrationQ9" />
             <br />
             <h2>Follow up at GP Clinics</h2>
-            Your Health Report & Blood Test Results (if applicable) will be mailed out about 4-6 weeks after the screening.  Depending on your results, our team may shortlist you for further follow-up.<br />Scenario 1: If no follow-up is required, the report will be mailed directly to you.<br />Scenario 2: If follow-up is required, you will need to visit a GP clinic to collect your report. <br />Please choose a preferred GP Clinic from the following list in case of Scenario 2.
+            <p>Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you have selected <b>4-6 weeks</b> after the screening.</p>
+            All results, included those that are normal, have to be collected from the GP clinic via an appointment
             <br/><br/>{displayVacancy}
             <RadioField name="registrationQ10" />
             <br />
@@ -120,8 +118,6 @@ const RegForm = () => {
                 type: String, optional: false
             }, registrationQ6: {
                 type: String, allowedValues: ["Jurong", "Yuhua", "Bukit Batok", "Pioneer", "West Coast", "Hong Kah North", "Others"], optional: false
-            }, registrationQ7: {
-                type: String, allowedValues: ["Below 1,100 per month (少于 1,100)", "1,100 - 1,799 per month (每月1,100 - 1,799)", "1,800 - 2,799 per month (每月1,800 - 2,799)", "2,800 & above (2,800 或以上)"], optional: false
             }, registrationQ8: {
                 type: String, allowedValues: ["CHAS Orange", "CHAS Green", "CHAS Blue", "No CHAS"], optional: false
             }, registrationQ9: {
