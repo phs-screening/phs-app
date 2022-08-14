@@ -378,7 +378,7 @@ export function kNewlines(k) {
 }
 
 
-export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctorSConsult, socialService, geriMmse, geriVision, geriAudiometry, geriGeriAppt, dietitiansConsult, oralHealth) {
+export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctorSConsult, socialService, geriMmse, geriVision, geriAudiometry, geriGeriAppt, dietitiansConsult, oralHealth, geriFunctionalScreening) {
 	var doc = new jsPDF();
 	var k = 0;
 	doc.setFontSize(10);
@@ -392,7 +392,7 @@ export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctor
 	k = addWce(doc, patients, wce, k);
 	k = addDoctorSConsult(doc, doctorSConsult, k);
 	k = addSocialService(doc, socialService, k);
-	k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k);
+	k = addGeriatrics(doc, geriMmse, geriFunctionalScreening, geriVision, geriAudiometry, geriGeriAppt, k);
 	k = addDietitiansConsult(doc, dietitiansConsult, k);
 	k = addOralHealth(doc, oralHealth, k);
 	k = addRecommendation(doc, k);
@@ -425,7 +425,7 @@ export function patient(doc, reg, patients, k) {
 	// Thanks note
 	var thanksNote = doc.splitTextToSize(kNewlines(k = k + 2) + "Dear " + salutation + ' ' + patients.initials + ',\n'
 													  		  + "Thank you for participating in our health screening at Jurong East on 20th/21st August this year."
-												 	  		  + " Here are your screening results*:", 180);
+												 	  		  + " Here are your screening results:", 180);
 	doc.text(10, 10, thanksNote)
 	k = k + 2;
 	
@@ -610,36 +610,34 @@ export function addSocialService(doc, socialService, k) {
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "SACS");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("SACS"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ6) {
-		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 2) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
+		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 1) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
 																	   + " application status for their programmes.", 180);
 		doc.text(10, 10, socialServiceQ6);
 		k++;
 	}
 
+	doc.addPage();
+	k = 0;
+	k++;
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "HDB EASE");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("HDB EASE"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ7) {
-		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 2) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
+		var socialServiceQ7 = doc.splitTextToSize(kNewlines(k = k + 1) + "The HDB Branch managing your estate will reply to you within 7 working days regarding your application."
 																       + " HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date."
 																	   + " You may expect the process from applying for EASE (Direct Application) to having the improvement items installed in your flat to"
 																	   + " be completed within a month.", 180);
 		doc.text(10, 10, socialServiceQ7);
-		doc.addPage();
-    	k = 0;
-		k++;
+		k = k + 3;
 	}
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "CHAS Application");
-	doc.line(10, calculateY(k), 10 + doc.getTextWidth("CHAS Application"), calculateY(k));
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ8) {
-		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 2) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
+		var socialServiceQ8 = doc.splitTextToSize(kNewlines(k = k + 1) + "Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their"
 																	   + " household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information"
 																	   + " on the use of the card. If you have not received the outcome after 15 working days, you can visit the CHAS online application page and login using"
 																	   + " your SingPass. You can also call the CHAS hotline at 1800-275-2427 (1800-ASK-CHAS) to check on your application status or if you need assistance in applying"
@@ -655,8 +653,14 @@ export function calculateY(coor) {
 	return coor * 4.0569 + 10.2
 }
 
-export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k) {
+export function addGeriatrics(doc, geriMmse, geriFunctionalScreening, geriVision, geriAudiometry, geriGeriAppt, k) {
 	var k = k;
+	const polyclinic = typeof geriMmse.geriMMSEQ4 != "undefined"
+						? geriMmse.geriMMSEQ4
+						: '-';
+	const details = typeof geriFunctionalScreening.geriFunctionalScreeningRegFormQ3 != "undefined"
+						? geriFunctionalScreening.geriFunctionalScreeningRegFormQ3
+						: '-';
 
 	doc.setFont(undefined, 'bold');
 	doc.text(10, 10, kNewlines(k = k + 2) + "Geriatrics");
@@ -669,38 +673,38 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGer
 	doc.setFont(undefined, 'normal');
 
 	if (geriMmse.geriMMSEQ3 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- G-RACE and partnering polyclinics");
-	}
-
-	if (geriVision.geriVisionQ8 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- NUHS for further vision screening");
-	}
-
-	if (geriAudiometry.geriAudiometryQ3 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- NUHS for further audiometry screening");
+		doc.text(10, 10, kNewlines(k = k + 1) + "- G-RACE and partnering polyclinics (" + polyclinic + ")");
 	}
 
 	if (geriGeriAppt.geriGeriApptQ12 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional screening");
-	}
-
-	if (geriGeriAppt.geriGeriApptQ4 == "No") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- South West CDC for Eye Vouchers");
+		doc.text(10, 10, kNewlines(k = k + 1) + "- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional screening (" + details + ")");
 	}
 
 	if (geriGeriAppt.geriGeriApptQ8 == "Yes") {
 		doc.text(10, 10, kNewlines(k = k + 1) + "- South West CDC for Safe & Sustainable Homes programme");
 	}
 
-	var geriatrics = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to follow through with the"
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 2) + "SWCDC Eye Vouchers");
+	doc.setFont(undefined, 'normal');
+	var vouchers = doc.splitTextToSize(kNewlines(k = k + 1) + "We strongly encourage you to use the eye vouchers before they expire.");
+	doc.text(10, 10, vouchers);
+
+
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 2) + "Physiotherapy");
+	doc.setFont(undefined, 'normal');
+	var geriatrics = doc.splitTextToSize(kNewlines(k = k + 1) + "We strongly encourage you to follow through with the"
 															  + " recommendations from Physiotherapy lead a more active"
 															  + " and healthier lifestyle.", 180);
+	doc.text(10, 10, geriatrics);
 	
-	var otherGeriatrics = doc.splitTextToSize(kNewlines(k = k + 3) + "We advice that you increase your lighting, declutter commonly used spaces to"
+	doc.setFont(undefined, 'bold');
+	doc.text(10, 10, kNewlines(k = k + 3) + "Occupational Therapy");
+	doc.setFont(undefined, 'normal');
+	var otherGeriatrics = doc.splitTextToSize(kNewlines(k = k + 1) + "We advice that you increase your lighting, declutter commonly used spaces to"
 																   + " prevent falls. As recommended by the Occupational Therapists as of any other arrangements"
 																   + " mentioned during the interview.", 180);
-						
-	doc.text(10, 10, geriatrics);
 	doc.text(10, 10, otherGeriatrics);
 
 	k++;
@@ -709,6 +713,8 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGer
 
 export function addDietitiansConsult(doc, dietitiansConsult, k) {
 	var k = k;
+	const notes = dietitiansConsult.dietitiansConsultQ4;
+
 	if (dietitiansConsult.dietitiansConsultQ7 == "Yes") {
 		doc.setFont(undefined, 'bold');
 		doc.text(10, 10, kNewlines(k = k + 2) + "Dietitian's Consult");
@@ -716,9 +722,12 @@ export function addDietitiansConsult(doc, dietitiansConsult, k) {
 		doc.setFont(undefined, 'normal');
 
 		var dietitiansConsult = doc.splitTextToSize(kNewlines(k = k + 2) + "We strongly encourage you to follow through with the recommendations from the"
-													                     + " Dietitian to lead a more healthy lifestyle.", 180);
+													                     + " Dietitian to lead a more healthy lifestyle. Make changes to your diet and lifestyle for"
+																		 + " a healthier you!", 180);
 		doc.text(10, 10, dietitiansConsult)
 		k++;
+
+		doc.text(10, 10, kNewlines(k = k + 2) + notes);
 	}
 
 	return k;
@@ -729,6 +738,7 @@ export function addOralHealth(doc, oralHealth, k) {
 	if (oralHealth.oralHealthQ2) {
 		doc.setFont(undefined, 'bold');
 		doc.text(10, 10, kNewlines(k = k + 2) + "Oral Health Consult");
+		doc.line(10, calculateY(k), 10 + doc.getTextWidth("Oral Health Consult"), calculateY(k));
 		doc.setFont(undefined, 'normal');
 
 		doc.text(10, 10, kNewlines(k = k + 2) + "We strongly encourage you to follow through with the recommendations from NUS Dentistry for adequate oral care.");
