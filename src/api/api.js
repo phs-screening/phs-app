@@ -88,6 +88,34 @@ export async function submitForm(args, patientId, formCollection) {
     }
 }
 
+export async function submitFormSpecial(args, patientId, formCollection) {
+	try {
+		const mongoConnection = mongoDB.currentUser.mongoClient("mongodb-atlas");
+		const patientsRecord = mongoConnection.db("phs").collection("patients");
+		const record = await patientsRecord.findOne({queueNo: patientId});
+		if (record) {
+			const registrationForms = mongoConnection.db("phs").collection(formCollection);
+			if (record[formCollection] === undefined) {
+				// first time form is filled, create document for form
+				await registrationForms.insertOne({_id: patientId, ...args});
+				await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+				return { "result" : true };
+			} else {
+				args.lastEdited = new Date()
+				args.lastEditedBy = getName()
+				await registrationForms.updateOne({_id : patientId}, {$set : {...args}})
+
+				return { "result" : true };
+			}
+		} else {
+			const errorMsg = "An error has occurred."
+			return { "result" : false, "error" : errorMsg };
+		}
+	} catch(err) {
+		return { "result" : false, "error" : err };
+	}
+}
+
 export async function submitFormReg(args, patientId, options) {
 	const formCollection = "registrationForm"
 	try {

@@ -10,7 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { AutoForm } from 'uniforms';
 import {SubmitField, ErrorsField, BoolField} from 'uniforms-material';
 import { RadioField, LongTextField } from 'uniforms-material';
-import {calculateBMI, submitForm} from '../api/api.js';
+import {submitFormSpecial} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 import {getSavedData} from "../services/mongoDB";
 import './fieldPadding.css'
@@ -89,7 +89,7 @@ const SocialServiceForm = (props) => {
         className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
-          const response = await submitForm(model, patientId, formName);
+          const response = await submitFormSpecial(model, patientId, formName);
           if (response.result) {
             isLoading(false);
             setTimeout(() => {

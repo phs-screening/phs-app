@@ -10,7 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { AutoForm } from 'uniforms';
 import { SubmitField, ErrorsField } from 'uniforms-material';
 import { TextField, SelectField, RadioField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
+import {submitFormSpecial} from '../api/api.js';
 import { FormContext } from '../api/utils.js';
 
 import '../Snippet.css';
@@ -69,7 +69,7 @@ const WceForm = (props) =>  {
         className='fieldPadding'
         onSubmit={async (model) => {
           isLoading(true);
-          const response = await submitForm(model, patientId, formName);
+          const response = await submitFormSpecial(model, patientId, formName);
           if (response.result) {
             isLoading(false);
             setTimeout(() => {
