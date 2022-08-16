@@ -131,6 +131,10 @@ const DoctorSConsultForm = (props) => {
 
       Doctor's Name:
       <LongTextField name="doctorSConsultQ1" label="Doctor's Consult Q1"/>
+      <br/><br/>
+      Clinical findings:
+      <LongTextField name="doctorSConsultQ2" label="Doctor's Consult Q2"/>
+      <br/><br/>
         Doctor's Memo:
       <LongTextField name="doctorSConsultQ3" label="Doctor's Consult Q3"/>
         <br/><br/>
@@ -276,7 +280,6 @@ const DoctorSConsultForm = (props) => {
                     {geriOt ? blueText(geriOt.geriOtConsultQ3 ) : blueText("nil")}
                     {title("PT consult")}
                     {underlined("Reasons for referral")}
-                    {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : blueText("nil")}
                     {geriPt ? blueText(geriPt.geriPtConsultQ3 ) : blueText("nil")}
                     {underlined("Short Physical Performance Battery Score (out of 12):")}
                     {geriSppb ? blueText(calculateSppbScore(geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8)) : blueText("nil")}

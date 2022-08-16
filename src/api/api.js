@@ -125,10 +125,13 @@ export async function submitFormReg(args, patientId, options) {
 		const old = await registrationForms.findOne({_id : patientId})
 		const patientsRecord = mongoConnection.db("phs").collection("patients");
 		const record = await patientsRecord.findOne({queueNo: patientId});
-		if (optionQ10Index >=0) {
+		if (optionQ10Index >= 0) {
 			if (old !== undefined && old !== null) {
 				const oldQ10Option = old.registrationQ10
-				if (oldQ10Option !== undefined) {
+				// check if there is old option selected for q10
+				if (oldQ10Option !== undefined ) {
+					// if the new option differs from old, +1 to new and -1 to old
+					// unless either old or new option is None. Logic coded in updateRegQ10No
 					if (oldQ10Option !== args.registrationQ10) {
 						const oldQ10OptionIndex = options.indexOf(oldQ10Option)
 						const response = await mongoDB.currentUser.functions.updateRegQ10No(optionQ10Index, oldQ10OptionIndex);

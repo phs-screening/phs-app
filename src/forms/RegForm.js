@@ -25,7 +25,7 @@ import './fieldPadding.css'
 
 const formName = "registrationForm"
 const RegForm = () => {
-    const options = ["Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114, S650207", "Drs Tang & Partners Pte. Ltd. Blk 64, Yung Kuang Road, #01-115, S610064", "Lai Medical Clinic Blk 213, Bukit Batok St. 21, #01-209, S650213", "Lakeside Family Medicine Clinic Blk 518A, Jurong West St. 52, #01-02, S641518", "Lee Family Clinic Pte. Ltd. Blk 762, Jurong West St 75, #02-262, S640762", "Mei Ling Clinic Blk 158, Mei Ling St, #01-80, S140158", "West Coast Clinic & Surgery Blk 772, Clementi West St. 2, #01-162, S120722" ]
+    const options = ["Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114, S650207", "Drs Tang & Partners Pte. Ltd. Blk 64, Yung Kuang Road, #01-115, S610064", "Lai Medical Clinic Blk 213, Bukit Batok St. 21, #01-209, S650213", "Lakeside Family Medicine Clinic Blk 518A, Jurong West St. 52, #01-02, S641518", "Lee Family Clinic Pte. Ltd. Blk 762, Jurong West St 75, #02-262, S640762", "Mei Ling Clinic Blk 158, Mei Ling St, #01-80, S140158", "West Coast Clinic & Surgery Blk 772, Clementi West St. 2, #01-162, S120722", "None" ]
     const {patientId, updatePatientId} = useContext(FormContext);
     const [loading, isLoading] = useState(false);
     const navigate = useNavigate();
@@ -36,17 +36,19 @@ const RegForm = () => {
         const savedData = await getSavedData(patientId, formName, options);
         const counters = await getReg18Counter()
         if (counters !== null) {
-            const seq = counters.seq
-            const seqLimits = counters.seqLimits
+            const seq = counters.seq // current selected
+            const seqLimits = counters.seqLimits // max limit
             for (let i = 0; i < seq.length; i++) {
+                // to get number of slots available
                 seq[i] = seqLimits[i] - seq[i]
             }
             setOptionsQ10(seq)
         }
         setSaveData(savedData)
     }, [])
-
-    const displayVacancy = optionsQ10.map((x, i) => {
+    
+    // Note: Slice does not modify old array. It creates new array.
+    const displayVacancy = optionsQ10.slice(0, -1).map((x, i) => {
         return <div>
             {options[i]}
             <b> Slots: {x}</b>

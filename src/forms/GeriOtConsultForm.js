@@ -37,6 +37,10 @@ const schema = new SimpleSchema({
     type: String, allowedValues: ["Yes", "No"], optional: false
   },geriOtConsultQ8: {
     type: String, optional: true
+  },geriOtConsultQ9: {
+    type: String, allowedValues: ["Yes", "No"], optional: false
+  },geriOtConsultQ10: {
+    type: String, optional: true
   }
 }
 )
@@ -129,6 +133,12 @@ const GeriOtConsultForm = (props) => {
           <RadioField name="geriOtConsultQ7" label="Geri - OT Consult Q7" />
           Reasons for referral (OT):
           <LongTextField name="geriOtConsultQ8" label="Geri - OT Consult Q8" />
+          <br/>
+          Indicated for SWCDC Safe & Sustainable Homes?
+          <RadioField name="geriOtConsultQ9" label="Geri - OT Consult Q9" />
+          <br/>
+          Comments:
+          <LongTextField name="geriOtConsultQ10" label="Geri - OT Consult Q10" />
           <br/>
           To be referred for social support (OT):
           <RadioField name="geriOtConsultQ4" label="Geri - OT Consult Q4" />
