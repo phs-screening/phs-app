@@ -418,7 +418,7 @@ export function generate_pdf(reg, patients, cancer, phlebotomy, fit, wce, doctor
 	k = addBmi(doc, cancer, k);
 	k = addBloodPressure(doc, cancer, k);
 	k = addOtherScreeningModularities(doc, k);
-	k = addPhelobotomy(doc, phlebotomy, k);
+	k = addPhleobotomy(doc, phlebotomy, k);
 	k = addFit(doc, fit, k);
 	k = addWce(doc, patients, wce, k);
 	k = addDoctorSConsult(doc, doctorSConsult, k);
@@ -536,18 +536,17 @@ export function addOtherScreeningModularities(doc, k) {
 }
 
 
-export function addPhelobotomy(doc, phlebotomy, k) {
+export function addPhleobotomy(doc, phlebotomy, k) {
 	if (phlebotomy.phlebotomyQ1) {
 		doc.setFont(undefined, 'bold');
 		doc.text(10, 10, kNewlines(k = k + 2) + "Phlebotomy");
 		doc.line(10, calculateY(k), 10 + doc.getTextWidth("Phlebotomy"), calculateY(k));
 		doc.setFont(undefined, 'normal');
 
-		var phlebotomy = doc.splitTextToSize(kNewlines(k = k + 2) + "The Blood Test Report will be out in around 4-6 weeks after screening. Depending on the result,"
-														          + " the report will be sent out to your home address if it is normal. If there is an issue, you may"
-														          + " have to go to the GP clinic you have previously selected to collect your Blood Test Report. If"
-														          + " required to head down to the GP, you will receive a call/ SMS to inform you.", 180);
-		k = k + 3;
+		var phlebotomy = doc.splitTextToSize(kNewlines(k = k + 2) + "The Blood Test Report will be mailed out to GP clinics"
+																  + " you have previously indicated. You will receive a call/SMS to"
+																  + " inform you about the GP appointment.", 180);
+		k++;
 		doc.text(10, 10, phlebotomy)
 	}
 
@@ -597,6 +596,11 @@ export function addWce(doc, patients, wce, k) {
 		doc.text(10, 10, kNewlines(k = k + 1) + "- Mammogram screening under Singapore Cancer Society");
 	}
 
+	var summary = doc.splitTextToSize(kNewlines(k = k + 2)  + "Do note that the Singapore Cancer Society (SCS) will contact you regarding your appointment. Should you have any"
+														    + " queries, please contact the Singapore Cancer"
+															+ " Society at 1800-727-3333.", 180)
+	k = k + 2;
+	doc.text(10, 10, summary);
 	return k;
 
 }
@@ -708,7 +712,10 @@ export function addGeriatrics(doc, geriMmse, geriFunctionalScreening, geriVision
 	}
 
 	if (geriGeriAppt.geriGeriApptQ12 == "Yes") {
-		doc.text(10, 10, kNewlines(k = k + 1) + "- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional screening (" + details + ")");
+		var geri = doc.splitTextToSize(kNewlines(k = k + 1) + "- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional"
+													      	+ " screening (" + details + ")", 180);
+		doc.text(10, 10, geri);
+		k++;
 	}
 
 	if (geriGeriAppt.geriGeriApptQ8 == "Yes") {
@@ -757,8 +764,6 @@ export function addDietitiansConsult(doc, dietitiansConsult, k) {
 																		 + " a healthier you!", 180);
 		doc.text(10, 10, dietitiansConsult)
 		k++;
-
-		doc.text(10, 10, kNewlines(k = k + 2) + notes);
 	}
 
 	return k;

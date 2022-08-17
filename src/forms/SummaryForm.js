@@ -71,7 +71,7 @@ const SummaryForm = (props) => {
         Promise.all([hcsrData, nssData, socialData, cancerData, visionData, fitData, wceData,
           patientsData, geriPtConsultData, geriOtConsultData, socialServiceData, doctorConsultData, 
 		  registrationData, phlebotomyData, geriEbasDepData, geriGeriApptData, geriAmtData, dietitiansConsultData, oralHealthData,
-		  geriMmseData, geriVision, geriAudiometryData, geriFunctionalScreeningData])
+		  geriMmseData, geriVisionData, geriAudiometryData, geriFunctionalScreeningData])
             .then((result) => {
               setHcsr(result[0])
               setNss(result[1])
@@ -160,8 +160,8 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("5. Systems Review")}
-			{underlined("Participant's presenting complaints/ concerns requires scrutiny by doctor:")} 
-			{hcsr.hxHcsrQ12
+			{underlined("Participant's systems review requires scrutiny by doctor:")} 
+			{hcsr.hxHcsrQ12 == "Yes"
 				? blueRedText(hcsr.hxHcsrQ12, "Please check if participant has visited the Doctor's Consult Station.")
 				: blueText(hcsr.hxHcsrQ12)}
 			<br></br>
@@ -401,7 +401,7 @@ const SummaryForm = (props) => {
 			{formatGeriVision(vision.geriVisionQ6, 6)}
 			<br></br>
 			{underlined("Participant referred to Doctor's Consult?")}
-			{geriOtConsult ? geriVision.geriVisionQ9 == "Referred to Doctor's Consult"
+			{geriVision ? typeof geriVision.geriVisionQ9 != undefined && geriVision.geriVisionQ9 == "Referred to Doctor's Consult"
 							? blueRedText(geriVision.geriVisionQ9, "Please check if participant has visited the Doctor's Consult Station.")
 							: blueText(geriVision.geriVisionQ9)
 						   : '-'}
@@ -450,7 +450,10 @@ const SummaryForm = (props) => {
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ7) : "-"}
 			<br></br>
 			{underlined("Sign up form for SWCDC filled in?")}
-			{geriGeriAppt ? blueRedText(geriGeriAppt.geriGeriApptQ8, "Please advise the participant that SWCDC will process their application and contact them separately.") : "-"}
+			{geriGeriAppt ? geriGeriAppt.geriGeriApptQ8 == "Yes" 
+							? blueRedText(geriGeriAppt.geriGeriApptQ8, "Please advise the participant that SWCDC will process their application and contact them separately.")
+							: blueText(geriGeriAppt.geriGeriApptQ8) 
+						   : "-"}
 			<br></br>
 			{underlined("Eligible for HDB EASE??")}
 			{geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ9) : "-"}
@@ -479,7 +482,7 @@ const SummaryForm = (props) => {
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ3) : "-"}
 			<br></br>
 			{underlined("Does this patient require urgent follow-up?")}
-			{doctorSConsult ? doctorSConsult.doctorSConsultQ10 
+			{doctorSConsult ? doctorSConsult.doctorSConsultQ10 == "Yes"
 								? blueRedText(doctorSConsult.doctorSConsultQ10 + '\nIf the on-site doctor has advised that you need urgent follow-up or you need to visit a GP/polyclinic/hospital, please do as instructed.')
 								: blueText(doctorSConsult.doctorSConsultQ10) 
 							: "-"}
@@ -611,7 +614,7 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("21. Mailing Details")}
-			{underlined("Preferred clinic:")}
+			{underlined("Preferred clinic (for phlebotomy):")}
 			{registration ? blueText(registration.registrationQ10) : '-'}
 			<br></br>
 			{underlined("Preferred language for health report:")}
