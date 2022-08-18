@@ -140,7 +140,10 @@ const SummaryForm = (props) => {
 							: blueText("No") 
 						: '-'}
 			<br></br>
-			
+			{underlined("Preferred clinic (for phlebotomy):")}
+			{registration ? blueText(registration.registrationQ10) : '-'}
+			<br></br>
+
 			<br></br>
 			{bold("3. History Taking")}
 			{underlined("Referrals")}
@@ -311,7 +314,7 @@ const SummaryForm = (props) => {
 			{geriAmt ? blueText(geriAmt.geriAmtQ12) : "-"}
 			<br></br>
 			{underlined("Referred to G-RACE for MMSE on-site?")}
-			{geriAmt ? blueText(geriAmt.geriAmtQ13ation) : "-"}
+			{geriAmt ? blueText(geriAmt.geriAmtQ13) : "-"}
 			<br></br>
 			{bold("b. Geriatrics - MMSE")}
 			{underlined("Need referral to G-RACE associated polyclinics/ partners?")}
@@ -482,9 +485,9 @@ const SummaryForm = (props) => {
 			{doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ3) : "-"}
 			<br></br>
 			{underlined("Does this patient require urgent follow-up?")}
-			{doctorSConsult ? doctorSConsult.doctorSConsultQ10 == "Yes"
-								? blueRedText(doctorSConsult.doctorSConsultQ10 + '\nIf the on-site doctor has advised that you need urgent follow-up or you need to visit a GP/polyclinic/hospital, please do as instructed.')
-								: blueText(doctorSConsult.doctorSConsultQ10) 
+			{doctorSConsult ? doctorSConsult.doctorSConsultQ10 
+								? blueRedText("Yes", 'If the on-site doctor has advised that you need urgent follow-up or you need to visit a GP/polyclinic/hospital, please do as instructed.')
+								: blueText("No") 
 							: "-"}
 			<br></br>
 			{underlined("Was the participant referred for Dietitian's Consult?")}
@@ -527,10 +530,11 @@ const SummaryForm = (props) => {
 			{dietitiansConsult ? blueText(dietitiansConsult.dietitiansConsultQ1) : '-'}
 			<br></br>
 			{underlined("Notes for participant (if applicable):")}
-			{dietitiansConsult ? dietitiansConsult.dietitiansConsultQ4
-									? blueText("Yes")
-									: blueText("No")
-								: "-"}
+			{dietitiansConsult ? typeof dietitiansConsult.dietitiansConsultQ4 != 'undefined'
+								 ? blueText(dietitiansConsult.dietitiansConsultQ4)
+								 : "-"
+							   : "-"}
+
 			<br></br>
 			{underlined("Does participant require urgent follow-up?")}
 			{dietitiansConsult ? dietitiansConsult.dietitiansConsultQ5
@@ -614,9 +618,6 @@ const SummaryForm = (props) => {
 
 			<br></br>
 			{bold("21. Mailing Details")}
-			{underlined("Preferred clinic (for phlebotomy):")}
-			{registration ? blueText(registration.registrationQ10) : '-'}
-			<br></br>
 			{underlined("Preferred language for health report:")}
 			{registration ? blueText(registration.registrationQ11) : '-'}
 			<br></br>

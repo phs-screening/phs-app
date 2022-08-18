@@ -647,7 +647,7 @@ export function addSocialService(doc, socialService, k) {
 	doc.text(10, 10, kNewlines(k = k + 2) + "SACS");
 	doc.setFont(undefined, 'normal');
 	if (socialService.socialServiceQ6) {
-		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 1) + "Do note that the the Singapore Anglican Community Service (SACS) will contact you regarding your"
+		var socialServiceQ6 = doc.splitTextToSize(kNewlines(k = k + 1) + "Do note that the Singapore Anglican Community Service (SACS) will contact you regarding your"
 																	   + " application status for their programmes.", 180);
 		doc.text(10, 10, socialServiceQ6);
 		k++;
