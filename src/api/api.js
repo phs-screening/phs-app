@@ -602,7 +602,7 @@ export function addWce(doc, patients, wce, k) {
 	k = k + 2;
 
 	if (wce.wceQ4 == "Yes" || wce.wceQ5 == "Yes") {
-	doc.text(10, 10, summary);
+		doc.text(10, 10, summary);
 	}
 
 	return k;
@@ -715,15 +715,19 @@ export function addGeriatrics(doc, geriMmse, geriFunctionalScreening, geriVision
 		doc.text(10, 10, kNewlines(k = k + 1) + "- G-RACE and partnering polyclinics (" + polyclinic + ")");
 	}
 
-	if (geriGeriAppt.geriGeriApptQ12 == "Yes") {
+	if (geriGeriAppt.geriGeriApptQ14 == "Yes") {
 		var geri = doc.splitTextToSize(kNewlines(k = k + 1) + "- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional"
 													      	+ " screening (" + details + ")", 180);
 		doc.text(10, 10, geri);
-		k++;
+		k = k + 2;
 	}
 
 	if (geriGeriAppt.geriGeriApptQ8 == "Yes") {
 		doc.text(10, 10, kNewlines(k = k + 1) + "- South West CDC for Safe & Sustainable Homes programme");
+	}
+
+	if (geriMmse.geriMMSEQ3 != "Yes" && geriGeriAppt.geriGeriApptQ14 != "Yes" && geriGeriAppt.geriGeriApptQ8 != "Yes") {
+		doc.text(10, 10, kNewlines(k = k + 1) + "-")
 	}
 
 	doc.setFont(undefined, 'bold');

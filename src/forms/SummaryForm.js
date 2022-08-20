@@ -627,10 +627,10 @@ const SummaryForm = (props) => {
 			{redText("If participant has gone for phlebotomy, he/she will receive the blood test results from NUHS/PHS. \n\n\n\n")}
 		</div>
 		<div>
-			<button onClick={() => generate_pdf(registration, patients, cancer, phlebotomy, fit, wce, doctorSConsult, socialService, geriMmse, geriVision, geriAudiometry, geriGeriAppt, dietitiansConsult, oralHealth, 
+			<Button onClick={() => generate_pdf(registration, patients, cancer, phlebotomy, fit, wce, doctorSConsult, socialService, geriMmse, geriVision, geriAudiometry, geriGeriAppt, dietitiansConsult, oralHealth, 
 				 								geriFunctionalScreening)}>
 				Download Screening Report
-			</button>
+			</Button>
 		</div>
 		</Fragment>
 		}
