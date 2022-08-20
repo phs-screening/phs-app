@@ -473,7 +473,7 @@ const SummaryForm = (props) => {
 			<br></br>
 			{bold("17. Doctor's Consult")}
 			{underlined("Did this patient consult an on-site doctor today?")}
-			{doctorSConsult ? doctorSConsult.doctorSConsultQ11 || typeof doctorSConsult.doctorSConsultQ11 == 'undefined'
+			{doctorSConsult ? doctorSConsult.doctorSConsultQ11
 								? blueRedText("Yes", 'Please check with participant if they have received a memo from the on-site Doctor.')
 								: blueText("No")
 							: "-"}
