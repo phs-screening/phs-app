@@ -574,7 +574,7 @@ export function addFit(doc, fit, k) {
 export function addWce(doc, patients, wce, k) {
 	var k = k;
 
-	if (wce.wceQ4 == "No" && wce.wceQ5 == "No" || patients.gender == "Male") {
+	if (wce.wceQ4 != "Yes" && wce.wceQ5 != "Yes" || patients.gender == "Male") {
 		return k;
 	}
 
@@ -592,7 +592,7 @@ export function addWce(doc, patients, wce, k) {
 		doc.text(10, 10, kNewlines(k = k + 1) + "- Cervical Cancer Screening under Singapore Cancer Society");
 	}	
 
-	if (wce.wceQ4 == "Yes") {
+	if (wce.wceQ5 == "Yes") {
 		doc.text(10, 10, kNewlines(k = k + 1) + "- Mammogram screening under Singapore Cancer Society");
 	}
 
@@ -600,7 +600,11 @@ export function addWce(doc, patients, wce, k) {
 														    + " queries, please contact the Singapore Cancer"
 															+ " Society at 1800-727-3333.", 180)
 	k = k + 2;
+
+	if (wce.wceQ4 == "Yes" || wce.wceQ5 == "Yes") {
 	doc.text(10, 10, summary);
+	}
+
 	return k;
 
 }
