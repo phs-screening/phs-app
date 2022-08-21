@@ -41,9 +41,12 @@ const SummaryForm = (props) => {
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
   const [oralHealth, setOralHealth] = useState({})
+    const [patientNo, updatePatientNo] = useState(patientId)
+    const [refresh, setRefresh] = useState(false)
 
   useEffect(async () => {
     const loadPastForms = async () => {
+        isLoadingPrevData(true);
 		const registrationData = getSavedData(patientId, allForms.registrationForm)
         const hcsrData = getSavedData(patientId, allForms.hxHcsrForm);
         const nssData = getSavedData(patientId, allForms.hxNssForm);
@@ -96,19 +99,31 @@ const SummaryForm = (props) => {
 			  setGeriVision(result[20])
 			  setGeriAudiometry(result[21])
 			  setGeriFunctionalScreening(result[22])
+                isLoadingPrevData(false);
             })
 
-        isLoadingPrevData(false);
+
     }
-    loadPastForms();
-  }, [])
+    await loadPastForms();
+  }, [refresh])
 
     return (
       <Paper elevation={2} pt={3} m={3}>
 		{loadingPrevData ? <CircularProgress/>
 		:
-		<Fragment m={2} pt={2}>
+		<Fragment>
 		<div>
+            <div>
+                <input
+                value={patientNo}
+                onChange={x => updatePatientNo(x.target.value)}
+                />
+                <button onClick={() => {
+                    updatePatientId(parseInt(patientNo))
+                setRefresh(!refresh)}}> Update </button>
+
+            </div>
+
 			{bold("Form Summary")}
 			{bold("Please make sure that the information is correct.")}
 
