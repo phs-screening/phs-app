@@ -117,6 +117,14 @@ const SummaryForm = (props) => {
                 <input
                 value={patientNo}
                 onChange={x => updatePatientNo(x.target.value)}
+                onSubmit={() => alert("hi")}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        updatePatientId(parseInt(patientNo))
+                        setRefresh(!refresh)
+                    }
+                   }
+                }
                 />
                 <button onClick={() => {
                     updatePatientId(parseInt(patientNo))
