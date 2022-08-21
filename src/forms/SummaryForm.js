@@ -114,6 +114,7 @@ const SummaryForm = (props) => {
 		<Fragment>
 		<div>
             <div>
+                For report printer only:
                 <input
                 value={patientNo}
                 onChange={x => updatePatientNo(x.target.value)}
