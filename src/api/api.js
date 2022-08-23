@@ -52,8 +52,8 @@ export async function submitForm(args, patientId, formCollection) {
             const registrationForms = mongoConnection.db("phs").collection(formCollection);
             if (record[formCollection] === undefined) {
                 // first time form is filled, create document for form
+				await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
                 await registrationForms.insertOne({_id: patientId, ...args});
-                await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
                 return { "result" : true };
             } else {
                 if (await isAdmin()) {

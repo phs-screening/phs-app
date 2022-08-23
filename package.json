@@ -56,6 +56,7 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^5.0.1",
     "realm-web": "^1.5.1",
+    "sshpk": "^1.17.0",
     "stream": "^0.0.2",
     "type-fest": "^0.13.1",
     "uniforms": "^3.5.1",
