@@ -44,6 +44,7 @@ const ManageVolunteers = () => {
         const guestProfiles = mongoConnection.db("phs").collection("profiles")
         isLoading(true)
         try {
+            // ensure volunteer names are unique
             const searchUnique = await guestProfiles.findOne({username:values.email})
 
             if (searchUnique === null) {

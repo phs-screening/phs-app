@@ -1,12 +1,13 @@
 import * as Realm from "realm-web";
 
 const REALM_APP_ID = process.env.REACT_APP_MONGO_KEY;
-
+// contact developer for .env file for key
 const app = new Realm.App({ id: REALM_APP_ID });
 
 export default app;
 
 export const getName = () => {
+    // admins have email, guests have name
     return app.currentUser.profile.name === undefined ? app.currentUser.profile.email : app.currentUser.profile.name
 }
 
@@ -50,6 +51,7 @@ export const getProfile = async (type) => {
 }
 
 export const isAdmin = async (type) => {
+    // admins have email, guests do not
     if (isLoggedin()) {
         return app.currentUser.profile.email !== undefined
     }
@@ -81,6 +83,7 @@ export const getSavedPatientData = async (patientId, collectionName) => {
 }
 
 export const getReg18Counter = async () => {
+    // special case for registration slot counter
     const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
     const savedData = await mongoConnection.db("phs").collection("queueCounters").findOne({_id : "registrationQ10"});
     return savedData === null ? null : savedData
