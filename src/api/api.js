@@ -97,8 +97,8 @@ export async function submitFormSpecial(args, patientId, formCollection) {
 			const registrationForms = mongoConnection.db("phs").collection(formCollection);
 			if (record[formCollection] === undefined) {
 				// first time form is filled, create document for form
-				await registrationForms.insertOne({_id: patientId, ...args});
 				await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+				await registrationForms.insertOne({_id: patientId, ...args});
 				return { "result" : true };
 			} else {
 				args.lastEdited = new Date()
@@ -157,8 +157,8 @@ export async function submitFormReg(args, patientId, options) {
 
 			if (record[formCollection] === undefined) {
 				// first time form is filled, create document for form
-				await registrationForms.insertOne({_id: patientId, ...args});
 				await patientsRecord.updateOne({queueNo: patientId}, {$set : {[formCollection] : patientId}});
+				await registrationForms.insertOne({_id: patientId, ...args});
 				return { "result" : true };
 			} else {
 				if (await isAdmin()) {
