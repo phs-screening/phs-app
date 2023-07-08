@@ -1,10 +1,10 @@
 snippet-container {
-    display: flex;
-    flex-flow: row nowrap;
-    margin: 5px;
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 5px;
 }
-  
+
 .snippet-item {
-    margin: 5px;
-    flex-grow: 1;
+  margin: 5px;
+  flex-grow: 1;
 }

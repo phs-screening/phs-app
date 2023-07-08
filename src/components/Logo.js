@@ -1,9 +1,5 @@
-const Logo = (props) => (
-  <img
-    alt="Logo"
-    src="/static/logo.svg"
-    {...props}
-  />
-);
+import React from 'react'
 
-export default Logo;
+const Logo = (props) => <img alt='Logo' src='/static/logo.svg' {...props} />
+
+export default Logo

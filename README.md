@@ -1,10 +1,10 @@
 ## Note to collaborators
 
-Remember to execute: `npm install` before running `npm start` whenever you pull any changes.                                 
+Remember to execute: `npm install` before running `npm start` whenever you pull any changes.
 
 ## Demo
 
-For inspiration: 
+For inspiration:
 
 - [Dashboard Page](https://material-kit-react.devias.io/app/dashboard)
 - [Users Page](https://material-kit-react.devias.io/app/customers)

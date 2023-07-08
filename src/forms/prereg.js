@@ -1,38 +1,58 @@
-import React, { Component, Fragment } from 'react';
-import SimpleSchema from 'simpl-schema';
+import React, { Component, Fragment } from 'react'
+import SimpleSchema from 'simpl-schema'
 
-import { AutoForm } from 'uniforms';
-import { RadioField, LongTextField } from 'uniforms-material';
-
+import { AutoForm } from 'uniforms'
+import { RadioField, LongTextField } from 'uniforms-material'
 
 export const schema = new SimpleSchema({
-        gender: {
-          type: String, allowedValues: ["Male", "Female"], optional: false
-        }, initials: {
-          type: String, optional: false
-        }, age: {
-        type: Number, optional: false
-        }, preferredLanguage: {
-        type: String, optional: false, regEx: /^[a-zA-Z]+$/
-        },goingForPhlebotomy: {
-            type: String, allowedValues: ["Y", "N"], optional: false
-        }
-    }
-)
+  gender: {
+    type: String,
+    allowedValues: ['Male', 'Female'],
+    optional: false,
+  },
+  initials: {
+    type: String,
+    optional: false,
+  },
+  age: {
+    type: Number,
+    optional: false,
+  },
+  preferredLanguage: {
+    type: String,
+    optional: false,
+    regEx: /^[a-zA-Z]+$/,
+  },
+  goingForPhlebotomy: {
+    type: String,
+    allowedValues: ['Y', 'N'],
+    optional: false,
+  },
+})
 
 export const layout = (
-    <Fragment>
+  <Fragment>
     <h2>Pre-Registration</h2>
     Gender
-    <RadioField name="gender" />
+    <RadioField name='gender' />
     Initials (E.g. Alan Simon Lee as S.L Alan)
-    <LongTextField name="initials" />
+    <LongTextField name='initials' />
     Age
-    <LongTextField name="age" />
+    <LongTextField name='age' />
     Preferred Language (e.g. English)
-    <LongTextField name="preferredLanguage" /> <br/>
-    Going for Phlebotomy?<br /><br /><i>Conditions:<br />1) Fasted for minimum 8 hours <br />          Note: Water is allowed, coffee/tea is not. Medications are fine. <br />2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.<br />3) Have not done a blood test within the past 3 years.</i>
-    <RadioField name="goingForPhlebotomy" />
-    
+    <LongTextField name='preferredLanguage' /> <br />
+    Going for Phlebotomy?
+    <br />
+    <br />
+    <i>
+      Conditions:
+      <br />
+      1) Fasted for minimum 8 hours <br /> Note: Water is allowed, coffee/tea is not. Medications
+      are fine. <br />
+      2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
+      <br />
+      3) Have not done a blood test within the past 3 years.
+    </i>
+    <RadioField name='goingForPhlebotomy' />
   </Fragment>
-  )
+)
