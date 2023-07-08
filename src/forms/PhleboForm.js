@@ -1,19 +1,20 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
+import SimpleSchema from 'simpl-schema';
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { submitForm } from '../api/api.js'
-import { FormContext } from '../api/utils.js'
-import { BoolField } from 'uniforms-material'
-import { getSavedData } from '../services/mongoDB'
-import './fieldPadding.css'
+import { AutoForm } from 'uniforms';
+import { SubmitField, ErrorsField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
+import { BoolField } from 'uniforms-material';
+import { getSavedData } from '../services/mongoDB';
+import './fieldPadding.css';
 
 const schema = new SimpleSchema({
   phlebotomyQ1: {
@@ -66,7 +67,7 @@ const PhleboForm = () => {
       <Fragment>
         Blood sample collected?
         <BoolField name='phlebotomyQ1' />
-        Circled 'Completed' under Phlebotomy on Form A?
+        Circled &apos;Completed&apos; under Phlebotomy on Form A?
         <BoolField name='phlebotomyQ2' />
       </Fragment>
       <ErrorsField />

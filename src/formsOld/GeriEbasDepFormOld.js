@@ -161,7 +161,7 @@ class GeriEbasDepForm extends Component {
             If question 5 rated 0, then automatically rate 0 for question 6 and skip to question 7.
             If question 5 rated 1, proceed to question 6.
           </h3>
-          6. Is it because you are depressed or nervous that you don't enjoy things as much?
+          6. Is it because you are depressed or nervous that you don&apos;t enjoy things as much?
           是不是因为你的忧郁或者精神紧张使得你对东西的喜爱大不如前？
           <br />
           Assessment: Loss of enjoyment because of depression/nervousness

@@ -6,6 +6,7 @@ module.exports = {
   },
   env: {
     browser: true,
+    node: true,
     es2021: true,
   },
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
@@ -25,5 +26,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react'],
-  rules: {},
+  rules: {
+    'no-unused-vars': 'warn', // Many unused variables in project - ignore for now
+    'react/prop-types': 'off', // Switch off for now 
+  },
 }

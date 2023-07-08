@@ -1,3 +1,4 @@
+import React from 'react'
 import { Avatar, Box, Card, CardContent, Grid, Typography } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'

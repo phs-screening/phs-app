@@ -292,19 +292,19 @@ const HxCancerForm = () => {
         <b>
           <font color='blue'>3. Any other significant family history?</font>
         </b>{' '}
-        Indicate 'NIL' if none.
+        Indicate &apos;NIL&apos; if none.
         <LongTextField name='hxCancerQ4' label='Hx Cancer Q4' />
         <br />
         <br />
         <b>
           Counsel for screening if positive family history of cancer or chronic disease. <br />
           <br />
-          Based on participant family hx, please recommend FIT/WCE and Doctor's Consultation (if
+          Based on participant family hx, please recommend FIT/WCE and Doctor&apos;s Consultation (if
           applicable)
         </b>{' '}
         <br />
-        1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
-        2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation{' '}
+        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+        2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation{' '}
         <br />
         3) Recommend relevant exhibition booths on Page 2 of Form A Exhibition - Recommendation
         <br />
@@ -377,7 +377,7 @@ const HxCancerForm = () => {
             Refer to WCE:{' '}
           </font>
           <br />
-          1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
         </b>
         <br />
         <br />
@@ -385,23 +385,23 @@ const HxCancerForm = () => {
         <br />
         <b>
           5. If participant has a <mark>history of cancer</mark> or if{' '}
-          <mark>participant's family history</mark> requires further scrutiny by doctors, refer to
-          doctor's consult.{' '}
-          <font color='red'>(If indicated 'Yes', please complete the question below.)</font>
+          <mark>participant&apos;s family history</mark> requires further scrutiny by doctors, refer to
+          doctor&apos;s consult.{' '}
+          <font color='red'>(If indicated &apos;Yes&apos; please complete the question below.)</font>
         </b>
         <RadioField name='hxCancerQ9' label='Hx Cancer Q9' />
         <PopupText qnNo='hxCancerQ9' triggerValue='Yes'>
           <h2>
-            Only complete Q6 if you are referring participant to Doctor's Consultation station.
+            Only complete Q6 if you are referring participant to Doctor&apos;s Consultation station.
           </h2>
           <b>
             <font color='blue'>
-              6. Based on participant's history taken thus far, please summarise his/her RELEVANT
+              6. Based on participant&apos;s history taken thus far, please summarise his/her RELEVANT
               Family History briefly for the doctors to refer to during doctors consultation.
             </font>
             <br />
             <br />
-            1) Participant's history of Cancers (if any)
+            1) Participant&apos;s history of Cancers (if any)
             <br />
             2) Positive family history of medical conditions in first-degree relatives:
             <br />
@@ -412,7 +412,7 @@ const HxCancerForm = () => {
         <br />
         <h2>2. VITALS</h2>
         <h3>
-          Please fill in the participant's BP and BMI based on what you earlier recorded on Form A
+          Please fill in the participant&apos;s BP and BMI based on what you earlier recorded on Form A
           and copy to <font color='red'>NUHS form too.</font>
         </h3>
         <b>
@@ -434,10 +434,10 @@ const HxCancerForm = () => {
         <IsHighBP systolic_qn='hxCancerQ13' diastolic_qn='hxCancerQ14' />
         <br />
         <p>
-          3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>>5mmHg</b>)
+          3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>&gt;5mmHg</b>)
         </p>
         <NumField name='hxCancerQ15' label='Hx Cancer Q15' /> <br />
-        3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by >5mmHg) <br />
+        3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by &gt;5mmHg) <br />
         <NumField name='hxCancerQ16' label='Hx Cancer Q16' /> <br />
         <IsHighBP systolic_qn='hxCancerQ15' diastolic_qn='hxCancerQ16' />
         <br />
@@ -446,10 +446,10 @@ const HxCancerForm = () => {
         Average Reading Diastolic (average of closest 2 readings): <br />
         <NumField name='hxCancerQ18' label='Hx Cancer Q18' /> <br />
         Hypertension criteria:
-        <br />○ Younger participants: > 140/90
-        <br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe
-        albuminuria): > 130/80
-        <br />○ DM: > 130/80
+        <br />○ Younger participants: &gt; 140/90
+        <br />○ Participants &gt; 80 years old: &gt; 150/90 <br />○ CKD w proteinuria (mod to severe
+        albuminuria): &gt; 130/80
+        <br />○ DM: &gt; 130/80
         <br /> <br />
         <p>
           Please tick to highlight if you feel <b>BLOOD PRESSURE</b> require closer scrutiny by
@@ -461,9 +461,9 @@ const HxCancerForm = () => {
           <b>
             REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
             <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
             <br />
             <br />
             <font color='red'>
@@ -523,14 +523,14 @@ const HxCancerForm = () => {
           <b>REFER TO DR CONSULT at:</b>
           <p>
             {' '}
-            1) <font color='red'>Doctor's Consultation station</font>, tick eligibility, Circle
-            interested 'Y' on Page 1 of Form A{' '}
+            1) <font color='red'>Doctor&apos;s Consultation station</font>, tick eligibility, Circle
+            interested &apos;Y&apos; on Page 1 of Form A{' '}
           </p>{' '}
-          2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation,{' '}
+          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation,{' '}
           <br />
           IF BMI IS:
           <br />≥ 23 as overweight (if positive for other risk factors) and ≥ 27.5 as obese, write
-          reasons under dietitian referral on Page 2 of Form A Doctor's Consultation - Reasons for
+          reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
           Recommendation
           <br />
         </PopupText>

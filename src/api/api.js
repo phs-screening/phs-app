@@ -1,7 +1,6 @@
 import mongoDB, { getName, isAdmin } from '../services/mongoDB'
 import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
 import { jsPDF } from 'jspdf'
-import forms from '../forms/forms.json'
 
 const axios = require('axios').default
 
@@ -643,7 +642,7 @@ export function addPhleobotomy(doc, phlebotomy, k) {
     doc.line(10, calculateY(k), 10 + doc.getTextWidth('Phlebotomy'), calculateY(k))
     doc.setFont(undefined, 'normal')
 
-    var phlebotomy = doc.splitTextToSize(
+    let phlebotomy = doc.splitTextToSize(
       kNewlines((k = k + 2)) +
         'The Blood Test Report will be mailed out to GP clinics' +
         ' you have previously indicated. You will receive a call/SMS to' +
@@ -658,55 +657,55 @@ export function addPhleobotomy(doc, phlebotomy, k) {
 }
 
 export function addFit(doc, fit, k) {
-  var k = k
+  let kk = k
 
   if (fit.fitQ2 == 'Yes') {
     doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((k = k + 2)) + 'Faecal Immunochemical Test (FIT)')
+    doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Faecal Immunochemical Test (FIT)')
     doc.line(
       10,
-      calculateY(k),
+      calculateY(kk),
       10 + doc.getTextWidth('Faecal Immunochemical Test (FIT)'),
-      calculateY(k),
+      calculateY(kk),
     )
     doc.setFont(undefined, 'normal')
-    var fit = doc.splitTextToSize(
-      kNewlines((k = k + 2)) +
+    let fit = doc.splitTextToSize(
+      kNewlines((kk = kk + 2)) +
         'Please remember the instructions that have been given to you, and remember to mail out' +
         ' both of your kits within the stipulated time. You may contact the SIngapore Cancer Society' +
         ' at 1800-727-3333 if you have any queries about using the FIT kit.',
       180,
     )
-    k = k + 2
+    kk = kk + 2
     doc.text(10, 10, fit)
   }
 
-  return k
+  return kk
 }
 
 export function addWce(doc, patients, wce, k) {
-  var k = k
+  let kk = k
 
   if ((wce.wceQ4 != 'Yes' && wce.wceQ5 != 'Yes') || patients.gender == 'Male') {
-    return k
+    return kk
   }
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + "Women's Cancer Education")
-  doc.line(10, calculateY(k), 10 + doc.getTextWidth("Women's Cancer Education"), calculateY(k))
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + "Women's Cancer Education")
+  doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Women's Cancer Education"), calculateY(kk))
   doc.setFont(undefined, 'normal')
 
   doc.setFont(undefined, 'bold')
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) + 'You have indicated interest for the following screening(s):',
+    kNewlines((kk = kk + 2)) + 'You have indicated interest for the following screening(s):',
   )
   doc.line(
     10,
-    calculateY(k),
+    calculateY(kk),
     10 + doc.getTextWidth('You have indicated interest for the following screening(s):'),
-    calculateY(k),
+    calculateY(kk),
   )
   doc.setFont(undefined, 'normal')
 
@@ -714,7 +713,7 @@ export function addWce(doc, patients, wce, k) {
     doc.text(
       10,
       10,
-      kNewlines((k = k + 1)) + '- Cervical Cancer Screening under Singapore Cancer Society',
+      kNewlines((kk = kk + 1)) + '- Cervical Cancer Screening under Singapore Cancer Society',
     )
   }
 
@@ -722,98 +721,98 @@ export function addWce(doc, patients, wce, k) {
     doc.text(
       10,
       10,
-      kNewlines((k = k + 1)) + '- Mammogram screening under Singapore Cancer Society',
+      kNewlines((kk = kk + 1)) + '- Mammogram screening under Singapore Cancer Society',
     )
   }
 
   var summary = doc.splitTextToSize(
-    kNewlines((k = k + 2)) +
+    kNewlines((kk = kk + 2)) +
       'Do note that the Singapore Cancer Society (SCS) will contact you regarding your appointment. Should you have any' +
       ' queries, please contact the Singapore Cancer' +
       ' Society at 1800-727-3333.',
     180,
   )
-  k = k + 2
+  kk = kk + 2
 
   if (wce.wceQ4 == 'Yes' || wce.wceQ5 == 'Yes') {
     doc.text(10, 10, summary)
   }
 
-  return k
+  return kk
 }
 
 export function addDoctorSConsult(doc, doctorSConsult, k) {
-  var k = k
+  let kk = k
 
   if (
     typeof doctorSConsult.doctorSConsultQ3 == 'string' ||
     doctorSConsult.doctorSConsultQ3 instanceof String
   ) {
     doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((k = k + 2)) + "Doctor's Consultation")
-    doc.line(10, calculateY(k), 10 + doc.getTextWidth("Doctor's Consultation"), calculateY(k))
+    doc.text(10, 10, kNewlines((kk = kk + 2)) + "Doctor's Consultation")
+    doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Doctor's Consultation"), calculateY(kk))
     doc.setFont(undefined, 'normal')
 
     var dSC = doc.splitTextToSize(
-      kNewlines((k = k + 2)) +
+      kNewlines((kk = kk + 2)) +
         'We strongly encourage you to visit your family doctor with the Doctor’s Memo obtained' +
         ' from our screening. He/She will be able to advise you on your next steps with regards' +
         ' to the health issue(s) raised in the memo.',
       180,
     )
     doc.text(10, 10, dSC)
-    k = k + 1
+    kk = kk + 1
   }
 
-  return k
+  return kk
 }
 
 export function addSocialService(doc, socialService, k) {
-  var k = k
+  let kk = k
 
   if (typeof socialService.socialServiceQ1 == 'undefined') {
-    return k
+    return kk
   }
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Social Service')
-  doc.line(10, calculateY(k), 10 + doc.getTextWidth('Social Service'), calculateY(k))
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Social Service')
+  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Social Service'), calculateY(kk))
   doc.setFont(undefined, 'normal')
 
   if (socialService.socialServiceQ1 == 'Yes') {
     var socialServiceQ1 = doc.splitTextToSize(
-      kNewlines((k = k + 2)) +
+      kNewlines((kk = kk + 2)) +
         'We strongly encourage you to follow through with the recommendations from Agency of Integrated Care (AIC)' +
         ' so that you receive the help that you need.',
       180,
     )
     doc.text(10, 10, socialServiceQ1)
-    k++
+    kk++
   }
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'SACS')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'SACS')
   doc.setFont(undefined, 'normal')
   if (socialService.socialServiceQ6) {
     var socialServiceQ6 = doc.splitTextToSize(
-      kNewlines((k = k + 1)) +
+      kNewlines((kk = kk + 1)) +
         'Do note that the Singapore Anglican Community Service (SACS) will contact you regarding your' +
         ' application status for their programmes.',
       180,
     )
     doc.text(10, 10, socialServiceQ6)
-    k++
+    kk++
   }
 
   doc.addPage()
-  k = 0
-  k++
+  kk = 0
+  kk++
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'HDB EASE')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'HDB EASE')
   doc.setFont(undefined, 'normal')
   if (socialService.socialServiceQ7) {
     var socialServiceQ7 = doc.splitTextToSize(
-      kNewlines((k = k + 1)) +
+      kNewlines((kk = kk + 1)) +
         'The HDB Branch managing your estate will reply to you within 7 working days regarding your application.' +
         ' HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date.' +
         ' You may expect the process from applying for EASE (Direct Application) to having the improvement items installed in your flat to' +
@@ -821,15 +820,15 @@ export function addSocialService(doc, socialService, k) {
       180,
     )
     doc.text(10, 10, socialServiceQ7)
-    k = k + 3
+    kk = kk + 3
   }
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'CHAS Application')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'CHAS Application')
   doc.setFont(undefined, 'normal')
   if (socialService.socialServiceQ8) {
     var socialServiceQ8 = doc.splitTextToSize(
-      kNewlines((k = k + 1)) +
+      kNewlines((kk = kk + 1)) +
         'Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their' +
         ' household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information' +
         ' on the use of the card. If you have not received the outcome after 15 working days, you can visit the CHAS online application page and login using' +
@@ -838,10 +837,10 @@ export function addSocialService(doc, socialService, k) {
       180,
     )
     doc.text(10, 10, socialServiceQ8)
-    k = k + 5
+    kk = kk + 5
   }
 
-  return k
+  return kk
 }
 
 export function calculateY(coor) {
@@ -857,7 +856,7 @@ export function addGeriatrics(
   geriGeriAppt,
   k,
 ) {
-  var k = k
+  let kk = k
   const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
   const details =
     typeof geriFunctionalScreening.geriFunctionalScreeningRegFormQ3 != 'undefined'
@@ -865,17 +864,21 @@ export function addGeriatrics(
       : '-'
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Geriatrics')
-  doc.line(10, calculateY(k), 10 + doc.getTextWidth('Geriatrics'), calculateY(k))
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Geriatrics')
+  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Geriatrics'), calculateY(kk))
   doc.setFont(undefined, 'normal')
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Please follow through with your appointment(s) with:')
+  doc.text(
+    10,
+    10,
+    kNewlines((kk = kk + 2)) + 'Please follow through with your appointment(s) with:',
+  )
   doc.line(
     10,
-    calculateY(k),
+    calculateY(kk),
     10 + doc.getTextWidth('Please follow through with your appointment(s) with:'),
-    calculateY(k),
+    calculateY(kk),
   )
   doc.setFont(undefined, 'normal')
 
@@ -883,13 +886,13 @@ export function addGeriatrics(
     doc.text(
       10,
       10,
-      kNewlines((k = k + 1)) + '- G-RACE and partnering polyclinics (' + polyclinic + ')',
+      kNewlines((kk = kk + 1)) + '- G-RACE and partnering polyclinics (' + polyclinic + ')',
     )
   }
 
   if (geriGeriAppt.geriGeriApptQ14 == 'Yes') {
     var geri = doc.splitTextToSize(
-      kNewlines((k = k + 1)) +
+      kNewlines((kk = kk + 1)) +
         '- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional' +
         ' screening (' +
         details +
@@ -897,14 +900,14 @@ export function addGeriatrics(
       180,
     )
     doc.text(10, 10, geri)
-    k = k + 2
+    kk = kk + 2
   }
 
   if (geriGeriAppt.geriGeriApptQ8 == 'Yes') {
     doc.text(
       10,
       10,
-      kNewlines((k = k + 1)) + '- South West CDC for Safe & Sustainable Homes programme',
+      kNewlines((kk = kk + 1)) + '- South West CDC for Safe & Sustainable Homes programme',
     )
   }
 
@@ -913,23 +916,23 @@ export function addGeriatrics(
     geriGeriAppt.geriGeriApptQ14 != 'Yes' &&
     geriGeriAppt.geriGeriApptQ8 != 'Yes'
   ) {
-    doc.text(10, 10, kNewlines((k = k + 1)) + '-')
+    doc.text(10, 10, kNewlines((kk = kk + 1)) + '-')
   }
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'SWCDC Eye Vouchers')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'SWCDC Eye Vouchers')
   doc.setFont(undefined, 'normal')
   var vouchers = doc.splitTextToSize(
-    kNewlines((k = k + 1)) +
+    kNewlines((kk = kk + 1)) +
       'We strongly encourage you to use the eye vouchers before they expire.',
   )
   doc.text(10, 10, vouchers)
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Physiotherapy')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Physiotherapy')
   doc.setFont(undefined, 'normal')
   var geriatrics = doc.splitTextToSize(
-    kNewlines((k = k + 1)) +
+    kNewlines((kk = kk + 1)) +
       'We strongly encourage you to follow through with the' +
       ' recommendations from Physiotherapy lead a more active' +
       ' and healthier lifestyle.',
@@ -938,10 +941,10 @@ export function addGeriatrics(
   doc.text(10, 10, geriatrics)
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 3)) + 'Occupational Therapy')
+  doc.text(10, 10, kNewlines((kk = kk + 3)) + 'Occupational Therapy')
   doc.setFont(undefined, 'normal')
   var otherGeriatrics = doc.splitTextToSize(
-    kNewlines((k = k + 1)) +
+    kNewlines((kk = kk + 1)) +
       'We advice that you increase your lighting, declutter commonly used spaces to' +
       ' prevent falls. As recommended by the Occupational Therapists as of any other arrangements' +
       ' mentioned during the interview.',
@@ -949,63 +952,63 @@ export function addGeriatrics(
   )
   doc.text(10, 10, otherGeriatrics)
 
-  k++
-  return k
+  kk++
+  return kk
 }
 
 export function addDietitiansConsult(doc, dietitiansConsult, k) {
-  var k = k
-  const notes = dietitiansConsult.dietitiansConsultQ4
+  let kk = k
+  // const notes = dietitiansConsult.dietitiansConsultQ4
 
   if (dietitiansConsult.dietitiansConsultQ7 == 'Yes') {
     doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((k = k + 2)) + "Dietitian's Consult")
-    doc.line(10, calculateY(k), 10 + doc.getTextWidth("Dietitian's Consult"), calculateY(k))
+    doc.text(10, 10, kNewlines((kk = kk + 2)) + "Dietitian's Consult")
+    doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Dietitian's Consult"), calculateY(kk))
     doc.setFont(undefined, 'normal')
 
-    var dietitiansConsult = doc.splitTextToSize(
-      kNewlines((k = k + 2)) +
+    let dietitiansConsult = doc.splitTextToSize(
+      kNewlines((kk = kk + 2)) +
         'We strongly encourage you to follow through with the recommendations from the' +
         ' Dietitian to lead a more healthy lifestyle. Make changes to your diet and lifestyle for' +
         ' a healthier you!',
       180,
     )
     doc.text(10, 10, dietitiansConsult)
-    k++
+    kk++
   }
 
-  return k
+  return kk
 }
 
 export function addOralHealth(doc, oralHealth, k) {
-  var k = k
+  let kk = k
   if (oralHealth.oralHealthQ2) {
     doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((k = k + 2)) + 'Oral Health Consult')
-    doc.line(10, calculateY(k), 10 + doc.getTextWidth('Oral Health Consult'), calculateY(k))
+    doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Oral Health Consult')
+    doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Oral Health Consult'), calculateY(kk))
     doc.setFont(undefined, 'normal')
 
     doc.text(
       10,
       10,
-      kNewlines((k = k + 2)) +
+      kNewlines((kk = kk + 2)) +
         'We strongly encourage you to follow through with the recommendations from NUS Dentistry for adequate oral care.',
     )
   }
 
-  return k
+  return kk
 }
 
 export function addRecommendation(doc, k) {
-  var k = k
+  let kk = k
 
   doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Recommendation')
-  doc.line(10, calculateY(k), 10 + doc.getTextWidth('Recommendation'), calculateY(k))
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Recommendation')
+  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Recommendation'), calculateY(kk))
   doc.setFont(undefined, 'normal')
 
   var recommendation = doc.splitTextToSize(
-    kNewlines((k = k + 2)) +
+    kNewlines((kk = kk + 2)) +
       'You are strongly recommended to seek follow-up based on your health screening result.' +
       ' If you have not opted out of our Telehealth Initiative, we will be calling you soon as a' +
       ' form of follow-up in a few weeks time. Should you have any queries, feel free to contact us at medsocphs@gmail.com. We' +

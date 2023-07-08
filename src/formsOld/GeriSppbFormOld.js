@@ -154,7 +154,7 @@ class GeriSppbForm extends Component {
           <NumField name='geriSppbQ7' label='Geri - SPPB Q7' />
           <font color='blue'>
             <b>
-              Score for 8' WALK (out of 4):
+              Score for 8&apos; WALK (out of 4):
               <RadioField name='geriSppbQ8' label='Geri - SPPB Q8' />
             </b>
           </font>

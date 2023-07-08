@@ -104,7 +104,7 @@ class GeriFrailScaleForm extends Component {
           <h2>3.1.3. FRAIL SCALE</h2>
           <h3>
             For each for the following question, assign a score of <br />1 or 0 depending on the
-            participant's answer.
+            participant&apos;s answer.
           </h3>
           <br />
           1. Fatigue: How much of the time during the past 4 weeks did you feel tired?
@@ -128,7 +128,7 @@ class GeriFrailScaleForm extends Component {
           <br />
           <br />
           3. Ambulation: By yourself and not using aids, do you have any difficulty walking several
-          hundred yards? (approx. > 300m)
+          hundred yards? (approx. &gt; 300m)
           <br />1 = Yes
           <br />0 = No <br />
           <RadioField name='geriFrailScaleQ3' label='Geri - Frail Scale Q3' />
@@ -158,7 +158,7 @@ class GeriFrailScaleForm extends Component {
           What is the percentage (%) weight change?
           <br />
           <br />
-          Percent change > 5 (representing a 5% loss of weight) is scored as 1 and &lt; 5 as 0.
+          Percent change &gt; 5 (representing a 5% loss of weight) is scored as 1 and &lt; 5 as 0.
           <br />
           <br />
           If participant cannot remember his/her weight, ask if there was any significant loss in

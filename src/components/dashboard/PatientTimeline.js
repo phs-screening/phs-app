@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Timeline from '@material-ui/lab/Timeline'
 import TimelineItem from '@material-ui/lab/TimelineItem'
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator'
@@ -6,10 +7,10 @@ import TimelineConnector from '@material-ui/lab/TimelineConnector'
 import TimelineContent from '@material-ui/lab/TimelineContent'
 import TimelineDot from '@material-ui/lab/TimelineDot'
 import { useNavigate } from 'react-router-dom'
-import mongoDB, { getProfile, isAdmin } from '../../services/mongoDB'
+import mongoDB, { isAdmin } from '../../services/mongoDB'
 import { ScrollTopContext } from '../../api/utils.js'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { Box, Button, Card, CardContent, CardHeader, Divider } from '@material-ui/core'
+import { Box, Card, CardContent, CardHeader, Divider } from '@material-ui/core'
 
 function generateStatusArray(record) {
   const entries = 12
@@ -294,21 +295,21 @@ const BasicTimeline = (props) => {
                 href='/app/doctorsconsult'
                 onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
               >
-                Doctor's Consult [Incomplete]
+                Doctor&apos;s Consult [Incomplete]
               </a>
             ) : admin ? (
               <a
                 href='/app/doctorsconsult'
                 onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
               >
-                Doctor's Consult [Edit]
+                Doctor&apos;s Consult [Edit]
               </a>
             ) : (
               <a
                 href='/app/doctorsconsult'
                 onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
               >
-                Doctor's Consult [Completed]
+                Doctor&apos;s Consult [Completed]
               </a>
             )}
           </TimelineContent>

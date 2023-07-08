@@ -67,8 +67,8 @@ class WceForm extends Component {
           <h2>PARTICIPANT IDENTIFICATION</h2>
           <h3>
             <font color='red'>
-              Please verify participant's identity using his/her NRIC before proceeding <br />
-              A. S/N B. Surname followed by Initials C. Last 4 characters of Participant's NRIC and
+              Please verify participant&apos;s identity using his/her NRIC before proceeding <br />
+              A. S/N B. Surname followed by Initials C. Last 4 characters of Participant&apos;s NRIC and
               Letter
             </font>
           </h3>
@@ -118,7 +118,7 @@ class WceForm extends Component {
           <font color='red'>
             <b>
               For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70
-              and above, seek doctor's advice.
+              and above, seek doctor&apos;s advice.
               <br />
               Please encourage participants to go for HPV test every 5 years.
             </b>
@@ -128,16 +128,16 @@ class WceForm extends Component {
           scrutiny by doctors?{' '}
           <font color='red'>
             <b>
-              (If indicated 'Yes', please refer to doctor's consult by following the steps below.)
+              (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the steps below.)
             </b>
           </font>
           <RadioField name='wceQ1' label='WCE Q1' />
           <PopupText qnNo='wceQ1' triggerValue='Yes'>
             <b>REFER TO DR CONSULT by indicating on:</b> <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under Doctor&apos;s
             Consultation row
             <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation{' '}
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation{' '}
             <br />
           </PopupText>
           <h2>3. FOLLOW UP PLAN</h2>

@@ -324,7 +324,7 @@ class FeedbackForm extends Component {
           <br />
           <SelectField name='feedbackFormQ2' checkboxes='true' label='Feedback Form Q2' />
           <br />
-          Please Specify for "Others" 请注明:
+          Please Specify for &quot;Others&quot; 请注明:
           <TextField name='feedbackFormQ3' label='Feedback Form Q3' />
           3a.Have you been to PHS before?
           <br />
@@ -349,7 +349,7 @@ class FeedbackForm extends Component {
           7. Are you aware of other screening programmes in your community?
           <br /> 您是否对社区里的其他健康检查有所认识？
           <RadioField name='feedbackFormQ9' label='Feedback Form Q9' />
-          Please Specify for "Others" 请注明:
+          Please Specify for &quot;Others&quot; 请注明:
           <TextField name='feedbackFormQ10' label='Feedback Form Q10' />
           <h3>
             8. We would like to find out more about your health beliefs and knowledge.
@@ -372,8 +372,8 @@ class FeedbackForm extends Component {
           <br />
           为了早期发现慢性疾病/癌症，参加健康检查是必须的
           <RadioField name='feedbackFormQ14' label='Feedback Form Q14' />
-          e. I think that going for health screening is (can tick >1 option)
-          <br /> 我认为参加健康检查... （可以选择>1个选项）
+          e. I think that going for health screening is (can tick &gt;1 option)
+          <br /> 我认为参加健康检查... （可以选择&gt;1个选项）
           <br />
           <SelectField name='feedbackFormQ15' checkboxes='true' label='Feedback Form Q15' />
           <h3>
@@ -431,7 +431,7 @@ class FeedbackForm extends Component {
           <br />
           <SelectField name='feedbackFormQ27' checkboxes='true' label='Feedback Form Q27' />
           <br />
-          Please Specify for "Others" 请注明:
+          Please Specify for &quot;Others&quot; 请注明:
           <TextField name='feedbackFormQ28' label='Feedback Form Q28' />
           15. If you have been contacted for Door-to-Door Publicity, did you learn about healthy
           ageing/metabolic syndrome through our volunteers/brochure?

@@ -1,16 +1,9 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {
-  calculateBMI,
-  formatGeriVision,
-  formatWceStation,
-  geriVisionForm,
-  preRegister,
-  submitForm,
-  generate_pdf,
-} from '../api/api.js'
+import { calculateBMI, formatGeriVision, formatWceStation, generate_pdf } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -546,7 +539,7 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined("Participant referred to Doctor's Consult?")}
             {geriVision
-              ? typeof geriVision.geriVisionQ9 != undefined &&
+              ? typeof geriVision.geriVisionQ9 != "undefined" &&
                 geriVision.geriVisionQ9 == "Referred to Doctor's Consult"
                 ? blueRedText(
                     geriVision.geriVisionQ9,

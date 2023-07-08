@@ -1,14 +1,15 @@
-import 'react-perfect-scrollbar/dist/css/styles.css'
-import { useRoutes } from 'react-router-dom'
-import { ThemeProvider } from '@material-ui/core'
-import GlobalStyles from 'src/components/GlobalStyles'
-import 'src/mixins/chartjs'
-import theme from 'src/theme'
-import routes from 'src/routes'
-import React, { useContext, useEffect, useState } from 'react'
-import mongoDB, { getProfile, isLoggedin } from './services/mongoDB'
-import { FormContext } from './api/utils'
-import './App.css'
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { useRoutes } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core';
+import GlobalStyles from 'src/components/GlobalStyles';
+import 'src/mixins/chartjs';
+import theme from 'src/theme';
+import routes from 'src/routes';
+import React, { useContext, useState } from 'react';
+import { getProfile, isLoggedin } from './services/mongoDB';
+import { FormContext } from './api/utils';
+import './App.css';
+
 export const LoginContext = React.createContext({
   login: false,
   isLogin: (status) => {},

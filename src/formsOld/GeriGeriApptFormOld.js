@@ -78,7 +78,7 @@ class GeriGeriApptForm extends Component {
           </span>
           <Fragment>
             <h3>Visual acuity is ≥ 6/12: </h3>
-            Pearl's Optical Voucher given?
+            Pearl&apos;s Optical Voucher given?
             <RadioField name='geriGeriApptQ4' label='Geri - Geri Appt Q4' />
           </Fragment>
           <span style={{ color: 'green' }}>

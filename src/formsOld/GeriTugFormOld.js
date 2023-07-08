@@ -88,7 +88,7 @@ class GeriTugForm extends Component {
           </PopupText>
           Time taken (in seconds):
           <NumField name='geriTugQ3' label='Geri - TUG Q3' />
-          <h3>If > 15 seconds, participant has a high falls risk.</h3>
+          <h3>If &gt; 15 seconds, participant has a high falls risk.</h3>
           <br />
           Falls Risk Level:
           <RadioField name='geriTugQ4' label='Geri - TUG Q4' />

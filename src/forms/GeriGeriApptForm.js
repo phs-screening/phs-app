@@ -200,17 +200,17 @@ const GeriGeriApptForm = (props) => {
           <RadioField name='geriGeriApptQ4' label='Geri - Geri Appt Q4' />
         </Fragment>
         <br />
-        <h3>SWCDC's Safe & Sustainable Homes </h3>
+        <h3>SWCDC&apos;s Safe & Sustainable Homes </h3>
         State eligibility criteria.
         <br />
         <br />
-        Is participant eligible for SWCDC's Safe & Sustaniable homes?
+        Is participant eligible for SWCDC&apos;s Safe & Sustaniable homes?
         <RadioField name='geriGeriApptQ6' label='Geri - Geri Appt Q6' />
         <br />
-        Does participant wish to sign up for SWCDC's Safe & Sustaniable homes?
+        Does participant wish to sign up for SWCDC&apos;s Safe & Sustaniable homes?
         <RadioField name='geriGeriApptQ7' label='Geri - Geri Appt Q7' />
         <br />
-        Sign up form for SWCDC's Safe & Sustainable homes filled up?
+        Sign up form for SWCDC&apos;s Safe & Sustainable homes filled up?
         <RadioField name='geriGeriApptQ8' label='Geri - Geri Appt Q8' />
         <br />
         <h3>HDB EASE</h3>
@@ -219,7 +219,7 @@ const GeriGeriApptForm = (props) => {
         <br />• aged between 60 and 64 years and requires assistance for one or more of the
         Activities of Daily Living (ADL)*
         <br />
-        <br /> * ADL refers to daily self-care activities within an individual's place of residence.
+        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of residence.
         These activities include washing/ bathing, dressing, feeding, toileting, mobility, and
         transferring.
         <br />
@@ -233,7 +233,7 @@ const GeriGeriApptForm = (props) => {
         Does participant wish to sign up for HDB EASE?
         <RadioField name='geriGeriApptQ10' label='Geri - Geri Appt Q10' />
         <br />
-        Participant (aged 60-64 years old, inclusive) referred to Doctor's Consult for Functional
+        Participant (aged 60-64 years old, inclusive) referred to Doctor&apos;s Consult for Functional
         Assessment Report completion?
         <RadioField name='geriGeriApptQ11' label='Geri - Geri Appt Q11' />
         <br />

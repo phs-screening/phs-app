@@ -74,7 +74,7 @@ class GeriPhysicalActivityLevelForm extends Component {
         <Fragment>
           <h2>3.1 PHYSICAL ACTIVITY SECTION</h2>
           <h2>3.1.2. PHYSICAL ACTIVITY LEVELS</h2>
-          1.     How often do you exercise in a week?
+          1. How often do you exercise in a week?
           <br />
           *If &lt; 3x/week and would like to start exercising more, suggest physiotherapist
           consultation
@@ -82,7 +82,7 @@ class GeriPhysicalActivityLevelForm extends Component {
             name='geriPhysicalActivityLevelQ1'
             label='Geri - Physical Activity Level Q1'
           />
-          2.     How long do you exercise each time?
+          2. How long do you exercise each time?
           <br />
           *If &lt; 30minutes per session and would like to increase, suggest physiotherapist
           consultation.
@@ -90,7 +90,7 @@ class GeriPhysicalActivityLevelForm extends Component {
             name='geriPhysicalActivityLevelQ2'
             label='Geri - Physical Activity Level Q2'
           />
-          3.     What do you do for exercise?
+          3. What do you do for exercise?
           <br />
           *Take down salient points. <br />
           *Dangerous/ inappropriate exercises are defined to the participants as exercises that
@@ -102,7 +102,7 @@ class GeriPhysicalActivityLevelForm extends Component {
             name='geriPhysicalActivityLevelQ3'
             label='Geri - Physical Activity Level Q3'
           />
-          4.     Using the following scale, can you rate the level of exertion when you exercise?
+          4. Using the following scale, can you rate the level of exertion when you exercise?
           <br />
           (Borg Scale – Rate Perceived Exertion (RPE))
           <br />
@@ -116,7 +116,7 @@ class GeriPhysicalActivityLevelForm extends Component {
             name='geriPhysicalActivityLevelQ4'
             label='Geri - Physical Activity Level Q4'
           />
-          5.     Do you have significant difficulties going about your regular exercise regime? Or
+          5. Do you have significant difficulties going about your regular exercise regime? Or
           do you not know how to start exercising?
           <br />
           <b>*If yes, to REFER FOR PHYSIOTHERAPIST CONSULATION</b>

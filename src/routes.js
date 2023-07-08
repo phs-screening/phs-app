@@ -25,6 +25,7 @@ import HxTabs from './forms/HistoryTaking'
 import ManageVolunteers from 'src/pages/ManageVolunteers'
 import Edit from 'src/pages/EditForms'
 import SummaryForm from 'src/forms/SummaryForm'
+import React from 'react'
 
 const routes = [
   {

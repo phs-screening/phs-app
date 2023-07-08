@@ -112,19 +112,19 @@ const GeriPhysicalActivityLevelForm = (props) => {
         <h2>PHYSICAL ACTIVITY SECTION</h2>
         <h2>PHYSICAL ACTIVITY LEVELS</h2>
         <br />
-        1.     How often do you exercise in a week?
+        1. How often do you exercise in a week?
         <br />
         *If &lt; 3x/week and would like to start exercising more, suggest physiotherapist
         consultation
         <RadioField name='geriPhysicalActivityLevelQ1' label='Geri - Physical Activity Level Q1' />
         <br />
-        2.     How long do you exercise each time?
+        2. How long do you exercise each time?
         <br />
         *If &lt; 30minutes per session and would like to increase, suggest physiotherapist
         consultation.
         <RadioField name='geriPhysicalActivityLevelQ2' label='Geri - Physical Activity Level Q2' />
         <br />
-        3.     What do you do for exercise?
+        3. What do you do for exercise?
         <br />
         *Take down salient points. <br />
         *Dangerous/ inappropriate exercises are defined to the participants as exercises that cause
@@ -137,32 +137,32 @@ const GeriPhysicalActivityLevelForm = (props) => {
           label='Geri - Physical Activity Level Q3'
         />
         <br />
-        4.     Using the following scale, can you rate the level of exertion when you exercise?
+        4. Using the following scale, can you rate the level of exertion when you exercise?
         <br />
         <p>
           <b>PT to note:</b> if participant:
         </p>
-        1)    Achieves less than 150 min moderate intensity per week OR
+        1) Achieves less than 150 min moderate intensity per week OR
         <br />
-        2)    Unsure about any of the 4 questions above. <br />
+        2) Unsure about any of the 4 questions above. <br />
         <img src='/images/geri-physical-activity-level/intensity.jpg' alt='Intensity' /> <br />
         <RadioField name='geriPhysicalActivityLevelQ4' label='Geri - Physical Activity Level Q4' />
         <br />
-        5.     Do you have significant difficulties going about your regular exercise regime? Or do
-        you not know how to start exercising?
+        5. Do you have significant difficulties going about your regular exercise regime? Or do you
+        not know how to start exercising?
         <br />
         <b>*If yes, to REFER FOR PHYSIOTHERAPIST CONSULATION</b>
         <RadioField name='geriPhysicalActivityLevelQ5' label='Geri - Physical Activity Level Q5' />
         <br />
-        6.     Do you have any history of falls in the past 1 year? If yes, how many falls?
+        6. Do you have any history of falls in the past 1 year? If yes, how many falls?
         <br />
         <RadioField name='geriPhysicalActivityLevelQ8' label='Geri - Physical Activity Level Q8' />
         <br />
-        7.     If yes, were any of the falls injurious?
+        7. If yes, were any of the falls injurious?
         <br />
         <p>
           If participant had 2 or more falls, or 1 fall with injury,{' '}
-          <b>REFER TO DOCTOR'S CONSULTATION</b>
+          <b>REFER TO DOCTOR&apos;S CONSULTATION</b>
         </p>
         <RadioField name='geriPhysicalActivityLevelQ9' label='Geri - Physical Activity Level Q9' />
         <br />

@@ -104,11 +104,11 @@ const DietitiansConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        Has the participant visited the Dietitian's Consult station?
+        Has the participant visited the Dietitian&apos;s Consult station?
         <RadioField name='dietitiansConsultQ7' label="Dietitian's Consult Q7" />
-        Dietitian's Name:
+        Dietitian&apos;s Name:
         <LongTextField name='dietitiansConsultQ1' label="Dietitian's Consult Q1" />
-        Dietitian's Notes:
+        Dietitian&apos;s Notes:
         <LongTextField name='dietitiansConsultQ3' label="Dietitian's Consult Q3" />
         Notes for participant (if applicable):
         <LongTextField name='dietitiansConsultQ4' label="Dietitian's Consult Q4" />

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Avatar, Box, Card, CardContent, Grid, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import MoneyIcon from '@material-ui/icons/Money'

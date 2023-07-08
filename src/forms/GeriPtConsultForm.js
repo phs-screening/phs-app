@@ -170,10 +170,10 @@ const GeriPtConsultForm = (props) => {
         Memo (for participant):
         <LongTextField name='geriPtConsultQ1' label='Geri - PT Consult Q1' />
         <br />
-        To be referred for doctor's consult (PT)?
+        To be referred for doctor&apos;s consult (PT)?
         <RadioField name='geriPtConsultQ2' label='Geri - PT Consult Q2' />
         <br />
-        Reasons for referral to Doctor's consult (PT):
+        Reasons for referral to Doctor&apos;s consult (PT):
         <SelectField name='geriPtConsultQ3' checkboxes='true' label='Geri - PT Consult Q3' />
         <br />
         Please specify (if others):
@@ -186,7 +186,7 @@ const GeriPtConsultForm = (props) => {
         <LongTextField name='geriPtConsultQ5' label='Geri - PT Consult Q5' />
         <h2>
           <span style={{ color: 'red' }}>
-            IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
+            IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
             RECOMMENDED, PLEASE EDIT ON FORM A
           </span>
         </h2>

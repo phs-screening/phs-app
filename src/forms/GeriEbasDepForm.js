@@ -184,7 +184,7 @@ const GeriEbasDepForm = (props) => {
           question 5 rated 1, proceed to question 6.
         </h3>
         <br />
-        6. Is it because you are depressed or nervous that you don't enjoy things as much?
+        6. Is it because you are depressed or nervous that you don&apos;t enjoy things as much?
         是不是因为你的忧郁或者精神紧张使得你对东西的喜爱大不如前？
         <br />
         Assessment: Loss of enjoyment because of depression/nervousness
@@ -216,7 +216,7 @@ const GeriEbasDepForm = (props) => {
           Support if score is 3 OR GREATER.
         </h3>
         <p>
-          Please note that "Yes"/ Abnormal response to Q8 is considered a positive test, regardless
+          Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test, regardless
           of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,
           <b> PLEASE REFER to Social Service.</b>{' '}
         </p>

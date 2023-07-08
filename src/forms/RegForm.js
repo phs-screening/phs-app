@@ -58,7 +58,7 @@ const RegForm = () => {
   // Note: Slice does not modify old array. It creates new array.
   const displayVacancy = optionsQ10.slice(0, -1).map((x, i) => {
     return (
-      <div>
+      <div key={i}>
         {options[i]}
         <b> Slots: {x}</b>
       </div>
@@ -89,7 +89,7 @@ const RegForm = () => {
       <br />
       <p>
         GRC/SMC Subdivision{' '}
-        <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank'>
+        <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel="noreferrer">
           [https://www.parliament.gov.sg/mps/find-my-mp]
         </a>
       </p>

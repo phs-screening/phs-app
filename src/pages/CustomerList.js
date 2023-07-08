@@ -1,3 +1,4 @@
+import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Box, Container } from '@material-ui/core'
 import CustomerListResults from 'src/components/customer/CustomerListResults'

@@ -78,7 +78,7 @@ const FitForm = (props) => {
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
           <span style={{ color: 'red' }}>
-            Please verify participant's identity using his/her
+            Please verify participant&apos;s identity using his/her
             <br />
             A. APP ID on wristband AND
             <br />
@@ -120,16 +120,18 @@ const FitForm = (props) => {
         scrutiny by doctors?{' '}
         <span style={{ color: 'red' }}>
           <b>
-            (If indicated 'Yes', please refer to doctor's consult by following the steps below.)
+            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the
+            steps below.)
           </b>
         </span>
         <RadioField name='fitQ1' label='FIT Q1' />
         <PopupText qnNo='fitQ1' triggerValue='Yes'>
           <b>REFER TO DR CONSULT</b> by indicating on: <br />
-          1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation
-          row
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under
+          Doctor&apos;s Consultation row
           <br />
-          2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
+          Recommendation
         </PopupText>
         <br />
         Was participant issued 2 FIT kits?

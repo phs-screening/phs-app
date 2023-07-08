@@ -93,7 +93,7 @@ const ManageVolunteers = () => {
     )
     .map((guest, index) => {
       return (
-        <li style={styles.manageVolunteersItem}>
+        <li style={styles.manageVolunteersItem} key={index}>
           <div style={styles.manageVolunteersDetails}>
             <div>{guest.username}</div>
             <div>

@@ -59,9 +59,9 @@ class GeriPtConsultForm extends Component {
           <h2>3.4a PT Consult</h2>
           Memo:
           <LongTextField name='geriPtConsultQ1' label='Geri - PT Consult Q1' />
-          To be referred for doctor's consult (PT)?
+          To be referred for doctor&apos;s consult (PT)?
           <RadioField name='geriPtConsultQ2' label='Geri - PT Consult Q2' />
-          Reasons for referral to Doctor's consult (PT):
+          Reasons for referral to Doctor&apos;s consult (PT):
           <LongTextField name='geriPtConsultQ3' label='Geri - PT Consult Q3' />
           To be referred for social support (For HDB EASE Sign-up) (PT):
           <RadioField name='geriPtConsultQ4' label='Geri - PT Consult Q4' />
@@ -69,7 +69,7 @@ class GeriPtConsultForm extends Component {
           <LongTextField name='geriPtConsultQ5' label='Geri - PT Consult Q5' />
           <h2>
             <span style={{ color: 'red' }}>
-              IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
+              IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
               RECOMMENDED, PLEASE EDIT ON FORM A
             </span>
           </h2>

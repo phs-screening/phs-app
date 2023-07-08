@@ -86,17 +86,17 @@ class HxHcsrForm extends Component {
       >
         <Fragment>
           <h3 style={{ color: 'red' }}>
-            Please verify participant's identity using his/her NRIC before proceeding <br />
-            A. S/N B. Surname followed by Initials C. Last 4 characters of Participant's NRIC
+            Please verify participant&apos;s identity using his/her NRIC before proceeding <br />
+            A. S/N B. Surname followed by Initials C. Last 4 characters of Participant&apos;s NRIC
           </h3>
           <br />
           <h2>PARTICIPANT IDENTIFICATION</h2>
-          <b>Booth number</b> and <b>History-taker's Name</b>
+          <b>Booth number</b> and <b>History-taker&apos;s Name</b>
           <br />
           <LongTextField name='hxHcsrQ1' label='Hx HCSR Q1' />
           <p style={{ color: 'red' }}>
-            **On Page 2 of Form A, under Doctor's Consultation (Hx-taking column, 1st row), please
-            write down booth number and history taker's name. (Eg. Booth 18 David Choo Ah Beng = 18
+            **On Page 2 of Form A, under Doctor&apos;s Consultation (Hx-taking column, 1st row), please
+            write down booth number and history taker&apos;s name. (Eg. Booth 18 David Choo Ah Beng = 18
             David Choo A B)**
           </p>
           <br />
@@ -117,9 +117,9 @@ class HxHcsrForm extends Component {
           <b>
             brief history. (Please write NIL if otherwise).
             <br />
-            "Do you have any health issues that you are currently concerned about?"
+            &quot;Do you have any health issues that you are currently concerned about?&quot;
           </b>{' '}
-          "最近有没有哪里不舒服？”
+          &quot;最近有没有哪里不舒服&quot;
           <br />
           <LongTextField name='hxHcsrQ2' label='Hx HCSR Q2' />
           <p>
@@ -142,13 +142,13 @@ class HxHcsrForm extends Component {
             <br />
             <b>REFER TO DR CONSULT</b> under Form A if{' '}
             <b>
-              worrying problems / participant strongly insists or if you feel 'Health Concerns'
+              worrying problems / participant strongly insists or if you feel &apos;Health Concerns&apos;
               requires closer scrutiny by doctors later.
             </b>
             <br />
-            Indicate for Doctor's Consultation station under: <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A<br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            Indicate for Doctor&apos;s Consultation station under: <br />
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
             <br />
             3) Please write relevant medical/social history of participant under history taking box
           </PopupText>
@@ -168,7 +168,7 @@ class HxHcsrForm extends Component {
           <b>
             Based on{' '}
             <span style={{ color: 'red' }}>
-              <u>participants's health concerns,</u>
+              <u>participants&apos;s health concerns,</u>
             </span>
           </b>{' '}
           please rule out red flags <b>(Please write NIL if otherwise)</b>
@@ -180,13 +180,13 @@ class HxHcsrForm extends Component {
           <PopupText qnNo='hxHcsrQ12' triggerValue='Yes'>
             <b>REFER TO DR CONSULT</b> under Form A if{' '}
             <b>
-              worrying problems / participant strongly insists or if you feel 'Health Concerns'
+              worrying problems / participant strongly insists or if you feel &apos;Health Concerns&apos;
               requires closer scrutiny by doctors later.
             </b>
             <br />
-            Indicate for Doctor's Consultation station under: <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            Indicate for Doctor&apos;s Consultation station under: <br />
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
             Reasons for recommendation
             <br />
             3) Please write relevant medical/social history of participant under history taking box
@@ -204,8 +204,8 @@ class HxHcsrForm extends Component {
               <span style={{ color: 'red' }}>EXHIBITION SFCS</span> booth under Form A
             </b>
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation{' '}
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation{' '}
             <br />
             3) Pleae write relevant medical/social history of participant under history taking box{' '}
             <br /> 4) Page 2 of Form A, under Exhibition - Recommendation, tick renal and bladder
@@ -226,8 +226,8 @@ class HxHcsrForm extends Component {
               includes vision screening.
             </b>
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
             <br />
             <br />
           </PopupText>
@@ -240,12 +240,12 @@ class HxHcsrForm extends Component {
               REFER TO <span style={{ color: 'red' }}>DR CONSULT</span> if have hearing problem for{' '}
               <span style={{ color: 'red' }}>40-59</span>. Please give the participant the PHS
               Hearing Questionnaire 2019, remind them to complete it by themselves before passing it
-              to the doctors at doctor's consult. For 60 and above, indicate for Geriatrics -
+              to the doctors at doctor&apos;s consult. For 60 and above, indicate for Geriatrics -
               Geriatrics Functional Screening includes audiometry screening.
             </b>
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
-            2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+            2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
             <br />
             3) Please write relevant medical/social history of participant under history taking box
             <br />

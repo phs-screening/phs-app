@@ -475,7 +475,7 @@ const GeriOtQuestionnaireForm = (props) => {
           <b>Definition:</b> Supportive, firmly fitting shoes / slippers with low heels and non-slip
           soles.
         </p>
-        No shoes = NO"
+        No shoes = &quot;NO&quot;
         <RadioField name='geriOtQuestionnaireQ26' label='geriOtQuestionnaire-Q26' />
         <br />
         25. If there are pets - can you care for them without bending down OR at risk of falling
@@ -492,7 +492,7 @@ const GeriOtQuestionnaireForm = (props) => {
         <h3>SCORING</h3>
         <br />
         <GetScores /> <br />
-        <b>Total (Record it as "YES" / 25 - "NA"):</b>
+        <b>Total (Record it as &quot;YES&quot; / 25 - &quot;NA&quot;</b>
         <LongTextField name='geriOtQuestionnaireQ32' label='geriOtQuestionnaire-Q32' />
         <br />
       </Fragment>

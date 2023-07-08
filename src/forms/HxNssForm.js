@@ -202,10 +202,10 @@ const HxNssForm = (props) => {
           <br />
         </h3>
         Hypertension criteria:
-        <br />○ Younger participants: > 140/90
-        <br />○ Participants > 80 years old: > 150/90 <br />○ CKD w proteinuria (mod to severe
-        albuminuria): > 130/80
-        <br />○ DM: > 130/80
+        <br />○ Younger participants: &gt; 140/90
+        <br />○ Participants &gt; 80 years old: &gt; 150/90 <br />○ CKD w proteinuria (mod to severe
+        albuminuria): &gt; 130/80
+        <br />○ DM: &gt; 130/80
         <br />
         <br />{' '}
         <p>
@@ -220,9 +220,9 @@ const HxNssForm = (props) => {
             <b>
               REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)
               <br />
-              1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+              1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
               <br />
-              2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for
+              2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
               Recommendation
               <br />
               <br />
@@ -301,8 +301,8 @@ const HxNssForm = (props) => {
             </b>
           </span>
           <br />
-          If participant is not engaged with any follow-up, ask "what is the reason that you're not
-          following up with your doctor for your existing conditions?"
+          If participant is not engaged with any follow-up, ask &quot;what is the reason that you&apos;re not
+          following up with your doctor for your existing conditions?&quot;
           <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility
           issues, financial issues, fear of doctors/ clinics/ hospitals etc
           <br />
@@ -321,17 +321,17 @@ const HxNssForm = (props) => {
         </Fragment>
         <span style={{ color: 'black' }}>
           <b>
-            Please tick to highlight if you feel 'Past Medical History' requires closer scrutiny by
+            Please tick to highlight if you feel &apos;Past Medical History&apos; requires closer scrutiny by
             doctors later
           </b>
         </span>
         <RadioField name='hxNssQ11' label='Hx NSS Q11' />
         <br />
         <b>Based on participant medical hx, please recommend relevant stations:</b>
-        1) Doctor's Consultation station, tick eligibility, Circle interested 'Y' on Page 1 of Form
+        1) Doctor&apos;s Consultation station, tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form
         A
         <br />
-        2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation
+        2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
         <br />
         3) Relevant exhibition booths on page 2 of form A. Indicate accordingly for past history of
         DM / CVS Disease (including HTN, HLD, IHD) / CVA.
@@ -367,11 +367,11 @@ const HxNssForm = (props) => {
         <RadioField name='hxNssQ17' label='Hx NSS Q17' /> <br />
         <b>
           Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
-          <span style={{ color: 'red' }}>dietitian</span> at Doctor's Consultation station,
+          <span style={{ color: 'red' }}>dietitian</span> at Doctor&apos;s Consultation station,
           Indicate:
         </b>
-        1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A<br />
-        2) Write reasons under dietitian referral on Page 2 of Form A Doctor's Consultation -
+        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
+        2) Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
         Reasons for Recommendation
         <br />
         <br />

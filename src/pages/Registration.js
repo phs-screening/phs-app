@@ -1,3 +1,4 @@
+import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Box, Container, Grid } from '@material-ui/core'
 import RegisterPatient from 'src/components/RegisterPatient'

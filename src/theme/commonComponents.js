@@ -1,4 +1,5 @@
 import Divider from '@material-ui/core/Divider'
+import React from 'react'
 
 const size = 18
 
@@ -34,8 +35,8 @@ export function underlinedWithBreak(text) {
 
 export function blueText(text) {
   if (Array.isArray(text)) {
-    return text.map((x) => (
-      <div>
+    return text.map((x, i) => (
+      <div key={i}>
         <p style={{ color: 'blue', margin: 2, whiteSpace: 'pre-wrap' }}>{x}</p>
       </div>
     ))
@@ -50,8 +51,8 @@ export function blueText(text) {
 
 export function redText(text) {
   if (Array.isArray(text)) {
-    return text.map((x) => (
-      <div>
+    return text.map((x, i) => (
+      <div key={i}>
         <p style={{ color: 'red', margin: 2, whiteSpace: 'pre-wrap' }}>{x}</p>
       </div>
     ))

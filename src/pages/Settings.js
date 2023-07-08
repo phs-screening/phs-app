@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet'
 import { Box, Container } from '@material-ui/core'
 import SettingsNotifications from 'src/components/settings/SettingsNotifications'
 import SettingsPassword from 'src/components/settings/SettingsPassword'
+import React from 'react'
 
 const SettingsView = () => (
   <>

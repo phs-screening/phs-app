@@ -1,3 +1,4 @@
+import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Box, Container, Grid } from '@material-ui/core'
 import AccountProfile from 'src/components/account/AccountProfile'

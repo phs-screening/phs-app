@@ -1,23 +1,23 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react';
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
+import SimpleSchema from 'simpl-schema';
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { TextField, RadioField, LongTextField } from 'uniforms-material'
-import { submitForm } from '../api/api.js'
-import { FormContext } from '../api/utils.js'
+import { AutoForm } from 'uniforms';
+import { SubmitField, ErrorsField } from 'uniforms-material';
+import { RadioField, LongTextField } from 'uniforms-material';
+import { submitForm } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
-import PopupText from 'src/utils/popupText'
-import { getSavedData } from '../services/mongoDB'
-import './fieldPadding.css'
-import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
+import PopupText from 'src/utils/popupText';
+import { getSavedData } from '../services/mongoDB';
+import './fieldPadding.css';
+import allForms from './forms.json';
+import { blueText } from '../theme/commonComponents';
 
 const schema = new SimpleSchema({
   hxSocialQ1: {
@@ -167,7 +167,7 @@ const HxSocialForm = (props) => {
         Please specify
         <LongTextField name='hxSocialQ2' label='Hx Social Q2' />
         <br /> <br />
-        4a. What is the average earnings of participant's household per month?
+        4a. What is the average earnings of participant&apos;s household per month?
         <RadioField name='hxSocialQ3' label='Hx Social Q3' />
         <br />
         <br />
@@ -199,7 +199,7 @@ const HxSocialForm = (props) => {
             <br />
             Indicate for Social Service station on:
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
             <br />
             2) Write reasons for referral on the right column
             <br />
@@ -238,13 +238,13 @@ const HxSocialForm = (props) => {
             <br />
             Indicate for Social Service station on:{' '}
           </b>
-          1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
           2) Write reasons for referral on the right column
         </PopupText>
         <br />
         <br />
         <h2>4. ORAL ISSUES</h2>
-        <b>Please do a quick inspection of participant's oral health status:</b> 1. Lips, Tongue,
+        <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips, Tongue,
         Gums & Tissues (Healthy - pink and moist)
         <br />
         2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures,
@@ -252,7 +252,7 @@ const HxSocialForm = (props) => {
         <br />
         3. Saliva status (free-flowing) and Any dental pain <br />
         <br />
-        1. How is the participant's Oral Health?
+        1. How is the participant&apos;s Oral Health?
         <RadioField name='hxSocialQ13' label='Hx Social Q13' />
         <br />
         Please specify:
@@ -293,7 +293,7 @@ const HxSocialForm = (props) => {
           <br />
           <br />
           <b>Indicate for Dentistry on:</b>
-          1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
           <br />
           2) Write reasons for referral on the right column
         </PopupText>

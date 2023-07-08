@@ -161,7 +161,7 @@ const DoctorSConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        Doctor's Name:
+        Doctor&apos;s Name:
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
         <br />
         <br />
@@ -169,7 +169,7 @@ const DoctorSConsultForm = (props) => {
         <LongTextField name='doctorSConsultQ2' label="Doctor's Consult Q2" />
         <br />
         <br />
-        Doctor's Memo:
+        Doctor&apos;s Memo:
         <LongTextField name='doctorSConsultQ3' label="Doctor's Consult Q3" />
         <br />
         <br />
@@ -196,7 +196,7 @@ const DoctorSConsultForm = (props) => {
         Does patient require urgent follow up
         <BoolField name='doctorSConsultQ10' />
         <br />
-        Completed Doctor’s Consult station. Please check that Form A is filled.
+        Completed Doctor&apos;s Consult station. Please check that Form A is filled.
         <BoolField name='doctorSConsultQ11' />
       </Fragment>
 

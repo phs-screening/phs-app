@@ -14,8 +14,7 @@ const ManageVolunteers = () => {
   })
 
   useEffect(async () => {
-    if (await isAdmin()) {
-    } else {
+    if (!(await isAdmin())) {
       alert('Only Admins have access to this Page!')
       navigate('/app/registration', { replace: true })
     }

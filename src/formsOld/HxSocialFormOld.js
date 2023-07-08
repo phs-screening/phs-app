@@ -152,8 +152,8 @@ class HxSocialForm extends Component {
           <h3 style={{ color: 'red' }}>
             PLEASE REFER TO PAGE 2 OF NSS FORM FOR RESPONSES. PLEASE ASK MORE as NECESSARY.{' '}
           </h3>
-          4a. What is the average earnings of participant's household per month? (Refer to NSS Form
-          Page 2, Put 'NIL' if participant unable to provide)
+          4a. What is the average earnings of participant&apos;s household per month? (Refer to NSS Form
+          Page 2, Put &apos;NIL&apos; if participant unable to provide)
           <RadioField name='hxSocialQ3' label='Hx Social Q3' />
           <br />
           <br />
@@ -183,7 +183,7 @@ class HxSocialForm extends Component {
               <br />
               Indicate for Social Service station on:
               <br />
-              1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+              1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
               <br />
               2) Write reasons for referral on the right column
               <br />
@@ -223,20 +223,20 @@ class HxSocialForm extends Component {
               Indicate for Social Service station on:{' '}
             </b>
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A <br />
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
             2) Write reasons for referral on the right column
           </PopupText>
           <br />
           <br />
           <h2>4. ORAL ISSUES</h2>
-          <b>Please do a quick inspection of participant's oral health status:</b> <br />
+          <b>Please do a quick inspection of participant&apos;s oral health status:</b> <br />
           1. Lips, Tongue, Gums & Tissues (Healthy - pink and moist)
           <br />
           2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken
           dentures, No food particles/tartar in mouth)
           <br />
           3. Saliva status (free-flowing) and Any dental pain <br />
-          1. How is the participant's Oral Health?
+          1. How is the participant&apos;s Oral Health?
           <RadioField name='hxSocialQ13' label='Hx Social Q13' />
           2. Would you like to go through free Oral Health screening by NUS Dentistry dentists and
           students?
@@ -253,7 +253,7 @@ class HxSocialForm extends Component {
               Indicate for Dentistry on:{' '}
             </b>
             <br />
-            1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A
+            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
             <br />
             2) Write reasons for referral on the right column
             <br />

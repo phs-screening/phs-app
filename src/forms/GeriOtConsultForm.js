@@ -146,9 +146,9 @@ const GeriOtConsultForm = (props) => {
         Memo (for participant):
         <LongTextField name='geriOtConsultQ1' label='Geri - OT Consult Q1' />
         <br />
-        To be referred for doctor's consult (OT)?
+        To be referred for doctor&apos;s consult (OT)?
         <RadioField name='geriOtConsultQ2' label='Geri - OT Consult Q2' />
-        Reasons for referral to Doctor's consult (OT):
+        Reasons for referral to Doctor&apos;s consult (OT):
         <LongTextField name='geriOtConsultQ3' label='Geri - OT Consult Q3' />
         <br />
         To be referred to Geriatric Appointment (For HDB EASE Sign-up) (OT):
@@ -172,8 +172,8 @@ const GeriOtConsultForm = (props) => {
         <SelectField name='geriOtConsultQ6' checkboxes='true' label='Geri - OT Consult Q6' />
         <h2>
           <span style={{ color: 'red' }}>
-            IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
-            RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER 'REGISTRATION'.
+            IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
+            RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER &apos;REGISTRATION&apos;
           </span>
         </h2>
         <br />

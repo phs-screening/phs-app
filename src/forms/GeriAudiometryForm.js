@@ -170,7 +170,7 @@ const GeriAudiometryForm = (props) => {
         <RadioField name='geriAudiometryQ9' label='geriAudiometry - Q9' />
         If yes, please specify:
         <LongTextField name='geriAudiometryQ10' label='geriAudiometry - Q10' />
-        Referred to Doctor's Consult?
+        Referred to Doctor&apos;s Consult?
         <RadioField name='geriAudiometryQ11' label='geriAudiometry - Q11' />
         Please document significant findings from audiometry test and recommended course of action
         for participant:

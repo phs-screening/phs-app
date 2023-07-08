@@ -43,7 +43,7 @@ class PhleboForm extends Component {
         <Fragment>
           Blood sample collected?
           <BoolField name='phlebotomyQ1' />
-          Circled 'Completed' under Phlebotomy on Form A?
+          Circled &apos;Completed&apos; under Phlebotomy on Form A?
           <BoolField name='phlebotomyQ2' />
         </Fragment>
         <ErrorsField />

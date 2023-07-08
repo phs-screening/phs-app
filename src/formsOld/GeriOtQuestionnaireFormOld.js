@@ -89,7 +89,7 @@ class GeriOtQuestionnaireForm extends Component {
           1. Have you fallen or had a near fall in the last year?
           <RadioField name='geriOtQuestionnaireQ1' label='Geri - OT Questionnaire Q1' />
           <h4>If yes, refer occupational therapist consultation</h4>
-          2. Has any medication you've taken caused you drowsiness/ giddiness?
+          2. Has any medication you&apos;ve taken caused you drowsiness/ giddiness?
           <RadioField name='geriOtQuestionnaireQ2' label='Geri - OT Questionnaire Q2' />
           <PopupText qnNo='geriOtQuestionnaireQ2' triggerValue='Yes (Specify in textbox )'>
             Please Specify:
@@ -118,8 +118,8 @@ class GeriOtQuestionnaireForm extends Component {
           />
           <h2>
             <span style={{ color: 'red' }}>
-              IF THE PATIENT NEEDS TO GO TO DOCTOR'S CONSULT MODALITY THAT YOU RECOMMENDED, PLEASE
-              EDIT ON FORM A.
+              IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT MODALITY THAT YOU RECOMMENDED,
+              PLEASE EDIT ON FORM A.
             </span>
           </h2>
         </Fragment>

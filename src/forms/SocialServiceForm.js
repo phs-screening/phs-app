@@ -137,7 +137,7 @@ const SocialServiceForm = (props) => {
         <h2>Social Service Station</h2>
         1. Has the participant visited the social service station?
         <RadioField name='socialServiceQ1' label='Social Service Q1' />
-        2. Brief summary of the participant's concerns
+        2. Brief summary of the participant&apos;s concerns
         <LongTextField name='socialServiceQ2' label='Social Service Q2' />
         3. Brief summary of what will be done for the participant (Eg name of scheme participant
         wants to apply for)

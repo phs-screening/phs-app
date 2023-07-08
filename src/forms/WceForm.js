@@ -1,24 +1,25 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
+import SimpleSchema from 'simpl-schema';
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { TextField, SelectField, RadioField } from 'uniforms-material'
-import { submitFormSpecial } from '../api/api.js'
-import { FormContext } from '../api/utils.js'
+import { AutoForm } from 'uniforms';
+import { SubmitField, ErrorsField } from 'uniforms-material';
+import { RadioField } from 'uniforms-material';
+import { submitFormSpecial } from '../api/api.js';
+import { FormContext } from '../api/utils.js';
 
-import '../Snippet.css'
-import PopupText from 'src/utils/popupText'
-import { getSavedData } from '../services/mongoDB'
-import './fieldPadding.css'
-import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
+import '../Snippet.css';
+import PopupText from 'src/utils/popupText';
+import { getSavedData } from '../services/mongoDB';
+import './fieldPadding.css';
+import allForms from './forms.json';
+import { blueText } from '../theme/commonComponents';
 
 const schema = new SimpleSchema({
   wceQ1: {
@@ -103,7 +104,7 @@ const WceForm = (props) => {
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
           <font color='red'>
-            Please verify participant's identity using his/her
+            Please verify participant&apos;s identity using his/her
             <br />
             A. APP ID on wristband AND
             <br />
@@ -161,7 +162,7 @@ const WceForm = (props) => {
         <font color='red'>
           <b>
             For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and
-            above, seek doctor's advice.
+            above, seek doctor&apos;s advice.
             <br />
             Please encourage participants to go for HPV test every 5 years.
           </b>
@@ -171,16 +172,16 @@ const WceForm = (props) => {
         scrutiny by doctors?{' '}
         <font color='red'>
           <b>
-            (If indicated 'Yes', please refer to doctor's consult by following the steps below.)
+            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the steps below.)
           </b>
         </font>
         <RadioField name='wceQ1' label='WCE Q1' />
         <PopupText qnNo='wceQ1' triggerValue='Yes'>
           <b>REFER TO DR CONSULT by indicating on:</b> <br />
-          1) Tick eligibility, Circle interested 'Y' on Page 1 of Form A under Doctor's Consultation
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under Doctor&apos;s Consultation
           row
           <br />
-          2) Write reasons on Page 2 of Form A Doctor's Consultation - Reasons for Recommendation{' '}
+          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation{' '}
           <br />
         </PopupText>
         <br /> <br />
