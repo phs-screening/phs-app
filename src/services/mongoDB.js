@@ -1,61 +1,68 @@
-import * as Realm from "realm-web";
+import * as Realm from 'realm-web'
 
-const REALM_APP_ID = process.env.REACT_APP_MONGO_KEY;
+const REALM_APP_ID = process.env.REACT_APP_MONGO_KEY
 // contact developer for .env file for key
-const app = new Realm.App({ id: REALM_APP_ID });
+const app = new Realm.App({ id: REALM_APP_ID })
 
-export default app;
+export default app
 
 export const getName = () => {
-    // admins have email, guests have name
-    return app.currentUser.profile.name === undefined ? app.currentUser.profile.email : app.currentUser.profile.name
+  // admins have email, guests have name
+  return app.currentUser.profile.name === undefined
+    ? app.currentUser.profile.email
+    : app.currentUser.profile.name
 }
 
 export const isLoggedin = () => {
-    return app.currentUser !== null && app.currentUser.accessToken
+  return app.currentUser !== null && app.currentUser.accessToken
 }
 
 export const logOut = () => {
-    return app.currentUser.logOut()
+  return app.currentUser.logOut()
 }
 
 export const guestUserCount = async () => {
-    const query = await app.currentUser.mongoClient("mongodb-atlas")
-        .db("phs").collection("profiles").count({is_admin: null})
-    return query
+  const query = await app.currentUser
+    .mongoClient('mongodb-atlas')
+    .db('phs')
+    .collection('profiles')
+    .count({ is_admin: null })
+  return query
 }
 
 export const hashPassword = async (password) => {
-    const encoder = new TextEncoder()
-    const encodePassword = encoder.encode(password)
-    const hashPassword = await crypto.subtle.digest('SHA-256', encodePassword);
-    const hashArray = Array.from(new Uint8Array(hashPassword))
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-    return hashHex
+  const encoder = new TextEncoder()
+  const encodePassword = encoder.encode(password)
+  const hashPassword = await crypto.subtle.digest('SHA-256', encodePassword)
+  const hashArray = Array.from(new Uint8Array(hashPassword))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  return hashHex
 }
 export const profilesCollection = () => {
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas")
-    const userProfile = mongoConnection.db("phs").collection("profiles")
-    return userProfile
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const userProfile = mongoConnection.db('phs').collection('profiles')
+  return userProfile
 }
 
-
 export const getProfile = async (type) => {
-    if (isLoggedin()) {
-            const profile = await app.currentUser.mongoClient("mongodb-atlas")
-                .db("phs").collection("profiles").findOne({username: getName()})
-            return profile
-    }
+  if (isLoggedin()) {
+    const profile = await app.currentUser
+      .mongoClient('mongodb-atlas')
+      .db('phs')
+      .collection('profiles')
+      .findOne({ username: getName() })
+    return profile
+  }
 
-    return null;
+  return null
 }
 
 export const isAdmin = async (type) => {
-    // admins have email, guests do not
-    if (isLoggedin()) {
-        return app.currentUser.profile.email !== undefined
-    }
-    return false;
+  // admins have email, guests do not
+  if (isLoggedin()) {
+    return app.currentUser.profile.email !== undefined
+  }
+  return false
 }
 
 // export const isValidQueueNo = async (queueNo) => {
@@ -66,25 +73,37 @@ export const isAdmin = async (type) => {
 // }
 
 export const getSavedData = async (patientId, collectionName) => {
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
-    const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({_id : patientId});
-    return savedData === null ? {} : savedData
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const savedData = await mongoConnection
+    .db('phs')
+    .collection(collectionName)
+    .findOne({ _id: patientId })
+  return savedData === null ? {} : savedData
 }
 
 export const getPreRegData = async (patientId, collectionName) => {
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
-    const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
-    return savedData === null ? {} : savedData
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const savedData = await mongoConnection
+    .db('phs')
+    .collection(collectionName)
+    .findOne({ queueNo: patientId })
+  return savedData === null ? {} : savedData
 }
 export const getSavedPatientData = async (patientId, collectionName) => {
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
-    const savedData = await mongoConnection.db("phs").collection(collectionName).findOne({queueNo : patientId});
-    return savedData === null ? {} : savedData
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const savedData = await mongoConnection
+    .db('phs')
+    .collection(collectionName)
+    .findOne({ queueNo: patientId })
+  return savedData === null ? {} : savedData
 }
 
 export const getReg18Counter = async () => {
-    // special case for registration slot counter
-    const mongoConnection = app.currentUser.mongoClient("mongodb-atlas");
-    const savedData = await mongoConnection.db("phs").collection("queueCounters").findOne({_id : "registrationQ10"});
-    return savedData === null ? null : savedData
+  // special case for registration slot counter
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const savedData = await mongoConnection
+    .db('phs')
+    .collection('queueCounters')
+    .findOne({ _id: 'registrationQ10' })
+  return savedData === null ? null : savedData
 }

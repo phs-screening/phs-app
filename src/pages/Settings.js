@@ -1,7 +1,7 @@
-import { Helmet } from 'react-helmet';
-import { Box, Container } from '@material-ui/core';
-import SettingsNotifications from 'src/components/settings/SettingsNotifications';
-import SettingsPassword from 'src/components/settings/SettingsPassword';
+import { Helmet } from 'react-helmet'
+import { Box, Container } from '@material-ui/core'
+import SettingsNotifications from 'src/components/settings/SettingsNotifications'
+import SettingsPassword from 'src/components/settings/SettingsPassword'
 
 const SettingsView = () => (
   <>
@@ -12,10 +12,10 @@ const SettingsView = () => (
       sx={{
         backgroundColor: 'background.default',
         minHeight: '100%',
-        py: 3
+        py: 3,
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth='lg'>
         <SettingsNotifications />
         <Box sx={{ pt: 3 }}>
           <SettingsPassword />
@@ -23,6 +23,6 @@ const SettingsView = () => (
       </Container>
     </Box>
   </>
-);
+)
 
-export default SettingsView;
+export default SettingsView
