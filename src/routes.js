@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom'
 import DashboardLayout from 'src/components/DashboardLayout'
 import MainLayout from 'src/components/MainLayout'
 import Account from 'src/pages/Account'
+import Queue from './pages/Queue'
 import CustomerList from 'src/pages/CustomerList'
 import Dashboard from 'src/pages/Dashboard'
 import Login from 'src/pages/Login'
@@ -51,6 +52,7 @@ const routes = [
       { path: 'manage', element: <ManageVolunteers /> },
       { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceForm /> },
+      { path: 'queue', element: <Queue /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },
