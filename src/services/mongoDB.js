@@ -44,6 +44,12 @@ export const profilesCollection = () => {
   return userProfile
 }
 
+export const getQueueCollection = () => {
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const queue = mongoConnection.db('phs').collection('queue')
+  return queue
+}
+
 export const getProfile = async (type) => {
   if (isLoggedin()) {
     const profile = await app.currentUser

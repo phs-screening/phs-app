@@ -7,6 +7,7 @@ import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,
   UserPlus as UserPlusIcon,
+  LogIn as LogInIcon,
 } from 'react-feather'
 import NavItem from './NavItem'
 import { FormContext } from 'src/api/utils'
@@ -29,6 +30,11 @@ const items = [
     href: '/app/summary',
     icon: ShoppingBagIcon,
     title: 'Patient Summary',
+  },
+  {
+    href: '/app/queue',
+    icon: LogInIcon,
+    title: 'Patient Queue Management',
   },
 ]
 
