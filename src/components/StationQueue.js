@@ -28,6 +28,7 @@ const StationQueue = () => {
 
     await sq.insertOne(station)
     setRefresh(!refresh)
+    setStationName('')
     isLoading(false)
   }
 
@@ -75,6 +76,7 @@ const StationQueue = () => {
       { upsert: true },
     )
     setRefresh(!refresh)
+    setStationPatientId({ ...stationPatientId, [stationName]: '' })
     isLoading(false)
   }
 
@@ -156,6 +158,7 @@ const StationQueue = () => {
                 size='large'
                 type='submit'
                 variant='contained'
+                disabled={loading}
                 onClick={(event) => handlePatientAdd(event, stationName)}
               >
                 Add to back
@@ -164,6 +167,7 @@ const StationQueue = () => {
                 color='primary'
                 size='large'
                 type='submit'
+                disabled={loading}
                 onClick={(event) => handlePatientRemove(event, stationName)}
               >
                 Remove First
@@ -187,7 +191,7 @@ const StationQueue = () => {
                 }}
               >
                 <div>Patient IDs in Queue:</div>
-                <strong>{queueItems.join(' ')}</strong>
+                <strong>{Array.isArray(queueItems) && queueItems.join(' ')}</strong>
               </Box>
 
               <Button
@@ -195,6 +199,7 @@ const StationQueue = () => {
                 size='large'
                 type='submit'
                 variant='contained'
+                disabled={loading} 
                 onClick={(event) => handleDeleteStation(event, stationName)}
               >
                 Delete Station
