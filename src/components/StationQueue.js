@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getQueueCollection } from '../services/mongoDB'
+import { getQueueCollection, getPreRegData } from '../services/mongoDB'
 import { Box, Button, Typography, TextField, CircularProgress } from '@material-ui/core'
 
 const StationQueue = () => {
@@ -59,6 +59,7 @@ const StationQueue = () => {
 
     const patientIdText = stationPatientId[stationName]
     const patientIds = patientIdText
+      .trim()
       .split(' ')
       .filter((id) => !isNaN(parseInt(id)))
       .map((id) => parseInt(id))
@@ -69,10 +70,21 @@ const StationQueue = () => {
       return
     }
 
+    const patientStrings = await Promise.all(
+      patientIds.map(async (id) => {
+        const patient = await getPreRegData(id, 'patients')
+        if (patient.initials !== undefined) {
+          return `${id} (${patient.initials})`
+        } else {
+          return `${id} (not found)`
+        }
+      }),
+    )
+
     const sq = getQueueCollection()
     await sq.findOneAndUpdate(
       { stationName },
-      { $push: { queueItems: { $each: patientIds } } },
+      { $push: { queueItems: { $each: patientStrings } } },
       { upsert: true },
     )
     setRefresh(!refresh)
@@ -199,7 +211,7 @@ const StationQueue = () => {
                 size='large'
                 type='submit'
                 variant='contained'
-                disabled={loading} 
+                disabled={loading}
                 onClick={(event) => handleDeleteStation(event, stationName)}
               >
                 Delete Station
