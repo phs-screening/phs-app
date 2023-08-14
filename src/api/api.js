@@ -488,12 +488,12 @@ export function patient(doc, reg, patients, k) {
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) + 'Public Health Service 2022 (PHS 2022) Health Screening Report',
+    kNewlines((k = k + 2)) + 'Public Health Service 2023 (PHS 2023) Health Screening Report',
   )
   doc.line(
     10,
     calculateY(k),
-    10 + doc.getTextWidth('Public Health Service 2022 (PHS 2022) Health Screening Report'),
+    10 + doc.getTextWidth('Public Health Service 2023 (PHS 2023) Health Screening Report'),
     calculateY(k),
   )
 
@@ -1012,7 +1012,7 @@ export function addRecommendation(doc, k) {
       'You are strongly recommended to seek follow-up based on your health screening result.' +
       ' If you have not opted out of our Telehealth Initiative, we will be calling you soon as a' +
       ' form of follow-up in a few weeks time. Should you have any queries, feel free to contact us at medsocphs@gmail.com. We' +
-      ' hope that you have benefited from PHS 2022 and would continue to support us' +
+      ' hope that you have benefited from PHS 2023 and would continue to support us' +
       ' in the future.',
     180,
   )

@@ -199,7 +199,7 @@ const StationQueue = () => {
                 size='large'
                 type='submit'
                 variant='contained'
-                disabled={loading}
+                disabled={loading} 
                 onClick={(event) => handleDeleteStation(event, stationName)}
               >
                 Delete Station
