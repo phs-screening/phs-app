@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { getQueueCollection } from '../services/mongoDB'
+import { getQueueCollection, getPreRegData, getSavedData } from '../services/mongoDB'
 import { Box, Button, Typography, TextField, CircularProgress } from '@material-ui/core'
+import allForms from '../forms/forms.json'
 
 const StationQueue = () => {
   const [loading, isLoading] = useState(false)
@@ -59,6 +60,7 @@ const StationQueue = () => {
 
     const patientIdText = stationPatientId[stationName]
     const patientIds = patientIdText
+      .trim()
       .split(' ')
       .filter((id) => !isNaN(parseInt(id)))
       .map((id) => parseInt(id))
@@ -69,10 +71,21 @@ const StationQueue = () => {
       return
     }
 
+    const patientStrings = await Promise.all(
+      patientIds.map(async (id) => {
+        const patient = await getPreRegData(id, 'patients')
+        const registrationData = await getSavedData(id, allForms.registrationForm)
+        const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
+        const initials = patient?.initials ?? 'Not Found'
+
+        return `${id}: ${salutation} ${patient.initials}`
+      }),
+    )
+
     const sq = getQueueCollection()
     await sq.findOneAndUpdate(
       { stationName },
-      { $push: { queueItems: { $each: patientIds } } },
+      { $push: { queueItems: { $each: patientStrings } } },
       { upsert: true },
     )
     setRefresh(!refresh)
@@ -87,6 +100,17 @@ const StationQueue = () => {
     const sq = getQueueCollection()
 
     await sq.findOneAndUpdate({ stationName }, { $pop: { queueItems: -1 } }, { upsert: true })
+    setRefresh(!refresh)
+    isLoading(false)
+  }
+
+  const handlePatientRemoveAll = async (event, stationName) => {
+    event.preventDefault()
+    isLoading(true)
+
+    const sq = getQueueCollection()
+
+    await sq.findOneAndUpdate({ stationName }, { $set: { queueItems: [] } }, { upsert: true })
     setRefresh(!refresh)
     isLoading(false)
   }
@@ -163,15 +187,38 @@ const StationQueue = () => {
               >
                 Add to back
               </Button>
-              <Button
-                color='primary'
-                size='large'
-                type='submit'
-                disabled={loading}
-                onClick={(event) => handlePatientRemove(event, stationName)}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
               >
-                Remove First
-              </Button>
+                <Button
+                  color='primary'
+                  size='large'
+                  type='submit'
+                  disabled={loading}
+                  onClick={(event) => handlePatientRemove(event, stationName)}
+                  sx={{
+                    flex: '1',
+                  }}
+                >
+                  Remove First
+                </Button>
+
+                <Button
+                  color='primary'
+                  size='large'
+                  type='submit'
+                  disabled={loading}
+                  onClick={(event) => handlePatientRemoveAll(event, stationName)}
+                  sx={{
+                    flex: '1',
+                  }}
+                >
+                  Remove All
+                </Button>
+              </Box>
 
               <TextField
                 id={stationName}
@@ -188,10 +235,19 @@ const StationQueue = () => {
                 sx={{
                   marginTop: '8px',
                   marginBottom: '16px',
+                  height: '200px',
+                  overflow: 'auto',
                 }}
               >
                 <div>Patient IDs in Queue:</div>
-                <strong>{Array.isArray(queueItems) && queueItems.join(' ')}</strong>
+                {queueItems &&
+                  queueItems.map((e) => {
+                    return (
+                      <div key={e}>
+                        <strong>{e}</strong>
+                      </div>
+                    )
+                  })}
               </Box>
 
               <Button
@@ -199,7 +255,7 @@ const StationQueue = () => {
                 size='large'
                 type='submit'
                 variant='contained'
-                disabled={loading} 
+                disabled={loading}
                 onClick={(event) => handleDeleteStation(event, stationName)}
               >
                 Delete Station
