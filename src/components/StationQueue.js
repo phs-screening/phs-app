@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { getQueueCollection, getPreRegData } from '../services/mongoDB'
+import { getQueueCollection, getPreRegData, getSavedData } from '../services/mongoDB'
 import { Box, Button, Typography, TextField, CircularProgress } from '@material-ui/core'
+import allForms from '../forms/forms.json'
 
 const StationQueue = () => {
   const [loading, isLoading] = useState(false)
@@ -73,11 +74,11 @@ const StationQueue = () => {
     const patientStrings = await Promise.all(
       patientIds.map(async (id) => {
         const patient = await getPreRegData(id, 'patients')
-        if (patient.initials !== undefined) {
-          return `${id} (${patient.initials})`
-        } else {
-          return `${id} (not found)`
-        }
+        const registrationData = await getSavedData(id, allForms.registrationForm)
+        const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
+        const initials = patient?.initials ?? 'Not Found'
+
+        return `${id}: ${salutation} ${patient.initials}`
       }),
     )
 
@@ -234,10 +235,19 @@ const StationQueue = () => {
                 sx={{
                   marginTop: '8px',
                   marginBottom: '16px',
+                  height: '200px',
+                  overflow: 'auto',
                 }}
               >
                 <div>Patient IDs in Queue:</div>
-                <strong>{Array.isArray(queueItems) && queueItems.join(' ')}</strong>
+                {queueItems &&
+                  queueItems.map((e) => {
+                    return (
+                      <div key={e}>
+                        <strong>{e}</strong>
+                      </div>
+                    )
+                  })}
               </Box>
 
               <Button
