@@ -103,6 +103,17 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  const handlePatientRemoveAll = async (event, stationName) => {
+    event.preventDefault()
+    isLoading(true)
+
+    const sq = getQueueCollection()
+
+    await sq.findOneAndUpdate({ stationName }, { $set: { queueItems: [] } }, { upsert: true })
+    setRefresh(!refresh)
+    isLoading(false)
+  }
+
   useEffect(async () => {
     const collection = getQueueCollection()
     const sq = await collection.find()
@@ -175,15 +186,38 @@ const StationQueue = () => {
               >
                 Add to back
               </Button>
-              <Button
-                color='primary'
-                size='large'
-                type='submit'
-                disabled={loading}
-                onClick={(event) => handlePatientRemove(event, stationName)}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
               >
-                Remove First
-              </Button>
+                <Button
+                  color='primary'
+                  size='large'
+                  type='submit'
+                  disabled={loading}
+                  onClick={(event) => handlePatientRemove(event, stationName)}
+                  sx={{
+                    flex: '1',
+                  }}
+                >
+                  Remove First
+                </Button>
+
+                <Button
+                  color='primary'
+                  size='large'
+                  type='submit'
+                  disabled={loading}
+                  onClick={(event) => handlePatientRemoveAll(event, stationName)}
+                  sx={{
+                    flex: '1',
+                  }}
+                >
+                  Remove All
+                </Button>
+              </Box>
 
               <TextField
                 id={stationName}
