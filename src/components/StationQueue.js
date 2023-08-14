@@ -187,7 +187,7 @@ const StationQueue = () => {
                 }}
               >
                 <div>Patient IDs in Queue:</div>
-                <strong>{queueItems.join(' ')}</strong>
+                <strong>{Array.isArray(queueItems) && queueItems.join(' ')}</strong>
               </Box>
 
               <Button
