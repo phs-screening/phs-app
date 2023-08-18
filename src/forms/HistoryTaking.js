@@ -69,7 +69,8 @@ export default function HxTabs() {
           <Tab label='HCSR' {...a11yProps(0)} />
           <Tab label='PMHx' {...a11yProps(1)} />
           <Tab label='Social' {...a11yProps(2)} />
-          <Tab label='Cancer' {...a11yProps(3)} />
+          <Tab label='Wellbeing' {...a11yProps(3)} />
+          <Tab label='Cancer' {...a11yProps(4)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -81,7 +82,7 @@ export default function HxTabs() {
       <TabPanel value={value} index={2}>
         <HxSocialForm changeTab={handleChange} nextTab={3} />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
         <HxCancerForm />
       </TabPanel>
     </div>
