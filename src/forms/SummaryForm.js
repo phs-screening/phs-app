@@ -41,6 +41,7 @@ const SummaryForm = (props) => {
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
   const [oralHealth, setOralHealth] = useState({})
+  const [triage, setTriage] = useState({})
   const [patientNo, updatePatientNo] = useState(patientId)
   const [refresh, setRefresh] = useState(false)
 
@@ -73,6 +74,7 @@ const SummaryForm = (props) => {
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
       const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
       const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
 
       Promise.all([
         hcsrData,
@@ -98,6 +100,7 @@ const SummaryForm = (props) => {
         geriVisionData,
         geriAudiometryData,
         geriFunctionalScreeningData,
+        triageData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
@@ -122,12 +125,14 @@ const SummaryForm = (props) => {
         setGeriVision(result[20])
         setGeriAudiometry(result[21])
         setGeriFunctionalScreening(result[22])
+        setTriage(result[23])
         isLoadingPrevData(false)
       })
     }
     await loadPastForms()
   }, [refresh])
 
+  // TODO: add triage to summary form
   return (
     <Paper elevation={2} pt={3} m={3}>
       {loadingPrevData ? (
@@ -539,7 +544,7 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined("Participant referred to Doctor's Consult?")}
             {geriVision
-              ? typeof geriVision.geriVisionQ9 != "undefined" &&
+              ? typeof geriVision.geriVisionQ9 != 'undefined' &&
                 geriVision.geriVisionQ9 == "Referred to Doctor's Consult"
                 ? blueRedText(
                     geriVision.geriVisionQ9,
@@ -837,6 +842,7 @@ const SummaryForm = (props) => {
             <Button
               onClick={() =>
                 generate_pdf(
+                  // TOOD: add triage here
                   registration,
                   patients,
                   cancer,

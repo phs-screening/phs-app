@@ -18,6 +18,7 @@ import FitForm from 'src/forms/FitForm'
 import PhleboForm from 'src/forms/PhleboForm'
 import PreregForm from 'src/forms/PreregForm'
 import RegForm from 'src/forms/RegForm'
+import TriageForm from 'src/forms/TriageForm'
 import SocialServiceForm from 'src/forms/SocialServiceForm'
 import OverviewForm from 'src/forms/OverviewForm'
 import WceForm from 'src/forms/WceForm'
@@ -45,6 +46,7 @@ const routes = [
       { path: 'phlebo', element: <PhleboForm /> },
       { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
+      { path: 'triage', element: <TriageForm /> },
       { path: 'dietitiansconsultation', element: <DietitiansConsultForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
       { path: 'oralhealth', element: <OralHealthForm /> },

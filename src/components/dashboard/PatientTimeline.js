@@ -17,6 +17,7 @@ function generateStatusObject(record) {
   const recordStatus = {
     prereg: true,
     reg: false,
+    triage: false,
     phlebo: false,
     hxtaking: false,
     fit: false,
@@ -32,6 +33,7 @@ function generateStatusObject(record) {
     return {
       prereg: true, // pre-registration, always true
       reg: record.registrationForm !== undefined, // registration
+      triage: record.triageForm,
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
       // historyTaking form consists of 4 forms
       hxtaking:
@@ -146,6 +148,22 @@ const BasicTimeline = (props) => {
             <a href='/app/reg' onClick={(event) => navigateTo(event, navigate, 'reg', scrollTop)}>
               Registration
               {!formDone?.reg ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
+            {formDone?.triage ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a
+              href='/app/triage'
+              onClick={(event) => navigateTo(event, navigate, 'triage', scrollTop)}
+            >
+              Triage
+              {!formDone?.hxtaking ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

@@ -30,5 +30,6 @@
   "oralHealthForm": "oralHealthForm",
   "overviewForm": "overviewForm",
   "socialServiceForm": "socialServiceForm",
-  "wceForm": "wceForm"
+  "wceForm": "wceForm",
+  "triageForm": "triageForm"
 }
