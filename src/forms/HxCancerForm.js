@@ -130,6 +130,7 @@ const schema = new SimpleSchema({
       'Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)',
       'Oral Health Education - Refer to eligibility criteria for Oral Health',
       'Exhibition - recommended as per necessary',
+      'Refer to SACS if patient sounds depressed'
     ],
   },
   hxCancerQ26: {
