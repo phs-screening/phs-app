@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getQueueCollection, getPreRegData, getSavedData } from '../services/mongoDB'
+import { getQueueCollection, getPreRegData, getSavedData, getProfile } from '../services/mongoDB'
 import { Box, Button, Typography, TextField, CircularProgress } from '@material-ui/core'
 import allForms from '../forms/forms.json'
 
@@ -10,6 +10,8 @@ const StationQueue = () => {
   const [stationQueues, setStationQueues] = useState([])
   const [stationName, setStationName] = useState('')
   const [stationPatientId, setStationPatientId] = useState({})
+
+  const [admin, isAdmin] = useState(false)
 
   const handleAddStation = async (event) => {
     event.preventDefault()
@@ -78,7 +80,7 @@ const StationQueue = () => {
         const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
         const initials = patient?.initials ?? 'Not Found'
 
-        return `${id}: ${salutation} ${patient.initials}`
+        return `${id}: ${salutation} ${initials}`
       }),
     )
 
@@ -120,6 +122,13 @@ const StationQueue = () => {
     const sq = await collection.find()
     setStationQueues(sq)
   }, [refresh])
+
+  useEffect(async () => {
+    const profile = await getProfile()
+    if (profile !== null) {
+      isAdmin(profile.is_admin)
+    }
+  }, [])
 
   return (
     <>
@@ -249,17 +258,18 @@ const StationQueue = () => {
                     )
                   })}
               </Box>
-
-              <Button
-                color='error'
-                size='large'
-                type='submit'
-                variant='contained'
-                disabled={loading}
-                onClick={(event) => handleDeleteStation(event, stationName)}
-              >
-                Delete Station
-              </Button>
+              {admin && (
+                <Button
+                  color='error'
+                  size='large'
+                  type='submit'
+                  variant='contained'
+                  disabled={loading}
+                  onClick={(event) => handleDeleteStation(event, stationName)}
+                >
+                  Delete Station
+                </Button>
+              )}
             </Box>
           )
         })}
