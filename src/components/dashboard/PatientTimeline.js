@@ -22,6 +22,7 @@ function generateStatusObject(record) {
     hxtaking: false,
     fit: false,
     wce: false,
+    sacs: false,
     geri: false,
     doctorsconsult: false,
     dietitiansconsult: false,
@@ -33,7 +34,7 @@ function generateStatusObject(record) {
     return {
       prereg: true, // pre-registration, always true
       reg: record.registrationForm !== undefined, // registration
-      triage: record.triageForm,
+      triage: record.triageForm === undefined, // triage
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
       // historyTaking form consists of 4 forms
       hxtaking:
@@ -43,6 +44,7 @@ function generateStatusObject(record) {
         record.hxCancerForm !== undefined,
       fit: record.fitForm !== undefined, // fit
       wce: record.wceForm !== undefined, // wce
+      sacs: record.sacsForm !== undefined, // sacs
       // geriatrics form consists of 12 forms
       geri:
         record.geriAmtForm !== undefined &&
@@ -226,6 +228,19 @@ const BasicTimeline = (props) => {
             <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
               WCE
               {!formDone?.wce ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
+            {formDone?.sacs ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a href='/app/sacs' onClick={(event) => navigateTo(event, navigate, 'sacs', scrollTop)}>
+              SACS
+              {!formDone?.sacs ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

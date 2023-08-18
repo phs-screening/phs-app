@@ -28,6 +28,7 @@ import ManageVolunteers from 'src/pages/ManageVolunteers'
 import Edit from 'src/pages/EditForms'
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
+import SacsForm from './forms/SacsForm'
 
 const routes = [
   {
@@ -54,6 +55,7 @@ const routes = [
       { path: 'manage', element: <ManageVolunteers /> },
       { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceForm /> },
+      { path: 'sacs', element: <SacsForm /> },
       { path: 'queue', element: <Queue /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
