@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -9,15 +9,14 @@ import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { LongTextField, BoolField } from 'uniforms-material'
+import { SubmitField, ErrorsField, TextField } from 'uniforms-material'
+import { BoolField } from 'uniforms-material'
 import { submitForm, calculateBMI } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
 import './fieldPadding.css'
-import { blue } from '@material-ui/core/colors'
 
 const schema = new SimpleSchema({
   oralHealthQ1: {
@@ -30,10 +29,14 @@ const schema = new SimpleSchema({
     label: 'Yes',
     optional: true,
   },
+  oralHealthQ3: {
+    type: String,
+    optional: true,
+  },
 })
 
 const formName = 'oralHealthForm'
-const OralHealthForm = (props) => {
+const OralHealthForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
@@ -105,6 +108,8 @@ const OralHealthForm = (props) => {
         <BoolField name='oralHealthQ1' />
         Completed Oral Health station. Please check that Form A is filled.
         <BoolField name='oralHealthQ2' />
+        Notes:
+        <TextField name='oralHealthQ3' />
       </Fragment>
 
       <ErrorsField />

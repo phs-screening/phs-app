@@ -26,7 +26,7 @@ const schema = new SimpleSchema({
   },
   geriMMSEQ3: {
     type: String,
-    allowedValues: ['Yes', 'No'],
+    allowedValues: ['Yes'],
     optional: false,
   },
   geriMMSEQ4: {
@@ -78,7 +78,7 @@ const GeriMMSEForm = (props) => {
         Need referral to G-RACE associated polyclinics/ partners?
         <RadioField name='geriMMSEQ2' label='geriMMSE - Q2' />
         <br />
-        Referral made?
+        Need referral to SACS?
         <RadioField name='geriMMSEQ3' label='geriMMSE - Q3' />
         Polyclinic:
         <LongTextField name='geriMMSEQ4' label='geriMMSE - Q4' />

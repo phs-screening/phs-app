@@ -32,11 +32,6 @@ const schema = new SimpleSchema({
     allowedValues: ['1 (Abnormal)', '0 (Normal)'],
     optional: false,
   },
-  geriEbasDepQ4: {
-    type: String,
-    allowedValues: ['1 (Abnormal)', '0 (Normal)'],
-    optional: false,
-  },
   geriEbasDepQ5: {
     type: String,
     allowedValues: ['1 (Abnormal)', '0 (Normal)'],
@@ -73,22 +68,22 @@ const schema = new SimpleSchema({
   geriEbasDepQ12: {
     type: String,
     optional: true,
-    custom: function () {
-      if (this.field('geriEbasDepQ11').isSet && this.field('geriEbasDepQ11').value === 'Yes') {
-        if (!this.isSet || this.value.length === 0) {
-          return SimpleSchema.ErrorTypes.REQUIRED
-        }
-      }
-    },
+    // TOOD: Might depend on Q10
+    // custom: function () {
+    //   if (this.field('geriEbasDepQ11').isSet && this.field('geriEbasDepQ11').value === 'Yes') {
+    //     if (!this.isSet || this.value.length === 0) {
+    //       return SimpleSchema.ErrorTypes.REQUIRED
+    //     }
+    //   }
+    // },
   },
 })
 
-function GetScore(props) {
+function GetScore() {
   let score = 0
   const [{ value: q1 }] = useField('geriEbasDepQ1', {})
   const [{ value: q2 }] = useField('geriEbasDepQ2', {})
   const [{ value: q3 }] = useField('geriEbasDepQ3', {})
-  const [{ value: q4 }] = useField('geriEbasDepQ4', {})
   const [{ value: q5 }] = useField('geriEbasDepQ5', {})
   const [{ value: q6 }] = useField('geriEbasDepQ6', {})
   const [{ value: q7 }] = useField('geriEbasDepQ7', {})
@@ -97,7 +92,6 @@ function GetScore(props) {
   if (q1 === '1 (Abnormal)') score += 1
   if (q2 === '1 (Abnormal)') score += 1
   if (q3 === '1 (Abnormal)') score += 1
-  if (q4 === '1 (Abnormal)') score += 1
   if (q5 === '1 (Abnormal)') score += 1
   if (q6 === '1 (Abnormal)') score += 1
   if (q7 === '1 (Abnormal)') score += 1
@@ -167,13 +161,6 @@ const GeriEbasDepForm = (props) => {
         Assessment: Has felt that life was not worth living at some time during the past month
         <RadioField name='geriEbasDepQ3' label='Geri - EBAS-DEP Q3' />
         <br />
-        4. How do you feel about your future? What are your hopes for the future?
-        你觉得自己的前途怎样？你对前途有何希望？
-        <br />
-        Assessment: Pessimistic about the future or has empty expectations (i.e. nothing to look
-        forward to)
-        <RadioField name='geriEbasDepQ4' label='Geri - EBAS-DEP Q4' />
-        <br />
         5. Do you enjoy things as much as you used to - say like you did a year ago?
         你对东西的喜爱是否与往常一样，比如说与一年前一样？
         <br />
@@ -216,29 +203,25 @@ const GeriEbasDepForm = (props) => {
           Support if score is 3 OR GREATER.
         </h3>
         <p>
-          Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test, regardless
-          of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,
+          Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test,
+          regardless of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,
           <b> PLEASE REFER to Social Service.</b>{' '}
         </p>
         <br />
-        To be referred for social support (failed EBAS-DEP) - from Geriatrics EBAS
+        To be referred for SACS (failed EBAS-DEP) - from Geriatrics EBAS
         <br />
         <RadioField name='geriEbasDepQ10' label='Geri - EBAS-DEP Q10' />
         <br />
-        To be referred for social support (for potential financial/ family difficulties) - from
-        Geriatrics EBAS
-        <RadioField name='geriEbasDepQ11' label='Geri - EBAS-DEP Q11' />
-        <br />
         <Fragment>
-          Reasons for referral to social support - from Geriatrics EBAS & AMT:
+          Reasons for referral to SACS - from Geriatrics EBAS & AMT:
           <br />
           Please document cognitive and social issues here.
           <LongTextField name='geriEbasDepQ12' label='Geri - EBAS-DEP Q12' />
         </Fragment>
         <font color='red'>
           <h2>
-            IF THE PATIENT NEEDS TO GO TO SOCIAL SUPPORT MODALITY THAT YOU RECOMMENDED, PLEASE
-            INDICATE ON FORM A.
+            IF THE PATIENT NEEDS TO GO TO SACS MODALITY THAT YOU RECOMMENDED, PLEASE INDICATE ON
+            FORM A.
           </h2>
         </font>
         <br />

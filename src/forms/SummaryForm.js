@@ -10,6 +10,8 @@ import allForms from './forms.json'
 import { bold, underlined, blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
 import { Button } from '@material-ui/core'
 
+// TODO: add triage and SACS
+
 const formName = 'summaryForm'
 
 const SummaryForm = (props) => {
@@ -36,11 +38,11 @@ const SummaryForm = (props) => {
   const [geriEbasDep, setGeriEbasDep] = useState({})
   const [geriGeriAppt, setGeriGeriAppt] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
-  const [geriFunctionalScreening, setGeriFunctionalScreening] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
   const [oralHealth, setOralHealth] = useState({})
+  const [triage, setTriage] = useState({})
   const [patientNo, updatePatientNo] = useState(patientId)
   const [refresh, setRefresh] = useState(false)
 
@@ -64,15 +66,12 @@ const SummaryForm = (props) => {
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
       const geriGeriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
-      const geriFunctionalScreeningData = getSavedData(
-        patientId,
-        allForms.geriFunctionalScreeningForm,
-      )
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
       const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
       const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
 
       Promise.all([
         hcsrData,
@@ -97,7 +96,7 @@ const SummaryForm = (props) => {
         geriMmseData,
         geriVisionData,
         geriAudiometryData,
-        geriFunctionalScreeningData,
+        triageData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
@@ -121,13 +120,14 @@ const SummaryForm = (props) => {
         setGeriMmse(result[19])
         setGeriVision(result[20])
         setGeriAudiometry(result[21])
-        setGeriFunctionalScreening(result[22])
+        setTriage(result[22])
         isLoadingPrevData(false)
       })
     }
     await loadPastForms()
   }, [refresh])
 
+  // TODO: add triage to summary form
   return (
     <Paper elevation={2} pt={3} m={3}>
       {loadingPrevData ? (
@@ -539,7 +539,7 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined("Participant referred to Doctor's Consult?")}
             {geriVision
-              ? typeof geriVision.geriVisionQ9 != "undefined" &&
+              ? typeof geriVision.geriVisionQ9 != 'undefined' &&
                 geriVision.geriVisionQ9 == "Referred to Doctor's Consult"
                 ? blueRedText(
                     geriVision.geriVisionQ9,
@@ -575,14 +575,6 @@ const SummaryForm = (props) => {
                     ' date and timings if applicable.',
                 )
               : blueText(geriGeriAppt.geriGeriApptQ14)}
-            <br></br>
-            {underlined(
-              'If participant applied for HPB screening, which event will they be going to? (event; date): ',
-            )}
-            {blueText(geriFunctionalScreening.geriFunctionalScreeningRegFormQ3)}
-            <br></br>
-            {underlined("Participant referred to Doctor's Consult?")}
-            {blueText(geriFunctionalScreening.geriFunctionalScreeningRegFormQ5)}
             <br></br>
 
             {bold('i. Geriatrics - Appointment')}
@@ -837,6 +829,7 @@ const SummaryForm = (props) => {
             <Button
               onClick={() =>
                 generate_pdf(
+                  // TOOD: add triage here
                   registration,
                   patients,
                   cancer,
@@ -851,7 +844,6 @@ const SummaryForm = (props) => {
                   geriGeriAppt,
                   dietitiansConsult,
                   oralHealth,
-                  geriFunctionalScreening,
                 )
               }
             >

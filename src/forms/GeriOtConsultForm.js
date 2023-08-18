@@ -47,7 +47,7 @@ const schema = new SimpleSchema({
   },
   'geriOtConsultQ6.$': {
     type: String,
-    allowedValues: ['HDB EASE', 'SWCDC Safe and Sustainable Homes', 'Own vendors'],
+    allowedValues: ['HDB EASE', 'Own vendors'],
   },
   geriOtConsultQ7: {
     type: String,

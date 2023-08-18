@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -17,7 +17,6 @@ import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
 import './fieldPadding.css'
-import { blue } from '@material-ui/core/colors'
 
 const schema = new SimpleSchema({
   doctorSConsultQ1: {
@@ -50,6 +49,11 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  doctorSConsultQ13: {
+    type: Boolean,
+    label: 'Yes',
+    optional: true,
+  },
   doctorSConsultQ8: {
     type: Boolean,
     label: 'Yes',
@@ -77,7 +81,7 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'doctorConsultForm'
-const DoctorSConsultForm = (props) => {
+const DoctorSConsultForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
@@ -186,6 +190,9 @@ const DoctorSConsultForm = (props) => {
         Reason for referral
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
         <br />
+        <br />
+        Refer to SACS? (and indicated on Form A)
+        <BoolField name='doctorSConsultQ13' />
         <br />
         Refer to Dental?
         <BoolField name='doctorSConsultQ8' />

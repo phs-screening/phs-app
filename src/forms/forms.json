@@ -10,14 +10,12 @@
   "geriOtConsultForm": "geriOtConsultForm",
   "geriOtQuestionnaireForm": "geriOtQuestionnaireForm",
   "geriParQForm": "geriParQForm",
-  "geriFunctionalScreeningRegForm": "geriFunctionalScreeningRegForm",
   "geriMmseForm": "geriMMSEForm",
   "geriPhysicalActivityLevelForm": "geriPhysicalActivityLevelForm",
   "geriAudiometryForm": "geriAudiometryForm",
   "geriPtConsultForm": "geriPtConsultForm",
   "geriSppbForm": "geriSppbForm",
   "geriMMSEForm": "geriMMSEForm",
-  "geriFunctionalScreeningForm": "geriFunctionalScreeningRegForm",
   "phlebotomyForm": "phlebotomyForm",
   "geriTugForm": "geriTugForm",
   "geriVisionForm": "geriVisionForm",
@@ -30,5 +28,7 @@
   "oralHealthForm": "oralHealthForm",
   "overviewForm": "overviewForm",
   "socialServiceForm": "socialServiceForm",
-  "wceForm": "wceForm"
+  "wceForm": "wceForm",
+  "triageForm": "triageForm",
+  "sacsForm": "sacsForm"
 }

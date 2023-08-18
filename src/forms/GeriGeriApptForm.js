@@ -28,11 +28,6 @@ const schema = new SimpleSchema({
   //   type: String, allowedValues: ["Yes", "No"], optional: false
   //},
   // Q1 - 3 missing
-  geriGeriApptQ4: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
   geriGeriApptQ5: {
     type: Boolean,
     label: 'Done',
@@ -68,17 +63,7 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: true,
   },
-  geriGeriApptQ12: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
   geriGeriApptQ13: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriGeriApptQ14: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: true,
@@ -153,53 +138,6 @@ const GeriGeriApptForm = (props) => {
       <Fragment>
         <h2>Geriatrics Appointment</h2>
         <br />
-        <h3>Functional screening </h3>
-        Did participant attend PHS vision and hearing screening?
-        <RadioField name='geriGeriApptQ12' label='Geri - Geri Appt Q12' />
-        Did participant apply for HPB functional screening?
-        <RadioField name='geriGeriApptQ14' label='Geri - Geri Appt Q14' />
-        <br />
-        <h3>Vision</h3>
-        <b>
-          <u>EyeWear@South West</u>
-        </b>
-        <p>
-          <b>Description:</b> A scheme that aims to help needy residents with free eye screening
-          service provided by professionally qualified optometrists and vouchers to subsidise the
-          cost of any prescription spectacles or eyewear. Beneficiaries are entitled to free eye
-          screening services and $150 off their glasses.{' '}
-        </p>
-        <br />
-        Participating optical partners:
-        <br />
-        1. Capitol Optical
-        <br />
-        2. Nanyang Optical
-        <br />
-        3. Optical 88
-        <br />
-        4. Owndays
-        <br />
-        5. Spectacle Hut
-        <br />
-        <br />
-        <b>Eligibility criteria:</b>
-        1. Resident of South West District;
-        <br />
-        2. Singapore Citizen or at least one (1) immediate family member is a Singapore Citizen;
-        <br />
-        3. Total Gross Monthly Household Income of $3,500 or Per Capita Household Income (PCHI) of
-        $875, whichever is lower; and
-        <br />
-        4. Discretion of the Grassroots Leaders/Volunteers for residents with exceptional family and
-        financial difficulties.
-        <br />
-        <br />
-        <Fragment>
-          SWCDC Eye Voucher given?
-          <RadioField name='geriGeriApptQ4' label='Geri - Geri Appt Q4' />
-        </Fragment>
-        <br />
         <h3>SWCDC&apos;s Safe & Sustainable Homes </h3>
         State eligibility criteria.
         <br />
@@ -219,9 +157,9 @@ const GeriGeriApptForm = (props) => {
         <br />• aged between 60 and 64 years and requires assistance for one or more of the
         Activities of Daily Living (ADL)*
         <br />
-        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of residence.
-        These activities include washing/ bathing, dressing, feeding, toileting, mobility, and
-        transferring.
+        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of
+        residence. These activities include washing/ bathing, dressing, feeding, toileting,
+        mobility, and transferring.
         <br />
         <br />
         Note: Age criterion is not applicable for EASE under HIP.
@@ -233,8 +171,8 @@ const GeriGeriApptForm = (props) => {
         Does participant wish to sign up for HDB EASE?
         <RadioField name='geriGeriApptQ10' label='Geri - Geri Appt Q10' />
         <br />
-        Participant (aged 60-64 years old, inclusive) referred to Doctor&apos;s Consult for Functional
-        Assessment Report completion?
+        Participant (aged 60-64 years old, inclusive) referred to Doctor&apos;s Consult for
+        Functional Assessment Report completion?
         <RadioField name='geriGeriApptQ11' label='Geri - Geri Appt Q11' />
         <br />
         To be referred to Social Service for HDB EASE application?
