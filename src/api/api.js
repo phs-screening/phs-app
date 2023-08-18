@@ -438,7 +438,6 @@ export function generate_pdf(
   geriGeriAppt,
   dietitiansConsult,
   oralHealth,
-  geriFunctionalScreening,
 ) {
   var doc = new jsPDF()
   var k = 0
@@ -456,7 +455,6 @@ export function generate_pdf(
   k = addGeriatrics(
     doc,
     geriMmse,
-    geriFunctionalScreening,
     geriVision,
     geriAudiometry,
     geriGeriAppt,
@@ -850,7 +848,6 @@ export function calculateY(coor) {
 export function addGeriatrics(
   doc,
   geriMmse,
-  geriFunctionalScreening,
   geriVision,
   geriAudiometry,
   geriGeriAppt,
@@ -858,10 +855,6 @@ export function addGeriatrics(
 ) {
   let kk = k
   const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
-  const details =
-    typeof geriFunctionalScreening.geriFunctionalScreeningRegFormQ3 != 'undefined'
-      ? geriFunctionalScreening.geriFunctionalScreeningRegFormQ3
-      : '-'
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Geriatrics')
@@ -895,8 +888,7 @@ export function addGeriatrics(
       kNewlines((kk = kk + 1)) +
         '- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional' +
         ' screening (' +
-        details +
-        ')',
+        ')', // NOTE: REMOVED GERIATIC FUNCTIONAL
       180,
     )
     doc.text(10, 10, geri)
@@ -1043,7 +1035,6 @@ export const deleteFromAllDatabase = async () => {
   // console.log(await mongoDBConnection.collection(forms.geriPhysicalActivityLevelForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.geriAudiometryForm).deleteMany({}))
   // console.log("half")
-  // console.log(await mongoDBConnection.collection(forms.geriFunctionalScreeningRegForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.geriSppbForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.phlebotomyForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.geriTugForm).deleteMany({}))

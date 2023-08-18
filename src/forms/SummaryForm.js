@@ -36,7 +36,6 @@ const SummaryForm = (props) => {
   const [geriEbasDep, setGeriEbasDep] = useState({})
   const [geriGeriAppt, setGeriGeriAppt] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
-  const [geriFunctionalScreening, setGeriFunctionalScreening] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
@@ -65,10 +64,6 @@ const SummaryForm = (props) => {
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
       const geriGeriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
-      const geriFunctionalScreeningData = getSavedData(
-        patientId,
-        allForms.geriFunctionalScreeningForm,
-      )
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
@@ -99,7 +94,6 @@ const SummaryForm = (props) => {
         geriMmseData,
         geriVisionData,
         geriAudiometryData,
-        geriFunctionalScreeningData,
         triageData,
       ]).then((result) => {
         setHcsr(result[0])
@@ -124,8 +118,7 @@ const SummaryForm = (props) => {
         setGeriMmse(result[19])
         setGeriVision(result[20])
         setGeriAudiometry(result[21])
-        setGeriFunctionalScreening(result[22])
-        setTriage(result[23])
+        setTriage(result[22])
         isLoadingPrevData(false)
       })
     }
@@ -581,14 +574,6 @@ const SummaryForm = (props) => {
                 )
               : blueText(geriGeriAppt.geriGeriApptQ14)}
             <br></br>
-            {underlined(
-              'If participant applied for HPB screening, which event will they be going to? (event; date): ',
-            )}
-            {blueText(geriFunctionalScreening.geriFunctionalScreeningRegFormQ3)}
-            <br></br>
-            {underlined("Participant referred to Doctor's Consult?")}
-            {blueText(geriFunctionalScreening.geriFunctionalScreeningRegFormQ5)}
-            <br></br>
 
             {bold('i. Geriatrics - Appointment')}
             <br></br>
@@ -857,7 +842,6 @@ const SummaryForm = (props) => {
                   geriGeriAppt,
                   dietitiansConsult,
                   oralHealth,
-                  geriFunctionalScreening,
                 )
               }
             >
