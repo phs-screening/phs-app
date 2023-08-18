@@ -1,25 +1,25 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import SimpleSchema from 'simpl-schema';
+import { Fragment, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
+import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
-import { RadioField } from 'uniforms-material';
-import { submitFormSpecial } from '../api/api.js';
-import { FormContext } from '../api/utils.js';
+import { AutoForm } from 'uniforms'
+import { SubmitField, ErrorsField } from 'uniforms-material'
+import { RadioField } from 'uniforms-material'
+import { submitFormSpecial } from '../api/api.js'
+import { FormContext } from '../api/utils.js'
 
-import '../Snippet.css';
-import PopupText from 'src/utils/popupText';
-import { getSavedData } from '../services/mongoDB';
-import './fieldPadding.css';
-import allForms from './forms.json';
-import { blueText } from '../theme/commonComponents';
+import '../Snippet.css'
+import PopupText from 'src/utils/popupText'
+import { getSavedData } from '../services/mongoDB'
+import './fieldPadding.css'
+import allForms from './forms.json'
+import { blueText } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
   wceQ1: {
@@ -43,11 +43,6 @@ const schema = new SimpleSchema({
     optional: true,
   },
   wceQ5: {
-    type: String,
-    allowedValues: ['Yes', 'No', 'Not Applicable'],
-    optional: true,
-  },
-  wceQ6: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
     optional: true,
@@ -172,17 +167,18 @@ const WceForm = (props) => {
         scrutiny by doctors?{' '}
         <font color='red'>
           <b>
-            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the steps below.)
+            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the
+            steps below.)
           </b>
         </font>
         <RadioField name='wceQ1' label='WCE Q1' />
         <PopupText qnNo='wceQ1' triggerValue='Yes'>
           <b>REFER TO DR CONSULT by indicating on:</b> <br />
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under Doctor&apos;s Consultation
-          row
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under
+          Doctor&apos;s Consultation row
           <br />
-          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation{' '}
-          <br />
+          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
+          Recommendation <br />
         </PopupText>
         <br /> <br />
         <h2>3. FOLLOW UP PLAN</h2>
@@ -199,8 +195,6 @@ const WceForm = (props) => {
         4. Indicated interest for Mammogram under SCS?
         <RadioField name='wceQ5' label='WCE Q5' />
         <br />
-        5. Registered for Mammogram under NHGD?
-        <RadioField name='wceQ6' label='WCE Q6' />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
