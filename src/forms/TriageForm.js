@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { SelectField, NumField, RadioField, LongTextField, BoolField } from 'uniforms-material'
+import { NumField, RadioField, BoolField } from 'uniforms-material'
 import { useField } from 'uniforms'
 import { submitForm, calculateBMI } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -113,7 +113,7 @@ function IsHighBP(props) {
 }
 
 const formName = 'triageForm'
-const HxCancerForm = () => {
+const TriageForm = () => {
   const [loading, isLoading] = useState(false)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -297,10 +297,11 @@ const HxCancerForm = () => {
   )
 }
 
-HxCancerForm.contextType = FormContext
+TriageForm.contextType = FormContext
 
-export default function HxCancerform(props) {
+// Note the capitalisation
+export default function Triageform(props) {
   const navigate = useNavigate()
 
-  return <HxCancerForm {...props} navigate={navigate} />
+  return <TriageForm {...props} navigate={navigate} />
 }
