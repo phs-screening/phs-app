@@ -12,22 +12,38 @@ import { ScrollTopContext } from '../../api/utils.js'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Box, Card, CardContent, CardHeader, Divider } from '@material-ui/core'
 
-function generateStatusArray(record) {
-  const entries = 12
+// Refactor the generateStatusArray to generate an object instead
+function generateStatusObject(record) {
+  const recordStatus = {
+    prereg: true,
+    reg: false,
+    phlebo: false,
+    hxtaking: false,
+    fit: false,
+    wce: false,
+    geri: false,
+    doctorsconsult: false,
+    dietitiansconsult: false,
+    socialservice: false,
+    oralhealth: false,
+  }
+
   if (record) {
-    return [
-      true, // pre-registration, always true
-      record.registrationForm !== undefined, // registration
-      record.phlebotomyForm !== undefined, // phlebotomy
+    return {
+      prereg: true, // pre-registration, always true
+      reg: record.registrationForm !== undefined, // registration
+      phlebo: record.phlebotomyForm !== undefined, // phlebotomy
       // historyTaking form consists of 4 forms
-      record.hxHcsrForm !== undefined &&
+      hxtaking:
+        record.hxHcsrForm !== undefined &&
         record.hxNssForm !== undefined &&
         record.hxSocialForm !== undefined &&
         record.hxCancerForm !== undefined,
-      record.fitForm !== undefined, // fit
-      record.wceForm !== undefined, // wce
+      fit: record.fitForm !== undefined, // fit
+      wce: record.wceForm !== undefined, // wce
       // geriatrics form consists of 12 forms
-      record.geriAmtForm !== undefined &&
+      geri:
+        record.geriAmtForm !== undefined &&
         record.geriEbasDepForm !== undefined &&
         record.geriVisionForm !== undefined &&
         record.geriVisionForm !== undefined &&
@@ -42,14 +58,14 @@ function generateStatusArray(record) {
         record.geriGeriApptForm !== undefined &&
         record.geriMMSEForm !== undefined &&
         record.geriAudiometryForm !== undefined,
-      record.doctorConsultForm !== undefined, // doctor's consult
-      record.dietitiansConsultForm !== undefined, // dietitian's consult
-      record.socialServiceForm !== undefined, // social service,
-      record.oralHealthForm !== undefined, // Oral Health
-    ]
-  } else {
-    return new Array(entries).fill(false)
+      doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult
+      dietitiansconsult: record.dietitiansConsultForm !== undefined, // dietitian's consult
+      socialservice: record.socialServiceForm !== undefined, // social service,
+      oralhealth: record.oralHealthForm !== undefined, // Oral Health
+    }
   }
+
+  return recordStatus
 }
 
 function navigateTo(event, navigate, page, scrollTop) {
@@ -63,7 +79,7 @@ const BasicTimeline = (props) => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [goingForPhlebotomy, setGoingForPhlebotomy] = useState()
-  const [formDone, setFormDone] = useState([])
+  const [formDone, setFormDone] = useState({})
   const [admin, isAdmins] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
 
@@ -77,7 +93,7 @@ const BasicTimeline = (props) => {
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
         setGoingForPhlebotomy(record.goingForPhlebotomy === 'Y')
-        setFormDone(generateStatusArray(record))
+        setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {
         alert(err)
@@ -104,7 +120,7 @@ const BasicTimeline = (props) => {
       <Timeline>
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[0] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineDot color='primary' />
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
@@ -123,55 +139,31 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[1] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.reg ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[1] ? (
-              <a href='/app/reg' onClick={(event) => navigateTo(event, navigate, 'reg', scrollTop)}>
-                Registration [Incomplete]
-              </a>
-            ) : admin ? (
-              <a href='/app/reg' onClick={(event) => navigateTo(event, navigate, 'reg', scrollTop)}>
-                Registration [Edit]
-              </a>
-            ) : (
-              <a href='/app/reg' onClick={(event) => navigateTo(event, navigate, 'reg', scrollTop)}>
-                Registration [Completed]
-              </a>
-            )}
+            <a href='/app/reg' onClick={(event) => navigateTo(event, navigate, 'reg', scrollTop)}>
+              Registration
+              {!formDone?.reg ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[2] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.phlebo ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
             {goingForPhlebotomy ? (
-              !formDone[2] ? (
-                <a
-                  href='/app/phlebo'
-                  onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
-                >
-                  Phlebotomy [Incomplete]
-                </a>
-              ) : admin ? (
-                <a
-                  href='/app/phlebo'
-                  onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
-                >
-                  Phlebotomy [Edit]
-                </a>
-              ) : (
-                <a
-                  href='/app/phlebo'
-                  onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
-                >
-                  Phlebotomy [Completed]
-                </a>
-              )
+              <a
+                href='/app/phlebo'
+                onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
+              >
+                Phlebotomy
+                {!formDone?.phlebo ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+              </a>
             ) : (
               <p>Phlebotomy [Not going]</p>
             )}
@@ -180,268 +172,151 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[3] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.hxtaking ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[3] ? (
-              <a
-                href='/app/hxtaking'
-                onClick={(event) => navigateTo(event, navigate, 'hxtaking', scrollTop)}
-              >
-                History Taking [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/hxtaking'
-                onClick={(event) => navigateTo(event, navigate, 'hxtaking', scrollTop)}
-              >
-                History Taking [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/hxtaking'
-                onClick={(event) => navigateTo(event, navigate, 'hxtaking', scrollTop)}
-              >
-                History Taking [Completed]
-              </a>
-            )}
+            <a
+              href='/app/hxtaking'
+              onClick={(event) => navigateTo(event, navigate, 'hxtaking', scrollTop)}
+            >
+              History Taking
+              {!formDone?.hxtaking ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[4] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.fit ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[4] ? (
-              <a href='/app/fit' onClick={(event) => navigateTo(event, navigate, 'fit', scrollTop)}>
-                FIT [Incomplete]
-              </a>
-            ) : admin ? (
-              <a href='/app/fit' onClick={(event) => navigateTo(event, navigate, 'fit', scrollTop)}>
-                FIT [Edit]
-              </a>
-            ) : (
-              <a href='/app/fit' onClick={(event) => navigateTo(event, navigate, 'fit', scrollTop)}>
-                FIT [Completed]
-              </a>
-            )}
+            <a href='/app/fit' onClick={(event) => navigateTo(event, navigate, 'fit', scrollTop)}>
+              FIT
+              {!formDone?.fit ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[5] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.wce ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[5] ? (
-              <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
-                WCE [Incomplete]
-              </a>
-            ) : admin ? (
-              <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
-                WCE [Edit]
-              </a>
-            ) : (
-              <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
-                WCE [Completed]
-              </a>
-            )}
+            <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
+              WCE
+              {!formDone?.wce ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[6] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.geri ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[6] ? (
-              <a
-                href='/app/geri'
-                onClick={(event) => navigateTo(event, navigate, 'geri', scrollTop)}
-              >
-                Geriatrics [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/geri'
-                onClick={(event) => navigateTo(event, navigate, 'geri', scrollTop)}
-              >
-                Geriatrics [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/geri'
-                onClick={(event) => navigateTo(event, navigate, 'geri', scrollTop)}
-              >
-                Geriatrics [Completed]
-              </a>
-            )}
+            <a href='/app/geri' onClick={(event) => navigateTo(event, navigate, 'geri', scrollTop)}>
+              Geriatrics
+              {!formDone?.geri ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[7] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.doctorsconsult ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[7] ? (
-              <a
-                href='/app/doctorsconsult'
-                onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
-              >
-                Doctor&apos;s Consult [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/doctorsconsult'
-                onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
-              >
-                Doctor&apos;s Consult [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/doctorsconsult'
-                onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
-              >
-                Doctor&apos;s Consult [Completed]
-              </a>
-            )}
+            <a
+              href='/app/doctorsconsult'
+              onClick={(event) => navigateTo(event, navigate, 'doctorsconsult', scrollTop)}
+            >
+              Doctor&apos;s Consult
+              {!formDone?.doctorsconsult ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[8] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.dietitiansconsult ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[8] ? (
-              <a
-                href='/app/dietitiansconsultation'
-                onClick={(event) =>
-                  navigateTo(event, navigate, 'dietitiansconsultation', scrollTop)
-                }
-              >
-                Dietitian’s Consultation [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/dietitiansconsultation'
-                onClick={(event) =>
-                  navigateTo(event, navigate, 'dietitiansconsultation', scrollTop)
-                }
-              >
-                Dietitian’s Consultation [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/dietitiansconsultation'
-                onClick={(event) =>
-                  navigateTo(event, navigate, 'dietitiansconsultation', scrollTop)
-                }
-              >
-                Dietitian’s Consultation [Completed]
-              </a>
-            )}
+            <a
+              href='/app/dietitiansconsultation'
+              onClick={(event) => navigateTo(event, navigate, 'dietitiansconsultation', scrollTop)}
+            >
+              Dietitian’s Consultation
+              {!formDone?.dietitiansconsult ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[9] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.socialservice ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[9] ? (
-              <a
-                href='/app/socialservice'
-                onClick={(event) => navigateTo(event, navigate, 'socialservice', scrollTop)}
-              >
-                Social Service [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/socialservice'
-                onClick={(event) => navigateTo(event, navigate, 'socialservice', scrollTop)}
-              >
-                Social Service [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/socialservice'
-                onClick={(event) => navigateTo(event, navigate, 'socialservice', scrollTop)}
-              >
-                Social Service [Completed]
-              </a>
-            )}
+            <a
+              href='/app/socialservice'
+              onClick={(event) => navigateTo(event, navigate, 'socialservice', scrollTop)}
+            >
+              Social Service
+              {!formDone?.socialservice ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[10] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.oralhealth ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[10] ? (
-              <a
-                href='/app/oralhealth'
-                onClick={(event) => navigateTo(event, navigate, 'oralhealth', scrollTop)}
-              >
-                Oral Health [Incomplete]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/oralhealth'
-                onClick={(event) => navigateTo(event, navigate, 'oralhealth', scrollTop)}
-              >
-                Oral Health [Edit]
-              </a>
-            ) : (
-              <a
-                href='/app/oralhealth'
-                onClick={(event) => navigateTo(event, navigate, 'oralhealth', scrollTop)}
-              >
-                Oral Health [Completed]
-              </a>
-            )}
+            <a
+              href='/app/oralhealth'
+              onClick={(event) => navigateTo(event, navigate, 'oralhealth', scrollTop)}
+            >
+              Oral Health
+              {!formDone?.oralhealth ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone[10] ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {Object.values(formDone).every((e) => e) ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {!formDone[11] ? (
-              <a
-                href='/app/summary'
-                onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
-              >
-                Summary [View Only]
-              </a>
-            ) : admin ? (
-              <a
-                href='/app/summary'
-                onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
-              >
-                Summary [View Only]
-              </a>
-            ) : (
-              <a
-                href='/app/summary'
-                onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
-              >
-                Summary [View Only]
-              </a>
-            )}
+            <a
+              href='/app/summary'
+              onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
+            >
+              Summary [View Only]
+            </a>
           </TimelineContent>
         </TimelineItem>
 
