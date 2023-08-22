@@ -65,11 +65,6 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
-  geriEbasDepQ11: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
   geriEbasDepQ12: {
     type: String,
     optional: true,
