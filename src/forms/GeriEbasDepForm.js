@@ -199,8 +199,8 @@ const GeriEbasDepForm = (props) => {
         <br />
         <h3>
           A score of 3 or greater indicates the probable presence of a depressive disorder which may
-          need treatment and the patient should be assessed in more detail. Please refer to Social
-          Support if score is 3 OR GREATER.
+          need treatment and the patient should be assessed in more detail. Please refer to SACS if
+          score is 3 OR GREATER.
         </h3>
         <p>
           Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test,
