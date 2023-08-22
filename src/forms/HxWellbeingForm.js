@@ -1,5 +1,4 @@
-import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -9,98 +8,46 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { RadioField, LongTextField } from 'uniforms-material'
+import { RadioField } from 'uniforms-material'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
-import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
+
+const oneToFiveSchema = {
+  type: String,
+  allowedValues: ['0', '1', '2', '3', '4', '5'],
+}
+
+const oneToSixSchema = {
+  type: String,
+  allowedValues: ['1', '2', '3', '4', '5', '6'],
+}
 
 const schema = new SimpleSchema({
-  hxSocialQ1: {
-    type: String,
-    allowedValues: ['Yes, (Please specify):', 'No'],
-    optional: false,
-  },
-  hxSocialQ2: {
-    type: String,
-    optional: true,
-  },
-  hxSocialQ3: {
-    type: String,
-    allowedValues: [
-      '1200 and below per month',
-      '1,201 - 2,000 per month',
-      '2,001 - 3,999 per month',
-      '4,000 - 5,999 per month',
-      '6,000 - 9,999 per month',
-      '10,000 & above',
-      'NIL',
-    ],
-    optional: false,
-  },
-  hxSocialQ4: {
-    type: String,
-    optional: false,
-  },
-  hxSocialQ5: {
+  hxWellbeingQ1: oneToFiveSchema,
+  hxWellbeingQ2: oneToFiveSchema,
+  hxWellbeingQ3: oneToFiveSchema,
+  hxWellbeingQ4: oneToFiveSchema,
+  hxWellbeingQ5: oneToFiveSchema,
+
+  hxWellbeingQ6: oneToSixSchema,
+  hxWellbeingQ7: oneToSixSchema,
+  hxWellbeingQ8: oneToSixSchema,
+  hxWellbeingQ9: oneToSixSchema,
+  hxWellbeingQ10: oneToSixSchema,
+
+  hxWellbeingQ11: {
     type: String,
     allowedValues: [
-      'Yes, (Please specify):',
-      'No, I do not qualify',
-      'No, I qualify but...(Please specify the reasons for not applying if you qualify):',
+      '1 (Never or very rarely)',
+      '2 (Rarely)',
+      '3 (Sometimes)',
+      '4 (Often)',
+      '5 (Very often or always)',
     ],
-    optional: false,
-  },
-  hxSocialQ6: {
-    type: String,
-    optional: true,
-  },
-  hxSocialQ7: {
-    type: String,
-    allowedValues: ['Yes, (Please specify):', 'No'],
-    optional: false,
-  },
-  hxSocialQ8: {
-    type: String,
-    optional: true,
-  },
-  hxSocialQ9: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  hxSocialQ10: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  hxSocialQ11: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  hxSocialQ12: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  hxSocialQ13: {
-    type: String,
-    allowedValues: ['Healthy', 'Moderate', 'Poor'],
-    optional: false,
-  },
-  hxSocialQ14: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  hxSocialQ15: {
-    type: String,
-    optional: true,
   },
 })
 
@@ -145,158 +92,78 @@ const HxWellbeingForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h2>HISTORY TAKING PART 3: SOCIAL HISTORY</h2>
+        <h2>HISTORY TAKING PART 4: Wellbeing</h2>
         <h3>
-          1. FINANCIAL STATUS
-          <span style={{ color: 'red' }}>
-            <br />
-            Please refer to page 1 of Form A for following questions.
-          </span>
+          From a scale of 0 to 5, 0 being &apos;no all the time&apos; and 5 being &apos;all of the
+          time&apos;, please give a number for each of the following statements.
         </h3>
-        1. Current CHAS status?
-        <br />
-        {regForm && regForm.registrationQ8 ? blueText(regForm.registrationQ8) : blueText('nil')}
-        <br />
-        2. Pioneer / Merderka Generation Card?
-        <br />
-        {regForm && regForm.registrationQ9 ? blueText(regForm.registrationQ9) : blueText('nil')}
-        <br />
-        3. Are you currently on any other Government Financial Assistance, other than CHAS and PG
-        (e.g. Public Assistance Scheme)?
-        <RadioField name='hxSocialQ1' label='Hx Social Q1' />
-        Please specify
-        <LongTextField name='hxSocialQ2' label='Hx Social Q2' />
-        <br /> <br />
-        4a. What is the average earnings of participant&apos;s household per month?
-        <RadioField name='hxSocialQ3' label='Hx Social Q3' />
-        <br />
-        <br />
-        4b. Number of household members (including yourself):
-        <LongTextField name='hxSocialQ4' label='Hx Social Q4' />
-        <br />
-        <br />
-        4c. Do you want to apply for CHAS card? (if you are currently not on CHAS but qualify){' '}
-        <br />
-        <img src='/images/hx/chas.jpg' alt='CHAS' /> <br />
-        <RadioField name='hxSocialQ5' label='Hx Social Q5' />
-        Please specify
-        <LongTextField name='hxSocialQ6' label='Hx Social Q6' />
-        <br />
-        <br />
-        5. Do you need advice on financial schemes that are available in Singapore or require
-        further financial assistance?
-        <RadioField name='hxSocialQ7' label='Hx Social Q7' />
-        Please specify
-        <LongTextField name='hxSocialQ8' label='Hx Social Q8' />
-        <br />
-        <br />
-        <PopupText qnNo='hxSocialQ5' triggerValue='Yes, (Please specify):'>
-          <PopupText qnNo='hxSocialQ7' triggerValue='Yes, (Please specify):'>
-            <p>
-              <b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of{' '}
-              <b>financial aid.</b>{' '}
-            </p>
-            <br />
-            Indicate for Social Service station on:
-            <br />
-            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
-            <br />
-            2) Write reasons for referral on the right column
-            <br />
-            <br />
-            Note the following criteria for your assessment: (wef from 1st Nov 2019)
-            <br />
-            Per-capita monthly income for CHAS:{' '}
-            <b>Green Card: Above $2000; Orange Card: $1201- $2000; Blue Card: $1200 and below</b>
-          </PopupText>
-        </PopupText>
-        <br />
-        <br />
-        <h2>3. SOCIAL ISSUES</h2>
-        1. Are you caring for a loved one?
-        <RadioField name='hxSocialQ9' label='Hx Social Q9' />
-        <br />
-        <br />
-        <PopupText qnNo='hxSocialQ9' triggerValue='Yes'>
-          2. If you are caring for a loved one, do you need training?
-          <RadioField name='hxSocialQ10' label='Hx Social Q10' />
+        <span>
+          1. <q>I have felt cheerful and in good spirits.</q>
+        </span>
+        <RadioField name='hxWellbeingQ1' label='Hx Wellbeing Q1' />
+        <span>
+          2. <q>I have felt calm and relaxed.</q>
+        </span>
+        <RadioField name='hxWellbeingQ2' label='Hx Wellbeing Q2' />
+        <span>
+          3. <q>I have felt active and vigorous.</q>
+        </span>
+        <RadioField name='hxWellbeingQ3' label='Hx Wellbeing Q3' />
+        <span>
+          4. <q>I woke up feeling refreshed and rested.</q>
+        </span>
+        <RadioField name='hxWellbeingQ4' label='Hx Wellbeing Q4' />
+        <span>
+          5. <q>My daily life has been filled with things that interest me.</q>
+        </span>
+        <RadioField name='hxWellbeingQ5' label='Hx Wellbeing Q5' />
+        <h3>
+          Rapid Positive Mental Health Instrument
           <br />
-          <br />
-          3. Do you need assistance? (eg funds to hire a helper / funds to offset caretaking costs,
-          subsidies for home healthcare items, arranging for short term care in nursing homes/senior
-          care centres)
-          <RadioField name='hxSocialQ11' label='Hx Social Q11' />
-          <br />
-          <br />
-        </PopupText>
-        4. Do you require social support?
-        <RadioField name='hxSocialQ12' label='Hx Social Q12' />
-        <PopupText qnNo='hxSocialQ12' triggerValue='Yes'>
-          <b>
-            REFER TO SOCIAL SERVICE STATION if participant has social issues that require further
-            consult.
-            <br />
-            Indicate for Social Service station on:{' '}
-          </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
-          2) Write reasons for referral on the right column
-        </PopupText>
+          Thinking over the last 4 weeks, please select a number showing how much the statements
+          describe you.
+        </h3>
+        1 - Not at all like me
         <br />
+        2 - Very slightly like me
         <br />
-        <h2>4. ORAL ISSUES</h2>
-        <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips,
-        Tongue, Gums & Tissues (Healthy - pink and moist)
+        3 - Slightly like me
         <br />
-        2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures,
-        No food particles/tartar in mouth)
+        4 - Moderately like me
         <br />
-        3. Saliva status (free-flowing) and Any dental pain <br />
+        5 - Very much like me
         <br />
-        1. How is the participant&apos;s Oral Health?
-        <RadioField name='hxSocialQ13' label='Hx Social Q13' />
+        6 - Exactly like me
         <br />
-        Please specify:
-        <LongTextField name='hxSocialQ15' label='Hx Social Q15' />
+        <hr />
+        <span>
+          6. <q>I spent time with people I like</q>
+        </span>
+        <RadioField name='hxWellbeingQ6' label='Hx Wellbeing Q6' />
         <br />
-        Indications for referral to Oral Health Education Booth (any one of the following):
+        <span>
+          7. <q>I make friends easily</q>
+        </span>
+        <RadioField name='hxWellbeingQ7' label='Hx Wellbeing Q7' />
         <br />
-        1. History:
-        <br />- Smoker
-        <br />- DM
-        <br /> - Denture wearer
-        <br />- Currently in pain
+        <span>
+          8. <q>I try to be patient with others</q>
+        </span>
+        <RadioField name='hxWellbeingQ8' label='Hx Wellbeing Q8' />
         <br />
+        <span>
+          9. <q>I am willing to share my time with others</q>
+        </span>
+        <RadioField name='hxWellbeingQ9' label='Hx Wellbeing Q9' />
         <br />
-        2. Quick examination:
-        <br />- red, swollen gums
-        <br />- severely receded gums
-        <br />- bleeding/pus from gums
-        <br />- obvious plaque/calculus deposits
-        <br /> - obvious decay
-        <br />- dry mouth/bad breath
+        <span>
+          10. <q>I have freedom to make choices that concern my future.</q>
+        </span>
+        <RadioField name='hxWellbeingQ10' label='Hx Wellbeing Q10' />
         <br />
+        <span>11. How often in the past 4 weeks have you felt calm?</span>
+        <RadioField name='hxWellbeingQ11' label='Hx Wellbeing Q11' />
         <br />
-        3. Participant has any dental queries/ concerns:
-        <br />
-        <br />
-        2. Would you like to go through free Oral Health Education by NUS Dentistry dentists and
-        students?
-        <RadioField name='hxSocialQ14' label='Hx Social Q14' />
-        <PopupText qnNo='hxSocialQ14' triggerValue='Yes'>
-          <b>
-            REFER TO NUS DENTISTRY ORAL HEALTH CONSULTATION if participant has poor dental hygiene
-            and interested to go through dental education.
-            <br />
-            <span style={{ color: 'red' }}>ALL</span> participants with suspected dental issues will
-            be referred to NUS DENTISTRY ORAL HEALTH CONSULTATION.
-          </b>
-          <br />
-          <br />
-          <b>Indicate for Dentistry on:</b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
-          <br />
-          2) Write reasons for referral on the right column
-        </PopupText>
       </Fragment>
 
       <ErrorsField />
@@ -316,6 +183,6 @@ const HxWellbeingForm = (props) => {
 
 HxWellbeingForm.contextType = FormContext
 
-export default function HxSocialform(props) {
+export default function HxWellbeingform(props) {
   return <HxWellbeingForm {...props} />
 }
