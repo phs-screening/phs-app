@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema from 'simpl-schema'
 
@@ -13,19 +13,12 @@ import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import PopupText from '../utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
 import { blueText } from '../theme/commonComponents'
-import { blue } from '@material-ui/core/colors'
 
 const schema = new SimpleSchema({
-  fitQ1: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
   fitQ2: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -116,23 +109,6 @@ const FitForm = (props) => {
           </span>{' '}
         </h3>
         <br />
-        Does participant have a history of cancer or his/her family history requires further
-        scrutiny by doctors?{' '}
-        <span style={{ color: 'red' }}>
-          <b>
-            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the
-            steps below.)
-          </b>
-        </span>
-        <RadioField name='fitQ1' label='FIT Q1' />
-        <PopupText qnNo='fitQ1' triggerValue='Yes'>
-          <b>REFER TO DR CONSULT</b> by indicating on: <br />
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under
-          Doctor&apos;s Consultation row
-          <br />
-          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation
-        </PopupText>
         <br />
         Was participant issued 2 FIT kits?
         <RadioField name='fitQ2' label='FIT Q2' />
