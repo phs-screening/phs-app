@@ -42,11 +42,6 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  socialServiceQ6: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
-  },
   socialServiceQ7: {
     type: Boolean,
     label: 'Yes',
@@ -142,8 +137,6 @@ const SocialServiceForm = (props) => {
         3. Brief summary of what will be done for the participant (Eg name of scheme participant
         wants to apply for)
         <LongTextField name='socialServiceQ3' label='Social Service Q3' />
-        4. SACS referral form filled-up?
-        <BoolField name='socialServiceQ6' />
         5. Is follow-up required?
         <BoolField name='socialServiceQ4' />
         6. Brief summary of follow-up for the participant

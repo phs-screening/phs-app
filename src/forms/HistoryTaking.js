@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes, { element } from 'prop-types'
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
@@ -10,6 +10,7 @@ import HxCancerForm from 'src/forms/HxCancerForm'
 import HxHcsrForm from 'src/forms/HxHcsrForm'
 import HxNssForm from 'src/forms/HxNssForm'
 import HxSocialForm from 'src/forms/HxSocialForm'
+import HxWellbeingForm from 'src/forms/HxWellbeingForm'
 import { ScrollTopContext } from '../api/utils.js'
 
 function TabPanel(props) {
@@ -81,6 +82,9 @@ export default function HxTabs() {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <HxSocialForm changeTab={handleChange} nextTab={3} />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <HxWellbeingForm changeTab={handleChange} nextTab={4} />
       </TabPanel>
       <TabPanel value={value} index={4}>
         <HxCancerForm />

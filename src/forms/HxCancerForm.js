@@ -175,7 +175,7 @@ const HxCancerForm = () => {
       model={saveData}
     >
       <Fragment>
-        <h2>HISTORY TAKING PART 4: CANCER SCREENING</h2>
+        <h2>HISTORY TAKING PART 5: CANCER SCREENING</h2>
         <br />
         <h2>HISTORY OF CANCER & FAMILY HISTORY</h2>
         <b>

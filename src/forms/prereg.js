@@ -47,11 +47,9 @@ export const layout = (
     <i>
       Conditions:
       <br />
-      1) Fasted for minimum 8 hours <br /> Note: Water is allowed, coffee/tea is not. Medications
-      are fine. <br />
-      2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
+      1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
       <br />
-      3) Have not done a blood test within the past 3 years.
+      2) Have not done a blood test within the past 3 years.
     </i>
     <RadioField name='goingForPhlebotomy' />
   </Fragment>

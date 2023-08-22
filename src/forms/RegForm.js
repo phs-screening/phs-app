@@ -89,7 +89,7 @@ const RegForm = () => {
       <br />
       <p>
         GRC/SMC Subdivision{' '}
-        <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel="noreferrer">
+        <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel='noreferrer'>
           [https://www.parliament.gov.sg/mps/find-my-mp]
         </a>
       </p>
@@ -142,17 +142,22 @@ const RegForm = () => {
       <BoolField name='registrationQ12' />
       <br />
       <h2>Compliance to PDPA 同意书</h2>
-      I hereby give my consent to the Public Health Service Executive Committee to collect my
-      personal information for the purpose of participating in the Public Health Service (hereby
-      called “PHS”) and its related events, and to contact me via calls, SMS, text messages or
-      emails regarding the event and follow-up process. <br />
-      <br />
-      Should you wish to withdraw your consent for us to contact you for the purposes stated above,
-      please notify a member of the PHS Executive Committee at ask.phs@gmail.com in writing. We will
-      then remove your personal information from our database. Please allow 3 business days for your
-      withdrawal of consent to take effect. All personal information will be kept confidential, will
-      only be disseminated to members of the PHS Executive Committee, and will be strictly used by
-      these parties for the purposes stated.
+      <p>
+        I hereby give consent to having photos and/or videos taken of me for publicity purposes. I
+        hereby give my consent to the Public Health Service Executive Committee to collect my
+        personal information for the purpose of participating in the Public Health Service (hereby
+        called “PHS”) and its related events, and to contact me via calls, SMS, text messages or
+        emails regarding the event and follow-up process.
+      </p>
+      <p>
+        Should you wish to withdraw your consent for us to contact you for the purposes stated
+        above, please notify a member of the PHS Executive Committee at &nbsp;
+        <a href='mailto:ask.phs@gmail.com'>ask.phs@gmail.com</a> &nbsp; in writing. We will then
+        remove your personal information from our database. Please allow 3 business days for your
+        withdrawal of consent to take effect. All personal information will be kept confidential,
+        will only be disseminated to members of the PHS Executive Committee, and will be strictly
+        used by these parties for the purposes stated.
+      </p>
       <BoolField name='registrationQ13' />
     </Fragment>
   )

@@ -1,23 +1,23 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react';
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import SimpleSchema from 'simpl-schema';
+import { Fragment, useContext, useEffect, useState } from 'react'
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
+import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
-import { RadioField, LongTextField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
-import { FormContext } from '../api/utils.js';
+import { AutoForm } from 'uniforms'
+import { SubmitField, ErrorsField } from 'uniforms-material'
+import { RadioField, LongTextField } from 'uniforms-material'
+import { submitForm } from '../api/api.js'
+import { FormContext } from '../api/utils.js'
 
-import PopupText from 'src/utils/popupText';
-import { getSavedData } from '../services/mongoDB';
-import './fieldPadding.css';
-import allForms from './forms.json';
-import { blueText } from '../theme/commonComponents';
+import PopupText from 'src/utils/popupText'
+import { getSavedData } from '../services/mongoDB'
+import './fieldPadding.css'
+import allForms from './forms.json'
+import { blueText } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
   hxSocialQ1: {
@@ -101,6 +101,11 @@ const schema = new SimpleSchema({
   hxSocialQ15: {
     type: String,
     optional: true,
+  },
+  hxSocialQ16: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
   },
 })
 
@@ -212,7 +217,7 @@ const HxSocialForm = (props) => {
         </PopupText>
         <br />
         <br />
-        <h2>3. SOCIAL ISSUES</h2>
+        <h2>2. SOCIAL ISSUES</h2>
         1. Are you caring for a loved one?
         <RadioField name='hxSocialQ9' label='Hx Social Q9' />
         <br />
@@ -241,11 +246,15 @@ const HxSocialForm = (props) => {
           1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
           2) Write reasons for referral on the right column
         </PopupText>
+        5. Patient exhibits signs of depression and has been administered EBAS (found under Geri
+        tab) by history taker. Patient has been informed that they have been referred to SACS and
+        this has been indicated on Form A.
+        <RadioField name='hxSocialQ16' label='Hx Social Q16' />
         <br />
         <br />
-        <h2>4. ORAL ISSUES</h2>
-        <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips, Tongue,
-        Gums & Tissues (Healthy - pink and moist)
+        <h2>3. ORAL ISSUES</h2>
+        <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips,
+        Tongue, Gums & Tissues (Healthy - pink and moist)
         <br />
         2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures,
         No food particles/tartar in mouth)
