@@ -174,93 +174,7 @@ const SummaryForm = (props) => {
             {patients ? blueText(patients.gender) : '-'}
             <br></br>
 
-            <br></br>
-            {bold('2. Phlebotomy')}
-            {underlined('Eligible for phlebotomy:')}
-            {registration ? (registration.registrationQ12 ? blueText('Yes') : blueText('No')) : '-'}
-            <br></br>
-            {underlined('Completed phlebotomy:')}
-            {phlebotomy
-              ? phlebotomy.phlebotomyQ1
-                ? blueRedText(
-                    'Yes',
-                    'Kindly remind him that PHS will follow-up with them via mailing the results directly' +
-                      ' to them or to their preferred GP clinics. These instructions are subjected to changes and hence, verify with the updated' +
-                      ' protocols.',
-                  )
-                : blueText('No')
-              : '-'}
-            <br></br>
-            {underlined('Preferred clinic (for phlebotomy):')}
-            {registration ? blueText(registration.registrationQ10) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('3. History Taking')}
-            {underlined('Referrals')}
-            {cancer ? blueText(cancer.hxCancerQ25) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('4. Health Concerns')}
-            {underlined(
-              "Participant's presenting complaints/concerns requires scrutiny by doctor: (if any)",
-            )}
-            {hcsr.hxHcsrQ11 == 'Yes'
-              ? blueRedText(
-                  hcsr.hxHcsrQ11,
-                  "Please check if participant has visited the Doctor's Consult Station.",
-                )
-              : blueText(hcsr.hxHcsrQ11)}
-            <br></br>
-            {underlined("Participant's presenting complaints/concerns (if any)")}
-            {hcsr ? blueText(hcsr.hxHcsrQ2) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('5. Systems Review')}
-            {underlined("Participant's systems review requires scrutiny by doctor:")}
-            {hcsr.hxHcsrQ12 == 'Yes'
-              ? blueRedText(
-                  hcsr.hxHcsrQ12,
-                  "Please check if participant has visited the Doctor's Consult Station.",
-                )
-              : blueText(hcsr.hxHcsrQ12)}
-            <br></br>
-            {underlined("Participant's system review")}
-            {hcsr ? blueText(hcsr.hxHcsrQ3) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('6. Past Medical History')}
-            {underlined("Participant's past medical history requires scrutiny by doctor:")}
-            {nss.hxNssQ11 == 'Yes'
-              ? blueRedText(
-                  nss.hxNssQ11,
-                  "Please check if participant has visited the Doctor's Consult Station.",
-                )
-              : blueText(nss.hxNssQ11)}
-            <br></br>
-            {underlined("Summary of participants's past medical history")}
-            {nss ? blueText(nss.hxNssQ12) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('7. Family History')}
-            {underlined("Participant's past medical history requires scrutiny by doctor:")}
-            {cancer.hxCancerQ9 == 'Yes'
-              ? blueRedText(
-                  cancer.hxCancerQ9,
-                  "Please check if participant has visited the Doctor's Consult Station.",
-                )
-              : blueText(cancer.hxCancerQ9)}
-            <br></br>
-            {underlined("Summary of participant's past medical history:")}
-            {cancer ? blueText(cancer.hxCancerQ10) : '-'}
-            <br></br>
-
-            <br></br>
-            {bold('8. Blood Pressure')}
+            {bold('2. Blood Pressure')}
             {underlined('Average Blood Pressure (Systolic)')}
             {cancer
               ? parseInt(cancer.hxCancerQ17) >= 130
@@ -283,7 +197,7 @@ const SummaryForm = (props) => {
             <br></br>
 
             <br></br>
-            {bold('9. BMI')}
+            {bold('3. BMI')}
             {underlined('Height (in cm)')}
             {cancer ? blueText(cancer.hxCancerQ19) : '-'}
             <br></br>
@@ -307,6 +221,93 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined('Body Mass Index (BMI)')}
             {cancer ? calculateBMI(Number(cancer.hxCancerQ19), Number(cancer.hxCancerQ20)) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('4. Phlebotomy')}
+            {underlined('Eligible for phlebotomy:')}
+            {registration ? (registration.registrationQ12 ? blueText('Yes') : blueText('No')) : '-'}
+            <br></br>
+            {underlined('Completed phlebotomy:')}
+            {phlebotomy
+              ? phlebotomy.phlebotomyQ1
+                ? blueRedText(
+                    'Yes',
+                    'Kindly remind him that PHS will follow-up with them via mailing the results directly' +
+                      ' to them or to their preferred GP clinics. These instructions are subjected to changes and hence, verify with the updated' +
+                      ' protocols.',
+                  )
+                : blueText('No')
+              : '-'}
+            <br></br>
+            {underlined('Preferred clinic (for phlebotomy):')}
+            {registration ? blueText(registration.registrationQ10) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('5. History Taking')}
+            {underlined('Referrals')}
+            {cancer ? blueText(cancer.hxCancerQ25) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('6. Health Concerns')}
+            {underlined(
+              "Participant's presenting complaints/concerns requires scrutiny by doctor: (if any)",
+            )}
+            {hcsr.hxHcsrQ11 == 'Yes'
+              ? blueRedText(
+                  hcsr.hxHcsrQ11,
+                  "Please check if participant has visited the Doctor's Consult Station.",
+                )
+              : blueText(hcsr.hxHcsrQ11)}
+            <br></br>
+            {underlined("Participant's presenting complaints/concerns (if any)")}
+            {hcsr ? blueText(hcsr.hxHcsrQ2) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('7. Systems Review')}
+            {underlined("Participant's systems review requires scrutiny by doctor:")}
+            {hcsr.hxHcsrQ12 == 'Yes'
+              ? blueRedText(
+                  hcsr.hxHcsrQ12,
+                  "Please check if participant has visited the Doctor's Consult Station.",
+                )
+              : blueText(hcsr.hxHcsrQ12)}
+            <br></br>
+            {underlined("Participant's system review")}
+            {hcsr ? blueText(hcsr.hxHcsrQ3) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('8. Past Medical History')}
+            {underlined("Participant's past medical history requires scrutiny by doctor:")}
+            {nss.hxNssQ11 == 'Yes'
+              ? blueRedText(
+                  nss.hxNssQ11,
+                  "Please check if participant has visited the Doctor's Consult Station.",
+                )
+              : blueText(nss.hxNssQ11)}
+            <br></br>
+            {underlined("Summary of participants's past medical history")}
+            {nss ? blueText(nss.hxNssQ12) : '-'}
+            <br></br>
+
+            <br></br>
+            {bold('9. Family History')}
+            {underlined("Participant's past medical history requires scrutiny by doctor:")}
+            {cancer.hxCancerQ9 == 'Yes'
+              ? blueRedText(
+                  cancer.hxCancerQ9,
+                  "Please check if participant has visited the Doctor's Consult Station.",
+                )
+              : blueText(cancer.hxCancerQ9)}
+            <br></br>
+            {underlined("Summary of participant's past medical history:")}
+            {cancer ? blueText(cancer.hxCancerQ10) : '-'}
+            <br></br>
+
             <br></br>
 
             <br></br>
