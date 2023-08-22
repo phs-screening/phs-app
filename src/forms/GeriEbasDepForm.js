@@ -32,6 +32,11 @@ const schema = new SimpleSchema({
     allowedValues: ['1 (Abnormal)', '0 (Normal)'],
     optional: false,
   },
+  geriEbasDepQ4: {
+    type: String,
+    allowedValues: ['1 (Abnormal)', '0 (Normal)'],
+    optional: false,
+  },
   geriEbasDepQ5: {
     type: String,
     allowedValues: ['1 (Abnormal)', '0 (Normal)'],
@@ -84,6 +89,7 @@ function GetScore() {
   const [{ value: q1 }] = useField('geriEbasDepQ1', {})
   const [{ value: q2 }] = useField('geriEbasDepQ2', {})
   const [{ value: q3 }] = useField('geriEbasDepQ3', {})
+  const [{ value: q4 }] = useField('geriEbasDepQ4', {})
   const [{ value: q5 }] = useField('geriEbasDepQ5', {})
   const [{ value: q6 }] = useField('geriEbasDepQ6', {})
   const [{ value: q7 }] = useField('geriEbasDepQ7', {})
@@ -92,6 +98,7 @@ function GetScore() {
   if (q1 === '1 (Abnormal)') score += 1
   if (q2 === '1 (Abnormal)') score += 1
   if (q3 === '1 (Abnormal)') score += 1
+  if (q4 === '1 (Abnormal)') score += 1
   if (q5 === '1 (Abnormal)') score += 1
   if (q6 === '1 (Abnormal)') score += 1
   if (q7 === '1 (Abnormal)') score += 1
@@ -160,6 +167,13 @@ const GeriEbasDepForm = (props) => {
         <br />
         Assessment: Has felt that life was not worth living at some time during the past month
         <RadioField name='geriEbasDepQ3' label='Geri - EBAS-DEP Q3' />
+        <br />
+        4. How do you feel about your future? What are your hopes for the future?
+        你觉得自己的前途怎样？你对前途有何希望？
+        <br />
+        Assessment: Pessimistic about the future or has empty expectations (i.e. nothing to look
+        forward to)
+        <RadioField name='geriEbasDepQ4' label='Geri - EBAS-DEP Q4' />
         <br />
         5. Do you enjoy things as much as you used to - say like you did a year ago?
         你对东西的喜爱是否与往常一样，比如说与一年前一样？
