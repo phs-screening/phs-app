@@ -65,11 +65,6 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
-  geriEbasDepQ11: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
   geriEbasDepQ12: {
     type: String,
     optional: true,
@@ -219,7 +214,7 @@ const GeriEbasDepForm = (props) => {
         <p>
           Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test,
           regardless of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,
-          <b> PLEASE REFER to Social Service.</b>{' '}
+          <b> PLEASE REFER to SACS.</b>{' '}
         </p>
         <br />
         To be referred for SACS (failed EBAS-DEP) - from Geriatrics EBAS

@@ -33,21 +33,6 @@ const schema = new SimpleSchema({
     label: 'Done',
     optional: true,
   },
-  geriGeriApptQ6: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriGeriApptQ7: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriGeriApptQ8: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
   geriGeriApptQ9: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -137,19 +122,6 @@ const GeriGeriApptForm = (props) => {
     >
       <Fragment>
         <h2>Geriatrics Appointment</h2>
-        <br />
-        <h3>SWCDC&apos;s Safe & Sustainable Homes </h3>
-        State eligibility criteria.
-        <br />
-        <br />
-        Is participant eligible for SWCDC&apos;s Safe & Sustaniable homes?
-        <RadioField name='geriGeriApptQ6' label='Geri - Geri Appt Q6' />
-        <br />
-        Does participant wish to sign up for SWCDC&apos;s Safe & Sustaniable homes?
-        <RadioField name='geriGeriApptQ7' label='Geri - Geri Appt Q7' />
-        <br />
-        Sign up form for SWCDC&apos;s Safe & Sustainable homes filled up?
-        <RadioField name='geriGeriApptQ8' label='Geri - Geri Appt Q8' />
         <br />
         <h3>HDB EASE</h3>
         SC flat owners qualify for EASE (Direct Application) if a family member in the household:
