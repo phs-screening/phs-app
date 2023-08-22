@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -6,7 +6,7 @@ import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { AutoForm, useField } from 'uniforms'
+import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
 import { RadioField, LongTextField, SelectField } from 'uniforms-material'
 import { submitForm, calculateSppbScore } from '../api/api.js'
@@ -16,7 +16,6 @@ import './fieldPadding.css'
 import allForms from './forms.json'
 import Grid from '@material-ui/core/Grid'
 import { blueText, title, underlined } from '../theme/commonComponents'
-import { blue } from '@material-ui/core/colors'
 
 const schema = new SimpleSchema({
   geriOtConsultQ1: {
@@ -55,15 +54,6 @@ const schema = new SimpleSchema({
     optional: false,
   },
   geriOtConsultQ8: {
-    type: String,
-    optional: true,
-  },
-  geriOtConsultQ9: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriOtConsultQ10: {
     type: String,
     optional: true,
   },
@@ -155,12 +145,6 @@ const GeriOtConsultForm = (props) => {
         <RadioField name='geriOtConsultQ7' label='Geri - OT Consult Q7' />
         Reasons for referral (OT):
         <LongTextField name='geriOtConsultQ8' label='Geri - OT Consult Q8' />
-        <br />
-        Indicated for SWCDC Safe & Sustainable Homes?
-        <RadioField name='geriOtConsultQ9' label='Geri - OT Consult Q9' />
-        <br />
-        Comments:
-        <LongTextField name='geriOtConsultQ10' label='Geri - OT Consult Q10' />
         <br />
         To be referred for social support (OT):
         <RadioField name='geriOtConsultQ4' label='Geri - OT Consult Q4' />
