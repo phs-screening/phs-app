@@ -165,7 +165,7 @@ const BasicTimeline = (props) => {
               onClick={(event) => navigateTo(event, navigate, 'triage', scrollTop)}
             >
               Triage
-              {!formDone?.hxtaking ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+              {!formDone?.triage ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>
