@@ -33,16 +33,6 @@ const schema = new SimpleSchema({
     label: 'Done',
     optional: true,
   },
-  geriGeriApptQ9: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriGeriApptQ10: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
   geriGeriApptQ11: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -122,26 +112,6 @@ const GeriGeriApptForm = (props) => {
     >
       <Fragment>
         <h2>Geriatrics Appointment</h2>
-        <br />
-        <h3>HDB EASE</h3>
-        SC flat owners qualify for EASE (Direct Application) if a family member in the household:
-        <br />• is 65 years old and above; or
-        <br />• aged between 60 and 64 years and requires assistance for one or more of the
-        Activities of Daily Living (ADL)*
-        <br />
-        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of
-        residence. These activities include washing/ bathing, dressing, feeding, toileting,
-        mobility, and transferring.
-        <br />
-        <br />
-        Note: Age criterion is not applicable for EASE under HIP.
-        <br />
-        <br />
-        Is participant eligible for HDB EASE?
-        <RadioField name='geriGeriApptQ9' label='Geri - Geri Appt Q9' />
-        <br />
-        Does participant wish to sign up for HDB EASE?
-        <RadioField name='geriGeriApptQ10' label='Geri - Geri Appt Q10' />
         <br />
         Participant (aged 60-64 years old, inclusive) referred to Doctor&apos;s Consult for
         Functional Assessment Report completion?
