@@ -270,12 +270,12 @@ const HxSocialForm = (props) => {
         Please specify:
         <LongTextField name='hxSocialQ15' label='Hx Social Q15' />
         <br />
-        Indications for referral to Oral Health Education Booth (any one of the following):
+        Indications for referral to Oral Health (any one of the following):
         <br />
         1. History:
         <br />- Smoker
         <br />- DM
-        <br /> - Denture wearer
+        <br />- Denture wearer
         <br />- Currently in pain
         <br />
         <br />
@@ -284,7 +284,7 @@ const HxSocialForm = (props) => {
         <br />- severely receded gums
         <br />- bleeding/pus from gums
         <br />- obvious plaque/calculus deposits
-        <br /> - obvious decay
+        <br />- obvious decay
         <br />- dry mouth/bad breath
         <br />
         <br />
@@ -296,11 +296,11 @@ const HxSocialForm = (props) => {
         <RadioField name='hxSocialQ14' label='Hx Social Q14' />
         <PopupText qnNo='hxSocialQ14' triggerValue='Yes'>
           <b>
-            REFER TO NUS DENTISTRY ORAL HEALTH CONSULTATION if participant has poor dental hygiene
+            Refer to Oral Health Station if participant has poor dental hygiene
             and interested to go through dental education.
             <br />
             <span style={{ color: 'red' }}>ALL</span> participants with suspected dental issues will
-            be referred to NUS DENTISTRY ORAL HEALTH CONSULTATION.
+            be referred to Oral Health Station.
           </b>
           <br />
           <br />
