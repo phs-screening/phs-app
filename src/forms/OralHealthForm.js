@@ -104,6 +104,8 @@ const OralHealthForm = () => {
       model={saveData}
     >
       <Fragment>
+        <h1>Oral Health</h1>
+        <br />
         Will participant undergo follow-up by NUS Dentistry?
         <BoolField name='oralHealthQ1' />
         Completed Oral Health station. Please check that Form A is filled.

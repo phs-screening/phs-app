@@ -316,9 +316,11 @@ export function calculateBMI(heightInCm, weightInKg) {
   const height = heightInCm / 100
   const bmi = (weightInKg / height / height).toFixed(1).toString()
 
-  if (bmi >= 23.0) {
+  if (bmi > 27.5) {
+    return redText(bmi + '\nBMI is obese')
+  } else if (bmi >= 23.0) {
     return redText(bmi + '\nBMI is overweight')
-  } else if (bmi <= 18.5) {
+  } else if (bmi < 18.5) {
     return redText(bmi + '\nBMI is underweight')
   } else {
     return blueText(bmi)

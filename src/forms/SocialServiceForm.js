@@ -129,7 +129,7 @@ const SocialServiceForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h2>Social Service Station</h2>
+        <h1>Social Service Station</h1>
         1. Has the participant visited the social service station?
         <RadioField name='socialServiceQ1' label='Social Service Q1' />
         2. Brief summary of the participant&apos;s concerns
@@ -237,12 +237,12 @@ const SocialServiceForm = (props) => {
                 ? blueText(geriAppt.geriGeriApptQ13)
                 : blueText('nil')}
               {underlined('Eligible for HDB EASE?')}
-              {geriAppt && geriAppt.geriGeriApptQ9
-                ? blueText(geriAppt.geriGeriApptQ9)
+              {geriOt && geriOt.geriOtConsultQ7
+                ? blueText(geriOt.geriOtConsultQ7)
                 : blueText('nil')}
               {underlined('Interested in signing up?')}
-              {geriAppt && geriAppt.geriGeriApptQ10
-                ? blueText(geriAppt.geriGeriApptQ10)
+              {geriOt && geriOt.geriOtConsultQ8
+                ? blueText(geriOt.geriOtConsultQ8)
                 : blueText('nil')}
               {underlined('Functional Assessment Report completed?')}
               {doctorConsult && doctorConsult.doctorSConsultQ12

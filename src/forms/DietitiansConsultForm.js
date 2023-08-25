@@ -49,6 +49,11 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
+  dietitiansConsultQ8: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
 })
 
 const formName = 'dietitiansConsultForm'
@@ -104,6 +109,8 @@ const DietitiansConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
+        <h1>Dietitian's Consultation</h1>
+        <br />
         Has the participant visited the Dietitian&apos;s Consult station?
         <RadioField name='dietitiansConsultQ7' label="Dietitian's Consult Q7" />
         Dietitian&apos;s Name:
@@ -116,6 +123,8 @@ const DietitiansConsultForm = (props) => {
         <BoolField name='dietitiansConsultQ5' />
         Reasons for urgent follow up:
         <LongTextField name='dietitiansConsultQ6' label="Dietitian's Consult Q6" />
+        Referred to Polyclinic for follow-up?
+        <RadioField name='dietitiansConsultQ8' label="Dietitian's Consult Q8" />
       </Fragment>
 
       <ErrorsField />

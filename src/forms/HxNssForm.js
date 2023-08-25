@@ -28,10 +28,6 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  hxNssQ3: {
-    type: String,
-    optional: true,
-  },
   hxNssQ4: {
     type: Array,
     optional: true,
@@ -100,46 +96,6 @@ const schema = new SimpleSchema({
       'Stroke (including transient ischaemic attack)',
       'No, they do not have any of the above.',
     ],
-  },
-  hxNssQ14: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  hxNssQ15: {
-    type: String,
-    allowedValues: [
-      'Less than 2 standard drinks per day on average.',
-      'More than 2 standard drinks per day on average.',
-      'No',
-      'Quit Alcoholic Drinks',
-    ],
-    optional: false,
-  },
-  hxNssQ16: {
-    type: Array,
-    optional: false,
-  },
-  'hxNssQ16.$': {
-    type: String,
-    allowedValues: [
-      'No (Skip to Q7)',
-      'Yes (Proceed to answer below)',
-      'Vegetables (1 serving/day)',
-      'Vegetables (2 or more servings/day)',
-      'Fruits (1 serving/day)',
-      'Fruits (2 or more servings/day)',
-      'Whole grain and cereals',
-    ],
-  },
-  hxNssQ17: {
-    type: String,
-    allowedValues: [
-      'Yes (At least 20 mins each time, for 3 or more days per week.)',
-      'Yes (At least 20 mins each time, for less than 3 days per week.)',
-      'No participation of at least 20 min each time.',
-    ],
-    optional: false,
   },
   hxNssQ22: {
     type: String,
@@ -342,37 +298,6 @@ const HxNssForm = (props) => {
         <br />
         Also, refer to DC if participant has not been diagnosed with DM, but has signs of DM
         (polyuria, polydipsia, periphery neuropathy, blurring of vision etc)
-        <br />
-        <br />
-        Do you smoke?
-        <RadioField name='hxNssQ14' label='Hx NSS Q14' />
-        Roughly, how many pack-years?
-        <LongTextField name='hxNssQ3' label='Hx NSS Q3' />
-        <br />
-        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or
-        bottle of beer, or a glass of wine.)
-        <RadioField name='hxNssQ15' label='Hx NSS Q15' />
-        <br />
-        <br />
-        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick
-        where applicable.
-        <br />
-        <SelectField name='hxNssQ16' checkboxes='true' label='Hx NSS Q16' />
-        <br />
-        <br />
-        Do you exercise or participate in any form of moderate physical activity for at least 150
-        minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples
-        of physical activity includes exercising, walking, playing sports, washing your car,
-        lifting/ moving moderately heavy luggage and doing housework.
-        <RadioField name='hxNssQ17' label='Hx NSS Q17' /> <br />
-        <b>
-          Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
-          <span style={{ color: 'red' }}>dietitian</span> at Doctor&apos;s Consultation station,
-          Indicate:
-        </b>
-        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
-        2) Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
-        Reasons for Recommendation
         <br />
         <br />
         <h3>PLEASE TAKE 3RD BP READING (IF MORE THAN 5MMHG) AND RECORD ON FORM A.</h3>

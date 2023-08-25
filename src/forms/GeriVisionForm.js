@@ -71,6 +71,16 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  geriVisionQ12: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  geriVisionQ13: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
 })
 
 const formName = 'geriVisionForm'
@@ -111,6 +121,8 @@ const GeriVisionForm = (props) => {
       <Fragment>
         <h2>VISION SCREENING</h2>
         <br />
+        <h3>Non-Refractive Error</h3>
+        <br />
         1. Previous eye condition or surgery
         <RadioField name='geriVisionQ1' label='Geri - Vision Q1' />
         <PopupText qnNo='geriVisionQ1' triggerValue='Yes (Specify in textbox )'>
@@ -138,11 +150,28 @@ const GeriVisionForm = (props) => {
         <p>
           Please <b>refer to Doctor’s Consult if pinhole</b> visual acuity is{' '}
           <b>
-            <u>≥ 6/12</u>
+            <u>worse than 6/12</u>
           </b>
         </p>
         <br />
         <SelectField name='geriVisionQ9' checkboxes='true' label='Geri - Vision Q9' />
+        <br />
+        <br />
+        <h3>Refractive Error</h3>
+        Senior Citizens are eligible to receiving subsidy for spectacles under the Senior Mobility Fund (SMF) provided they qualify for the following:
+        <br />
+        <ul>
+          <li>Have a household monthly income per person of $2,000 and below OR Annual Value (AV) of residence reflected on NRIC of $13,000 and below for households with no income</li>
+          <li>Be living in the community (not residing in a nursing home or sheltered home).</li>
+          <li>First time SMF applicant</li>
+          <li>Be assessed by a qualified assessor on the type of device required when applicable.</li>
+          <li>Not concurrently receive (or apply for) any other public or private grants, or subsidies.</li>
+        </ul>
+        <br />
+        1. Does the participant wish to apply for the Senior Mobility Fund?
+        <RadioField name='geriVisionQ12' label='Geri - Vision Q12' />
+        2. Referred to Social Services?
+        <RadioField name='geriVisionQ13' label='Geri - Vision Q13' />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
