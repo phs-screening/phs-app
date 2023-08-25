@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -8,10 +8,9 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, LongTextField, SelectField } from 'uniforms-material'
-import { RadioField, NumField } from 'uniforms-material'
-import { calculateBMI, submitForm } from '../api/api.js'
+import { RadioField } from 'uniforms-material'
+import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { useField } from 'uniforms'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import Grid from '@material-ui/core/Grid'
@@ -19,19 +18,6 @@ import { blueText, title, underlined } from '../theme/commonComponents'
 import allForms from './forms.json'
 
 const schema = new SimpleSchema({
-  geriPreAudiometryQ1: {
-    type: String,
-    allowedValues: ['Yes (go to Q2)', 'No (skip Q2, continue with hearing test)'],
-    optional: false,
-  },
-  geriPreAudiometryQ2: {
-    type: String,
-    allowedValues: [
-      'Yes (To skip hearing test & refer to polyclinic or specialist if any)',
-      'No (To skip hearing test)',
-    ],
-    optional: true,
-  },
   geriAudiometryQ1: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -150,22 +136,6 @@ const GeriAudiometryForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <br />
-        <h2>AUDIOMETRY PRE-SCREENING</h2>
-        1. Are you currently wearing hearing aid(s)?
-        <RadioField name='geriPreAudiometryQ1' label='geriPreAudiometry - Q1' />
-        <br />
-        2. Please answer the following
-        <ol type='a' style={{ listStylePosition: 'inside' }}>
-          <li>Have you had your hearing aids for more than 5 years?</li>
-          <li>Has it been 3 years or more since you last used your hearing aids?</li>
-          <li>Are your hearing aids spoilt/not working?</li>
-        </ol>
-        <br />
-        If participant answered yes to any of of the questions, tick yes below.
-        <br />
-        If no to all question, tick no below.
-        <RadioField name='geriPreAudiometryQ2' label='geriPreAudiometry - Q2' />
         <br />
         <h2>AUDIOMETRY</h2>
         Did participant visit Audiometry Booth by NUS audiology team?

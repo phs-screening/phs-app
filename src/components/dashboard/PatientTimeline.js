@@ -60,7 +60,8 @@ function generateStatusObject(record) {
         record.geriPtConsultForm !== undefined &&
         record.geriOtConsultForm !== undefined &&
         record.geriMMSEForm !== undefined &&
-        record.geriAudiometryForm !== undefined,
+        record.geriAudiometryForm !== undefined &&
+        record.geriAudiometryPreScreeningForm !== undefined,
       doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult
       dietitiansconsult: record.dietitiansConsultForm !== undefined, // dietitian's consult
       socialservice: record.socialServiceForm !== undefined, // social service,

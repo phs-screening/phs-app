@@ -16,6 +16,7 @@ import GeriSppbForm from 'src/forms/GeriSppbForm'
 import GeriVisionForm from 'src/forms/GeriVisionForm'
 import GeriMMSEForm from './GeriMMSEForm'
 import GeriAudiometryform from './GeriAudiometryForm'
+import GeriAudiometryPreScreeningform from './GeriAudiometryPreScreeningForm'
 import { ScrollTopContext } from '../api/utils.js'
 
 function TabPanel(props) {
@@ -86,7 +87,8 @@ export default function GeriTabs() {
           <Tab label='PT Consult' {...a11yProps(6)} />
           <Tab label='OT Consult' {...a11yProps(7)} />
           <Tab label='Vision' {...a11yProps(8)} />
-          <Tab label='Audiometry' {...a11yProps(9)} />
+          <Tab label='Audiometry Pre-Screening' {...a11yProps(9)} />
+          <Tab label='Audiometry' {...a11yProps(10)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -117,7 +119,10 @@ export default function GeriTabs() {
         <GeriVisionForm changeTab={handleChange} nextTab={9} />
       </TabPanel>
       <TabPanel value={value} index={9}>
-        <GeriAudiometryform changeTab={handleChange} nextTab={10} />
+        <GeriAudiometryPreScreeningform changeTab={handleChange} nextTab={10} />
+      </TabPanel>
+      <TabPanel value={value} index={10}>
+        <GeriAudiometryform changeTab={handleChange} nextTab={11} />
       </TabPanel>
     </div>
   )
