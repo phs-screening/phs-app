@@ -104,7 +104,7 @@ export const getSavedPatientData = async (patientId, collectionName) => {
   return savedData === null ? {} : savedData
 }
 
-export const getPhlebCountersCollection = () => {
+export const getClinicSlotsCollection = () => {
   const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
   const phlebCounters = mongoConnection.db('phs').collection('queueCounters')
   return phlebCounters

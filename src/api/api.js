@@ -1,8 +1,6 @@
-import mongoDB, {
-  getName, isAdmin, getPhlebCountersCollection
-} from '../services/mongoDB';
-import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js';
-import { jsPDF } from 'jspdf';
+import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
+import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
+import { jsPDF } from 'jspdf'
 
 const axios = require('axios').default
 
@@ -131,34 +129,32 @@ export async function submitFormSpecial(args, patientId, formCollection) {
   }
 }
 
-export async function submitPhlebLocation(postalCode, patientId) {
-  const phlebCountersCollection = getPhlebCountersCollection()
-  await phlebCountersCollection.findOneAndUpdate(
+export async function submitRegClinics(postalCode, patientId) {
+  const clinicSlotsCollection = getClinicSlotsCollection()
+  await clinicSlotsCollection.findOneAndUpdate(
     { postalCode },
     { $push: { counterItems: patientId } },
     { upsert: true },
   )
 
   const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
-  const phlebotomyFormRecords = mongoConnection.db('phs').collection('phlebotomyForm')
-  const patientPhlebForm = await phlebotomyFormRecords.findOne({ _id: patientId })
-  const phlebFormExists = patientPhlebForm !== undefined && patientPhlebForm !== null
+  const registrationFormRecords = mongoConnection.db('phs').collection('registrationForm')
+  const patientRegForm = await registrationFormRecords.findOne({ _id: patientId })
 
+  console.log(patientRegForm)
   try {
-    if (phlebFormExists) {
-      const prevOption = patientPhlebForm.phlebotomyQ3
-      const prevOptionExists = prevOption !== undefined && prevOption !== null
-      if (prevOptionExists) {
-        const prevPostalCode = prevOption.trim().slice(-6)
-        await phlebCountersCollection.findOneAndUpdate(
-          {
-            postalCode: prevPostalCode,
-          },
-          {
-            $pull: { counterItems: patientId },
-          },
-        )
-      }
+    if (patientRegForm && patientRegForm.registrationQ10) {
+      const location = patientRegForm.registrationQ10.trim()
+      const prevPostalCode = location === 'None' ? location : location.slice(-6)
+      console.log(prevPostalCode)
+      await clinicSlotsCollection.findOneAndUpdate(
+        {
+          postalCode: prevPostalCode,
+        },
+        {
+          $pull: { counterItems: patientId },
+        },
+      )
     }
     return { result: true }
   } catch (error) {
