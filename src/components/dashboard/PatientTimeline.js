@@ -234,19 +234,6 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone?.sacs ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <a href='/app/sacs' onClick={(event) => navigateTo(event, navigate, 'sacs', scrollTop)}>
-              SACS
-              {!formDone?.sacs ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
-            </a>
-          </TimelineContent>
-        </TimelineItem>
-
-        <TimelineItem>
-          <TimelineSeparator>
             {formDone?.geri ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
@@ -254,6 +241,19 @@ const BasicTimeline = (props) => {
             <a href='/app/geri' onClick={(event) => navigateTo(event, navigate, 'geri', scrollTop)}>
               Geriatrics
               {!formDone?.geri ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
+            {formDone?.sacs ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a href='/app/sacs' onClick={(event) => navigateTo(event, navigate, 'sacs', scrollTop)}>
+              SACS
+              {!formDone?.sacs ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

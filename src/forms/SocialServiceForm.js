@@ -125,7 +125,7 @@ const SocialServiceForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h2>Social Service Station</h2>
+        <h1>Social Service Station</h1>
         1. Has the participant visited the social service station?
         <RadioField name='socialServiceQ1' label='Social Service Q1' />
         2. Brief summary of the participant&apos;s concerns

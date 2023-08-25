@@ -68,6 +68,8 @@ const FitForm = (props) => {
       model={saveData}
     >
       <Fragment>
+        <h1>FIT</h1>
+        <br />
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
           <span style={{ color: 'red' }}>
@@ -105,7 +107,7 @@ const FitForm = (props) => {
           <span style={{ color: 'red' }}>
             Please encourage participants to go for FIT every year if participant is above 50,
             asymptomatic and no positive family history of colorectal cancer in first degree
-            relatives.
+            relatives and does not have any bleeding disorders.
           </span>{' '}
         </h3>
         <br />

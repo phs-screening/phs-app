@@ -22,11 +22,6 @@ import allForms from './forms.json'
 import { blueText } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
-  wceQ1: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
   wceQ2: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
@@ -96,6 +91,8 @@ const WceForm = (props) => {
       model={saveData}
     >
       <Fragment>
+        <h1>WCE</h1>
+        <br />
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
           <font color='red'>
@@ -129,7 +126,7 @@ const WceForm = (props) => {
         <br />
         <h2>2. CANCER SCREENING </h2> <br />
         <p>
-          1.
+          1. 
           <font color='red'>
             <b>For female respondent aged 40 and above only.</b>
           </font>
@@ -140,7 +137,7 @@ const WceForm = (props) => {
         {hxCancer && hxCancer.hxCancerQ7 ? blueText(hxCancer.hxCancerQ7) : blueText('nil')}
         <br />
         <p>
-          2.
+          2. 
           <font color='red'>
             <b>
               For female respondent aged 25 and above, who have/had a husband/boyfriend and not had
@@ -162,25 +159,8 @@ const WceForm = (props) => {
             Please encourage participants to go for HPV test every 5 years.
           </b>
         </font>{' '}
+        <br /> 
         <br />
-        3.Does participant has a history of cancer or his/her family history requires further
-        scrutiny by doctors?{' '}
-        <font color='red'>
-          <b>
-            (If indicated &apos;Yes&apos; please refer to doctor&apos;s consult by following the
-            steps below.)
-          </b>
-        </font>
-        <RadioField name='wceQ1' label='WCE Q1' />
-        <PopupText qnNo='wceQ1' triggerValue='Yes'>
-          <b>REFER TO DR CONSULT by indicating on:</b> <br />
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A under
-          Doctor&apos;s Consultation row
-          <br />
-          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation <br />
-        </PopupText>
-        <br /> <br />
         <h2>3. FOLLOW UP PLAN</h2>
         <br />
         1. Completed Breast Self Examination station?

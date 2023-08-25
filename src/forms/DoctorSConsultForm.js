@@ -73,11 +73,6 @@ const schema = new SimpleSchema({
     label: 'Yes',
     optional: true,
   },
-  doctorSConsultQ12: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
-  },
 })
 
 const formName = 'doctorConsultForm'
@@ -161,6 +156,8 @@ const DoctorSConsultForm = () => {
       model={saveData}
     >
       <Fragment>
+        <h1>Doctor's Consult</h1>
+        <br />
         Doctor&apos;s Name:
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
         <br />
@@ -181,8 +178,6 @@ const DoctorSConsultForm = () => {
         <br />
         Refer to Social Support?
         <BoolField name='doctorSConsultQ6' />
-        Functional Assessment Report (Pg 2-3) completed for HDB EASE application?
-        <BoolField name='doctorSConsultQ12' />
         Reason for referral
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
         <br />
@@ -375,6 +370,10 @@ const DoctorSConsultForm = () => {
               {underlined('Were any of the falls injurious?')}
               {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ9) : blueText('nil')}
               {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ10) : blueText('nil')}
+              {underlined('Eligible for HDB EASE?')}
+              {geriOt ? blueText(geriOt.geriOtConsultQ7) : blueText('nil')}
+              {underlined('Interested in signing up?')}
+              {geriOt ? blueText(geriOt.geriOtConsultQ8) : blueText('nil')}
             </div>
           )}
         </Grid>

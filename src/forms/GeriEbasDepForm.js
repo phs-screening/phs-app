@@ -77,6 +77,11 @@ const schema = new SimpleSchema({
     //   }
     // },
   },
+  geriEbasDepQ13: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
 })
 
 function GetScore() {
@@ -205,6 +210,12 @@ const GeriEbasDepForm = (props) => {
           EBAS Total Score: <GetScore />
           /8
         </h3>
+        <br />
+        Referral to Doctor's Consult?
+        <br />
+        (For 1. non-geri participants who are probably depressed from EBAS Score” AND 
+        2. geri patients who pass AMT and who are probably depressed from EBAS Score)
+        <RadioField name='geriEbasDepQ13' label='Geri - EBAS-DEP Q13' />
         <br />
         <h3>
           A score of 3 or greater indicates the probable presence of a depressive disorder which may

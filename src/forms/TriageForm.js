@@ -62,16 +62,6 @@ const schema = new SimpleSchema({
     type: Number,
     optional: true,
   },
-  triageQ12: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  triageQ13: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
-  },
   triageQ14: {
     type: Number,
     optional: true,
@@ -148,6 +138,8 @@ const TriageForm = () => {
       model={saveData}
     >
       <Fragment>
+        <h1>Triage</h1>
+        <br />
         <h2>VITALS</h2>
         <h3>
           Please fill in the participant&apos;s BP and BMI based on what you earlier recorded on
@@ -253,26 +245,6 @@ const TriageForm = () => {
           BMI: <CalcBMI />
         </h3>
         <br />
-        Has a doctor ever told you that you are overweight or obese before?
-        <RadioField name='triageQ12' label='Triage Q12' />
-        Please tick to highlight if you feel BMI requires closer scrutiny by doctors and dietitians
-        later.
-        <BoolField name='triageQ13' />
-        <PopupText qnNo='triageQ13' triggerValue={true}>
-          <b>REFER TO DR CONSULT at:</b>
-          <p>
-            {' '}
-            1) <font color='red'>Doctor&apos;s Consultation station</font>, tick eligibility, Circle
-            interested &apos;Y&apos; on Page 1 of Form A{' '}
-          </p>{' '}
-          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation, <br />
-          IF BMI IS:
-          <br />≥ 23 as overweight (if positive for other risk factors) and ≥ 27.5 as obese, write
-          reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation - Reasons
-          for Recommendation
-          <br />
-        </PopupText>
         <br />
         <h3>
           <u>3) Waist Circumference</u> (taken only if cannot measure BMI e.g. wheelchair,

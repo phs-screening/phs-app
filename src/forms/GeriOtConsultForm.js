@@ -51,10 +51,16 @@ const schema = new SimpleSchema({
   geriOtConsultQ7: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: false,
+    optional: true,
   },
   geriOtConsultQ8: {
     type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: true,
+  },
+  geriOtConsultQ9: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
     optional: true,
   },
 })
@@ -132,19 +138,19 @@ const GeriOtConsultForm = (props) => {
     >
       <Fragment>
         <h2>OT Consult</h2>
-        <br />
         Memo (for participant):
         <LongTextField name='geriOtConsultQ1' label='Geri - OT Consult Q1' />
         <br />
         To be referred for doctor&apos;s consult (OT)?
+        <br />
+        If referral to long-term OT rehab services is necessary, this will be done through the doctor's consult route. 
+        <br />
         <RadioField name='geriOtConsultQ2' label='Geri - OT Consult Q2' />
         Reasons for referral to Doctor&apos;s consult (OT):
-        <LongTextField name='geriOtConsultQ3' label='Geri - OT Consult Q3' />
         <br />
-        To be referred to Geriatric Appointment (For HDB EASE Sign-up) (OT):
-        <RadioField name='geriOtConsultQ7' label='Geri - OT Consult Q7' />
-        Reasons for referral (OT):
-        <LongTextField name='geriOtConsultQ8' label='Geri - OT Consult Q8' />
+        For Referral to Polyclinic for OT Rehabilitation Services
+        <br />
+        <LongTextField name='geriOtConsultQ3' label='Geri - OT Consult Q3' />
         <br />
         To be referred for social support (OT):
         <RadioField name='geriOtConsultQ4' label='Geri - OT Consult Q4' />
@@ -154,13 +160,29 @@ const GeriOtConsultForm = (props) => {
         Which of the following programmes would you recommend the participant for? (Please select
         the most appropriate programme)
         <SelectField name='geriOtConsultQ6' checkboxes='true' label='Geri - OT Consult Q6' />
-        <h2>
-          <span style={{ color: 'red' }}>
-            IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
-            RECOMMENDED, PLEASE EDIT ON THE MSS TAB UNDER &apos;REGISTRATION&apos;
-          </span>
-        </h2>
         <br />
+        <h3>HDB EASE</h3>
+        SC flat owners qualify for EASE (Direct Application) if a family member in the household:
+        <br />• is 65 years old and above; or
+        <br />• aged between 60 and 64 years and requires assistance for one or more of the
+        Activities of Daily Living (ADL)*
+        <br />
+        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of
+        residence. These activities include washing/ bathing, dressing, feeding, toileting,
+        mobility, and transferring.
+        <br />
+        <br />
+        Note: Age criterion is not applicable for EASE under HIP.
+        <br />
+        <br />
+        Is participant eligible for HDB EASE?
+        <RadioField name='geriOtConsultQ7' label='Geri - OT Consult Q7' />
+        <br />
+        Does participant wish to sign up for HDB EASE?
+        <RadioField name='geriOtConsultQ8' label='Geri - OT Consult Q8' />
+        <br />
+        Functional Assessment Report completed & given to participant?
+        <RadioField name='geriOtConsultQ9' label='Geri - OT Consult Q9' />
       </Fragment>
 
       <ErrorsField />

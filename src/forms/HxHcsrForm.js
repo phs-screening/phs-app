@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { RadioField, LongTextField } from 'uniforms-material'
+import { BoolField, RadioField, LongTextField } from 'uniforms-material'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
@@ -84,6 +84,16 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  hxHcsrQ17: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxHcsrQ18: {
+    type: Boolean,
+    label: 'Yes',
+    optional: true,
+  },
 })
 
 const formName = 'hxHcsrForm'
@@ -154,6 +164,24 @@ const HxHcsrForm = (props) => {
         <br />
         <br />
         <h2>1. HEALTH CONCERNS</h2>
+        Has a doctor ever told you that you are overweight or obese before?
+        <RadioField name='hxHcsrQ17' label='Hx HCSR Q17' />
+        Please tick to highlight if you feel BMI requires closer scrutiny by doctors and dietitians
+        later.
+        <BoolField name='hxHcsrQ18' />
+        <PopupText qnNo='hxHcsrQ18' triggerValue={true}>
+          <b>REFER TO DIETICIAN&apos;S CONSULT at:</b>
+          <p>
+            {' '}
+            1) <font color='red'>Dietitian&apos;s Consultation station</font>, tick eligibility, Circle
+            interested &apos;Y&apos; on Page 1 of Form A{' '}
+          </p>{' '}
+          <br />
+          IF BMI IS:
+          <br /> &gt; 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Dietitian&apos;s Consultation - Reasons
+          for Recommendation
+          <br />
+        </PopupText>
         <p>
           If the participant has any <b>presenting complaints or concern(s)</b>, please take a{' '}
           <b>
@@ -182,7 +210,6 @@ const HxHcsrForm = (props) => {
           doctors later or if <b>participant strongly insists.</b>
         </p>
         <br />
-        <br />
         <RadioField name='hxHcsrQ11' label='Hx HCSR Q11' />
         <PopupText qnNo='hxHcsrQ11' triggerValue='Yes'>
           <br />
@@ -202,14 +229,14 @@ const HxHcsrForm = (props) => {
           3) Please write relevant medical/social history of participant under history taking box
         </PopupText>
         <br />
-        <br /> <br />
+        <br />
         <h2>2. SYSTEMS REVIEW</h2>
         <b>Below is a non-exhaustive list of possible red flags:</b>
         - Constitutional Symptoms: LOA, LOW, Fever
         <br />- CVS: Chest pain, Palpitations
         <br />- Respi: SOB, Haemoptysis, Night Sweat, Cough
         <br />- GI: change in BO habits, PR bleed, Haematemesis
-        <br /> - Frequent falls
+        <br />- Frequent falls
         <br />
         <br />
         <p>
@@ -258,12 +285,14 @@ const HxHcsrForm = (props) => {
             REFER TO <span style={{ color: 'red' }}>DR CONSULT</span> and{' '}
             <span style={{ color: 'red' }}>EXHIBITION SFCS</span> booth under Form A
           </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A 
+          <br />
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation <br />
-          3) Pleae write relevant medical/social history of participant under history taking box{' '}
-          <br /> 4) Page 2 of Form A, under Exhibition - Recommendation, tick renal and bladder
-          health, write down SFCS booth
+          Recommendation 
+          <br />
+          3) Please write relevant medical/social history of participant under history taking box{' '}
+          <br /> 
+          4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS booth
           <br />
           <br />
         </PopupText>
@@ -285,8 +314,6 @@ const HxHcsrForm = (props) => {
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
           Recommendation
         </PopupText>
-        <br />
-        <br />
         <br />
         2c. Do you have any hearing problems? Please specify if yes. <br />
         <RadioField name='hxHcsrQ8' label='Hx HCSR Q8' />

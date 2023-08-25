@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { RadioField, LongTextField } from 'uniforms-material'
+import { SelectField, RadioField, LongTextField } from 'uniforms-material'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
@@ -105,6 +105,50 @@ const schema = new SimpleSchema({
   hxSocialQ16: {
     type: String,
     allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxSocialQ17: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxSocialQ18: {
+    type: String,
+    optional: true,
+  },
+  hxSocialQ19: {
+    type: String,
+    allowedValues: [
+      'Less than 2 standard drinks per day on average.',
+      'More than 2 standard drinks per day on average.',
+      'No',
+      'Quit Alcoholic Drinks',
+    ],
+    optional: false,
+  },
+  hxSocialQ20: {
+    type: Array,
+    optional: false,
+  },
+  'hxSocialQ20.$': {
+    type: String,
+    allowedValues: [
+      'No (Skip to Q7)',
+      'Yes (Proceed to answer below)',
+      'Vegetables (1 serving/day)',
+      'Vegetables (2 or more servings/day)',
+      'Fruits (1 serving/day)',
+      'Fruits (2 or more servings/day)',
+      'Whole grain and cereals',
+    ],
+  },
+  hxSocialQ21: {
+    type: String,
+    allowedValues: [
+      'Yes (At least 20 mins each time, for 3 or more days per week.)',
+      'Yes (At least 20 mins each time, for less than 3 days per week.)',
+      'No participation of at least 20 min each time.',
+    ],
     optional: false,
   },
 })
@@ -243,16 +287,44 @@ const HxSocialForm = (props) => {
             <br />
             Indicate for Social Service station on:{' '}
           </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+          1) Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1 
+          <br />
           2) Write reasons for referral on the right column
         </PopupText>
+        <br />
+        <br />
         5. Patient exhibits signs of depression and has been administered EBAS (found under Geri
         tab) by history taker. Patient has been informed that they have been referred to SACS and
         this has been indicated on Form A.
         <RadioField name='hxSocialQ16' label='Hx Social Q16' />
         <br />
         <br />
-        <h2>3. ORAL ISSUES</h2>
+        <h2>3. LIFESTYLE</h2>
+        Do you smoke?
+        <RadioField name='hxSocialQ17' label='Hx Social Q17' />
+        Roughly, how many pack-years?
+        <LongTextField name='hxSocialQ18' label='Hx Social Q18' />
+        <br />
+        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)
+        <RadioField name='hxSocialQ19' label='Hx Social Q19' />
+        <br />
+        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.
+        <br />
+        <SelectField name='hxSocialQ20' checkboxes='true' label='Hx Social Q20' />
+        <br />
+        Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
+        <RadioField name='hxSocialQ21' label='Hx Social Q21' />
+        <br />
+        <b>
+          Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
+          <span style={{ color: 'red' }}>Dietitian's Consult</span> if participant agrees,
+          Indicate:
+        </b>
+        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
+        2) Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
+        Reasons for Recommendation
+        <br />
+        <h2>4. ORAL ISSUES</h2>
         <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips,
         Tongue, Gums & Tissues (Healthy - pink and moist)
         <br />
@@ -267,12 +339,12 @@ const HxSocialForm = (props) => {
         Please specify:
         <LongTextField name='hxSocialQ15' label='Hx Social Q15' />
         <br />
-        Indications for referral to Oral Health Education Booth (any one of the following):
+        Indications for referral to Oral Health (any one of the following):
         <br />
         1. History:
         <br />- Smoker
         <br />- DM
-        <br /> - Denture wearer
+        <br />- Denture wearer
         <br />- Currently in pain
         <br />
         <br />
@@ -281,7 +353,7 @@ const HxSocialForm = (props) => {
         <br />- severely receded gums
         <br />- bleeding/pus from gums
         <br />- obvious plaque/calculus deposits
-        <br /> - obvious decay
+        <br />- obvious decay
         <br />- dry mouth/bad breath
         <br />
         <br />
@@ -293,11 +365,11 @@ const HxSocialForm = (props) => {
         <RadioField name='hxSocialQ14' label='Hx Social Q14' />
         <PopupText qnNo='hxSocialQ14' triggerValue='Yes'>
           <b>
-            REFER TO NUS DENTISTRY ORAL HEALTH CONSULTATION if participant has poor dental hygiene
+            Refer to Oral Health Station if participant has poor dental hygiene
             and interested to go through dental education.
             <br />
             <span style={{ color: 'red' }}>ALL</span> participants with suspected dental issues will
-            be referred to NUS DENTISTRY ORAL HEALTH CONSULTATION.
+            be referred to Oral Health Station.
           </b>
           <br />
           <br />
