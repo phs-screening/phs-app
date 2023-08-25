@@ -243,9 +243,12 @@ const HxSocialForm = (props) => {
             <br />
             Indicate for Social Service station on:{' '}
           </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+          1) Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1 
+          <br />
           2) Write reasons for referral on the right column
         </PopupText>
+        <br />
+        <br />
         5. Patient exhibits signs of depression and has been administered EBAS (found under Geri
         tab) by history taker. Patient has been informed that they have been referred to SACS and
         this has been indicated on Form A.
