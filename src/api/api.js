@@ -360,7 +360,7 @@ export function formatGeriVision(acuity, questionNo) {
         additionalInfo = '\nNon-refractive error, participant should have consulted on-site doctor'
       } else {
         result = 'Visual acuity (with pinhole occluder) - Left Eye 6/' + acuity
-        additionalInfo = '\nRefractive error, participant should have received spectacles vouchers'
+        additionalInfo = '\nRefractive error, participant can opt to apply for Senior Mobility Fund (SMF)'
       }
       result = redText(result + additionalInfo)
 

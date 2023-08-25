@@ -1,5 +1,4 @@
-import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -407,9 +406,6 @@ const SummaryForm = (props) => {
             {underlined('Indicated interest for Mammogram under SCS?')}
             {formatWceStation(patients.gender, 5, wce.wceQ5)}
             <br></br>
-            {underlined('Registered for Mammogram under NHGD?')}
-            {formatWceStation(patients.gender, 6, wce.wceQ6)}
-            <br></br>
 
             <br></br>
             {bold('16. Geriatrics')}
@@ -436,11 +432,8 @@ const SummaryForm = (props) => {
                 : blueText(geriMmse.geriMMSEQ3)
               : '-'}
             <br></br>
-            {underlined('Recommended polyclinic:')}
-            {blueText(geriMmse.geriMMSEQ4)}
-            <br></br>
             {bold('c. Geriatrics - EBAS')}
-            {underlined('Referred to Social Service for failing EBAS?')}
+            {underlined('Referred to SACS (failed EBAS-DEP) - from Geriatrics EBAS, probable present of a depressive order?')}
             {geriEbasDep
               ? geriEbasDep.geriEbasDepQ10 == 'Yes'
                 ? blueRedText(
@@ -450,17 +443,7 @@ const SummaryForm = (props) => {
                 : blueText(geriEbasDep.geriEbasDepQ10)
               : '-'}
             <br></br>
-            {underlined('Referred to Social Service for potential financial/ family difficulties?')}
-            {geriEbasDep
-              ? geriEbasDep.geriEbasDepQ11 == 'Yes'
-                ? blueRedText(
-                    geriEbasDep.geriEbasDepQ11,
-                    'Please check if participant has visited the Social Service Station.',
-                  )
-                : blueText(geriEbasDep.geriEbasDepQ11)
-              : '-'}
-            <br></br>
-            {underlined('Reasons for referral to Social Service:')}
+            {underlined('Reasons for referral to SACS - from Geriatrics EBAS & AMT:')}
             {geriEbasDep ? blueRedText(geriEbasDep.geriEbasDepQ12) : '-'}
             <br></br>
             {bold('d. Geriatrics - PT consult')}
@@ -563,52 +546,13 @@ const SummaryForm = (props) => {
               : blueText(geriAudiometry.geriAudiometryQ11)}
             <br></br>
 
-            {bold('h. Geriatrics - Functional Screening ')}
-            {underlined('Did participant attend PHS vision and hearing screening?')}
-            {blueText(geriGeriAppt.geriGeriApptQ12)}
-            <br></br>
-            {underlined('Did participant apply for HPB functional screening? ')}
-            {geriGeriAppt.geriGeriApptQ14 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ14,
-                  'Please advise the participant that they may be followed-up by HPB regarding nearby' +
-                    ' functional screenings. Please remind them that they applied for a specific' +
-                    ' date and timings if applicable.',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ14)}
-            <br></br>
-
-            {bold('i. Geriatrics - Appointment')}
-            <br></br>
-            {underlined('Were spectacle vouchers given to participant for VA ≥ 6/12?')}
-            {geriGeriAppt.geriGeriApptQ4 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ4,
-                  'Please advise the participant to use the vouchers before the expiry date (reflected on voucher).',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ4)}
-            <br></br>
-            {underlined('Eligible for SWCDC Safe & Sustainable Homes Programme?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ6) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ7) : '-'}
-            <br></br>
-            {underlined('Sign up form for SWCDC filled in?')}
-            {geriGeriAppt
-              ? geriGeriAppt.geriGeriApptQ8 == 'Yes'
-                ? blueRedText(
-                    geriGeriAppt.geriGeriApptQ8,
-                    'Please advise the participant that SWCDC will process their application and contact them separately.',
-                  )
-                : blueText(geriGeriAppt.geriGeriApptQ8)
-              : '-'}
+            {bold('h. Geriatrics - Appointment')}
             <br></br>
             {underlined('Eligible for HDB EASE??')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ9) : '-'}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
             <br></br>
             {underlined('Interest in signing up?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ10) : '-'}
+            {geriOtConsult? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
             <br></br>
             {underlined('Referred to Social Service for HDB EASE Application?')}
             {geriGeriAppt.geriGeriApptQ13 == 'Yes'
@@ -683,6 +627,16 @@ const SummaryForm = (props) => {
             {underlined('Reasons for referral:')}
             {doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ9) : '-'}
             <br></br>
+            {underlined('Was participant referred to Polyclinic for depression?')}
+            {doctorSConsult
+              ? doctorSConsult.doctorSConsultQ11
+                ? blueRedText(
+                    'Yes',
+                    'Please check with participant if they have received a memo from the on-site Doctor.',
+                  )
+                : blueText('No')
+              : '-'}
+            <br></br>
 
             {bold("18. Dietitian's Consult")}
             {underlined("Did this participant visit the Dietitian's Consult Station today?")}
@@ -739,16 +693,6 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined('What will be done for the participant?')}
             {socialService ? blueText(socialService.socialServiceQ3) : '-'}
-            <br></br>
-            {underlined('SACS referral form filled-up?')}
-            {socialService
-              ? socialService.socialServiceQ6
-                ? blueRedText(
-                    'Yes',
-                    'Please advise the participant that they may be followed-up by SACS regarding their application status for the programmes.',
-                  )
-                : blueText('No')
-              : '-'}
             <br></br>
             {underlined('Is follow-up required?')}
             {socialService
