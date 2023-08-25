@@ -36,6 +36,7 @@ const SummaryForm = (props) => {
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
+  const [sacs, setSacs] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
@@ -64,6 +65,7 @@ const SummaryForm = (props) => {
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
+      const sacsData = getSavedData(patientId, allForms.sacsForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
       const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
@@ -93,6 +95,7 @@ const SummaryForm = (props) => {
         geriVisionData,
         geriAudiometryData,
         triageData,
+        sacsData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
@@ -116,6 +119,7 @@ const SummaryForm = (props) => {
         setGeriVision(result[19])
         setGeriAudiometry(result[20])
         setTriage(result[21])
+        setSacs(result[22])
         isLoadingPrevData(false)
       })
     }
@@ -553,8 +557,17 @@ const SummaryForm = (props) => {
             {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
             <br></br>
 
+            {bold('17. SACS')}
+            {underlined('Notes from SACS Consultation')}
+            {sacs ? blueText(sacs.sacsQ1) : '-'}
+            {underlined('Is the patient okay to continue with screening?')}
+            {sacs ? blueText(sacs.sacsQ2) : '-'}
+            {underlined('Has this person been referred to a SACS CREST programme for follow-up?')}
+            {sacs ? blueText(sacs.sacsQ3) : '-'}
             <br></br>
-            {bold("17. Doctor's Consult")}
+
+            <br></br>
+            {bold("18. Doctor's Consult")}
             {underlined('Did this patient consult an on-site doctor today?')}
             {doctorSConsult
               ? doctorSConsult.doctorSConsultQ11
@@ -628,7 +641,7 @@ const SummaryForm = (props) => {
               : '-'}
             <br></br>
 
-            {bold("18. Dietitian's Consult")}
+            {bold("19. Dietitian's Consult")}
             {underlined("Did this participant visit the Dietitian's Consult Station today?")}
             {dietitiansConsult
               ? dietitiansConsult.dietitiansConsultQ7 == 'No'
@@ -670,7 +683,7 @@ const SummaryForm = (props) => {
               : ''}
             <br></br>
 
-            {bold('19. Social Service')}
+            {bold('20. Social Service')}
             {underlined('Did this participant visit the social service station today?')}
             {socialService
               ? socialService.socialServiceQ1 == 'No'
@@ -731,7 +744,7 @@ const SummaryForm = (props) => {
             {socialService ? blueText(socialService.socialServiceQ9) : '-'}
             <br></br>
 
-            {bold('20. Oral Health')}
+            {bold('21. Oral Health')}
             {underlined('Did this participant visit the Oral Health station today?')}
             {oralHealth ? (oralHealth.oralHealthQ2 ? blueText('Yes') : blueText('No')) : '-'}
             <br></br>
@@ -747,7 +760,7 @@ const SummaryForm = (props) => {
             <br></br>
 
             <br></br>
-            {bold('21. Mailing Details')}
+            {bold('22. Mailing Details')}
             {underlined('Preferred language for health report:')}
             {registration ? blueText(registration.registrationQ11) : '-'}
             <br></br>
@@ -778,7 +791,7 @@ const SummaryForm = (props) => {
                   geriAudiometry,
                   dietitiansConsult,
                   oralHealth,
-                  triage
+                  triage,
                 )
               }
             >
