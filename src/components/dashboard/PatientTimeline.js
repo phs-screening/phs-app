@@ -34,7 +34,7 @@ function generateStatusObject(record) {
     return {
       prereg: true, // pre-registration, always true
       reg: record.registrationForm !== undefined, // registration
-      triage: record.triageForm === undefined, // triage
+      triage: record.triageForm !== undefined, // triage
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
       // historyTaking form consists of 4 forms
       hxtaking:
