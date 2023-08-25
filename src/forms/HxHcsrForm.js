@@ -182,7 +182,6 @@ const HxHcsrForm = (props) => {
           doctors later or if <b>participant strongly insists.</b>
         </p>
         <br />
-        <br />
         <RadioField name='hxHcsrQ11' label='Hx HCSR Q11' />
         <PopupText qnNo='hxHcsrQ11' triggerValue='Yes'>
           <br />
@@ -202,14 +201,14 @@ const HxHcsrForm = (props) => {
           3) Please write relevant medical/social history of participant under history taking box
         </PopupText>
         <br />
-        <br /> <br />
+        <br />
         <h2>2. SYSTEMS REVIEW</h2>
         <b>Below is a non-exhaustive list of possible red flags:</b>
         - Constitutional Symptoms: LOA, LOW, Fever
         <br />- CVS: Chest pain, Palpitations
         <br />- Respi: SOB, Haemoptysis, Night Sweat, Cough
         <br />- GI: change in BO habits, PR bleed, Haematemesis
-        <br /> - Frequent falls
+        <br />- Frequent falls
         <br />
         <br />
         <p>
@@ -258,11 +257,14 @@ const HxHcsrForm = (props) => {
             REFER TO <span style={{ color: 'red' }}>DR CONSULT</span> and{' '}
             <span style={{ color: 'red' }}>EXHIBITION SFCS</span> booth under Form A
           </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A 
+          <br />
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation <br />
+          Recommendation 
+          <br />
           3) Please write relevant medical/social history of participant under history taking box{' '}
-          <br /> 4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS booth
+          <br /> 
+          4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS booth
           <br />
           <br />
         </PopupText>
@@ -284,8 +286,6 @@ const HxHcsrForm = (props) => {
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
           Recommendation
         </PopupText>
-        <br />
-        <br />
         <br />
         2c. Do you have any hearing problems? Please specify if yes. <br />
         <RadioField name='hxHcsrQ8' label='Hx HCSR Q8' />
