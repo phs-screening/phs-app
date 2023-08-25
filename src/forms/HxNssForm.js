@@ -367,7 +367,7 @@ const HxNssForm = (props) => {
         <RadioField name='hxNssQ17' label='Hx NSS Q17' /> <br />
         <b>
           Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
-          <span style={{ color: 'red' }}>dietitian</span> at Doctor&apos;s Consultation station,
+          <span style={{ color: 'red' }}>Dietitian's Consult</span> if participant agrees,
           Indicate:
         </b>
         1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
