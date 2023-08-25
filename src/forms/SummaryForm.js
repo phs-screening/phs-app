@@ -513,6 +513,13 @@ const SummaryForm = (props) => {
             )}
             {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ6) : '-'}
             <br></br>
+            {underlined('Eligible for HDB EASE??')}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
+            <br></br>
+            {underlined('Interest in signing up?')}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
+            <br></br>
+
             {bold('f. Geriatrics - Vision')}
             {underlined('Visual acuity (VA) scores')}
             {formatGeriVision(vision.geriVisionQ3, 3)}
@@ -546,15 +553,6 @@ const SummaryForm = (props) => {
                   "Please check if participant has visited the Doctor's Consult Station.",
                 )
               : blueText(geriAudiometry.geriAudiometryQ11)}
-            <br></br>
-
-            {bold('h. Geriatrics - Appointment')}
-            <br></br>
-            {underlined('Eligible for HDB EASE??')}
-            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
             <br></br>
 
             {bold('17. SACS')}
