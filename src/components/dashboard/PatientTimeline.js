@@ -49,19 +49,15 @@ function generateStatusObject(record) {
       geri:
         record.geriAmtForm !== undefined &&
         record.geriEbasDepForm !== undefined &&
-        record.geriVisionForm !== undefined &&
-        record.geriVisionForm !== undefined &&
-        record.geriParQForm !== undefined &&
+        record.geriMMSEForm !== undefined &&
         record.geriPhysicalActivityLevelForm !== undefined &&
-        record.geriFrailScaleForm !== undefined &&
         record.geriOtQuestionnaireForm !== undefined &&
         record.geriSppbForm !== undefined &&
-        record.geriTugForm !== undefined &&
         record.geriPtConsultForm !== undefined &&
         record.geriOtConsultForm !== undefined &&
-        record.geriMMSEForm !== undefined &&
-        record.geriAudiometryForm !== undefined &&
-        record.geriAudiometryPreScreeningForm !== undefined,
+        record.geriVisionForm !== undefined &&
+        record.geriAudiometryPreScreeningForm !== undefined &&
+        record.geriAudiometryForm !== undefined,
       doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult
       dietitiansconsult: record.dietitiansConsultForm !== undefined, // dietitian's consult
       socialservice: record.socialServiceForm !== undefined, // social service,
