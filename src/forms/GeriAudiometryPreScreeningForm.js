@@ -7,49 +7,44 @@ import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, LongTextField } from 'uniforms-material'
+import { SubmitField, ErrorsField } from 'uniforms-material'
 import { RadioField } from 'uniforms-material'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
+import Grid from '@material-ui/core/Grid'
 
 const schema = new SimpleSchema({
-  geriMMSEQ1: {
+  geriPreAudiometryQ1: {
     type: String,
+    allowedValues: ['Yes (go to Q2)', 'No (skip Q2, continue with hearing test)'],
     optional: false,
   },
-  geriMMSEQ2: {
+  geriPreAudiometryQ2: {
     type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriMMSEQ3: {
-    type: String,
-    allowedValues: ['Yes'],
-    optional: false,
-  },
-  geriMMSEQ4: {
-    type: String,
+    allowedValues: [
+      'Yes (To skip hearing test & refer to polyclinic or specialist if any)',
+      'No (To skip hearing test)',
+    ],
     optional: true,
-  },
-  geriMMSEQ5: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
   },
 })
 
-const formName = 'geriMMSEForm'
-const GeriMMSEForm = (props) => {
+const formName = 'geriAudiometryPreScreeningForm'
+const GeriAudiometryPreScreeningForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+
+  useEffect(() => {
+    const loadForms = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    loadForms()
   }, [])
   const newForm = () => (
     <AutoForm
@@ -75,23 +70,22 @@ const GeriMMSEForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h2>MINI-MENTAL STATE EXAMINATION (MMSE)</h2>
         <br />
-        MMSE score (_/_):
-        <LongTextField name='geriMMSEQ1' label='geriMMSE - Q1' />
+        <h2>AUDIOMETRY PRE-SCREENING</h2>
+        1. Are you currently wearing hearing aid(s)?
+        <RadioField name='geriPreAudiometryQ1' label='geriPreAudiometry - Q1' />
         <br />
-        Need referral to G-RACE associated polyclinics/ partners?
-        <RadioField name='geriMMSEQ2' label='geriMMSE - Q2' />
-        Polyclinic:
-        <LongTextField name='geriMMSEQ4' label='geriMMSE - Q4' />
+        2. Please answer the following
+        <ol type='a' style={{ listStylePosition: 'inside' }}>
+          <li>Have you had your hearing aids for more than 5 years?</li>
+          <li>Has it been 3 years or more since you last used your hearing aids?</li>
+          <li>Are your hearing aids spoilt/not working?</li>
+        </ol>
         <br />
-        Need referral to SACS?
-        <RadioField name='geriMMSEQ3' label='geriMMSE - Q3' />
+        If participant answered yes to any of of the questions, tick yes below.
         <br />
-        Referral to Doctor&apos;s Consult?
-        <br />
-        For geri patients who may be depressed
-        <RadioField name='geriMMSEQ5' label='geriMMSE - Q5' />
+        If no to all question, tick no below.
+        <RadioField name='geriPreAudiometryQ2' label='geriPreAudiometry - Q2' />
         <br />
       </Fragment>
       <ErrorsField />
@@ -104,13 +98,19 @@ const GeriMMSEForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+      </Grid>
     </Paper>
   )
 }
 
-GeriMMSEForm.contextType = FormContext
+GeriAudiometryPreScreeningForm.contextType = FormContext
 
-export default function GeriMMSEform(props) {
-  return <GeriMMSEForm {...props} />
+export default function GeriAudiometryPreScreeningform(props) {
+  return <GeriAudiometryPreScreeningForm {...props} />
 }

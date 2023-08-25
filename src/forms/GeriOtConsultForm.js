@@ -143,7 +143,7 @@ const GeriOtConsultForm = (props) => {
         <br />
         To be referred for doctor&apos;s consult (OT)?
         <br />
-        If referral to long-term OT rehab services is necessary, this will be done through the doctor's consult route. 
+        If referral to long-term OT rehab services is necessary, this will be done through the doctor&apos;s consult route. 
         <br />
         <RadioField name='geriOtConsultQ2' label='Geri - OT Consult Q2' />
         Reasons for referral to Doctor&apos;s consult (OT):

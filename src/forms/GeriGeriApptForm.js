@@ -50,6 +50,7 @@ const schema = new SimpleSchema({
   },
 })
 
+// TODO: Delete this file as Geri appt form is removed
 const formName = 'geriGeriApptForm'
 const GeriGeriApptForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)

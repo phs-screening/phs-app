@@ -17,50 +17,70 @@ import {
   BoolField,
 } from 'uniforms-material'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { submitFormReg } from '../api/api.js'
+import { submitForm, submitRegClinics } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { getReg18Counter, getSavedData } from '../services/mongoDB'
+import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
+
+const postalCodeToLocations = {
+  600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
+  600130: 'Trinity Medical Clinic\nBIk 130, Jurong Gateway Road #02-205, S600130',
+  129581: 'Frontier FMC\n3151 Commonwealth Ave West, #04-01 Grantral Mall, S129581',
+  650207: 'Bukit Batok Medical\nBIk 207, Bukit Batok Street 21 #01- 114, S650207',
+  650644: 'Kang An Clinic\nBIk 644 Bukit Batok Central #01-70 S650644',
+  610064: 'Drs Tangs and Partner\nBIk 64, Yung Kuang Road, #01- 115, S610064',
+  641518: 'Lakeside FMC\nBIk 518A, Jurong West Street 52 #01-02, S641518',
+  640638:
+    'Healthmark Pioneer MallClinic\nBIk 638, Jurong West Street 61 Pioneer Mall #02-08, S640638',
+  640762:
+    'Lee Family Clinic\nBIk 762 Jurong West Street 75, #02-262 Gek Poh Shopping Centre S640762',
+  None: 'None',
+}
+
+const defaultSlots = {
+  600415: 30,
+  600130: 30,
+  129581: 30,
+  650207: 30,
+  650644: 30,
+  610064: 30,
+  641518: 30,
+  640638: 30,
+  640762: 30,
+  None: 10000,
+}
 
 const formName = 'registrationForm'
 const RegForm = () => {
-  const options = [
-    'Bukit Batok Medical Clinic Blk 207 Bukit Batok Street 21, #01-114, S650207',
-    'Drs Tang & Partners Pte. Ltd. Blk 64, Yung Kuang Road, #01-115, S610064',
-    'Lai Medical Clinic Blk 213, Bukit Batok St. 21, #01-209, S650213',
-    'Lakeside Family Medicine Clinic Blk 518A, Jurong West St. 52, #01-02, S641518',
-    'Lee Family Clinic Pte. Ltd. Blk 762, Jurong West St 75, #02-262, S640762',
-    'Mei Ling Clinic Blk 158, Mei Ling St, #01-80, S140158',
-    'West Coast Clinic & Surgery Blk 772, Clementi West St. 2, #01-162, S120722',
-    'None',
-  ]
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
-  const [optionsQ10, setOptionsQ10] = useState([])
+  const [slots, setSlots] = useState(defaultSlots)
 
   useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName, options)
-    const counters = await getReg18Counter()
-    if (counters !== null) {
-      const seq = counters.seq // current selected
-      const seqLimits = counters.seqLimits // max limit
-      for (let i = 0; i < seq.length; i++) {
-        // to get number of slots available
-        seq[i] = seqLimits[i] - seq[i]
+    const savedData = await getSavedData(patientId, formName)
+
+    const phlebCountersCollection = getClinicSlotsCollection()
+    const phlebCounters = await phlebCountersCollection.find()
+    const temp = { ...defaultSlots }
+    for (const { postalCode, counterItems } of phlebCounters) {
+      if (postalCode && counterItems) {
+        console.log(postalCode, counterItems.length)
+        temp[postalCode] -= counterItems.length
       }
-      setOptionsQ10(seq)
     }
+    console.log(temp)
+    setSlots(temp)
+
     setSaveData(savedData)
   }, [])
 
-  // Note: Slice does not modify old array. It creates new array.
-  const displayVacancy = optionsQ10.slice(0, -1).map((x, i) => {
+  const displayVacancy = Object.entries(slots).map(([postalCode, n], i) => {
     return (
       <div key={i}>
-        {options[i]}
-        <b> Slots: {x}</b>
+        {postalCodeToLocations[postalCode]}
+        <b> Slots: {n}</b>
       </div>
     )
   })
@@ -98,9 +118,6 @@ const RegForm = () => {
       CHAS Status 社保援助计划
       <SelectField name='registrationQ8' />
       <br />
-      Pioneer Generation Status 建国一代配套
-      <RadioField name='registrationQ9' />
-      <br />
       <h2>Follow up at GP Clinics</h2>
       <p>
         Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you
@@ -111,7 +128,11 @@ const RegForm = () => {
       <br />
       <br />
       {displayVacancy}
+      <br />
       <RadioField name='registrationQ10' />
+      <br />
+      Pioneer Generation Status 建国一代配套
+      <RadioField name='registrationQ9' />
       <br />
       Preferred Language for Health Report
       <RadioField name='registrationQ11' />
@@ -119,11 +140,9 @@ const RegForm = () => {
       <h2>Phlebotomy Eligibility</h2>
       Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
       <br />
-      1) Fasted for minimum 8 hours <br /> Note: Water is allowed, coffee/tea is not. Medications
-      are fine. <br />
-      2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
+      1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
       <br />
-      3) Have not done a blood test within the past 3 years.
+      2) Have not done a blood test within the past 3 years.
       <br />
       <br />
       Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
@@ -134,11 +153,9 @@ const RegForm = () => {
       <br />
       抽血合格标准:
       <br />
-      1) 八个小时内没有吃东西或喝饮料. 可以喝水, 吃药。不能喝咖啡, 喝茶。
+      1) 在过去的三年内沒有验过血。
       <br />
-      2) 在过去的三年内沒有验过血。
-      <br />
-      3) 没有糖尿病, 高血压, 高胆固醇。
+      2) 没有糖尿病, 高血压, 高胆固醇。
       <BoolField name='registrationQ12' />
       <br />
       <h2>Compliance to PDPA 同意书</h2>
@@ -229,7 +246,7 @@ const RegForm = () => {
     },
     registrationQ10: {
       type: String,
-      allowedValues: options,
+      allowedValues: Object.values(postalCodeToLocations),
       optional: true,
     },
     registrationQ11: {
@@ -261,19 +278,46 @@ const RegForm = () => {
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
-        const response = await submitFormReg(model, patientId, options)
+
+        // Note: Q10 is optional
+        const location = model.registrationQ10
+        if (location) {
+          const postalCode =
+            model.registrationQ10 === 'None' ? 'None' : model.registrationQ10.trim().slice(-6)
+
+          // If no more slots, do not submit form
+          if (slots[postalCode] <= 0) {
+            alert('No more slots available for this location')
+            isLoading(false)
+            return
+          }
+
+          const counterResponse = await submitRegClinics(postalCode, patientId)
+          // Update counters by checking previous selection
+          if (!counterResponse.result) {
+            isLoading(false)
+            setTimeout(() => {
+              alert(`Unsuccessful. ${counterResponse.error}`)
+            }, 80)
+            isLoading(false)
+            return
+          }
+        }
+
+        // If counters updated successfully, submit the new form information
+        const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
-          isLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }
+
+        isLoading(false)
       }}
       model={saveData}
     >

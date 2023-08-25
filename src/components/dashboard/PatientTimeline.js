@@ -59,9 +59,9 @@ function generateStatusObject(record) {
         record.geriTugForm !== undefined &&
         record.geriPtConsultForm !== undefined &&
         record.geriOtConsultForm !== undefined &&
-        record.geriGeriApptForm !== undefined &&
         record.geriMMSEForm !== undefined &&
-        record.geriAudiometryForm !== undefined,
+        record.geriAudiometryForm !== undefined &&
+        record.geriAudiometryPreScreeningForm !== undefined,
       doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult
       dietitiansconsult: record.dietitiansConsultForm !== undefined, // dietitian's consult
       socialservice: record.socialServiceForm !== undefined, // social service,
@@ -165,7 +165,7 @@ const BasicTimeline = (props) => {
               onClick={(event) => navigateTo(event, navigate, 'triage', scrollTop)}
             >
               Triage
-              {!formDone?.hxtaking ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+              {!formDone?.triage ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

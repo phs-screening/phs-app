@@ -35,7 +35,6 @@ const SummaryForm = (props) => {
   const [geriPtConsult, setGeriPtConsult] = useState({})
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
-  const [geriGeriAppt, setGeriGeriAppt] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
@@ -63,7 +62,6 @@ const SummaryForm = (props) => {
       const geriAudiometryData = getSavedData(patientId, allForms.geriAudiometryForm)
       const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
-      const geriGeriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
@@ -88,7 +86,6 @@ const SummaryForm = (props) => {
         registrationData,
         phlebotomyData,
         geriEbasDepData,
-        geriGeriApptData,
         geriAmtData,
         dietitiansConsultData,
         oralHealthData,
@@ -112,14 +109,13 @@ const SummaryForm = (props) => {
         setRegistration(result[12])
         setPhlebotomy(result[13])
         setGeriEbasDep(result[14])
-        setGeriGeriAppt(result[15])
-        setGeriAmt(result[16])
-        setDietiatiansConsult(result[17])
-        setOralHealth(result[18])
-        setGeriMmse(result[19])
-        setGeriVision(result[20])
-        setGeriAudiometry(result[21])
-        setTriage(result[22])
+        setGeriAmt(result[15])
+        setDietiatiansConsult(result[16])
+        setOralHealth(result[17])
+        setGeriMmse(result[18])
+        setGeriVision(result[19])
+        setGeriAudiometry(result[20])
+        setTriage(result[21])
         isLoadingPrevData(false)
       })
     }
@@ -554,14 +550,6 @@ const SummaryForm = (props) => {
             {underlined('Interest in signing up?')}
             {geriOtConsult? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
             <br></br>
-            {underlined('Referred to Social Service for HDB EASE Application?')}
-            {geriGeriAppt.geriGeriApptQ13 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ13,
-                  'Please check if participant visisted the Social Service station for completion of his/her HDB EASE Application.',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ13)}
-            <br></br>
 
             <br></br>
             {bold("17. Doctor's Consult")}
@@ -786,7 +774,6 @@ const SummaryForm = (props) => {
                   geriMmse,
                   geriVision,
                   geriAudiometry,
-                  geriGeriAppt,
                   dietitiansConsult,
                   oralHealth,
                 )

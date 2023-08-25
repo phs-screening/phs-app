@@ -104,12 +104,17 @@ export const getSavedPatientData = async (patientId, collectionName) => {
   return savedData === null ? {} : savedData
 }
 
-export const getReg18Counter = async () => {
-  // special case for registration slot counter
+export const getClinicSlotsCollection = () => {
   const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
-  const savedData = await mongoConnection
+  const phlebCounters = mongoConnection.db('phs').collection('queueCounters')
+  return phlebCounters
+}
+
+export const updatePhlebotomyCounter = async (seq) => {
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  await mongoConnection
     .db('phs')
     .collection('queueCounters')
-    .findOne({ _id: 'registrationQ10' })
-  return savedData === null ? null : savedData
+    .updateOne({ _id: 'phlebotomyQ3' }, { $set: { seq } })
+  return
 }

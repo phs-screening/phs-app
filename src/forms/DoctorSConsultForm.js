@@ -92,7 +92,6 @@ const DoctorSConsultForm = () => {
   const [geriVision, setGeriVision] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
   const [geriPhysical, setGeriPhysical] = useState({})
-  const [geriAppt, setGeriAppt] = useState({})
   const [geriAudio, setGeriAudio] = useState({})
   useEffect(async () => {
     const loadPastForms = async () => {
@@ -104,7 +103,6 @@ const DoctorSConsultForm = () => {
       const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
       const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
       const geriPhysicalData = getSavedData(patientId, allForms.geriPhysicalActivityLevelForm)
-      const geriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriAudioData = getSavedData(patientId, allForms.geriAudiometryForm)
       const savedData = getSavedData(patientId, formName)
       Promise.all([
@@ -117,7 +115,6 @@ const DoctorSConsultForm = () => {
         geriVisionData,
         geriSppbData,
         geriPhysicalData,
-        geriApptData,
         geriAudioData,
       ]).then((result) => {
         setHcsr(result[0])
@@ -130,8 +127,7 @@ const DoctorSConsultForm = () => {
         setGeriVision(result[6])
         setGeriSppb(result[7])
         setGeriPhysical(result[8])
-        setGeriAppt(result[9])
-        setGeriAudio(result[10])
+        setGeriAudio(result[9])
       })
     }
 
@@ -160,7 +156,7 @@ const DoctorSConsultForm = () => {
       model={saveData}
     >
       <Fragment>
-        <h1>Doctor's Consult</h1>
+        <h1>Doctor&apos;s Consult</h1>
         <br />
         Doctor&apos;s Name:
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
@@ -378,8 +374,6 @@ const DoctorSConsultForm = () => {
               {geriOt ? blueText(geriOt.geriOtConsultQ7) : blueText('nil')}
               {underlined('Interested in signing up?')}
               {geriOt ? blueText(geriOt.geriOtConsultQ8) : blueText('nil')}
-              {underlined('Requires Functional Assessment Report Completion?')}
-              {geriAppt ? blueText(geriAppt.geriGeriApptQ11) : blueText('nil')}
             </div>
           )}
         </Grid>

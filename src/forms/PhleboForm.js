@@ -1,20 +1,19 @@
-import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import SimpleSchema from 'simpl-schema';
+import React, { Fragment, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
+import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { AutoForm } from 'uniforms';
-import { SubmitField, ErrorsField } from 'uniforms-material';
-import { submitForm } from '../api/api.js';
-import { FormContext } from '../api/utils.js';
-import { BoolField } from 'uniforms-material';
-import { getSavedData } from '../services/mongoDB';
-import './fieldPadding.css';
+import { AutoForm } from 'uniforms'
+import { SubmitField, ErrorsField, RadioField } from 'uniforms-material'
+import { submitForm, submitRegClinics } from '../api/api.js'
+import { FormContext } from '../api/utils.js'
+import { BoolField } from 'uniforms-material'
+import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'
+import './fieldPadding.css'
 
 const schema = new SimpleSchema({
   phlebotomyQ1: {
@@ -30,6 +29,7 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'phlebotomyForm'
+
 const PhleboForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
@@ -39,6 +39,7 @@ const PhleboForm = () => {
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
+
     setSaveData(savedData)
   }, [])
 
@@ -50,17 +51,16 @@ const PhleboForm = () => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
-          isLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }
+        isLoading(false)
       }}
       model={saveData}
     >
@@ -69,10 +69,10 @@ const PhleboForm = () => {
         <BoolField name='phlebotomyQ1' />
         Circled &apos;Completed&apos; under Phlebotomy on Form A?
         <BoolField name='phlebotomyQ2' />
+        <br />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-
       <br />
       <Divider />
     </AutoForm>
