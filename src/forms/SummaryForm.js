@@ -171,51 +171,51 @@ const SummaryForm = (props) => {
 
             {bold('2. Blood Pressure')}
             {underlined('Average Blood Pressure (Systolic)')}
-            {cancer
-              ? parseInt(cancer.hxCancerQ17) >= 130
+            {triage
+              ? parseInt(triage.triageQ7) >= 130
                 ? redText(
-                    cancer.hxCancerQ17 +
+                    triage.triageQ7 +
                       '\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension',
                   )
-                : blueText(cancer.hxCancerQ17)
+                : blueText(triage.triageQ7)
               : '-'}
             <br></br>
             {underlined('Average Blood Pressure (Diastolic)')}
-            {cancer
-              ? parseInt(cancer.hxCancerQ18) >= 85
+            {triage
+              ? parseInt(triage.triageQ8) >= 85
                 ? redText(
-                    cancer.hxCancerQ18 +
+                    triage.triageQ8 +
                       '\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension',
                   )
-                : blueText(cancer.hxCancerQ18)
+                : blueText(triage.traigeQ8)
               : '-'}
             <br></br>
 
             <br></br>
             {bold('3. BMI')}
             {underlined('Height (in cm)')}
-            {cancer ? blueText(cancer.hxCancerQ19) : '-'}
+            {triage ? blueText(triage.triageQ9) : '-'}
             <br></br>
             {underlined('Weight (in kg)')}
-            {cancer ? blueText(cancer.hxCancerQ20) : '-'}
+            {triage ? blueText(triage.triageQ10) : '-'}
             <br></br>
             {underlined('Waist Circumference (in cm)')}
-            {cancer
-              ? Number(cancer.hxCancerQ24) >= 90 && patients.gender == 'Male'
+            {triage
+              ? Number(triage.triageQ14) >= 90 && patients.gender == 'Male'
                 ? redText(
-                    cancer.hxCancerQ24 +
+                    triage.triageQ14 +
                       '\nYour waist circumference is above the normal range. The normal range is less than 90 cm for males.',
                   )
-                : Number(cancer.hxCancerQ24) >= 80 && patients.gender == 'Female'
+                : Number(triage.triageQ14) >= 80 && patients.gender == 'Female'
                 ? redText(
-                    cancer.hxCancerQ24 +
+                    triage.triageQ14 +
                       '\nYour waist circumference is above the normal range. The normal range is less than 80 cm for females.',
                   )
-                : blueText(cancer.hxCancerQ24)
+                : blueText(triage.triageQ14)
               : '-'}
             <br></br>
             {underlined('Body Mass Index (BMI)')}
-            {cancer ? calculateBMI(Number(cancer.hxCancerQ19), Number(cancer.hxCancerQ20)) : '-'}
+            {triage ? calculateBMI(Number(triage.triageQ9), Number(triage.triageQ10)) : '-'}
             <br></br>
 
             <br></br>
@@ -429,7 +429,9 @@ const SummaryForm = (props) => {
               : '-'}
             <br></br>
             {bold('c. Geriatrics - EBAS')}
-            {underlined('Referred to SACS (failed EBAS-DEP) - from Geriatrics EBAS, probable present of a depressive order?')}
+            {underlined(
+              'Referred to SACS (failed EBAS-DEP) - from Geriatrics EBAS, probable present of a depressive order?',
+            )}
             {geriEbasDep
               ? geriEbasDep.geriEbasDepQ10 == 'Yes'
                 ? blueRedText(
@@ -548,7 +550,7 @@ const SummaryForm = (props) => {
             {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
             <br></br>
             {underlined('Interest in signing up?')}
-            {geriOtConsult? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
             <br></br>
 
             <br></br>
@@ -776,6 +778,7 @@ const SummaryForm = (props) => {
                   geriAudiometry,
                   dietitiansConsult,
                   oralHealth,
+                  triage
                 )
               }
             >
