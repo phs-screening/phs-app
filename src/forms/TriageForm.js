@@ -148,6 +148,8 @@ const TriageForm = () => {
       model={saveData}
     >
       <Fragment>
+        <h1>Triage</h1>
+        <br />
         <h2>VITALS</h2>
         <h3>
           Please fill in the participant&apos;s BP and BMI based on what you earlier recorded on
@@ -265,10 +267,9 @@ const TriageForm = () => {
             1) <font color='red'>Dietitian&apos;s Consultation station</font>, tick eligibility, Circle
             interested &apos;Y&apos; on Page 1 of Form A{' '}
           </p>{' '}
-          2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation, <br />
+          <br />
           IF BMI IS:
-          <br />≥ 27.6 as obese, write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation - Reasons
+          <br /> &gt; 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Dietitian&apos;s Consultation - Reasons
           for Recommendation
           <br />
         </PopupText>
