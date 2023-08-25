@@ -261,9 +261,8 @@ const HxHcsrForm = (props) => {
           1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A <br />
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
           Recommendation <br />
-          3) Pleae write relevant medical/social history of participant under history taking box{' '}
-          <br /> 4) Page 2 of Form A, under Exhibition - Recommendation, tick renal and bladder
-          health, write down SFCS booth
+          3) Please write relevant medical/social history of participant under history taking box{' '}
+          <br /> 4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS booth
           <br />
           <br />
         </PopupText>
