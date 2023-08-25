@@ -107,15 +107,6 @@ const schema = new SimpleSchema({
     ],
     optional: true,
   },
-  hxCancerQ9: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  hxCancerQ10: {
-    type: String,
-    optional: true,
-  },
   hxCancerQ25: {
     type: Array,
     optional: false,
@@ -126,8 +117,9 @@ const schema = new SimpleSchema({
       'FIT (50 and above, FIT not done in past 1 year, Colonoscopy not done in past 10 years, Not diagnosed with colorectal cancer)',
       'WCE (40 and above, females only)',
       'Geriatrics (60 and above)',
-      "Doctor's Consultation (& Dietitian) - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)",
-      'Social Service - As recommended by hx-taker (CHAS Application, Financial Support required, Social Support required)',
+      "Doctor's Consultation - As recommended by hx-taker, undiagnosed or non-compliant cases (HTN, DM, Vision Impairment, Hearing Impairment, Urinary Incontinence, Any other pertinent medical issues)",
+      "Dietitian's Consultation - As recommended by hx taker, underweight or obese BMI",
+      'Social Service - As recommended by hx-taker (CHAS Application, Financial Support required)',
       'Oral Health Education - Refer to eligibility criteria for Oral Health',
       'Exhibition - recommended as per necessary',
       'Refer to SACS if patient sounds depressed'
@@ -247,7 +239,7 @@ const HxCancerForm = () => {
           <b>
             Please encourage participants to go for FIT every year if participant is above 50,
             asymptomatic and no positive family history of colorectal cancer in first degree
-            relatives. <br />
+            relatives and does not have any bleeding disorders. <br />
             If deemed to be in high risk (positive family history of colorectal cancer in first
             degree relatives, counsel for colonoscopy every 3 years), refer to risk categorization
             given.
@@ -280,7 +272,6 @@ const HxCancerForm = () => {
         cells of your cervix, which may develop into cancer later.)
         <RadioField name='hxCancerQ8' label='Hx Cancer Q8' />
         <br />
-        <br />
         <b>
           <font color='red'>
             For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and
@@ -293,38 +284,6 @@ const HxCancerForm = () => {
           1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
         </b>
         <br />
-        <br />
-        <br />
-        <br />
-        <b>
-          5. If participant has a <mark>history of cancer</mark> or if{' '}
-          <mark>participant&apos;s family history</mark> requires further scrutiny by doctors, refer
-          to doctor&apos;s consult.{' '}
-          <font color='red'>
-            (If indicated &apos;Yes&apos; please complete the question below.)
-          </font>
-        </b>
-        <RadioField name='hxCancerQ9' label='Hx Cancer Q9' />
-        <PopupText qnNo='hxCancerQ9' triggerValue='Yes'>
-          <h2>
-            Only complete Q6 if you are referring participant to Doctor&apos;s Consultation station.
-          </h2>
-          <b>
-            <font color='blue'>
-              6. Based on participant&apos;s history taken thus far, please summarise his/her
-              RELEVANT Family History briefly for the doctors to refer to during doctors
-              consultation.
-            </font>
-            <br />
-            <br />
-            1) Participant&apos;s history of Cancers (if any)
-            <br />
-            2) Positive family history of medical conditions in first-degree relatives:
-            <br />
-            3) Positive family history of Cancers (Cervical, Breast, Colorectal)
-          </b>
-          <LongTextField name='hxCancerQ10' label='Hx Cancer Q10' />
-        </PopupText>
         <br />
         <h2>HISTORY TAKING PART 5: REFERRALS/MEGA SORTING STATION </h2>
         1. REFERRALS
