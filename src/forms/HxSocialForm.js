@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { RadioField, LongTextField } from 'uniforms-material'
+import { SelectField, RadioField, LongTextField } from 'uniforms-material'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
@@ -105,6 +105,50 @@ const schema = new SimpleSchema({
   hxSocialQ16: {
     type: String,
     allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxSocialQ17: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxSocialQ18: {
+    type: String,
+    optional: true,
+  },
+  hxSocialQ19: {
+    type: String,
+    allowedValues: [
+      'Less than 2 standard drinks per day on average.',
+      'More than 2 standard drinks per day on average.',
+      'No',
+      'Quit Alcoholic Drinks',
+    ],
+    optional: false,
+  },
+  hxSocialQ20: {
+    type: Array,
+    optional: false,
+  },
+  'hxSocialQ20.$': {
+    type: String,
+    allowedValues: [
+      'No (Skip to Q7)',
+      'Yes (Proceed to answer below)',
+      'Vegetables (1 serving/day)',
+      'Vegetables (2 or more servings/day)',
+      'Fruits (1 serving/day)',
+      'Fruits (2 or more servings/day)',
+      'Whole grain and cereals',
+    ],
+  },
+  hxSocialQ21: {
+    type: String,
+    allowedValues: [
+      'Yes (At least 20 mins each time, for 3 or more days per week.)',
+      'Yes (At least 20 mins each time, for less than 3 days per week.)',
+      'No participation of at least 20 min each time.',
+    ],
     optional: false,
   },
 })
@@ -255,7 +299,32 @@ const HxSocialForm = (props) => {
         <RadioField name='hxSocialQ16' label='Hx Social Q16' />
         <br />
         <br />
-        <h2>3. ORAL ISSUES</h2>
+        <h2>3. LIFESTYLE</h2>
+        Do you smoke?
+        <RadioField name='hxSocialQ17' label='Hx Social Q17' />
+        Roughly, how many pack-years?
+        <LongTextField name='hxSocialQ18' label='Hx Social Q18' />
+        <br />
+        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)
+        <RadioField name='hxSocialQ19' label='Hx Social Q19' />
+        <br />
+        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.
+        <br />
+        <SelectField name='hxSocialQ20' checkboxes='true' label='Hx Social Q20' />
+        <br />
+        Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
+        <RadioField name='hxSocialQ21' label='Hx Social Q21' />
+        <br />
+        <b>
+          Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
+          <span style={{ color: 'red' }}>Dietitian's Consult</span> if participant agrees,
+          Indicate:
+        </b>
+        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
+        2) Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
+        Reasons for Recommendation
+        <br />
+        <h2>4. ORAL ISSUES</h2>
         <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips,
         Tongue, Gums & Tissues (Healthy - pink and moist)
         <br />
