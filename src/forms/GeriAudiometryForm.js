@@ -16,6 +16,7 @@ import './fieldPadding.css'
 import Grid from '@material-ui/core/Grid'
 import { blueText, title, underlined } from '../theme/commonComponents'
 import allForms from './forms.json'
+import { useNavigate } from 'react-router-dom'
 
 const schema = new SimpleSchema({
   geriAudiometryQ1: {
@@ -99,6 +100,8 @@ const GeriAudiometryForm = (props) => {
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
   const [hcsr, setHcsr] = useState({})
+  const navigate = useNavigate()
+
   useEffect(() => {
     const loadForms = async () => {
       const savedData = getSavedData(patientId, formName)
@@ -124,7 +127,7 @@ const GeriAudiometryForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)
