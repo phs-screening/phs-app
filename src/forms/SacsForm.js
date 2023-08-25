@@ -33,10 +33,6 @@ const schema = new SimpleSchema({
     type: String,
     allowedValues: ['Yes', 'No'],
   },
-  sacsQ4: {
-    type: String,
-    optional: true,
-  },
   wceQ1: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -100,7 +96,7 @@ const SacsForm = () => {
       model={saveData}
     >
       <Fragment>
-        <h2>SACS</h2>
+        <h1>SACS</h1>
         <br />
         Notes from SACS Consultation
         <TextField name='sacsQ1' label='SACS Q1' />
@@ -108,11 +104,9 @@ const SacsForm = () => {
         Is the patient okay to continue with screening?
         <RadioField name='sacsQ2' label='SACS Q2' />
         <br />
-        Has this person been referred to a SACS partner clinic for follow-up?
+        Has this person been referred to a SACS CREST programme for follow-up?
         <RadioField name='sacsQ3' label='SACS Q3' />
         <br />
-        If yes, please specify name of clinic
-        <TextField name='sacsQ4' label='SACS Q4' />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
