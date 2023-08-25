@@ -156,7 +156,7 @@ const DoctorSConsultForm = () => {
       model={saveData}
     >
       <Fragment>
-        <h1>Doctor's Consult</h1>
+        <h1>Doctor&apos;s Consult</h1>
         <br />
         Doctor&apos;s Name:
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />

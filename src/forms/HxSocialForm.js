@@ -287,7 +287,7 @@ const HxSocialForm = (props) => {
             <br />
             Indicate for Social Service station on:{' '}
           </b>
-          1) Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1 
+          1) Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1
           <br />
           2) Write reasons for referral on the right column
         </PopupText>
@@ -305,19 +305,24 @@ const HxSocialForm = (props) => {
         Roughly, how many pack-years?
         <LongTextField name='hxSocialQ18' label='Hx Social Q18' />
         <br />
-        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of wine.)
+        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or
+        bottle of beer, or a glass of wine.)
         <RadioField name='hxSocialQ19' label='Hx Social Q19' />
         <br />
-        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick where applicable.
+        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick
+        where applicable.
         <br />
         <SelectField name='hxSocialQ20' checkboxes='true' label='Hx Social Q20' />
         <br />
-        Do you exercise or participate in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples of physical activity includes exercising, walking, playing sports, washing your car, lifting/ moving moderately heavy luggage and doing housework.
+        Do you exercise or participate in any form of moderate physical activity for at least 150
+        minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples
+        of physical activity includes exercising, walking, playing sports, washing your car,
+        lifting/ moving moderately heavy luggage and doing housework.
         <RadioField name='hxSocialQ21' label='Hx Social Q21' />
         <br />
         <b>
           Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
-          <span style={{ color: 'red' }}>Dietitian's Consult</span> if participant agrees,
+          <span style={{ color: 'red' }}>Dietitian&apos;s Consult</span> if participant agrees,
           Indicate:
         </b>
         1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
@@ -365,8 +370,8 @@ const HxSocialForm = (props) => {
         <RadioField name='hxSocialQ14' label='Hx Social Q14' />
         <PopupText qnNo='hxSocialQ14' triggerValue='Yes'>
           <b>
-            Refer to Oral Health Station if participant has poor dental hygiene
-            and interested to go through dental education.
+            Refer to Oral Health Station if participant has poor dental hygiene and interested to go
+            through dental education.
             <br />
             <span style={{ color: 'red' }}>ALL</span> participants with suspected dental issues will
             be referred to Oral Health Station.

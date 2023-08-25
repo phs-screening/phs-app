@@ -109,7 +109,7 @@ const DietitiansConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h1>Dietitian's Consultation</h1>
+        <h1>Dietitian&apos;s Consultation</h1>
         <br />
         Has the participant visited the Dietitian&apos;s Consult station?
         <RadioField name='dietitiansConsultQ7' label="Dietitian's Consult Q7" />

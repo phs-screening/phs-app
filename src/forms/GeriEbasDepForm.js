@@ -211,7 +211,7 @@ const GeriEbasDepForm = (props) => {
           /8
         </h3>
         <br />
-        Referral to Doctor's Consult?
+        Referral to Doctor&apos;s Consult?
         <br />
         (For 1. non-geri participants who are probably depressed from EBAS Score” AND 
         2. geri patients who pass AMT and who are probably depressed from EBAS Score)

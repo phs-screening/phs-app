@@ -88,7 +88,7 @@ const GeriMMSEForm = (props) => {
         Need referral to SACS?
         <RadioField name='geriMMSEQ3' label='geriMMSE - Q3' />
         <br />
-        Referral to Doctor's Consult?
+        Referral to Doctor&apos;s Consult?
         <br />
         For geri patients who may be depressed
         <RadioField name='geriMMSEQ5' label='geriMMSE - Q5' />
