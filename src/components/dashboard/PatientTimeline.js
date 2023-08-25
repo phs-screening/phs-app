@@ -354,8 +354,12 @@ const BasicTimeline = (props) => {
         </TimelineItem>
 
         <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot />
+        <TimelineSeparator>
+            {Object.values(formDone).every((e) => e) ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
           </TimelineSeparator>
           <TimelineContent>END</TimelineContent>
         </TimelineItem>

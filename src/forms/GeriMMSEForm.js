@@ -26,7 +26,7 @@ const schema = new SimpleSchema({
   },
   geriMMSEQ3: {
     type: String,
-    allowedValues: ['Yes'],
+    allowedValues: ['Yes', 'No'],
     optional: false,
   },
   geriMMSEQ4: {
