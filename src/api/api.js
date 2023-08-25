@@ -1,6 +1,8 @@
-import mongoDB, { getName, isAdmin } from '../services/mongoDB'
-import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
-import { jsPDF } from 'jspdf'
+import mongoDB, {
+  getName, isAdmin, getPhlebCountersCollection
+} from '../services/mongoDB';
+import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js';
+import { jsPDF } from 'jspdf';
 
 const axios = require('axios').default
 
@@ -129,84 +131,38 @@ export async function submitFormSpecial(args, patientId, formCollection) {
   }
 }
 
-export async function submitFormReg(args, patientId, options) {
-  const formCollection = 'registrationForm'
-  try {
-    const optionQ10Index = options.indexOf(args.registrationQ10)
-    const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
-    const registrationForms = mongoConnection.db('phs').collection(formCollection)
-    const old = await registrationForms.findOne({ _id: patientId })
-    const patientsRecord = mongoConnection.db('phs').collection('patients')
-    const record = await patientsRecord.findOne({ queueNo: patientId })
-    if (optionQ10Index >= 0) {
-      if (old !== undefined && old !== null) {
-        const oldQ10Option = old.registrationQ10
-        // check if there is old option selected for q10
-        if (oldQ10Option !== undefined) {
-          // if the new option differs from old, +1 to new and -1 to old
-          // unless either old or new option is None. Logic coded in updateRegQ10No
-          if (oldQ10Option !== args.registrationQ10) {
-            const oldQ10OptionIndex = options.indexOf(oldQ10Option)
-            const response = await mongoDB.currentUser.functions.updateRegQ10No(
-              optionQ10Index,
-              oldQ10OptionIndex,
-            )
-            if (!response) {
-              return { result: false, error: 'Reg Q10: Clinical slots are full!' }
-            }
-          }
-        } else {
-          const response = await mongoDB.currentUser.functions.getRegQ10No(optionQ10Index)
-          if (!response) {
-            return { result: false, error: 'Reg Q10: Clinical slots are full!' }
-          }
-        }
-      } else {
-        const response = await mongoDB.currentUser.functions.getRegQ10No(optionQ10Index)
-        if (!response) {
-          return { result: false, error: 'Reg Q10: Clinical slots are full!' }
-        }
-      }
-    }
-    if (record) {
-      if (record[formCollection] === undefined) {
-        // first time form is filled, create document for form
-        await patientsRecord.updateOne(
-          { queueNo: patientId },
-          { $set: { [formCollection]: patientId } },
-        )
-        await registrationForms.insertOne({ _id: patientId, ...args })
-        return { result: true }
-      } else {
-        if (await isAdmin()) {
-          args.lastEdited = new Date()
-          args.lastEditedBy = getName()
+export async function submitPhlebLocation(postalCode, patientId) {
+  const phlebCountersCollection = getPhlebCountersCollection()
+  await phlebCountersCollection.findOneAndUpdate(
+    { postalCode },
+    { $push: { counterItems: patientId } },
+    { upsert: true },
+  )
 
-          await registrationForms.updateOne({ _id: patientId }, { $set: { ...args } })
-          // replace form
-          // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
-          // throw error message
-          // const errorMsg = "This form has already been submitted. If you need to make "
-          //         + "any changes, please contact the admin."
-          return { result: true }
-        } else {
-          const errorMsg =
-            'This form has already been submitted. If you need to make ' +
-            'any changes, please contact the admin.'
-          return { result: false, error: errorMsg }
-        }
+  const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
+  const phlebotomyFormRecords = mongoConnection.db('phs').collection('phlebotomyForm')
+  const patientPhlebForm = await phlebotomyFormRecords.findOne({ _id: patientId })
+  const phlebFormExists = patientPhlebForm !== undefined && patientPhlebForm !== null
+
+  try {
+    if (phlebFormExists) {
+      const prevOption = patientPhlebForm.phlebotomyQ3
+      const prevOptionExists = prevOption !== undefined && prevOption !== null
+      if (prevOptionExists) {
+        const prevPostalCode = prevOption.trim().slice(-6)
+        await phlebCountersCollection.findOneAndUpdate(
+          {
+            postalCode: prevPostalCode,
+          },
+          {
+            $pull: { counterItems: patientId },
+          },
+        )
       }
-    } else {
-      // TODO: throw error, not possible that no document is found
-      // unless malicious user tries to change link to directly access reg page
-      // Can check in every form page if there is valid patientId instead
-      // cannot use useEffect since the form component is class component
-      const errorMsg = 'An error has occurred.'
-      // You will be directed to the registration page." logic not done
-      return { result: false, error: errorMsg }
     }
-  } catch (err) {
-    return { result: false, error: err }
+    return { result: true }
+  } catch (error) {
+    return { result: false, error: error.message }
   }
 }
 
@@ -452,14 +408,7 @@ export function generate_pdf(
   k = addWce(doc, patients, wce, k)
   k = addDoctorSConsult(doc, doctorSConsult, k)
   k = addSocialService(doc, socialService, k)
-  k = addGeriatrics(
-    doc,
-    geriMmse,
-    geriVision,
-    geriAudiometry,
-    geriGeriAppt,
-    k,
-  )
+  k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k)
   k = addDietitiansConsult(doc, dietitiansConsult, k)
   k = addOralHealth(doc, oralHealth, k)
   k = addRecommendation(doc, k)
@@ -845,14 +794,7 @@ export function calculateY(coor) {
   return coor * 4.0569 + 10.2
 }
 
-export function addGeriatrics(
-  doc,
-  geriMmse,
-  geriVision,
-  geriAudiometry,
-  geriGeriAppt,
-  k,
-) {
+export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k) {
   let kk = k
   const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
 
