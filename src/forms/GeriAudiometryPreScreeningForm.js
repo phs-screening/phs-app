@@ -18,7 +18,7 @@ import Grid from '@material-ui/core/Grid'
 const schema = new SimpleSchema({
   geriPreAudiometryQ1: {
     type: String,
-    allowedValues: ['Yes (go to Q2)', 'No (skip Q2, continue with hearing test)'],
+    allowedValues: ['Yes (go to Q2)', 'No (skip Q2, go to Q3)'],
     optional: false,
   },
   geriPreAudiometryQ2: {
@@ -28,6 +28,11 @@ const schema = new SimpleSchema({
       'No (To skip hearing test)',
     ],
     optional: true,
+  },
+  geriPreAudiometryQ3: {
+    type: String,
+    allowedValues: ['Yes (continue with hearing test)', 'No (skip hearing test)'],
+    optional: false,
   },
 })
 
@@ -87,6 +92,8 @@ const GeriAudiometryPreScreeningForm = (props) => {
         If no to all question, tick no below.
         <RadioField name='geriPreAudiometryQ2' label='geriPreAudiometry - Q2' />
         <br />
+        3. Do you think you have a hearing problem?
+        <RadioField name='geriPreAudiometryQ3' label='geriPreAudiometry - Q3' />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
