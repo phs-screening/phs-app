@@ -94,6 +94,7 @@ const GeriAudiometryPreScreeningForm = (props) => {
         <br />
         3. Do you think you have a hearing problem?
         <RadioField name='geriPreAudiometryQ3' label='geriPreAudiometry - Q3' />
+        <br />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
