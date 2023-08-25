@@ -84,6 +84,16 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  hxHcsrQ17: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  hxHcsrQ18: {
+    type: Boolean,
+    label: 'Yes',
+    optional: true,
+  },
 })
 
 const formName = 'hxHcsrForm'
@@ -154,6 +164,24 @@ const HxHcsrForm = (props) => {
         <br />
         <br />
         <h2>1. HEALTH CONCERNS</h2>
+        Has a doctor ever told you that you are overweight or obese before?
+        <RadioField name='hxHcsrQ17' label='Hx HCSR Q17' />
+        Please tick to highlight if you feel BMI requires closer scrutiny by doctors and dietitians
+        later.
+        <BoolField name='hxHcsrQ18' />
+        <PopupText qnNo='hxHcsrQ18' triggerValue={true}>
+          <b>REFER TO DIETICIAN&apos;S CONSULT at:</b>
+          <p>
+            {' '}
+            1) <font color='red'>Dietitian&apos;s Consultation station</font>, tick eligibility, Circle
+            interested &apos;Y&apos; on Page 1 of Form A{' '}
+          </p>{' '}
+          <br />
+          IF BMI IS:
+          <br /> &gt; 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Dietitian&apos;s Consultation - Reasons
+          for Recommendation
+          <br />
+        </PopupText>
         <p>
           If the participant has any <b>presenting complaints or concern(s)</b>, please take a{' '}
           <b>
