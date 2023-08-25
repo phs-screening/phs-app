@@ -76,11 +76,9 @@ const RegForm = () => {
       <h2>Phlebotomy Eligibility</h2>
       Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
       <br />
-      1) Fasted for minimum 8 hours <br /> Note: Water is allowed, coffee/tea is not. Medications
-      are fine. <br />
-      2) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
+      1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
       <br />
-      3) Have not done a blood test within the past 3 years.
+      2) Have not done a blood test within the past 3 years.
       <br />
       <br />
       Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
@@ -91,11 +89,9 @@ const RegForm = () => {
       <br />
       抽血合格标准:
       <br />
-      1) 八个小时内没有吃东西或喝饮料. 可以喝水, 吃药。不能喝咖啡, 喝茶。
+      1) 在过去的三年内沒有验过血。
       <br />
-      2) 在过去的三年内沒有验过血。
-      <br />
-      3) 没有糖尿病, 高血压, 高胆固醇。
+      2) 没有糖尿病, 高血压, 高胆固醇。
       <BoolField name='registrationQ12' />
       <br />
       <h2>Compliance to PDPA 同意书</h2>
