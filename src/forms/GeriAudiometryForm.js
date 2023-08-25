@@ -21,7 +21,9 @@ import allForms from './forms.json'
 const schema = new SimpleSchema({
   geriPreAudiometryQ1: {
     type: String,
-    allowedValues: ['Yes (go to Q2)', 'No (skip Q2, continue with hearing test)'],
+    allowedValues: [
+      'Yes (go to Q2)',
+      'No (skip Q2, go to Q3)'],
     optional: false,
   },
   geriPreAudiometryQ2: {
@@ -31,6 +33,14 @@ const schema = new SimpleSchema({
       'No (To skip hearing test)',
     ],
     optional: true,
+  },
+  geriPreAudiometryQ3: {
+    type: String,
+    allowedValues: [
+      'Yes (continue with hearing test)',
+      'No (skip hearing test)',
+    ],
+    optional: false,
   },
   geriAudiometryQ1: {
     type: String,
@@ -150,7 +160,6 @@ const GeriAudiometryForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <br />
         <h2>AUDIOMETRY PRE-SCREENING</h2>
         1. Are you currently wearing hearing aid(s)?
         <RadioField name='geriPreAudiometryQ1' label='geriPreAudiometry - Q1' />
@@ -166,6 +175,9 @@ const GeriAudiometryForm = (props) => {
         <br />
         If no to all question, tick no below.
         <RadioField name='geriPreAudiometryQ2' label='geriPreAudiometry - Q2' />
+        <br />
+        3. Do you think you have a hearing problem?'
+        <RadioField name='geriPreAudiometryQ3' label='geriPreAudiometry - Q3' />
         <br />
         <h2>AUDIOMETRY</h2>
         Did participant visit Audiometry Booth by NUS audiology team?
