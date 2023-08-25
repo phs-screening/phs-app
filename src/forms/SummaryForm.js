@@ -36,6 +36,7 @@ const SummaryForm = (props) => {
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
+  const [sacs, setSacs] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
@@ -64,6 +65,7 @@ const SummaryForm = (props) => {
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
+      const sacsData = getSavedData(patientId, allForms.sacsForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
       const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
@@ -93,6 +95,7 @@ const SummaryForm = (props) => {
         geriVisionData,
         geriAudiometryData,
         triageData,
+        sacsData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
@@ -116,6 +119,7 @@ const SummaryForm = (props) => {
         setGeriVision(result[19])
         setGeriAudiometry(result[20])
         setTriage(result[21])
+        setSacs(result[22])
         isLoadingPrevData(false)
       })
     }
@@ -171,51 +175,51 @@ const SummaryForm = (props) => {
 
             {bold('2. Blood Pressure')}
             {underlined('Average Blood Pressure (Systolic)')}
-            {cancer
-              ? parseInt(cancer.hxCancerQ17) >= 130
+            {triage
+              ? parseInt(triage.triageQ7) >= 130
                 ? redText(
-                    cancer.hxCancerQ17 +
+                    triage.triageQ7 +
                       '\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension',
                   )
-                : blueText(cancer.hxCancerQ17)
+                : blueText(triage.triageQ7)
               : '-'}
             <br></br>
             {underlined('Average Blood Pressure (Diastolic)')}
-            {cancer
-              ? parseInt(cancer.hxCancerQ18) >= 85
+            {triage
+              ? parseInt(triage.triageQ8) >= 85
                 ? redText(
-                    cancer.hxCancerQ18 +
+                    triage.triageQ8 +
                       '\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension',
                   )
-                : blueText(cancer.hxCancerQ18)
+                : blueText(triage.traigeQ8)
               : '-'}
             <br></br>
 
             <br></br>
             {bold('3. BMI')}
             {underlined('Height (in cm)')}
-            {cancer ? blueText(cancer.hxCancerQ19) : '-'}
+            {triage ? blueText(triage.triageQ9) : '-'}
             <br></br>
             {underlined('Weight (in kg)')}
-            {cancer ? blueText(cancer.hxCancerQ20) : '-'}
+            {triage ? blueText(triage.triageQ10) : '-'}
             <br></br>
             {underlined('Waist Circumference (in cm)')}
-            {cancer
-              ? Number(cancer.hxCancerQ24) >= 90 && patients.gender == 'Male'
+            {triage
+              ? Number(triage.triageQ14) >= 90 && patients.gender == 'Male'
                 ? redText(
-                    cancer.hxCancerQ24 +
+                    triage.triageQ14 +
                       '\nYour waist circumference is above the normal range. The normal range is less than 90 cm for males.',
                   )
-                : Number(cancer.hxCancerQ24) >= 80 && patients.gender == 'Female'
+                : Number(triage.triageQ14) >= 80 && patients.gender == 'Female'
                 ? redText(
-                    cancer.hxCancerQ24 +
+                    triage.triageQ14 +
                       '\nYour waist circumference is above the normal range. The normal range is less than 80 cm for females.',
                   )
-                : blueText(cancer.hxCancerQ24)
+                : blueText(triage.triageQ14)
               : '-'}
             <br></br>
             {underlined('Body Mass Index (BMI)')}
-            {cancer ? calculateBMI(Number(cancer.hxCancerQ19), Number(cancer.hxCancerQ20)) : '-'}
+            {triage ? calculateBMI(Number(triage.triageQ9), Number(triage.triageQ10)) : '-'}
             <br></br>
 
             <br></br>
@@ -429,7 +433,9 @@ const SummaryForm = (props) => {
               : '-'}
             <br></br>
             {bold('c. Geriatrics - EBAS')}
-            {underlined('Referred to SACS (failed EBAS-DEP) - from Geriatrics EBAS, probable present of a depressive order?')}
+            {underlined(
+              'Referred to SACS (failed EBAS-DEP) - from Geriatrics EBAS, probable present of a depressive order?',
+            )}
             {geriEbasDep
               ? geriEbasDep.geriEbasDepQ10 == 'Yes'
                 ? blueRedText(
@@ -507,6 +513,13 @@ const SummaryForm = (props) => {
             )}
             {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ6) : '-'}
             <br></br>
+            {underlined('Eligible for HDB EASE??')}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
+            <br></br>
+            {underlined('Interest in signing up?')}
+            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
+            <br></br>
+
             {bold('f. Geriatrics - Vision')}
             {underlined('Visual acuity (VA) scores')}
             {formatGeriVision(vision.geriVisionQ3, 3)}
@@ -542,17 +555,17 @@ const SummaryForm = (props) => {
               : blueText(geriAudiometry.geriAudiometryQ11)}
             <br></br>
 
-            {bold('h. Geriatrics - Appointment')}
-            <br></br>
-            {underlined('Eligible for HDB EASE??')}
-            {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ7) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriOtConsult? blueText(geriOtConsult.geriOtConsultQ8) : '-'}
+            {bold('17. SACS')}
+            {underlined('Notes from SACS Consultation')}
+            {sacs ? blueText(sacs.sacsQ1) : '-'}
+            {underlined('Is the patient okay to continue with screening?')}
+            {sacs ? blueText(sacs.sacsQ2) : '-'}
+            {underlined('Has this person been referred to a SACS CREST programme for follow-up?')}
+            {sacs ? blueText(sacs.sacsQ3) : '-'}
             <br></br>
 
             <br></br>
-            {bold("17. Doctor's Consult")}
+            {bold("18. Doctor's Consult")}
             {underlined('Did this patient consult an on-site doctor today?')}
             {doctorSConsult
               ? doctorSConsult.doctorSConsultQ11
@@ -626,7 +639,7 @@ const SummaryForm = (props) => {
               : '-'}
             <br></br>
 
-            {bold("18. Dietitian's Consult")}
+            {bold("19. Dietitian's Consult")}
             {underlined("Did this participant visit the Dietitian's Consult Station today?")}
             {dietitiansConsult
               ? dietitiansConsult.dietitiansConsultQ7 == 'No'
@@ -668,7 +681,7 @@ const SummaryForm = (props) => {
               : ''}
             <br></br>
 
-            {bold('19. Social Service')}
+            {bold('20. Social Service')}
             {underlined('Did this participant visit the social service station today?')}
             {socialService
               ? socialService.socialServiceQ1 == 'No'
@@ -729,7 +742,7 @@ const SummaryForm = (props) => {
             {socialService ? blueText(socialService.socialServiceQ9) : '-'}
             <br></br>
 
-            {bold('20. Oral Health')}
+            {bold('21. Oral Health')}
             {underlined('Did this participant visit the Oral Health station today?')}
             {oralHealth ? (oralHealth.oralHealthQ2 ? blueText('Yes') : blueText('No')) : '-'}
             <br></br>
@@ -745,7 +758,7 @@ const SummaryForm = (props) => {
             <br></br>
 
             <br></br>
-            {bold('21. Mailing Details')}
+            {bold('22. Mailing Details')}
             {underlined('Preferred language for health report:')}
             {registration ? blueText(registration.registrationQ11) : '-'}
             <br></br>
@@ -776,6 +789,7 @@ const SummaryForm = (props) => {
                   geriAudiometry,
                   dietitiansConsult,
                   oralHealth,
+                  triage,
                 )
               }
             >

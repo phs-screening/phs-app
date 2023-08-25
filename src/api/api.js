@@ -312,7 +312,8 @@ export function formatGeriVision(acuity, questionNo) {
         additionalInfo = '\nNon-refractive error, participant should have consulted on-site doctor'
       } else {
         result = 'Visual acuity (with pinhole occluder) - Left Eye 6/' + acuity
-        additionalInfo = '\nRefractive error, participant can opt to apply for Senior Mobility Fund (SMF)'
+        additionalInfo =
+          '\nRefractive error, participant can opt to apply for Senior Mobility Fund (SMF)'
       }
       result = redText(result + additionalInfo)
 
@@ -377,6 +378,14 @@ export function kNewlines(k) {
   return newline.repeat(k)
 }
 
+/** For future devs:
+ * jsPDF is a library that allows us to generate PDFs on the client side.
+ * doc.text(...) is used to add text to the PDF.
+ * Instead of calulating the coordinates of where to place the text, we use kNewlines(k) to add k number of newlines.
+ * As such, we need use "k" to keep track of the current line number of the text.
+ *
+ * This approach works, so we have chosen to keep it.
+ */
 export function generate_pdf(
   reg,
   patients,
@@ -391,13 +400,17 @@ export function generate_pdf(
   geriAudiometry,
   dietitiansConsult,
   oralHealth,
+  triage,
 ) {
   var doc = new jsPDF()
   var k = 0
   doc.setFontSize(10)
 
   k = patient(doc, reg, patients, k)
-  k = addBmi(doc, cancer, k)
+
+  const height = triage.triageQ9
+  const weight = triage.triageQ10
+  k = addBmi(doc, k, height, weight)
   k = addBloodPressure(doc, cancer, k)
   k = addOtherScreeningModularities(doc, k)
   k = addPhleobotomy(doc, phlebotomy, k)
@@ -450,7 +463,7 @@ export function patient(doc, reg, patients, k) {
       ' ' +
       patients.initials +
       ',\n' +
-      'Thank you for participating in our health screening at Jurong East on 20th/21st August this year.' +
+      'Thank you for participating in our health screening at Jurong East on 26th - 27th August this year.' +
       ' Here are your screening results:',
     180,
   )
@@ -460,9 +473,9 @@ export function patient(doc, reg, patients, k) {
   return k
 }
 
-export function addBmi(doc, cancer, k) {
+export function addBmi(doc, k, height, weight) {
   //Bmi
-  const bmi = calculateBmi(Number(cancer.hxCancerQ19), Number(cancer.hxCancerQ20))
+  const bmi = calculateBmi(Number(height), Number(weight))
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + 'Body Mass Index (BMI)')
@@ -474,9 +487,9 @@ export function addBmi(doc, cancer, k) {
     10,
     kNewlines((k = k + 2)) +
       'Your height is ' +
-      cancer.hxCancerQ19 +
+      height +
       ' cm and your weight is ' +
-      cancer.hxCancerQ20 +
+      weight +
       ' kg. Your BMI is ' +
       bmi.toString() +
       ' kg/m2.',
