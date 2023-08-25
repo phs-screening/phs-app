@@ -71,7 +71,6 @@ const SocialServiceForm = (props) => {
   const [geriEbas, setGeriEbas] = useState({})
   const [geriOt, setGeriOt] = useState({})
   const [geriPt, setGeriPt] = useState({})
-  const [geriAppt, setGeriAppt] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
 
   useEffect(async () => {
@@ -82,7 +81,6 @@ const SocialServiceForm = (props) => {
     const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
     const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
     const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
-    const geriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
 
     Promise.all([
       savedData,
@@ -92,7 +90,6 @@ const SocialServiceForm = (props) => {
       geriEbasDepData,
       geriOtData,
       geriPtData,
-      geriApptData,
     ]).then((result) => {
       setSaveData(result[0])
       setReg(result[1])
@@ -101,7 +98,6 @@ const SocialServiceForm = (props) => {
       setGeriEbas(result[4])
       setGeriOt(result[5])
       setGeriPt(result[6])
-      setGeriAppt(result[7])
       isLoadingSidePanel(false)
     })
   }, [])
@@ -233,17 +229,6 @@ const SocialServiceForm = (props) => {
                 ? blueText(geriPt.geriPtConsultQ5)
                 : blueText('nil')}
               {underlined('Referred to Social Service for HDB EASE application?')}
-              {geriAppt && geriAppt.geriGeriApptQ13
-                ? blueText(geriAppt.geriGeriApptQ13)
-                : blueText('nil')}
-              {underlined('Eligible for HDB EASE?')}
-              {geriAppt && geriAppt.geriGeriApptQ9
-                ? blueText(geriAppt.geriGeriApptQ9)
-                : blueText('nil')}
-              {underlined('Interested in signing up?')}
-              {geriAppt && geriAppt.geriGeriApptQ10
-                ? blueText(geriAppt.geriGeriApptQ10)
-                : blueText('nil')}
               {underlined('Functional Assessment Report completed?')}
               {doctorConsult && doctorConsult.doctorSConsultQ12
                 ? blueText(doctorConsult.doctorSConsultQ12.toString())
@@ -251,9 +236,6 @@ const SocialServiceForm = (props) => {
               {underlined(
                 "Participant signed up for SWCDC's Safe & Sustainable Homes (Geri Appointment)?",
               )}
-              {geriAppt && geriAppt.geriGeriApptQ8
-                ? blueText(geriAppt.geriGeriApptQ8)
-                : blueText('nil')}
             </div>
           )}
         </Grid>

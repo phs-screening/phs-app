@@ -35,7 +35,6 @@ const SummaryForm = (props) => {
   const [geriPtConsult, setGeriPtConsult] = useState({})
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
-  const [geriGeriAppt, setGeriGeriAppt] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
@@ -58,7 +57,6 @@ const SummaryForm = (props) => {
       const geriPtConsultData = getSavedData(patientId, allForms.geriPtConsultForm)
       const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
-      const geriGeriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
@@ -81,7 +79,6 @@ const SummaryForm = (props) => {
         registrationData,
         phlebotomyData,
         geriEbasDepData,
-        geriGeriApptData,
         geriAmtData,
         dietitiansConsultData,
         oralHealthData,
@@ -101,10 +98,9 @@ const SummaryForm = (props) => {
         setRegistration(result[12])
         setPhlebotomy(result[13])
         setGeriEbasDep(result[14])
-        setGeriGeriAppt(result[15])
-        setGeriAmt(result[16])
-        setDietiatiansConsult(result[17])
-        setOralHealth(result[18])
+        setGeriAmt(result[15])
+        setDietiatiansConsult(result[16])
+        setOralHealth(result[17])
       })
 
       isLoadingPrevData(false)
@@ -375,18 +371,6 @@ const SummaryForm = (props) => {
               'Which of the programmes did the OT recommend for the participant to go? (if applicable)',
             )}
             {geriOtConsult ? blueText(geriOtConsult.geriOtConsultQ6) : '-'}
-            <br></br>
-            {underlined('Were spectacle vouchers given to participant for VA ≥ 6/12?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ4) : '-'}
-            <br></br>
-            {underlined('Eligible for SWCDC Safe & Bright Homes Programme?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ6) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ7) : '-'}
-            <br></br>
-            {underlined('Sign up form for SWCDC filled in?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ8) : '-'}
             <br></br>
 
             <br></br>

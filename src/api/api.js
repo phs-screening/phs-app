@@ -391,7 +391,6 @@ export function generate_pdf(
   geriMmse,
   geriVision,
   geriAudiometry,
-  geriGeriAppt,
   dietitiansConsult,
   oralHealth,
 ) {
@@ -408,7 +407,7 @@ export function generate_pdf(
   k = addWce(doc, patients, wce, k)
   k = addDoctorSConsult(doc, doctorSConsult, k)
   k = addSocialService(doc, socialService, k)
-  k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k)
+  k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k)
   k = addDietitiansConsult(doc, dietitiansConsult, k)
   k = addOralHealth(doc, oralHealth, k)
   k = addRecommendation(doc, k)
@@ -794,7 +793,7 @@ export function calculateY(coor) {
   return coor * 4.0569 + 10.2
 }
 
-export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGeriAppt, k) {
+export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k) {
   let kk = k
   const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
 
@@ -823,34 +822,6 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, geriGer
       10,
       kNewlines((kk = kk + 1)) + '- G-RACE and partnering polyclinics (' + polyclinic + ')',
     )
-  }
-
-  if (geriGeriAppt.geriGeriApptQ14 == 'Yes') {
-    var geri = doc.splitTextToSize(
-      kNewlines((kk = kk + 1)) +
-        '- Health Promotion Board (HPB) - Agency of Integrated Care (AIC) for functional' +
-        ' screening (' +
-        ')', // NOTE: REMOVED GERIATIC FUNCTIONAL
-      180,
-    )
-    doc.text(10, 10, geri)
-    kk = kk + 2
-  }
-
-  if (geriGeriAppt.geriGeriApptQ8 == 'Yes') {
-    doc.text(
-      10,
-      10,
-      kNewlines((kk = kk + 1)) + '- South West CDC for Safe & Sustainable Homes programme',
-    )
-  }
-
-  if (
-    geriMmse.geriMMSEQ3 != 'Yes' &&
-    geriGeriAppt.geriGeriApptQ14 != 'Yes' &&
-    geriGeriAppt.geriGeriApptQ8 != 'Yes'
-  ) {
-    doc.text(10, 10, kNewlines((kk = kk + 1)) + '-')
   }
 
   doc.setFont(undefined, 'bold')

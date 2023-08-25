@@ -36,7 +36,6 @@ const SummaryForm = (props) => {
   const [geriPtConsult, setGeriPtConsult] = useState({})
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
-  const [geriGeriAppt, setGeriGeriAppt] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
@@ -64,7 +63,6 @@ const SummaryForm = (props) => {
       const geriAudiometryData = getSavedData(patientId, allForms.geriAudiometryForm)
       const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
-      const geriGeriApptData = getSavedData(patientId, allForms.geriGeriApptForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
@@ -89,7 +87,6 @@ const SummaryForm = (props) => {
         registrationData,
         phlebotomyData,
         geriEbasDepData,
-        geriGeriApptData,
         geriAmtData,
         dietitiansConsultData,
         oralHealthData,
@@ -113,14 +110,13 @@ const SummaryForm = (props) => {
         setRegistration(result[12])
         setPhlebotomy(result[13])
         setGeriEbasDep(result[14])
-        setGeriGeriAppt(result[15])
-        setGeriAmt(result[16])
-        setDietiatiansConsult(result[17])
-        setOralHealth(result[18])
-        setGeriMmse(result[19])
-        setGeriVision(result[20])
-        setGeriAudiometry(result[21])
-        setTriage(result[22])
+        setGeriAmt(result[15])
+        setDietiatiansConsult(result[16])
+        setOralHealth(result[17])
+        setGeriMmse(result[18])
+        setGeriVision(result[19])
+        setGeriAudiometry(result[20])
+        setTriage(result[21])
         isLoadingPrevData(false)
       })
     }
@@ -564,60 +560,6 @@ const SummaryForm = (props) => {
             <br></br>
 
             {bold('h. Geriatrics - Functional Screening ')}
-            {underlined('Did participant attend PHS vision and hearing screening?')}
-            {blueText(geriGeriAppt.geriGeriApptQ12)}
-            <br></br>
-            {underlined('Did participant apply for HPB functional screening? ')}
-            {geriGeriAppt.geriGeriApptQ14 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ14,
-                  'Please advise the participant that they may be followed-up by HPB regarding nearby' +
-                    ' functional screenings. Please remind them that they applied for a specific' +
-                    ' date and timings if applicable.',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ14)}
-            <br></br>
-
-            {bold('i. Geriatrics - Appointment')}
-            <br></br>
-            {underlined('Were spectacle vouchers given to participant for VA ≥ 6/12?')}
-            {geriGeriAppt.geriGeriApptQ4 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ4,
-                  'Please advise the participant to use the vouchers before the expiry date (reflected on voucher).',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ4)}
-            <br></br>
-            {underlined('Eligible for SWCDC Safe & Sustainable Homes Programme?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ6) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ7) : '-'}
-            <br></br>
-            {underlined('Sign up form for SWCDC filled in?')}
-            {geriGeriAppt
-              ? geriGeriAppt.geriGeriApptQ8 == 'Yes'
-                ? blueRedText(
-                    geriGeriAppt.geriGeriApptQ8,
-                    'Please advise the participant that SWCDC will process their application and contact them separately.',
-                  )
-                : blueText(geriGeriAppt.geriGeriApptQ8)
-              : '-'}
-            <br></br>
-            {underlined('Eligible for HDB EASE??')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ9) : '-'}
-            <br></br>
-            {underlined('Interest in signing up?')}
-            {geriGeriAppt ? blueText(geriGeriAppt.geriGeriApptQ10) : '-'}
-            <br></br>
-            {underlined('Referred to Social Service for HDB EASE Application?')}
-            {geriGeriAppt.geriGeriApptQ13 == 'Yes'
-              ? blueRedText(
-                  geriGeriAppt.geriGeriApptQ13,
-                  'Please check if participant visisted the Social Service station for completion of his/her HDB EASE Application.',
-                )
-              : blueText(geriGeriAppt.geriGeriApptQ13)}
-            <br></br>
 
             <br></br>
             {bold("17. Doctor's Consult")}
@@ -842,7 +784,6 @@ const SummaryForm = (props) => {
                   geriMmse,
                   geriVision,
                   geriAudiometry,
-                  geriGeriAppt,
                   dietitiansConsult,
                   oralHealth,
                 )

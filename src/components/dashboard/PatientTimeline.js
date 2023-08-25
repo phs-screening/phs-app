@@ -59,7 +59,6 @@ function generateStatusObject(record) {
         record.geriTugForm !== undefined &&
         record.geriPtConsultForm !== undefined &&
         record.geriOtConsultForm !== undefined &&
-        record.geriGeriApptForm !== undefined &&
         record.geriMMSEForm !== undefined &&
         record.geriAudiometryForm !== undefined,
       doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult

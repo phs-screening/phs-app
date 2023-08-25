@@ -8,15 +8,11 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import GeriAmtForm from 'src/forms/GeriAmtForm'
 import GeriEbasDepForm from 'src/forms/GeriEbasDepForm'
-import GeriFrailScaleForm from 'src/forms/GeriFrailScaleForm' //not working yet
-import GeriGeriApptForm from 'src/forms/GeriGeriApptForm'
 import GeriOtConsultForm from 'src/forms/GeriOtConsultForm'
 import GeriOtQuestionnaireForm from 'src/forms/GeriOtQuestionnaireForm'
-import GeriParQForm from 'src/forms/GeriParQForm'
 import GeriPhysicalActivityLevelForm from 'src/forms/GeriPhysicalActivityLevelForm'
 import GeriPtConsultForm from 'src/forms/GeriPtConsultForm'
 import GeriSppbForm from 'src/forms/GeriSppbForm'
-import GeriTugForm from 'src/forms/GeriTugForm'
 import GeriVisionForm from 'src/forms/GeriVisionForm'
 import GeriMMSEForm from './GeriMMSEForm'
 import GeriAudiometryform from './GeriAudiometryForm'
@@ -91,7 +87,6 @@ export default function GeriTabs() {
           <Tab label='OT Consult' {...a11yProps(7)} />
           <Tab label='Vision' {...a11yProps(8)} />
           <Tab label='Audiometry' {...a11yProps(9)} />
-          <Tab label='Geri Appointment' {...a11yProps(10)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -123,9 +118,6 @@ export default function GeriTabs() {
       </TabPanel>
       <TabPanel value={value} index={9}>
         <GeriAudiometryform changeTab={handleChange} nextTab={10} />
-      </TabPanel>
-      <TabPanel value={value} index={10}>
-        <GeriGeriApptForm />
       </TabPanel>
     </div>
   )
