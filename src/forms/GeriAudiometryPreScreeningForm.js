@@ -31,8 +31,8 @@ const schema = new SimpleSchema({
   },
   geriPreAudiometryQ3: {
     type: String,
-    allowedValues: ['Yes (continue with hearing test)', 'No (skip hearing test)'],
-    optional: false,
+    allowedValues: ['Yes', 'No'],
+    optional: true,
   },
 })
 
