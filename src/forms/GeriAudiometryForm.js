@@ -89,6 +89,14 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  geriAudiometryQ13: {
+    type: String,
+    allowedValues: [
+      ' There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+      "There is no hearing loss detected, the patient's hearing is normal.",
+    ],
+    optional: false,
+  },
 })
 
 const formName = 'geriAudiometryForm'
@@ -177,6 +185,7 @@ const GeriAudiometryForm = (props) => {
         Please document significant findings from audiometry test and recommended course of action
         for participant:
         <LongTextField name='geriAudiometryQ12' label='geriAudiometry - Q12' />
+        <RadioField name='geriAudiometryQ13' label='geriAudiometry - Q13' />
         <br />
       </Fragment>
       <ErrorsField />
