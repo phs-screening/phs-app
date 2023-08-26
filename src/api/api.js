@@ -1,6 +1,7 @@
 import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
 import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
 import { jsPDF } from 'jspdf'
+import { defaultSlots } from 'src/forms/RegForm'
 
 const axios = require('axios').default
 
@@ -131,6 +132,16 @@ export async function submitFormSpecial(args, patientId, formCollection) {
 
 export async function submitRegClinics(postalCode, patientId) {
   const clinicSlotsCollection = getClinicSlotsCollection()
+  // Check if the limit has been reached yet for the clinic
+  const clinicSlots = await clinicSlotsCollection.findOne({ postalCode })
+  if (clinicSlots) {
+    const maxSlots = defaultSlots[postalCode]
+    const currentSlots = clinicSlots.counterItems.length
+    if (currentSlots >= maxSlots) {
+      return { result: false, error: 'No more slots available for this location' }
+    }
+  }
+
   await clinicSlotsCollection.findOneAndUpdate(
     { postalCode },
     { $push: { counterItems: patientId } },

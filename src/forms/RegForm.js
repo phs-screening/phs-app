@@ -37,7 +37,7 @@ const postalCodeToLocations = {
   None: 'None',
 }
 
-const defaultSlots = {
+export const defaultSlots = {
   600415: 30,
   600130: 30,
   129581: 30,
@@ -285,13 +285,7 @@ const RegForm = () => {
           const postalCode =
             model.registrationQ10 === 'None' ? 'None' : model.registrationQ10.trim().slice(-6)
 
-          // If no more slots, do not submit form
-          if (slots[postalCode] <= 0) {
-            alert('No more slots available for this location')
-            isLoading(false)
-            return
-          }
-
+          // Note we check on the backend if no slots left
           const counterResponse = await submitRegClinics(postalCode, patientId)
           // Update counters by checking previous selection
           if (!counterResponse.result) {
