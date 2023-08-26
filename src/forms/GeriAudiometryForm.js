@@ -92,7 +92,7 @@ const schema = new SimpleSchema({
   geriAudiometryQ13: {
     type: String,
     allowedValues: [
-      ' There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+      'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
       "There is no hearing loss detected, the patient's hearing is normal.",
     ],
     optional: false,
