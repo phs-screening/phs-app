@@ -191,7 +191,7 @@ const SummaryForm = (props) => {
                     triage.triageQ8 +
                       '\nBlood pressure is high, please see a GP if you have not been diagnosed with hypertension',
                   )
-                : blueText(triage.traigeQ8)
+                : blueText(triage.triageQ8)
               : '-'}
             <br></br>
 
@@ -558,13 +558,14 @@ const SummaryForm = (props) => {
             {bold('17. SACS')}
             {underlined('Notes from SACS Consultation')}
             {sacs ? blueText(sacs.sacsQ1) : '-'}
+            <br></br>
             {underlined('Is the patient okay to continue with screening?')}
             {sacs ? blueText(sacs.sacsQ2) : '-'}
+            <br></br>
             {underlined('Has this person been referred to a SACS CREST programme for follow-up?')}
             {sacs ? blueText(sacs.sacsQ3) : '-'}
             <br></br>
 
-            <br></br>
             {bold("18. Doctor's Consult")}
             {underlined('Did this patient consult an on-site doctor today?')}
             {doctorSConsult
