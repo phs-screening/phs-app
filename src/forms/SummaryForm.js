@@ -608,7 +608,7 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined('Was participant referred for Social Service?')}
             {doctorSConsult
-              ? blueText(doctorSConsult.doctorSConsultQ6)
+              ? doctorSConsult.doctorSConsultQ6
                 ? blueRedText(
                     'Yes',
                     'Please check if participant visited the Social Service Station.',
@@ -621,7 +621,7 @@ const SummaryForm = (props) => {
             <br></br>
             {underlined('Was participant referred for Oral Health Station?')}
             {doctorSConsult
-              ? blueText(doctorSConsult.doctorSConsultQ8)
+              ? doctorSConsult.doctorSConsultQ8
                 ? blueRedText('Yes', 'Please check if participant visited the Oral Health Station.')
                 : blueText('No')
               : '-'}
