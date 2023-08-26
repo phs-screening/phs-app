@@ -247,8 +247,7 @@ const TriageForm = () => {
         <br />
         <br />
         <h3>
-          <u>3) Waist Circumference</u> (taken only if cannot measure BMI e.g. wheelchair,
-          prosthetic legs)
+          <u>3) Waist Circumference</u> (all participants)
         </h3>
         Waist Circumference (in cm) <br />
         <NumField name='triageQ14' label='Triage Q14' /> <br />
