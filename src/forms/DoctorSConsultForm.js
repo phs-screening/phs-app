@@ -299,6 +299,9 @@ const DoctorSConsultForm = () => {
               {geriAudio && geriAudio.geriAudiometryQ12
                 ? blueText(geriAudio.geriAudiometryQ12)
                 : blueText('nil')}
+              {geriAudio && geriAudio.geriAudiometryQ13
+                ? blueText(geriAudio.geriAudiometryQ13)
+                : blueText('nil')}
 
               {title('Past Medical History')}
               {underlined('Summary of Relevant Past Medical History')}
