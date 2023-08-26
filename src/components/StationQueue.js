@@ -14,6 +14,7 @@ const StationQueue = () => {
 
   const [admin, isAdmin] = useState(false)
 
+  // Form a string of <id>: <salutation> <initials> for each patient id
   const getPatientStrings = async (patientIds) => {
     const patientStrings = await Promise.all(
       patientIds.map(async (id) => {
@@ -28,6 +29,7 @@ const StationQueue = () => {
     return patientStrings
   }
 
+  // Handler for Add Station button
   const handleAddStation = async (event) => {
     event.preventDefault()
     isLoading(true)
@@ -50,6 +52,7 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for Delete Station button
   const handleDeleteStation = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -60,17 +63,20 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for add station input field
   const handleChange = (event) => {
     const text = event.target.value
     setStationName(text)
   }
 
+  // Handdler for add patient input field
   const handlePatientAddInput = (event) => {
     const text = event.target.value
     const stationName = event.target.name
     setStationAddPatientId({ ...stationPatientAddId, [stationName]: text })
   }
 
+  // Handler for add patient button
   const handlePatientAdd = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -100,12 +106,14 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for remove patient input field
   const handlePatientRemoveInput = (event) => {
     const text = event.target.value
     const stationName = event.target.name
     setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: text })
   }
 
+  // Handler for remove button (remove specific patient from queue)
   const handlePatientRemove = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -125,6 +133,8 @@ const StationQueue = () => {
 
     const patientStrings = await getPatientStrings(patientIds)
     const sq = getQueueCollection()
+    // Read MongoDB documentation here:
+    // https://www.mongodb.com/docs/manual/reference/operator/update/pullAll/
     await sq.findOneAndUpdate({ stationName }, { $pullAll: { queueItems: patientStrings } })
 
     setRefresh(!refresh)
@@ -132,6 +142,7 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for remove first button (remove first patient from queue)
   const handlePatientRemoveFirst = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -143,6 +154,7 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for remove all button (remove all patients from queue)
   const handlePatientRemoveAll = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -154,12 +166,14 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Set a listener to update the station queues when the refresh state changes
   useEffect(async () => {
     const collection = getQueueCollection()
     const sq = await collection.find()
     setStationQueues(sq)
   }, [refresh])
 
+  // Update if user is admin (to show delete station button for admins)
   useEffect(async () => {
     const profile = await getProfile()
     if (profile !== null) {
