@@ -629,16 +629,6 @@ const SummaryForm = (props) => {
             {underlined('Reasons for referral:')}
             {doctorSConsult ? blueText(doctorSConsult.doctorSConsultQ9) : '-'}
             <br></br>
-            {underlined('Was participant referred to Polyclinic for depression?')}
-            {doctorSConsult
-              ? doctorSConsult.doctorSConsultQ11
-                ? blueRedText(
-                    'Yes',
-                    'Please check with participant if they have received a memo from the on-site Doctor.',
-                  )
-                : blueText('No')
-              : '-'}
-            <br></br>
 
             {bold("19. Dietitian's Consult")}
             {underlined("Did this participant visit the Dietitian's Consult Station today?")}
