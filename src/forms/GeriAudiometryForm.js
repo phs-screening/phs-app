@@ -149,13 +149,18 @@ const GeriAudiometryForm = (props) => {
       <Fragment>
         <br />
         <h2>AUDIOMETRY</h2>
+        <br />
         Did participant visit Audiometry Booth by NUS audiology team?
         <RadioField name='geriAudiometryQ1' label='geriAudiometry - Q1' />
+        <br />
+        <h3>External Ear Examination</h3>
         <br />
         Visual Ear Examination (Left Ear):
         <RadioField name='geriAudiometryQ2' label='geriAudiometry - Q2' />
         Visual Ear Examination (Right Ear)
         <RadioField name='geriAudiometryQ3' label='geriAudiometry - Q3' />
+        <br />
+        <h3>Hearing Test</h3>
         <br />
         Practice Tone (500Hz at 60dB in “better” ear):
         <RadioField name='geriAudiometryQ4' label='geriAudiometry - Q4' />
