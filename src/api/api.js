@@ -410,7 +410,7 @@ export function generate_pdf(
 
   const height = triage.triageQ9
   const weight = triage.triageQ10
-  k = addBloodPressure(doc, cancer, k)
+  k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, height, weight)
   k = addOtherScreeningModularities(doc, k)
   k = addPhlebotomy(doc, phlebotomy, k)
@@ -551,7 +551,7 @@ export function addBmi(doc, k, height, weight) {
   return k
 }
 
-export function addBloodPressure(doc, cancer, k) {
+export function addBloodPressure(doc, triage, k) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + 'Blood Pressure')
   doc.line(10, calculateY(k), 10 + doc.getTextWidth('Blood Pressure'), calculateY(k))
