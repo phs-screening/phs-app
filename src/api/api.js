@@ -410,17 +410,16 @@ export function generate_pdf(
 
   const height = triage.triageQ9
   const weight = triage.triageQ10
-  k = addBmi(doc, k, height, weight)
   k = addBloodPressure(doc, cancer, k)
+  k = addBmi(doc, k, height, weight)
   k = addOtherScreeningModularities(doc, k)
-  k = addPhleobotomy(doc, phlebotomy, k)
+  k = addPhlebotomy(doc, phlebotomy, k)
   k = addFit(doc, fit, k)
   k = addWce(doc, patients, wce, k)
-  k = addDoctorSConsult(doc, doctorSConsult, k)
-  k = addSocialService(doc, socialService, k)
   k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k)
+  k = addDoctorSConsult(doc, doctorSConsult, k)
   k = addDietitiansConsult(doc, dietitiansConsult, k)
-  k = addOralHealth(doc, oralHealth, k)
+  k = addSocialService(doc, socialService, k)
   k = addRecommendation(doc, k)
 
   if (typeof patients.initials == 'undefined') {
@@ -562,9 +561,9 @@ export function addBloodPressure(doc, cancer, k) {
     10,
     kNewlines((k = k + 2)) +
       'Your average blood pressure reading is ' +
-      cancer.hxCancerQ17 +
+      triage.triageQ7 +
       '/' +
-      cancer.hxCancerQ18 +
+      triage.triageQ8 +
       ' mmHg.',
   )
   var bloodPressure = doc.splitTextToSize(
@@ -592,7 +591,7 @@ export function addOtherScreeningModularities(doc, k) {
   return k
 }
 
-export function addPhleobotomy(doc, phlebotomy, k) {
+export function addPhlebotomy(doc, phlebotomy, k) {
   if (phlebotomy.phlebotomyQ1) {
     doc.setFont(undefined, 'bold')
     doc.text(10, 10, kNewlines((k = k + 2)) + 'Phlebotomy')
@@ -834,15 +833,6 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k) {
       kNewlines((kk = kk + 1)) + '- G-RACE and partnering polyclinics (' + polyclinic + ')',
     )
   }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'SWCDC Eye Vouchers')
-  doc.setFont(undefined, 'normal')
-  var vouchers = doc.splitTextToSize(
-    kNewlines((kk = kk + 1)) +
-      'We strongly encourage you to use the eye vouchers before they expire.',
-  )
-  doc.text(10, 10, vouchers)
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Physiotherapy')
