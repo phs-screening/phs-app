@@ -9,10 +9,27 @@ const StationQueue = () => {
 
   const [stationQueues, setStationQueues] = useState([])
   const [stationName, setStationName] = useState('')
-  const [stationPatientId, setStationPatientId] = useState({})
+  const [stationPatientAddId, setStationAddPatientId] = useState({})
+  const [stationPatientRemoveId, setStationRemovePatientId] = useState({})
 
   const [admin, isAdmin] = useState(false)
 
+  // Form a string of <id>: <salutation> <initials> for each patient id
+  const getPatientStrings = async (patientIds) => {
+    const patientStrings = await Promise.all(
+      patientIds.map(async (id) => {
+        const patient = await getPreRegData(id, 'patients')
+        const registrationData = await getSavedData(id, allForms.registrationForm)
+        const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
+        const initials = patient?.initials ?? 'Not Found'
+
+        return `${id}: ${salutation} ${initials}`
+      }),
+    )
+    return patientStrings
+  }
+
+  // Handler for Add Station button
   const handleAddStation = async (event) => {
     event.preventDefault()
     isLoading(true)
@@ -35,6 +52,7 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for Delete Station button
   const handleDeleteStation = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -45,22 +63,25 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for add station input field
   const handleChange = (event) => {
     const text = event.target.value
     setStationName(text)
   }
 
-  const handlePatientInput = (event) => {
+  // Handdler for add patient input field
+  const handlePatientAddInput = (event) => {
     const text = event.target.value
     const stationName = event.target.name
-    setStationPatientId({ ...stationPatientId, [stationName]: text })
+    setStationAddPatientId({ ...stationPatientAddId, [stationName]: text })
   }
 
+  // Handler for add patient button
   const handlePatientAdd = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
 
-    const patientIdText = stationPatientId[stationName]
+    const patientIdText = stationPatientAddId[stationName]
     const patientIds = patientIdText
       .trim()
       .split(' ')
@@ -73,17 +94,7 @@ const StationQueue = () => {
       return
     }
 
-    const patientStrings = await Promise.all(
-      patientIds.map(async (id) => {
-        const patient = await getPreRegData(id, 'patients')
-        const registrationData = await getSavedData(id, allForms.registrationForm)
-        const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
-        const initials = patient?.initials ?? 'Not Found'
-
-        return `${id}: ${salutation} ${initials}`
-      }),
-    )
-
+    const patientStrings = await getPatientStrings(patientIds)
     const sq = getQueueCollection()
     await sq.findOneAndUpdate(
       { stationName },
@@ -91,11 +102,48 @@ const StationQueue = () => {
       { upsert: true },
     )
     setRefresh(!refresh)
-    setStationPatientId({ ...stationPatientId, [stationName]: '' })
+    setStationAddPatientId({ ...stationPatientAddId, [stationName]: '' })
     isLoading(false)
   }
 
+  // Handler for remove patient input field
+  const handlePatientRemoveInput = (event) => {
+    const text = event.target.value
+    const stationName = event.target.name
+    setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: text })
+  }
+
+  // Handler for remove button (remove specific patient from queue)
   const handlePatientRemove = async (event, stationName) => {
+    event.preventDefault()
+    isLoading(true)
+
+    const patientIdText = stationPatientRemoveId[stationName]
+    const patientIds = patientIdText
+      .trim()
+      .split(' ')
+      .filter((id) => !isNaN(parseInt(id)))
+      .map((id) => parseInt(id))
+
+    if (patientIds.length === 0) {
+      alert('Patient ID must be a number.')
+      isLoading(false)
+      return
+    }
+
+    const patientStrings = await getPatientStrings(patientIds)
+    const sq = getQueueCollection()
+    // Read MongoDB documentation here:
+    // https://www.mongodb.com/docs/manual/reference/operator/update/pullAll/
+    await sq.findOneAndUpdate({ stationName }, { $pullAll: { queueItems: patientStrings } })
+
+    setRefresh(!refresh)
+    setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: '' })
+    isLoading(false)
+  }
+
+  // Handler for remove first button (remove first patient from queue)
+  const handlePatientRemoveFirst = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
 
@@ -106,6 +154,7 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Handler for remove all button (remove all patients from queue)
   const handlePatientRemoveAll = async (event, stationName) => {
     event.preventDefault()
     isLoading(true)
@@ -117,12 +166,14 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  // Set a listener to update the station queues when the refresh state changes
   useEffect(async () => {
     const collection = getQueueCollection()
     const sq = await collection.find()
     setStationQueues(sq)
   }, [refresh])
 
+  // Update if user is admin (to show delete station button for admins)
   useEffect(async () => {
     const profile = await getProfile()
     if (profile !== null) {
@@ -186,6 +237,18 @@ const StationQueue = () => {
               <Typography color='textPrimary' gutterBottom variant='h4'>
                 {stationName}
               </Typography>
+
+              <TextField
+                id={stationName}
+                name={stationName}
+                label='Add Patient'
+                type='text'
+                placeholder='Enter one or more patient IDs, e.g. 1 2 3 4'
+                size='small'
+                variant='outlined'
+                onChange={handlePatientAddInput}
+              />
+
               <Button
                 color='primary'
                 size='large'
@@ -196,6 +259,19 @@ const StationQueue = () => {
               >
                 Add to back
               </Button>
+
+              <br />
+
+              <TextField
+                id={stationName + '-remove'}
+                name={stationName}
+                label='Remove patient'
+                type='text'
+                placeholder='Enter one or more patient IDs, e.g. 1 2 3 4'
+                size='small'
+                variant='outlined'
+                onChange={handlePatientRemoveInput}
+              />
               <Box
                 sx={{
                   display: 'flex',
@@ -207,7 +283,7 @@ const StationQueue = () => {
                   size='large'
                   type='submit'
                   disabled={loading}
-                  onClick={(event) => handlePatientRemove(event, stationName)}
+                  onClick={(event) => handlePatientRemoveFirst(event, stationName)}
                   sx={{
                     flex: '1',
                   }}
@@ -227,18 +303,20 @@ const StationQueue = () => {
                 >
                   Remove All
                 </Button>
-              </Box>
 
-              <TextField
-                id={stationName}
-                name={stationName}
-                label='Add Patient'
-                type='text'
-                placeholder='Enter one or more patient IDs, e.g. 1 2 3 4'
-                size='small'
-                variant='outlined'
-                onChange={handlePatientInput}
-              />
+                <Button
+                  color='primary'
+                  size='large'
+                  type='submit'
+                  disabled={loading}
+                  onClick={(event) => handlePatientRemove(event, stationName)}
+                  sx={{
+                    flex: '1',
+                  }}
+                >
+                  Remove
+                </Button>
+              </Box>
 
               <Box
                 sx={{
