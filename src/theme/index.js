@@ -1,12 +1,12 @@
-import { createMuiTheme, colors } from '@material-ui/core'
+import { createTheme } from '@mui/system'
 import shadows from './shadows'
 import typography from './typography'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     background: {
       default: '#F4F6F8',
-      paper: colors.common.white,
+      paper: '#ffffff',
     },
     primary: {
       contrastText: '#ffffff',
