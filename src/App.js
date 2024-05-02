@@ -1,6 +1,6 @@
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import { useRoutes } from 'react-router-dom'
-import { ThemeProvider, StyledEngineProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material'
 import 'src/mixins/chartjs'
 import routes from 'src/routes'
 import React, { useContext, useState } from 'react'
@@ -49,12 +49,10 @@ const App = () => {
   return (
     <LoginContext.Provider value={{ login, isLogin, profile, setProfile }}>
       <FormContext.Provider value={{ patientId, updatePatientId, patientInfo, updatePatientInfo }}>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>{routing}</ThemeProvider>
-        </StyledEngineProvider>
+        <ThemeProvider theme={theme}>{routing}</ThemeProvider>
       </FormContext.Provider>
     </LoginContext.Provider>
-  );
+  )
 }
 
 export default App
