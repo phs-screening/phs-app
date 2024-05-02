@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getQueueCollection, getPreRegData, getSavedData, getProfile } from '../services/mongoDB'
-import { Box, Button, Typography, TextField, CircularProgress } from '@material-ui/core'
+import { Box, Button, Typography, TextField, CircularProgress } from '@mui/material'
 import allForms from '../forms/forms.json'
 
 const StationQueue = () => {

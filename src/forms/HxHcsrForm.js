@@ -2,9 +2,9 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -173,13 +173,13 @@ const HxHcsrForm = (props) => {
           <b>REFER TO DIETICIAN&apos;S CONSULT at:</b>
           <p>
             {' '}
-            1) <font color='red'>Dietitian&apos;s Consultation station</font>, tick eligibility, Circle
-            interested &apos;Y&apos; on Page 1 of Form A{' '}
+            1) <font color='red'>Dietitian&apos;s Consultation station</font>, tick eligibility,
+            Circle interested &apos;Y&apos; on Page 1 of Form A{' '}
           </p>{' '}
           <br />
           IF BMI IS:
-          <br /> &gt; 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A Dietitian&apos;s Consultation - Reasons
-          for Recommendation
+          <br /> &gt; 27.5 as obese, write reasons under dietitian referral on Page 2 of Form A
+          Dietitian&apos;s Consultation - Reasons for Recommendation
           <br />
         </PopupText>
         <p>
@@ -285,14 +285,15 @@ const HxHcsrForm = (props) => {
             REFER TO <span style={{ color: 'red' }}>DR CONSULT</span> and{' '}
             <span style={{ color: 'red' }}>EXHIBITION SFCS</span> booth under Form A
           </b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A 
+          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
           <br />
           2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for
-          Recommendation 
+          Recommendation
           <br />
           3) Please write relevant medical/social history of participant under history taking box{' '}
-          <br /> 
-          4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS booth
+          <br />
+          4) Page 2 of Form A, under Exhibition - Recommendation, tick renal health, write down SFCS
+          booth
           <br />
           <br />
         </PopupText>

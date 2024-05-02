@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Box, Container, Grid } from '@material-ui/core'
+import { Box, Container, Grid } from '@mui/material'
 import StationQueue from 'src/components/StationQueue'
 
 const Queue = () => (

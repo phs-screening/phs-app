@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useForm, Controller } from 'react-hook-form'
 
-import { Checkbox, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
+import { Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import './Login.css'
 
 const defaultValues = {

@@ -9,7 +9,7 @@ import {
   Typography,
   colors,
   useTheme,
-} from '@material-ui/core'
+} from '@mui/material'
 import LaptopMacIcon from '@mui/icons-material/LaptopMac'
 import PhoneIcon from '@mui/icons-material/Phone'
 import TabletIcon from '@mui/icons-material/Tablet'

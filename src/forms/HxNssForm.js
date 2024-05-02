@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -257,8 +257,8 @@ const HxNssForm = (props) => {
             </b>
           </span>
           <br />
-          If participant is not engaged with any follow-up, ask &quot;what is the reason that you&apos;re not
-          following up with your doctor for your existing conditions?&quot;
+          If participant is not engaged with any follow-up, ask &quot;what is the reason that
+          you&apos;re not following up with your doctor for your existing conditions?&quot;
           <br />- e.g. do not see the purpose for tests, busy/ no time, lack of access e.g. mobility
           issues, financial issues, fear of doctors/ clinics/ hospitals etc
           <br />
@@ -277,15 +277,15 @@ const HxNssForm = (props) => {
         </Fragment>
         <span style={{ color: 'black' }}>
           <b>
-            Please tick to highlight if you feel &apos;Past Medical History&apos; requires closer scrutiny by
-            doctors later
+            Please tick to highlight if you feel &apos;Past Medical History&apos; requires closer
+            scrutiny by doctors later
           </b>
         </span>
         <RadioField name='hxNssQ11' label='Hx NSS Q11' />
         <br />
         <b>Based on participant medical hx, please recommend relevant stations:</b>
-        1) Doctor&apos;s Consultation station, tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form
-        A
+        1) Doctor&apos;s Consultation station, tick eligibility, Circle interested &apos;Y&apos; on
+        Page 1 of Form A
         <br />
         2) Write reasons on Page 2 of Form A Doctor&apos;s Consultation - Reasons for Recommendation
         <br />

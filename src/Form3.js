@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
 
 import AutoForm from 'uniforms-material/AutoForm'
 import SubmitField from 'uniforms-material/SubmitField'

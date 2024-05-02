@@ -1,6 +1,6 @@
 import React from 'react'
-import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@material-ui/core'
-import { orange } from '@material-ui/core/colors'
+import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material'
+import { orange } from '@mui/material/colors'
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined'
 
 const TasksProgress = (props) => (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Box, Container, Grid } from '@material-ui/core'
+import { Box, Container, Grid } from '@mui/material'
 import RegisterPatient from 'src/components/RegisterPatient'
 
 const Registration = () => (

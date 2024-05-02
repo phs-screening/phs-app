@@ -9,8 +9,8 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import { useNavigate } from 'react-router-dom'
 import mongoDB, { isAdmin } from '../../services/mongoDB'
 import { ScrollTopContext } from '../../api/utils.js'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { Box, Card, CardContent, CardHeader, Divider } from '@material-ui/core'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Box, Card, CardContent, CardHeader, Divider } from '@mui/material'
 
 // Refactor the generateStatusArray to generate an object instead
 function generateStatusObject(record) {

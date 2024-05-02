@@ -12,7 +12,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-} from '@material-ui/core'
+} from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 

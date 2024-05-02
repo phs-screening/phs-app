@@ -81,141 +81,139 @@ const Login = () => {
     }
   }
 
-  return (
-    <>
-      <Helmet>
-        <title>Login</title>
-      </Helmet>
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <Container maxWidth='sm'>
-          <Formik
-            initialValues={{
-              email: '',
-              password: '',
-            }}
-            validationSchema={Yup.object().shape({
-              email: Yup.string().max(255).required('Username is required'),
-              password: Yup.string().max(255).required('Password is required'),
-            })}
-            onSubmit={(values) => {
-              handleLogin(values)
-            }}
-          >
-            {({
-              errors,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              touched,
-              values,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <Box sx={{ mb: 3 }}>
-                  <Typography color='textPrimary' variant='h2'>
-                    Sign in
-                  </Typography>
+  return <>
+    <Helmet>
+      <title>Login</title>
+    </Helmet>
+    <Box
+      sx={{
+        backgroundColor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      <Container maxWidth='sm'>
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          validationSchema={Yup.object().shape({
+            email: Yup.string().max(255).required('Username is required'),
+            password: Yup.string().max(255).required('Password is required'),
+          })}
+          onSubmit={(values) => {
+            handleLogin(values)
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ mb: 3 }}>
+                <Typography color='textPrimary' variant='h2'>
+                  Sign in
+                </Typography>
 
-                  <Typography color='textSecondary' gutterBottom variant='body2'>
-                    PHS {new Date().getFullYear()}
-                  </Typography>
+                <Typography color='textSecondary' gutterBottom variant='body2'>
+                  PHS {new Date().getFullYear()}
+                </Typography>
 
-                  <select
-                    onChange={(e) => {
-                      setAccountOption(e.target.value)
-                    }}
-                  >
-                    {accountOptions.map((account) => (
-                      <option name={'account'} value={account} key={account}>
-                        {account}
-                      </option>
-                    ))}
-                  </select>
-                </Box>
-                <TextField
-                  // error={Boolean(touched.email && errors.email)}
-                  fullWidth
-                  helperText={touched.email && errors.email}
-                  label='Username'
-                  margin='normal'
-                  name='email'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type=''
-                  value={values.email}
-                  variant='outlined'
-                />
-                <TextField
-                  // error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  label='Password'
-                  margin='normal'
-                  name='password'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type={showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  variant='outlined'
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <IconButton
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                <select
+                  onChange={(e) => {
+                    setAccountOption(e.target.value)
                   }}
-                />
+                >
+                  {accountOptions.map((account) => (
+                    <option name={'account'} value={account} key={account}>
+                      {account}
+                    </option>
+                  ))}
+                </select>
+              </Box>
+              <TextField
+                // error={Boolean(touched.email && errors.email)}
+                fullWidth
+                helperText={touched.email && errors.email}
+                label='Username'
+                margin='normal'
+                name='email'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                type=''
+                value={values.email}
+                variant='outlined'
+              />
+              <TextField
+                // error={Boolean(touched.password && errors.password)}
+                fullWidth
+                helperText={touched.password && errors.password}
+                label='Password'
+                margin='normal'
+                name='password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                type={showPassword ? 'text' : 'password'}
+                value={values.password}
+                variant='outlined'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='toggle password visibility'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        size="large">
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-                <Box sx={{ py: 2 }}>
+              <Box sx={{ py: 2 }}>
+                <Button
+                  color='primary'
+                  // disabled={isSubmitting}
+                  fullWidth
+                  size='large'
+                  type='submit'
+                  variant='contained'
+                >
+                  {loading ? 'Logging in...' : 'Sign in now'}
+                </Button>
+              </Box>
+              {accountOption === accountOptions[1] && (
+                <Box sx={{ py: 1 }}>
                   <Button
                     color='primary'
                     // disabled={isSubmitting}
                     fullWidth
                     size='large'
-                    type='submit'
+                    type='button'
                     variant='contained'
+                    onClick={() => {
+                      handleReset(values)
+                    }}
                   >
-                    {loading ? 'Logging in...' : 'Sign in now'}
+                    Reset Password
                   </Button>
                 </Box>
-                {accountOption === accountOptions[1] && (
-                  <Box sx={{ py: 1 }}>
-                    <Button
-                      color='primary'
-                      // disabled={isSubmitting}
-                      fullWidth
-                      size='large'
-                      type='button'
-                      variant='contained'
-                      onClick={() => {
-                        handleReset(values)
-                      }}
-                    >
-                      Reset Password
-                    </Button>
-                  </Box>
-                )}
-              </form>
-            )}
-          </Formik>
-        </Container>
-      </Box>
-    </>
-  )
+              )}
+            </form>
+          )}
+        </Formik>
+      </Container>
+    </Box>
+  </>;
 }
 
 export default Login

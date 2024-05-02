@@ -2,9 +2,9 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, LongTextField } from 'uniforms-material'
@@ -118,8 +118,8 @@ const GeriParQForm = (props) => {
         4. Do you lose your balance because of dizziness or do you ever lose consciousness?
         <RadioField name='geriParQQ4' label='Geri - PAR-Q Q4' />
         <br />
-        5. Do you have a bone or joint problem (for example, back, knee or hip) that could be
-        made worse by a change in your physical activity?
+        5. Do you have a bone or joint problem (for example, back, knee or hip) that could be made
+        worse by a change in your physical activity?
         <br />
         (If yes, refer to PT consult)
         <RadioField name='geriParQQ5' label='Geri - PAR-Q Q5' />

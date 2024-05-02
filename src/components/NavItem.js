@@ -1,6 +1,6 @@
 import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Button, ListItem } from '@material-ui/core'
+import { Button, ListItem } from '@mui/material'
 import React from 'react'
 
 const NavItem = ({ href, icon: Icon, title, shouldDisable, ...rest }) => {
