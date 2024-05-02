@@ -1,11 +1,11 @@
 import React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import Timeline from '@material-ui/lab/Timeline'
-import TimelineItem from '@material-ui/lab/TimelineItem'
-import TimelineSeparator from '@material-ui/lab/TimelineSeparator'
-import TimelineConnector from '@material-ui/lab/TimelineConnector'
-import TimelineContent from '@material-ui/lab/TimelineContent'
-import TimelineDot from '@material-ui/lab/TimelineDot'
+import Timeline from '@mui/lab/Timeline'
+import TimelineItem from '@mui/lab/TimelineItem'
+import TimelineSeparator from '@mui/lab/TimelineSeparator'
+import TimelineConnector from '@mui/lab/TimelineConnector'
+import TimelineContent from '@mui/lab/TimelineContent'
+import TimelineDot from '@mui/lab/TimelineDot'
 import { useNavigate } from 'react-router-dom'
 import mongoDB, { isAdmin } from '../../services/mongoDB'
 import { ScrollTopContext } from '../../api/utils.js'
@@ -350,7 +350,7 @@ const BasicTimeline = (props) => {
         </TimelineItem>
 
         <TimelineItem>
-        <TimelineSeparator>
+          <TimelineSeparator>
             {Object.values(formDone).every((e) => e) ? (
               <TimelineDot color='primary' />
             ) : (

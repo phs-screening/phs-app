@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react'
 import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { Box, Button, Divider, Drawer, Hidden, List, Typography } from '@material-ui/core'
+import { Box, Button, Divider, Drawer, Hidden, List, Typography } from '@mui/material'
 import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,

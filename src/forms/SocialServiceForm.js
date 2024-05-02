@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, BoolField } from 'uniforms-material'
@@ -14,10 +14,10 @@ import { submitFormSpecial } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import { blueText, title, underlined } from '../theme/commonComponents'
 import allForms from './forms.json'
-import { blue } from '@material-ui/core/colors'
+import { blue } from '@mui/material/colors'
 
 const schema = new SimpleSchema({
   socialServiceQ1: {

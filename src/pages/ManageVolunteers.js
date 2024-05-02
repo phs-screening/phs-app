@@ -3,7 +3,7 @@ import { Box, Typography, TextField, Button, InputAdornment, IconButton } from '
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import mongoDB, { hashPassword, isAdmin, profilesCollection } from '../services/mongoDB'
-import { Visibility, VisibilityOff, Search } from '@material-ui/icons'
+import { Visibility, VisibilityOff, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { regexPasswordPattern as pattern } from '../api/api'
 

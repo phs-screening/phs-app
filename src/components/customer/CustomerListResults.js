@@ -15,7 +15,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import getInitials from 'src/utils/getInitials'
 
 const CustomerListResults = ({ customers, ...rest }) => {

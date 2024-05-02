@@ -1,13 +1,13 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 import { calculateBMI, formatGeriVision, formatWceStation, generate_pdf } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import allForms from './forms.json'
 import { bold, underlined, blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 
 // TODO: add triage and SACS
 

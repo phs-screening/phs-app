@@ -13,7 +13,7 @@ import {
   InputAdornment,
   SvgIcon,
   CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { Search as SearchIcon } from 'react-feather'
 

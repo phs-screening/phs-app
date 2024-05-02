@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  TextField,
-  InputAdornment,
-  SvgIcon,
-} from '@material-ui/core'
+import { Box, Button, Card, CardContent, TextField, InputAdornment, SvgIcon } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 
 const ProductListToolbar = (props) => (

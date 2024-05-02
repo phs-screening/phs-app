@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom'
-import { styled, ThemeProvider } from '@mui/system'
+import { styled } from '@mui/system'
+import { ThemeProvider } from '@mui/material/styles'
 import MainNavbar from './MainNavbar'
 import React from 'react'
-import * as theme from '../theme/index.js'
 
 const MainLayoutRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -32,18 +32,16 @@ const MainLayoutContent = styled('div')({
 })
 
 const MainLayout = () => (
-  <ThemeProvider theme={theme}>
-    <MainLayoutRoot>
-      <MainNavbar />
-      <MainLayoutWrapper>
-        <MainLayoutContainer>
-          <MainLayoutContent>
-            <Outlet />
-          </MainLayoutContent>
-        </MainLayoutContainer>
-      </MainLayoutWrapper>
-    </MainLayoutRoot>
-  </ThemeProvider>
+  <MainLayoutRoot>
+    <MainNavbar />
+    <MainLayoutWrapper>
+      <MainLayoutContainer>
+        <MainLayoutContent>
+          <Outlet />
+        </MainLayoutContent>
+      </MainLayoutContainer>
+    </MainLayoutWrapper>
+  </MainLayoutRoot>
 )
 
 export default MainLayout

@@ -13,10 +13,10 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useContext, useState } from 'react'
 import { LoginContext } from '../App.js'
-import { Visibility, VisibilityOff } from '@material-ui/icons'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { regexPasswordPattern as pattern } from '../api/api'
 
 // TODO

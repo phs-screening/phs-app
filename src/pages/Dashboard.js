@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Box, Container, Grid } from '@material-ui/core'
+import { Box, Container, Grid } from '@mui/material'
 import PatientTimeline from 'src/components/dashboard/PatientTimeline'
 import { Helmet } from 'react-helmet'
 import { FormContext } from 'src/api/utils'

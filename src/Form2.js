@@ -18,7 +18,6 @@ function Form2() {
   const [data, setData] = useState(null)
 
   return (
-    //<ThemeProvider theme={theme}>
     <div>
       <h1>Pre-Registration</h1>
       <form onSubmit={handleSubmit((data) => setData(data))}>
@@ -58,7 +57,6 @@ function Form2() {
         </div>
       </form>
     </div>
-    //</ThemeProvider>
   )
 }
 

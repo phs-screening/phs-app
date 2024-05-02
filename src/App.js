@@ -1,14 +1,13 @@
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import { useRoutes } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core';
-import GlobalStyles from 'src/components/GlobalStyles';
-import 'src/mixins/chartjs';
-import theme from 'src/theme';
-import routes from 'src/routes';
-import React, { useContext, useState } from 'react';
-import { getProfile, isLoggedin } from './services/mongoDB';
-import { FormContext } from './api/utils';
-import './App.css';
+import 'react-perfect-scrollbar/dist/css/styles.css'
+import { useRoutes } from 'react-router-dom'
+import { ThemeProvider } from '@mui/material'
+import 'src/mixins/chartjs'
+import routes from 'src/routes'
+import React, { useContext, useState } from 'react'
+import { useTheme } from '@mui/material/styles'
+import { getProfile, isLoggedin } from './services/mongoDB'
+import { FormContext } from './api/utils'
+import './App.css'
 
 export const LoginContext = React.createContext({
   login: false,
@@ -44,15 +43,13 @@ const App = () => {
     }
   }
 
+  const theme = useTheme()
   const routing = useRoutes(routes)
 
   return (
     <LoginContext.Provider value={{ login, isLogin, profile, setProfile }}>
       <FormContext.Provider value={{ patientId, updatePatientId, patientInfo, updatePatientInfo }}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          {routing}
-        </ThemeProvider>
+        <ThemeProvider theme={theme}>{routing}</ThemeProvider>
       </FormContext.Provider>
     </LoginContext.Provider>
   )

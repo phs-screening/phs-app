@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Box, Typography, TextField, Button, InputAdornment, SvgIcon } from '@material-ui/core'
+import { Box, Typography, TextField, Button, InputAdornment, SvgIcon } from '@mui/material'
 import { isAdmin, getPreRegData } from '../services/mongoDB'
 import { useNavigate } from 'react-router-dom'
 import { Search as SearchIcon } from 'react-feather'
