@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -126,7 +126,7 @@ const WceForm = (props) => {
         <br />
         <h2>2. CANCER SCREENING </h2> <br />
         <p>
-          1. 
+          1.
           <font color='red'>
             <b>For female respondent aged 40 and above only.</b>
           </font>
@@ -137,7 +137,7 @@ const WceForm = (props) => {
         {hxCancer && hxCancer.hxCancerQ7 ? blueText(hxCancer.hxCancerQ7) : blueText('nil')}
         <br />
         <p>
-          2. 
+          2.
           <font color='red'>
             <b>
               For female respondent aged 25 and above, who have/had a husband/boyfriend and not had
@@ -159,7 +159,7 @@ const WceForm = (props) => {
             Please encourage participants to go for HPV test every 5 years.
           </b>
         </font>{' '}
-        <br /> 
+        <br />
         <br />
         <h2>3. FOLLOW UP PLAN</h2>
         <br />

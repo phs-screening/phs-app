@@ -12,9 +12,9 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-} from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import ArrowRightIcon from '@material-ui/icons/ArrowRight'
+} from '@mui/material'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 
 const products = [
   {

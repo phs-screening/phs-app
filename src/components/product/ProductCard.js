@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@material-ui/core'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import GetAppIcon from '@material-ui/icons/GetApp'
+import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import GetAppIcon from '@mui/icons-material/GetApp'
 
 const ProductCard = ({ product, ...rest }) => (
   <Card

@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import { Outlet } from 'react-router-dom'
-import { experimentalStyled } from '@material-ui/core'
+import { styled } from '@mui/system'
 import DashboardNavbar from './DashboardNavbar'
 import DashboardSidebar from './DashboardSidebar'
 import { ScrollTopContext } from '../api/utils'
 
-const DashboardLayoutRoot = experimentalStyled('div')(({ theme }) => ({
+const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   display: 'flex',
   height: '100%',
@@ -13,7 +13,7 @@ const DashboardLayoutRoot = experimentalStyled('div')(({ theme }) => ({
   width: '100%',
 }))
 
-const DashboardLayoutWrapper = experimentalStyled('div')(({ theme }) => ({
+const DashboardLayoutWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   flex: '1 1 auto',
   overflow: 'hidden',
@@ -23,13 +23,13 @@ const DashboardLayoutWrapper = experimentalStyled('div')(({ theme }) => ({
   },
 }))
 
-const DashboardLayoutContainer = experimentalStyled('div')({
+const DashboardLayoutContainer = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
   overflow: 'hidden',
 })
 
-const DashboardLayoutContent = experimentalStyled('div')({
+const DashboardLayoutContent = styled('div')({
   flex: '1 1 auto',
   height: '100%',
   overflow: 'auto',

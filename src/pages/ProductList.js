@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Box, Container, Grid, Pagination } from '@material-ui/core'
+import { Box, Container, Grid, Pagination } from '@mui/material'
 import ProductListToolbar from 'src/components/product/ProductListToolbar'
 import ProductCard from 'src/components/product//ProductCard'
 import products from 'src/__mocks__/products'

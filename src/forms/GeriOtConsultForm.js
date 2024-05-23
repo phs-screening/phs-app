@@ -2,9 +2,9 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -14,7 +14,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import { blueText, title, underlined } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
@@ -143,7 +143,8 @@ const GeriOtConsultForm = (props) => {
         <br />
         To be referred for doctor&apos;s consult (OT)?
         <br />
-        If referral to long-term OT rehab services is necessary, this will be done through the doctor&apos;s consult route. 
+        If referral to long-term OT rehab services is necessary, this will be done through the
+        doctor&apos;s consult route.
         <br />
         <RadioField name='geriOtConsultQ2' label='Geri - OT Consult Q2' />
         Reasons for referral to Doctor&apos;s consult (OT):

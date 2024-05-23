@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
+import { styled } from '@mui/system'
+import AppBar from '@mui/material/AppBar'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import HxCancerForm from 'src/forms/HxCancerForm'
 import HxHcsrForm from 'src/forms/HxHcsrForm'
 import HxNssForm from 'src/forms/HxNssForm'
@@ -46,15 +46,14 @@ function a11yProps(index) {
   }
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-}))
+const HxWrapper = styled('div')(
+  ({ theme }) => `
+  flex-grow: 1;
+  background-color: $(theme.palette.background.paper);
+`,
+)
 
 export default function HxTabs() {
-  const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
 
@@ -64,7 +63,7 @@ export default function HxTabs() {
   }
 
   return (
-    <div className={classes.root}>
+    <HxWrapper>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='simple tabs example'>
           <Tab label='HCSR' {...a11yProps(0)} />
@@ -89,6 +88,6 @@ export default function HxTabs() {
       <TabPanel value={value} index={4}>
         <HxCancerForm />
       </TabPanel>
-    </div>
+    </HxWrapper>
   )
 }

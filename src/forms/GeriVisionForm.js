@@ -2,9 +2,9 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -158,14 +158,23 @@ const GeriVisionForm = (props) => {
         <br />
         <br />
         <h3>Refractive Error</h3>
-        Senior Citizens are eligible to receiving subsidy for spectacles under the Senior Mobility Fund (SMF) provided they qualify for the following:
+        Senior Citizens are eligible to receiving subsidy for spectacles under the Senior Mobility
+        Fund (SMF) provided they qualify for the following:
         <br />
         <ul>
-          <li>Have a household monthly income per person of $2,000 and below OR Annual Value (AV) of residence reflected on NRIC of $13,000 and below for households with no income</li>
+          <li>
+            Have a household monthly income per person of $2,000 and below OR Annual Value (AV) of
+            residence reflected on NRIC of $13,000 and below for households with no income
+          </li>
           <li>Be living in the community (not residing in a nursing home or sheltered home).</li>
           <li>First time SMF applicant</li>
-          <li>Be assessed by a qualified assessor on the type of device required when applicable.</li>
-          <li>Not concurrently receive (or apply for) any other public or private grants, or subsidies.</li>
+          <li>
+            Be assessed by a qualified assessor on the type of device required when applicable.
+          </li>
+          <li>
+            Not concurrently receive (or apply for) any other public or private grants, or
+            subsidies.
+          </li>
         </ul>
         <br />
         1. Does the participant wish to apply for the Senior Mobility Fund?

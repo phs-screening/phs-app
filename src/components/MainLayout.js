@@ -1,9 +1,10 @@
 import { Outlet } from 'react-router-dom'
-import { experimentalStyled } from '@material-ui/core'
+import { styled } from '@mui/system'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import MainNavbar from './MainNavbar'
 import React from 'react'
 
-const MainLayoutRoot = experimentalStyled('div')(({ theme }) => ({
+const MainLayoutRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   display: 'flex',
   height: '100%',
@@ -11,20 +12,20 @@ const MainLayoutRoot = experimentalStyled('div')(({ theme }) => ({
   width: '100%',
 }))
 
-const MainLayoutWrapper = experimentalStyled('div')({
+const MainLayoutWrapper = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
   overflow: 'hidden',
   paddingTop: 64,
 })
 
-const MainLayoutContainer = experimentalStyled('div')({
+const MainLayoutContainer = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
   overflow: 'hidden',
 })
 
-const MainLayoutContent = experimentalStyled('div')({
+const MainLayoutContent = styled('div')({
   flex: '1 1 auto',
   height: '100%',
   overflow: 'auto',

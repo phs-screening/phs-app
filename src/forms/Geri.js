@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
+import { styled } from '@mui/system'
+import AppBar from '@mui/material/AppBar'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import GeriAmtForm from 'src/forms/GeriAmtForm'
 import GeriEbasDepForm from 'src/forms/GeriEbasDepForm'
 import GeriOtConsultForm from 'src/forms/GeriOtConsultForm'
@@ -52,15 +52,21 @@ function a11yProps(index) {
   }
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-}))
+//const useStyles = makeStyles((theme) => ({
+//  root: {
+//    flexGrow: 1,
+//    backgroundColor: theme.palette.background.paper,
+//  },
+//}))
+
+const GeriWrapper = styled('div')(
+  ({ theme }) => `
+  flex-grow: 1
+  background-color: $(theme.palette.background.paper);
+`,
+)
 
 export default function GeriTabs() {
-  const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
 
@@ -70,7 +76,7 @@ export default function GeriTabs() {
   }
 
   return (
-    <div className={classes.root}>
+    <GeriWrapper>
       <AppBar position='static' color='default'>
         <Tabs
           value={value}
@@ -124,6 +130,6 @@ export default function GeriTabs() {
       <TabPanel value={value} index={10}>
         <GeriAudiometryform changeTab={handleChange} nextTab={11} />
       </TabPanel>
-    </div>
+    </GeriWrapper>
   )
 }

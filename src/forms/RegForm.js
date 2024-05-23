@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
 
 import { AutoForm } from 'uniforms'
 import {
@@ -16,7 +16,7 @@ import {
   TextField,
   BoolField,
 } from 'uniforms-material'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import { submitForm, submitRegClinics } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'

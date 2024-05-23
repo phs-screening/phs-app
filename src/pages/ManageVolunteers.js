@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, TextField, Button, InputAdornment, IconButton } from '@material-ui/core'
+import { Box, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import mongoDB, { hashPassword, isAdmin, profilesCollection } from '../services/mongoDB'
-import { Visibility, VisibilityOff, Search } from '@material-ui/icons'
+import { Visibility, VisibilityOff, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { regexPasswordPattern as pattern } from '../api/api'
 
@@ -243,7 +243,7 @@ const ManageVolunteers = () => {
                         aria-label='toggle password visibility'
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
-                      >
+                        size="large">
                         {showPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -335,7 +335,7 @@ const ManageVolunteers = () => {
                   aria-label='toggle password visibility'
                   onClick={handleClickShowPasswordReset}
                   onMouseDown={handleMouseDownPasswordReset}
-                >
+                  size="large">
                   {showPasswordReset ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
@@ -362,7 +362,7 @@ const ManageVolunteers = () => {
         )}
       </Box>
     </div>
-  )
+  );
 }
 
 const styles = {

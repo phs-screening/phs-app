@@ -13,10 +13,10 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useContext, useState } from 'react'
 import { LoginContext } from '../App.js'
-import { Visibility, VisibilityOff } from '@material-ui/icons'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { regexPasswordPattern as pattern } from '../api/api'
 
 // TODO
@@ -50,96 +50,94 @@ const Reset = () => {
     }
   }
 
-  return (
-    <>
-      <Helmet>
-        <title>Reset</title>
-      </Helmet>
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <Container maxWidth='sm'>
-          <Formik
-            initialValues={{
-              password: '',
-            }}
-            validationSchema={Yup.object().shape({
-              password: Yup.string().max(255).required('Password is required'),
-            })}
-            onSubmit={(values) => {
-              handleReset(values)
-            }}
-          >
-            {({
-              errors,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              touched,
-              values,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <Box sx={{ mb: 3 }}>
-                  <Typography color='textPrimary' variant='h2'>
-                    Reset Password
-                  </Typography>
+  return <>
+    <Helmet>
+      <title>Reset</title>
+    </Helmet>
+    <Box
+      sx={{
+        backgroundColor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      <Container maxWidth='sm'>
+        <Formik
+          initialValues={{
+            password: '',
+          }}
+          validationSchema={Yup.object().shape({
+            password: Yup.string().max(255).required('Password is required'),
+          })}
+          onSubmit={(values) => {
+            handleReset(values)
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ mb: 3 }}>
+                <Typography color='textPrimary' variant='h2'>
+                  Reset Password
+                </Typography>
 
-                  <Typography color='textSecondary' gutterBottom variant='body2'>
-                    PHS
-                  </Typography>
-                </Box>
-                <TextField
-                  // error={Boolean(touched.password && errors.password)}
+                <Typography color='textSecondary' gutterBottom variant='body2'>
+                  PHS
+                </Typography>
+              </Box>
+              <TextField
+                // error={Boolean(touched.password && errors.password)}
+                fullWidth
+                helperText={touched.password && errors.password}
+                label='Password'
+                margin='normal'
+                name='password'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                type={showPassword ? 'text' : 'password'}
+                value={values.password}
+                variant='outlined'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='toggle password visibility'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        size="large">
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box sx={{ py: 2 }}>
+                <Button
+                  color='primary'
+                  // disabled={isSubmitting}
                   fullWidth
-                  helperText={touched.password && errors.password}
-                  label='Password'
-                  margin='normal'
-                  name='password'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type={showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  variant='outlined'
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <IconButton
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <Box sx={{ py: 2 }}>
-                  <Button
-                    color='primary'
-                    // disabled={isSubmitting}
-                    fullWidth
-                    size='large'
-                    type='submit'
-                    variant='contained'
-                  >
-                    Reset Password
-                  </Button>
-                </Box>
-              </form>
-            )}
-          </Formik>
-        </Container>
-      </Box>
-    </>
-  )
+                  size='large'
+                  type='submit'
+                  variant='contained'
+                >
+                  Reset Password
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
+      </Container>
+    </Box>
+  </>;
 }
 
 export default Reset

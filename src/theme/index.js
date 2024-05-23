@@ -1,12 +1,42 @@
-import { createMuiTheme, colors } from '@material-ui/core'
+import { createTheme } from '@mui/system'
+import { adaptV4Theme } from '@mui/material/styles';
 import shadows from './shadows'
 import typography from './typography'
 
-const theme = createMuiTheme({
+const customTheme = createTheme(adaptV4Theme({
+  components: {
+    '*': {
+      boxSizing: 'border-box',
+      margin: 0,
+      padding: 0,
+    },
+    html: {
+      WebkitFontSmoothing: 'antialiased',
+      MozOsxFontsmoothing: 'grayscale',
+      height: '100%',
+      width: '100%',
+    },
+    body: {
+      backgroundColor: '#f4f6f8',
+      height: '100%',
+      width: '100%',
+    },
+    a: {
+      textDecoration: 'none',
+    },
+    form: {
+      padding: '50px',
+    },
+    '#root': {
+      height: '100%',
+      width: '100%',
+    },
+  },
+
   palette: {
     background: {
       default: '#F4F6F8',
-      paper: colors.common.white,
+      paper: '#ffffff',
     },
     primary: {
       contrastText: '#ffffff',
@@ -19,9 +49,12 @@ const theme = createMuiTheme({
       primary: '#172b4d',
       secondary: '#6b778c',
     },
+    grey: {
+      main: '#808080',
+    },
   },
   shadows,
   typography,
-})
+}))
 
-export default theme
+export default customTheme

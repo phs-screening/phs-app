@@ -1,16 +1,18 @@
-import { createStyles, makeStyles } from '@material-ui/core'
+import { GlobalStyles } from '@mui/material'
+import React from 'react'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    '@global': {
+//already included in theme/index.js, not imported anywhere, left here temporarily as reference
+const globalStyles = (
+  <GlobalStyles
+    styles={(theme) => ({
       '*': {
         boxSizing: 'border-box',
         margin: 0,
         padding: 0,
       },
       html: {
-        '-webkit-font-smoothing': 'antialiased',
-        '-moz-osx-font-smoothing': 'grayscale',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontsmoothing: 'grayscale',
         height: '100%',
         width: '100%',
       },
@@ -29,14 +31,8 @@ const useStyles = makeStyles(() =>
         height: '100%',
         width: '100%',
       },
-    },
-  }),
+    })}
+  />
 )
 
-const GlobalStyles = () => {
-  useStyles()
-
-  return null
-}
-
-export default GlobalStyles
+export default globalStyles

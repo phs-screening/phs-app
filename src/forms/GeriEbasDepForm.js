@@ -2,9 +2,9 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
@@ -213,8 +213,8 @@ const GeriEbasDepForm = (props) => {
         <br />
         Referral to Doctor&apos;s Consult?
         <br />
-        (For 1. non-geri participants who are probably depressed from EBAS Score” AND 
-        2. geri patients who pass AMT and who are probably depressed from EBAS Score)
+        (For 1. non-geri participants who are probably depressed from EBAS Score” AND 2. geri
+        patients who pass AMT and who are probably depressed from EBAS Score)
         <RadioField name='geriEbasDepQ13' label='Geri - EBAS-DEP Q13' />
         <br />
         <h3>
