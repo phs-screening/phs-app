@@ -1,4 +1,4 @@
-import React, { Component, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 
@@ -7,14 +7,14 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
+import { SubmitField } from 'uniforms-material'
 
 import { schema, layout } from './prereg.js'
 
 import { preRegister, submitPreRegForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import './fieldPadding.css'
-import { getPreRegData, isAdmin } from '../services/mongoDB'
+import { getPreRegDataById, isAdmin } from '../services/mongoDB'
 
 const formName = 'patients'
 const PreregForm = (props) => {
@@ -26,7 +26,7 @@ const PreregForm = (props) => {
   const [saveData, setSaveData] = useState({})
 
   useEffect(async () => {
-    const savedData = await getPreRegData(patientId, formName)
+    const savedData = await getPreRegDataById(patientId, formName)
     if (!(await isAdmin())) {
       if ('initials' in savedData) {
         alert('You are not an admin!')
@@ -82,7 +82,6 @@ const PreregForm = (props) => {
       model={saveData}
     >
       {form_layout}
-      <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
       <br />

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography, TextField, Button, InputAdornment, SvgIcon } from '@mui/material'
-import { isAdmin, getPreRegData } from '../services/mongoDB'
+import { isAdmin, getPreRegDataById } from '../services/mongoDB'
 import { useNavigate } from 'react-router-dom'
 import { Search as SearchIcon } from 'react-feather'
 import { FormContext } from '../api/utils'
@@ -34,7 +34,7 @@ const ManageVolunteers = () => {
   const handleSubmit = async () => {
     const value = values.queueNumber
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-    const data = await getPreRegData(value, 'patients')
+    const data = await getPreRegDataById(value, 'patients')
     if ('initials' in data) {
       updatePatientInfo(data)
       navigate('/app/dashboard', { replace: true })

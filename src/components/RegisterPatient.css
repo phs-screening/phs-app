@@ -1,0 +1,21 @@
+.button {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.box {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.textfield {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.autocomplete {
+  width: 300px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

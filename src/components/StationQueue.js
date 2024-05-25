@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { getQueueCollection, getPreRegData, getSavedData, getProfile } from '../services/mongoDB'
+import {
+  getQueueCollection,
+  getPreRegDataById,
+  getSavedData,
+  getProfile,
+} from '../services/mongoDB'
 import { Box, Button, Typography, TextField, CircularProgress } from '@mui/material'
 import allForms from '../forms/forms.json'
 
@@ -18,7 +23,7 @@ const StationQueue = () => {
   const getPatientStrings = async (patientIds) => {
     const patientStrings = await Promise.all(
       patientIds.map(async (id) => {
-        const patient = await getPreRegData(id, 'patients')
+        const patient = await getPreRegDataById(id, 'patients')
         const registrationData = await getSavedData(id, allForms.registrationForm)
         const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
         const initials = patient?.initials ?? 'Not Found'
