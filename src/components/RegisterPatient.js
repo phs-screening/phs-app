@@ -1,4 +1,5 @@
 import React from 'react'
+import './RegisterPatient.css'
 import { useState, useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllPatientNames, getPreRegDataById, getPreRegDataByName } from '../services/mongoDB'
@@ -15,7 +16,6 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
-import './RegisterPatient.css'
 import Autocomplete from '@mui/material/Autocomplete'
 
 const RegisterPatient = (props) => {
@@ -124,14 +124,14 @@ const RegisterPatient = (props) => {
   return (
     <Card {...props}>
       <CardContent>
-        <Box className='box'>
+        <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
           <Button
             color='secondary'
             size='large'
             type='submit'
             variant='contained'
             href='/app/prereg'
-            className='button'
+            sx={{ marginTop: '10px', marginBottom: '20px' }}
           >
             Register
           </Button>
@@ -143,9 +143,6 @@ const RegisterPatient = (props) => {
             Enter queue number below
           </Typography>
           <TextField
-            id='queue-number'
-            name='queueNumber'
-            className='textfield'
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -159,6 +156,7 @@ const RegisterPatient = (props) => {
             size='small'
             variant='outlined'
             onChange={handleQueueNumberInput}
+            sx={{ marginTop: '5px', marginBottom: '5px' }}
           />
           {isLoadingQueueNumber ? (
             <CircularProgress />
@@ -170,7 +168,7 @@ const RegisterPatient = (props) => {
               type='submit'
               variant='contained'
               onClick={handleSubmit}
-              className='button'
+              sx={{ marginTop: '10px', marginBottom: '20px' }}
             >
               Go
             </Button>
@@ -182,12 +180,10 @@ const RegisterPatient = (props) => {
             Select name below
           </Typography>
           <Autocomplete
-            id='patient-name'
-            name='patientName'
+            sx={{ width: '300px', marginTop: '5px', marginBottom: '5px' }}
             freeSolo
             size='small'
             disableClearable
-            className='autocomplete'
             options={patientNames}
             getOptionLabel={(option) => option.initials}
             renderInput={handlePatientNameInput}
@@ -209,6 +205,7 @@ const RegisterPatient = (props) => {
               variant='contained'
               onClick={handleSubmit}
               className='button'
+              sx={{ marginTop: '10px', marginBottom: '20px' }}
             >
               Go
             </Button>
