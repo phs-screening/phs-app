@@ -1,5 +1,4 @@
 import React from 'react'
-import './RegisterPatient.css'
 import { useState, useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllPatientNames, getPreRegDataById, getPreRegDataByName } from '../services/mongoDB'
