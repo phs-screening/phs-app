@@ -22,9 +22,8 @@ const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
   const [isLoadingPatientName, setIsLoadingPatientName] = useState(false)
   const [values, setValues] = useState({
-    id: null,
-    queueNumber: 1,
-    patientName: '',
+    isQueueNumber: true,
+    selectedValue: null,
   })
   const [patientNames, setPatientNames] = useState([])
   const { patientId, updatePatientInfo } = useContext(FormContext)
@@ -47,7 +46,6 @@ const RegisterPatient = (props) => {
     const getPatientNames = async () => {
       const data = await getAllPatientNames('patients')
       setPatientNames(data)
-      console.log(data)
     }
     getPatientNames()
   }, [])
@@ -56,8 +54,8 @@ const RegisterPatient = (props) => {
     const value = event.target.value
     if (value >= 0 || value === '') {
       setValues({
-        id: event.target.id,
-        [event.target.name]: parseInt(value),
+        isQueueNumner: true,
+        selectedValue: parseInt(value),
       })
     } else {
       event.target.value = 0
@@ -84,29 +82,41 @@ const RegisterPatient = (props) => {
     )
   }
 
-  const handleSubmit = async () => {
-    switch (values.id) {
-      case 'queue-number': {
-        setIsLoadingQueueNumber(true)
-        const value = values.queueNumber
-        // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-        const data = await getPreRegDataById(value, 'patients')
-        if ('initials' in data) {
-          updatePatientInfo(data)
-          setIsLoadingQueueNumber(false)
-          navigate('/app/dashboard', { replace: true })
-        } else {
-          // if response is unsuccessful/id does not exist, show error style/popup.
-          alert('Unsuccessful. There is no patient with this queue number.')
-          setIsLoadingQueueNumber(false)
-        }
-        break
-      }
-      case 'patient-name': {
-        setIsLoadingPatientName(true)
-        const value = values.patientName
+  const handlePatientNameSelect = (event, value) => {
+    console.log(event.target.id)
+    setValues({
+      isQueueNumber: false,
+      selectedValue: value,
+    })
+  }
 
-        break
+  const handleSubmit = async () => {
+    if (values.isQueueNumber) {
+      setIsLoadingQueueNumber(true)
+      const value = values.selectedValue
+      // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
+      const data = await getPreRegDataById(value, 'patients')
+      if ('initials' in data) {
+        updatePatientInfo(data)
+        setIsLoadingQueueNumber(false)
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        // if response is unsuccessful/id does not exist, show error style/popup.
+        alert('Unsuccessful. There is no patient with this queue number.')
+        setIsLoadingQueueNumber(false)
+      }
+    } else {
+      setIsLoadingPatientName(true)
+      const value = values.selectedValue.initials
+      console.log(value)
+      const data = await getPreRegDataByName(value, 'patients')
+      if ('initials' in data) {
+        updatePatientInfo(data)
+        setIsLoadingPatientName(false)
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        alert('Unsuccessful. There is no patient with this name.')
+        setIsLoadingPatientName(false)
       }
     }
   }
@@ -173,12 +183,20 @@ const RegisterPatient = (props) => {
           </Typography>
           <Autocomplete
             id='patient-name'
+            name='patientName'
             freeSolo
             size='small'
             disableClearable
             className='autocomplete'
-            options={patientNames.map((option) => option.initials)}
+            options={patientNames}
+            getOptionLabel={(option) => option.initials}
             renderInput={handlePatientNameInput}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.defaultMuiPrevented = true
+              }
+            }}
+            onChange={handlePatientNameSelect}
           />
           {isLoadingPatientName ? (
             <CircularProgress />
