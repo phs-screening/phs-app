@@ -78,6 +78,15 @@ export const isAdmin = async (type) => {
 //     return record !== null;
 // }
 
+export const getAllPatientNames = async (collectionName) => {
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const data = await mongoConnection
+    .db('phs')
+    .collection(collectionName)
+    .find({}, { projection: { initials: 1, _id: 0 } })
+  return data === null ? {} : data
+}
+
 export const getSavedData = async (patientId, collectionName) => {
   const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
   const savedData = await mongoConnection
@@ -87,12 +96,21 @@ export const getSavedData = async (patientId, collectionName) => {
   return savedData === null ? {} : savedData
 }
 
-export const getPreRegData = async (patientId, collectionName) => {
+export const getPreRegDataById = async (patientId, collectionName) => {
   const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
   const savedData = await mongoConnection
     .db('phs')
     .collection(collectionName)
     .findOne({ queueNo: patientId })
+  return savedData === null ? {} : savedData
+}
+
+export const getPreRegDataByName = async (patientName, collectionName) => {
+  const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
+  const savedData = await mongoConnection
+    .db('phs')
+    .collection(collectionName)
+    .findOne({ initials: patientName })
   return savedData === null ? {} : savedData
 }
 export const getSavedPatientData = async (patientId, collectionName) => {

@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment } from 'react'
 import SimpleSchema from 'simpl-schema'
-
-import { AutoForm } from 'uniforms'
 import { RadioField, LongTextField } from 'uniforms-material'
+import './prereg.css'
 
 export const schema = new SimpleSchema({
   gender: {
@@ -33,17 +32,23 @@ export const schema = new SimpleSchema({
 export const layout = (
   <Fragment>
     <h2>Pre-Registration</h2>
-    Gender
-    <RadioField name='gender' />
-    Initials (E.g. Alan Simon Lee as S.L Alan)
-    <LongTextField name='initials' />
-    Age
-    <LongTextField name='age' />
+    <h3 className='question--text'>Gender</h3>
+    <RadioField
+      name='gender'
+      options={[
+        { label: 'Female', value: 'Female' },
+        { label: 'Male', value: 'Male' } /* ... */,
+      ]}
+      showInlineError
+    />
+    <h3 className='question--text'>Initials (E.g. Alan Simon Lee as S.L Alan)</h3>
+    <LongTextField name='initials' showInlineError />
+    <h3 className='question--text'>Age</h3>
+    <LongTextField name='age' showInlineError />
     Preferred Language (e.g. English)
-    <LongTextField name='preferredLanguage' /> <br />
-    Going for Phlebotomy?
+    <LongTextField name='preferredLanguage' showInlineError />
     <br />
-    <br />
+    <h3>Going for Phlebotomy?</h3>
     <i>
       Conditions:
       <br />
@@ -51,6 +56,13 @@ export const layout = (
       <br />
       2) Have not done a blood test within the past 3 years.
     </i>
-    <RadioField name='goingForPhlebotomy' />
+    <RadioField
+      name='goingForPhlebotomy'
+      options={[
+        { label: 'Yes', value: 'Y' },
+        { label: 'No', value: 'N' },
+      ]}
+      showInlineError
+    />
   </Fragment>
 )

@@ -60,7 +60,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
 
         <Box sx={{ flexGrow: 1 }} />
         <Hidden lgUp>
-          <IconButton color='inherit' onClick={onMobileNavOpen}>
+          <IconButton color='inherit' onClick={onMobileNavOpen} size='large'>
             <MenuIcon />
           </IconButton>
         </Hidden>
