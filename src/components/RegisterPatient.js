@@ -89,34 +89,32 @@ const RegisterPatient = (props) => {
     })
   }
 
-  const handleSubmit = async () => {
-    if (values.isQueueNumber) {
-      setIsLoadingQueueNumber(true)
-      const value = values.selectedValue
-      // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-      const data = await getPreRegDataById(value, 'patients')
-      if ('initials' in data) {
-        updatePatientInfo(data)
-        setIsLoadingQueueNumber(false)
-        navigate('/app/dashboard', { replace: true })
-      } else {
-        // if response is unsuccessful/id does not exist, show error style/popup.
-        alert('Unsuccessful. There is no patient with this queue number.')
-        setIsLoadingQueueNumber(false)
-      }
+  const handleSubmitQueueNumber = async () => {
+    setIsLoadingQueueNumber(true)
+    const value = values.selectedValue
+    // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
+    const data = await getPreRegDataById(value, 'patients')
+    if ('initials' in data) {
+      updatePatientInfo(data)
+      setIsLoadingQueueNumber(false)
+      navigate('/app/dashboard', { replace: true })
     } else {
-      setIsLoadingPatientName(true)
-      const value = values.selectedValue.initials
-      console.log(value)
-      const data = await getPreRegDataByName(value, 'patients')
-      if ('initials' in data) {
-        updatePatientInfo(data)
-        setIsLoadingPatientName(false)
-        navigate('/app/dashboard', { replace: true })
-      } else {
-        alert('Unsuccessful. There is no patient with this name.')
-        setIsLoadingPatientName(false)
-      }
+      // if response is unsuccessful/id does not exist, show error style/popup.
+      alert('Unsuccessful. There is no patient with this queue number.')
+      setIsLoadingQueueNumber(false)
+    }
+  }
+  const handleSubmitPatientName = async () => {
+    setIsLoadingPatientName(true)
+    const value = values.selectedValue.initials
+    const data = await getPreRegDataByName(value, 'patients')
+    if ('initials' in data) {
+      updatePatientInfo(data)
+      setIsLoadingPatientName(false)
+      navigate('/app/dashboard', { replace: true })
+    } else {
+      alert('Unsuccessful. There is no patient with this name.')
+      setIsLoadingPatientName(false)
     }
   }
 
@@ -166,7 +164,7 @@ const RegisterPatient = (props) => {
               size='large'
               type='submit'
               variant='contained'
-              onClick={handleSubmit}
+              onClick={handleSubmitQueueNumber}
               sx={{ marginTop: '10px', marginBottom: '20px' }}
             >
               Go
@@ -202,7 +200,7 @@ const RegisterPatient = (props) => {
               size='large'
               type='submit'
               variant='contained'
-              onClick={handleSubmit}
+              onClick={handleSubmitPatientName}
               className='button'
               sx={{ marginTop: '10px', marginBottom: '20px' }}
             >
