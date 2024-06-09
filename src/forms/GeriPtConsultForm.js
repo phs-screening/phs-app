@@ -16,6 +16,7 @@ import './fieldPadding.css'
 import allForms from './forms.json'
 import Grid from '@mui/material/Grid'
 import { blueText, title, underlined } from '../theme/commonComponents'
+import './forms.css'
 
 const schema = new SimpleSchema({
   geriPtConsultQ1: {
@@ -142,6 +143,28 @@ const GeriPtConsultForm = (props) => {
       isLoadingSidePanel(false)
     })
   }, [])
+
+  const formOptions = {
+    geriPtConsultQ2: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriPtConsultQ3: [
+      {
+        label: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
+        value: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
+      },
+      {
+        label: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
+        value: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
+      },
+      { label: 'Others (please specify:)', value: 'Others (please specify:)' },
+    ],
+    geriPtConsultQ4: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -165,24 +188,34 @@ const GeriPtConsultForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <Fragment className='fieldPadding'>
         <h2>3.4a PT Consult</h2>
-        Memo (for participant):
+        <h3 className='question--text'>Memo (for participant):</h3>
         <LongTextField name='geriPtConsultQ1' label='Geri - PT Consult Q1' />
-        <br />
-        To be referred for doctor&apos;s consult (PT)?
-        <RadioField name='geriPtConsultQ2' label='Geri - PT Consult Q2' />
-        <br />
-        Reasons for referral to Doctor&apos;s consult (PT):
-        <SelectField name='geriPtConsultQ3' checkboxes='true' label='Geri - PT Consult Q3' />
-        <br />
-        Please specify (if others):
+        <h3 className='question--text'>To be referred for doctor&apos;s consult (PT)?</h3>
+        <RadioField
+          name='geriPtConsultQ2'
+          label='Geri - PT Consult Q2'
+          options={formOptions.geriPtConsultQ2}
+        />
+        <h4 className='question--text'>Reasons for referral to Doctor&apos;s consult (PT):</h4>
+        <SelectField
+          name='geriPtConsultQ3'
+          checkboxes='true'
+          label='Geri - PT Consult Q3'
+          options={formOptions.geriPtConsultQ3}
+        />
+        <p className='question--text'>Please specify (if others):</p>
         <LongTextField name='geriPtConsultQ8' label='Geri - PT Consult Q8' />
         <br />
         <br />
-        To be referred for social support (PT):
-        <RadioField name='geriPtConsultQ4' label='Geri - PT Consult Q4' />
-        Reasons for referral to social support (PT):
+        <h3 className='question--text'>To be referred for social support (PT):</h3>
+        <RadioField
+          name='geriPtConsultQ4'
+          label='Geri - PT Consult Q4'
+          options={formOptions.geriPtConsultQ4}
+        />
+        <h4 className='question--text'>Reasons for referral to social support (PT):</h4>
         <LongTextField name='geriPtConsultQ5' label='Geri - PT Consult Q5' />
         <h2>
           <span style={{ color: 'red' }}>
