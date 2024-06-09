@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import SimpleSchema from 'simpl-schema'
 import { RadioField, LongTextField } from 'uniforms-material'
-import './prereg.css'
+import './forms.css'
 
 export const schema = new SimpleSchema({
   gender: {
@@ -31,7 +31,7 @@ export const schema = new SimpleSchema({
 
 export const layout = (
   <Fragment>
-    <h2>Pre-Registration</h2>
+    <h2 className='question--text'>Pre-Registration</h2>
     <h3 className='question--text'>Gender</h3>
     <RadioField
       name='gender'
@@ -45,7 +45,7 @@ export const layout = (
     <LongTextField name='initials' showInlineError />
     <h3 className='question--text'>Age</h3>
     <LongTextField name='age' showInlineError />
-    Preferred Language (e.g. English)
+    <h3 className='question--text'>Preferred Language (e.g. English)</h3>
     <LongTextField name='preferredLanguage' showInlineError />
     <br />
     <h3>Going for Phlebotomy?</h3>

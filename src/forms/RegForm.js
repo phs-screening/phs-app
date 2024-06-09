@@ -21,6 +21,7 @@ import { submitForm, submitRegClinics } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
+import './forms.css'
 
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
@@ -66,11 +67,9 @@ const RegForm = () => {
     const temp = { ...defaultSlots }
     for (const { postalCode, counterItems } of phlebCounters) {
       if (postalCode && counterItems) {
-        console.log(postalCode, counterItems.length)
         temp[postalCode] -= counterItems.length
       }
     }
-    console.log(temp)
     setSlots(temp)
 
     setSaveData(savedData)
@@ -78,87 +77,135 @@ const RegForm = () => {
 
   const displayVacancy = Object.entries(slots).map(([postalCode, n], i) => {
     return (
-      <div key={i}>
+      <div key={i} className='paragraph--text'>
         {postalCodeToLocations[postalCode]}
         <b> Slots: {n}</b>
       </div>
     )
   })
 
+  const displayLocations = () => {
+    const result = []
+    Object.values(postalCodeToLocations).map((item) => {
+      result.push({ label: item, value: item })
+    })
+    return result
+  }
+  const formOptions = {
+    registrationQ1: [
+      { label: 'Mr', value: 'Mr' },
+      { label: 'Ms', value: 'Ms' },
+      { label: 'Mrs', value: 'Mrs' },
+      { label: 'Dr', value: 'Dr' },
+    ],
+    registrationQ3: [
+      { label: 'Singapore Citizen 新加坡公民', value: 'Singapore Citizen 新加坡公民' },
+      {
+        label: 'Singapore Permanent Resident (PR) \n新加坡永久居民',
+        value: 'Singapore Permanent Resident (PR) \n新加坡永久居民',
+      },
+    ],
+    registrationQ4: [
+      { label: 'Single 单身', value: 'Single 单身' },
+      { label: 'Married 已婚', value: 'Married 已婚' },
+      { label: 'Widowed 已寡', value: 'Widowed 已寡' },
+      { label: 'Separated 已分居', value: 'Separated 已分居' },
+      { label: 'Divorced 已离婚', value: 'Divorced 已离婚' },
+    ],
+    registrationQ6: [
+      { label: 'Jurong', value: 'Jurong' },
+      { label: 'Yuhua', value: 'Yuhua' },
+      { label: 'Bukit Batok', value: 'Bukit Batok' },
+      { label: 'Pioneer', value: 'Pioneer' },
+      { label: 'West Coast', value: 'West Coast' },
+      { label: 'Hong Kah North', value: 'Hong Kah North' },
+      { label: 'Others', value: 'Others' },
+    ],
+    registrationQ8: [
+      { label: 'CHAS Orange', value: 'CHAS Orange' },
+      { label: 'CHAS Green', value: 'CHAS Green' },
+      { label: 'CHAS Blue', value: 'CHAS blue' },
+      { label: 'No CHAS', value: 'No CHAS' },
+    ],
+    registrationQ9: [
+      { label: 'Pioneer generation card holder', value: 'Pioneer generation card holder' },
+      { label: 'Merdeka generation card holder', value: 'Merdeka generation card holder' },
+      { label: 'None', value: 'None' },
+    ],
+    registrationQ11: [
+      { label: 'English', value: 'English' },
+      { label: 'Mandarin', value: 'Mandarin' },
+      { label: 'Malay', value: 'Malay' },
+      { label: 'Tamil', value: 'Tamil' },
+    ],
+  }
+
   const layout = (
     <Fragment>
-      <h2>Registration</h2>
-      <br />
-      Salutation 称谓
-      <SelectField name='registrationQ1' />
-      <br />
-      Race 种族
-      <RadioField name='registrationQ2' />
+      <h2 className='question--text'>Registration</h2>
+      <h3 className='question--text'>Salutation 称谓</h3>
+      <SelectField name='registrationQ1' options={formOptions.registrationQ1} />
+      <h3 className='question--text'>Race 种族</h3>
+      <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
       <LongTextField name='registrationQ14' />
-      <br />
-      Nationality 国籍 <br />
-      Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health
-      screening
-      <RadioField name='registrationQ3' />
-      <br />
-      Marital Status 婚姻状况
-      <SelectField name='registrationQ4' />
-      <br />
-      Occupation 工作
+      <h3 className='question--text'>Nationality 国籍</h3>
+      <p className='paragraph--title'>
+        Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health
+        screening
+      </p>
+      <RadioField name='registrationQ3' options={formOptions.registrationQ3} />
+      <h3 className='question--text'>Marital Status 婚姻状况</h3>
+      <SelectField name='registrationQ4' options={formOptions.registrationQ4} />
+      <h3 className='question--text'>Occupation 工作</h3>
       <TextField name='registrationQ5' />
-      <br />
-      <p>
+      <h3 className='question--text'>
         GRC/SMC Subdivision{' '}
         <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel='noreferrer'>
           [https://www.parliament.gov.sg/mps/find-my-mp]
         </a>
-      </p>
-      <SelectField name='registrationQ6' />
-      <br />
-      CHAS Status 社保援助计划
-      <SelectField name='registrationQ8' />
-      <br />
-      <h2>Follow up at GP Clinics</h2>
+      </h3>
+      <SelectField name='registrationQ6' options={formOptions.registrationQ6} />
+      <h3 className='question--text'>CHAS Status 社保援助计划</h3>
+      <SelectField name='registrationQ8' options={formOptions.registrationQ8} />
+      <h2 className='question--text'>Follow up at GP Clinics</h2>
       <p>
         Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you
         have selected <b>4-6 weeks</b> after the screening.
       </p>
-      All results, included those that are normal, have to be collected from the GP clinic via an
-      appointment
-      <br />
-      <br />
+      <h4 className='paragraph--title'>
+        All results, included those that are normal, have to be collected from the GP clinic via an
+        appointment
+      </h4>
       {displayVacancy}
-      <br />
-      <RadioField name='registrationQ10' />
-      <br />
-      Pioneer Generation Status 建国一代配套
-      <RadioField name='registrationQ9' />
-      <br />
-      Preferred Language for Health Report
-      <RadioField name='registrationQ11' />
-      <br />
-      <h2>Phlebotomy Eligibility</h2>
-      Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
-      <br />
-      1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
-      <br />
-      2) Have not done a blood test within the past 3 years.
-      <br />
-      <br />
-      Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
-      their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This
-      information is available in our publicity material. Please approach our registration
-      volunteers should you have any queries. We are happy to explain further. Thank you!
-      <br />
-      <br />
-      抽血合格标准:
-      <br />
-      1) 在过去的三年内沒有验过血。
-      <br />
-      2) 没有糖尿病, 高血压, 高胆固醇。
+      <RadioField name='registrationQ10' options={displayLocations()} />
+      <h3 className='question--text'> Pioneer Generation Status 建国一代配套</h3>
+      <RadioField name='registrationQ9' options={formOptions.registrationQ9} />
+      <h3 className='question--text'>Preferred Language for Health Report</h3>
+      <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
+      <h2 className='question--text'>Phlebotomy Eligibility</h2>
+      <p className='paragraph--title'>
+        Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
+        <br />
+        1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
+        <br />
+        2) Have not done a blood test within the past 3 years.
+      </p>
+      <p className='paragraph--title'>
+        Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
+        their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This
+        information is available in our publicity material. Please approach our registration
+        volunteers should you have any queries. We are happy to explain further. Thank you!
+      </p>
+      <p className='paragraph--title'>
+        抽血合格标准:
+        <br />
+        1) 在过去的三年内沒有验过血。
+        <br />
+        2) 没有糖尿病, 高血压, 高胆固醇。
+      </p>
       <BoolField name='registrationQ12' />
       <br />
-      <h2>Compliance to PDPA 同意书</h2>
+      <h2 className='question--text'>Compliance to PDPA 同意书</h2>
       <p>
         I hereby give consent to having photos and/or videos taken of me for publicity purposes. I
         hereby give my consent to the Public Health Service Executive Committee to collect my
