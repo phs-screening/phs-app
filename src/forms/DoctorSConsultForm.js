@@ -157,44 +157,31 @@ const DoctorSConsultForm = () => {
     >
       <Fragment>
         <h1>Doctor&apos;s Consult</h1>
-        <br />
-        Doctor&apos;s Name:
+        <h3 className='question--text'>Doctor&apos;s Name:</h3>
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
-        <br />
-        <br />
-        Clinical findings:
+        <h3 className='question--text'>Clinical findings:</h3>
         <LongTextField name='doctorSConsultQ2' label="Doctor's Consult Q2" />
-        <br />
-        <br />
-        Doctor&apos;s Memo:
+        <h3 className='question--text'>Doctor&apos;s Memo:</h3>
         <LongTextField name='doctorSConsultQ3' label="Doctor's Consult Q3" />
-        <br />
-        <br />
-        Refer to dietitian?
+        <h3 className='question--text'>Refer to dietitian?</h3>
         <BoolField name='doctorSConsultQ4' />
-        Reason for referral
+        <h3 className='question--text'>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ5' label="Doctor's Consult Q5" />
-        <br />
-        <br />
-        Refer to Social Support?
+        <h3 className='question--text'>Refer to Social Support?</h3>
         <BoolField name='doctorSConsultQ6' />
-        Reason for referral
+        <h3 className='question--text'>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
-        <br />
-        <br />
-        Refer to SACS? (and indicated on Form A)
+        <h3 className='question--text'>Refer to SACS? (and indicated on Form A)</h3>
         <BoolField name='doctorSConsultQ13' />
-        <br />
-        Refer to Dental?
+        <h3 className='question--text'>Refer to Dental?</h3>
         <BoolField name='doctorSConsultQ8' />
-        Reason for referral
+        <h3 className='question--text'>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ9' label="Doctor's Consult Q9" />
-        <br />
-        <br />
-        Does patient require urgent follow up
+        <h3 className='question--text'>Does patient require urgent follow up</h3>
         <BoolField name='doctorSConsultQ10' />
-        <br />
-        Completed Doctor&apos;s Consult station. Please check that Form A is filled.
+        <h3 className='question--text'>
+          Completed Doctor&apos;s Consult station. Please check that Form A is filled.
+        </h3>
         <BoolField name='doctorSConsultQ11' />
       </Fragment>
 

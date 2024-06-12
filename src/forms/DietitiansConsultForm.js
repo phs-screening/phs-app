@@ -133,7 +133,7 @@ const DietitiansConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h2>Dietitian&apos;s Consultation</h2>
+        <h1>Dietitian&apos;s Consultation</h1>
         <h3 className='question--text'>
           Has the participant visited the Dietitian&apos;s Consult station?
         </h3>
