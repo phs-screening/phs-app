@@ -86,6 +86,30 @@ const DietitiansConsultForm = (props) => {
     setSaveData(savedData)
     loadPastForms()
   }, [])
+
+  const formOptions = {
+    dietitiansConsultQ7: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      {
+        label: 'No',
+        value: 'No',
+      },
+    ],
+
+    dietitiansConsultQ8: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      {
+        label: 'No',
+        value: 'No',
+      },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -109,22 +133,31 @@ const DietitiansConsultForm = (props) => {
       model={saveData}
     >
       <Fragment>
-        <h1>Dietitian&apos;s Consultation</h1>
-        <br />
-        Has the participant visited the Dietitian&apos;s Consult station?
-        <RadioField name='dietitiansConsultQ7' label="Dietitian's Consult Q7" />
-        Dietitian&apos;s Name:
+        <h2>Dietitian&apos;s Consultation</h2>
+        <h3 className='question--text'>
+          Has the participant visited the Dietitian&apos;s Consult station?
+        </h3>
+        <RadioField
+          name='dietitiansConsultQ7'
+          label="Dietitian's Consult Q7"
+          options={formOptions.dietitiansConsultQ7}
+        />
+        <h3 className='question--text'>Dietitian&apos;s Name:</h3>
         <LongTextField name='dietitiansConsultQ1' label="Dietitian's Consult Q1" />
-        Dietitian&apos;s Notes:
+        <h3 className='question--text'>Dietitian&apos;s Notes:</h3>
         <LongTextField name='dietitiansConsultQ3' label="Dietitian's Consult Q3" />
-        Notes for participant (if applicable):
+        <h3 className='question--text'>Notes for participant (if applicable):</h3>
         <LongTextField name='dietitiansConsultQ4' label="Dietitian's Consult Q4" />
-        Does the patient require urgent follow up?
+        <h3 className='question--text'>Does the patient require urgent follow up?</h3>
         <BoolField name='dietitiansConsultQ5' />
-        Reasons for urgent follow up:
+        <h3 className='question--text'>Reasons for urgent follow up:</h3>
         <LongTextField name='dietitiansConsultQ6' label="Dietitian's Consult Q6" />
-        Referred to Polyclinic for follow-up?
-        <RadioField name='dietitiansConsultQ8' label="Dietitian's Consult Q8" />
+        <h3 className='question--text'>Referred to Polyclinic for follow-up?</h3>
+        <RadioField
+          name='dietitiansConsultQ8'
+          label="Dietitian's Consult Q8"
+          options={formOptions.dietitiansConsultQ8}
+        />
       </Fragment>
 
       <ErrorsField />

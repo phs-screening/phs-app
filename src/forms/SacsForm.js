@@ -15,11 +15,9 @@ import { submitFormSpecial } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
 import '../Snippet.css'
-import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
-import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
+import './forms.css'
 
 const schema = new SimpleSchema({
   sacsQ1: {
@@ -73,6 +71,46 @@ const SacsForm = () => {
     setSaveData(savedData)
   }, [])
 
+  const formOptions = {
+    sacsQ2: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+
+    sacsQ3: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+
+    wceQ1: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+
+    wceQ2: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+
+    wceQ3: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+
+    wceQ4: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+
+    wceQ5: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -97,16 +135,14 @@ const SacsForm = () => {
     >
       <Fragment>
         <h1>SACS</h1>
-        <br />
-        Notes from SACS Consultation
+        <h3 className='question--text'>Notes from SACS Consultation</h3>
         <TextField name='sacsQ1' label='SACS Q1' />
-        <br />
-        Is the patient okay to continue with screening?
-        <RadioField name='sacsQ2' label='SACS Q2' />
-        <br />
-        Has this person been referred to a SACS CREST programme for follow-up?
-        <RadioField name='sacsQ3' label='SACS Q3' />
-        <br />
+        <h3 className='question--text'>Is the patient okay to continue with screening?</h3>
+        <RadioField name='sacsQ2' label='SACS Q2' options={formOptions.sacsQ2} />
+        <h3 className='question--text'>
+          Has this person been referred to a SACS CREST programme for follow-up?
+        </h3>
+        <RadioField name='sacsQ3' label='SACS Q3' options={formOptions.sacsQ3} />
       </Fragment>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
