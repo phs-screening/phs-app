@@ -4,6 +4,7 @@ import { Box, Container, Grid, Typography } from '@mui/material'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
+import { calculateBMI } from '../api/api.js' 
 
 const Eligibility = () => {
     const { patientId, updatePatientId } = useContext(FormContext)
@@ -54,9 +55,14 @@ const Eligibility = () => {
                 <Typography variant="body1">Initials: {patients.initials}</Typography>
                 <Typography variant="body1">Gender: {patients.gender}</Typography>
                 <Typography variant="body1">Age: {patients.age}</Typography>
+                <br />
+                <Typography variant="body1">Body Mass Index (BMI): {calculateBMI(Number(triage.triageQ9), Number(triage.triageQ10))}</Typography>
+                <br />
+                <Typography variant="body1">Phlebotomy Eligibility: {registration.registrationQ12} </Typography>
             </Grid>
    
             <Grid item lg={8} md={8} xs={12}>
+                <br />
                 <Typography variant="h6">Patient Eligibility</Typography>
                 <Typography variant="body1">List of Eligible Tests</Typography>
             </Grid>
