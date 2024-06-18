@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-import { calculateBMI, parseGeriVision, parseWceStation, generate_pdf } from '../api/api.js'
+import { formatBmi, formatGeriVision, parseWceStation, generate_pdf } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -125,48 +125,6 @@ const SummaryForm = (props) => {
     }
     await loadPastForms()
   }, [refresh])
-
-  const formatBmi = (heightInCm, weightInKg) => {
-    const bmi = calculateBMI(heightInCm, weightInKg)
-    if (bmi > 27.5) {
-      return (
-        <p className='summary--red-text'>
-          {bmi}
-          <br />
-          BMI is obese
-        </p>
-      )
-    } else if (bmi >= 23.0) {
-      return (
-        <p className='summary--red-text'>
-          {bmi}
-          <br />
-          BMI is overweight
-        </p>
-      )
-    } else if (bmi < 18.5) {
-      return (
-        <p className='summary--red-text'>
-          {bmi}
-          <br />
-          BMI is underweights
-        </p>
-      )
-    } else {
-      return <p className='summary--blue-text'>{bmi}</p>
-    }
-  }
-
-  const formatGeriVision = (acuityString, questionNo) => {
-    const acuity = parseInt(acuityString)
-    if (acuity >= 6) {
-      return <p className='summary--red-text'>{parseGeriVision(acuityString, questionNo)}</p>
-    }
-    if (questionNo === 6) {
-      return <p className='summary--red-text'>{parseGeriVision(acuityString, questionNo)}</p>
-    }
-    return <p className='summary--blue-text'>{parseGeriVision(acuityString, questionNo)}</p>
-  }
 
   // TODO: add triage to summary form
   return (

@@ -141,33 +141,33 @@ const RegForm = () => {
   }
 
   const layout = (
-    <Fragment>
-      <h2 className='question--text'>Registration</h2>
-      <h3 className='question--text'>Salutation 称谓</h3>
+    <div className='form--div'>
+      <h2>Registration</h2>
+      <h3>Salutation 称谓</h3>
       <SelectField name='registrationQ1' options={formOptions.registrationQ1} />
-      <h3 className='question--text'>Race 种族</h3>
+      <h3>Race 种族</h3>
       <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
       <LongTextField name='registrationQ14' />
-      <h3 className='question--text'>Nationality 国籍</h3>
+      <h3>Nationality 国籍</h3>
       <p className='paragraph--title'>
         Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health
         screening
       </p>
       <RadioField name='registrationQ3' options={formOptions.registrationQ3} />
-      <h3 className='question--text'>Marital Status 婚姻状况</h3>
+      <h3>Marital Status 婚姻状况</h3>
       <SelectField name='registrationQ4' options={formOptions.registrationQ4} />
-      <h3 className='question--text'>Occupation 工作</h3>
+      <h3>Occupation 工作</h3>
       <TextField name='registrationQ5' />
-      <h3 className='question--text'>
+      <h3>
         GRC/SMC Subdivision{' '}
         <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel='noreferrer'>
           [https://www.parliament.gov.sg/mps/find-my-mp]
         </a>
       </h3>
       <SelectField name='registrationQ6' options={formOptions.registrationQ6} />
-      <h3 className='question--text'>CHAS Status 社保援助计划</h3>
+      <h3>CHAS Status 社保援助计划</h3>
       <SelectField name='registrationQ8' options={formOptions.registrationQ8} />
-      <h2 className='question--text'>Follow up at GP Clinics</h2>
+      <h2>Follow up at GP Clinics</h2>
       <p>
         Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you
         have selected <b>4-6 weeks</b> after the screening.
@@ -178,11 +178,11 @@ const RegForm = () => {
       </h4>
       {displayVacancy}
       <RadioField name='registrationQ10' options={displayLocations()} />
-      <h3 className='question--text'> Pioneer Generation Status 建国一代配套</h3>
+      <h3> Pioneer Generation Status 建国一代配套</h3>
       <RadioField name='registrationQ9' options={formOptions.registrationQ9} />
-      <h3 className='question--text'>Preferred Language for Health Report</h3>
+      <h3>Preferred Language for Health Report</h3>
       <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
-      <h2 className='question--text'>Phlebotomy Eligibility</h2>
+      <h2>Phlebotomy Eligibility</h2>
       <p className='paragraph--title'>
         Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
         <br />
@@ -205,7 +205,7 @@ const RegForm = () => {
       </p>
       <BoolField name='registrationQ12' />
       <br />
-      <h2 className='question--text'>Compliance to PDPA 同意书</h2>
+      <h2>Compliance to PDPA 同意书</h2>
       <p>
         I hereby give consent to having photos and/or videos taken of me for publicity purposes. I
         hereby give my consent to the Public Health Service Executive Committee to collect my
@@ -223,7 +223,7 @@ const RegForm = () => {
         used by these parties for the purposes stated.
       </p>
       <BoolField name='registrationQ13' />
-    </Fragment>
+    </div>
   )
   const form_layout = layout
 

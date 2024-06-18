@@ -30,9 +30,9 @@ export const schema = new SimpleSchema({
 })
 
 export const layout = (
-  <Fragment>
-    <h2 className='question--text'>Pre-Registration</h2>
-    <h3 className='question--text'>Gender</h3>
+  <div className='form--div'>
+    <h2>Pre-Registration</h2>
+    <h3>Gender</h3>
     <RadioField
       name='gender'
       options={[
@@ -41,11 +41,11 @@ export const layout = (
       ]}
       showInlineError
     />
-    <h3 className='question--text'>Initials (E.g. Alan Simon Lee as S.L Alan)</h3>
+    <h3>Initials (E.g. Alan Simon Lee as S.L Alan)</h3>
     <LongTextField name='initials' showInlineError />
-    <h3 className='question--text'>Age</h3>
+    <h3>Age</h3>
     <LongTextField name='age' showInlineError />
-    <h3 className='question--text'>Preferred Language (e.g. English)</h3>
+    <h3>Preferred Language (e.g. English)</h3>
     <LongTextField name='preferredLanguage' showInlineError />
     <br />
     <h3>Going for Phlebotomy?</h3>
@@ -64,5 +64,5 @@ export const layout = (
       ]}
       showInlineError
     />
-  </Fragment>
+  </div>
 )

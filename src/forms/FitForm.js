@@ -69,7 +69,6 @@ const FitForm = (props) => {
     >
       <Fragment>
         <h1>FIT</h1>
-        <br />
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
           <span style={{ color: 'red' }}>
