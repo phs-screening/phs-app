@@ -155,40 +155,37 @@ const DoctorSConsultForm = () => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>Doctor&apos;s Consult</h1>
-        <h3 className='question--text'>Doctor&apos;s Name:</h3>
+        <h3>Doctor&apos;s Name:</h3>
         <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
-        <h3 className='question--text'>Clinical findings:</h3>
+        <h3>Clinical findings:</h3>
         <LongTextField name='doctorSConsultQ2' label="Doctor's Consult Q2" />
-        <h3 className='question--text'>Doctor&apos;s Memo:</h3>
+        <h3>Doctor&apos;s Memo:</h3>
         <LongTextField name='doctorSConsultQ3' label="Doctor's Consult Q3" />
-        <h3 className='question--text'>Refer to dietitian?</h3>
+        <h3>Refer to dietitian?</h3>
         <BoolField name='doctorSConsultQ4' />
-        <h3 className='question--text'>Reason for referral</h3>
+        <h3>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ5' label="Doctor's Consult Q5" />
-        <h3 className='question--text'>Refer to Social Support?</h3>
+        <h3>Refer to Social Support?</h3>
         <BoolField name='doctorSConsultQ6' />
-        <h3 className='question--text'>Reason for referral</h3>
+        <h3>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
-        <h3 className='question--text'>Refer to SACS? (and indicated on Form A)</h3>
+        <h3>Refer to SACS? (and indicated on Form A)</h3>
         <BoolField name='doctorSConsultQ13' />
-        <h3 className='question--text'>Refer to Dental?</h3>
+        <h3>Refer to Dental?</h3>
         <BoolField name='doctorSConsultQ8' />
-        <h3 className='question--text'>Reason for referral</h3>
+        <h3>Reason for referral</h3>
         <LongTextField name='doctorSConsultQ9' label="Doctor's Consult Q9" />
-        <h3 className='question--text'>Does patient require urgent follow up</h3>
+        <h3>Does patient require urgent follow up</h3>
         <BoolField name='doctorSConsultQ10' />
-        <h3 className='question--text'>
-          Completed Doctor&apos;s Consult station. Please check that Form A is filled.
-        </h3>
+        <h3>Completed Doctor&apos;s Consult station. Please check that Form A is filled.</h3>
         <BoolField name='doctorSConsultQ11' />
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )
@@ -211,159 +208,325 @@ const DoctorSConsultForm = () => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title('Health Concerns')}
-              {underlined('Requires scrutiny by doctor?')}
-              {hcsr ? blueText(hcsr.hxHcsrQ11) : blueText('nil')}
-              {underlined('Summarised reasons for referral to Doctor Consultation')}
-              {hcsr ? blueText(hcsr.hxHcsrQ2) : blueText('nil')}
-              {title('Systems Review')}
-              {underlined('Requires scrutiny by doctor?')}
-              {hcsr ? blueText(hcsr.hxHcsrQ12) : blueText('nil')}
-              {underlined('Summarised systems review')}
-              {hcsr ? blueText(hcsr.hxHcsrQ3) : blueText('nil')}
-              {title('Urinary/Faecal incontinence')}
-              {underlined('Urinary/Faecal incontinence')}
-              {hcsr ? blueText(hcsr.hxHcsrQ4) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ5 ? blueText(hcsr.hxHcsrQ5) : blueText('nil')}
-              {title('Vision problems')}
-              {underlined('Vision Problems (From history taking)')}
-              {hcsr ? blueText(hcsr.hxHcsrQ6) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ7 ? blueText(hcsr.hxHcsrQ7) : blueText('nil')}
-              {underlined('Referred from Geriatric Vision Screening (if VA with pinhole ≥ 6/12)')}
-              {geriVision && geriVision.geriVisionQ9
-                ? geriVision.geriVisionQ9.length === 0
-                  ? blueText('nil')
-                  : blueText(geriVision.geriVisionQ9)
-                : blueText('nil')}
-              {underlined('Previous eye condition or surgery:')}
-              {geriVision && geriVision.geriVisionQ1
-                ? blueText(geriVision.geriVisionQ1)
-                : blueText('nil')}
-              {geriVision && geriVision.geriVisionQ2
-                ? blueText(geriVision.geriVisionQ2)
-                : blueText('nil')}
-              {underlined(
-                'Is participant currently on any eye review/ consulting an eye specialist?',
+            <div className='summary--question-div'>
+              <h2>Health Concerns</h2>
+              <p className='underlined'>Requires scrutiny by doctor?</p>
+              {hcsr && hcsr.hxHcsrQ11 ? (
+                <p className='blue'>{hcsr.hxHcsrQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {geriVision && geriVision.geriVisionQ10
-                ? blueText(geriVision.geriVisionQ10)
-                : blueText('nil')}
-              {geriVision && geriVision.geriVisionQ11
-                ? blueText(geriVision.geriVisionQ11)
-                : blueText('nil')}
-              {underlined('Visual acuity (w/o pinhole occluder) - Right Eye 6/__')}
-              {geriVision && geriVision.geriVisionQ3
-                ? blueText(geriVision.geriVisionQ3)
-                : blueText('nil')}
-              {underlined('Visual acuity (w/o pinhole occluder) - Left Eye 6/__')}
-              {geriVision && geriVision.geriVisionQ4
-                ? blueText(geriVision.geriVisionQ4)
-                : blueText('nil')}
-              {underlined(
-                'Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__',
+              <p className='underlined'>Summarised reasons for referral to Doctor Consultation</p>
+              {hcsr && hcsr.hxHcsrQ2 ? (
+                <p className='blue'>{hcsr.hxHcsrQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {geriVision && geriVision.geriVisionQ5
-                ? blueText(geriVision.geriVisionQ5)
-                : blueText('nil')}
-              {underlined(
-                'Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__',
+              <h2>Systems Review</h2>
+              <p className='underlined'>Requires scrutiny by doctor?</p>
+              {hcsr && hcsr.hxHcsrQ12 ? (
+                <p className='blue'>{hcsr.hxHcsrQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {geriVision && geriVision.geriVisionQ6
-                ? blueText(geriVision.geriVisionQ6)
-                : blueText('nil')}
+              <p className='underlined'>Summarised systems review</p>
+              {hcsr && hcsr.hxHcsrQ3 ? (
+                <p className='blue'>{hcsr.hxHcsrQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Urinary/Faecal incontinence</h2>
+              <p className='underlined'>Urinary/Faecal incontinence</p>
+              {hcsr && hcsr.hxHcsrQ4 ? (
+                <p className='blue'>{hcsr.hxHcsrQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hcsr && hcsr.hxHcsrQ5 ? (
+                <p className='blue'>{hcsr.hxHcsrQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Vision problems</h2>
+              <p className='underlined'>Vision Problems (From history taking)</p>
+              {hcsr && hcsr.hxHcsrQ6 ? (
+                <p className='blue'>{hcsr.hxHcsrQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hcsr && hcsr.hxHcsrQ7 ? (
+                <p className='blue'>{hcsr.hxHcsrQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Referred from Geriatric Vision Screening (if VA with pinhole ≥ 6/12)
+              </p>
+              {geriVision && geriVision.geriVisionQ9 ? (
+                geriVision.geriVisionQ9.length === 0 ? (
+                  <p className='blue'>nil</p>
+                ) : (
+                  <p className='blue'>{geriVision.geriVisionQ9}</p>
+                )
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Previous eye condition or surgery:</p>
+              {geriVision && geriVision.geriVisionQ1 ? (
+                <p className='blue'>{geriVision.geriVisionQ1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {geriVision && geriVision.geriVisionQ2 ? (
+                <p className='blue'>{geriVision.geriVisionQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Is participant currently on any eye review/ consulting an eye specialist?
+              </p>
+              {geriVision && geriVision.geriVisionQ10 ? (
+                <p className='blue'>{geriVision.geriVisionQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {geriVision && geriVision.geriVisionQ11 ? (
+                <p className='blue'>{geriVision.geriVisionQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Visual acuity (w/o pinhole occluder) - Right Eye 6/__</p>
+              {geriVision && geriVision.geriVisionQ3 ? (
+                <p className='blue'>{geriVision.geriVisionQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Visual acuity (w/o pinhole occluder) - Left Eye 6/__</p>
+              {geriVision && geriVision.geriVisionQ4 ? (
+                <p className='blue'>{geriVision.geriVisionQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__
+              </p>
+              {geriVision && geriVision.geriVisionQ5 ? (
+                <p className='blue'>{geriVision.geriVisionQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__
+              </p>
+              {geriVision && geriVision.geriVisionQ6 ? (
+                <p className='blue'>{geriVision.geriVisionQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
 
-              {title('Hearing problems')}
-              {underlined('Hearing Problems')}
-              {hcsr ? blueText(hcsr.hxHcsrQ8) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : blueText('nil')}
-              {title('Audiometry')}
-              {underlined('Referred from Geriatric Audiometry Screening?')}
-              {geriAudio && geriAudio.geriAudiometryQ11
-                ? blueText(geriAudio.geriAudiometryQ11)
-                : blueText('nil')}
-              {underlined('Significant findings and recommended course of action?')}
-              {geriAudio && geriAudio.geriAudiometryQ12
-                ? blueText(geriAudio.geriAudiometryQ12)
-                : blueText('nil')}
-              {geriAudio && geriAudio.geriAudiometryQ13
-                ? blueText(geriAudio.geriAudiometryQ13)
-                : blueText('nil')}
+              <h2>Hearing problems</h2>
+              <p className='underlined'>Hearing Problems</p>
+              {hcsr ? <p className='blue'>{hcsr.hxHcsrQ8}</p> : <p className='blue'>nil</p>}
+              {hcsr && hcsr.hxHcsrQ9 ? (
+                <p className='blue'>{hcsr.hxHcsrQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Audiometry</h2>
+              <p className='underlined'>Referred from Geriatric Audiometry Screening?</p>
+              {geriAudio && geriAudio.geriAudiometryQ11 ? (
+                <p className='blue'>{geriAudio.geriAudiometryQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Significant findings and recommended course of action?</p>
+              {geriAudio && geriAudio.geriAudiometryQ12 ? (
+                <p className='blue'>{geriAudio.geriAudiometryQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {geriAudio && geriAudio.geriAudiometryQ13 ? (
+                <p className='blue'>{geriAudio.geriAudiometryQ13}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
 
-              {title('Past Medical History')}
-              {underlined('Summary of Relevant Past Medical History')}
-              {nss && nss.hxNssQ12 ? blueText(nss.hxNssQ12.toString()) : blueText('nil')}
-              {underlined('Drug allergies?')}
-              {nss && nss.hxNssQ1 ? blueText(nss.hxNssQ1.toString()) : blueText('nil')}
-              {nss && nss.hxNssQ2 ? blueText(nss.hxNssQ2.toString()) : blueText('nil')}
-              {underlined('Currently on any alternative medicine?')}
-              {nss && nss.hxNssQ9 ? blueText(nss.hxNssQ9.toString()) : blueText('nil')}
-              {nss && nss.hxNssQ10 ? blueText(nss.hxNssQ10.toString()) : blueText('nil')}
-              {title('Smoking History')}
-              {underlined('Smoking frequency')}
-              {nss ? blueText(nss.hxNssQ14) : blueText('nil')}
-              {underlined('Pack years:')}
-              {nss ? blueText(nss.hxNssQ3) : blueText('nil')}
-              {title('Alcohol history')}
-              {underlined('Alcohol consumption')}
-              {nss ? blueText(nss.hxNssQ15) : blueText('nil')}
-              {title('Family History')}
-              {underlined('Summary of Relevant Family History')}
-              {cancer && cancer.hxCancerQ10 ? blueText(cancer.hxCancerQ10) : blueText('nil')}
-              {title('Blood Pressure')}
-              {underlined('Requires scrutiny by doctor?')}
-              {cancer && cancer.hxCancerQ27 ? blueText(cancer.hxCancerQ27) : blueText('nil')}
-              {underlined('Average Blood Pressure')}
-              {cancer
-                ? blueText('Average Reading Systolic: ' + cancer.hxCancerQ17)
-                : blueText('nil')}
-              {cancer
-                ? blueText('Average Reading Diastolic: ' + cancer.hxCancerQ18)
-                : blueText('nil')}
-              {title('BMI')}
-              {underlined('Requires scrutiny by doctor?')}
-              {cancer && cancer.hxCancerQ23
-                ? blueText(cancer.hxCancerQ23.toString())
-                : blueText('nil')}
-              {underlined('BMI')}
-              {cancer ? blueText('Height: ' + cancer.hxCancerQ19 + 'cm') : blueText('nil')}
-              {cancer ? blueText('Weight: ' + cancer.hxCancerQ20 + 'kg') : blueText('nil')}
-              {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20
-                ? formatBmi(cancer.hxCancerQ19, cancer.hxCancerQ20)
-                : blueText('nil')}
-              {underlined('Waist circumference (cm)')}
-              {cancer ? blueText(cancer.hxCancerQ24) : blueText('nil')}
-              {title('OT consult')}
-              {underlined('Reasons for referral')}
-              {geriOt ? blueText(geriOt.geriOtConsultQ3) : blueText('nil')}
-              {title('PT consult')}
-              {underlined('Reasons for referral')}
-              {geriPt ? blueText(geriPt.geriPtConsultQ3) : blueText('nil')}
-              {underlined('Short Physical Performance Battery Score (out of 12):')}
-              {geriSppb
-                ? blueText(
-                    calculateSppbScore(
-                      geriSppb.geriSppbQ2,
-                      geriSppb.geriSppbQ6,
-                      geriSppb.geriSppbQ8,
-                    ),
-                  )
-                : blueText('nil')}
-              {underlined('Gait speed Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText('nil')}
-              {underlined('5 Chair rise Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText('nil')}
-              {underlined('Balance score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText('nil')}
-              {underlined('Number of falls in past 1 year:')}
-              {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ8) : blueText('nil')}
-              {underlined('Were any of the falls injurious?')}
-              {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ9) : blueText('nil')}
-              {geriPhysical ? blueText(geriPhysical.geriPhysicalActivityLevelQ10) : blueText('nil')}
-              {underlined('Eligible for HDB EASE?')}
-              {geriOt ? blueText(geriOt.geriOtConsultQ7) : blueText('nil')}
-              {underlined('Interested in signing up?')}
-              {geriOt ? blueText(geriOt.geriOtConsultQ8) : blueText('nil')}
+              <h2>Past Medical History</h2>
+              <p className='underlined'>Summary of Relevant Past Medical History</p>
+              {nss && nss.hxNssQ12 ? (
+                <p className='blue'>{nss.hxNssQ12.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Drug allergies?</p>
+              {nss && nss.hxNssQ1 ? (
+                <p className='blue'>{nss.hxNssQ1.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {nss && nss.hxNssQ2 ? (
+                <p className='blue'>{nss.hxNssQ2.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Currently on any alternative medicine?</p>
+              {nss && nss.hxNssQ9 ? (
+                <p className='blue'>{nss.hxNssQ9.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {nss && nss.hxNssQ10 ? (
+                <p className='blue'>{nss.hxNssQ10.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Smoking History</h2>
+              <p className='underlined'>Smoking frequency</p>
+              {nss && nss.hxNssQ14 ? (
+                <p className='blue'>{nss.hxNssQ14}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Pack years:</p>
+              {nss && nss.hxNssQ3 ? (
+                <p className='blue'>{nss.hxNssQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Alcohol history</h2>
+              <p className='underlined'>Alcohol consumption</p>
+              {nss && nss.hxNssQ15 ? (
+                <p className='blue'>{nss.hxNssQ15}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Family History</h2>
+              <p className='underlined'>Summary of Relevant Family History</p>
+              {cancer && cancer.hxCancerQ10 ? (
+                <p className='blue'>{cancer.hxCancerQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>Blood Pressure</h2>
+              <p className='underlined'>Requires scrutiny by doctor?</p>
+              {cancer && cancer.hxCancerQ27 ? (
+                <p className='blue'>{cancer.hxCancerQ27}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Average Blood Pressure</p>
+              {cancer && cancer.hxCancerQ17 ? (
+                <p className='blue'>Average Reading Systolic: {cancer.hxCancerQ17}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {cancer && cancer.hxCancerQ18 ? (
+                <p className='blue'>Average Reading Diastolic: {cancer.hxCancerQ18}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>BMI</h2>
+              <p className='underlined'>Requires scrutiny by doctor?</p>
+              {cancer && cancer.hxCancerQ23 ? (
+                <p className='blue'>{cancer.hxCancerQ23.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>BMI</p>
+              {cancer && cancer.hxCancerQ19 ? (
+                <p className='blue'>Height: {cancer.hxCancerQ19} cm</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {cancer && cancer.hxCancerQ20 ? (
+                <p className='blue'>Weight: {cancer.hxCancerQ20} kg</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {cancer && cancer.hxCancerQ19 && cancer.hxCancerQ20 ? (
+                formatBmi(cancer.hxCancerQ19, cancer.hxCancerQ20)
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Waist circumference (cm)</p>
+              {cancer && cancer.hxCancerQ24 ? (
+                <p className='blue'>{cancer.hxCancerQ24}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>OT consult</h2>
+              <p className='underlined'>Reasons for referral</p>
+              {geriOt && geriOt.geriOtConsultQ3 ? (
+                <p className='blue'>{geriOt.geriOtConsultQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <h2>PT consult</h2>
+              <p className='underlined'>Reasons for referral</p>
+              {geriPt && geriPt.geriPtConsultQ3 ? (
+                <p className='blue'>{geriPt.geriPtConsultQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Short Physical Performance Battery Score (out of 12):</p>
+              {geriSppb && geriSppb.geriSppbQ2 && geriSppb.geriSppbQ6 && geriSppb.geriSppbQ8 ? (
+                <p className='blue'>
+                  {calculateSppbScore(
+                    geriSppb.geriSppbQ2,
+                    geriSppb.geriSppbQ6,
+                    geriSppb.geriSppbQ8,
+                  )}
+                </p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Gait speed Score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ8 ? (
+                <p className='blue'>{geriSppb.geriSppbQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>5 Chair rise Score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ2 ? (
+                <p className='blue'>{geriSppb.geriSppbQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Balance score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ6 ? (
+                <p className='blue'>{geriSppb.geriSppbQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Number of falls in past 1 year:</p>
+              {geriPhysical && geriPhysical.geriPhysicalActivityLevelQ8 ? (
+                <p className='blue'>{geriPhysical.geriPhysicalActivityLevelQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Were any of the falls injurious?</p>
+              {geriPhysical && geriPhysical.geriPhysicalActivityLevelQ9 ? (
+                <p className='blue'>{geriPhysical.geriPhysicalActivityLevelQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {geriPhysical && geriPhysical.geriPhysicalActivityLevelQ10 ? (
+                <p className='blue'>{geriPhysical.geriPhysicalActivityLevelQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Eligible for HDB EASE?</p>
+              {geriOt && geriOt.geriOtConsultQ7 ? (
+                <p className='blue'>{geriOt.geriOtConsultQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Interested in signing up?</p>
+              {geriOt && geriOt.geriOtConsultQ8 ? (
+                <p className='blue'>{geriOt.geriOtConsultQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
             </div>
           )}
         </Grid>
