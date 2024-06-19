@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, RadioField } from 'uniforms-material'
 import { LongTextField, BoolField } from 'uniforms-material'
-import { submitForm, calculateBMI } from '../api/api.js'
+import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
@@ -132,38 +132,35 @@ const DietitiansConsultForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>Dietitian&apos;s Consultation</h1>
-        <h3 className='question--text'>
-          Has the participant visited the Dietitian&apos;s Consult station?
-        </h3>
+        <h3>Has the participant visited the Dietitian&apos;s Consult station?</h3>
         <RadioField
           name='dietitiansConsultQ7'
           label="Dietitian's Consult Q7"
           options={formOptions.dietitiansConsultQ7}
         />
-        <h3 className='question--text'>Dietitian&apos;s Name:</h3>
+        <h3>Dietitian&apos;s Name:</h3>
         <LongTextField name='dietitiansConsultQ1' label="Dietitian's Consult Q1" />
-        <h3 className='question--text'>Dietitian&apos;s Notes:</h3>
+        <h3>Dietitian&apos;s Notes:</h3>
         <LongTextField name='dietitiansConsultQ3' label="Dietitian's Consult Q3" />
-        <h3 className='question--text'>Notes for participant (if applicable):</h3>
+        <h3>Notes for participant (if applicable):</h3>
         <LongTextField name='dietitiansConsultQ4' label="Dietitian's Consult Q4" />
-        <h3 className='question--text'>Does the patient require urgent follow up?</h3>
+        <h3>Does the patient require urgent follow up?</h3>
         <BoolField name='dietitiansConsultQ5' />
-        <h3 className='question--text'>Reasons for urgent follow up:</h3>
+        <h3>Reasons for urgent follow up:</h3>
         <LongTextField name='dietitiansConsultQ6' label="Dietitian's Consult Q6" />
-        <h3 className='question--text'>Referred to Polyclinic for follow-up?</h3>
+        <h3>Referred to Polyclinic for follow-up?</h3>
         <RadioField
           name='dietitiansConsultQ8'
           label="Dietitian's Consult Q8"
           options={formOptions.dietitiansConsultQ8}
         />
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )
@@ -186,50 +183,62 @@ const DietitiansConsultForm = (props) => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title("Doctor's Consult ")}
-              {underlined("Reasons for referral from Doctor's Consult")}
-              {doctorConsult ? blueText(doctorConsult.doctorSConsultQ5) : null}
-              {title('Blood Pressure ')}
-              {underlined('Average Reading Systolic (average of closest 2 readings)')}
+            <div className='summary--question-div'>
+              <h2>Doctor&apos;s Consult</h2>
+              <p className='underlined'>Reasons for referral from Doctor&apos;s Consult</p>
+              {doctorConsult ? <p className='blue'>{doctorConsult.doctorSConsultQ5}</p> : null}
+              <Divider />
+              <h2>Blood Pressure</h2>
+              <p className='underlined'>Average Reading Systolic (average of closest 2 readings)</p>
               Systolic BP:
-              {hxCancer ? blueText(hxCancer.hxCancerQ17) : null}
-              {underlined('Average Reading Diastolic (average of closest 2 readings)')}
+              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ17}</p> : null}
+              <p className='underlined'>
+                Average Reading Diastolic (average of closest 2 readings)
+              </p>
               Diastolic BP:
-              {hxCancer ? blueText(hxCancer.hxCancerQ18) : null}
-              {title('BMI')}
-              {underlined('Requires scrutiny by doctor?')}
-              {hxCancer
-                ? hxCancer.hxCancerQ23
-                  ? blueText(hxCancer.hxCancerQ23.toString())
-                  : 'false'
-                : null}
-              {underlined('Height (in cm)')}
-              {hxCancer ? blueText(hxCancer.hxCancerQ19) : null}
-              {underlined('Weight (in kg)')}
-              {hxCancer ? blueText(hxCancer.hxCancerQ20) : null}
-              {underlined('BMI')}
-              {hxCancer ? blueText(calculateBMI(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20)) : null}
-              {title('Waist circumference (cm)')}
-              {underlined('Waist Circumference (in cm)')}
-              {hxCancer ? blueText(hxCancer.hxCancerQ24) : null}
-              {title('Smoking History ')}
-              {underlined('Smoking frequency')}
-              {hxNss ? blueText(hxNss.hxNssQ14) : null}
-              {underlined('Pack years:')}
-              {hxNss ? blueText(hxNss.hxNssQ3) : null}
-              {title('Alcohol history ')}
-              {underlined('Alcohol consumption')}
-              {hxNss ? blueText(hxNss.hxNssQ15) : null}
-              {title('Diet')}
-              {underlined(
-                'Does participant consciously try to the more fruits, vegetables, whole grain & cereals?',
+              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ18}</p> : null}
+              <Divider />
+              <h2>BMI</h2>
+              <p className='underlined'>Requires scrutiny by doctor?</p>
+              {hxCancer ? (
+                hxCancer.hxCancerQ23 ? (
+                  <p className='blue'>{hxCancer.hxCancerQ23.toString()}</p>
+                ) : (
+                  <p className='blue'>false</p>
+                )
+              ) : null}
+              <p className='underlined'>Height (in cm)</p>
+              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ19}</p> : null}
+              <p className='underlined'>Weight (in kg)</p>
+              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ20}</p> : null}
+              <p className='underlined'>BMI</p>
+              {hxCancer && hxCancer.hxCancerQ19 && hxCancer.hxCancerQ20 ? (
+                <p className='blue'>{formatBmi(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20)}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {hxNss ? blueText(hxNss.hxNssQ16) : null}
-              {underlined(
-                'Does the participant exercise in any form of moderate physical activity for at least 150 minutes OR intense physical activity at least 75 minutes throuhgout the week?',
-              )}
-              {hxNss ? blueText(hxNss.hxNssQ17) : null}
+              <h2>Waist circumference (cm)</h2>
+              <p className='underlined'>Waist Circumference (in cm)</p>
+              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ24}</p> : null}
+              <h2>Smoking History</h2>
+              <p className='underlined'>Smoking frequency</p>
+              {hxNss ? <p className='blue'>{hxNss.hxNssQ14}</p> : null}
+              <p className='underlined'>Pack years:</p>
+              {hxNss ? <p className='blue'>{hxNss.hxNssQ3}</p> : null}
+              <h2>Alcohol history</h2>
+              <p className='underlined'>Alcohol consumption</p>
+              {hxNss ? <p className='blue'>{hxNss.hxNssQ15}</p> : null}
+              <h2>Diet</h2>
+              <p className='underlined'>
+                Does participant consciously try to the more fruits, vegetables, whole grain &
+                cereals?
+              </p>
+              {hxNss ? <p className='blue'>{hxNss.hxNssQ16}</p> : null}
+              <p className='underlined'>
+                Does the participant exercise in any form of moderate physical activity for at least
+                150 minutes OR intense physical activity at least 75 minutes throuhgout the week?
+              </p>
+              {hxNss ? <p className='blue'>{hxNss.hxNssQ17}</p> : null}
             </div>
           )}
         </Grid>

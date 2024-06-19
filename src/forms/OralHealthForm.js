@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, TextField } from 'uniforms-material'
 import { BoolField } from 'uniforms-material'
-import { submitForm, calculateBMI } from '../api/api.js'
+import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
@@ -215,7 +215,7 @@ const OralHealthForm = () => {
               {hxCancer ? blueText('Height: ' + hxCancer.hxCancerQ19 + 'cm') : null}
               {hxCancer ? blueText('Weight: ' + hxCancer.hxCancerQ20 + 'kg') : null}
               {hxCancer && hxCancer.hxCancerQ19 && hxCancer.hxCancerQ20
-                ? blueText('BMI: ' + calculateBMI(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20))
+                ? blueText('BMI: ' + formatBmi(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20))
                 : null}
               {underlined('Waist circumference (cm)')}
               {hxCancer ? blueText(hxCancer.hxCancerQ24) : null}

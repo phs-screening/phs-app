@@ -2,11 +2,10 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-import { formatBmi, formatGeriVision, parseWceStation, generate_pdf } from '../api/api.js'
+import { formatBmi, formatGeriVision, formatWceStation, generate_pdf } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import allForms from './forms.json'
-import { bold, underlined, blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
 import { Button } from '@mui/material'
 
 // TODO: add triage and SACS
@@ -476,12 +475,7 @@ const SummaryForm = (props) => {
             <div className='summary--question-div'>
               <h2>15. WCE Station</h2>
               <p className='underlined'>Completed Breast Self Examination station?</p>
-              <p className='blue'>{wce.wceQ2}</p>
-              <p className='red'>
-                {patients.gender === 'Male' || patients.gender === 'Not Applicable'
-                  ? '-'
-                  : parseWceStation(2, wce.wceQ2)}
-              </p>
+              {formatWceStation(patients.gender, 2, wce.wceQ2)}
               <p className='underlined'>Completed Cervical Education station?</p>
               <p className='blue'>{wce.wceQ3}</p>
               <p className='red'>
