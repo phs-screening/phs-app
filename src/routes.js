@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import DashboardLayout from 'src/components/DashboardLayout'
 import MainLayout from 'src/components/MainLayout'
-import Account from 'src/pages/Account'
 import Queue from './pages/Queue'
 import CustomerList from 'src/pages/CustomerList'
 import Dashboard from 'src/pages/Dashboard'
@@ -29,6 +28,7 @@ import Edit from 'src/pages/EditForms'
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
 import SacsForm from './forms/SacsForm'
+import Eligibility from 'src/pages/Eligibility'
 
 const routes = [
   {
@@ -57,6 +57,7 @@ const routes = [
       { path: 'wce', element: <WceForm /> },
       { path: 'sacs', element: <SacsForm /> },
       { path: 'queue', element: <Queue /> },
+      { path: 'eligibility', element: <Eligibility /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },
