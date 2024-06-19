@@ -378,10 +378,4 @@ const RegForm = () => {
   )
 }
 
-RegForm.contextType = FormContext
-
-export default function Regform(props) {
-  const navigate = useNavigate()
-
-  return <RegForm {...props} navigate={navigate} />
-}
+export default RegForm

@@ -15,6 +15,10 @@
     font-size: 14.5px;
     color: red;
   }
+  .blue {
+    font-size: 14.5px;
+    color: blue;
+  }
   .underlined {
     text-decoration: underline;
   }

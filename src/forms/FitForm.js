@@ -45,6 +45,13 @@ const FitForm = (props) => {
     })
   }, [])
 
+  const formOptions = {
+    fitQ2: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -67,58 +74,52 @@ const FitForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>FIT</h1>
         <h2>PARTICIPANT IDENTIFICATION</h2>
         <h3>
-          <span style={{ color: 'red' }}>
+          <p className='red'>
             Please verify participant&apos;s identity using his/her
-            <br />
-            A. APP ID on wristband AND
-            <br />
-            B. INITIALS{' '}
-          </span>
-        </h3>{' '}
-        <br />
-        <h2>CANCER SCREENING </h2> <br />
-        <p>
-          <span style={{ color: 'red' }}>
-            <b>For respondent aged 50 and above only,</b>
-          </span>{' '}
-          unless positive family history for colorectal cancer.
-          <br />
-          When was the last time you had a blood stool test? (A blood stool test is a test to
-          determine whether the stool contains blood.)
-        </p>
-        {hxCancer && hxCancer.hxCancerQ5 ? blueText(hxCancer.hxCancerQ5) : blueText('nil')}
-        <br />
-        <span style={{ color: 'red' }}>
-          <b>For respondent aged 50 and above only,</b>
-        </span>{' '}
-        unless positive family history for colorectal cancer.
-        <br />
-        When was the last time you had a colonoscopy? (A colonoscopy is an examination in which a
-        tube is inserted in the rectum to view the colon for signs of cancer or other health
-        problems.)
-        {hxCancer && hxCancer.hxCancerQ6 ? blueText(hxCancer.hxCancerQ6) : blueText('nil')}
-        <br />
-        <h3>
-          <span style={{ color: 'red' }}>
-            Please encourage participants to go for FIT every year if participant is above 50,
-            asymptomatic and no positive family history of colorectal cancer in first degree
-            relatives and does not have any bleeding disorders.
-          </span>{' '}
+            <ol>
+              <li>APP ID on wristband AND</li>
+              <li>INITIALS</li>
+            </ol>
+          </p>
         </h3>
-        <br />
-        <br />
-        Was participant issued 2 FIT kits?
-        <RadioField name='fitQ2' label='FIT Q2' />
-      </Fragment>
+        <h2>CANCER SCREENING </h2>
+        <p>
+          <b className='red'>For respondent aged 50 and above only, </b>
+          unless positive family history for colorectal cancer.
+        </p>
+        <h3>When was the last time you had a blood stool test?</h3>
+        <p>(A blood stool test is a test to determine whether the stool contains blood.)</p>
+        {hxCancer && hxCancer.hxCancerQ5 ? (
+          <p className='blue'>{hxCancer.hxCancerQ5}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <p>
+          <b className='red'>For respondent aged 50 and above only, </b>
+          unless positive family history for colorectal cancer.
+        </p>
+        <h3>When was the last time you had a colonoscopy? </h3>
+        <p>
+          (A colonoscopy is an examination in which a tube is inserted in the rectum to view the
+          colon for signs of cancer or other health problems.)
+        </p>
+        {hxCancer && hxCancer.hxCancerQ6 ? blueText(hxCancer.hxCancerQ6) : blueText('nil')}
+        <h4 className='red'>
+          Please encourage participants to go for FIT every year if participant is above 50,
+          asymptomatic and no positive family history of colorectal cancer in first degree relatives
+          and does not have any bleeding disorders.
+        </h4>
+        <h3>Was participant issued 2 FIT kits?</h3>
+        <RadioField name='fitQ2' label='FIT Q2' options={formOptions.fitQ2} />
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )
