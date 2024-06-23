@@ -36,7 +36,6 @@ const routes = [
     element: <DashboardLayout />,
     children: [
       { path: 'registration', element: <Registration /> },
-      { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'settings', element: <Settings /> },
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
