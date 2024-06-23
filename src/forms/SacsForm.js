@@ -133,17 +133,15 @@ const SacsForm = () => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>SACS</h1>
-        <h3 className='question--text'>Notes from SACS Consultation</h3>
+        <h3>Notes from SACS Consultation</h3>
         <TextField name='sacsQ1' label='SACS Q1' />
-        <h3 className='question--text'>Is the patient okay to continue with screening?</h3>
+        <h3>Is the patient okay to continue with screening?</h3>
         <RadioField name='sacsQ2' label='SACS Q2' options={formOptions.sacsQ2} />
-        <h3 className='question--text'>
-          Has this person been referred to a SACS CREST programme for follow-up?
-        </h3>
+        <h3>Has this person been referred to a SACS CREST programme for follow-up?</h3>
         <RadioField name='sacsQ3' label='SACS Q3' options={formOptions.sacsQ3} />
-      </Fragment>
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 

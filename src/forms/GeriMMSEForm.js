@@ -47,10 +47,36 @@ const GeriMMSEForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    geriMMSEQ2: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriMMSEQ3: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriMMSEQ5: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -74,26 +100,20 @@ const GeriMMSEForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>MINI-MENTAL STATE EXAMINATION (MMSE)</h2>
-        <br />
-        MMSE score (_/_):
+      <div className='form--div'>
+        <h1>MINI-MENTAL STATE EXAMINATION (MMSE)</h1>
+        <h3>MMSE score (_/_):</h3>
         <LongTextField name='geriMMSEQ1' label='geriMMSE - Q1' />
-        <br />
-        Need referral to G-RACE associated polyclinics/ partners?
-        <RadioField name='geriMMSEQ2' label='geriMMSE - Q2' />
-        Polyclinic:
+        <h3>Need referral to G-RACE associated polyclinics/ partners?</h3>
+        <RadioField name='geriMMSEQ2' label='geriMMSE - Q2' options={formOptions.geriMMSEQ2} />
+        <h3>Polyclinic:</h3>
         <LongTextField name='geriMMSEQ4' label='geriMMSE - Q4' />
-        <br />
-        Need referral to SACS?
-        <RadioField name='geriMMSEQ3' label='geriMMSE - Q3' />
-        <br />
-        Referral to Doctor&apos;s Consult?
-        <br />
+        <h3>Need referral to SACS?</h3>
+        <RadioField name='geriMMSEQ3' label='geriMMSE - Q3' options={formOptions.geriMMSEQ3} />
+        <h3>Referral to Doctor&apos;s Consult?</h3>
         For geri patients who may be depressed
-        <RadioField name='geriMMSEQ5' label='geriMMSE - Q5' />
-        <br />
-      </Fragment>
+        <RadioField name='geriMMSEQ5' label='geriMMSE - Q5' options={formOptions.geriMMSEQ5} />
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 

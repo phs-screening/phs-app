@@ -216,17 +216,21 @@ const DietitiansConsultForm = (props) => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Waist circumference (cm)</h2>
               <p className='underlined'>Waist Circumference (in cm)</p>
               {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ24}</p> : null}
+              <Divider />
               <h2>Smoking History</h2>
               <p className='underlined'>Smoking frequency</p>
               {hxNss ? <p className='blue'>{hxNss.hxNssQ14}</p> : null}
               <p className='underlined'>Pack years:</p>
               {hxNss ? <p className='blue'>{hxNss.hxNssQ3}</p> : null}
+              <Divider />
               <h2>Alcohol history</h2>
               <p className='underlined'>Alcohol consumption</p>
               {hxNss ? <p className='blue'>{hxNss.hxNssQ15}</p> : null}
+              <Divider />
               <h2>Diet</h2>
               <p className='underlined'>
                 Does participant consciously try to the more fruits, vegetables, whole grain &

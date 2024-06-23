@@ -188,43 +188,41 @@ const GeriPtConsultForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment className='fieldPadding'>
-        <h2>3.4a PT Consult</h2>
-        <h3 className='question--text'>Memo (for participant):</h3>
+      <div className='form--div'>
+        <h1>3.4a PT Consult</h1>
+        <h3>Memo (for participant):</h3>
         <LongTextField name='geriPtConsultQ1' label='Geri - PT Consult Q1' />
-        <h3 className='question--text'>To be referred for doctor&apos;s consult (PT)?</h3>
+        <h3>To be referred for doctor&apos;s consult (PT)?</h3>
         <RadioField
           name='geriPtConsultQ2'
           label='Geri - PT Consult Q2'
           options={formOptions.geriPtConsultQ2}
         />
-        <h4 className='question--text'>Reasons for referral to Doctor&apos;s consult (PT):</h4>
+        <h4>Reasons for referral to Doctor&apos;s consult (PT):</h4>
         <SelectField
           name='geriPtConsultQ3'
           checkboxes='true'
           label='Geri - PT Consult Q3'
           options={formOptions.geriPtConsultQ3}
         />
-        <p className='question--text'>Please specify (if others):</p>
+        <h4>Please specify (if others):</h4>
         <LongTextField name='geriPtConsultQ8' label='Geri - PT Consult Q8' />
-        <br />
-        <br />
-        <h3 className='question--text'>To be referred for social support (PT):</h3>
+        <h3>To be referred for social support (PT):</h3>
         <RadioField
           name='geriPtConsultQ4'
           label='Geri - PT Consult Q4'
           options={formOptions.geriPtConsultQ4}
         />
-        <h4 className='question--text'>Reasons for referral to social support (PT):</h4>
+        <h4>Reasons for referral to social support (PT):</h4>
         <LongTextField name='geriPtConsultQ5' label='Geri - PT Consult Q5' />
         <h2>
-          <span style={{ color: 'red' }}>
+          <span className='red'>
             IF THE PATIENT NEEDS TO GO TO DOCTOR&apos;S CONSULT/ SOCIAL SUPPORT MODALITY THAT YOU
             RECOMMENDED, PLEASE EDIT ON FORM A
           </span>
         </h2>
         <br />
-      </Fragment>
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
@@ -243,7 +241,7 @@ const GeriPtConsultForm = (props) => {
         </Grid>
         <Grid
           p={1}
-          width='30%'
+          width='50%'
           display='flex'
           flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
@@ -251,82 +249,149 @@ const GeriPtConsultForm = (props) => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title('Physical Activity Level Results ')}
-              {underlined('How often do you exercise in a week?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ1
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ1)
-                : blueText('nil')}
-              {underlined('How long do you exercise each time?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ2
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ2)
-                : blueText('nil')}
-              {underlined('What do you do for exercise?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ3
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ3)
-                : blueText('nil')}
-              {underlined('How would you rate the level of exertion when you exercise?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ4
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ4)
-                : blueText('nil')}
-              {underlined(
-                'Do you have significant difficulties going about your regular exercise regime? Or do you not know how to start exercising?',
+            <div className='summary--question-div'>
+              <h2>Physical Activity Level Results</h2>
+              <p className='underlined'>How often do you exercise in a week?</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ1 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ1}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ5
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ5)
-                : blueText('nil')}
-              {underlined('History of falls in past 1 year? If yes, how many falls?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ8
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ8)
-                : blueText('nil')}
-              {underlined('If yes, were any of the falls injurious?')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ9
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ9)
-                : blueText('nil')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ10
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ10)
-                : blueText('nil')}
-              {underlined('Notes:')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ7
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ7)
-                : blueText('nil')}
-              {underlined('Reasons for referral to PT Consult:')}
-              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ6
-                ? blueText(geriPhysicalActivity.geriPhysicalActivityLevelQ6)
-                : blueText('nil')}
-              {title('SPPB Scores')}
-              {underlined('Short Physical Performance Battery Score (out of 12):')}
-              {geriSppb
-                ? blueText(
-                    calculateSppbScore(
-                      geriSppb.geriSppbQ2,
-                      geriSppb.geriSppbQ6,
-                      geriSppb.geriSppbQ8,
-                    ),
+              <p className='underlined'>How long do you exercise each time?</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ2 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>What do you do for exercise?</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ3 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                How would you rate the level of exertion when you exercise?
+              </p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ4 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Do you have significant difficulties going about your regular exercise regime? Or do
+                you not know how to start exercising?
+              </p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ5 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>History of falls in past 1 year? If yes, how many falls?</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ8 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>If yes, were any of the falls injurious?</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ9 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ10 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Notes:</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ7 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Reasons for referral to PT Consult:</p>
+              {geriPhysicalActivity && geriPhysicalActivity.geriPhysicalActivityLevelQ6 ? (
+                <p className='blue'>{geriPhysicalActivity.geriPhysicalActivityLevelQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <Divider />
+              <h2>SPPB Scores</h2>
+              <p className='underlined'>Short Physical Performance Battery Score (out of 12):</p>
+              {geriSppb ? (
+                <p className='blue'>
+                  calculateSppbScore( geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8,
                   )
-                : blueText('nil')}
-              {underlined('Gait speed (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ7) : blueText('nil')}
-              {underlined('Gait speed Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText('nil')}
-              {underlined('Chair rise (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText('nil')}
-              {underlined('Number of chairs completed:')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ13) : blueText('nil')}
-              {underlined('5 Chair rise Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText('nil')}
-              {underlined('Side to Side (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText('nil')}
-              {underlined('Semi-tandem Stand (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText('nil')}
-              {underlined('Tandem Stand (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText('nil')}
-              {underlined('Balance score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText('nil')}
-              {underlined('Falls Risk Level: ')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText('nil')}
-              {underlined('Notes:')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ12) : blueText('nil')}
+                </p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Gait speed (Time taken in seconds):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Gait speed Score (out of 4):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Chair rise (Time taken in seconds):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Number of chairs completed:</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ13}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>5 Chair rise Score (out of 4):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Side to Side (Time taken in seconds):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Semi-tandem Stand (Time taken in seconds):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Tandem Stand (Time taken in seconds):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Balance score (out of 4):</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Falls Risk Level: </p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Notes:</p>
+              {geriSppb ? (
+                <p className='blue'>{geriSppb.geriSppbQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
             </div>
           )}
         </Grid>

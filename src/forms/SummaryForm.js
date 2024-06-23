@@ -477,26 +477,11 @@ const SummaryForm = (props) => {
               <p className='underlined'>Completed Breast Self Examination station?</p>
               {formatWceStation(patients.gender, 2, wce.wceQ2)}
               <p className='underlined'>Completed Cervical Education station?</p>
-              <p className='blue'>{wce.wceQ3}</p>
-              <p className='red'>
-                {patients.gender === 'Male' || patients.gender === 'Not Applicable'
-                  ? '-'
-                  : parseWceStation(3, wce.wceQ3)}
-              </p>
+              {formatWceStation(patients.gender, 3, wce.wceQ3)}
               <p className='underlined'>Indicated interest for HPV Test under SCS?</p>
-              <p className='blue'>{wce.wceQ4}</p>
-              <p className='red'>
-                {patients.gender === 'Male' || patients.gender === 'Not Applicable'
-                  ? '-'
-                  : parseWceStation(4, wce.wceQ4)}
-              </p>
+              {formatWceStation(patients.gender, 4, wce.wceQ4)}
               <p className='underlined'>Indicated interest for Mammogram under SCS?</p>
-              <p className='blue'>{wce.wceQ5}</p>
-              <p className='red'>
-                {patients.gender === 'Male' || patients.gender === 'Not Applicable'
-                  ? '-'
-                  : parseWceStation(5, wce.wceQ5)}
-              </p>
+              {formatWceStation(patients.gender, 5, wce.wceQ5)}
             </div>
 
             <div className='summary--question-div'>

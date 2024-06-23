@@ -68,6 +68,41 @@ const WceForm = (props) => {
       setHxCancer(result[3])
     })
   }, [])
+
+  const formOptions = {
+    wceQ2: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+    wceQ3: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+    wceQ4: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+    wceQ5: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+      { label: 'Not Applicable', value: 'Not Applicable' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -90,92 +125,95 @@ const WceForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>WCE</h1>
-        <br />
         <h2>PARTICIPANT IDENTIFICATION</h2>
+        <h3 className='red'>
+          Please verify participant&apos;s identity using his/her
+          <ol type='A'>
+            <li>APP ID on wristband AND</li>
+            <li>INITIALS </li>
+          </ol>
+        </h3>
+        <h2>1. FINANCIAL STATUS</h2>
+        <h4 className='red'>Please refer to page 1 of Form A for following questions.</h4>
+        <h3>1. Current CHAS status?</h3>
+        {reg && reg.registrationQ8 ? (
+          <p className='blue'>{reg.registrationQ8}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <h3>2. Pioneer / Merdeka Generation Card?</h3>
+        {reg && reg.registrationQ9 ? (
+          <p className='blue'>{reg.registrationQ9}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
         <h3>
-          <font color='red'>
-            Please verify participant&apos;s identity using his/her
-            <br />
-            A. APP ID on wristband AND
-            <br />
-            B. INITIALS{' '}
-          </font>
-        </h3>{' '}
-        <br />
-        <h2>
-          1. FINANCIAL STATUS
+          3. Are you currently on any other Government Financial Assistance, other than CHAS and PG
+          (e.g. Public Assistance Scheme)?
+        </h3>
+        {hxSocial && hxSocial.hxSocialQ1 ? (
+          <p className='blue'>{hxSocial.hxSocialQ1}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        {hxSocial && hxSocial.hxSocialQ2 ? (
+          <p className='blue'>{hxSocial.hxSocialQ2}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <h2>2. CANCER SCREENING </h2>
+        <h3>
+          <span className='red'>1. For female respondent aged 40 and above only.</span>
           <br />
-        </h2>
-        <font color='red'>
-          <b>Please refer to page 1 of Form A for following questions.</b>
-        </font>
-        <br />
-        1. Current CHAS status?
-        {reg && reg.registrationQ8 ? blueText(reg.registrationQ8) : blueText('nil')}
-        <br />
-        2. Pioneer / Merdeka Generation Card?
-        {reg && reg.registrationQ9 ? blueText(reg.registrationQ9) : blueText('nil')}
-        <br />
-        3. Are you currently on any other Government Financial Assistance, other than CHAS and PG
-        (e.g. Public Assistance Scheme)?
-        {hxSocial && hxSocial.hxSocialQ1 ? blueText(hxSocial.hxSocialQ1) : blueText('nil')}
-        {hxSocial && hxSocial.hxSocialQ2 ? blueText(hxSocial.hxSocialQ2) : blueText('nil')}
-        <br />
-        <br />
-        <h2>2. CANCER SCREENING </h2> <br />
-        <p>
-          1.
-          <font color='red'>
-            <b>For female respondent aged 40 and above only.</b>
-          </font>
-          <br />
-          When was the last time you had your last mammogram? (A mammogram is an x-ray of each
-          breast to look for breast cancer.){' '}
+          When was the last time you had your last mammogram?
+        </h3>
+        <p className='increase-top-margin'>
+          (A mammogram is an x-ray of each breast to look for breast cancer.)
         </p>
-        {hxCancer && hxCancer.hxCancerQ7 ? blueText(hxCancer.hxCancerQ7) : blueText('nil')}
-        <br />
-        <p>
-          2.
-          <font color='red'>
-            <b>
-              For female respondent aged 25 and above, who have/had a husband/boyfriend and not had
-              their womb completely surgically removed only.{' '}
-            </b>
-          </font>
+        {hxCancer && hxCancer.hxCancerQ7 ? (
+          <p className='blue'>{hxCancer.hxCancerQ7}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <h3>
+          <span className='red'>
+            2. For female respondent aged 25 and above, who have/had a husband/boyfriend and not had
+            their womb completely surgically removed only.{' '}
+          </span>
           <br />
-          When was the last time you had a PAP smear test? (A PAP smear test is a simple test
-          involving the scrapping of cells fom the mouth of the womb, to check for changes in the
-          cells of your cervix, which may develop into cancer later.){' '}
+          When was the last time you had a PAP smear test?
+        </h3>
+        <p className='increase-top-margin'>
+          (A PAP smear test is a simple test involving the scrapping of cells fom the mouth of the
+          womb, to check for changes in the cells of your cervix, which may develop into cancer
+          later.)
         </p>
-        {hxCancer && hxCancer.hxCancerQ8 ? blueText(hxCancer.hxCancerQ8) : blueText('nil')}
-        <br />
-        <font color='red'>
-          <b>
-            For women 40-49, advise yearly mammogram. 50-69, advise mammogram every 2 years. 70 and
-            above, seek doctor&apos;s advice.
-            <br />
-            Please encourage participants to go for HPV test every 5 years.
-          </b>
-        </font>{' '}
-        <br />
-        <br />
+        {hxCancer && hxCancer.hxCancerQ8 ? (
+          <p className='blue'>{hxCancer.hxCancerQ8}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <h4 className='red'>
+          For women:
+          <ul>
+            <li>40-49, advise yearly mammogram.</li>
+            <li>50-69, advise mammogram every 2 years.</li>
+            <li>70 and above and if interested, refer to WCE.</li>
+          </ul>
+          Please encourage participants to go for HPV test every 5 years. <br />
+        </h4>
         <h2>3. FOLLOW UP PLAN</h2>
-        <br />
-        1. Completed Breast Self Examination station?
-        <RadioField name='wceQ2' label='WCE Q2' />
-        <br />
-        2. Completed Cervical Education station?
-        <RadioField name='wceQ3' label='WCE Q3' />
-        <br />
-        3. Indicated interest for HPV Test under SCS?
-        <RadioField name='wceQ4' label='WCE Q4' />
-        <br />
-        4. Indicated interest for Mammogram under SCS?
-        <RadioField name='wceQ5' label='WCE Q5' />
-        <br />
-      </Fragment>
+        <h3>1. Completed Breast Self Examination station?</h3>
+        <RadioField name='wceQ2' label='WCE Q2' options={formOptions.wceQ2} />
+        <h3>2. Completed Cervical Education station?</h3>
+        <RadioField name='wceQ3' label='WCE Q3' options={formOptions.wceQ3} />
+        <h3>3. Indicated interest for HPV Test under SCS?</h3>
+        <RadioField name='wceQ4' label='WCE Q4' options={formOptions.wceQ4} />
+        <h3>4. Indicated interest for Mammogram under SCS?</h3>
+        <RadioField name='wceQ5' label='WCE Q5' options={formOptions.wceQ5} />
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 

@@ -184,11 +184,11 @@ const RegForm = () => {
       <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
       <h2>Phlebotomy Eligibility</h2>
       <p className='paragraph--title'>
-        Before entering our screening, do note the following eligibility criteria for Phlebotomy{' '}
-        <br />
-        1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
-        <br />
-        2) Have not done a blood test within the past 3 years.
+        Before entering our screening, do note the following eligibility criteria for Phlebotomy:
+        <ol type='A'>
+          <li>NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.</li>
+          <li>Have not done a blood test within the past 3 years.</li>
+        </ol>
       </p>
       <p className='paragraph--title'>
         Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of

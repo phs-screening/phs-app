@@ -80,17 +80,17 @@ const FitForm = (props) => {
         <h3>
           <p className='red'>
             Please verify participant&apos;s identity using his/her
-            <ol>
+            <ol type='A'>
               <li>APP ID on wristband AND</li>
               <li>INITIALS</li>
             </ol>
           </p>
         </h3>
         <h2>CANCER SCREENING </h2>
-        <p>
-          <b className='red'>For respondent aged 50 and above only, </b>
+        <h3>
+          <span className='red'>For respondent aged 50 and above only, </span>
           unless positive family history for colorectal cancer.
-        </p>
+        </h3>
         <h3>When was the last time you had a blood stool test?</h3>
         <p>(A blood stool test is a test to determine whether the stool contains blood.)</p>
         {hxCancer && hxCancer.hxCancerQ5 ? (
@@ -98,10 +98,10 @@ const FitForm = (props) => {
         ) : (
           <p className='blue'>nil</p>
         )}
-        <p>
-          <b className='red'>For respondent aged 50 and above only, </b>
+        <h3>
+          <span className='red'>For respondent aged 50 and above only, </span>
           unless positive family history for colorectal cancer.
-        </p>
+        </h3>
         <h3>When was the last time you had a colonoscopy? </h3>
         <p>
           (A colonoscopy is an examination in which a tube is inserted in the rectum to view the

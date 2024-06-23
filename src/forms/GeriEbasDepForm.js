@@ -118,6 +118,49 @@ const GeriEbasDepForm = (props) => {
     setSaveData(savedData)
   }, [])
 
+  const formOptions = {
+    geriEbasDepQ1: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ2: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ3: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ4: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ5: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ6: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ7: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ8: [
+      { label: '1 (Abnormal)', value: '1 (Abnormal)' },
+      { label: '0 (Normal)', value: '0 (Normal)' },
+    ],
+    geriEbasDepQ10: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriEbasDepQ13: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -141,116 +184,145 @@ const GeriEbasDepForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2> EBAS-DEP </h2>
-        <h3>
+      <div className='form--div'>
+        <h1>EBAS-DEP</h1>
+        <h4>
           The 8 items of this schedule require raters to make a judgement as to whether the
           proposition under “Assessment” is satisfied or not. Each question must be asked exactly as
           shown but follow-up or subsidiary questions may be used to clarify the initial answer.
           <br />
-          Select 1 = Fits the assessment criteria; Select 0 = Does not fit the criteria; participant
-          is well.
-        </h3>
-        <br />
-        1. Do you worry? In the past month? 过去一个月内你曾经有担心过吗？
-        <br />
+          <u className='red'>
+            Select 1 = Fits the assessment criteria; Select 0 = Does not fit the criteria;
+            participant is well.
+          </u>
+        </h4>
+        <h3>1. Do you worry? In the past month? 过去一个月内你曾经有担心过吗？</h3>
         Assessment: Admits to worrying in past month
-        <RadioField name='geriEbasDepQ1' label='Geri - EBAS-DEP Q1' />
-        <br />
-        2. Have you been sad or depressed in the past month? 过去一个月内你曾经伤心或忧郁过吗？
-        <br />
+        <RadioField
+          name='geriEbasDepQ1'
+          label='Geri - EBAS-DEP Q1'
+          options={formOptions.geriEbasDepQ1}
+        />
+        <h3>
+          2. Have you been sad or depressed in the past month? 过去一个月内你曾经伤心或忧郁过吗？
+        </h3>
         Assessment: Has had sad or depressed mood during the past month
-        <RadioField name='geriEbasDepQ2' label='Geri - EBAS-DEP Q2' />
-        <br />
-        3. During the past month have you ever felt that life was not worth living?
-        近一个月来你曾经觉得生活毫无意义（无价值）吗？
-        <br />
+        <RadioField
+          name='geriEbasDepQ2'
+          label='Geri - EBAS-DEP Q2'
+          options={formOptions.geriEbasDepQ2}
+        />
+        <h3>
+          3. During the past month have you ever felt that life was not worth living?
+          近一个月来你曾经觉得生活毫无意义（无价值）吗？
+        </h3>
         Assessment: Has felt that life was not worth living at some time during the past month
-        <RadioField name='geriEbasDepQ3' label='Geri - EBAS-DEP Q3' />
-        <br />
-        4. How do you feel about your future? What are your hopes for the future?
-        你觉得自己的前途怎样？你对前途有何希望？
-        <br />
+        <RadioField
+          name='geriEbasDepQ3'
+          label='Geri - EBAS-DEP Q3'
+          options={formOptions.geriEbasDepQ3}
+        />
+        <h3>
+          4. How do you feel about your future? What are your hopes for the future?
+          你觉得自己的前途怎样？你对前途有何希望？
+        </h3>
         Assessment: Pessimistic about the future or has empty expectations (i.e. nothing to look
         forward to)
-        <RadioField name='geriEbasDepQ4' label='Geri - EBAS-DEP Q4' />
-        <br />
-        5. Do you enjoy things as much as you used to - say like you did a year ago?
-        你对东西的喜爱是否与往常一样，比如说与一年前一样？
-        <br />
-        Assessment: Less enjoyment in activities than a year previously
-        <RadioField name='geriEbasDepQ5' label='Geri - EBAS-DEP Q5' />
+        <RadioField
+          name='geriEbasDepQ4'
+          label='Geri - EBAS-DEP Q4'
+          options={formOptions.geriEbasDepQ4}
+        />
         <h3>
+          5. Do you enjoy things as much as you used to - say like you did a year ago?
+          你对东西的喜爱是否与往常一样，比如说与一年前一样？
+        </h3>
+        Assessment: Less enjoyment in activities than a year previously
+        <RadioField
+          name='geriEbasDepQ5'
+          label='Geri - EBAS-DEP Q5'
+          options={formOptions.geriEbasDepQ5}
+        />
+        <h4 className='red'>
           If question 5 rated 0, then automatically rate 0 for question 6 and skip to question 7. If
           question 5 rated 1, proceed to question 6.
-        </h3>
-        <br />
-        6. Is it because you are depressed or nervous that you don&apos;t enjoy things as much?
-        是不是因为你的忧郁或者精神紧张使得你对东西的喜爱大不如前？
-        <br />
-        Assessment: Loss of enjoyment because of depression/nervousness
-        <RadioField name='geriEbasDepQ6' label='Geri - EBAS-DEP Q6' />
-        <br />
-        7. In general, how happy are you? (Read out) <br />
-        Are you - very happy - fairly happy - not very happy or not happy at all?
-        <br />
-        一般来说，你有何等的快乐?
-        <br />
-        你是 : 很快乐 快乐 不很快乐 或 毫无快乐？
-        <br />
-        Assessment: Not very happy or not happy at all / 不很快乐 或 毫无快乐
-        <RadioField name='geriEbasDepQ7' label='Geri - EBAS-DEP Q7' />
-        <br />
-        8. During the past month have you ever felt that you would rather be dead?
-        过去一个月内，你曾有时觉得生不如死？ <br />
-        Assessment: Has wished to be dead at any time during past month
-        <RadioField name='geriEbasDepQ8' label='Geri - EBAS-DEP Q8' />
-        <br />
+        </h4>
         <h3>
+          6. Is it because you are depressed or nervous that you don&apos;t enjoy things as much?
+          是不是因为你的忧郁或者精神紧张使得你对东西的喜爱大不如前？
+        </h3>
+        Assessment: Loss of enjoyment because of depression/nervousness
+        <RadioField
+          name='geriEbasDepQ6'
+          label='Geri - EBAS-DEP Q6'
+          options={formOptions.geriEbasDepQ6}
+        />
+        <h3>
+          7. In general, how happy are you? (Read out) <br />
+          Are you - very happy - fairly happy - not very happy or not happy at all?
+          <br />
+          一般来说，你有何等的快乐? 你是 : 很快乐 快乐 不很快乐 或 毫无快乐？
+        </h3>
+        Assessment: Not very happy or not happy at all / 不很快乐 或 毫无快乐
+        <RadioField
+          name='geriEbasDepQ7'
+          label='Geri - EBAS-DEP Q7'
+          options={formOptions.geriEbasDepQ7}
+        />
+        <h3>
+          8. During the past month have you ever felt that you would rather be dead?
+          过去一个月内，你曾有时觉得生不如死？ <br />
+        </h3>
+        Assessment: Has wished to be dead at any time during past month
+        <RadioField
+          name='geriEbasDepQ8'
+          label='Geri - EBAS-DEP Q8'
+          options={formOptions.geriEbasDepQ8}
+        />
+        <h4>
           EBAS Total Score: <GetScore />
           /8
-        </h3>
-        <br />
-        Referral to Doctor&apos;s Consult?
-        <br />
-        (For 1. non-geri participants who are probably depressed from EBAS Score” AND 2. geri
-        patients who pass AMT and who are probably depressed from EBAS Score)
-        <RadioField name='geriEbasDepQ13' label='Geri - EBAS-DEP Q13' />
-        <br />
-        <h3>
+        </h4>
+        <h3>Referral to Doctor&apos;s Consult?</h3>
+        <ol>
+          <li>non-geri participants who are probably depressed from EBAS Score</li>
+          <li>geri patients who pass AMT and who are probably depressed from EBAS Score</li>
+        </ol>
+        <RadioField
+          name='geriEbasDepQ13'
+          label='Geri - EBAS-DEP Q13'
+          options={formOptions.geriEbasDepQ13}
+        />
+        <h4>
           A score of 3 or greater indicates the probable presence of a depressive disorder which may
           need treatment and the patient should be assessed in more detail. Please refer to SACS if
           score is 3 OR GREATER.
-        </h3>
+        </h4>
         <p>
-          Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a positive test,
-          regardless of the TOTAL EBAS Score. Hence, if there is an abnormal response to Question 8,
+          Please note that &quot;Yes&quot; Abnormal response to Q8 is considered a{' '}
+          <b>positive test</b>, regardless of the TOTAL EBAS Score. Hence, if there is an abnormal
+          response to Question 8,
           <b> PLEASE REFER to SACS.</b>{' '}
         </p>
+        <h3>To be referred for SACS (failed EBAS-DEP) - from Geriatrics EBAS</h3>
+        <RadioField
+          name='geriEbasDepQ10'
+          label='Geri - EBAS-DEP Q10'
+          options={formOptions.geriEbasDepQ10}
+        />
+        <h3>Reasons for referral to SACS - from Geriatrics EBAS & AMT:</h3>
+        Please document cognitive and social issues here.
+        <LongTextField name='geriEbasDepQ12' label='Geri - EBAS-DEP Q12' />
+        <h2 className='red'>
+          IF THE PATIENT NEEDS TO GO TO SACS MODALITY THAT YOU RECOMMENDED, PLEASE INDICATE ON FORM
+          A.
+        </h2>
         <br />
-        To be referred for SACS (failed EBAS-DEP) - from Geriatrics EBAS
-        <br />
-        <RadioField name='geriEbasDepQ10' label='Geri - EBAS-DEP Q10' />
-        <br />
-        <Fragment>
-          Reasons for referral to SACS - from Geriatrics EBAS & AMT:
-          <br />
-          Please document cognitive and social issues here.
-          <LongTextField name='geriEbasDepQ12' label='Geri - EBAS-DEP Q12' />
-        </Fragment>
-        <font color='red'>
-          <h2>
-            IF THE PATIENT NEEDS TO GO TO SACS MODALITY THAT YOU RECOMMENDED, PLEASE INDICATE ON
-            FORM A.
-          </h2>
-        </font>
-        <br />
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )

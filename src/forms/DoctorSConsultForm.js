@@ -222,6 +222,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Systems Review</h2>
               <p className='underlined'>Requires scrutiny by doctor?</p>
               {hcsr && hcsr.hxHcsrQ12 ? (
@@ -235,6 +236,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Urinary/Faecal incontinence</h2>
               <p className='underlined'>Urinary/Faecal incontinence</p>
               {hcsr && hcsr.hxHcsrQ4 ? (
@@ -247,6 +249,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Vision problems</h2>
               <p className='underlined'>Vision Problems (From history taking)</p>
               {hcsr && hcsr.hxHcsrQ6 ? (
@@ -323,7 +326,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
-
+              <Divider />
               <h2>Hearing problems</h2>
               <p className='underlined'>Hearing Problems</p>
               {hcsr ? <p className='blue'>{hcsr.hxHcsrQ8}</p> : <p className='blue'>nil</p>}
@@ -332,6 +335,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Audiometry</h2>
               <p className='underlined'>Referred from Geriatric Audiometry Screening?</p>
               {geriAudio && geriAudio.geriAudiometryQ11 ? (
@@ -350,7 +354,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
-
+              <Divider />
               <h2>Past Medical History</h2>
               <p className='underlined'>Summary of Relevant Past Medical History</p>
               {nss && nss.hxNssQ12 ? (
@@ -380,6 +384,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Smoking History</h2>
               <p className='underlined'>Smoking frequency</p>
               {nss && nss.hxNssQ14 ? (
@@ -393,6 +398,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Alcohol history</h2>
               <p className='underlined'>Alcohol consumption</p>
               {nss && nss.hxNssQ15 ? (
@@ -400,6 +406,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Family History</h2>
               <p className='underlined'>Summary of Relevant Family History</p>
               {cancer && cancer.hxCancerQ10 ? (
@@ -407,6 +414,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>Blood Pressure</h2>
               <p className='underlined'>Requires scrutiny by doctor?</p>
               {cancer && cancer.hxCancerQ27 ? (
@@ -425,6 +433,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>BMI</h2>
               <p className='underlined'>Requires scrutiny by doctor?</p>
               {cancer && cancer.hxCancerQ23 ? (
@@ -454,6 +463,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>OT consult</h2>
               <p className='underlined'>Reasons for referral</p>
               {geriOt && geriOt.geriOtConsultQ3 ? (
@@ -461,6 +471,7 @@ const DoctorSConsultForm = () => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+              <Divider />
               <h2>PT consult</h2>
               <p className='underlined'>Reasons for referral</p>
               {geriPt && geriPt.geriPtConsultQ3 ? (

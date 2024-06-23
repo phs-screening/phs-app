@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -95,6 +95,50 @@ const GeriFrailScaleForm = (props) => {
     setSaveData(savedData)
   }, [])
 
+  const formOptions = {
+    geriFrailScaleQ1: [
+      {
+        label: '1',
+        value: '1',
+      },
+      { label: '0', value: '0' },
+    ],
+    geriFrailScaleQ2: [
+      {
+        label: '1',
+        value: '1',
+      },
+      { label: '0', value: '0' },
+    ],
+    geriFrailScaleQ3: [
+      {
+        label: '1',
+        value: '1',
+      },
+      { label: '0', value: '0' },
+    ],
+    geriFrailScaleQ1: [
+      {
+        label: 'Hypertension',
+        value: 'Hypertension',
+      },
+      { label: 'Diabetes', value: 'Diabetes' },
+      {
+        label: 'Cancer (other than a minor skin cancer)',
+        value: 'Cancer (other than a minor skin cancer)',
+      },
+      { label: 'Chronic lung disease', value: 'Chronic lung disease' },
+      { label: 'Heart attack', value: 'Heart attack' },
+      { label: 'Congestive heart failure', value: 'Congestive heart failure' },
+      { label: 'Angina', value: 'Angina' },
+      { label: 'Asthma', value: 'Asthma' },
+      { label: 'Arthritis', value: 'Arthritis' },
+      { label: 'Stroke', value: 'Stroke' },
+      { label: 'Kidney disease', value: 'Kidney disease' },
+      { label: 'NIL', value: 'NIL' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -118,8 +162,8 @@ const GeriFrailScaleForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>PHYSICAL ACTIVITY SECTION</h2>
+      <div className='form--div'>
+        <h1>PHYSICAL ACTIVITY SECTION</h1>
         <h2>FRAIL SCALE</h2>
         <h3>
           For each for the following question, assign a score of <br />1 or 0 depending on the
@@ -204,7 +248,7 @@ const GeriFrailScaleForm = (props) => {
         <font color='red'>*Referral to Physiotherapist Consult</font>
         <RadioField name='geriFrailScaleQ6' label='Geri - Frail Scale Q6' />
         <br />
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

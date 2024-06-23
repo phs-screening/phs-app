@@ -113,6 +113,34 @@ const GeriOtConsultForm = (props) => {
       },
     )
   }, [])
+
+  const formOptions = {
+    geriOtConsultQ2: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriOtConsultQ4: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriOtConsultQ6: [
+      { label: 'HDB EASE', value: 'HDB EASE' },
+      { label: 'Own vendors', value: 'Own vendors' },
+    ],
+    geriOtConsultQ7: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriOtConsultQ8: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriOtConsultQ9: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -136,60 +164,74 @@ const GeriOtConsultForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>OT Consult</h2>
-        Memo (for participant):
+      <div className='form--div'>
+        <h1>OT Consult</h1>
+        <h3>Memo (for participant):</h3>
         <LongTextField name='geriOtConsultQ1' label='Geri - OT Consult Q1' />
-        <br />
-        To be referred for doctor&apos;s consult (OT)?
-        <br />
+        <h3>To be referred for doctor&apos;s consult (OT)?</h3>
         If referral to long-term OT rehab services is necessary, this will be done through the
         doctor&apos;s consult route.
-        <br />
-        <RadioField name='geriOtConsultQ2' label='Geri - OT Consult Q2' />
-        Reasons for referral to Doctor&apos;s consult (OT):
-        <br />
+        <RadioField
+          name='geriOtConsultQ2'
+          label='Geri - OT Consult Q2'
+          options={formOptions.geriOtConsultQ2}
+        />
+        <h4>Reasons for referral to Doctor&apos;s consult (OT):</h4>
         For Referral to Polyclinic for OT Rehabilitation Services
-        <br />
         <LongTextField name='geriOtConsultQ3' label='Geri - OT Consult Q3' />
-        <br />
-        To be referred for social support (OT):
-        <RadioField name='geriOtConsultQ4' label='Geri - OT Consult Q4' />
-        Reasons for referral to social support (OT):
+        <h3>To be referred for social support (OT):</h3>
+        <RadioField
+          name='geriOtConsultQ4'
+          label='Geri - OT Consult Q4'
+          options={formOptions.geriOtConsultQ4}
+        />
+        <h4>Reasons for referral to social support (OT):</h4>
         <LongTextField name='geriOtConsultQ5' label='Geri - OT Consult Q5' />
+        <h4>Which of the following programmes would you recommend the participant for?</h4>
+        (Please select the most appropriate programme)
         <br />
-        Which of the following programmes would you recommend the participant for? (Please select
-        the most appropriate programme)
-        <SelectField name='geriOtConsultQ6' checkboxes='true' label='Geri - OT Consult Q6' />
-        <br />
+        <SelectField
+          name='geriOtConsultQ6'
+          checkboxes='true'
+          label='Geri - OT Consult Q6'
+          options={formOptions.geriOtConsultQ6}
+        />
         <h3>HDB EASE</h3>
-        SC flat owners qualify for EASE (Direct Application) if a family member in the household:
-        <br />• is 65 years old and above; or
-        <br />• aged between 60 and 64 years and requires assistance for one or more of the
-        Activities of Daily Living (ADL)*
-        <br />
-        <br /> * ADL refers to daily self-care activities within an individual&apos;s place of
-        residence. These activities include washing/ bathing, dressing, feeding, toileting,
-        mobility, and transferring.
-        <br />
-        <br />
-        Note: Age criterion is not applicable for EASE under HIP.
-        <br />
-        <br />
-        Is participant eligible for HDB EASE?
-        <RadioField name='geriOtConsultQ7' label='Geri - OT Consult Q7' />
-        <br />
-        Does participant wish to sign up for HDB EASE?
-        <RadioField name='geriOtConsultQ8' label='Geri - OT Consult Q8' />
-        <br />
-        Functional Assessment Report completed & given to participant?
-        <RadioField name='geriOtConsultQ9' label='Geri - OT Consult Q9' />
-      </Fragment>
+        <p className='remove-bottom-margin'>
+          SC flat owners qualify for EASE (Direct Application) if a family member in the household:
+        </p>
+        <ul>
+          <li>is 65 years old and above; or</li>
+          <li>aged between 60 and 64 years and requires assistance for one or more of the</li>
+        </ul>
+        <h4>Activities of Daily Living (ADL)</h4>
+        ADL refers to daily self-care activities within an individual&apos;s place of residence.
+        These activities include washing/ bathing, dressing, feeding, toileting, mobility, and
+        transferring.
+        <p className='underlined'>Note: Age criterion is not applicable for EASE under HIP.</p>
+        <h3>Is participant eligible for HDB EASE?</h3>
+        <RadioField
+          name='geriOtConsultQ7'
+          label='Geri - OT Consult Q7'
+          options={formOptions.geriOtConsultQ7}
+        />
+        <h3>Does participant wish to sign up for HDB EASE?</h3>
+        <RadioField
+          name='geriOtConsultQ8'
+          label='Geri - OT Consult Q8'
+          options={formOptions.geriOtConsultQ8}
+        />
+        <h3>Functional Assessment Report completed & given to participant?</h3>
+        <RadioField
+          name='geriOtConsultQ9'
+          label='Geri - OT Consult Q9'
+          options={formOptions.geriOtConsultQ9}
+        />
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )
@@ -204,7 +246,7 @@ const GeriOtConsultForm = (props) => {
         </Grid>
         <Grid
           p={1}
-          width='30%'
+          width='50%'
           display='flex'
           flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
@@ -212,52 +254,135 @@ const GeriOtConsultForm = (props) => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title('OT Questionnaire Results')}
-              {underlined('Notes (Q1 - 9, Living room/ Home entrance):')}
-              {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ10) : blueText('nil')}
-              {underlined('Notes (Q10 - 15, Toilet):')}
-              {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ17) : blueText('nil')}
-              {underlined('Notes (Q16 - 25, Kitchen and Living Environment):')}
-              {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ28) : blueText('nil')}
-              {underlined('Scores')}
-              Yes: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ29) : blueText('nil')}
-              No: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ30) : blueText('nil')}
-              NA: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ31) : blueText('nil')}
-              Total: {geriOtQ ? blueText(geriOtQ.geriOtQuestionnaireQ32) : blueText('nil')}
-              {title('SPPB Scores')}
-              {underlined('Short Physical Performance Battery Score (out of 12):')}
-              {geriSppb
-                ? blueText(
-                    calculateSppbScore(
-                      geriSppb.geriSppbQ2,
-                      geriSppb.geriSppbQ6,
-                      geriSppb.geriSppbQ8,
-                    ),
-                  )
-                : blueText('nil')}
-              {underlined('Gait speed (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ7) : blueText('nil')}
-              {underlined('Gait speed Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ8) : blueText('nil')}
-              {underlined('Chair rise (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ1) : blueText('nil')}
-              {underlined('Number of chairs completed:')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ13) : blueText('nil')}
-              {underlined('5 Chair rise Score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ2) : blueText('nil')}
-              {underlined('Side to Side (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ3) : blueText('nil')}
-              {underlined('Semi-tandem Stand (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ4) : blueText('nil')}
-              {underlined('Tandem Stand (Time taken in seconds):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ5) : blueText('nil')}
-              {underlined('Balance score (out of 4):')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ6) : blueText('nil')}
-              {underlined('Falls Risk Level: ')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ11) : blueText('nil')}
-              {underlined('Notes:')}
-              {geriSppb ? blueText(geriSppb.geriSppbQ12) : blueText('nil')}
+            <div className='summary--question-div'>
+              <h2>OT Questionnaire Results</h2>
+              <p className='underlined'>Notes (Q1 - 9, Living room/ Home entrance):</p>
+              {geriOtQ ? (
+                <p className='blue'>{geriOtQ.geriOtQuestionnaireQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Notes (Q10 - 15, Toilet):</p>
+              {geriOtQ ? (
+                <p className='blue'>{geriOtQ.geriOtQuestionnaireQ17}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Notes (Q16 - 25, Kitchen and Living Environment):</p>
+              {geriOtQ ? (
+                <p className='blue'>{geriOtQ.geriOtQuestionnaireQ28}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Scores</p>
+              Yes:
+              {geriOtQ && geriOtQ.geriOtQuestionnaireQ29 ? (
+                <span className='blue'>{geriOtQ.geriOtQuestionnaireQ29}</span>
+              ) : (
+                <span className='blue'> nil</span>
+              )}
+              <br />
+              No:
+              {geriOtQ && geriOtQ.geriOtQuestionnaireQ30 ? (
+                <span className='blue'>{geriOtQ.geriOtQuestionnaireQ30}</span>
+              ) : (
+                <span className='blue'> nil</span>
+              )}
+              <br />
+              NA:
+              {geriOtQ && geriOtQ.geriOtQuestionnaireQ31 ? (
+                <span className='blue'>{geriOtQ.geriOtQuestionnaireQ31}</span>
+              ) : (
+                <span className='blue'> nil</span>
+              )}
+              <br />
+              Total:
+              {geriOtQ && geriOtQ.geriOtQuestionnaireQ32 ? (
+                <span className='blue'>{geriOtQ.geriOtQuestionnaireQ32}</span>
+              ) : (
+                <span className='blue'> nil</span>
+              )}
+              <br />
+              <Divider />
+              <h2>SPPB Scores</h2>
+              <p className='underlined'>Short Physical Performance Battery Score (out of 12):</p>
+              {geriSppb && geriSppb.geriSppbQ2 && geriSppb.geriSppbQ6 && geriSppb.geriSppbQ8 ? (
+                <p className='blue'>
+                  {calculateSppbScore(
+                    geriSppb.geriSppbQ2,
+                    geriSppb.geriSppbQ6,
+                    geriSppb.geriSppbQ8,
+                  )}
+                </p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Gait speed (Time taken in seconds):</p>
+              {geriSppb && geriSppb.geriSppbQ7 ? (
+                <p className='blue'>{geriSppb.geriSppbQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Gait speed Score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ8 ? (
+                <p className='blue'>{geriSppb.geriSppbQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Chair rise (Time taken in seconds):</p>
+              {geriSppb && geriSppb.geriSppbQ1 ? (
+                <p className='blue'>{geriSppb.geriSppbQ1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Number of chairs completed:</p>
+              {geriSppb && geriSppb.geriSppbQ13 ? (
+                <p className='blue'>{geriSppb.geriSppbQ13}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>5 Chair rise Score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ2 ? (
+                <p className='blue'>{geriSppb.geriSppbQ2}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Side to Side (Time taken in seconds):</p>
+              {geriSppb && geriSppb.geriSppbQ3 ? (
+                <p className='blue'>{geriSppb.geriSppbQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Semi-tandem Stand (Time taken in seconds):</p>
+              {geriSppb && geriSppb.geriSppbQ4 ? (
+                <p className='blue'>{geriSppb.geriSppbQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Tandem Stand (Time taken in seconds):</p>
+              {geriSppb && geriSppb.geriSppbQ5 ? (
+                <p className='blue'>{geriSppb.geriSppbQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Balance score (out of 4):</p>
+              {geriSppb && geriSppb.geriSppbQ6 ? (
+                <p className='blue'>{geriSppb.geriSppbQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Falls Risk Level: </p>
+              {geriSppb && geriSppb.geriSppbQ11 ? (
+                <p className='blue'>{geriSppb.geriSppbQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Notes:</p>
+              {geriSppb && geriSppb.geriSppbQ12 ? (
+                <p className='blue'>{geriSppb.geriSppbQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
             </div>
           )}
         </Grid>

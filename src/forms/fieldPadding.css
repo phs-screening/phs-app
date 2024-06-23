@@ -10,8 +10,9 @@
   letter-spacing: 0 !important;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
   font-size: 1rem !important;
   line-height: 1.75 !important;
   min-width: 64px !important;
 }
+

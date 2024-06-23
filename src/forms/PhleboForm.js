@@ -64,13 +64,13 @@ const PhleboForm = () => {
       }}
       model={saveData}
     >
-      <Fragment>
-        Blood sample collected?
+      <div className='form--div'>
+        <h3>Blood sample collected?</h3>
         <BoolField name='phlebotomyQ1' />
-        Circled &apos;Completed&apos; under Phlebotomy on Form A?
+        <h3>Circled &apos;Completed&apos; under Phlebotomy on Form A?</h3>
         <BoolField name='phlebotomyQ2' />
         <br />
-      </Fragment>
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
       <br />

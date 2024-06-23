@@ -123,6 +123,99 @@ const GeriAudiometryForm = (props) => {
     }
     loadForms()
   }, [])
+
+  const formOptions = {
+    geriAudiometryQ1: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriAudiometryQ2: [
+      {
+        label: 'Pass',
+        value: 'Pass',
+      },
+      { label: 'Refer', value: 'Refer' },
+    ],
+    geriAudiometryQ3: [
+      {
+        label: 'Pass',
+        value: 'Pass',
+      },
+      { label: 'Refer', value: 'Refer' },
+    ],
+    geriAudiometryQ4: [
+      {
+        label: 'Pass',
+        value: 'Pass',
+      },
+      { label: 'Refer', value: 'Refer' },
+    ],
+    geriAudiometryQ5: [
+      {
+        label: '500Hz',
+        value: '500Hz',
+      },
+      { label: '1000Hz', value: '1000Hz' },
+      { label: '2000Hz', value: '2000Hz' },
+      { label: '4000Hz', value: '4000Hz' },
+    ],
+    geriAudiometryQ6: [
+      {
+        label: '500Hz',
+        value: '500Hz',
+      },
+      { label: '1000Hz', value: '1000Hz' },
+      { label: '2000Hz', value: '2000Hz' },
+      { label: '4000Hz', value: '4000Hz' },
+    ],
+    geriAudiometryQ7: [
+      {
+        label: '500Hz',
+        value: '500Hz',
+      },
+      { label: '1000Hz', value: '1000Hz' },
+      { label: '2000Hz', value: '2000Hz' },
+      { label: '4000Hz', value: '4000Hz' },
+    ],
+    geriAudiometryQ8: [
+      {
+        label: '500Hz',
+        value: '500Hz',
+      },
+      { label: '1000Hz', value: '1000Hz' },
+      { label: '2000Hz', value: '2000Hz' },
+      { label: '4000Hz', value: '4000Hz' },
+    ],
+    geriAudiometryQ9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriAudiometryQ11: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriAudiometryQ13: [
+      {
+        label:
+          'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+        value:
+          'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+      },
+      {
+        label: "There is no hearing loss detected, the patient's hearing is normal.",
+        value: "There is no hearing loss detected, the patient's hearing is normal.",
+      },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -146,57 +239,96 @@ const GeriAudiometryForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <br />
-        <h2>AUDIOMETRY</h2>
-        <br />
-        Did participant visit Audiometry Booth by NUS audiology team?
-        <RadioField name='geriAudiometryQ1' label='geriAudiometry - Q1' />
-        <br />
-        <h3>External Ear Examination</h3>
-        <br />
-        Visual Ear Examination (Left Ear):
-        <RadioField name='geriAudiometryQ2' label='geriAudiometry - Q2' />
-        Visual Ear Examination (Right Ear)
-        <RadioField name='geriAudiometryQ3' label='geriAudiometry - Q3' />
-        <br />
-        <h3>Hearing Test</h3>
-        <br />
-        Practice Tone (500Hz at 60dB in “better” ear):
-        <RadioField name='geriAudiometryQ4' label='geriAudiometry - Q4' />
-        <br />
-        Pure Tone Screening at 25dB for Left Ear: (Tick checkbox for Response, DO NOT tick checkbox
-        if NO response):
-        <SelectField name='geriAudiometryQ5' checkboxes='true' label='geriAudiometry - Q5' />
-        Pure Tone Screening at 25dB for Right Ear: (Tick checkbox for Response, DO NOT tick checkbox
-        if NO response):
-        <SelectField name='geriAudiometryQ6' checkboxes='true' label='geriAudiometry - Q6' />
-        <br />
-        Pure Tone Screening at 40dB for Left Ear: (Tick checkbox for Response, DO NOT tick checkbox
-        if NO response):
-        <SelectField name='geriAudiometryQ7' checkboxes='true' label='geriAudiometry - Q7' />
-        Pure Tone Screening at 40dB for Right Ear: (Tick checkbox for Response, DO NOT tick checkbox
-        if NO response):
-        <SelectField name='geriAudiometryQ8' checkboxes='true' label='geriAudiometry - Q8' />
-        <br />
-        When senior is found to have abnormal hearing results, please ask the following questions:
-        <br />
-        Do you have an upcoming appointment with your ear specialist or audiologist?
-        <RadioField name='geriAudiometryQ9' label='geriAudiometry - Q9' />
-        If yes, please specify:
+      <div className='form--div'>
+        <h1>AUDIOMETRY</h1>
+        <h3>Did participant visit Audiometry Booth by NUS audiology team?</h3>
+        <RadioField
+          name='geriAudiometryQ1'
+          label='geriAudiometry - Q1'
+          options={formOptions.geriAudiometryQ1}
+        />
+        <h2>External Ear Examination</h2>
+        <h3>Visual Ear Examination (Left Ear):</h3>
+        <RadioField
+          name='geriAudiometryQ2'
+          label='geriAudiometry - Q2'
+          options={formOptions.geriAudiometryQ2}
+        />
+        <h3>Visual Ear Examination (Right Ear)</h3>
+        <RadioField
+          name='geriAudiometryQ3'
+          label='geriAudiometry - Q3'
+          options={formOptions.geriAudiometryQ3}
+        />
+        <h2>Hearing Test</h2>
+        <h3>Practice Tone (500Hz at 60dB in “better” ear):</h3>
+        <RadioField
+          name='geriAudiometryQ4'
+          label='geriAudiometry - Q4'
+          options={formOptions.geriAudiometryQ4}
+        />
+        <h3>Pure Tone Screening at 25dB for Left Ear: </h3>
+        <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
+        <SelectField
+          name='geriAudiometryQ5'
+          checkboxes='true'
+          label='geriAudiometry - Q5'
+          options={formOptions.geriAudiometryQ5}
+        />
+        <h3>Pure Tone Screening at 25dB for Right Ear:</h3>
+        <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
+        <SelectField
+          name='geriAudiometryQ6'
+          checkboxes='true'
+          label='geriAudiometry - Q6'
+          options={formOptions.geriAudiometryQ6}
+        />
+        <h3>Pure Tone Screening at 40dB for Left Ear:</h3>
+        <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
+        <SelectField
+          name='geriAudiometryQ7'
+          checkboxes='true'
+          label='geriAudiometry - Q7'
+          options={formOptions.geriAudiometryQ7}
+        />
+        <h3>Pure Tone Screening at 40dB for Right Ear:</h3>{' '}
+        <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
+        <SelectField
+          name='geriAudiometryQ8'
+          checkboxes='true'
+          label='geriAudiometry - Q8'
+          options={formOptions.geriAudiometryQ8}
+        />
+        <h4>
+          When senior is found to have abnormal hearing results, please ask the following questions:
+        </h4>
+        <h3>Do you have an upcoming appointment with your ear specialist or audiologist?</h3>
+        <RadioField
+          name='geriAudiometryQ9'
+          label='geriAudiometry - Q9'
+          options={formOptions.geriAudiometryQ9}
+        />
+        <h4>If yes, please specify:</h4>
         <LongTextField name='geriAudiometryQ10' label='geriAudiometry - Q10' />
-        Referred to Doctor&apos;s Consult?
-        <RadioField name='geriAudiometryQ11' label='geriAudiometry - Q11' />
-        Please document significant findings from audiometry test and recommended course of action
-        for participant:
+        <h3>Referred to Doctor&apos;s Consult?</h3>
+        <RadioField
+          name='geriAudiometryQ11'
+          label='geriAudiometry - Q11'
+          options={formOptions.geriAudiometryQ11}
+        />
+        <h4>
+          Please document significant findings from audiometry test and recommended course of action
+          for participant:
+        </h4>
         <LongTextField name='geriAudiometryQ12' label='geriAudiometry - Q12' />
-        <RadioField name='geriAudiometryQ13' label='geriAudiometry - Q13' />
-        <br />
-      </Fragment>
+        <RadioField
+          name='geriAudiometryQ13'
+          label='geriAudiometry - Q13'
+          options={formOptions.geriAudiometryQ13}
+        />
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-
-      <br />
       <Divider />
     </AutoForm>
   )
@@ -211,7 +343,7 @@ const GeriAudiometryForm = (props) => {
         </Grid>
         <Grid
           p={1}
-          width='30%'
+          width='50%'
           display='flex'
           flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
@@ -219,17 +351,41 @@ const GeriAudiometryForm = (props) => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title('Hearing Issues ')}
-              {underlined('Hearing problems')}
-              {hcsr && hcsr.hxHcsrQ8 ? blueText(hcsr.hxHcsrQ8) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ9 ? blueText(hcsr.hxHcsrQ9) : blueText('nil')}
-              {underlined('Has participant seen an ENT Specialist before?')}
-              {hcsr && hcsr.hxHcsrQ13 ? blueText(hcsr.hxHcsrQ13) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ14 ? blueText(hcsr.hxHcsrQ14) : blueText('nil')}
-              {underlined('Does participant use any hearing aids?')}
-              {hcsr && hcsr.hxHcsrQ15 ? blueText(hcsr.hxHcsrQ15) : blueText('nil')}
-              {hcsr && hcsr.hxHcsrQ16 ? blueText(hcsr.hxHcsrQ16) : blueText('nil')}
+            <div className='summary--question-div'>
+              <h2>Hearing Issues</h2>
+              <p className='underlined'>Hearing problems</p>
+              {hcsr && hcsr.hxHcsrQ8 ? (
+                <p className='blue'>{hcsr.hxHcsrQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hcsr && hcsr.hxHcsrQ9 ? (
+                <p className='blue'>{hcsr.hxHcsrQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {<p className='underlined'>Has participant seen an ENT Specialist before?</p>}
+              {hcsr && hcsr.hxHcsrQ13 ? (
+                <p className='blue'>{hcsr.hxHcsrQ13}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hcsr && hcsr.hxHcsrQ14 ? (
+                <p className='blue'>{hcsr.hxHcsrQ14}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {<p className='underlined'>Does participant use any hearing aids?</p>}
+              {hcsr && hcsr.hxHcsrQ15 ? (
+                <p className='blue'>{hcsr.hxHcsrQ15}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hcsr && hcsr.hxHcsrQ16 ? (
+                <p className='blue'>{hcsr.hxHcsrQ16}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
             </div>
           )}
         </Grid>

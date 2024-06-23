@@ -170,6 +170,144 @@ const HxSocialForm = (props) => {
       setRegForm(result[1])
     })
   }, [])
+
+  const formOptions = {
+    hxSocialQ1: [
+      {
+        label: 'Yes, (Please specify):',
+        value: 'Yes, (Please specify):',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ3: [
+      {
+        label: '1200 and below per month',
+        value: '1200 and below per month',
+      },
+      { label: '1,201 - 2,000 per month', value: '1,201 - 2,000 per month' },
+      { label: '2,001 - 3,999 per month', value: '2,001 - 3,999 per month' },
+      { label: '4,000 - 5,999 per month', value: '4,000 - 5,999 per month' },
+      { label: '6,000 - 9,999 per month', value: '6,000 - 9,999 per month' },
+      { label: '10,000 & above', value: '10,000 & above' },
+      { label: 'NIL', value: 'NIL' },
+    ],
+    hxSocialQ5: [
+      {
+        label: 'Yes, (Please specify):',
+        value: 'Yes, (Please specify):',
+      },
+      { label: 'No, I do not qualify', value: 'No, I do not qualify' },
+      {
+        label: 'No, I qualify but...(Please specify the reasons for not applying if you qualify):',
+        value: 'No, I qualify but...(Please specify the reasons for not applying if you qualify):',
+      },
+    ],
+    hxSocialQ7: [
+      {
+        label: 'Yes, (Please specify):',
+        value: 'Yes, (Please specify):',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ10: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ11: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ12: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ13: [
+      {
+        label: 'Healthy',
+        value: 'Healthy',
+      },
+      { label: 'Moderate', value: 'Moderate' },
+      { label: 'Poor', value: 'Poor' },
+    ],
+    hxSocialQ14: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ16: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ17: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    hxSocialQ19: [
+      {
+        label: 'Less than 2 standard drinks per day on average.',
+        value: 'Less than 2 standard drinks per day on average.',
+      },
+      {
+        label: 'More than 2 standard drinks per day on average.',
+        value: 'More than 2 standard drinks per day on average.',
+      },
+      { label: 'No', value: 'No' },
+      { label: 'Quit Alcoholic Drinks', value: 'Quit Alcoholic Drinks' },
+    ],
+    hxSocialQ20: [
+      {
+        label: 'No (Skip to Q7)',
+        value: 'No (Skip to Q7)',
+      },
+      { label: 'Yes (Proceed to answer below)', value: 'Yes (Proceed to answer below)' },
+      { label: 'Vegetables (1 serving/day)', value: 'Vegetables (1 serving/day)' },
+      {
+        label: 'Vegetables (2 or more servings/day)',
+        value: 'Vegetables (2 or more servings/day)',
+      },
+      { label: 'Fruits (1 serving/day)', value: 'Fruits (1 serving/day)' },
+      { label: 'Fruits (2 or more servings/day)', value: 'Fruits (2 or more servings/day)' },
+      { label: 'Whole grain and cereals', value: 'Whole grain and cereals' },
+    ],
+    hxSocialQ21: [
+      {
+        label: 'Yes (At least 20 mins each time, for 3 or more days per week.)',
+        value: 'Yes (At least 20 mins each time, for 3 or more days per week.)',
+      },
+      {
+        label: 'Yes (At least 20 mins each time, for less than 3 days per week.)',
+        value: 'Yes (At least 20 mins each time, for less than 3 days per week.)',
+      },
+      {
+        label: 'No participation of at least 20 min each time.',
+        value: 'No participation of at least 20 min each time.',
+      },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -193,197 +331,202 @@ const HxSocialForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>HISTORY TAKING PART 3: SOCIAL HISTORY</h2>
+      <div className='form--div'>
+        <h1>HISTORY TAKING PART 3: SOCIAL HISTORY</h1>
+        <h2>1. FINANCIAL STATUS</h2>
+        <h4 className='red'>Please refer to page 1 of Form A for following questions.</h4>
+        <h3>1. Current CHAS status?</h3>
+        {regForm && regForm.registrationQ8 ? (
+          <p className='blue'>{regForm.registrationQ8}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
+        <h3>2. Pioneer / Merderka Generation Card?</h3>
+        {regForm && regForm.registrationQ9 ? (
+          <p className='blue'>{regForm.registrationQ9}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
         <h3>
-          1. FINANCIAL STATUS
-          <span style={{ color: 'red' }}>
-            <br />
-            Please refer to page 1 of Form A for following questions.
-          </span>
+          3. Are you currently on any other Government Financial Assistance, other than CHAS and PG
+          (e.g. Public Assistance Scheme)?
         </h3>
-        1. Current CHAS status?
-        <br />
-        {regForm && regForm.registrationQ8 ? blueText(regForm.registrationQ8) : blueText('nil')}
-        <br />
-        2. Pioneer / Merderka Generation Card?
-        <br />
-        {regForm && regForm.registrationQ9 ? blueText(regForm.registrationQ9) : blueText('nil')}
-        <br />
-        3. Are you currently on any other Government Financial Assistance, other than CHAS and PG
-        (e.g. Public Assistance Scheme)?
-        <RadioField name='hxSocialQ1' label='Hx Social Q1' />
-        Please specify
+        <RadioField name='hxSocialQ1' label='Hx Social Q1' options={formOptions.hxSocialQ1} />
+        <h4>Please specify</h4>
         <LongTextField name='hxSocialQ2' label='Hx Social Q2' />
-        <br /> <br />
-        4a. What is the average earnings of participant&apos;s household per month?
-        <RadioField name='hxSocialQ3' label='Hx Social Q3' />
-        <br />
-        <br />
-        4b. Number of household members (including yourself):
+        <h3>4a. What is the average earnings of participant&apos;s household per month?</h3>
+        <RadioField name='hxSocialQ3' label='Hx Social Q3' options={formOptions.hxSocialQ3} />
+        <h3>4b. Number of household members (including yourself):</h3>
         <LongTextField name='hxSocialQ4' label='Hx Social Q4' />
-        <br />
-        <br />
-        4c. Do you want to apply for CHAS card? (if you are currently not on CHAS but qualify){' '}
-        <br />
+        <h3>
+          4c. Do you want to apply for CHAS card? (if you are currently not on CHAS but qualify)
+        </h3>
         <img src='/images/hx/chas.jpg' alt='CHAS' /> <br />
-        <RadioField name='hxSocialQ5' label='Hx Social Q5' />
-        Please specify
+        <RadioField name='hxSocialQ5' label='Hx Social Q5' options={formOptions.hxSocialQ5} />
+        <h4>Please specify</h4>
         <LongTextField name='hxSocialQ6' label='Hx Social Q6' />
-        <br />
-        <br />
-        5. Do you need advice on financial schemes that are available in Singapore or require
-        further financial assistance?
-        <RadioField name='hxSocialQ7' label='Hx Social Q7' />
-        Please specify
+        <h3>
+          5. Do you need advice on financial schemes that are available in Singapore or require
+          further financial assistance?
+        </h3>
+        <RadioField name='hxSocialQ7' label='Hx Social Q7' options={formOptions.hxSocialQ7} />
+        <h4>Please specify</h4>
         <LongTextField name='hxSocialQ8' label='Hx Social Q8' />
-        <br />
-        <br />
         <PopupText qnNo='hxSocialQ5' triggerValue='Yes, (Please specify):'>
           <PopupText qnNo='hxSocialQ7' triggerValue='Yes, (Please specify):'>
             <p>
-              <b>REFER TO SOCIAL SERVICE STATION</b> if participant is in need of{' '}
-              <b>financial aid.</b>{' '}
+              <b>
+                REFER TO <span className='red'>SOCIAL SERVICE STATION</span>
+              </b>{' '}
+              if participant is in need of <b>financial aid.</b>{' '}
             </p>
-            <br />
             Indicate for Social Service station on:
-            <br />
-            1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
-            <br />
-            2) Write reasons for referral on the right column
-            <br />
-            <br />
-            Note the following criteria for your assessment: (wef from 1st Nov 2019)
+            <ul>
+              <li>Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A</li>
+              <li>Write reasons for referral on the right column</li>
+            </ul>
+            <b>Note the following criteria for your assessment: (wef from 1st Nov 2019)</b>
             <br />
             Per-capita monthly income for CHAS:{' '}
-            <b>Green Card: Above $2000; Orange Card: $1201- $2000; Blue Card: $1200 and below</b>
+            <ul>
+              <li>Green Card: Above $2000</li>
+              <li>Orange Card: $1201- $2000</li>
+              <li>Blue Card: $1200 and below</li>
+            </ul>
           </PopupText>
         </PopupText>
-        <br />
-        <br />
         <h2>2. SOCIAL ISSUES</h2>
-        1. Are you caring for a loved one?
-        <RadioField name='hxSocialQ9' label='Hx Social Q9' />
-        <br />
-        <br />
+        <h3>1. Are you caring for a loved one?</h3>
+        <RadioField name='hxSocialQ9' label='Hx Social Q9' options={formOptions.hxSocialQ9} />
         <PopupText qnNo='hxSocialQ9' triggerValue='Yes'>
-          2. If you are caring for a loved one, do you need training?
-          <RadioField name='hxSocialQ10' label='Hx Social Q10' />
-          <br />
-          <br />
-          3. Do you need assistance? (eg funds to hire a helper / funds to offset caretaking costs,
-          subsidies for home healthcare items, arranging for short term care in nursing homes/senior
-          care centres)
-          <RadioField name='hxSocialQ11' label='Hx Social Q11' />
-          <br />
-          <br />
+          <h3>2. If you are caring for a loved one, do you need training?</h3>
+          <RadioField name='hxSocialQ10' label='Hx Social Q10' options={formOptions.hxSocialQ10} />
+          <h3>3. Do you need assistance? </h3>(e.g. funds to hire a helper / funds to offset
+          caretaking costs, subsidies for home healthcare items, arranging for short term care in
+          nursing homes/senior care centres)
+          <RadioField name='hxSocialQ11' label='Hx Social Q11' options={formOptions.hxSocialQ11} />
         </PopupText>
-        4. Do you require social support?
-        <RadioField name='hxSocialQ12' label='Hx Social Q12' />
+        <h3>4. Do you require social support?</h3>
+        <RadioField name='hxSocialQ12' label='Hx Social Q12' options={formOptions.hxSocialQ12} />
         <PopupText qnNo='hxSocialQ12' triggerValue='Yes'>
-          <b>
-            REFER TO SOCIAL SERVICE STATION if participant has social issues that require further
-            consult.
-            <br />
-            Indicate for Social Service station on:{' '}
-          </b>
-          1) Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1
-          <br />
-          2) Write reasons for referral on the right column
+          <p>
+            <b>
+              REFER TO <span className='red'>SOCIAL SERVICE STATION</span> if participant has social
+              issues that require further consult.
+            </b>
+          </p>
+          Indicate for Social Service station on:
+          <ol>
+            <li>Tick eligibility, circle &apos;Y&apos; on SACS Consultation on Form A Page 1</li>
+            <li>Write reasons for referral on the right column</li>
+          </ol>
         </PopupText>
-        <br />
-        <br />
-        5. Patient exhibits signs of depression and has been administered EBAS (found under Geri
-        tab) by history taker. Patient has been informed that they have been referred to SACS and
-        this has been indicated on Form A.
-        <RadioField name='hxSocialQ16' label='Hx Social Q16' />
-        <br />
-        <br />
+        <h3>
+          5. Patient exhibits signs of depression and has been administered EBAS (found under Geri
+          tab) by history taker.
+        </h3>
+        Patient has been informed that they have been referred to SACS and this has been indicated
+        on Form A.
+        <RadioField name='hxSocialQ16' label='Hx Social Q16' options={formOptions.hxSocialQ16} />
         <h2>3. LIFESTYLE</h2>
-        Do you smoke?
-        <RadioField name='hxSocialQ17' label='Hx Social Q17' />
-        Roughly, how many pack-years?
+        <h3>Do you smoke?</h3>
+        <RadioField name='hxSocialQ17' label='Hx Social Q17' options={formOptions.hxSocialQ17} />
+        <h3>Roughly, how many pack-years?</h3>
         <LongTextField name='hxSocialQ18' label='Hx Social Q18' />
-        <br />
-        Do you consume alcoholic drinks? (Note: Standard drink means a shot of hard liquor, a can or
-        bottle of beer, or a glass of wine.)
-        <RadioField name='hxSocialQ19' label='Hx Social Q19' />
-        <br />
-        Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please tick
-        where applicable.
-        <br />
-        <SelectField name='hxSocialQ20' checkboxes='true' label='Hx Social Q20' />
-        <br />
-        Do you exercise or participate in any form of moderate physical activity for at least 150
-        minutes OR intense physical activity at least 75 minutes throughout the week? Note: Examples
-        of physical activity includes exercising, walking, playing sports, washing your car,
-        lifting/ moving moderately heavy luggage and doing housework.
-        <RadioField name='hxSocialQ21' label='Hx Social Q21' />
-        <br />
+        <h3>Do you consume alcoholic drinks?</h3>
+        (Note: Standard drink means a shot of hard liquor, a can or bottle of beer, or a glass of
+        wine.)
+        <RadioField name='hxSocialQ19' label='Hx Social Q19' options={formOptions.hxSocialQ19} />
+        <h3>
+          Do you consciously try to eat more fruits, vegetables, whole grain and cereals? Please
+          tick where applicable.
+        </h3>
+        <SelectField
+          name='hxSocialQ20'
+          checkboxes='true'
+          label='Hx Social Q20'
+          options={formOptions.hxSocialQ20}
+        />
+        <h3>
+          Do you exercise or participate in any form of moderate physical activity for at least 150
+          minutes OR intense physical activity at least 75 minutes throughout the week?
+        </h3>
+        Note: Examples of physical activity includes exercising, walking, playing sports, washing
+        your car, lifting/ moving moderately heavy luggage and doing housework.
+        <RadioField name='hxSocialQ21' label='Hx Social Q21' options={formOptions.hxSocialQ21} />
         <b>
           Counsel for positive diet and lifestyle modification if deemed necessary. Refer to{' '}
-          <span style={{ color: 'red' }}>Dietitian&apos;s Consult</span> if participant agrees,
-          Indicate:
+          <span className='red'>Dietitian&apos;s Consult</span> if participant agrees, Indicate:
         </b>
-        1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
-        2) Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
-        Reasons for Recommendation
-        <br />
+        <ol>
+          <li>
+            Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A<br />
+          </li>
+          <li>
+            Write reasons under dietitian referral on Page 2 of Form A Doctor&apos;s Consultation -
+            Reasons for Recommendation
+          </li>
+        </ol>
         <h2>4. ORAL ISSUES</h2>
-        <b>Please do a quick inspection of participant&apos;s oral health status:</b> 1. Lips,
-        Tongue, Gums & Tissues (Healthy - pink and moist)
-        <br />
-        2. Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken dentures,
-        No food particles/tartar in mouth)
-        <br />
-        3. Saliva status (free-flowing) and Any dental pain <br />
-        <br />
-        1. How is the participant&apos;s Oral Health?
-        <RadioField name='hxSocialQ13' label='Hx Social Q13' />
-        <br />
-        Please specify:
+        <b>Please do a quick inspection of participant&apos;s oral health status:</b>
+        <ol>
+          <li>Lips, Tongue, Gums & Tissues (Healthy - pink and moist)</li>
+          <li>
+            Natural Teeth, Oral Cleanliness & Dentures (Tooth/Root decay, no cracked/broken
+            dentures, no food particles/tartar in mouth)
+          </li>
+          <li>Saliva status (free-flowing) and Any dental pain</li>
+        </ol>
+        <h3>1. How is the participant&apos;s Oral Health?</h3>
+        <RadioField name='hxSocialQ13' label='Hx Social Q13' options={formOptions.hxSocialQ13} />
+        <h4>Please specify:</h4>
         <LongTextField name='hxSocialQ15' label='Hx Social Q15' />
-        <br />
-        Indications for referral to Oral Health (any one of the following):
-        <br />
-        1. History:
-        <br />- Smoker
-        <br />- DM
-        <br />- Denture wearer
-        <br />- Currently in pain
-        <br />
-        <br />
-        2. Quick examination:
-        <br />- red, swollen gums
-        <br />- severely receded gums
-        <br />- bleeding/pus from gums
-        <br />- obvious plaque/calculus deposits
-        <br />- obvious decay
-        <br />- dry mouth/bad breath
-        <br />
-        <br />
-        3. Participant has any dental queries/ concerns:
-        <br />
-        <br />
-        2. Would you like to go through free Oral Health Education by NUS Dentistry dentists and
-        students?
-        <RadioField name='hxSocialQ14' label='Hx Social Q14' />
+        <h3>Indications for referral to Oral Health (any one of the following):</h3>
+        <ol>
+          <li>
+            History:
+            <ul>
+              <li>Smoker</li>
+              <li>DM</li>
+              <li>Denture wearer</li>
+              <li>Currently in pain</li>
+            </ul>
+          </li>
+          <li>
+            Quick examination:
+            <ul>
+              <li>red, swollen gums</li>
+              <li>severely receded gums</li>
+              <li>bleeding/pus from gums</li>
+              <li>obvious plaque/calculus deposits</li>
+              <li>obvious decay</li>
+              <li>dry mouth/bad breath</li>
+            </ul>
+          </li>
+          <li>Participant has any dental queries/ concerns:</li>
+        </ol>
+        <h3>
+          2. Would you like to go through free Oral Health Education by NUS Dentistry dentists and
+          students?
+        </h3>
+        <RadioField name='hxSocialQ14' label='Hx Social Q14' options={formOptions.hxSocialQ14} />
         <PopupText qnNo='hxSocialQ14' triggerValue='Yes'>
-          <b>
-            Refer to Oral Health Station if participant has poor dental hygiene and interested to go
-            through dental education.
-            <br />
-            <span style={{ color: 'red' }}>ALL</span> participants with suspected dental issues will
-            be referred to Oral Health Station.
-          </b>
-          <br />
-          <br />
-          <b>Indicate for Dentistry on:</b>
-          1) Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A
-          <br />
-          2) Write reasons for referral on the right column
+          <p>
+            <b>
+              Refer to <span className='red'>Oral Health Station</span> if participant has poor
+              dental hygiene and interested to go through dental education.
+              <br />
+              <span className='red'>ALL</span> participants with suspected dental issues will be
+              referred to Oral Health Station.
+            </b>
+          </p>
+          Indicate for Dentistry on:
+          <ol>
+            <li>Tick eligibility, Circle interested &apos;Y&apos; on Page 1 of Form A</li>
+            <li>Write reasons for referral on the right column</li>
+          </ol>
         </PopupText>
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

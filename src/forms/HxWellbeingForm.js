@@ -68,6 +68,42 @@ const HxWellbeingForm = (props) => {
       setRegForm(result[1])
     })
   }, [])
+
+  const formOptions = {
+    oneToFiveSchema: [
+      {
+        label: '0',
+        value: '0',
+      },
+      { label: '1', value: '1' },
+      { label: '2', value: '2' },
+      { label: '3', value: '3' },
+      { label: '4', value: '4' },
+      { label: '5', value: '5' },
+    ],
+    oneToSixSchema: [
+      {
+        label: '0',
+        value: '0',
+      },
+      { label: '1', value: '1' },
+      { label: '2', value: '2' },
+      { label: '3', value: '3' },
+      { label: '4', value: '4' },
+      { label: '5', value: '5' },
+      { label: '6', value: '6' },
+    ],
+    hxWellbeingQ11: [
+      {
+        label: '1 (Never or very rarely)',
+        value: '1 (Never or very rarely)',
+      },
+      { label: '2 (Rarely)', value: '2 (Rarely)' },
+      { label: '3 (Sometimes)', value: '3 (Sometimes)' },
+      { label: '4 (Often)', value: '4 (Often)' },
+      { label: '5 (Very often or always)', value: '5 (Very often or always)' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -91,80 +127,118 @@ const HxWellbeingForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>HISTORY TAKING PART 4: Wellbeing</h2>
+      <div className='form--div'>
+        <h1>HISTORY TAKING PART 4: Wellbeing</h1>
         <h3>
           From a scale of 0 to 5, 0 being &apos;no all the time&apos; and 5 being &apos;all of the
           time&apos;, please give a number for each of the following statements.
         </h3>
-        <span>
+        <h4>
           1. <q>I have felt cheerful and in good spirits.</q>
-        </span>
-        <RadioField name='hxWellbeingQ1' label='Hx Wellbeing Q1' />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ1'
+          label='Hx Wellbeing Q1'
+          options={formOptions.oneToFiveSchema}
+        />
+        <h4>
           2. <q>I have felt calm and relaxed.</q>
-        </span>
-        <RadioField name='hxWellbeingQ2' label='Hx Wellbeing Q2' />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ2'
+          label='Hx Wellbeing Q2'
+          options={formOptions.oneToFiveSchema}
+        />
+        <h4>
           3. <q>I have felt active and vigorous.</q>
-        </span>
-        <RadioField name='hxWellbeingQ3' label='Hx Wellbeing Q3' />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ3'
+          label='Hx Wellbeing Q3'
+          options={formOptions.oneToFiveSchema}
+        />
+        <h4>
           4. <q>I woke up feeling refreshed and rested.</q>
-        </span>
-        <RadioField name='hxWellbeingQ4' label='Hx Wellbeing Q4' />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ4'
+          label='Hx Wellbeing Q4'
+          options={formOptions.oneToFiveSchema}
+        />
+        <h4>
           5. <q>My daily life has been filled with things that interest me.</q>
-        </span>
-        <RadioField name='hxWellbeingQ5' label='Hx Wellbeing Q5' />
+        </h4>
+        <RadioField
+          name='hxWellbeingQ5'
+          label='Hx Wellbeing Q5'
+          options={formOptions.oneToFiveSchema}
+        />
+        <h2>Rapid Positive Mental Health Instrument</h2>
         <h3>
-          Rapid Positive Mental Health Instrument
-          <br />
           Thinking over the last 4 weeks, please select a number showing how much the statements
           describe you.
         </h3>
-        1 - Not at all like me
-        <br />
-        2 - Very slightly like me
-        <br />
-        3 - Slightly like me
-        <br />
-        4 - Moderately like me
-        <br />
-        5 - Very much like me
-        <br />
-        6 - Exactly like me
-        <br />
-        <hr />
-        <span>
+        <p>
+          1 - Not at all like me
+          <br />
+          2 - Very slightly like me
+          <br />
+          3 - Slightly like me
+          <br />
+          4 - Moderately like me
+          <br />
+          5 - Very much like me
+          <br />6 - Exactly like me
+        </p>
+        <Divider />
+        <h4>
           6. <q>I spent time with people I like</q>
-        </span>
-        <RadioField name='hxWellbeingQ6' label='Hx Wellbeing Q6' />
-        <br />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ6'
+          label='Hx Wellbeing Q6'
+          options={formOptions.oneToSixSchema}
+        />
+        <h4>
           7. <q>I make friends easily</q>
-        </span>
-        <RadioField name='hxWellbeingQ7' label='Hx Wellbeing Q7' />
-        <br />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ7'
+          label='Hx Wellbeing Q7'
+          options={formOptions.oneToSixSchema}
+        />
+        <h4>
           8. <q>I try to be patient with others</q>
-        </span>
-        <RadioField name='hxWellbeingQ8' label='Hx Wellbeing Q8' />
-        <br />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ8'
+          label='Hx Wellbeing Q8'
+          options={formOptions.oneToSixSchema}
+        />
+        <h4>
           9. <q>I am willing to share my time with others</q>
-        </span>
-        <RadioField name='hxWellbeingQ9' label='Hx Wellbeing Q9' />
-        <br />
-        <span>
+        </h4>
+        <RadioField
+          name='hxWellbeingQ9'
+          label='Hx Wellbeing Q9'
+          options={formOptions.oneToSixSchema}
+        />
+        <h4>
           10. <q>I have freedom to make choices that concern my future.</q>
-        </span>
-        <RadioField name='hxWellbeingQ10' label='Hx Wellbeing Q10' />
+        </h4>
+        <RadioField
+          name='hxWellbeingQ10'
+          label='Hx Wellbeing Q10'
+          options={formOptions.oneToSixSchema}
+        />
+        <h4>11. How often in the past 4 weeks have you felt calm?</h4>
+        <RadioField
+          name='hxWellbeingQ11'
+          label='Hx Wellbeing Q11'
+          options={formOptions.hxWellbeingQ11}
+        />
         <br />
-        <span>11. How often in the past 4 weeks have you felt calm?</span>
-        <RadioField name='hxWellbeingQ11' label='Hx Wellbeing Q11' />
-        <br />
-      </Fragment>
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

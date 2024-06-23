@@ -80,10 +80,72 @@ const GeriPhysicalActivityLevelForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    geriPhysicalActivityLevelQ1: [
+      {
+        label: 'Nil',
+        value: 'Nil',
+      },
+      { label: '1-2x/ week', value: '1-2x/ week' },
+      { label: '3-4x/ week', value: '3-4x/ week' },
+      { label: '5x/ week or more', value: '5x/ week or more' },
+    ],
+    geriPhysicalActivityLevelQ2: [
+      {
+        label: 'Nil',
+        value: 'Nil',
+      },
+      { label: '<15 min', value: '<15 min' },
+      { label: '< 15-30 min', value: '< 15-30 min' },
+      { label: '30 min or more', value: '30 min or more' },
+    ],
+    geriPhysicalActivityLevelQ4: [
+      {
+        label: 'Light Intensity',
+        value: 'Light Intensity',
+      },
+      { label: 'Moderate Intensity', value: 'Moderate Intensity' },
+      { label: 'Vigorous Intensity', value: 'Vigorous Intensity' },
+      { label: 'Unsure', value: 'Unsure' },
+    ],
+    geriPhysicalActivityLevelQ5: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriPhysicalActivityLevelQ6: [
+      {
+        label: '< 150min of mod intensity per week',
+        value: '< 150min of mod intensity per week',
+      },
+      { label: 'unsure about qns 1-4', value: 'unsure about qns 1-4' },
+      { label: 'yes to qn 5', value: 'yes to qn 5' },
+      { label: 'nil - regular advice', value: 'nil - regular advice' },
+    ],
+    geriPhysicalActivityLevelQ8: [
+      {
+        label: 'No fall',
+        value: 'No fall',
+      },
+      { label: '1 fall', value: '1 fall' },
+      { label: '2 or more falls', value: '2 or more falls' },
+    ],
+    geriPhysicalActivityLevelQ9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
 
   const newForm = () => (
     <AutoForm
@@ -108,88 +170,109 @@ const GeriPhysicalActivityLevelForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>PHYSICAL ACTIVITY SECTION</h2>
+      <div className='form--div'>
+        <h1>PHYSICAL ACTIVITY SECTION</h1>
         <h2>PHYSICAL ACTIVITY LEVELS</h2>
-        <br />
-        1. How often do you exercise in a week?
-        <br />
-        *If &lt; 3x/week and would like to start exercising more, suggest physiotherapist
+        <h3>1. How often do you exercise in a week?</h3>
+        If &lt; 3x/week and would like to start exercising more, suggest physiotherapist
         consultation
-        <RadioField name='geriPhysicalActivityLevelQ1' label='Geri - Physical Activity Level Q1' />
-        <br />
-        2. How long do you exercise each time?
-        <br />
-        *If &lt; 30minutes per session and would like to increase, suggest physiotherapist
+        <RadioField
+          name='geriPhysicalActivityLevelQ1'
+          label='Geri - Physical Activity Level Q1'
+          options={formOptions.geriPhysicalActivityLevelQ1}
+        />
+        <h3>2. How long do you exercise each time?</h3>
+        If &lt; 30minutes per session and would like to increase, suggest physiotherapist
         consultation.
-        <RadioField name='geriPhysicalActivityLevelQ2' label='Geri - Physical Activity Level Q2' />
-        <br />
-        3. What do you do for exercise?
-        <br />
-        *Take down salient points. <br />
-        *Dangerous/ inappropriate exercises are defined to the participants as exercises that cause
-        pain or difficulty to to the participant in performing.
-        <br />
-        *If exercises are dangerous or deemed inappropriate, to REFER FOR PHYSIOTHERAPIST
-        CONSULATION.
+        <RadioField
+          name='geriPhysicalActivityLevelQ2'
+          label='Geri - Physical Activity Level Q2'
+          options={formOptions.geriPhysicalActivityLevelQ2}
+        />
+        <h3>3. What do you do for exercise?</h3>
+        <ul className='decrease-left-margin'>
+          <li>Take down salient points. </li>
+          <li>
+            Dangerous/ inappropriate exercises are defined to the participants as exercises that
+            cause pain or difficulty to to the participant in performing.
+          </li>
+          <li>
+            If exercises are dangerous or deemed inappropriate, to REFER FOR PHYSIOTHERAPIST
+            CONSULATION.
+          </li>
+        </ul>
         <LongTextField
           name='geriPhysicalActivityLevelQ3'
           label='Geri - Physical Activity Level Q3'
         />
-        <br />
-        4. Using the following scale, can you rate the level of exertion when you exercise?
-        <br />
+        <h3>4. Using the following scale, can you rate the level of exertion when you exercise?</h3>
         <p>
-          <b>PT to note:</b> if participant:
+          <b>PT to note:</b>
+          <br />
+          if participant:
+          <ol>
+            <li>Achieves less than 150 min moderate intensity per week OR</li>
+            <li>
+              Unsure about any of the 4 questions above. <br />
+            </li>
+          </ol>
         </p>
-        1) Achieves less than 150 min moderate intensity per week OR
-        <br />
-        2) Unsure about any of the 4 questions above. <br />
         <img src='/images/geri-physical-activity-level/intensity.jpg' alt='Intensity' /> <br />
-        <RadioField name='geriPhysicalActivityLevelQ4' label='Geri - Physical Activity Level Q4' />
-        <br />
-        5. Do you have significant difficulties going about your regular exercise regime? Or do you
-        not know how to start exercising?
-        <br />
-        <b>*If yes, to REFER FOR PHYSIOTHERAPIST CONSULATION</b>
-        <RadioField name='geriPhysicalActivityLevelQ5' label='Geri - Physical Activity Level Q5' />
-        <br />
-        6. Do you have any history of falls in the past 1 year? If yes, how many falls?
-        <br />
-        <RadioField name='geriPhysicalActivityLevelQ8' label='Geri - Physical Activity Level Q8' />
-        <br />
-        7. If yes, were any of the falls injurious?
-        <br />
-        <p>
-          If participant had 2 or more falls, or 1 fall with injury,{' '}
-          <b>REFER TO DOCTOR&apos;S CONSULTATION</b>
-        </p>
-        <RadioField name='geriPhysicalActivityLevelQ9' label='Geri - Physical Activity Level Q9' />
-        <br />
-        Please elaborate below on the injuries and whether there was medical treatment e.g. seeing
-        Dr/ED dept.
-        <br />
+        <RadioField
+          name='geriPhysicalActivityLevelQ4'
+          label='Geri - Physical Activity Level Q4'
+          options={formOptions.geriPhysicalActivityLevelQ4}
+        />
+        <h3>
+          5. Do you have significant difficulties going about your regular exercise regime? Or do
+          you not know how to start exercising?
+        </h3>
+        If yes, to{' '}
+        <b>
+          REFER FOR <span className='red'>PHYSIOTHERAPIST CONSULATION</span>
+        </b>
+        <RadioField
+          name='geriPhysicalActivityLevelQ5'
+          label='Geri - Physical Activity Level Q5'
+          options={formOptions.geriPhysicalActivityLevelQ5}
+        />
+        <h3>6. Do you have any history of falls in the past 1 year? If yes, how many falls?</h3>
+        <RadioField
+          name='geriPhysicalActivityLevelQ8'
+          label='Geri - Physical Activity Level Q8'
+          options={formOptions.geriPhysicalActivityLevelQ8}
+        />
+        <h3>7. If yes, were any of the falls injurious?</h3>
+        If participant had 2 or more falls, or 1 fall with injury,{' '}
+        <b>
+          REFER TO <span className='red'>DOCTOR&apos;S CONSULTATION</span>
+        </b>
+        <RadioField
+          name='geriPhysicalActivityLevelQ9'
+          label='Geri - Physical Activity Level Q9'
+          options={formOptions.geriPhysicalActivityLevelQ9}
+        />
+        <h4>
+          Please elaborate below on the injuries and whether there was medical treatment e.g. seeing
+          Dr/ED dept.
+        </h4>
         <LongTextField
           name='geriPhysicalActivityLevelQ10'
           label='Geri - Physical Activity Level Q10'
         />
-        <br />
-        Notes:
+        <h4>Notes:</h4>
         <LongTextField
           name='geriPhysicalActivityLevelQ7'
           label='Geri - Physical Activity Level Q7'
         />
-        <br />
-        <font color='red'>
-          <span>*Referral to Physiotherapist Consult</span>
-          <br />
-          <SelectField
-            name='geriPhysicalActivityLevelQ6'
-            checkboxes='true'
-            label='Geri - Physical Activity Level Q6'
-          />
-        </font>
-      </Fragment>
+        <h3 className='red'>Referral to Physiotherapist Consult</h3>
+        <SelectField
+          name='geriPhysicalActivityLevelQ6'
+          checkboxes='true'
+          label='Geri - Physical Activity Level Q6'
+          options={formOptions.geriPhysicalActivityLevelQ6}
+        />
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

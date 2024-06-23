@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { TextField, RadioField } from 'uniforms-material'
+import { RadioField } from 'uniforms-material'
 import { useField } from 'uniforms'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -119,6 +119,60 @@ const GeriAmtForm = (props) => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
+  const formOptions = {
+    geriAmtQ1: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ2: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ3: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ4: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ5: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ6: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ7: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ8: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ9: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ10: [
+      { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
+      { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+    ],
+    geriAmtQ11: [
+      { label: '0 to 6 years of education', value: '0 to 6 years of education' },
+      { label: 'More than 6 years of education', value: 'More than 6 years of education' },
+    ],
+    geriAmtQ12: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    geriAmtQ13: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -142,48 +196,42 @@ const GeriAmtForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2> ABBREVIATED MENTAL TEST (for dementia)</h2>
-        <br />
-        <h3>
+      <div className='form--div'>
+        <h1> ABBREVIATED MENTAL TEST (for dementia)</h1>
+        <h2>
           Please select ‘Yes’ if participant answered correctly or ‘No’ if participant answered
           incorrectly.
-        </h3>
+        </h2>
         <h3>1) What is the year? 请问今是什么年份？</h3>
         Was Q1 answered correctly?
-        <RadioField name='geriAmtQ1' />
+        <RadioField name='geriAmtQ1' options={formOptions.geriAmtQ1} />
         <br />
         <h3>
           2) About what time is it? (within 1 hour) 请问现在大约是几点钟 （一在一个小时之内）？
         </h3>
         Was Q2 answered correctly?
-        <RadioField name='geriAmtQ2' />
+        <RadioField name='geriAmtQ2' options={formOptions.geriAmtQ2} />
         <br />
         <h3>
           Ask volunteer to memorise memory phase: “ 37 Bukit Timah Road ”<br />
-          请您记住以下这个地址，
-          <br />
-          我将在数分钟后要您重复一遍：37 号， 武吉支马路
-          <br />
+          请您记住以下这个地址， 我将在数分钟后要您重复一遍：37 号， 武吉支马路
         </h3>
-        <br />
         <h3>3) What is your age? 请问您今年几岁？</h3>
         Was Q3 answered correctly?
-        <RadioField name='geriAmtQ3' />
+        <RadioField name='geriAmtQ3' options={formOptions.geriAmtQ3} />
         <br />
         <h3>4) What is your date of birth? 请问您的出生日期或生日？ • 几月 • 几号</h3>
         Was Q4 answered correctly?
-        <RadioField name='geriAmtQ4' />
-        <br />
+        <RadioField name='geriAmtQ4' options={formOptions.geriAmtQ4} />
         <h3>
           5) What is your home address?
           <br />
           请问您的（住家）地址是在什么地方？
           <br />
-          (1) 门牌;(2)几楼或哪一层; (3)大牌; (4)路名
+          (1) 门牌; (2)几楼或哪一层; (3)大牌; (4)路名
         </h3>
         Was Q5 answered correctly?
-        <RadioField name='geriAmtQ5' />
+        <RadioField name='geriAmtQ5' options={formOptions.geriAmtQ5} />
         <br />
         <h3>
           6) Where are we now? (The name of building or the nature of the building e.g. hospital,
@@ -192,52 +240,43 @@ const GeriAmtForm = (props) => {
           请问我们现在正在什么地方？（例：建筑名称或用途）
         </h3>
         Was Q6 answered correctly?
-        <RadioField name='geriAmtQ6' />
-        <br />
+        <RadioField name='geriAmtQ6' options={formOptions.geriAmtQ6} />
         <h3>
           7) Who is our country’s Prime Minister?
           <br />
           请问新加坡现任总理是哪位？
         </h3>
         Was Q7 answered correctly?
-        <RadioField name='geriAmtQ7' />
-        <br />
+        <RadioField name='geriAmtQ7' options={formOptions.geriAmtQ7} />
         <h3>
           8) What is his/her job? (show picture)
           <br />
           请问图片里的人士很有可能是从事哪种行业？
         </h3>
         Was Q8 answered correctly?
-        <RadioField name='geriAmtQ8' />
-        <br />
+        <RadioField name='geriAmtQ8' options={formOptions.geriAmtQ8} />
         <h3>9) Count backwards from 20 to 1. 请您从二十开始，倒数到一。</h3>
         Was Q9 answered correctly?
-        <RadioField name='geriAmtQ9' />
-        <br />
+        <RadioField name='geriAmtQ9' options={formOptions.geriAmtQ9} />
         <h3>10) Recall memory phase 请您把刚才我要您记住的地址重复一遍。</h3>
         Was Q10 answered correctly?
-        <RadioField name='geriAmtQ10' />
-        <br />
-        AMT Total Score: <GetScore />
-        /10
-        <br />
-        <br />
-        What is your education level?
-        <br />
+        <RadioField name='geriAmtQ10' options={formOptions.geriAmtQ10} />
+        <h4>
+          AMT Total Score: <GetScore />
+          /10
+        </h4>
+        <h3>What is your education level?</h3>
         <img src='/images/geri-amt/edu.png' alt='Education' /> <br />
-        <RadioField name='geriAmtQ11' />
-        <br />
-        Need referral to G-RACE for MMSE?
-        <RadioField name='geriAmtQ12' />
-        Referred to G-RACE for MMSE?
-        <RadioField name='geriAmtQ13' />
-        <br />
-      </Fragment>
+        <RadioField name='geriAmtQ11' options={formOptions.geriAmtQ11} />
+        <h3>Need referral to G-RACE for MMSE?</h3>
+        <RadioField name='geriAmtQ12' options={formOptions.geriAmtQ12} />
+        <h3>Referred to G-RACE for MMSE?</h3>
+        <RadioField name='geriAmtQ13' options={formOptions.geriAmtQ13} />
+      </div>
 
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )

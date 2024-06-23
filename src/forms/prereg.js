@@ -47,15 +47,13 @@ export const layout = (
     <LongTextField name='age' showInlineError />
     <h3>Preferred Language (e.g. English)</h3>
     <LongTextField name='preferredLanguage' showInlineError />
-    <br />
     <h3>Going for Phlebotomy?</h3>
-    <i>
-      Conditions:
-      <br />
-      1) NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.
-      <br />
-      2) Have not done a blood test within the past 3 years.
-    </i>
+    <br />
+    Conditions:
+    <ol type='A'>
+      <li>NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.</li>
+      <li>Have not done a blood test within the past 3 years.</li>
+    </ol>
     <RadioField
       name='goingForPhlebotomy'
       options={[

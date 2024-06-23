@@ -51,6 +51,27 @@ const GeriAudiometryPreScreeningForm = (props) => {
     }
     loadForms()
   }, [])
+
+  const formOptions = {
+    geriPreAudiometryQ1: [
+      { label: 'Yes (go to Q2)', value: 'Yes (go to Q2)' },
+      { label: 'No (skip Q2, go to Q3)', value: 'No (skip Q2, go to Q3)' },
+    ],
+    geriPreAudiometryQ2: [
+      {
+        label: 'Yes (To skip hearing test & refer to polyclinic or specialist if any)',
+        value: 'Yes (To skip hearing test & refer to polyclinic or specialist if any)',
+      },
+      { label: 'No (To skip hearing test)', value: 'No (To skip hearing test)' },
+    ],
+    geriPreAudiometryQ3: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -74,32 +95,37 @@ const GeriAudiometryPreScreeningForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <br />
-        <h2>AUDIOMETRY PRE-SCREENING</h2>
-        1. Are you currently wearing hearing aid(s)?
-        <RadioField name='geriPreAudiometryQ1' label='geriPreAudiometry - Q1' />
-        <br />
-        2. Please answer the following
+      <div className='form--div'>
+        <h1>AUDIOMETRY PRE-SCREENING</h1>
+        <h3>1. Are you currently wearing hearing aid(s)?</h3>
+        <RadioField
+          name='geriPreAudiometryQ1'
+          label='geriPreAudiometry - Q1'
+          options={formOptions.geriPreAudiometryQ1}
+        />
+        <h3>2. Please answer the following</h3>
         <ol type='a' style={{ listStylePosition: 'inside' }}>
           <li>Have you had your hearing aids for more than 5 years?</li>
           <li>Has it been 3 years or more since you last used your hearing aids?</li>
           <li>Are your hearing aids spoilt/not working?</li>
         </ol>
-        <br />
-        If participant answered yes to any of of the questions, tick yes below.
-        <br />
+        <h4>If participant answered yes to any of of the questions, tick yes below.</h4>
         If no to all question, tick no below.
-        <RadioField name='geriPreAudiometryQ2' label='geriPreAudiometry - Q2' />
-        <br />
-        3. Do you think you have a hearing problem?
-        <RadioField name='geriPreAudiometryQ3' label='geriPreAudiometry - Q3' />
-        <br />
-      </Fragment>
+        <RadioField
+          name='geriPreAudiometryQ2'
+          label='geriPreAudiometry - Q2'
+          options={formOptions.geriPreAudiometryQ2}
+        />
+        <h3>3. Do you think you have a hearing problem?</h3>
+        <RadioField
+          name='geriPreAudiometryQ3'
+          label='geriPreAudiometry - Q3'
+          options={formOptions.geriPreAudiometryQ3}
+        />
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
-      <br />
       <Divider />
     </AutoForm>
   )

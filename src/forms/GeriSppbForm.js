@@ -107,10 +107,70 @@ const GeriSppbForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    geriSppbQ2: [
+      {
+        label: '0       (If not able to complete 5 chair stands)',
+        value: '0       (If not able to complete 5 chair stands)',
+      },
+      { label: '1       (> 16.7s )', value: '1       (> 16.7s )' },
+      { label: '2       (16.6 – 13.7s )', value: '2       (16.6 – 13.7s )' },
+      { label: '3       (13.6 – 11.2s )', value: '3       (13.6 – 11.2s )' },
+      { label: '4       (< 11.1s )', value: '4       (< 11.1s )' },
+    ],
+    geriSppbQ6: [
+      {
+        label: '0        (Side by side < 10s or unable)',
+        value: '0        (Side by side < 10s or unable)',
+      },
+      {
+        label: '1       (Side by side 10s AND < 10s semi tandem)',
+        value: '1       (Side by side 10s AND < 10s semi tandem)',
+      },
+      {
+        label: '2       (Semi tandem 10s AND tandem < 3s)',
+        value: '2       (Semi tandem 10s AND tandem < 3s)',
+      },
+      {
+        label: '3       (Semi tandem 10s AND tandem < 10s but > 3s)',
+        value: '3       (Semi tandem 10s AND tandem < 10s but > 3s)',
+      },
+      { label: '4       (Tandem >= 10s)', value: '4       (Tandem >= 10s)' },
+      { label: 'Refused to do', value: 'Refused to do' },
+    ],
+    geriSppbQ8: [
+      {
+        label: '0       (Could not do)',
+        value: '0       (Could not do)',
+      },
+      { label: '1       (> 6.52s )', value: '1       (> 6.52s )' },
+      { label: '2       (4.66 – 6.52s )', value: '2       (4.66 – 6.52s )' },
+      { label: '3       (3.62 – 4.65s )', value: '3       (3.62 – 4.65s )' },
+      { label: '4       (< 3.62s )', value: '4       (< 3.62s )' },
+    ],
+    geriSppbQ10: [
+      {
+        label: 'High Fall Risk (0-3)',
+        value: 'High Fall Risk (0-3)',
+      },
+      { label: 'Moderate Fall Risk (4-9)', value: 'Moderate Fall Risk (4-9)' },
+      { label: 'Low Fall Risk (10-12)', value: 'Low Fall Risk (10-12)' },
+    ],
+    geriSppbQ11: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -134,71 +194,47 @@ const GeriSppbForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>SHORT PHYSICAL PERFORMANCE BATTERY (SPPB)</h2>
-        <br />
-        1) REPEATED CHAIR STANDS
-        <br />
-        Time taken in seconds (only if 5 chair stands were completed):
+      <div className='form--div'>
+        <h1>SHORT PHYSICAL PERFORMANCE BATTERY (SPPB)</h1>
+        <h3>1) REPEATED CHAIR STANDS</h3>
+        <h4>Time taken in seconds (only if 5 chair stands were completed):</h4>
         <NumField name='geriSppbQ1' label='Geri - SPPB Q1' />
-        <br />
-        Number of chairs completed:
+        <h4>Number of chairs completed:</h4>
         <NumField name='geriSppbQ13' label='Geri - SPPB Q13' />
-        <br />
-        <font color='blue'>
-          <b>
-            Score for REPEATED CHAIR STANDS (out of 4):
-            <RadioField name='geriSppbQ2' label='Geri - SPPB Q2' />
-          </b>
-        </font>
-        <br />
-        2a) BALANCE Side-by-side Stand <br />
-        Time held for in seconds:
+        <h4 className='blue'>
+          Score for REPEATED CHAIR STANDS (out of 4):
+          <RadioField name='geriSppbQ2' label='Geri - SPPB Q2' options={formOptions.geriSppbQ2} />
+        </h4>
+        <h3>2a) BALANCE Side-by-side Stand Time held for in seconds:</h3>
         <NumField name='geriSppbQ3' label='Geri - SPPB Q3' />
-        <br />
-        2b) BALANCE Semi-tandem Stand <br />
-        Time held for in seconds:
+        <h3>2b) BALANCE Semi-tandem Stand</h3>
+        <h4>Time held for in seconds:</h4>
         <NumField name='geriSppbQ4' label='Geri - SPPB Q4' />
-        <br />
-        2c) BALANCE Tandem Stand <br />
-        Time held for in seconds:
+        <h3>2c) BALANCE Tandem Stand</h3>
+        <h4>Time held for in seconds:</h4>
         <NumField name='geriSppbQ5' label='Geri - SPPB Q5' />
-        <br />
-        <font color='blue'>
-          <b>
-            Score for BALANCE (out of 4):
-            <RadioField name='geriSppbQ6' label='Geri - SPPB Q6' />
-          </b>
-        </font>
-        <br />
-        3) 3m WALK <br />
-        Time taken in seconds:
+        <h4 className='blue'>
+          Score for BALANCE (out of 4):
+          <RadioField name='geriSppbQ6' label='Geri - SPPB Q6' options={formOptions.geriSppbQ6} />
+        </h4>
+        <h3>3) 3m WALK </h3>
+        <h4>Time taken in seconds:</h4>
         <NumField name='geriSppbQ7' label='Geri - SPPB Q7' />
-        <br />
-        <font color='blue'>
-          <b>
-            Score for 3m WALK (out of 4):
-            <RadioField name='geriSppbQ8' label='Geri - SPPB Q8' />
-          </b>
-        </font>
-        <br />
-        <h3>
-          <font color='blue'>
-            Total score (Max Score: 12):
-            <GetSppbScore />
-          </font>
+        <h4 className='blue'>
+          Score for 3m WALK (out of 4):
+          <RadioField name='geriSppbQ8' label='Geri - SPPB Q8' options={formOptions.geriSppbQ8} />
+        </h4>
+        <h3 className='blue'>
+          Total score (Max Score: 12):
+          <GetSppbScore />
         </h3>
-        <br />
-        Fall Risk Level:
-        <RadioField name='geriSppbQ10' label='Geri - SPPB Q10' />
-        <br />
-        <font color='red'>*Referral to Physiotherapist and Occupational Therapist Consult</font>
-        <RadioField name='geriSppbQ11' label='Geri - SPPB Q11' />
-        <br />
-        Notes:
+        <h3>Fall Risk Level:</h3>
+        <RadioField name='geriSppbQ10' label='Geri - SPPB Q10' options={formOptions.geriSppbQ10} />
+        <h3 className='red'>Referral to Physiotherapist and Occupational Therapist Consult</h3>
+        <RadioField name='geriSppbQ11' label='Geri - SPPB Q11' options={formOptions.geriSppbQ11} />
+        <h3>Notes:</h3>
         <LongTextField name='geriSppbQ12' label='Geri - SPPB Q12' />
-        <br />
-      </Fragment>
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
