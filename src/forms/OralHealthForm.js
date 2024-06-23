@@ -13,7 +13,6 @@ import { SubmitField, ErrorsField, TextField } from 'uniforms-material'
 import { BoolField } from 'uniforms-material'
 import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
 import './fieldPadding.css'
@@ -183,7 +182,7 @@ const OralHealthForm = () => {
               <h2>Hearing problems</h2>
               <p className='underlined'>Hearing Problems</p>
               {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ8}</p> : null}
-              {hxHcsr && hxHcsr.hxHcsrQ9 ? blueText(hxHcsr.hxHcsrQ9) : null}
+              {hxHcsr && hxHcsr.hxHcsrQ9 ? <p className='blue'>{hxHcsr.hxHcsrQ9}</p> : null}
               <Divider />
               <h2>Past Medical History</h2>
               <p className='underlined'>Summary of Relevant Past Medical History</p>

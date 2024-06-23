@@ -15,9 +15,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import Grid from '@mui/material/Grid'
-import { blueText, title, underlined } from '../theme/commonComponents'
 import allForms from './forms.json'
-import { blue } from '@mui/material/colors'
 
 const schema = new SimpleSchema({
   socialServiceQ1: {

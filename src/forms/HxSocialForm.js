@@ -17,7 +17,6 @@ import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
   hxSocialQ1: {

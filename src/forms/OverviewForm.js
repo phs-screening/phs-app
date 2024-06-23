@@ -5,17 +5,15 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-material'
-import { LongTextField, BoolField } from 'uniforms-material'
 import { submitForm, calculateBMI } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { title, underlined, blueText } from '../theme/commonComponents'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
+import './forms.css'
 
 const schema = new SimpleSchema({
   socialServiceQ1: {
@@ -97,9 +95,9 @@ const OverviewForm = (props) => {
       {loadingPrevData ? (
         <CircularProgress />
       ) : (
-        <div>
-          {title('Health Concerns')}
-          {underlined('Summarised reasons for referral to Doctor Consultation')}
+        <div className='summary--question-div'>
+          <h2>Health Concerns</h2>
+          <p className='underlined'>Summarised reasons for referral to Doctor Consultation</p>
           {hcsr ? hcsr.hxHcsrQ2 : null}
         </div>
       )}

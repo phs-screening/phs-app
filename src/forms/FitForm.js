@@ -16,7 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
-import { blueText } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
   fitQ2: {
@@ -107,7 +106,11 @@ const FitForm = (props) => {
           (A colonoscopy is an examination in which a tube is inserted in the rectum to view the
           colon for signs of cancer or other health problems.)
         </p>
-        {hxCancer && hxCancer.hxCancerQ6 ? blueText(hxCancer.hxCancerQ6) : blueText('nil')}
+        {hxCancer && hxCancer.hxCancerQ6 ? (
+          <p className='blue'>{hxCancer.hxCancerQ6}</p>
+        ) : (
+          <p className='blue'>nil</p>
+        )}
         <h4 className='red'>
           Please encourage participants to go for FIT every year if participant is above 50,
           asymptomatic and no positive family history of colorectal cancer in first degree relatives

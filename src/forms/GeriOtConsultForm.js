@@ -15,7 +15,6 @@ import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import allForms from './forms.json'
 import Grid from '@mui/material/Grid'
-import { blueText, title, underlined } from '../theme/commonComponents'
 
 const schema = new SimpleSchema({
   geriOtConsultQ1: {
