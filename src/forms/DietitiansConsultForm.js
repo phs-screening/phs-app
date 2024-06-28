@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -9,8 +9,8 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField } from 'uniforms-material'
-import { LongTextField, BoolField } from 'uniforms-material'
+import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
+import { LongTextField, BoolField } from 'uniforms-mui'
 import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -252,8 +252,4 @@ const DietitiansConsultForm = (props) => {
 
 DietitiansConsultForm.contextType = FormContext
 
-export default function DietitiansConsultform(props) {
-  const navigate = useNavigate()
-
-  return <DietitiansConsultForm {...props} navigate={navigate} />
-}
+export default DietitiansConsultForm

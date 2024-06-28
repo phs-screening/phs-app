@@ -29,8 +29,7 @@ const NavItem = ({ href, icon: Icon, title, shouldDisable, ...rest }) => {
         disabled={shouldDisable}
         component={RouterLink}
         sx={{
-          //TODO: change this temp color after removing uniforms library
-          color: '#3f51b5',
+          color: 'text.secondary',
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,

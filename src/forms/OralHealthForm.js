@@ -9,8 +9,15 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, TextField } from 'uniforms-material'
-import { BoolField } from 'uniforms-material'
+import {
+  SubmitField,
+  ErrorsField,
+  TextField,
+  SelectField,
+  RadioField,
+  LongTextField,
+} from 'uniforms-mui'
+import { BoolField } from 'uniforms-mui'
 import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -18,17 +25,38 @@ import allForms from './forms.json'
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
-  oralHealthQ1: {
-    type: Boolean,
-    label: 'Yes',
+  DENT1: {
+    type: Array,
+    optional: false,
+  },
+  'DENT1.$': {
+    type: String,
+    allowedValues: ['I have been informed and understand.'],
+  },
+  DENT2: {
+    type: String,
+    allowedValues: ['Yes, (please specify)', 'No'],
+    optional: false,
+  },
+  DENTShortAns2: {
+    type: String,
     optional: true,
   },
-  oralHealthQ2: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
+  DENT3: {
+    type: Array,
+    optional: false,
   },
-  oralHealthQ3: {
+  'DENT3.$': {
+    type: String,
+    allowedValues: ['Yes'],
+    optional: false,
+  },
+  DENT4: {
+    type: String,
+    allowedValues: ['Yes, No, (specify why)'],
+    optional: false,
+  },
+  DENTShortAns4: {
     type: String,
     optional: true,
   },
@@ -42,44 +70,32 @@ const OralHealthForm = () => {
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
-  // forms to retrieve for side panel
-  const [doctorConsult, setDoctorConsult] = useState({})
-  const [hxSocial, sethxSocial] = useState({})
-  const [hxHcsr, setHxHcsr] = useState({})
-  const [geriOt, setGeriOt] = useState({})
-  const [hxNss, setHxNss] = useState({})
-  const [hxCancer, setHxCancer] = useState({})
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
-    const loadPastForms = async () => {
-      const doctorsConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-      const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-      const hxHcsrData = getSavedData(patientId, allForms.hxHcsrForm)
-      const geriOtData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
-      const hxNssData = getSavedData(patientId, allForms.hxNssForm)
-      const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
-
-      Promise.all([
-        doctorsConsultData,
-        hxSocialData,
-        hxHcsrData,
-        geriOtData,
-        hxNssData,
-        hxCancerData,
-      ]).then((result) => {
-        setDoctorConsult(result[0])
-        sethxSocial(result[1])
-        setHxHcsr(result[2])
-        setGeriOt(result[3])
-        setHxNss(result[4])
-        setHxCancer(result[5])
-      })
-
-      isLoadingSidePanel(false)
-    }
     setSaveData(savedData)
-    loadPastForms()
   }, [])
+  const formOptions = {
+    DENT1: [
+      {
+        label: 'I have been informed and understand.',
+        value: 'I have been informed and understand.',
+      },
+    ],
+    DENT2: [
+      {
+        label: 'Yes, (please specify)',
+        value: 'Yes, (please specify)',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    DENT4: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No, (specify why)', value: 'No, (specify why)' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -104,12 +120,65 @@ const OralHealthForm = () => {
     >
       <div className='form--div'>
         <h1>Oral Health</h1>
-        <h3>Will participant undergo follow-up by NUS Dentistry?</h3>
-        <BoolField name='oralHealthQ1' />
-        <h3>Completed Oral Health station. Please check that Form A is filled.</h3>
-        <BoolField name='oralHealthQ2' />
-        <h3>Notes:</h3>
-        <TextField name='oralHealthQ3' />
+        <h3>I have been informed and understand that: </h3>
+        <p>
+          <ol type='a'>
+            <li>
+              The oral health screening may be provided by clinical instructors <br />
+              AND/OR postgraduate dental students who are qualified dentists <br />
+              AND/OR undergraduate dental students who are not qualified dentists
+              <ul>
+                <li>
+                  ALL undergraduate dental students will be supervised by a clinical instructor
+                  and/or postgraduate dental student.
+                </li>
+              </ul>
+            </li>
+            <li>
+              The Oral Health Screening only provides a basic assessment of my/my ward&apos;s oral
+              health condtion and that it does not take the place of a thorough oral health
+              examination.
+            </li>
+            <li>
+              I/My ward will be advised on the type(s) of follow-up dental treatment required for
+              my/my ward&apos;s oral health condition after the Oral Health Screening.
+              <ul>
+                <li>
+                  I/My ward will be responsible to seek such follow-up dental treatment as advised
+                  at my/myward&apos; own cost.
+                </li>
+              </ul>
+            </li>
+            <li>
+              My decision to participate/let my ward participate in this Oral Health Screening is
+              voluntary.
+            </li>
+          </ol>
+        </p>
+        <SelectField
+          appearance='checkbox'
+          checkboxes
+          name='DENT1'
+          label='DENT1'
+          options={formOptions.DENT1}
+        />
+        <h3>Are you on any blood thinners or have any bleeding disorders?</h3>
+        <RadioField name='DENT2' label='DENT2' options={formOptions.DENT2} />
+        <h4>Please specify:</h4>
+        <LongTextField name='DENTShortAns2' label='DENT2' />
+        <h3>Patient has completed Oral Health station.</h3>
+        <SelectField
+          appearance='checkbox'
+          checkboxes
+          name='DENT3'
+          label='DENT3'
+          options={formOptions.DENT1}
+        />
+        <h3>Patient has registered with NUS Dentistry for follow-up. If no, why not.</h3>
+        <RadioField name='DENT4' label='DENT4' options={formOptions.DENT4} />
+        <h4>Please specify:</h4>
+        <LongTextField name='DENTShortAns4' label='DENT4' />
+        <br />
       </div>
 
       <ErrorsField />
@@ -122,157 +191,7 @@ const OralHealthForm = () => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      <Grid display='flex' flexDirection='row'>
-        <Grid xs={9}>
-          <Paper elevation={2} p={0} m={0}>
-            {newForm()}
-          </Paper>
-        </Grid>
-        <Grid
-          p={1}
-          width='50%'
-          display='flex'
-          flexDirection='column'
-          alignItems={loadingSidePanel ? 'center' : 'left'}
-        >
-          {loadingSidePanel ? (
-            <CircularProgress />
-          ) : (
-            <div className='summary--question-div'>
-              <h2>Referral from Docto&apos;s Consult </h2>
-              <p className='underlined'>Reasons for referral:</p>
-              {doctorConsult && doctorConsult.doctorSConsultQ8 ? (
-                <p className='blue'>{doctorConsult.doctorSConsultQ8.toString()}</p>
-              ) : null}
-              {doctorConsult ? <p className='blue'>{doctorConsult.doctorSConsultQ9}</p> : null}
-              <Divider />
-              <h2>Referral from History Taking </h2>
-              <p className='underlined'>Participant&apos;s Oral Health Brief Assessment:</p>
-              {hxSocial ? <p className='blue'>{hxSocial.hxSocialQ13}</p> : null}
-              {hxSocial ? <p className='blue'>{hxSocial.hxSocialQ15}</p> : null}
-              <p className='underlined'>Interest in Oral Health Screening: </p>
-              {hxSocial ? <p className='blue'>{hxSocial.hxSocialQ14}</p> : null}
-              <Divider />
-              <h2>Health Concerns</h2>
-              <p className='underlined'>Requires scrutiny by doctor? </p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ11}</p> : null}
-              <p className='underlined'>Summarised reasons for referral to Doctor Consultation</p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ2}</p> : null}
-              <Divider />
-              <h2>Systems Review</h2>
-              <p className='underlined'>Requires scrutiny by doctor? </p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ12}</p> : null}
-              <p className='underlined'>Summarised systems review</p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ3}</p> : null}
-              <Divider />
-              <h2>Urinary/Faecal incontinence</h2>
-              <p className='underlined'>Urinary/Faecal incontinence</p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ4}</p> : null}
-              {hxHcsr && hxHcsr.hxHcsrQ5 ? <p className='blue'>{hxHcsr.hxHcsrQ5}</p> : null}
-              <p className='underlined'>
-                Urinary Incontinence or nocturia (at least 3 or more times at night)?
-              </p>
-              {geriOt ? <p className='blue'>{geriOt.geriOtQuestionnaireQ6}</p> : null}
-              <Divider />
-              <h2>Vision problems</h2>
-              <p className='underlined'>Vision Problems</p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ6}</p> : null}
-              {hxHcsr && hxHcsr.hxHcsrQ7 ? <p className='blue'>{hxHcsr.hxHcsrQ7}</p> : null}
-              <Divider />
-              <h2>Hearing problems</h2>
-              <p className='underlined'>Hearing Problems</p>
-              {hxHcsr ? <p className='blue'>{hxHcsr.hxHcsrQ8}</p> : null}
-              {hxHcsr && hxHcsr.hxHcsrQ9 ? <p className='blue'>{hxHcsr.hxHcsrQ9}</p> : null}
-              <Divider />
-              <h2>Past Medical History</h2>
-              <p className='underlined'>Summary of Relevant Past Medical History</p>
-              {hxNss && hxNss.hxNssQ12 ? (
-                <p className='blue'>{hxNss.hxNssQ12}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Drug allergies?</p>
-              {hxNss && hxNss.hxNssQ1 ? (
-                <p className='blue'>{hxNss.hxNssQ1.toString()}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              {hxNss && hxNss.hxNssQ2 ? (
-                <p className='blue'>{hxNss.hxNssQ2.toString()}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Currently on any alternative medicine?</p>
-              {hxNss && hxNss.hxNssQ9 ? (
-                <p className='blue'>{hxNss.hxNssQ9.toString()}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              {hxNss && hxNss.hxNssQ10 ? (
-                <p className='blue'>{hxNss.hxNssQ10.toString()}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <Divider />
-              <h2>Smoking History</h2>
-              <p className='underlined'>Smoking frequency</p>
-              {hxNss ? <p className='blue'>{hxNss.hxNssQ14}</p> : null}
-              <p className='underlined'>Pack years:</p>
-              {hxNss ? <p className='blue'>{hxNss.hxNssQ3}</p> : null}
-              <Divider />
-              <h2>Alcohol history</h2>
-              <p className='underlined'>Alcohol consumption</p>
-              {hxNss ? <p className='blue'>{hxNss.hxNssQ15}</p> : null}
-              <Divider />
-              <h2>Family History</h2>
-              {hxCancer && hxCancer.hxCancerQ10 ? (
-                <p className='blue'>{hxCancer.hxCancerQ10}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <Divider />
-              <h2>Blood Pressure</h2>
-              <p className='underlined'>Requires scrutiny by doctor?</p>
-              {hxCancer && hxCancer.hxCancerQ27 ? (
-                <p className='blue'>{hxCancer.hxCancerQ27}</p>
-              ) : null}
-              <p className='underlined'>
-                Dizziness on standing up from a seated or laid down position?
-              </p>
-              {geriOt && geriOt.geriOtQuestionnaireQ5 ? (
-                <p className='blue'>{geriOt.geriOtQuestionnaireQ5}</p>
-              ) : null}
-              <p className='underlined'>Average Blood Pressure</p>
-              {hxCancer && hxCancer.hxCancerQ17 ? (
-                <p className='blue'>Average Reading Systolic: {hxCancer.hxCancerQ17}</p>
-              ) : null}
-              {hxCancer && hxCancer.hxCancerQ18 ? (
-                <p className='blue'>Average Reading Diastolic: {hxCancer.hxCancerQ18}</p>
-              ) : null}
-              <Divider />
-              <h2>BMI</h2>
-              <p className='underlined'>Requires scrutiny by doctor?</p>
-              {hxCancer && hxCancer.hxCancerQ23 ? (
-                <p className='blue'>{hxCancer.hxCancerQ23.toString()}</p>
-              ) : (
-                <p className='blue'>no</p>
-              )}
-              <p className='underlined'>BMI</p>
-              {hxCancer && hxCancer.hxCancerQ19 ? (
-                <p className='blue'>Height: {hxCancer.hxCancerQ19} cm</p>
-              ) : null}
-              {hxCancer && hxCancer.hxCancerQ20 ? (
-                <p className='blue'>Weight: {hxCancer.hxCancerQ20} kg</p>
-              ) : null}
-              {hxCancer && hxCancer.hxCancerQ19 && hxCancer.hxCancerQ20 ? (
-                <p className='blue'>BMI: {formatBmi(hxCancer.hxCancerQ19, hxCancer.hxCancerQ20)}</p>
-              ) : null}
-              <p className='underlined'>Waist circumference (cm)</p>
-              {hxCancer ? <p className='blue'>{hxCancer.hxCancerQ24}</p> : null}
-            </div>
-          )}
-        </Grid>
-      </Grid>
+      {newForm()}
     </Paper>
   )
 }

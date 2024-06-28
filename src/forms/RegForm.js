@@ -1,4 +1,4 @@
-import React, { createRef, Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -16,8 +16,7 @@ import {
   TextField,
   BoolField,
   DateField,
-  NumField,
-} from 'uniforms-material'
+} from 'uniforms-mui'
 import CircularProgress from '@mui/material/CircularProgress'
 import { submitForm, submitRegClinics } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -25,6 +24,7 @@ import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import './forms.css'
 import { useField } from 'uniforms'
+import PopupText from 'src/utils/popupText.js'
 
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
@@ -60,6 +60,7 @@ const RegForm = () => {
   const [loading, isLoading] = useState(false)
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
+  const [birthday, setBirthday] = useState(new Date())
   const [slots, setSlots] = useState(defaultSlots)
 
   useEffect(async () => {
@@ -73,11 +74,8 @@ const RegForm = () => {
         temp[postalCode] -= counterItems.length
       }
     }
-    if (!savedData.registrationQ4) {
-      savedData.registrationQ4 = new Date()
-    }
+    savedData.registrationQ3 = birthday
     setSlots(temp)
-
     setSaveData(savedData)
   }, [])
 
@@ -99,7 +97,7 @@ const RegForm = () => {
   }
 
   const GetAge = () => {
-    const [{ value: birthday }] = useField('registrationQ4', {})
+    const [{ value: birthday }] = useField('registrationQ3', {})
     const today = new Date()
     if (birthday) {
       var age = today.getFullYear() - birthday.getFullYear()
@@ -107,6 +105,7 @@ const RegForm = () => {
       if (monthDiff < 0 || (monthDiff == 0 && today.getDate() < birthday.getDate())) {
         age--
       }
+      setBirthday(birthday)
       return <p className='blue'>{age}</p>
     }
     return null
@@ -118,14 +117,14 @@ const RegForm = () => {
       { label: 'Mrs', value: 'Mrs' },
       { label: 'Dr', value: 'Dr' },
     ],
-    registrationQ6: [
+    registrationQ5: [
       {
         label: 'Male',
         value: 'Male',
       },
       { label: 'Female', value: 'Female' },
     ],
-    registrationQ7: [
+    registrationQ6: [
       {
         label: 'Chinese 华裔',
         value: 'Chinese 华裔',
@@ -135,21 +134,21 @@ const RegForm = () => {
       { label: 'Eurasian 欧亚裔', value: 'Eurasian 欧亚裔' },
       { label: 'Others 其他', value: 'Others 其他' },
     ],
-    registrationQ8: [
+    registrationQ7: [
       { label: 'Singapore Citizen 新加坡公民', value: 'Singapore Citizen 新加坡公民' },
       {
         label: 'Singapore Permanent Resident (PR) \n新加坡永久居民',
         value: 'Singapore Permanent Resident (PR) \n新加坡永久居民',
       },
     ],
-    registrationQ9: [
+    registrationQ8: [
       { label: 'Single 单身', value: 'Single 单身' },
       { label: 'Married 已婚', value: 'Married 已婚' },
       { label: 'Widowed 已寡', value: 'Widowed 已寡' },
       { label: 'Separated 已分居', value: 'Separated 已分居' },
       { label: 'Divorced 已离婚', value: 'Divorced 已离婚' },
     ],
-    registrationQ11: [
+    registrationQ10: [
       { label: 'Jurong', value: 'Jurong' },
       { label: 'Yuhua', value: 'Yuhua' },
       { label: 'Bukit Batok', value: 'Bukit Batok' },
@@ -158,7 +157,7 @@ const RegForm = () => {
       { label: 'Hong Kah North', value: 'Hong Kah North' },
       { label: 'Others', value: 'Others' },
     ],
-    registrationQ12: [
+    registrationQ11: [
       {
         label: 'Yes',
         value: 'Yes',
@@ -166,18 +165,18 @@ const RegForm = () => {
       { label: 'No', value: 'No' },
       { label: 'Unsure', value: 'Unsure' },
     ],
-    registrationQ13: [
+    registrationQ12: [
       { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'CHAS Green', value: 'CHAS Green' },
       { label: 'CHAS Blue', value: 'CHAS blue' },
       { label: 'No CHAS', value: 'No CHAS' },
     ],
-    registrationQ14: [
+    registrationQ13: [
       { label: 'Pioneer generation card holder', value: 'Pioneer generation card holder' },
       { label: 'Merdeka generation card holder', value: 'Merdeka generation card holder' },
       { label: 'None', value: 'None' },
     ],
-    registrationQ15: [
+    registrationQ14: [
       { label: 'English', value: 'English' },
       { label: 'Mandarin', value: 'Mandarin' },
       { label: 'Malay', value: 'Malay' },
@@ -191,41 +190,43 @@ const RegForm = () => {
       <h3>Salutation 称谓</h3>
       <SelectField name='registrationQ1' options={formOptions.registrationQ1} />
       <h3>Initials (E.g. Alan Simon Lee as S.L Alan)</h3>
-      <LongTextField name='registrationQ3' />
+      <LongTextField name='registrationQ2' />
       <h3>Birthday</h3>
-      <DateField name='registrationQ4' type='date' />
+      <DateField name='registrationQ3' type='date' />
       <h3>Age</h3>
       <GetAge />
       <h3>Gender</h3>
-      <RadioField name='registrationQ6' options={formOptions.registrationQ6} />
+      <RadioField name='registrationQ5' options={formOptions.registrationQ5} />
       <h3>Race 种族</h3>
-      <RadioField name='registrationQ7' options={formOptions.registrationQ7} />
-      <LongTextField name='registrationQ20' />
+      <RadioField name='registrationQ6' options={formOptions.registrationQ6} />
+      <PopupText qnNo='registrationQ6' triggerValue='Others 其他'>
+        <LongTextField name='registrationShortAnsQ6' />
+      </PopupText>
       <h3>Nationality 国籍</h3>
-      <p className='paragraph--title'>
+      <p>
         Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this health
         screening
       </p>
-      <RadioField name='registrationQ8' options={formOptions.registrationQ8} />
+      <RadioField name='registrationQ7' options={formOptions.registrationQ7} />
       <h3>Marital Status 婚姻状况</h3>
-      <SelectField name='registrationQ9' options={formOptions.registrationQ9} />
+      <SelectField name='registrationQ8' options={formOptions.registrationQ8} />
       <h3>Occupation 工作</h3>
-      <TextField name='registrationQ10' />
+      <TextField name='registrationQ9' />
       <h3>
         GRC/SMC Subdivision{' '}
         <a href='https://www.parliament.gov.sg/mps/find-my-mp' target='_blank' rel='noreferrer'>
           [https://www.parliament.gov.sg/mps/find-my-mp]
         </a>
       </h3>
-      <SelectField name='registrationQ11' options={formOptions.registrationQ11} />
+      <SelectField name='registrationQ10' options={formOptions.registrationQ10} />
       <h3>Are you currently part of HealthierSG?</h3>
-      <RadioField name='registrationQ12' options={formOptions.registrationQ12} />
+      <RadioField name='registrationQ11' options={formOptions.registrationQ11} />
       <h3>CHAS Status 社保援助计划</h3>
-      <SelectField name='registrationQ13' options={formOptions.registrationQ13} />
+      <SelectField name='registrationQ12' options={formOptions.registrationQ12} />
       <h3> Pioneer Generation Status 建国一代配套</h3>
-      <RadioField name='registrationQ14' options={formOptions.registrationQ14} />
+      <RadioField name='registrationQ13' options={formOptions.registrationQ13} />
       <h3>Preferred Language for Health Report</h3>
-      <RadioField name='registrationQ15' options={formOptions.registrationQ15} />
+      <RadioField name='registrationQ14' options={formOptions.registrationQ14} />
       <h2>Phlebotomy Eligibility</h2>{' '}
       <p>
         {' '}
@@ -248,7 +249,7 @@ const RegForm = () => {
         <br />
         2) 没有糖尿病, 高血压, 高胆固醇。
       </p>
-      <BoolField name='registrationQ12' />
+      <BoolField name='registrationQ15' />
       <br />
       <h2>Compliance to PDPA 同意书</h2>
       <p>
@@ -267,7 +268,7 @@ const RegForm = () => {
         will only be disseminated to members of the PHS Executive Committee, and will be strictly
         used by these parties for the purposes stated.
       </p>
-      <BoolField name='registrationQ13' />
+      <BoolField name='registrationQ16' />
       <h2>Follow up at GP Clinics</h2>
       <p>
         Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you
@@ -279,7 +280,7 @@ const RegForm = () => {
       </h4>
       <br />
       {displayVacancy}
-      <RadioField name='registrationQ10' options={displayLocations()} />
+      <RadioField name='registrationQ18' options={displayLocations()} />
     </div>
   )
   const form_layout = layout
@@ -296,24 +297,16 @@ const RegForm = () => {
       optional: false,
     },
     registrationQ3: {
-      type: String,
-      optional: false,
-    },
-    registrationQ4: {
       defaultValue: new Date(),
       type: Date,
       optional: false,
     },
     registrationQ5: {
-      type: Number,
-      optional: false,
-    },
-    registrationQ6: {
       type: String,
       allowedValues: ['Male', 'Female'],
       optional: false,
     },
-    registrationQ7: {
+    registrationQ6: {
       type: String,
       allowedValues: [
         'Chinese 华裔',
@@ -324,7 +317,7 @@ const RegForm = () => {
       ],
       optional: false,
     },
-    registrationQ8: {
+    registrationQ7: {
       type: String,
       allowedValues: [
         'Singapore Citizen 新加坡公民',
@@ -332,7 +325,7 @@ const RegForm = () => {
       ],
       optional: false,
     },
-    registrationQ9: {
+    registrationQ8: {
       type: String,
       allowedValues: [
         'Single 单身',
@@ -343,11 +336,11 @@ const RegForm = () => {
       ],
       optional: false,
     },
-    registrationQ10: {
+    registrationQ9: {
       type: String,
       optional: false,
     },
-    registrationQ11: {
+    registrationQ10: {
       type: String,
       allowedValues: [
         'Jurong',
@@ -360,43 +353,45 @@ const RegForm = () => {
       ],
       optional: false,
     },
-    registrationQ12: {
+    registrationQ11: {
       type: String,
       allowedValues: ['Yes', 'No', 'Unsure'],
       optional: false,
     },
-    registrationQ13: {
+    registrationQ12: {
       type: String,
       allowedValues: ['CHAS Orange', 'CHAS Green', 'CHAS Blue', 'No CHAS'],
       optional: false,
     },
-    registrationQ14: {
+    registrationQ13: {
       type: String,
       allowedValues: ['Pioneer generation card holder', 'Merdeka generation card holder', 'None'],
       optional: false,
     },
-    registrationQ19: {
+    //locations
+    registrationQ18: {
       type: String,
       allowedValues: Object.values(postalCodeToLocations),
       optional: true,
     },
-    registrationQ15: {
+    registrationQ14: {
       type: String,
       allowedValues: ['English', 'Mandarin', 'Malay', 'Tamil'],
       optional: false,
     },
-    registrationQ16: {
+    registrationQ15: {
       type: Boolean,
       label:
         'I have read and acknowledged the eligibility criteria for Phlebotomy. 我知道抽血的合格标准。',
       optional: false,
     },
-    registrationQ17: {
+    registrationQ16: {
       type: Boolean,
       label: 'I agree and consent to the above.',
       optional: false,
     },
-    registrationQ20: {
+    //race: other
+    registrationShortAnsQ6: {
       type: String,
       optional: true,
     },
@@ -418,8 +413,10 @@ const RegForm = () => {
 
           // Note we check on the backend if no slots left
           const counterResponse = await submitRegClinics(postalCode, patientId)
+          console.log(counterResponse)
           // Update counters by checking previous selection
           if (!counterResponse.result) {
+            console.log('fail')
             isLoading(false)
             setTimeout(() => {
               alert(`Unsuccessful. ${counterResponse.error}`)

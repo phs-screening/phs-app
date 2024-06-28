@@ -9,8 +9,8 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { LongTextField, BoolField } from 'uniforms-material'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { LongTextField, BoolField } from 'uniforms-mui'
 import { submitForm, formatBmi, calculateSppbScore } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -164,17 +164,17 @@ const DoctorSConsultForm = () => {
         <LongTextField name='doctorSConsultQ3' label="Doctor's Consult Q3" />
         <h3>Refer to dietitian?</h3>
         <BoolField name='doctorSConsultQ4' />
-        <h3>Reason for referral</h3>
+        <h4>Reason for referral</h4>
         <LongTextField name='doctorSConsultQ5' label="Doctor's Consult Q5" />
         <h3>Refer to Social Support?</h3>
         <BoolField name='doctorSConsultQ6' />
-        <h3>Reason for referral</h3>
+        <h4>Reason for referral</h4>
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
         <h3>Refer to SACS? (and indicated on Form A)</h3>
         <BoolField name='doctorSConsultQ13' />
         <h3>Refer to Dental?</h3>
         <BoolField name='doctorSConsultQ8' />
-        <h3>Reason for referral</h3>
+        <h4>Reason for referral</h4>
         <LongTextField name='doctorSConsultQ9' label="Doctor's Consult Q9" />
         <h3>Does patient require urgent follow up</h3>
         <BoolField name='doctorSConsultQ10' />

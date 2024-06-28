@@ -5,32 +5,37 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { submitForm } from '../api/api.js'
+import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
+import { LongTextField, BoolField } from 'uniforms-mui'
+import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { BoolField } from 'uniforms-mui'
 import { getSavedData } from '../services/mongoDB'
+import allForms from './forms.json'
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
-  phlebotomyQ1: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
+  NKF1: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
   },
-  phlebotomyQ2: {
-    type: Boolean,
-    label: 'Yes',
+  NKF2: {
+    type: String,
+    optional: false,
+  },
+  //q1 short ans
+  NKF3: {
+    type: String,
     optional: true,
   },
 })
 
-const formName = 'phlebotomyForm'
-
-const PhleboForm = () => {
+const formName = 'nkfForm'
+const NkfForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -42,6 +47,16 @@ const PhleboForm = () => {
 
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    NKF1: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
 
   const newForm = () => (
     <AutoForm
@@ -65,15 +80,18 @@ const PhleboForm = () => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>Phlebotomy</h1>
-        <h3>Blood sample collected?</h3>
-        <BoolField name='phlebotomyQ1' />
-        <h3>Circled &apos;Completed&apos; under Phlebotomy on Form A?</h3>
-        <BoolField name='phlebotomyQ2' />
-        <br />
+        <h1>NKF</h1>
+        <h3>Patient has booked an appointment for kidney screen on NKF website.</h3>
+        <RadioField name='NKF1' label='NKF1' options={formOptions.NKF1} />
+        <h3>Details of Kidney Screen (Date, Time)</h3>
+        <p>
+          Write in this format: 16th January, 2024 at 3PM
+          <LongTextField name='NKF2' label='NKF2' />
+        </p>
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+
       <br />
       <Divider />
     </AutoForm>
@@ -86,6 +104,6 @@ const PhleboForm = () => {
   )
 }
 
-PhleboForm.contextType = FormContext
+NkfForm.contextType = FormContext
 
-export default PhleboForm
+export default NkfForm

@@ -1,3 +1,8 @@
+.fieldPadding { 
+  display: flex; 
+  flex-direction: column;
+  padding: 5px 15px 15px 15px;
+}
 .question--text {
   margin-bottom: -3px;
 }

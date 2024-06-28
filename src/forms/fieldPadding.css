@@ -1,18 +1,4 @@
 .fieldPadding { display: flex; flex-direction: column;
   padding: 5px 15px 15px 15px;
 }
-.MuiButtonBase-root {
-  text-transform: none !important;
-  justify-content: flex-start  !important;
-  margin-left: 8px !important;
-  margin-right: 8px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0 !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
-  font-family: Roboto, Helvetica, Arial, sans-serif !important;
-  font-size: 1rem !important;
-  line-height: 1.75 !important;
-  min-width: 64px !important;
-}
 

@@ -8,8 +8,8 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { NumField, RadioField, BoolField } from 'uniforms-material'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { NumField, RadioField } from 'uniforms-mui'
 import { useField } from 'uniforms'
 import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -304,8 +304,4 @@ const TriageForm = () => {
 TriageForm.contextType = FormContext
 
 // Note the capitalisation
-export default function Triageform(props) {
-  const navigate = useNavigate()
-
-  return <TriageForm {...props} navigate={navigate} />
-}
+export default TriageForm

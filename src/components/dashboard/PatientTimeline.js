@@ -15,7 +15,6 @@ import { Box, Card, CardContent, CardHeader, Divider } from '@mui/material'
 // Refactor the generateStatusArray to generate an object instead
 function generateStatusObject(record) {
   const recordStatus = {
-    prereg: true,
     reg: false,
     triage: false,
     phlebo: false,
@@ -32,7 +31,6 @@ function generateStatusObject(record) {
 
   if (record) {
     return {
-      prereg: true, // pre-registration, always true
       reg: record.registrationForm !== undefined, // registration
       triage: record.triageForm !== undefined, // triage
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
@@ -118,25 +116,6 @@ const BasicTimeline = (props) => {
   } else {
     return (
       <Timeline>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot color='primary' />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            {admin ? (
-              <a
-                href='/app/prereg'
-                onClick={(event) => navigateTo(event, navigate, 'prereg', scrollTop)}
-              >
-                Pre-Registration [Edit]
-              </a>
-            ) : (
-              'Pre-Registration [Completed]'
-            )}
-          </TimelineContent>
-        </TimelineItem>
-
         <TimelineItem>
           <TimelineSeparator>
             {formDone?.reg ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}

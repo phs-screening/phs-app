@@ -7,8 +7,8 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, LongTextField, SelectField } from 'uniforms-material'
-import { RadioField } from 'uniforms-material'
+import { SubmitField, ErrorsField, LongTextField, SelectField } from 'uniforms-mui'
+import { RadioField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -315,10 +315,10 @@ const GeriAudiometryForm = (props) => {
           label='geriAudiometry - Q11'
           options={formOptions.geriAudiometryQ11}
         />
-        <h4>
+        <h3>
           Please document significant findings from audiometry test and recommended course of action
           for participant:
-        </h4>
+        </h3>
         <LongTextField name='geriAudiometryQ12' label='geriAudiometry - Q12' />
         <RadioField
           name='geriAudiometryQ13'
@@ -395,6 +395,4 @@ const GeriAudiometryForm = (props) => {
 
 GeriAudiometryForm.contextType = FormContext
 
-export default function GeriAudiometryform(props) {
-  return <GeriAudiometryForm {...props} />
-}
+export default GeriAudiometryForm

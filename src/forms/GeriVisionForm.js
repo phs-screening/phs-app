@@ -7,8 +7,8 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { LongTextField, SelectField, RadioField, NumField } from 'uniforms-material'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { LongTextField, SelectField, RadioField, NumField } from 'uniforms-mui'
 import PopupText from 'src/utils/popupText'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -274,6 +274,4 @@ const GeriVisionForm = (props) => {
 
 GeriVisionForm.contextType = FormContext
 
-export default function GeriVisionform(props) {
-  return <GeriVisionForm {...props} />
-}
+export default GeriVisionForm

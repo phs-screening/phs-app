@@ -185,27 +185,29 @@ const Login = () => {
                   <Button
                     color='primary'
                     // disabled={isSubmitting}
+                    fullWidth
                     size='large'
                     type='submit'
                     variant='contained'
                   >
                     {loading ? 'Logging in...' : 'Sign in now'}
                   </Button>
-                  {accountOption === accountOptions[1] && (
-                    <Button
-                      color='primary'
-                      // disabled={isSubmitting}
-                      size='large'
-                      type='button'
-                      variant='contained'
-                      onClick={() => {
-                        handleReset(values)
-                      }}
-                    >
-                      Reset Password
-                    </Button>
-                  )}
                 </Box>
+                {accountOption === accountOptions[1] && (
+                  <Button
+                    color='primary'
+                    // disabled={isSubmitting}
+                    fullWidth
+                    size='large'
+                    type='button'
+                    variant='contained'
+                    onClick={() => {
+                      handleReset(values)
+                    }}
+                  >
+                    Reset Password
+                  </Button>
+                )}
               </form>
             )}
           </Formik>
