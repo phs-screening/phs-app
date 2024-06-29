@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -9,39 +8,44 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { TextField, RadioField, LongTextField } from 'uniforms-mui'
+import { useField } from 'uniforms'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { BoolField } from 'uniforms-mui'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
+import { useNavigate } from 'react-router'
 
 const schema = new SimpleSchema({
-  phlebotomyQ1: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
-  },
-  phlebotomyQ2: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
+  VAX1: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
   },
 })
 
-const formName = 'phlebotomyForm'
+const formName = 'vaccineForm'
 
-const PhleboForm = () => {
+const VaccineForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const navigate = useNavigate()
-
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
-
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    VAX1: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
 
   const newForm = () => (
     <AutoForm
@@ -51,30 +55,30 @@ const PhleboForm = () => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
+          const event = null // not interested in this value
+          isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
+          isLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }
-        isLoading(false)
       }}
       model={saveData}
     >
       <div className='form--div'>
-        <h1>Phlebotomy</h1>
-        <h3>Blood sample collected?</h3>
-        <BoolField name='phlebotomyQ1' />
-        <h3>Circled &apos;Completed&apos; under Phlebotomy on Form A?</h3>
-        <BoolField name='phlebotomyQ2' />
+        <h1>Vaccination</h1>
+        <h3>You have signed up for your complimentary influenza vaccination.</h3>
+        <RadioField name='VAX1' label='VAX1' options={formOptions.VAX1} />
         <br />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-      <br />
+
       <Divider />
     </AutoForm>
   )
@@ -86,6 +90,6 @@ const PhleboForm = () => {
   )
 }
 
-PhleboForm.contextType = FormContext
+VaccineForm.contextType = FormContext
 
-export default PhleboForm
+export default VaccineForm

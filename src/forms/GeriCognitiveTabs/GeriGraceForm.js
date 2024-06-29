@@ -1,69 +1,73 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SimpleSchema from 'simpl-schema'
-
-import { AutoForm } from 'uniforms'
-import { LongTextField, RadioField } from 'uniforms-mui'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
+import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import { submitForm } from '../api/api.js'
-import { FormContext } from '../api/utils.js'
+import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { getSavedData } from '../services/mongoDB'
-import './fieldPadding.css'
-import allForms from './forms.json'
-import PopupText from 'src/utils/popupText.js'
+import { AutoForm } from 'uniforms'
+import { SubmitField, ErrorsField, LongTextField } from 'uniforms-mui'
+import { RadioField } from 'uniforms-mui'
+import { submitForm } from '../../api/api.js'
+import { FormContext } from '../../api/utils.js'
+import { getSavedData } from '../../services/mongoDB'
+import '../fieldPadding.css'
+import '../forms.css'
 
 const schema = new SimpleSchema({
-  fitQ1: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  fitShortAnsQ1: {
+  GRACE1: {
     type: String,
     optional: true,
   },
-  fitQ2: {
+  GRACE2: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
-  fitShortAnsQ2: {
+  GRACE3: {
+    type: String,
+    optional: true,
+  },
+  GRACE4: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  GRACE5: {
     type: String,
     optional: true,
   },
 })
 
-const formName = 'fitForm'
-const FitForm = (props) => {
+const formName = 'geriGraceForm'
+
+const GeriGraceForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
-  const [hxCancer, setHxCancer] = useState({})
-
   useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
+    const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
-
   const formOptions = {
-    fitQ1: [
-      { label: 'Yes', value: 'Yes' },
+    GRACE2: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
       { label: 'No', value: 'No' },
     ],
-    fitQ2: [
-      { label: 'Yes', value: 'Yes' },
+    GRACE4: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
       { label: 'No', value: 'No' },
     ],
   }
-
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -72,10 +76,11 @@ const FitForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
+          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
+            changeTab(event, nextTab)
           }, 80)
         } else {
           isLoading(false)
@@ -87,21 +92,20 @@ const FitForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>FIT</h1>
-        <h3>Does the patient have any gastrointestinal symptoms?</h3>
-        <RadioField name='fitQ1' label='fitQ1' options={formOptions.fitQ1} />
-        <h4>Please specify:</h4>
-        <LongTextField name='fitShortAnsQ1' label='fitQ1' />
-        <h3>Sign-up for FIT home delivery</h3>
-        <RadioField name='fitQ2' label='fitQ2' options={formOptions.fitQ2} />
-        <PopupText qnNo='fitQ2' triggerValue='No'>
-          <p>
-            <h4>If no, why?</h4>
-            <LongTextField name='fitShortAnsQ2' label='fitQ2' />
-          </p>
-        </PopupText>
+        <h1>G-RACE</h1>
+        <h3>MMSE score (_/_):</h3>
+        <LongTextField name='GRACE1' label='GRACE1' />
+        <h3>Need referral to G-RACE associated polyclinics/partners?</h3>
+        <RadioField name='GRACE2' label='GRACE2' options={formOptions.GRACE2} />
+        <h3>Polyclinic:</h3>
+        <LongTextField name='GRACE3' label='GRACE3' />
+        <h3>Referral to Doctor&apos;s Consult?</h3>
+        <p>For geri patients who may be depressed</p>
+        <RadioField name='GRACE4' label='GRACE4' options={formOptions.GRACE4} />
+        <h3>Reason for referral: </h3>
+        <LongTextField name='GRACE5' label='GRACE5' />
+        <br />
       </div>
-
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
@@ -116,6 +120,6 @@ const FitForm = (props) => {
   )
 }
 
-FitForm.contextType = FormContext
+GeriGraceForm.contextType = FormContext
 
-export default FitForm
+export default GeriGraceForm

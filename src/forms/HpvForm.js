@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { BoolField } from 'uniforms-mui'
@@ -16,21 +16,16 @@ import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
-  phlebotomyQ1: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
-  },
-  phlebotomyQ2: {
-    type: Boolean,
-    label: 'Yes',
-    optional: true,
+  SOCIAL16: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
   },
 })
 
-const formName = 'phlebotomyForm'
+const formName = 'hpvForm'
 
-const PhleboForm = () => {
+const HpvForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -42,6 +37,16 @@ const PhleboForm = () => {
 
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    SOCIAL16: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
 
   const newForm = () => (
     <AutoForm
@@ -65,12 +70,13 @@ const PhleboForm = () => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>Phlebotomy</h1>
-        <h3>Blood sample collected?</h3>
-        <BoolField name='phlebotomyQ1' />
-        <h3>Circled &apos;Completed&apos; under Phlebotomy on Form A?</h3>
-        <BoolField name='phlebotomyQ2' />
-        <br />
+        <h1>On-Site HPV Testing</h1>
+        <h3>Are you sexually active, have you engaged in sexual intercourse?</h3>
+        <p>
+          We are asking this so that we know if you are eligible and interested for Pap Smear,
+          provided free and on-the-spot
+          <RadioField name='SOCIAL16' label='SOCIAL16' options={formOptions.SOCIAL16} />
+        </p>
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
@@ -86,6 +92,4 @@ const PhleboForm = () => {
   )
 }
 
-PhleboForm.contextType = FormContext
-
-export default PhleboForm
+export default HpvForm

@@ -1,5 +1,5 @@
+import React from 'react'
 import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
-import { blueText, redText, blueRedText } from 'src/theme/commonComponents.js'
 import { jsPDF } from 'jspdf'
 import { defaultSlots } from 'src/forms/RegForm'
 
@@ -275,18 +275,35 @@ export async function upsertIndividualFormData(userID, form_name, form_data) {
 }
 
 // Calcuates the BMI
-export function calculateBMI(heightInCm, weightInKg) {
-  const height = heightInCm / 100
-  const bmi = (weightInKg / height / height).toFixed(1).toString()
+export function formatBmi(heightInCm, weightInKg) {
+  const bmi = calculateBmi(heightInCm, weightInKg)
 
   if (bmi > 27.5) {
-    return redText(bmi + '\nBMI is obese')
+    return (
+      <p className='summary--red-text'>
+        {bmi}
+        <br />
+        BMI is obese
+      </p>
+    )
   } else if (bmi >= 23.0) {
-    return redText(bmi + '\nBMI is overweight')
+    return (
+      <p className='summary--red-text'>
+        {bmi}
+        <br />
+        BMI is overweight
+      </p>
+    )
   } else if (bmi < 18.5) {
-    return redText(bmi + '\nBMI is underweight')
+    return (
+      <p className='summary--red-text'>
+        {bmi}
+        <br />
+        BMI is underweight
+      </p>
+    )
   } else {
-    return blueText(bmi)
+    return <p className='summary--blue-text'>{bmi}</p>
   }
 }
 
@@ -298,27 +315,33 @@ export function calculateBmi(heightInCm, weightInKg) {
 }
 
 // Formats the response for the geri vision section
-export function formatGeriVision(acuity, questionNo) {
-  const acuityInNumber = Number(acuity)
+export const formatGeriVision = (acuityString, questionNo) => {
+  const acuity = parseInt(acuityString)
+  if (acuity >= 6) {
+    return <p className='summary--red-text'>{parseGeriVision(acuity, questionNo)}</p>
+  }
+  if (questionNo === 6) {
+    return <p className='summary--red-text'>{parseGeriVision(acuity, questionNo)}</p>
+  }
+  return <p className='summary--blue-text'>{parseGeriVision(acuity, questionNo)}</p>
+}
+export function parseGeriVision(acuity, questionNo) {
   var result
   var additionalInfo
 
   switch (questionNo) {
     case 3:
     case 4:
-      if (acuityInNumber >= 6) {
+      if (acuity >= 6) {
         additionalInfo = '\nSee VA with pinhole'
-        result = 'Visual acuity (w/o pinhole occluder) - Right Eye 6/' + acuity
-        result = redText(result + additionalInfo)
+        result = 'Visual acuity (w/o pinhole occluder) - Right Eye 6/' + acuity + additionalInfo
       } else {
         result = 'Visual acuity (w/o pinhole occluder) - Left Eye 6/' + acuity
-        result = blueText(result)
       }
-
       return result
     case 5:
     case 6:
-      if (acuityInNumber >= 6) {
+      if (acuity >= 6) {
         result = 'Visual acuity (with pinhole occluder) - Right Eye 6/' + acuity
         additionalInfo = '\nNon-refractive error, participant should have consulted on-site doctor'
       } else {
@@ -326,18 +349,24 @@ export function formatGeriVision(acuity, questionNo) {
         additionalInfo =
           '\nRefractive error, participant can opt to apply for Senior Mobility Fund (SMF)'
       }
-      result = redText(result + additionalInfo)
-
+      result = result + additionalInfo
       return result
   }
 }
 
-export function formatWceStation(gender, question, answer) {
+export const formatWceStation = (gender, question, answer) => {
   if (gender == 'Male' || gender == 'Not Applicable') {
     return '-'
   }
-
-  var result = answer
+  return (
+    <div>
+      <p className='summary--blue-text'>{parseWceStation(question, answer).result}</p>
+      <p className='summary--red-text'>{parseWceStation(question, answer).additionalInfo}</p>
+    </div>
+  )
+}
+export function parseWceStation(question, answer) {
+  var result = { result: answer, additionalInfo: null }
   var additionalInfo
   switch (question) {
     case 2:
@@ -362,8 +391,8 @@ export function formatWceStation(gender, question, answer) {
       }
       break
   }
+  result.additionalInfo = additionalInfo
 
-  result = blueRedText(result, additionalInfo)
   return result
 }
 

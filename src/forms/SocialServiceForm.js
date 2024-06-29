@@ -8,16 +8,14 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, BoolField } from 'uniforms-material'
-import { RadioField, LongTextField } from 'uniforms-material'
+import { SubmitField, ErrorsField, BoolField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitFormSpecial } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import Grid from '@mui/material/Grid'
-import { blueText, title, underlined } from '../theme/commonComponents'
 import allForms from './forms.json'
-import { blue } from '@mui/material/colors'
 
 const schema = new SimpleSchema({
   socialServiceQ1: {
@@ -102,6 +100,16 @@ const SocialServiceForm = (props) => {
     })
   }, [])
 
+  const formOptions = {
+    socialServiceQ1: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -124,26 +132,35 @@ const SocialServiceForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
+      <div className='form--div'>
         <h1>Social Service Station</h1>
-        1. Has the participant visited the social service station?
-        <RadioField name='socialServiceQ1' label='Social Service Q1' />
-        2. Brief summary of the participant&apos;s concerns
+        <h3>1. Has the participant visited the social service station?</h3>
+        <RadioField
+          name='socialServiceQ1'
+          label='Social Service Q1'
+          options={formOptions.socialServiceQ1}
+        />
+        <h3>2. Brief summary of the participant&apos;s concerns</h3>
         <LongTextField name='socialServiceQ2' label='Social Service Q2' />
-        3. Brief summary of what will be done for the participant (Eg name of scheme participant
-        wants to apply for)
+        <h3>
+          3. Brief summary of what will be done for the participant (Eg name of scheme participant
+          wants to apply for)
+        </h3>
         <LongTextField name='socialServiceQ3' label='Social Service Q3' />
-        5. Is follow-up required?
+        <h3>5. Is follow-up required?</h3>
         <BoolField name='socialServiceQ4' />
-        6. Brief summary of follow-up for the participant
+        <h3>6. Brief summary of follow-up for the participant</h3>
         <LongTextField name='socialServiceQ5' label='Social Service Q5' />
-        7. Completed application for HDB EASE?
+        <h3>7. Completed application for HDB EASE?</h3>
         <BoolField name='socialServiceQ7' />
-        8. Completed CHAS application?
+        <h3>8. Completed CHAS application?</h3>
         <BoolField name='socialServiceQ8' />
-        9. If application is unsuccessful, document the reasons below and further follow-up action.
+        <h3>
+          9. If application is unsuccessful, document the reasons below and further follow-up
+          action.
+        </h3>
         <LongTextField name='socialServiceQ9' label='Social Service Q9' />
-      </Fragment>
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
@@ -162,7 +179,7 @@ const SocialServiceForm = (props) => {
         </Grid>
         <Grid
           p={1}
-          width='30%'
+          width='50%'
           display='flex'
           flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
@@ -170,72 +187,151 @@ const SocialServiceForm = (props) => {
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
-            <div>
-              {title('Financial Status')}
-              {underlined('CHAS Status')}
-              {reg && reg.registrationQ8 ? blueText(reg.registrationQ8) : blueText('nil')}
-              {underlined('Pioneer/ Merdeka Generation Status')}
-              {reg && reg.registrationQ9 ? blueText(reg.registrationQ9) : blueText('nil')}
-              {underlined('Is the participant on any Government Financial Assistance?')}
-              {hxSocial && hxSocial.hxSocialQ1 ? blueText(hxSocial.hxSocialQ1) : blueText('nil')}
-              {hxSocial && hxSocial.hxSocialQ2 ? blueText(hxSocial.hxSocialQ2) : blueText('no')}
-              {underlined('Household Income Per Month')}
-              {hxSocial && hxSocial.hxSocialQ3 ? blueText(hxSocial.hxSocialQ3) : blueText('nil')}
-              {underlined('Number of Household Members (Including Participant)')}
-              {hxSocial && hxSocial.hxSocialQ4 ? blueText(hxSocial.hxSocialQ4) : blueText('nil')}
-              {underlined('Interest in CHAS Card Application')}
-              {hxSocial && hxSocial.hxSocialQ5 ? blueText(hxSocial.hxSocialQ5) : blueText('nil')}
-              {hxSocial && hxSocial.hxSocialQ6 ? blueText(hxSocial.hxSocialQ6) : blueText('nil')}
-              {underlined(
-                'Does the participant need advice on financial schemes in Singapore or financial assistance?',
+            <div className='summary--question-div'>
+              <h2>Financial Status</h2>
+              <p className='underlined'>CHAS Status</p>
+              {reg && reg.registrationQ8 ? (
+                <p className='blue'>{reg.registrationQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
-              {hxSocial && hxSocial.hxSocialQ7 ? blueText(hxSocial.hxSocialQ7) : blueText('nil')}
-              {hxSocial && hxSocial.hxSocialQ8 ? blueText(hxSocial.hxSocialQ8) : blueText('nil')}
-              {title('Social Issues')}
-              {underlined('Is the participant caring for a loved one')}
-              {hxSocial && hxSocial.hxSocialQ9 ? blueText(hxSocial.hxSocialQ9) : blueText('nil')}
-              {underlined('Does the participant require caregiver training?')}
-              {hxSocial && hxSocial.hxSocialQ10 ? blueText(hxSocial.hxSocialQ10) : blueText('nil')}
-              {underlined('Does the participant need assistance in caring for a loved one?')}
-              {hxSocial && hxSocial.hxSocialQ11 ? blueText(hxSocial.hxSocialQ11) : blueText('nil')}
-              {underlined('Does the participant require social support?')}
-              {hxSocial && hxSocial.hxSocialQ12 ? blueText(hxSocial.hxSocialQ12) : blueText('nil')}
-              {title('Referrals')}
-              {underlined("Reasons for referral from Doctor's Consult:")}
-              {doctorConsult && doctorConsult.doctorSConsultQ6
-                ? blueText(doctorConsult.doctorSConsultQ6.toString())
-                : blueText('nil')}
-              {doctorConsult && doctorConsult.doctorSConsultQ6 && doctorConsult.doctorSConsultQ7
-                ? blueText(doctorConsult.doctorSConsultQ7)
-                : blueText('nil')}
-              {underlined('Failed EBAS-DEP?')}
-              {geriEbas && geriEbas.geriEbasDepQ10
-                ? blueText(geriEbas.geriEbasDepQ10)
-                : blueText('nil')}
-              {underlined('Potential financial/ family difficulties?')}
-              {geriEbas && geriEbas.geriEbasDepQ11
-                ? blueText(geriEbas.geriEbasDepQ11)
-                : blueText('nil')}
-              {underlined('Reasons for referral from Geri-EBAS & AMT:')}
-              {geriEbas && geriEbas.geriEbasDepQ12
-                ? blueText(geriEbas.geriEbasDepQ12)
-                : blueText('nil')}
-              {underlined('Reasons for referral from OT consult')}
-              {geriOt && geriOt.geriOtConsultQ5
-                ? blueText(geriOt.geriOtConsultQ5)
-                : blueText('nil')}
-              {underlined('Reasons for referral from PT consult')}
-              {geriPt && geriPt.geriPtConsultQ5
-                ? blueText(geriPt.geriPtConsultQ5)
-                : blueText('nil')}
-              {underlined('Referred to Social Service for HDB EASE application?')}
-              {underlined('Functional Assessment Report completed?')}
-              {doctorConsult && doctorConsult.doctorSConsultQ12
-                ? blueText(doctorConsult.doctorSConsultQ12.toString())
-                : blueText('nil')}
-              {underlined(
-                "Participant signed up for SWCDC's Safe & Sustainable Homes (Geri Appointment)?",
+              <p className='underlined'>Pioneer/ Merdeka Generation Status</p>
+              {reg && reg.registrationQ9 ? (
+                <p className='blue'>{reg.registrationQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
               )}
+              <p className='underlined'>
+                Is the participant on any Government Financial Assistance?
+              </p>
+              {hxSocial && hxSocial.hxSocialQ1 ? (
+                <p className='blue'>{hxSocial.hxSocialQ1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.hxSocialQ2 ? (
+                <p className='blue'>{hxSocial.hxSocialQ2}</p>
+              ) : (
+                <p className='blue'>no</p>
+              )}
+              <p className='underlined'>Household Income Per Month</p>
+              {hxSocial && hxSocial.hxSocialQ3 ? (
+                <p className='blue'>{hxSocial.hxSocialQ3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Number of Household Members (Including Participant)</p>
+              {hxSocial && hxSocial.hxSocialQ4 ? (
+                <p className='blue'>{hxSocial.hxSocialQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Interest in CHAS Card Application</p>
+              {hxSocial && hxSocial.hxSocialQ5 ? (
+                <p className='blue'>{hxSocial.hxSocialQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.hxSocialQ6 ? (
+                <p className='blue'>{hxSocial.hxSocialQ6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Does the participant need advice on financial schemes in Singapore or financial
+                assistance?
+              </p>
+              {hxSocial && hxSocial.hxSocialQ7 ? (
+                <p className='blue'>{hxSocial.hxSocialQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.hxSocialQ8 ? (
+                <p className='blue'>{hxSocial.hxSocialQ8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <Divider />
+              <h2>Social Issues</h2>
+              <p className='underlined'>Is the participant caring for a loved one</p>
+              {hxSocial && hxSocial.hxSocialQ9 ? (
+                <p className='blue'>{hxSocial.hxSocialQ9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Does the participant require caregiver training?</p>
+              {hxSocial && hxSocial.hxSocialQ10 ? (
+                <p className='blue'>{hxSocial.hxSocialQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Does the participant need assistance in caring for a loved one?
+              </p>
+              {hxSocial && hxSocial.hxSocialQ11 ? (
+                <p className='blue'>{hxSocial.hxSocialQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Does the participant require social support?</p>
+              {hxSocial && hxSocial.hxSocialQ12 ? (
+                <p className='blue'>{hxSocial.hxSocialQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <Divider />
+              <h2>Referrals</h2>
+              <p className='underlined'>Reasons for referral from Doctor&apos;s Consult:</p>
+              {doctorConsult && doctorConsult.doctorSConsultQ6 ? (
+                <p className='blue'>{doctorConsult.doctorSConsultQ6.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {doctorConsult && doctorConsult.doctorSConsultQ6 && doctorConsult.doctorSConsultQ7 ? (
+                <p className='blue'>{doctorConsult.doctorSConsultQ7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Failed EBAS-DEP?</p>
+              {geriEbas && geriEbas.geriEbasDepQ10 ? (
+                <p className='blue'>{geriEbas.geriEbasDepQ10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Potential financial/ family difficulties?</p>
+              {geriEbas && geriEbas.geriEbasDepQ11 ? (
+                <p className='blue'>{geriEbas.geriEbasDepQ11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Reasons for referral from Geri-EBAS & AMT:</p>
+              {geriEbas && geriEbas.geriEbasDepQ12 ? (
+                <p className='blue'>{geriEbas.geriEbasDepQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Reasons for referral from OT consult</p>
+              {geriOt && geriOt.geriOtConsultQ5 ? (
+                <p className='blue'>{geriOt.geriOtConsultQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Reasons for referral from PT consult</p>
+              {geriPt && geriPt.geriPtConsultQ5 ? (
+                <p className='blue'>{geriPt.geriPtConsultQ5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Referred to Social Service for HDB EASE application?</p>
+              <p className='underlined'>Functional Assessment Report completed?</p>
+              {doctorConsult && doctorConsult.doctorSConsultQ12 ? (
+                <p className='blue'>{doctorConsult.doctorSConsultQ12.toString()}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Participant signed up for SWCDC&apos;s Safe & Sustainable Homes (Geri Appointment)?
+              </p>
             </div>
           )}
         </Grid>

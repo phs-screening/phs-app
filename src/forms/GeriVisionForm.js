@@ -7,8 +7,8 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-material'
-import { LongTextField, SelectField, RadioField, NumField } from 'uniforms-material'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { LongTextField, SelectField, RadioField, NumField } from 'uniforms-mui'
 import PopupText from 'src/utils/popupText'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -95,6 +95,62 @@ const GeriVisionForm = (props) => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
   }, [])
+
+  const formOptions = {
+    geriVisionQ1: [
+      {
+        label: 'Yes (Specify in textbox )',
+        value: 'Yes (Specify in textbox )',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriVisionQ7: [
+      {
+        label: 'CF2M',
+        value: 'CF2M',
+      },
+      { label: 'CF1M', value: 'CF1M' },
+      { label: 'HM', value: 'HM' },
+      { label: 'LP', value: 'LP' },
+      { label: 'NLP', value: 'NLP' },
+      { label: 'NIL', value: 'NIL' },
+    ],
+    geriVisionQ8: [
+      {
+        label: 'Refractive',
+        value: 'Refractive',
+      },
+      { label: 'Non-refractive', value: 'Non-refractive' },
+      { label: 'None', value: 'None' },
+    ],
+    geriVisionQ9: [
+      {
+        label: "Referred to Doctor's Consult",
+        value: "Referred to Doctor's Consult",
+      },
+    ],
+    geriVisionQ10: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriVisionQ12: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    geriVisionQ13: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+  }
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -118,49 +174,61 @@ const GeriVisionForm = (props) => {
       }}
       model={saveData}
     >
-      <Fragment>
-        <h2>VISION SCREENING</h2>
-        <br />
-        <h3>Non-Refractive Error</h3>
-        <br />
-        1. Previous eye condition or surgery
-        <RadioField name='geriVisionQ1' label='Geri - Vision Q1' />
+      <div className='form--div'>
+        <h1>VISION SCREENING</h1>
+        <h2>Non-Refractive Error</h2>
+        <h3>1. Previous eye condition or surgery</h3>
+        <RadioField
+          name='geriVisionQ1'
+          label='Geri - Vision Q1'
+          options={formOptions.geriVisionQ1}
+        />
         <PopupText qnNo='geriVisionQ1' triggerValue='Yes (Specify in textbox )'>
-          <Fragment>
-            Explanation
-            <LongTextField name='geriVisionQ2' label='Geri - Vision Q2' />
-          </Fragment>
+          <h4>Explanation</h4>
+          <LongTextField name='geriVisionQ2' label='Geri - Vision Q2' />
         </PopupText>
-        <br />
-        2. Visual acuity (w/o pinhole occluder) - Right Eye 6/__ <br />
+        <h3>
+          2. Visual acuity (w/o pinhole occluder) - Right Eye 6/__ <br />
+        </h3>
         <NumField name='geriVisionQ3' label='Geri - Vision Q3' /> <br />
-        3. Visual acuity (w/o pinhole occluder) - Left Eye 6/__ <br />
+        <h3>
+          3. Visual acuity (w/o pinhole occluder) - Left Eye 6/__ <br />
+        </h3>
         <NumField name='geriVisionQ4' label='Geri - Vision Q4' /> <br />
-        4. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__ <br />
+        <h3>
+          4. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__ <br />
+        </h3>
         <NumField name='geriVisionQ5' label='Geri - Vision Q5' /> <br />
-        5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__ <br />
+        <h3>
+          5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__ <br />
+        </h3>
         <NumField name='geriVisionQ6' label='Geri - Vision Q6' /> <br />
-        6. Is participant currently on any eye review/ consulting any eye specialist?
-        <RadioField name='geriVisionQ10' label='Geri - Vision Q10' />
-        Please specify:
+        <h3>6. Is participant currently on any eye review/ consulting any eye specialist?</h3>
+        <RadioField
+          name='geriVisionQ10'
+          label='Geri - Vision Q10'
+          options={formOptions.geriVisionQ10}
+        />
+        <h4>Please specify:</h4>
         <LongTextField name='geriVisionQ11' label='Geri - Vision Q11' />
-        <br /> <p>7. Type of vision error?</p>
-        <RadioField name='geriVisionQ8' label='Geri - Vision Q8' />
-        <br />{' '}
-        <p>
-          Please <b>refer to Doctor’s Consult if pinhole</b> visual acuity is{' '}
-          <b>
-            <u>worse than 6/12</u>
-          </b>
-        </p>
-        <br />
-        <SelectField name='geriVisionQ9' checkboxes='true' label='Geri - Vision Q9' />
-        <br />
-        <br />
-        <h3>Refractive Error</h3>
+        <h3>7. Type of vision error?</h3>
+        <RadioField
+          name='geriVisionQ8'
+          label='Geri - Vision Q8'
+          options={formOptions.geriVisionQ8}
+        />
+        <h4>
+          Please <u>refer to Doctor’s Consult</u> if pinhole visual acuity is <u>worse than 6/12</u>
+        </h4>
+        <SelectField
+          name='geriVisionQ9'
+          checkboxes='true'
+          label='Geri - Vision Q9'
+          options={formOptions.geriVisionQ9}
+        />
+        <h2>Refractive Error</h2>
         Senior Citizens are eligible to receiving subsidy for spectacles under the Senior Mobility
         Fund (SMF) provided they qualify for the following:
-        <br />
         <ul>
           <li>
             Have a household monthly income per person of $2,000 and below OR Annual Value (AV) of
@@ -176,12 +244,19 @@ const GeriVisionForm = (props) => {
             subsidies.
           </li>
         </ul>
-        <br />
-        1. Does the participant wish to apply for the Senior Mobility Fund?
-        <RadioField name='geriVisionQ12' label='Geri - Vision Q12' />
-        2. Referred to Social Services?
-        <RadioField name='geriVisionQ13' label='Geri - Vision Q13' />
-      </Fragment>
+        <h3>1. Does the participant wish to apply for the Senior Mobility Fund?</h3>
+        <RadioField
+          name='geriVisionQ12'
+          label='Geri - Vision Q12'
+          options={formOptions.geriVisionQ12}
+        />
+        <h3>2. Referred to Social Services?</h3>
+        <RadioField
+          name='geriVisionQ13'
+          label='Geri - Vision Q13'
+          options={formOptions.geriVisionQ13}
+        />
+      </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
 
@@ -199,6 +274,4 @@ const GeriVisionForm = (props) => {
 
 GeriVisionForm.contextType = FormContext
 
-export default function GeriVisionform(props) {
-  return <GeriVisionForm {...props} />
-}
+export default GeriVisionForm
