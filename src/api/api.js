@@ -2,6 +2,9 @@ import React from 'react'
 import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
 import { jsPDF } from 'jspdf'
 import { defaultSlots } from 'src/forms/RegForm'
+import image from 'src/icons/Icon'
+import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
+import 'jspdf-autotable'
 
 const axios = require('axios').default
 
@@ -452,6 +455,8 @@ export function generate_pdf(
   const weight = triage.triageQ10
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, height, weight)
+  doc.addPage()
+  k = 0
   k = addOtherScreeningModularities(doc, k)
   k = addPhlebotomy(doc, phlebotomy, k)
   k = addFit(doc, fit, k)
@@ -480,19 +485,21 @@ export function generate_pdf(
 
 export function patient(doc, reg, patients, k) {
   const salutation = typeof reg.registrationQ1 == 'undefined' ? 'Mr/Mrs' : reg.registrationQ1
+
+  doc.addImage(image, 'PNG', 10, 10, 77.8, 26.7)
+  k = k + 3
+
   doc.setFont(undefined, 'bold')
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(17)
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) + 'Public Health Service 2023 (PHS 2023) Health Screening Report',
+    kNewlines((k = k + 2)) + 'Public Health Service 2024 Health Screening Report',
   )
-  doc.line(
-    10,
-    calculateY(k),
-    10 + doc.getTextWidth('Public Health Service 2023 (PHS 2023) Health Screening Report'),
-    calculateY(k),
-  )
+  k = k + 4
 
+  doc.setFontSize(original_font_size)
   doc.setFont(undefined, 'normal')
   // Thanks note
   var thanksNote = doc.splitTextToSize(
@@ -534,29 +541,57 @@ export function addBmi(doc, k, height, weight) {
       ' kg/m2.',
   )
 
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Asian BMI cut-off points for action')
-  doc.line(
-    10,
-    calculateY(k),
-    10 + doc.getTextWidth('Asian BMI cut-off points for action'),
-    calculateY(k),
-  )
-  doc.text(80, 10, kNewlines(k) + 'Cardiovascular disease risk')
-  doc.line(80, calculateY(k), 80 + doc.getTextWidth('Cardiovascular disease risk'), calculateY(k))
-  doc.setFont(undefined, 'normal')
+  k = k + 2
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '18.5 - 22.9')
-  doc.text(96, 10, kNewlines(k) + 'Low')
+  doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(8)
+  doc.text(160, 170, doc.splitTextToSize(
+    "https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems"
+  , 40))
+  doc.setFontSize(original_font_size)
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '23.0 - 27.4')
-  doc.text(96, 10, kNewlines(k) + 'Moderate')
+  doc.autoTable({
+    theme: 'grid',
+    styles: {
+      cellWidth: 57
+    },
+    startY: calculateY(k),
+    head: [['Asian BMI cut-off points for action', 'Cardiovascular disease risk']],
+    body: [
+      ['18.5 - 22.9', 'Low'],
+      ['23.0 - 27.4', 'Moderate'],
+      ['27.5 - 32.4', 'High'],
+      ['32.5 - 37.4', 'Very High']
+    ]
+  })
+  k = k + 12
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '27.5 - 32.4')
-  doc.text(96, 10, kNewlines(k) + 'High')
+  // TODO: Add QR Code and caption
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '32.5 - 37.4')
-  doc.text(96, 10, kNewlines(k) + 'Very High')
+  // doc.setFont(undefined, 'bold')
+  // doc.text(10, 10, kNewlines((k = k + 2)) + 'Asian BMI cut-off points for action')
+  // doc.line(
+  //   10,
+  //   calculateY(k),
+  //   10 + doc.getTextWidth('Asian BMI cut-off points for action'),
+  //   calculateY(k),
+  // )
+  // doc.text(80, 10, kNewlines(k) + 'Cardiovascular disease risk')
+  // doc.line(80, calculateY(k), 80 + doc.getTextWidth('Cardiovascular disease risk'), calculateY(k))
+  // doc.setFont(undefined, 'normal')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '18.5 - 22.9')
+  // doc.text(96, 10, kNewlines(k) + 'Low')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '23.0 - 27.4')
+  // doc.text(96, 10, kNewlines(k) + 'Moderate')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '27.5 - 32.4')
+  // doc.text(96, 10, kNewlines(k) + 'High')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '32.5 - 37.4')
+  // doc.text(96, 10, kNewlines(k) + 'Very High')
 
   if (bmi <= 22.9) {
     doc.text(
@@ -606,6 +641,15 @@ export function addBloodPressure(doc, triage, k) {
       triage.triageQ8 +
       ' mmHg.',
   )
+
+  doc.addImage(bloodpressureQR, "png", 165, 75, 32, 32);
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(8)
+  doc.text(160, 110, doc.splitTextToSize(
+    "https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings"
+  , 40))
+  doc.setFontSize(original_font_size)
+
   var bloodPressure = doc.splitTextToSize(
     kNewlines((k = k + 2)) +
       'A normal blood pressure reading is lower than 130/85mmHg.' +
@@ -614,10 +658,11 @@ export function addBloodPressure(doc, triage, k) {
       ' taken on several separate occasions. This should be regularly followed-up by a doctor who can provide' +
       ' the appropriate diagnosis and management. If your average blood pressure reading is above 130/85, please' +
       ' consult a doctor who can better evaluate your risk of hypertension.',
-    180,
+    145,
   )
   doc.text(10, 10, bloodPressure)
-  k = k + 4
+  
+  k = k + 6
 
   return k
 }
