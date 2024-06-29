@@ -127,7 +127,7 @@ const RegisterPatient = (props) => {
             size='large'
             type='submit'
             variant='contained'
-            href='/app/prereg'
+            href='/app/reg'
             sx={{ marginTop: '10px', marginBottom: '20px' }}
           >
             Register

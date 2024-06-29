@@ -14,19 +14,25 @@ import DietitiansConsultForm from 'src/forms/DietitiansConsultForm'
 import OralHealthForm from 'src/forms/OralHealthForm'
 import FitForm from 'src/forms/FitForm'
 import PhleboForm from 'src/forms/PhleboForm'
-import PreregForm from 'src/forms/PreregForm'
 import RegForm from 'src/forms/RegForm'
 import TriageForm from 'src/forms/TriageForm'
 import SocialServiceForm from 'src/forms/SocialServiceForm'
-import OverviewForm from 'src/forms/OverviewForm'
-import WceForm from 'src/forms/WceForm'
-import GeriTabs from './forms/Geri'
-import HxTabs from './forms/HistoryTaking'
+import HxTabs from './forms/HistoryTakingTabs/HistoryTaking'
 import ManageVolunteers from 'src/pages/ManageVolunteers'
 import Edit from 'src/pages/EditForms'
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
-import SacsForm from './forms/SacsForm'
+import HsgForm from './forms/HsgForm'
+import LungFnForm from './forms/LungFnForm'
+import NkfForm from './forms/NkfForm'
+import MentalHealthForm from './forms/MentalHealthForm'
+import HpvForm from './forms/HpvForm'
+import VaccineForm from './forms/VaccineForm'
+import WceTabs from './forms/WceTabs/WceMain'
+import GeriAudiometryForm from './forms/GeriAudiometryForm'
+import GeriVisionForm from './forms/GeriVisionForm'
+import GeriMobilityTabs from './forms/GeriMobilityTabs/GeriMobility'
+import GeriCognitiveTabs from './forms/GeriCognitiveTabs/GeriCognitive'
 
 const routes = [
   {
@@ -39,20 +45,26 @@ const routes = [
       { path: 'doctorsconsult', element: <DoctorSConsultForm /> },
       { path: 'summary', element: <SummaryForm /> },
       { path: 'fit', element: <FitForm /> },
-      { path: 'geri', element: <GeriTabs /> },
+      { path: 'lungfn', element: <LungFnForm /> },
+      { path: 'gerimobility', element: <GeriMobilityTabs /> },
       { path: 'hxtaking', element: <HxTabs /> },
       { path: 'phlebo', element: <PhleboForm /> },
-      { path: 'prereg', element: <PreregForm /> },
       { path: 'reg', element: <RegForm /> },
+      { path: 'vax', element: <VaccineForm /> },
+      { path: 'hsg', element: <HsgForm /> },
+      { path: 'geriaudio', element: <GeriAudiometryForm /> },
+      { path: 'gerivision', element: <GeriVisionForm /> },
+      { path: 'gericog', element: <GeriCognitiveTabs /> },
       { path: 'triage', element: <TriageForm /> },
+      { path: 'nkf', element: <NkfForm /> },
       { path: 'dietitiansconsultation', element: <DietitiansConsultForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },
+      { path: 'mentalhealth', element: <MentalHealthForm /> },
       { path: 'oralhealth', element: <OralHealthForm /> },
-      { path: 'overview', element: <OverviewForm /> },
+      { path: 'hpv', element: <HpvForm /> },
       { path: 'manage', element: <ManageVolunteers /> },
       { path: 'edit', element: <Edit /> },
-      { path: 'wce', element: <WceForm /> },
-      { path: 'sacs', element: <SacsForm /> },
+      { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
