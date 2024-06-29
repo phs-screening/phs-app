@@ -35,7 +35,7 @@ const SummaryForm = (props) => {
   const [geriOtConsult, setGeriOtConsult] = useState({})
   const [geriEbasDep, setGeriEbasDep] = useState({})
   const [geriAmt, setGeriAmt] = useState({})
-  const [sacs, setSacs] = useState({})
+  //const [sacs, setSacs] = useState({})
   const [socialService, setSocialService] = useState({})
   const [doctorSConsult, setDoctorSConsult] = useState({})
   const [dietitiansConsult, setDietiatiansConsult] = useState({})
@@ -64,7 +64,7 @@ const SummaryForm = (props) => {
       const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
       const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
       const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
-      const sacsData = getSavedData(patientId, allForms.sacsForm)
+      //const sacsData = getSavedData(patientId, allForms.sacsForm)
       const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
       const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
       const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
@@ -94,7 +94,7 @@ const SummaryForm = (props) => {
         geriVisionData,
         geriAudiometryData,
         triageData,
-        sacsData,
+        //sacsData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
@@ -118,7 +118,7 @@ const SummaryForm = (props) => {
         setGeriVision(result[19])
         setGeriAudiometry(result[20])
         setTriage(result[21])
-        setSacs(result[22])
+        //setSacs(result[22])
         isLoadingPrevData(false)
       })
     }
@@ -666,7 +666,7 @@ const SummaryForm = (props) => {
               )}
             </div>
 
-            <div className='summary--question-div'>
+            {/* <div className='summary--question-div'>
               <h2>17. SACS</h2>
               <p className='underlined'>Notes from SACS Consultation</p>
               {sacs ? <p className='blue'>{sacs.sacsQ1}</p> : '-'}
@@ -676,7 +676,7 @@ const SummaryForm = (props) => {
                 Has this person been referred to a SACS CREST programme for follow-up?
               </p>
               {sacs ? <p className='blue'>{sacs.sacsQ3}</p> : '-'}
-            </div>
+            </div> */}
 
             <div className='summary--question-div'>
               <h2>18. Doctor&apos;s Consult</h2>
