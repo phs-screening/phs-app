@@ -276,7 +276,7 @@ export async function upsertIndividualFormData(userID, form_name, form_data) {
 
 // Calcuates the BMI
 export function formatBmi(heightInCm, weightInKg) {
-  const bmi = calculateBmi(heightInCm, weightInKg)
+  const bmi = calculateBMI(heightInCm, weightInKg)
 
   if (bmi > 27.5) {
     return (
@@ -307,7 +307,7 @@ export function formatBmi(heightInCm, weightInKg) {
   }
 }
 
-export function calculateBmi(heightInCm, weightInKg) {
+export function calculateBMI(heightInCm, weightInKg) {
   const height = heightInCm / 100
   const bmi = (weightInKg / height / height).toFixed(1)
 
@@ -514,7 +514,7 @@ export function patient(doc, reg, patients, k) {
 
 export function addBmi(doc, k, height, weight) {
   //Bmi
-  const bmi = calculateBmi(Number(height), Number(weight))
+  const bmi = calculateBMI(Number(height), Number(weight))
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + 'Body Mass Index (BMI)')

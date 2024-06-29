@@ -35,6 +35,8 @@ import GeriVisionForm from './forms/GeriVisionForm'
 import GeriMobilityTabs from './forms/GeriMobilityTabs/GeriMobility'
 import GeriCognitiveTabs from './forms/GeriCognitiveTabs/GeriCognitive'
 
+import Eligibility from './pages/Eligibility'
+
 const routes = [
   {
     path: 'app',
