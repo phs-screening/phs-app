@@ -22,6 +22,7 @@ import ManageVolunteers from 'src/pages/ManageVolunteers'
 import Edit from 'src/pages/EditForms'
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
+
 import HsgForm from './forms/HsgForm'
 import LungFnForm from './forms/LungFnForm'
 import NkfForm from './forms/NkfForm'
@@ -66,6 +67,7 @@ const routes = [
       { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
+      { path: 'eligibility', element: <Eligibility /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },

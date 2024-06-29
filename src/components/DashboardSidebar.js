@@ -8,6 +8,7 @@ import {
   ShoppingBag as ShoppingBagIcon,
   UserPlus as UserPlusIcon,
   LogIn as LogInIcon,
+  FileText as FileTextIcon,
 } from 'react-feather'
 import NavItem from './NavItem'
 import { FormContext } from 'src/api/utils'
@@ -25,6 +26,11 @@ const items = [
     href: '/app/registration',
     icon: UserPlusIcon,
     title: 'Change Patient',
+  },
+  {
+    href: '/app/eligibility',
+    icon: FileTextIcon,
+    title: 'Eligibility',
   },
   {
     href: '/app/summary',
