@@ -99,8 +99,8 @@ const WceForm = (props) => {
   const formOptions = {
     wceQ1: [
       {
-        label: 'More than 1 year to 2 years',
-        value: 'More than 1 year to 2 years',
+        label: '1 year ago or less',
+        value: '1 year ago or less',
       },
       { label: 'More than 1 year to 2 years', value: 'More than 1 year to 2 years' },
       { label: 'More than 2 years to 3 years', value: 'More than 2 years to 3 years' },
@@ -111,8 +111,8 @@ const WceForm = (props) => {
     ],
     wceQ2: [
       {
-        label: 'More than 1 year to 2 years',
-        value: 'More than 1 year to 2 years',
+        label: '1 year ago or less',
+        value: '1 year ago or less',
       },
       { label: 'More than 1 year to 2 years', value: 'More than 1 year to 2 years' },
       { label: 'More than 2 years to 3 years', value: 'More than 2 years to 3 years' },
