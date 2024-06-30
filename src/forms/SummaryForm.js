@@ -17,6 +17,7 @@ const SummaryForm = (props) => {
   const [loadingPrevData, isLoadingPrevData] = useState(true)
   const [saveData, setSaveData] = useState({})
 
+  // Oh my god this is terrible PLEASE SOMEONE FIX THIS
   // All the forms
   const [hcsr, setHcsr] = useState({})
   const [nss, setNss] = useState({})
@@ -42,6 +43,14 @@ const SummaryForm = (props) => {
   const [oralHealth, setOralHealth] = useState({})
   const [triage, setTriage] = useState({})
   const [patientNo, updatePatientNo] = useState(patientId)
+
+  const [vaccine, setVaccine] = useState({})
+  const [lung, setLung] = useState({})
+  const [nkf, setNKF] = useState({})
+  const [hsg, setHSG] = useState({})
+  const [grace, setGrace] = useState({})
+  const [hearts, setHearts] = useState({})
+
   const [refresh, setRefresh] = useState(false)
 
   useEffect(async () => {
@@ -71,6 +80,13 @@ const SummaryForm = (props) => {
       const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
       const triageData = getSavedData(patientId, allForms.triageForm)
 
+      const vaccineData = getSavedData(patientId, allForms.vaccineForm)
+      const lungData = getSavedData(patientId, allForms.lungForm)
+      const nkfData = getSavedData(patientId, allForms.nkfForm)
+      const hsgData = getSavedData(patientId, allForms.hsgForm)
+      const graceData = getSavedData(patientId, allForms.geriGraceForm)
+      const heartsData = getSavedData(patientId, allForms.geriWhForm)
+
       Promise.all([
         hcsrData,
         nssData,
@@ -94,6 +110,12 @@ const SummaryForm = (props) => {
         geriVisionData,
         geriAudiometryData,
         triageData,
+        vaccineData,
+        lungData,
+        nkfData,
+        hsgData,
+        graceData,
+        heartsData
         //sacsData,
       ]).then((result) => {
         setHcsr(result[0])
@@ -118,7 +140,13 @@ const SummaryForm = (props) => {
         setGeriVision(result[19])
         setGeriAudiometry(result[20])
         setTriage(result[21])
-        //setSacs(result[22])
+        setVaccine(result[22])
+        setLung(result[23])
+        setNKF(result[24])
+        setHSG(result[25])
+        setGrace(result[26])
+        setHearts(result[27])
+        //setSacs(result[])
         isLoadingPrevData(false)
       })
     }
@@ -989,6 +1017,14 @@ const SummaryForm = (props) => {
                   dietitiansConsult,
                   oralHealth,
                   triage,
+                  vaccine,
+                  lung,
+                  nkf,
+                  hsg,
+                  grace,
+                  hearts,
+                  geriPtConsult,
+                  geriOtConsult
                 )
               }
             >

@@ -27,5 +27,11 @@
   "oralHealthForm": "oralHealthForm",
   "socialServiceForm": "socialServiceForm",
   "wceForm": "wceForm",
-  "triageForm": "triageForm"
+  "triageForm": "triageForm",
+  "vaccineForm": "vaccineForm",
+  "lungForm": "lungFnForm",
+  "nkfForm": "nkfForm",
+  "hsgForm": "hsgForm",
+  "geriGraceForm": "geriGraceForm",
+  "geriWhForm": "geriWhForm"
 }
