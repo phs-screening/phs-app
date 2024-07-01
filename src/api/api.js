@@ -2,6 +2,9 @@ import React from 'react'
 import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
 import { jsPDF } from 'jspdf'
 import { defaultSlots } from 'src/forms/RegForm'
+import logo from 'src/icons/Icon'
+import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
+import 'jspdf-autotable'
 
 const axios = require('axios').default
 
@@ -462,6 +465,18 @@ export function kNewlines(k) {
  * As such, we need use "k" to keep track of the current line number of the text.
  *
  * This approach works, so we have chosen to keep it.
+ * 
+ * For Future devs pt2 (29/6/2024): 
+ * please for the love of god make this code more flexible
+ * right now it doesn't even manage page overflow automatically
+ * and is terrible to expand upon
+ * 
+ * Also you see that "justification" to use a running tracker of newlines? yeah that breaks
+ * as soon as you start to actually format the document so IF YOU HAVE THE TIME please nuke that
+ * entire system.
+ * 
+ * Incase you're wondering why I'm not doing it myself, because the deadline is in 1 month
+ * Do not repeat the mistakes of ghosts long past
  */
 export function generate_pdf(
   reg,
@@ -478,6 +493,14 @@ export function generate_pdf(
   dietitiansConsult,
   oralHealth,
   triage,
+  vaccine,
+  lung,
+  nkf,
+  hsg,
+  grace,
+  hearts,
+  geriPtConsult,
+  geriOtConsult
 ) {
   var doc = new jsPDF()
   var k = 0
@@ -489,14 +512,21 @@ export function generate_pdf(
   const weight = triage.triageQ10
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, height, weight)
-  k = addOtherScreeningModularities(doc, k)
-  k = addPhlebotomy(doc, phlebotomy, k)
-  k = addFit(doc, fit, k)
-  k = addWce(doc, patients, wce, k)
-  k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k)
-  k = addDoctorSConsult(doc, doctorSConsult, k)
-  k = addDietitiansConsult(doc, dietitiansConsult, k)
-  k = addSocialService(doc, socialService, k)
+  
+  k = addOtherScreeningModularities(doc, lung, geriVision, k)
+  
+  k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth)
+
+  k = addMemos(doc, k, geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult)
+
+  // DEPRECATED
+  // k = addPhlebotomy(doc, phlebotomy, k)
+  // k = addFit(doc, fit, k)
+  // k = addWce(doc, patients, wce, k)
+  // k = addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k)
+  // k = addDoctorSConsult(doc, doctorSConsult, k)
+  // k = addDietitiansConsult(doc, dietitiansConsult, k)
+  // k = addSocialService(doc, socialService, k)
   k = addRecommendation(doc, k)
 
   if (typeof patients.initials == 'undefined') {
@@ -517,19 +547,21 @@ export function generate_pdf(
 
 export function patient(doc, reg, patients, k) {
   const salutation = typeof reg.registrationQ1 == 'undefined' ? 'Mr/Mrs' : reg.registrationQ1
+
+  doc.addImage(logo, 'PNG', 10, 10, 77.8, 26.7)
+  k = k + 3
+
   doc.setFont(undefined, 'bold')
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(17)
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) + 'Public Health Service 2023 (PHS 2023) Health Screening Report',
+    kNewlines((k = k + 2)) + 'Public Health Service 2024 Health Screening Report',
   )
-  doc.line(
-    10,
-    calculateY(k),
-    10 + doc.getTextWidth('Public Health Service 2023 (PHS 2023) Health Screening Report'),
-    calculateY(k),
-  )
+  k = k + 4
 
+  doc.setFontSize(original_font_size)
   doc.setFont(undefined, 'normal')
   // Thanks note
   var thanksNote = doc.splitTextToSize(
@@ -539,8 +571,8 @@ export function patient(doc, reg, patients, k) {
       ' ' +
       patients.initials +
       ',\n' +
-      'Thank you for participating in our health screening at Jurong East on 26th - 27th August this year.' +
-      ' Here are your screening results:',
+      'Thank you for participating in our health screening at The Frontier CC and Jurong Medical Centre on 17th and 18th August this year. ' +
+      'Here are your screening results:',
     180,
   )
   doc.text(10, 10, thanksNote)
@@ -571,29 +603,55 @@ export function addBmi(doc, k, height, weight) {
       ' kg/m2.',
   )
 
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((k = k + 2)) + 'Asian BMI cut-off points for action')
-  doc.line(
-    10,
-    calculateY(k),
-    10 + doc.getTextWidth('Asian BMI cut-off points for action'),
-    calculateY(k),
-  )
-  doc.text(80, 10, kNewlines(k) + 'Cardiovascular disease risk')
-  doc.line(80, calculateY(k), 80 + doc.getTextWidth('Cardiovascular disease risk'), calculateY(k))
-  doc.setFont(undefined, 'normal')
+  k = k + 2
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '18.5 - 22.9')
-  doc.text(96, 10, kNewlines(k) + 'Low')
+  doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(8)
+  doc.text(160, 170, doc.splitTextToSize(
+    "https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems"
+  , 40))
+  doc.setFontSize(original_font_size)
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '23.0 - 27.4')
-  doc.text(96, 10, kNewlines(k) + 'Moderate')
+  doc.autoTable({
+    theme: 'grid',
+    styles: {
+      cellWidth: 57
+    },
+    startY: calculateY(k),
+    head: [['Asian BMI cut-off points for action', 'Cardiovascular disease risk']],
+    body: [
+      ['18.5 - 22.9', 'Low'],
+      ['23.0 - 27.4', 'Moderate'],
+      ['27.5 - 32.4', 'High'],
+      ['32.5 - 37.4', 'Very High']
+    ]
+  })
+  k = k + 10
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '27.5 - 32.4')
-  doc.text(96, 10, kNewlines(k) + 'High')
+  // doc.setFont(undefined, 'bold')
+  // doc.text(10, 10, kNewlines((k = k + 2)) + 'Asian BMI cut-off points for action')
+  // doc.line(
+  //   10,
+  //   calculateY(k),
+  //   10 + doc.getTextWidth('Asian BMI cut-off points for action'),
+  //   calculateY(k),
+  // )
+  // doc.text(80, 10, kNewlines(k) + 'Cardiovascular disease risk')
+  // doc.line(80, calculateY(k), 80 + doc.getTextWidth('Cardiovascular disease risk'), calculateY(k))
+  // doc.setFont(undefined, 'normal')
 
-  doc.text(26, 10, kNewlines((k = k + 1)) + '32.5 - 37.4')
-  doc.text(96, 10, kNewlines(k) + 'Very High')
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '18.5 - 22.9')
+  // doc.text(96, 10, kNewlines(k) + 'Low')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '23.0 - 27.4')
+  // doc.text(96, 10, kNewlines(k) + 'Moderate')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '27.5 - 32.4')
+  // doc.text(96, 10, kNewlines(k) + 'High')
+
+  // doc.text(26, 10, kNewlines((k = k + 1)) + '32.5 - 37.4')
+  // doc.text(96, 10, kNewlines(k) + 'Very High')
 
   if (bmi <= 22.9) {
     doc.text(
@@ -643,6 +701,15 @@ export function addBloodPressure(doc, triage, k) {
       triage.triageQ8 +
       ' mmHg.',
   )
+
+  doc.addImage(bloodpressureQR, "png", 165, 75, 32, 32);
+  const original_font_size = doc.getFontSize()
+  doc.setFontSize(8)
+  doc.text(160, 110, doc.splitTextToSize(
+    "https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings"
+  , 40))
+  doc.setFontSize(original_font_size)
+
   var bloodPressure = doc.splitTextToSize(
     kNewlines((k = k + 2)) +
       'A normal blood pressure reading is lower than 130/85mmHg.' +
@@ -651,23 +718,254 @@ export function addBloodPressure(doc, triage, k) {
       ' taken on several separate occasions. This should be regularly followed-up by a doctor who can provide' +
       ' the appropriate diagnosis and management. If your average blood pressure reading is above 130/85, please' +
       ' consult a doctor who can better evaluate your risk of hypertension.',
-    180,
+    145,
   )
   doc.text(10, 10, bloodPressure)
-  k = k + 4
+  
+  k = k + 6
 
   return k
 }
 
-export function addOtherScreeningModularities(doc, k) {
+export function addOtherScreeningModularities(doc, lung, eye, k) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + 'Other Screening Modalities')
   doc.line(10, calculateY(k), 10 + doc.getTextWidth('Other Screening Modalities'), calculateY(k))
   doc.setFont(undefined, 'normal')
 
+  // TODO: LUNG
+  doc.text(10, 10, kNewlines((k = k + 1)) + `The results of your FEV1:FEC ratio is ${lung.LUNG4}, results are [LUNG6]`)
+  doc.text(10, 10, kNewlines((k = k + 1)) + 'The results of your visual acuity are')
+  k++
+
+  // EYE
+  doc.autoTable({
+    theme: 'grid',
+    styles: {
+      cellWidth: 46.6
+    },
+    startY: calculateY(k),
+    head: [['', 'Right Eye', 'Left Eye']],
+    body: [
+      ['Without Pinhole Occluder', `6/${eye.geriVisionQ3}`, `6/${eye.geriVisionQ4}`],
+      ['With Pinhole Occluder', `6/${eye.geriVisionQ5}`, `6/${eye.geriVisionQ6}`]
+    ]
+  })
+  k = k + 6
+
+  doc.text(10, 10, kNewlines((k = k + 2)) + `Type of vision error, if any: ${eye.geriVisionQ11}`)
+
   return k
 }
 
+export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, geriWhForm, oral) {
+  doc.setFont(undefined, 'bold')
+  doc.text(10, 10, kNewlines((k = k + 2)) + 'Follow-Up')
+  doc.line(10, calculateY(k), 10 + doc.getTextWidth('Follow-Up'), calculateY(k))
+  doc.setFont(undefined, 'normal')
+  k++
+
+  const clean_k = k
+
+  const trip = (k) => followUpWith(doc, k, null, 0, k == clean_k, 
+    'You have indicated interest for or signed-up for follow up with'
+    + 'our external partners, details can be found below:')
+
+  const indent = 10
+  // TODO: 
+  // VACCINE
+  k = followUpWith(doc, k, trip, indent, vaccine.VAX1 == 'Yes', 
+    'You signed up for an influenza vaccine with [unsure yet] on [unsure].'
+    + 'Please contact [unsure] for further details.')
+  // HSG
+  k = followUpWith(doc, k, trip, indent, hsg.HSG1 == 'Yes, I signed up for HSG today', 
+    'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.'
+  )
+  // PHLEBOTOMY
+  k = followUpWith(doc, k, trip, indent, phlebotomy.phlebotomyQ1, 
+    `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. 
+    When your results are ready for collection, our PHS volunteers will call you to remind you.  
+    You have indicated your preferred clinic to be ${reg.registrationQ18}`)
+  // FIT
+  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes', 
+    'You signed up for FIT home kits to be delivered to you, '
+    + 'please follow instructions from our partner Singapore Cancer Society.')
+  // HPV
+  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes', 
+    `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below. 
+    - Address: 
+    9 Bishan Place Junction 8 Office Tower
+    #06-05, Singapore 579837
+    - Clinic operating hours:
+    Mondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm)
+    Saturdays, 9.00am to 4.00pm (last appointment at 3.15pm)
+    - Contact us: 6499 9133`)
+  // OSTEO
+
+  // NKF
+  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes', 
+    `You have indicated interest with National Kidney Foundation on ${nkf.NKF2} at CKD Clinic
+    - Address:
+    109 Whampoa Road
+    #01-09/11, Singapore 321109
+    - Clinic operating hours:
+    Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
+    - Contact us: 1800-KIDNEYS / 1800-5436397`
+  )
+  // MENTAL
+
+  // GRACE
+  k = followUpWith(doc, k, trip, indent, grace.GRACE2 == 'Yes', 
+    `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. `
+    + `Please contact G-RACE at: g_race@nuhs.edu.sg`)
+  // WHISPERING
+  k = followUpWith(doc, k, trip, indent, geriWhForm.WH1 == 'Yes', 
+    'You have indicated interest to be followed-up with Whispering Hearts. Whispering Hearts '
+    + 'will contact you for follow up. Whispering Hearts can be contacted at: contact@viriya.org.sg'
+  )
+  // NUS DENTISTRY
+  k = followUpWith(doc, k, trip, indent, oral.DENT4 == 'Yes',
+    'You have indicated interest with NUS Dentistry to be followed up. '
+    + 'Please contact NUS Dentistry at smileclinic@nus.edu.sg for further enquiries.'
+  )
+
+  k = followUpWith(doc, k, null, 0, k == clean_k,
+    'You have not indicated or signed-up for any follow-ups.'
+  )
+
+  return k;
+}
+
+export function followUpWith(doc, k, trip, indent, condition, statement) {
+  const width = 180
+  if (condition) {
+    if (trip) k = trip(k)
+    var text = doc.splitTextToSize(
+      statement,
+      width,
+    )
+    k = testOverflow(doc, k, text.length)
+
+    if (indent > 0) {
+      doc.setFont("Zapfdingbats", 'normal')
+      const old_size = doc.getFontSize()
+      doc.text(10 + indent - 5, 10, kNewlines(k) + "l")
+      doc.setFont("helvetica", "normal")
+    }
+
+    doc.text(10 + indent, 10, 
+      doc.splitTextToSize(
+        kNewlines(k) + statement,
+        width,
+      )
+    )
+
+    k = k + text.length
+  }
+  return k;
+}
+
+export function addMemos(doc, k, audioData, dietData, ptData, otData) {
+  k = testOverflow(doc, k, 24)
+
+  doc.setFont(undefined, 'bold')
+  doc.text(10, 10, kNewlines((k = k + 2)) + 'Referral Memos')
+  doc.line(10, calculateY(k), 10 + doc.getTextWidth('Referral Memos'), calculateY(k))
+  doc.setFont(undefined, 'normal')
+
+  const width = 180
+  // TODO: AUDIOLOGY
+  var audio = 'Audiology:\n\n'
+    + `The audiology team believes that [AUDIO3]\n\n`
+    + `The audiology team has written a recommended follow-up: ${audioData.geriAudiometryQ12}`
+  // TODO: DIET
+  var diet = 'Dietitian’s Station:\n\n'
+    + `${dietData.dietitiansConsultQ4}`
+  if (dietData.dietitiansConsultQ5) {
+    diet += `\n\nThe dietitian has indicated that you [DIET5] urgent follow up due to ${dietData.dietitiansConsultQ6}. `
+  }
+  var pt = 'Physical Therapist Station:\n\n'
+    + `${ptData.geriPtConsultQ1}`
+  var ot = 'Occupational Therapist Station:\n\n'
+    + `${otData.geriOtConsultQ1}`
+
+  doc.autoTable({
+    theme: 'grid',
+    styles: {
+      cellWidth: 180,
+      textColor: 20,
+      lineColor: 20,
+      fillColor: null
+    },
+    startY: calculateY(k = k + 1),
+    head: [],
+    body: [
+      [audio],
+      [diet],
+      [pt],
+      [ot]
+    ],
+    didDrawPage: function(data) {
+      console.log(`Final cursor at ${data.cursor.y}`)
+      k = Math.floor(data.cursor.y / 4.2)
+    },
+    willDrawCell: function(data) {  // copied from https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/src/models.ts
+      if (data.section === 'body' && Array.isArray(data.cell.text)) {
+        const PHYSICAL_LINE_HEIGHT = 1.15
+        const k = doc.internal.scaleFactor
+        const fontSize = doc.internal.getFontSize() / k
+
+        var {x, y} = data.cell.getTextPos()
+        y += fontSize * (2 - PHYSICAL_LINE_HEIGHT)
+        doc.setFont(undefined, 'bold')
+        doc.text(x, y, data.cell.text[0]);
+        doc.setFont(undefined, 'normal')
+        data.cell.text[0] = '\n'
+      }
+    }
+  })
+  k = k+1
+
+  return k
+}
+
+const checkOverflow = (doc, k) => {
+  if (k > 70) {
+    doc.addPage()
+    return 0
+  }
+  return k
+}
+
+const testOverflow = (doc, k, offset) => {
+  if (k+offset > 70) {
+    doc.addPage()
+    return 0
+  }
+  return k
+}
+
+export function addRecommendation(doc, k) {
+  k = testOverflow(doc, k, 5)
+  let kk = k
+
+  doc.setFont(undefined, 'bold')
+  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Recommendation')
+  // doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Recommendation'), calculateY(kk))
+  doc.setFont(undefined, 'normal')
+
+  var recommendation = doc.splitTextToSize(
+    kNewlines((kk = kk + 2)) +
+      'You are strongly recommended to seek follow-up based on your health screening result.\n\n' +
+      'As mentioned above, PHS members may be calling you soon as a form of follow-up in a few weeks time,' +
+      ' if you have not opted out of our Telehealth Initiative. Should you have any queries, feel free to contact us at hello@publichealthservice.org.' +
+      ' Thank you for participating in PHS 2024 and we hope that you have benefited and would continue to support us in the future.',
+    180
+  )
+  doc.text(10, 10, recommendation)
+}
+
+// DEPRECATED
 export function addPhlebotomy(doc, phlebotomy, k) {
   if (phlebotomy.phlebotomyQ1) {
     doc.setFont(undefined, 'bold')
@@ -689,6 +987,7 @@ export function addPhlebotomy(doc, phlebotomy, k) {
   return k
 }
 
+// DEPRECATED
 export function addFit(doc, fit, k) {
   let kk = k
 
@@ -716,6 +1015,7 @@ export function addFit(doc, fit, k) {
   return kk
 }
 
+// DEPRECATED
 export function addWce(doc, patients, wce, k) {
   let kk = k
 
@@ -774,6 +1074,7 @@ export function addWce(doc, patients, wce, k) {
   return kk
 }
 
+// DEPRECATED
 export function addDoctorSConsult(doc, doctorSConsult, k) {
   let kk = k
 
@@ -800,6 +1101,7 @@ export function addDoctorSConsult(doc, doctorSConsult, k) {
   return kk
 }
 
+// DEPRECATED
 export function addSocialService(doc, socialService, k) {
   let kk = k
 
@@ -880,6 +1182,7 @@ export function calculateY(coor) {
   return coor * 4.0569 + 10.2
 }
 
+// DEPRECATED
 export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k) {
   let kk = k
   const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
@@ -939,6 +1242,7 @@ export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k) {
   return kk
 }
 
+// DEPRECATED
 export function addDietitiansConsult(doc, dietitiansConsult, k) {
   let kk = k
   // const notes = dietitiansConsult.dietitiansConsultQ4
@@ -963,6 +1267,7 @@ export function addDietitiansConsult(doc, dietitiansConsult, k) {
   return kk
 }
 
+// DEPRECATED
 export function addOralHealth(doc, oralHealth, k) {
   let kk = k
   if (oralHealth.oralHealthQ2) {
@@ -980,26 +1285,6 @@ export function addOralHealth(doc, oralHealth, k) {
   }
 
   return kk
-}
-
-export function addRecommendation(doc, k) {
-  let kk = k
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Recommendation')
-  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Recommendation'), calculateY(kk))
-  doc.setFont(undefined, 'normal')
-
-  var recommendation = doc.splitTextToSize(
-    kNewlines((kk = kk + 2)) +
-      'You are strongly recommended to seek follow-up based on your health screening result.' +
-      ' If you have not opted out of our Telehealth Initiative, we will be calling you soon as a' +
-      ' form of follow-up in a few weeks time. Should you have any queries, feel free to contact us at medsocphs@gmail.com. We' +
-      ' hope that you have benefited from PHS 2023 and would continue to support us' +
-      ' in the future.',
-    180,
-  )
-  doc.text(10, 10, recommendation)
 }
 
 export const regexPasswordPattern =
