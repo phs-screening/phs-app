@@ -18,13 +18,16 @@ import {
   DateField,
 } from 'uniforms-mui'
 import CircularProgress from '@mui/material/CircularProgress'
-import { submitForm, submitRegClinics } from '../api/api.js'
+import { submitForm, submitRegClinics, preRegister, submitPreRegForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { getClinicSlotsCollection, getSavedData } from '../services/mongoDB'
+import { getClinicSlotsCollection, getSavedData, getPreRegDataById, isAdmin } from '../services/mongoDB'
 import './fieldPadding.css'
 import './forms.css'
 import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
+import { isInteger } from 'formik'
+
+let patientAge;
 
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
@@ -56,7 +59,7 @@ export const defaultSlots = {
 
 const formName = 'registrationForm'
 const RegForm = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId, updatePatientId, updatePatientInfo} = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
@@ -106,6 +109,7 @@ const RegForm = () => {
         age--
       }
       setBirthday(birthday)
+      patientAge = age
       return <p className='blue'>{age}</p>
     }
     return null
@@ -301,6 +305,11 @@ const RegForm = () => {
       type: Date,
       optional: false,
     },
+    registrationQ4: {
+      defaultValue: patientAge,
+      type: Number,
+      optional: true,
+    },
     registrationQ5: {
       type: String,
       allowedValues: ['Male', 'Female'],
@@ -404,6 +413,7 @@ const RegForm = () => {
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
+        model.registrationQ4 = patientAge
 
         // Note: Q10 is optional
         const location = model.registrationQ10
@@ -428,13 +438,20 @@ const RegForm = () => {
 
         // If counters updated successfully, submit the new form information
         const response = await submitForm(model, patientId, formName)
+
+        console.log("test  _" + response.result + " " + patientAge)
         if (response.result) {
           setTimeout(() => {
+            console.log("response data: "+ response.data)
             alert('Successfully submitted form')
+            console.log('Successfully submitted form')
+            updatePatientInfo(response.data)
+            updatePatientId(response.qNum)
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           setTimeout(() => {
+            console.log("failed")
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }

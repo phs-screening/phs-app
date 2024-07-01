@@ -98,17 +98,23 @@ const BasicTimeline = (props) => {
   useEffect(async () => {
     const createFormsStatus = async () => {
       try {
+        console.log("testing")
         const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
         const patientsRecord = mongoConnection.db('phs').collection('patients')
         // patientId must be valid for this component to even render
         // checks done in parent component Dashboard.js
         // hence, if there is no record, likely there is implementation bug
+        console.log("testing2 " + props.patientId + (props.patientId === undefined))
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
-        setGoingForPhlebotomy(record.goingForPhlebotomy === 'Y')
+        console.log("test: "+ props.patientId + " "+ record.goingForPhlebotomy)
+        if (record.goingForPhlebotomy != null){
+          setGoingForPhlebotomy(record.goingForPhlebotomy === 'Y')
+        }
         setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {
         alert(err)
+        console.log("error is here")
         navigate('/app/registration', { replace: true })
       }
     }
