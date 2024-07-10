@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
@@ -12,6 +13,8 @@ import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
 import { SelectField, RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
+
+import allForms from './forms.json'
 
 import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
@@ -57,14 +60,25 @@ const formName = 'lungFnForm'
 const LungFnForm = (props) => {
   const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [ratio, setRatio] = useState(null)
 
+  const [social, setSocial] = useState({})
+
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
+    const socialData = getSavedData(patientId, allForms.hxSocialForm)
     setSaveData(savedData)
+
+    Promise.all([
+      socialData,
+    ]).then((result) => {
+      setSocial(result[0])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const formOptions = {
@@ -169,7 +183,53 @@ const LungFnForm = (props) => {
   )
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Social</h2>
+              <p className='underlined'>Does patient currently smoke:</p>
+              {social && social.SOCIAL10 ? (
+                <p className='blue'>{social.SOCIAL10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>How many pack-years:</p>
+              {social && social.SOCIALShortAns10 ? (
+                <p className='blue'>{social.SOCIALShortAns10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Has patient smoked before:</p>
+              {social && social.SOCIAL11 ? (
+                <p className='blue'>{social.SOCIAL11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>For how long and when did they stop:</p>
+              {social && social.SOCIALShortAns11 ? (
+                <p className='blue'>{social.SOCIALShortAns11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

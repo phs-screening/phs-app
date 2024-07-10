@@ -15,13 +15,15 @@
   "geriPtConsultForm": "geriPtConsultForm",
   "geriSppbForm": "geriSppbForm",
   "geriMMSEForm": "geriMMSEForm",
+  "geriPhqForm": "geriPhqForm",
   "phlebotomyForm": "phlebotomyForm",
   "geriTugForm": "geriTugForm",
   "geriVisionForm": "geriVisionForm",
   "hxCancerForm": "hxCancerForm",
+  "hxFamilyForm": "hxFamilyForm",
   "hxHcsrForm": "hxHcsrForm",
   "hxNssForm": "hxNssForm",
-  "hxSocialForm": "alForm",
+  "hxSocialForm": "hxSocialForm",
   "phleboForm": "phleboForm",
   "registrationForm": "registrationForm",
   "oralHealthForm": "oralHealthForm",
@@ -33,5 +35,7 @@
   "nkfForm": "nkfForm",
   "hsgForm": "hsgForm",
   "geriGraceForm": "geriGraceForm",
-  "geriWhForm": "geriWhForm"
+  "geriWhForm": "geriWhForm",
+
+  "Comments": "Please refactor away this name list because it makes no gurantees of the actual form name in the js file, doesn't autocomplete and isn't automatically maintained"
 }

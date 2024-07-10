@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
@@ -12,6 +13,7 @@ import { LongTextField, SubmitField, ErrorsField, RadioField } from 'uniforms-mu
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
+import allForms from './forms.json'
 import './fieldPadding.css'
 
 const dayRangeFormOptions = [
@@ -39,14 +41,29 @@ const formName = 'mentalHealthForm'
 const MentalHealthForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
 
+  const [regi, setReg] = useState({})
+  const [doc, setDoc] = useState({})
+  const [phq, setPHQ] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
-
     setSaveData(savedData)
+
+    const regData = getSavedData(patientId, allForms.registrationForm)
+    // const docData = getSavedData(patientId, allForms.triageForm)
+    const phqData = getSavedData(patientId, allForms.geriPhqForm)
+
+    Promise.all([regData,phqData]).then((result) => {
+      setReg(result[0]),
+      // setHxFamily(result[1])
+      setPHQ(result[1])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const GetScore = () => {
@@ -149,7 +166,43 @@ const MentalHealthForm = () => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Patient Info</h2>
+              {regi && regi.registrationQ4 ? (
+                <p className='blue'>Age: {regi.registrationQ4}</p>
+              ) : (
+                <p className='blue'>Age: nil</p>
+              )}
+
+              <p className='blue'>DOC11: UNKNOWN DATA</p>
+
+              <p className='blue'>DOC12: UNKNOWN DATA</p>
+
+              <p className='blue'>PHQ10: UNKNOWN DATA</p>
+
+              <p className='blue'>PHQ11: UNKNOWN DATA</p>
+
+
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

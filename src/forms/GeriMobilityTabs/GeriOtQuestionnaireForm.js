@@ -2,14 +2,17 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
+import allForms from '../../forms/forms.json'
+
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
 import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
 import { LongTextField, RadioField } from 'uniforms-mui'
-import { submitForm } from '../../api/api.js'
+import { formatBmi, submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
@@ -244,13 +247,28 @@ const formName = 'geriOtQuestionnaireForm'
 const GeriOtQuestionnaireForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
+  const [reg, setReg] = useState({})
+  const [hxSocial, setHxSocial] = useState({})
+  const [triage, setTriage] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
+
+    const regData = getSavedData(patientId, allForms.registrationForm)
+    const triageData = getSavedData(patientId, allForms.triageForm)
+    const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+    Promise.all([regData, triageData, hxSocialData]).then((result) => {
+      setReg(result[0])
+      setTriage(result[1])
+      setHxSocial(result[2])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const formOptions = {
@@ -804,7 +822,78 @@ const GeriOtQuestionnaireForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Patient Info</h2>
+              {reg && reg.registrationQ3 ? (
+                <p className='blue'>Birthday: {reg.registrationQ3}</p>
+              ) : (
+                <p className='blue'>Birthday: nil</p>
+              )}
+
+              {reg && reg.registrationQ4 ? (
+                <p className='blue'>Age: {reg.registrationQ4}</p>
+              ) : (
+                <p className='blue'>Age: nil</p>
+              )}
+
+              {reg && reg.registrationQ5 ? (
+                <p className='blue'>Gender: {reg.registrationQ5}</p>
+              ) : (
+                <p className='blue'>Gender: nil</p>
+              )}
+
+              {triage && triage.triageQ10 ? (
+                <p className='blue'>Weight (in kg): {triage.triageQ10}</p>
+              ) : (
+                <p className='blue'>Weight (in kg): nil</p>
+              )}
+
+              {triage && triage.triageQ9 && triage.triageQ10 ? (
+                <p className='blue'>BMI: {formatBmi(triage.triageQ9, triage.triageQ10)}</p>
+              ) : (
+                <p className='blue'>BMI: nil</p>
+              )}
+
+              <h2>History</h2>
+              <p className='underlined'>Does patient currently smoke:</p>
+              {hxSocial && hxSocial.SOCIAL10 ? (
+                <p className='blue'>{hxSocial.SOCIAL10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>How many pack-years:</p>
+              {hxSocial && hxSocial.SOCIALShortAns10 ? (
+                <p className='blue'>{hxSocial.SOCIALShortAns10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Does patient consume alcoholic drinks:</p>
+              {hxSocial && hxSocial.SOCIAL12 ? (
+                <p className='blue'>{hxSocial.SOCIAL12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

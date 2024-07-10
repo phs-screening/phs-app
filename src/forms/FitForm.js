@@ -11,6 +11,7 @@ import { FormContext } from '../api/utils.js'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { getSavedData } from '../services/mongoDB'
@@ -43,14 +44,28 @@ const formName = 'fitForm'
 const FitForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const [hxCancer, setHxCancer] = useState({})
+
+  const [regi, setRegi] = useState({})
+  const [pmhx, setPMHX] = useState({})
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
+    const regiData = getSavedData(patientId, allForms.registrationForm)
+    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
     setSaveData(savedData)
+
+    Promise.all([
+      regiData,
+      pmhxData,
+    ]).then((result) => {
+      setRegi(result[0])
+      setPMHX(result[1])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const formOptions = {
@@ -111,7 +126,48 @@ const FitForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Patient Info</h2>
+              <p className='underlined'>Patent Age:</p>
+              {regi && regi.registrationQ4 ? (
+                <p className='blue'>{regi.registrationQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <h2>History</h2>
+              <p className='underlined'>Has patient done a FIT test in the last 1 year:</p>
+              {pmhx && pmhx.PMHX10 ? (
+                <p className='blue'>{pmhx.PMHX10}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Has patient done a colonoscopy in the last 10 years or otherwise advised by their doctor:</p>
+              {pmhx && pmhx.PMHX11 ? (
+                <p className='blue'>{pmhx.PMHX11}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

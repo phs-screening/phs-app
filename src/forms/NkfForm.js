@@ -38,14 +38,32 @@ const formName = 'nkfForm'
 const NkfForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
 
+  const [reg, setReg] = useState({})
+  const [triage, setTriage] = useState({})
+  const [hxfamily, setHxFamily] = useState({})
+  const [pmhx, setPMHXData] = useState({})
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
-
     setSaveData(savedData)
+
+    const regData = getSavedData(patientId, allForms.registrationForm)
+    const triageData = getSavedData(patientId, allForms.triageForm)
+    const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
+    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+
+    Promise.all([regData,triageData,hxFamilyData,pmhxData]).then((result) => {
+      setReg(result[0])
+      setTriage(result[1])
+      setHxFamily(result[2])
+      setPMHXData(result[3])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const formOptions = {
@@ -99,7 +117,60 @@ const NkfForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Patient Info</h2>
+              {reg && reg.registrationQ4 ? (
+                <p className='blue'>Age: {reg.registrationQ4}</p>
+              ) : (
+                <p className='blue'>Age: nil</p>
+              )}
+
+              {triage && triage.triageQ9 && triage.triageQ10 ? (
+                <p className='blue'>BMI: {formatBmi(triage.triageQ9, triage.triageQ10)}</p>
+              ) : (
+                <p className='blue'>BMI: nil</p>
+              )}
+
+              <p className='underlined'>Patient has these conditions: </p>
+              {pmhx && pmhx.PMHX7 ? (
+                <p className='blue'>{pmhx.PMHX7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Patient has positive family of these conditions: </p>
+              {hxfamily && hxfamily.FAMILY3 ? (
+                <p className='blue'>{hxfamily.FAMILY3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Has patient has done a kidney screening in the past 1 year: </p>
+              {pmhx && pmhx.PMHX9 ? (
+                <p className='blue'>{pmhx.PMHX9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }
