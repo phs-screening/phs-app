@@ -11,7 +11,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log("patient id " + patientId)
+    console.log("Current Patient ID: " + patientId)
     if (patientId === -1) {
       alert('You need to enter the queue number for the patient you are attending to!')
       navigate('/app/registration', { replace: true })

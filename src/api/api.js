@@ -62,9 +62,6 @@ export async function submitForm(args, patientId, formCollection) {
     const record2 = await patientsRecord.findOne({ queueNo: patientId })
     let qNum = 0
 
-    console.log("test " + patientId)
-
-    console.log("record2 1: "+ record2)
     let gender = args.registrationQ5
     let initials = args.registrationQ2
     let age = args.registrationQ4
@@ -79,25 +76,17 @@ export async function submitForm(args, patientId, formCollection) {
       goingForPhlebotomy: "Y",
     }
     if (record2 == null) {
-      console.log("data: "+ data.initials + " "+ patientId)
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
-      console.log("qNum: "+ qNum)
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
       patientId = qNum
     }
 
-    console.log("record2 2: "+ record2 + " patinet "+ patientId)
-
     const record = await patientsRecord.findOne({ queueNo: patientId })
-    
-    console.log("record: "+ record)
 
     if (record) {
       const registrationForms = mongoConnection.db('phs').collection(formCollection)
       
-      console.log("testing "+ record[formCollection])
       if (record[formCollection] === undefined) {
-        console.log("testing1 "+ record[formCollection] + " patinet "+ patientId )
         // first time form is filled, create document for form
         await patientsRecord.updateOne(
           { queueNo: patientId },
@@ -128,8 +117,6 @@ export async function submitForm(args, patientId, formCollection) {
       // unless malicious user tries to change link to directly access reg page
       // Can check in every form page if there is valid patientId instead
       // cannot use useEffect since the form component is class component
-      console.log("testing2 "+ record[formCollection])
-
       const errorMsg = 'An error has occurred.'
       // You will be directed to the registration page." logic not done
       return { result: false, error: errorMsg }
@@ -192,12 +179,10 @@ export async function submitRegClinics(postalCode, patientId) {
   const registrationFormRecords = mongoConnection.db('phs').collection('registrationForm')
   const patientRegForm = await registrationFormRecords.findOne({ _id: patientId })
 
-  console.log(patientRegForm)
   try {
     if (patientRegForm && patientRegForm.registrationQ10) {
       const location = patientRegForm.registrationQ10.trim()
       const prevPostalCode = location === 'None' ? location : location.slice(-6)
-      console.log(prevPostalCode)
       await clinicSlotsCollection.findOneAndUpdate(
         {
           postalCode: prevPostalCode,
@@ -1291,7 +1276,6 @@ export const regexPasswordPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
 
 export const deleteFromAllDatabase = async () => {
-  console.log('here')
   const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
   const mongoDBConnection = mongoConnection.db('phs')
 
