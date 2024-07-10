@@ -4,7 +4,10 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
+
+import allForms from './forms.json'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
@@ -29,12 +32,23 @@ const formName = 'vaccineForm'
 const VaccineForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
+
+  const [pmhx, setPMHXData] = useState({})
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
+
+    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+    Promise.all([
+      pmhxData,
+    ]).then((result) => {
+      setPMHXData(result[0])
+      isLoadingSidePanel(false)
+    })
   }, [])
 
   const formOptions = {
@@ -85,7 +99,34 @@ const VaccineForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Influenza Vaccination</h2>
+              <p className='underlined'>Has taken influenza vaccination in the past 1 year:</p>
+              {pmhx && pmhx.PMHX16 ? (
+                <p className='blue'>{pmhx.PMHX16}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

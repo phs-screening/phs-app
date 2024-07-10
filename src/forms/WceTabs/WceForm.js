@@ -6,6 +6,7 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
@@ -75,24 +76,29 @@ const formName = 'wceForm'
 const WceForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
   const [hxCancer, setHxCancer] = useState({})
+  const [hxFamily, setHxFamily] = useState({})
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
     const regData = getSavedData(patientId, allForms.registrationForm)
     const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
     const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
+    const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
 
-    Promise.all([savedData, regData, hxSocialData, hxCancerData]).then((result) => {
+    Promise.all([savedData, regData, hxSocialData, hxCancerData, hxFamilyData]).then((result) => {
       setSaveData(result[0])
       setReg(result[1])
       setHxSocial(result[2])
       setHxCancer(result[3])
+      setHxFamily(result[4])
+      isLoadingSidePanel(false)
     })
   }, [])
 
@@ -221,8 +227,69 @@ const WceForm = (props) => {
   )
 
   return (
-    <Paper className='snippet-item' elevation={2} p={0} m={0}>
-      {newForm()}
+    <Paper elevation={2} p={0} m={0}>
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Social Support</h2>
+              <p className='underlined'>CHAS Status 社保援助计划:</p>
+              {reg && reg.registrationQ12 ? (
+                <p className='blue'>{reg.registrationQ12}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Pioneer Generation Status 建国一代配套:</p>
+              {reg && reg.registrationQ13 ? (
+                <p className='blue'>{reg.registrationQ13}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Patient on any other Government Financial Assistance, other than CHAS and PG:</p>
+              {hxSocial && hxSocial.SOCIAL3 ? (
+                <p className='blue'>{hxSocial.SOCIAL3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.SOCIALShortAns3 ? (
+                <p className='blue'>{hxSocial.SOCIALShortAns3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <h2>Family History</h2>
+              <p className='underlined'>Is there positive family history{' '}
+              <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following cancers?:</p>
+              {hxFamily && hxFamily.FAMILY1 ? (
+                <p className='blue'>{hxFamily.FAMILY1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Age of diagnosis:</p>
+              {hxFamily && hxFamily.FAMILYShortAns1 ? (
+                <p className='blue'>{hxFamily.FAMILYShortAns1}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }
