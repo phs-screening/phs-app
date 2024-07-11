@@ -144,7 +144,7 @@ const FitForm = (props) => {
           ) : (
             <div className='summary--question-div'>
               <h2>Patient Info</h2>
-              <p className='underlined'>Patent Age:</p>
+              <p className='underlined'>Patient Age:</p>
               {regi && regi.registrationQ4 ? (
                 <p className='blue'>{regi.registrationQ4}</p>
               ) : (
