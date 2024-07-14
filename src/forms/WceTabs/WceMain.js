@@ -62,15 +62,15 @@ export default function WceTabs() {
     <WceWrapper>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='simple tabs example'>
-          <Tab label='Gynae' {...a11yProps(0)} />
-          <Tab label='WCE' {...a11yProps(1)} />
+          <Tab label='WCE' {...a11yProps(0)} />
+          <Tab label='Gynae' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <GynaeForm changeTab={handleChange} nextTab={1} />
+        <WceForm changeTab={handleChange} nextTab={1} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <WceForm changeTab={handleChange} nextTab={2} />
+        <GynaeForm changeTab={handleChange} nextTab={2} />
       </TabPanel>
     </WceWrapper>
   )
