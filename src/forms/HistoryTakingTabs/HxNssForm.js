@@ -24,7 +24,7 @@ const schema = new SimpleSchema({
   PMHX2: {
     type: String,
     optional: false,
-  },
+  },/* 
   PMHX3: {
     type: Array,
     optional: false,
@@ -52,7 +52,7 @@ const schema = new SimpleSchema({
   PMHXShortAns4: {
     type: String,
     optional: true,
-  },
+  }, */
   PMHX5: {
     type: String,
     allowedValues: ['Yes, (please specify)', 'No'],
@@ -157,7 +157,7 @@ const HxNssForm = (props) => {
   }, [])
 
   const formOptions = {
-    PMHX3: [
+    /* PMHX3: [
       {
         label:
           'Ischaemic Heart Disease (Including Coronary Artery Diseases) 缺血性心脏病（包括心脏血管阻塞)',
@@ -174,7 +174,7 @@ const HxNssForm = (props) => {
         label: 'No, I have never been told I have any of these conditions before',
         value: 'No, I have never been told I have any of these conditions before',
       },
-    ],
+    ], */
     PMHX5: [
       {
         label: 'Yes, (please specify)',
@@ -322,7 +322,7 @@ const HxNssForm = (props) => {
           Has a doctor ever told you that you have the following conditions? Please select all that
           apply.
         </h3>
-        <SelectField
+        {/* <SelectField
           appearance='checkbox'
           checkboxes
           name='PMHX3'
@@ -342,7 +342,7 @@ const HxNssForm = (props) => {
           options={formOptions.PMHX3}
         />
         <h4>Please specify:</h4>
-        <LongTextField name='PMHXShortAns4' label='PMHX4' />
+        <LongTextField name='PMHXShortAns4' label='PMHX4' /> */}
         <h3>Do you have any drug allergies? If yes, please specify.</h3>
         <RadioField name='PMHX5' label='PMHX5' options={formOptions.PMHX5} />
         <h4>Please specify:</h4>

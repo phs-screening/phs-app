@@ -1,5 +1,5 @@
 import React from 'react'
-import { useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -146,7 +146,19 @@ const HxPhqForm = (props) => {
         break
       }
     })
-    return <p className='blue'>{score}</p>
+    if (score >= 10) {
+      return (
+        <Fragment>
+          <p className='blue'>{score} / 27</p>
+          <font color='red'>
+            <b>Patient fails PHQ, score is 10 and above </b>
+          </font>{' '}
+          <br />
+        </Fragment>
+      )
+    } else {
+      return <p className='blue'>{score} / 27</p>
+    }
   }
 
   const newForm = () => (
