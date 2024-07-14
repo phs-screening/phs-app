@@ -104,9 +104,7 @@ const BasicTimeline = (props) => {
         // checks done in parent component Dashboard.js
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
-        if (record.goingForPhlebotomy != null){
-          setGoingForPhlebotomy(record.goingForPhlebotomy === 'Y')
-        }
+
         setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {
