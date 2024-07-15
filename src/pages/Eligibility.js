@@ -178,7 +178,7 @@ const Eligibility = () => {
 
             <Grid item lg={8} md={8} xs={12}>
                 <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
-                    <Typography variant="h6" paddingRight={5} >Doctor's Station</Typography>
+                    <Typography variant="h6" paddingRight={5} >Doctor&apos;s Station</Typography>
                     <Typography>
                         <p className='underlined'></p>
                     </Typography>
