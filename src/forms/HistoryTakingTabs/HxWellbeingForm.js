@@ -157,7 +157,7 @@ const HxWellbeingForm = (props) => {
           options={formOptions.oneToFiveSchema}
         />
         <h4>
-          4. <q>I woke up feeling refreshed and rested.</q>
+          4. <q>I woke up feeling freshed and rested.</q>
         </h4>
         <RadioField
           name='hxWellbeingQ4'
@@ -191,7 +191,7 @@ const HxWellbeingForm = (props) => {
         </p>
         <Divider />
         <h4>
-          6. <q>I spent time with people I like</q>
+          6. <q>I spend time with people I like</q>
         </h4>
         <RadioField
           name='hxWellbeingQ6'

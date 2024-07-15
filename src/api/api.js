@@ -59,7 +59,9 @@ export async function submitForm(args, patientId, formCollection) {
   try {
     const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
     const patientsRecord = mongoConnection.db('phs').collection('patients')
+    const registrationForms = mongoConnection.db('phs').collection(formCollection)
     const record2 = await patientsRecord.findOne({ queueNo: patientId })
+
     let qNum = 0
 
     let gender = args.registrationQ5
@@ -73,29 +75,30 @@ export async function submitForm(args, patientId, formCollection) {
       initials: initials,
       age: age,
       preferredLanguage: preferredLanguage,
-      goingForPhlebotomy: "Y",
+      goingForPhlebotomy: goingForPhlebotomy,
     }
-    if (record2 == null) {
+    if (record2 == null) { 
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
+      await registrationForms.insertOne({ _id: patientId, ...args })
       patientId = qNum
     }
 
     const record = await patientsRecord.findOne({ queueNo: patientId })
 
     if (record) {
-      const registrationForms = mongoConnection.db('phs').collection(formCollection)
-      
       if (record[formCollection] === undefined) {
         // first time form is filled, create document for form
+        console.log("record formcollection: "+ record[formCollection])
         await patientsRecord.updateOne(
           { queueNo: patientId },
           { $set: { [formCollection]: patientId } },
         )
         await registrationForms.insertOne({ _id: patientId, ...args })
-        return { result: true, data: data , qNum: qNum}
+        return { result: true, data: data , qNum: patientId}
       } else {
         if (await isAdmin()) {
+          console.log("record formcollection admin: "+ record[formCollection])
           args.lastEdited = new Date()
           args.lastEditedBy = getName()
           await registrationForms.updateOne({ _id: patientId }, { $set: { ...args } })
@@ -104,7 +107,7 @@ export async function submitForm(args, patientId, formCollection) {
           // throw error message
           // const errorMsg = "This form has already been submitted. If you need to make "
           //         + "any changes, please contact the admin."
-          return { result: true, qNum: qNum}
+          return { result: true, data: data, qNum: patientId}
         } else {
           const errorMsg =
             'This form has already been submitted. If you need to make ' +

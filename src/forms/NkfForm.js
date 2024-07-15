@@ -16,6 +16,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
 import './fieldPadding.css'
+import PopupText from 'src/utils/popupText.js'
 
 const schema = new SimpleSchema({
   NKF1: {
@@ -101,6 +102,12 @@ const NkfForm = (props) => {
         <h1>NKF</h1>
         <h3>Patient has booked an appointment for kidney screen on NKF website.</h3>
         <RadioField name='NKF1' label='NKF1' options={formOptions.NKF1} />
+        <PopupText qnNo='NKF1' triggerValue='No'>
+          <p>
+            <h4>If no, why?</h4>
+            <LongTextField name='NKF3' label='NKF3' />
+          </p>
+        </PopupText>
         <h3>Details of Kidney Screen (Date, Time)</h3>
         <p>
           Write in this format: 16th January, 2024 at 3PM

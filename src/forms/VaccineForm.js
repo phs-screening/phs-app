@@ -11,7 +11,7 @@ import allForms from './forms.json'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { TextField, RadioField, LongTextField } from 'uniforms-mui'
+import { SelectField, TextField, RadioField, LongTextField } from 'uniforms-mui'
 import { useField } from 'uniforms'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -24,6 +24,25 @@ const schema = new SimpleSchema({
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
+  },
+  VAX2: {
+    type: Array,
+    optional: false,
+  },
+  'VAX2.$': {
+    type: String,
+    allowedValues: [
+      '1. Healthway Medical (Jurong West)',
+      '2. Healthway Medical (Jurong West Central)',
+      '3. Healthway Medical (Bukit Batok)',
+      '4. Healthway Medical (Clementi West) (formerly West Coast Clinic and Surgery)',
+      '5. Healthway Medical (Bukit Panjang Plaza)',
+      '6. Medico Clinic & Surgery',
+      '7. Silver Cross Medical (Jurong West)',
+      '8. Healthway Medical (Bukit Batok West)',
+      '9. Silver Cross Medical (Bukit Timah)',
+      '10. Healthway Medical (Limbang)',
+    ],
   },
 })
 
@@ -59,6 +78,28 @@ const VaccineForm = (props) => {
       },
       { label: 'No', value: 'No' },
     ],
+    VAX2: [
+      { label: '1. Healthway Medical (Jurong West)',
+        value: '1. Healthway Medical (Jurong West)' },
+      { label: '2. Healthway Medical (Jurong West Central)', 
+        value: '2. Healthway Medical (Jurong West Central)' },
+      { label: '3. Healthway Medical (Bukit Batok)', 
+        value: '3. Healthway Medical (Bukit Batok)' },
+      { label: '4. Healthway Medical (Clementi West) (formerly West Coast Clinic and Surgery)', 
+        value: '4. Healthway Medical (Clementi West) (formerly West Coast Clinic and Surgery)' },
+      { label: '5. Healthway Medical (Bukit Panjang Plaza)',
+        value: '5. Healthway Medical (Bukit Panjang Plaza)' },
+      { label: '6. Medico Clinic & Surgery',
+        value: '6. Medico Clinic & Surgery' },
+      { label: '7. Silver Cross Medical (Jurong West)',
+        value: '7. Silver Cross Medical (Jurong West)' },
+      { label: '8. Healthway Medical (Bukit Batok West)',
+        value: '8. Healthway Medical (Bukit Batok West)' },
+      { label: '9. Silver Cross Medical (Bukit Timah)',
+        value: '9. Silver Cross Medical (Bukit Timah)' },
+      { label: '10. Healthway Medical (Limbang)',
+        value: '10. Healthway Medical (Limbang)' },
+    ],
   }
 
   const newForm = () => (
@@ -89,6 +130,14 @@ const VaccineForm = (props) => {
         <h3>You have signed up for your complimentary influenza vaccination.</h3>
         <RadioField name='VAX1' label='VAX1' options={formOptions.VAX1} />
         <br />
+        <h3>Please indicate which clinic you would like to take it at:</h3>
+        <SelectField
+          appearance='checkbox'
+          checkboxes
+          name='VAX2'
+          label='VAX2'
+          options={formOptions.VAX2}
+        />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
