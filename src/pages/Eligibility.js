@@ -15,6 +15,7 @@ const Eligibility = () => {
     const [patient, setPatient] = useState({})
     const [hxfamily, setHxFamily] = useState({})
     const [triage, setTriage] = useState({})
+    const [hcsr, setHcsr] = useState({})
 
     useEffect(async () => {
         const loadPastForms = async () => {
@@ -25,6 +26,7 @@ const Eligibility = () => {
             const patientData = getSavedPatientData(patientId, 'patients')
             const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
             const triageData = getSavedData(patientId, allForms.triageForm)
+            const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
             
             Promise.all([
                 pmhxData,
@@ -32,7 +34,8 @@ const Eligibility = () => {
                 regData, 
                 patientData,
                 hxFamilyData, 
-                triageData
+                triageData,
+                hcsrData
             ]).then((result) => {
                 setPMHX(result[0])
                 setSocial(result[1])
@@ -40,6 +43,7 @@ const Eligibility = () => {
                 setPatient(result[3])
                 setHxFamily(result[4])
                 setTriage(result[5])
+                setHcsr(result[6])
                 isLoadingPrevData(false)
             })
         }
@@ -147,6 +151,66 @@ const Eligibility = () => {
                 </Box>
             </Grid>
             
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Mental Health</Typography>
+                    <Typography>
+                        <p className='underlined'>Age: {reg && reg.registrationQ4 ? reg.registrationQ4 : '-'} </p>
+                        <p className='underlined'>DOC11: UNKNOWN DATA </p>
+                        <p className='underlined'>DOC12: UNKNOWN DATA </p>
+                        <p className='underlined'>PHQ10: UNKNOWN DATA </p>
+                        <p className='underlined'>PHQ11: UNKNOWN DATA</p>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Geri - Audiometry</Typography>
+                    <Typography>
+                        <p className='underlined'>Hearing problems: {hcsr && hcsr.hxHcsrQ7 ? hcsr.hxHcsrQ7 : '-'} </p>
+                        <p className='underlined'>Currently use hearing aids/have been detected to require hearing aids? {pmhx && pmhx.PMHX13 ? pmhx.PMHX13 : '-'} </p>
+                        <p className='underlined'>Has the senior seen an ENT specialist before: {pmhx && pmhx.PMHX14 ? pmhx.PMHX14 : '-'} </p>
+                        <p className='underlined'>Hearing aids spoilt/not working?: {pmhx && pmhx.PMHX15 ? pmhx.PMHX15 : '-'} </p>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Doctor's Station</Typography>
+                    <Typography>
+                        <p className='underlined'></p>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Dietician</Typography>
+                    <Typography>
+                        <p className='underlined'></p>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Social Services</Typography>
+                    <Typography>
+                        <p className='underlined'></p>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid item lg={8} md={8} xs={12}>
+                <Box sx={{ display:"flex", alignItems:"center", width:"100%" }}>
+                    <Typography variant="h6" paddingRight={5} >Dental</Typography>
+                    <Typography>
+                        <p className='underlined'></p>
+                    </Typography>
+                </Box>
+            </Grid>
 
             </Grid>
         </Container>
