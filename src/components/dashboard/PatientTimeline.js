@@ -25,6 +25,7 @@ function generateStatusObject(record) {
     lungfn: false,
     gynae: false,
     wce: false,
+    osteo: false,
     nkf: false,
     mentalhealth: false,
     hpv: false,
@@ -57,6 +58,7 @@ function generateStatusObject(record) {
       lungfn: record.lungFnForm !== undefined,
       gynae: record.gynaeForm !== undefined,
       wce: record.wceForm !== undefined, // wce
+      osteo: record.osteoForm !== undefined,
       nkf: record.nkfForm !== undefined,
       mentalhealth: record.mentalHealthForm !== undefined,
       hpv: record.hpvForm !== undefined,
@@ -104,9 +106,7 @@ const BasicTimeline = (props) => {
         // checks done in parent component Dashboard.js
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
-        if (record.goingForPhlebotomy != null){
-          setGoingForPhlebotomy(record.goingForPhlebotomy === 'Y')
-        }
+
         setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {
@@ -262,6 +262,19 @@ const BasicTimeline = (props) => {
             <a href='/app/wce' onClick={(event) => navigateTo(event, navigate, 'wce', scrollTop)}>
               WCE
               {!formDone?.wce ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
+            {formDone?.osteo ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a href='/app/osteoporosis' onClick={(event) => navigateTo(event, navigate, 'osteoporosis', scrollTop)}>
+              Osteoporosis
+              {!formDone?.osteo ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

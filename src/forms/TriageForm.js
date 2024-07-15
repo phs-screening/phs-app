@@ -17,6 +17,12 @@ import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
+let calSyst
+let calDias
+
+const sys1 = 1
+const sys2 = 2
+
 const schema = new SimpleSchema({
   triageQ1: {
     type: Number,
@@ -44,14 +50,15 @@ const schema = new SimpleSchema({
   },
   triageQ7: {
     type: Number,
-    optional: false,
+    optional: true,
   },
   triageQ8: {
     type: Number,
-    optional: false,
+    optional: true,
   },
   triageQ9: {
-    type: Number,
+    type: String,
+    allowedValues: ['Yes', 'No'],
     optional: false,
   },
   triageQ10: {
@@ -60,26 +67,21 @@ const schema = new SimpleSchema({
   },
   triageQ11: {
     type: Number,
-    optional: true,
+    optional: false,
   },
-  triageQ14: {
+  triageQ12: {
     type: Number,
     optional: true,
   },
-  triageQ16: {
-    type: String,
-    optional: true,
-  },
-  triageQ17: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
+  triageQ13: {
+    type: Number,
     optional: false,
-  },
+  }
 })
 
 function CalcBMI() {
-  const [{ value: height_cm }] = useField('triageQ9', {})
-  const [{ value: weight }] = useField('triageQ10', {})
+  const [{ value: height_cm }] = useField('triageQ10', {})
+  const [{ value: weight }] = useField('triageQ11', {})
   if (height_cm && weight) {
     return formatBmi(height_cm, weight)
   }
@@ -102,6 +104,62 @@ function IsHighBP(props) {
   return null
 }
 
+function compareNumbers(a, b) {
+  return a - b;
+}
+
+function CalcAvg(props) {
+  const [{ value: sys1 }] = useField(props.reading1, {})
+  const [{ value: sys2 }] = useField(props.reading2, {})
+  const [{ value: sys3 }] = useField(props.reading3, {})
+  let name = props.label
+
+  let ans
+
+  if (sys3 == null) {
+    ans = Math.round((sys1+sys2)/2)
+    if (name == 1) {
+      calSyst = ans
+    } else {
+      calDias = ans
+    }
+    return ans
+  } else {
+    let diff1 = Math.abs(sys1-sys2)
+    let diff2 = Math.abs(sys1-sys3)
+    let diff3 = Math.abs(sys3-sys2)
+
+    const diffArray = [diff1, diff2, diff3]
+
+    diffArray.sort(compareNumbers);
+
+    if (diffArray[0] == diff1) {
+      ans = Math.round((sys1+sys2)/2)
+      if (name == 1) {
+        calSyst = ans
+      } else {
+        calDias = ans
+      }
+    } else if (diffArray[0] == diff2) {
+      ans = Math.round((sys1+sys3)/2)
+      if (name == 1) {
+        calSyst = ans
+      } else {
+        calDias = ans
+      }
+    } else {
+      ans = Math.round((sys2+sys3)/2)
+      if (name == 1) {
+        calSyst = ans
+      } else {
+        calDias = ans
+      }
+    }
+    return ans
+  }
+}
+
+
 const formName = 'triageForm'
 const TriageForm = () => {
   const [loading, isLoading] = useState(false)
@@ -116,7 +174,7 @@ const TriageForm = () => {
   }, [])
 
   const formOptions = {
-    triageQ17: [
+    triageQ9: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
     ],
@@ -128,7 +186,11 @@ const TriageForm = () => {
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
+        model.triageQ7 = calSyst
+        model.triageQ8 = calDias
+        model.triageQ12 = parseFloat(formatBmi(model.triageQ10, model.triageQ11).props.children)
         const response = await submitForm(model, patientId, formName)
+
         if (response.result) {
           isLoading(false)
           setTimeout(() => {
@@ -173,10 +235,21 @@ const TriageForm = () => {
         <h4>3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by &gt;5mmHg)</h4>
         <NumField name='triageQ6' label='Triage Q6' />
         <IsHighBP systolic_qn='triageQ5' diastolic_qn='triageQ6' />
+
         <h3>Average Reading Systolic (average of closest 2 readings):</h3>
-        <NumField name='triageQ7' label='Triage Q7' />
+        <RadioField name='triageQ7'/>
+        <h3>
+          Calculated Average:
+          <CalcAvg label={sys1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
+        </h3>
+        <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
-        <NumField name='triageQ8' label='Triage Q8' />
+        <RadioField name='triageQ8'/>
+        <h3>
+          Calculated Average:
+          <CalcAvg label={sys2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
+        </h3>
+        <br />
         <h3>Hypertension criteria:</h3>
         <ul>
           <li>Younger participants: &gt; 140/90</li>
@@ -192,8 +265,8 @@ const TriageForm = () => {
           Please tick to highlight if you feel <b>BLOOD PRESSURE</b> require closer scrutiny by
           doctors later.
         </p>
-        <RadioField name='triageQ17' label='Triage Q17' options={formOptions.triageQ17} />
-        <PopupText qnNo='triageQ17' triggerValue='Yes'>
+        <RadioField name='triageQ9' label='Triage Q9' options={formOptions.triageQ9} />
+        <PopupText qnNo='triageQ9' triggerValue='Yes'>
           <b>
             <h4 className='underlined'>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)</h4>
             <ol>
@@ -275,15 +348,15 @@ const TriageForm = () => {
         </PopupText>
         <h2>2) BMI</h2>
         <h3>Height (in cm)</h3>
-        <NumField name='triageQ9' label='Triage Q9' /> <br />
-        <h3>Weight (in kg)</h3>
         <NumField name='triageQ10' label='Triage Q10' /> <br />
+        <h3>Weight (in kg)</h3>
+        <NumField name='triageQ11' label='Triage Q11' /> <br />
         <h3>
           BMI: <CalcBMI />
         </h3>
         <h2>3) Waist Circumference (all participants)</h2>
         <h3>Waist Circumference (in cm)</h3>
-        <NumField name='triageQ14' label='Triage Q14' /> <br />
+        <NumField name='triageQ13' label='Triage Q13' /> <br />
       </div>
 
       <ErrorsField />

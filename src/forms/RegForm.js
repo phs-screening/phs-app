@@ -27,7 +27,7 @@ import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
 import { isInteger } from 'formik'
 
-let patientAge;
+let patientAge
 
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
@@ -186,6 +186,10 @@ const RegForm = () => {
       { label: 'Malay', value: 'Malay' },
       { label: 'Tamil', value: 'Tamil' },
     ],
+    registrationQ15: [
+      { label: 'Yes', value: 'Yes', },
+      { label: 'No', value: 'No' },
+    ]
   }
 
   const layout = (
@@ -231,29 +235,44 @@ const RegForm = () => {
       <RadioField name='registrationQ13' options={formOptions.registrationQ13} />
       <h3>Preferred Language for Health Report</h3>
       <RadioField name='registrationQ14' options={formOptions.registrationQ14} />
-      <h2>Phlebotomy Eligibility</h2>{' '}
-      <p>
-        {' '}
-        Before entering our screening, do note the following eligibility criteria for Phlebotomy:
-        <ol type='A'>
-          <li>NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.</li>
-          <li>Have not done a blood test within the past 3 years.</li>
-        </ol>
-      </p>
-      <p>
-        Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
-        their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This
-        information is available in our publicity material. Please approach our registration
-        volunteers should you have any queries. We are happy to explain further. Thank you!
-      </p>
-      <p>
-        抽血合格标准:
+      <h2>Going for Phlebotomy?</h2>
+      <h3>
+        Conditions:
         <br />
-        1) 在过去的三年内沒有验过血。
+        1) Singaporeans ONLY
         <br />
-        2) 没有糖尿病, 高血压, 高胆固醇。
-      </p>
-      <BoolField name='registrationQ15' />
+        2) Not enrolled under HealthierSG
+        <br />
+        3) Have not undergone a government screening for the past 3 years
+        <br />
+        4) Have not been diagnosed with diabetes, hyperlipidemia or high blood pressure
+      </h3>
+      <RadioField name='registrationQ15' options={formOptions.registrationQ15} />
+      <PopupText qnNo='registrationQ15' triggerValue='Yes'>
+        <h2>Phlebotomy Eligibility</h2>{' '}
+        <p>
+          {' '}
+          Before entering our screening, do note the following eligibility criteria for Phlebotomy:
+          <ol type='A'>
+            <li>NOT previously diagnosed with Diabetes/ High Cholesterol/ High Blood Pressure.</li>
+            <li>Have not done a blood test within the past 3 years.</li>
+          </ol>
+        </p>
+        <p>
+          Rationale: PHS aims to reach out to undiagnosed people. Patients that are already aware of
+          their condition would have regular follow-ups with the GPs/polyclinics/hospitals. This
+          information is available in our publicity material. Please approach our registration
+          volunteers should you have any queries. We are happy to explain further. Thank you!
+        </p>
+        <p>
+          抽血合格标准:
+          <br />
+          1) 在过去的三年内沒有验过血。
+          <br />
+          2) 没有糖尿病, 高血压, 高胆固醇。
+        </p>
+        <BoolField name='registrationQ16' />
+      </PopupText>
       <br />
       <h2>Compliance to PDPA 同意书</h2>
       <p>
@@ -272,7 +291,7 @@ const RegForm = () => {
         will only be disseminated to members of the PHS Executive Committee, and will be strictly
         used by these parties for the purposes stated.
       </p>
-      <BoolField name='registrationQ16' />
+      <BoolField name='registrationQ17' />
       <h2>Follow up at GP Clinics</h2>
       <p>
         Your Health Report & Blood Test Results (if applicable) will be mailed out to the GP you
@@ -389,12 +408,17 @@ const RegForm = () => {
       optional: false,
     },
     registrationQ15: {
-      type: Boolean,
-      label:
-        'I have read and acknowledged the eligibility criteria for Phlebotomy. 我知道抽血的合格标准。',
+      type: String,
+      allowedValues: ['Yes', 'No'],
       optional: false,
     },
     registrationQ16: {
+      type: Boolean,
+      label:
+        'I have read and acknowledged the eligibility criteria for Phlebotomy. 我知道抽血的合格标准。',
+      optional: true,
+    },
+    registrationQ17: {
       type: Boolean,
       label: 'I agree and consent to the above.',
       optional: false,
@@ -423,10 +447,8 @@ const RegForm = () => {
 
           // Note we check on the backend if no slots left
           const counterResponse = await submitRegClinics(postalCode, patientId)
-          console.log(counterResponse)
           // Update counters by checking previous selection
           if (!counterResponse.result) {
-            console.log('fail')
             isLoading(false)
             setTimeout(() => {
               alert(`Unsuccessful. ${counterResponse.error}`)
@@ -436,13 +458,14 @@ const RegForm = () => {
           }
         }
 
+        console.log("Patient ID: " + patientId)
         // If counters updated successfully, submit the new form information
         const response = await submitForm(model, patientId, formName)
 
         console.log("test  _" + response.result + " " + patientAge)
         if (response.result) {
           setTimeout(() => {
-            console.log("response data: "+ response.data)
+            console.log("response data: "+ response.qNum)
             alert('Successfully submitted form')
             console.log('Successfully submitted form')
             updatePatientInfo(response.data)
@@ -451,7 +474,7 @@ const RegForm = () => {
           }, 80)
         } else {
           setTimeout(() => {
-            console.log("failed")
+            console.log("Form submission failed")
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }
