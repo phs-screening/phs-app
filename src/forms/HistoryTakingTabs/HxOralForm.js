@@ -63,7 +63,6 @@ const HxOralForm = (props) => {
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
-
     setSaveData(savedData)
   }, [])
 
@@ -116,7 +115,7 @@ const HxOralForm = (props) => {
         if (response.result) {
           setTimeout(() => {
             alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
+            changeTab(event, nextTab)
           }, 80)
         } else {
           setTimeout(() => {

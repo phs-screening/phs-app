@@ -317,7 +317,6 @@ const RegForm = () => {
       optional: false,
     },
     registrationQ3: {
-      defaultValue: new Date(),
       type: Date,
       optional: false,
     },

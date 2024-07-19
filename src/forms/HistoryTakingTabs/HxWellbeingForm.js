@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
+import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -59,6 +60,7 @@ const HxWellbeingForm = (props) => {
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
   const [regForm, setRegForm] = useState({})
+  const navigate = useNavigate()
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
@@ -116,7 +118,7 @@ const HxWellbeingForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)
