@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
+import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -31,6 +32,8 @@ const GeriWhForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
+  const navigate = useNavigate()
+
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
@@ -58,7 +61,7 @@ const GeriWhForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)
