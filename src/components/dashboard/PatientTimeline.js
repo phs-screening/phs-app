@@ -107,6 +107,10 @@ const BasicTimeline = (props) => {
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
 
+        if (record.goingForPhlebotomy == 'Y') {
+          setGoingForPhlebotomy(true)
+        }
+
         setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {

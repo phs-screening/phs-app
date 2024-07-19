@@ -67,6 +67,7 @@ const RegForm = () => {
   const [slots, setSlots] = useState(defaultSlots)
 
   useEffect(async () => {
+    console.log("Patient ID: "+ patientId)
     const savedData = await getSavedData(patientId, formName)
 
     const phlebCountersCollection = getClinicSlotsCollection()
@@ -104,10 +105,6 @@ const RegForm = () => {
     const today = new Date()
     if (birthday) {
       var age = today.getFullYear() - birthday.getFullYear()
-      const monthDiff = today.getMonth() - birthday.getMonth()
-      if (monthDiff < 0 || (monthDiff == 0 && today.getDate() < birthday.getDate())) {
-        age--
-      }
       setBirthday(birthday)
       patientAge = age
       return <p className='blue'>{age}</p>
@@ -172,7 +169,7 @@ const RegForm = () => {
     registrationQ12: [
       { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'CHAS Green', value: 'CHAS Green' },
-      { label: 'CHAS Blue', value: 'CHAS blue' },
+      { label: 'CHAS Blue', value: 'CHAS Blue' },
       { label: 'No CHAS', value: 'No CHAS' },
     ],
     registrationQ13: [
@@ -187,8 +184,8 @@ const RegForm = () => {
       { label: 'Tamil', value: 'Tamil' },
     ],
     registrationQ15: [
-      { label: 'Yes', value: 'Yes', },
-      { label: 'No', value: 'No' },
+      { label: 'Yes', value: 'Y', },
+      { label: 'No', value: 'N' },
     ]
   }
 
@@ -248,7 +245,7 @@ const RegForm = () => {
         4) Have not been diagnosed with diabetes, hyperlipidemia or high blood pressure
       </h3>
       <RadioField name='registrationQ15' options={formOptions.registrationQ15} />
-      <PopupText qnNo='registrationQ15' triggerValue='Yes'>
+      <PopupText qnNo='registrationQ15' triggerValue='Y'>
         <h2>Phlebotomy Eligibility</h2>{' '}
         <p>
           {' '}
@@ -409,7 +406,7 @@ const RegForm = () => {
     },
     registrationQ15: {
       type: String,
-      allowedValues: ['Yes', 'No'],
+      allowedValues: ['Y', 'N'], //dont change this
       optional: false,
     },
     registrationQ16: {
