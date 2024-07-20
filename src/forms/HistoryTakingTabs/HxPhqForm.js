@@ -11,6 +11,7 @@ import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
+import PopupText from 'src/utils/popupText'
 
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
@@ -75,6 +76,11 @@ const schema = new SimpleSchema({
     allowedValues: dayRange,
     optional: false,
   },
+  PHQextra9: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
   PHQ11: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -115,6 +121,16 @@ const HxPhqForm = (props) => {
     PHQ7: dayRangeFormOptions,
     PHQ8: dayRangeFormOptions,
     PHQ9: dayRangeFormOptions,
+    PHQextra9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { 
+        label: 'No', 
+        value: 'No' 
+      },
+    ],
     PHQ11: [
       {
         label: 'Yes',
@@ -199,6 +215,10 @@ const HxPhqForm = (props) => {
     >
       <div className='form--div'>
         <h2>
+          **When asking these questions, please let patient know that it can be sensitive**
+        </h2>
+        <br />
+        <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
         </h2>
         <h3>1. Little interest or pleasure in doing things</h3>
@@ -225,6 +245,15 @@ const HxPhqForm = (props) => {
         <RadioField name='PHQ8' label='PHQ8' options={formOptions.PHQ8} />
         <h3>9. Thoughts that you would be better off dead or hurting yourself in some way</h3>
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
+        <PopupText qnNo='PHQ9' triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}>
+          <h3>*Do you want to take your life now?*</h3>
+          <RadioField name='PHQextra9' label='PHQextra9' options={formOptions.PHQextra9} />
+        </PopupText>
+        <PopupText qnNo='PHQextra9' triggerValue='Yes'>
+          <font color='red'>
+            <b>*Patient requires urgent attention, please escalate*</b>
+          </font>{' '}
+        </PopupText>
         <h3>Score:</h3>
         <GetScore />
         <h3>Do you feel like the patient will benefit from counselling? Specify why.</h3>

@@ -43,10 +43,13 @@ const HsgForm = (props) => {
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    setSaveData(savedData)
-  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
+  }, [patientId])
 
   const formOptions = {
     HSG1: [
