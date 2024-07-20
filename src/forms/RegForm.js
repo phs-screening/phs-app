@@ -27,8 +27,6 @@ import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
 import { isInteger } from 'formik'
 
-let patientAge
-
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
   600130: 'Trinity Medical Clinic\nBIk 130, Jurong Gateway Road #02-205, S600130',
@@ -65,6 +63,7 @@ const RegForm = () => {
   const [saveData, setSaveData] = useState({})
   const [birthday, setBirthday] = useState(new Date())
   const [slots, setSlots] = useState(defaultSlots)
+  const [patientAge, setPatientAge] = useState(0)
 
   useEffect(async () => {
     console.log("Patient ID: "+ patientId)
@@ -106,7 +105,7 @@ const RegForm = () => {
     if (birthday) {
       var age = today.getFullYear() - birthday.getFullYear()
       setBirthday(birthday)
-      patientAge = age
+      setPatientAge(age)
       return <p className='blue'>{age}</p>
     }
     return null
@@ -184,8 +183,8 @@ const RegForm = () => {
       { label: 'Tamil', value: 'Tamil' },
     ],
     registrationQ15: [
-      { label: 'Yes', value: 'Y', },
-      { label: 'No', value: 'N' },
+      { label: 'Yes', value: 'Yes', },
+      { label: 'No', value: 'No' },
     ]
   }
 
@@ -245,7 +244,7 @@ const RegForm = () => {
         4) Have not been diagnosed with diabetes, hyperlipidemia or high blood pressure
       </h3>
       <RadioField name='registrationQ15' options={formOptions.registrationQ15} />
-      <PopupText qnNo='registrationQ15' triggerValue='Y'>
+      <PopupText qnNo='registrationQ15' triggerValue='Yes'>
         <h2>Phlebotomy Eligibility</h2>{' '}
         <p>
           {' '}
@@ -317,6 +316,7 @@ const RegForm = () => {
       optional: false,
     },
     registrationQ3: {
+      defaultValue: new Date(),
       type: Date,
       optional: false,
     },
@@ -405,7 +405,7 @@ const RegForm = () => {
     },
     registrationQ15: {
       type: String,
-      allowedValues: ['Y', 'N'], //dont change this
+      allowedValues: ['Yes', 'No'], 
       optional: false,
     },
     registrationQ16: {

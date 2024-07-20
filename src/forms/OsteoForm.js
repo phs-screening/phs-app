@@ -88,7 +88,7 @@ const OsteoForm = (props) => {
     >
       <div className='form--div'>
         <h1>Osteoporosis</h1>
-        <h3>OSTA: Based on the picture below, patients osteoporosis risk is: </h3>
+        <h3>OSTA: Based on the picture below, patient&apos;s osteoporosis risk is: </h3>
         <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
         <br />
         <h3>Patient requires a follow up</h3>
@@ -96,7 +96,6 @@ const OsteoForm = (props) => {
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-
       <Divider />
     </AutoForm>
   )
@@ -109,12 +108,18 @@ const OsteoForm = (props) => {
             {newForm()}
           </Paper>
         </Grid>
-        <Grid item p={1} width='30%' display='flex' flexDirection='column' alignItems={loadingSidePanel ? 'center' : 'left'}>
+        <Grid 
+          item p={1} 
+          width='30%' 
+          display='flex' 
+          flexDirection='column' 
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2>Regi, tri, social</h2>
+              <h2></h2>
             </div>
           )}
         </Grid>
