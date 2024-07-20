@@ -239,14 +239,14 @@ const TriageForm = () => {
         <h3>Average Reading Systolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ7'/>
         <h3>
-          Calculated Average:
+          Calculated Average: &nbsp;
           <CalcAvg label={sys1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
         </h3>
         <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ8'/>
         <h3>
-          Calculated Average:
+          Calculated Average: &nbsp;
           <CalcAvg label={sys2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
         </h3>
         <br />

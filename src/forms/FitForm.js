@@ -20,7 +20,7 @@ import allForms from './forms.json'
 import PopupText from 'src/utils/popupText.js'
 
 const schema = new SimpleSchema({
-  fitQ1: {
+  /* fitQ1: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
@@ -28,7 +28,7 @@ const schema = new SimpleSchema({
   fitShortAnsQ1: {
     type: String,
     optional: true,
-  },
+  }, */
   fitQ2: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -69,10 +69,10 @@ const FitForm = (props) => {
   }, [])
 
   const formOptions = {
-    fitQ1: [
+    /* fitQ1: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-    ],
+    ], */
     fitQ2: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
@@ -103,10 +103,10 @@ const FitForm = (props) => {
     >
       <div className='form--div'>
         <h1>FIT</h1>
-        <h3>Does the patient have any gastrointestinal symptoms?</h3>
+        {/* <h3>Does the patient have any gastrointestinal symptoms?</h3>
         <RadioField name='fitQ1' label='fitQ1' options={formOptions.fitQ1} />
         <h4>Please specify:</h4>
-        <LongTextField name='fitShortAnsQ1' label='fitQ1' />
+        <LongTextField name='fitShortAnsQ1' label='fitQ1' /> */}
         <h3>Sign-up for FIT home delivery</h3>
         <RadioField name='fitQ2' label='fitQ2' options={formOptions.fitQ2} />
         <PopupText qnNo='fitQ2' triggerValue='No'>

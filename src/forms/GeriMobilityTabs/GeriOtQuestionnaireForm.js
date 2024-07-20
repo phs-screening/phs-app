@@ -2,7 +2,7 @@ import React, { Component, Fragment, useContext, useEffect, useState } from 'rea
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
-import allForms from '../../forms/forms.json'
+import allForms from '../forms.json'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -253,21 +253,20 @@ const GeriOtQuestionnaireForm = (props) => {
   const [saveData, setSaveData] = useState({})
 
   const [reg, setReg] = useState({})
-  const [hxSocial, setHxSocial] = useState({})
+  const [social, setSocial] = useState({})
   const [triage, setTriage] = useState({})
 
   useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
-
+    const savedData = getSavedData(patientId, formName)
     const regData = getSavedData(patientId, allForms.registrationForm)
     const triageData = getSavedData(patientId, allForms.triageForm)
     const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-    Promise.all([regData, triageData, hxSocialData]).then((result) => {
-      setReg(result[0])
-      setTriage(result[1])
-      setHxSocial(result[2])
-      isLoadingSidePanel(false)
+    Promise.all([savedData, regData, triageData, hxSocialData]).then((result) => {
+      setSaveData(result[0])
+      setReg(result[1])
+      setTriage(result[2])
+      setSocial(result[3])
+      //isLoadingSidePanel(false) //there is an issue here. Need to fix
     })
   }, [])
 
@@ -872,21 +871,21 @@ const GeriOtQuestionnaireForm = (props) => {
 
               <h2>History</h2>
               <p className='underlined'>Does patient currently smoke:</p>
-              {hxSocial && hxSocial.SOCIAL10 ? (
-                <p className='blue'>{hxSocial.SOCIAL10}</p>
+              {social && social.SOCIAL10 ? (
+                <p className='blue'>{social.SOCIAL10}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
               <p className='underlined'>How many pack-years:</p>
-              {hxSocial && hxSocial.SOCIALShortAns10 ? (
-                <p className='blue'>{hxSocial.SOCIALShortAns10}</p>
+              {social && social.SOCIALShortAns10 ? (
+                <p className='blue'>{social.SOCIALShortAns10}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
 
               <p className='underlined'>Does patient consume alcoholic drinks:</p>
-              {hxSocial && hxSocial.SOCIAL12 ? (
-                <p className='blue'>{hxSocial.SOCIAL12}</p>
+              {social && social.SOCIAL12 ? (
+                <p className='blue'>{social.SOCIAL12}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
