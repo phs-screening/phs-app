@@ -239,14 +239,14 @@ const TriageForm = () => {
         <h3>Average Reading Systolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ7'/>
         <h3>
-          Calculated Average:
+          Calculated Average: &nbsp;
           <CalcAvg label={sys1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
         </h3>
         <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ8'/>
         <h3>
-          Calculated Average:
+          Calculated Average: &nbsp;
           <CalcAvg label={sys2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
         </h3>
         <br />
@@ -266,7 +266,7 @@ const TriageForm = () => {
           doctors later.
         </p>
         <RadioField name='triageQ9' label='Triage Q9' options={formOptions.triageQ9} />
-        <PopupText qnNo='triageQ9' triggerValue='Yes'>
+        {/* <PopupText qnNo='triageQ9' triggerValue='Yes'>
           <b>
             <h4 className='underlined'>REFER TO DR CONSULT: (FOR THE FOLLOWING SCENARIOS)</h4>
             <ol>
@@ -345,7 +345,7 @@ const TriageForm = () => {
             </ul>
             <br />
           </b>
-        </PopupText>
+        </PopupText> */}
         <h2>2) BMI</h2>
         <h3>Height (in cm)</h3>
         <NumField name='triageQ10' label='Triage Q10' /> <br />

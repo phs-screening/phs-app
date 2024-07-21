@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -6,15 +6,14 @@ import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { RadioField } from 'uniforms-mui'
-import { useField } from 'uniforms'
+import { AutoForm, useField } from 'uniforms'
+import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
+
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
-import '../forms.css'
 
 const dayRange = [
   '0 - Not at all',
@@ -22,12 +21,15 @@ const dayRange = [
   '2 - More than half the days',
   '3 - Nearly everyday',
 ]
+
+
 const dayRangeFormOptions = [
   { label: '0 - Not at all', value: '0 - Not at all' },
   { label: '1 - Several days', value: '1 - Several days' },
   { label: '2 - More than half the days', value: '2 - More than half the days' },
   { label: '3 - Nearly everyday', value: '3 - Nearly everyday' },
 ]
+
 const schema = new SimpleSchema({
   PHQ1: {
     type: String,
@@ -74,21 +76,40 @@ const schema = new SimpleSchema({
     allowedValues: dayRange,
     optional: false,
   },
+  PHQ10: {
+    type: Number,
+    optional: true,
+  },
+  PHQ11: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
+  PHQShortAns11: {
+    type: String,
+    optional: true,
+  },
 })
 
 const formName = 'geriPhqForm'
+const formNamePHQ = 'hxPhqForm' // In this form, you get the info from the HX PHQ Form
 
 const GeriPhqForm = (props) => {
-  const [loading, isLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    setSaveData(savedData)
-  }, [])
+  let score = 0
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formNamePHQ)
+      setSaveData(savedData)
+    }
+    fetchData()
+  }, [patientId])
 
   const formOptions = {
     PHQ1: dayRangeFormOptions,
@@ -100,10 +121,19 @@ const GeriPhqForm = (props) => {
     PHQ7: dayRangeFormOptions,
     PHQ8: dayRangeFormOptions,
     PHQ9: dayRangeFormOptions,
+    PHQ11: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { 
+        label: 'No', 
+        value: 'No' 
+      },
+    ],
   }
-  const GetScore = () => {
-    let score = 0
 
+  const GetScore = () => {
     const [{ value: q1 }] = useField('PHQ1', {})
     const [{ value: q2 }] = useField('PHQ2', {})
     const [{ value: q3 }] = useField('PHQ3', {})
@@ -123,34 +153,49 @@ const GeriPhqForm = (props) => {
 
     const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
 
-    questions.forEach((qn) => {
+    /*questions.forEach((qn) => {
       while (qn) {
         score += points[qn]
         break
       }
-    })
-    return (
-      <p>
-        <span className='blue'>{score}</span> /27
-      </p>
-    )
+    })*/
+
+    score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
+
+    if (score >= 10) {
+      return (
+        <Fragment>
+          <p className='blue'>{score} / 27</p>
+          <font color='red'>
+            <b>Patient fails PHQ, score is 10 and above </b>
+          </font>{' '}
+          <br />
+        </Fragment>
+      )
+    } else {
+      return <p className='blue'>{score} / 27</p>
+    }
   }
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
       className='fieldPadding'
       onSubmit={async (model) => {
-        isLoading(true)
+        setLoading(true)
+
+        model.PHQ10 = score //update score
+
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             changeTab(event, nextTab)
           }, 80)
         } else {
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
@@ -159,7 +204,6 @@ const GeriPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>PHQ</h1>
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
         </h2>
@@ -189,6 +233,10 @@ const GeriPhqForm = (props) => {
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
         <h3>Score:</h3>
         <GetScore />
+        <h3>Do you feel like the patient will benefit from counselling? Specify why.</h3>
+        <RadioField name='PHQ11' label='PHQ11' options={formOptions.PHQ11} />
+        <h4>Please specify.</h4>
+        <LongTextField name='PHQShortAns11' label='PHQ11' />
         <br />
       </div>
       <ErrorsField />

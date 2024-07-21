@@ -68,7 +68,7 @@ const LungFnForm = (props) => {
 
   const [social, setSocial] = useState({})
 
-  useEffect(async () => {
+  /* useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
     const socialData = getSavedData(patientId, allForms.hxSocialForm)
     setSaveData(savedData)
@@ -78,6 +78,15 @@ const LungFnForm = (props) => {
     ]).then((result) => {
       setSocial(result[0])
       isLoadingSidePanel(false)
+    })
+  }, []) */
+
+  useEffect(async () => {
+    const savedData = getSavedData(patientId, formName)
+    const socialData = getSavedData(patientId, allForms.hxSocialForm)
+    Promise.all([savedData, socialData]).then((result) => {
+      setSaveData(result[0])
+      setSocial(result[1])
     })
   }, [])
 

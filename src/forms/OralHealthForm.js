@@ -53,7 +53,7 @@ const schema = new SimpleSchema({
   },
   DENT4: {
     type: String,
-    allowedValues: ['Yes, No, (specify why)'],
+    allowedValues: ['Yes', 'No, (specify why)'],
     optional: false,
   },
   DENTShortAns4: {
@@ -87,6 +87,12 @@ const OralHealthForm = () => {
         value: 'Yes, (please specify)',
       },
       { label: 'No', value: 'No' },
+    ],
+    DENT3: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
     ],
     DENT4: [
       {
@@ -136,7 +142,7 @@ const OralHealthForm = () => {
             </li>
             <li>
               The Oral Health Screening only provides a basic assessment of my/my ward&apos;s oral
-              health condtion and that it does not take the place of a thorough oral health
+              health condition and that it does not take the place of a thorough oral health
               examination.
             </li>
             <li>
@@ -172,7 +178,7 @@ const OralHealthForm = () => {
           checkboxes
           name='DENT3'
           label='DENT3'
-          options={formOptions.DENT1}
+          options={formOptions.DENT3}
         />
         <h3>Patient has registered with NUS Dentistry for follow-up. If no, why not.</h3>
         <RadioField name='DENT4' label='DENT4' options={formOptions.DENT4} />

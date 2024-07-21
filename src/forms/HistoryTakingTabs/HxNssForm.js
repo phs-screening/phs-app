@@ -116,12 +116,12 @@ const schema = new SimpleSchema({
   PMHX13: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: false,
+    optional: true,
   },
   PMHX14: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: false,
+    optional: true,
   },
   PMHXShortAns14: {
     type: String,
@@ -130,17 +130,17 @@ const schema = new SimpleSchema({
   PMHX15: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: false,
+    optional: true,
   },
   PMHXShortAns15: {
     type: String,
     optional: true,
   },
-  PMHX16: {
+  /* PMHX16: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
-  },
+  }, */
 })
 
 const formName = 'hxNssForm'
@@ -253,13 +253,13 @@ const HxNssForm = (props) => {
       },
       { label: 'No', value: 'No' },
     ],
-    PMHX16: [
+    /* PMHX16: [
       {
         label: 'Yes',
         value: 'Yes',
       },
       { label: 'No', value: 'No' },
-    ],
+    ], */
   }
 
   const newForm = () => (
@@ -418,8 +418,8 @@ const HxNssForm = (props) => {
         <RadioField name='PMHX15' label='PMHX15' options={formOptions.PMHX15} />
         <h4>Please specify:</h4>
         <LongTextField name='PMHXShortAns15' label='PMHX15' />
-        <h3>Have you taken a influenza vaccination in the past 1 year?</h3>
-        <RadioField name='PMHX16' label='PMHX16' options={formOptions.PMHX16} />
+        {/* <h3>Have you taken a influenza vaccination in the past 1 year?</h3>
+        <RadioField name='PMHX16' label='PMHX16' options={formOptions.PMHX16} /> */}
       </div>
 
       <ErrorsField />

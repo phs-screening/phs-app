@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm } from 'uniforms'
+import { AutoForm, useField } from 'uniforms'
 import { SubmitField, ErrorsField, LongTextField } from 'uniforms-mui'
 import { RadioField } from 'uniforms-mui'
 import { submitFormSpecial } from '../../api/api.js'
@@ -20,7 +20,7 @@ import '../fieldPadding.css'
 import allForms from '../forms.json'
 
 const schema = new SimpleSchema({
-  wceQ1: {
+  /* wceQ1: {
     type: String,
     allowedValues: [
       '1 year ago or less',
@@ -45,7 +45,7 @@ const schema = new SimpleSchema({
       'Never been checked',
     ],
     optional: false,
-  },
+  }, */
   wceQ3: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
@@ -70,7 +70,42 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: true,
   },
+  wceQ8: {
+    type: String,
+    allowedValues: ['Never before', 'Less than 5 years', '5 years or longer'],
+    optional: true,
+  },
+  wceQ9: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: true,
+  },
+  wceQ10: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: true,
+  }
 })
+
+function CheckHpvEligibility(props) {
+  const [{ value: wceQ8p }] = useField(props.wceQ8p, {})
+  const [{ value: wceQ9p }] = useField(props.wceQ9p, {})
+  const [{ value: wceQ10p }] = useField(props.wceQ10p, {})
+
+  if ((wceQ8p == '5 years or longer' || (wceQ8p == 'Never before')) && (wceQ9p == 'Yes') && (wceQ10p == 'No')) {
+    return (
+      <Fragment>
+        <p className='blue'>Patient is eligibile for HPV Test</p>
+      </Fragment>
+    )
+  } else {
+    return (
+      <Fragment>
+        <p className='blue'>Patient is not eligibile for HPV Test</p>
+      </Fragment>
+    )
+  }
+}
 
 const formName = 'wceForm'
 const WceForm = (props) => {
@@ -84,6 +119,7 @@ const WceForm = (props) => {
   const [hxSocial, setHxSocial] = useState({})
   const [hxCancer, setHxCancer] = useState({})
   const [hxFamily, setHxFamily] = useState({})
+  const { changeTab, nextTab } = props
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
@@ -103,7 +139,7 @@ const WceForm = (props) => {
   }, [])
 
   const formOptions = {
-    wceQ1: [
+    /* wceQ1: [
       {
         label: '1 year ago or less',
         value: '1 year ago or less',
@@ -126,7 +162,7 @@ const WceForm = (props) => {
       { label: 'More than 4 years to 5 years', value: 'More than 4 years to 5 years' },
       { label: 'More than 5 years', value: 'More than 5 years' },
       { label: 'Never been checked', value: 'Never been checked' },
-    ],
+    ], */
     wceQ3: [
       {
         label: 'Yes',
@@ -158,6 +194,34 @@ const WceForm = (props) => {
       },
       { label: 'No', value: 'No' },
     ],
+    wceQ8: [
+      {
+        label: 'Never before',
+        value: 'Never before',
+      },
+      { 
+        label: 'Less than 5 years', 
+        value: 'Less than 5 years' 
+      },
+      { 
+        label: '5 years or longer', 
+        value: '5 years or longer' 
+      },
+    ],
+    wceQ9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
+    wceQ10: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { label: 'No', value: 'No' },
+    ],
   }
   const newForm = () => (
     <AutoForm
@@ -170,7 +234,7 @@ const WceForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
+            changeTab(event, nextTab)
           }, 80)
         } else {
           isLoading(false)
@@ -183,7 +247,7 @@ const WceForm = (props) => {
     >
       <div className='form--div'>
         <h1>WCE</h1>
-        <h3>
+        {/* <h3>
           <span className='red'>1. For female respondent aged 40 and above only. </span>
           When was the last time you had your last mammogram?
         </h3>
@@ -201,11 +265,23 @@ const WceForm = (props) => {
           womb, to check for changes in the cells of your cervix, which may develop into cancer
           later.)
         </p>
-        <RadioField name='wceQ2' label='WCE Q2' options={formOptions.wceQ2} />
+        <RadioField name='wceQ2' label='WCE Q2' options={formOptions.wceQ2} /> */}
         <h3>Completed Breast Self Examination station?</h3>
         <RadioField name='wceQ3' label='WCE Q3' options={formOptions.wceQ3} />
         <h3>Completed Cervical Education station?</h3>
         <RadioField name='wceQ4' label='WCE Q4' options={formOptions.wceQ4} />
+        <h3>
+          When, if any, was the last hpv test you have taken? (HPV is different from Pap Smear, disregard Pap Smear)
+        </h3>
+        <RadioField name='wceQ8' label='WCE Q8' options={formOptions.wceQ8} />
+        <h3>
+          I am asking the next few questions to check your eligibility for a Pap Smear. This question may be sensitive, but could I ask if you have engaged in sexual intercourse before?
+        </h3>
+        <RadioField name='wceQ9' label='WCE Q9' options={formOptions.wceQ9} />
+        <h3>Are you pregnant?</h3>
+        <RadioField name='wceQ10' label='WCE Q10' options={formOptions.wceQ10} />
+        <h3>HPV Test Eligibility</h3>
+        <CheckHpvEligibility wceQ8p='wceQ8' wceQ9p='wceQ9' wceQ10p='wceQ10'/>
         <h3>Indicated interest for HPV Test under SCS?</h3>
         <RadioField name='wceQ5' label='WCE Q5' options={formOptions.wceQ5} />
         <h3>Details of HPV Test (Date, Time)</h3>

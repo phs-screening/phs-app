@@ -19,7 +19,7 @@ import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import { useNavigate } from 'react-router'
 
-const schema = SimpleSchema({
+const schema = new SimpleSchema({
   BONE1: {
     type: String,
     allowedValues: ['High', 'Moderate', 'Low'],
@@ -36,16 +36,21 @@ const formName = 'osteoForm'
 
 const OsteoForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
-  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+      isLoadingSidePanel(false)
+    }
+
+    fetchData()
+  }, [patientId])
 
   const formOptions = {
     BONE1: [
@@ -54,10 +59,8 @@ const OsteoForm = (props) => {
       { label: 'Low', value: 'Low' },
     ],
     BONE2: [
-      { label: 'Yes',
-        value: 'Yes' },
-      { label: 'No', 
-        value: 'No' },
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
     ],
   }
 
@@ -66,17 +69,16 @@ const OsteoForm = (props) => {
       schema={form_schema}
       className='fieldPadding'
       onSubmit={async (model) => {
-        isLoading(true)
+        setLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
@@ -86,7 +88,7 @@ const OsteoForm = (props) => {
     >
       <div className='form--div'>
         <h1>Osteoporosis</h1>
-        <h3>OSTA: Based on the picture below, patient s osteoporosis risk is: </h3>
+        <h3>OSTA: Based on the picture below, patient&apos;s osteoporosis risk is: </h3>
         <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
         <br />
         <h3>Patient requires a follow up</h3>
@@ -94,31 +96,30 @@ const OsteoForm = (props) => {
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-
       <Divider />
     </AutoForm>
   )
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      <Grid display='flex' flexDirection='row'>
-        <Grid xs={9}>
+      <Grid container direction='row'>
+        <Grid item xs={9}>
           <Paper elevation={2} p={0} m={0}>
             {newForm()}
           </Paper>
         </Grid>
-        <Grid
-          p={1}
-          width='30%'
-          display='flex'
-          flexDirection='column'
+        <Grid 
+          item p={1} 
+          width='30%' 
+          display='flex' 
+          flexDirection='column' 
           alignItems={loadingSidePanel ? 'center' : 'left'}
         >
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2>Regi, tri, social</h2>
+              <h2></h2>
             </div>
           )}
         </Grid>
