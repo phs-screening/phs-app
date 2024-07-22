@@ -17,8 +17,11 @@ import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
-const [calSyst, setCalSyst] = useState(0)
-const [calDias, setCalDias] = useState(0)
+let calSyst
+let calDias
+
+const sys1 = 1
+const sys2 = 2
 
 const schema = new SimpleSchema({
   triageQ1: {
@@ -116,9 +119,9 @@ function CalcAvg(props) {
   if (sys3 == null) {
     ans = Math.round((sys1+sys2)/2)
     if (name == 1) {
-      setCalSyst(ans)
+      calSyst = ans
     } else {
-      setCalDias(ans)
+      calDias = ans
     }
     return ans
   } else {
@@ -133,23 +136,23 @@ function CalcAvg(props) {
     if (diffArray[0] == diff1) {
       ans = Math.round((sys1+sys2)/2)
       if (name == 1) {
-        setCalSyst(ans)
+        calSyst = ans
       } else {
-        setCalDias(ans)
+        calDias = ans
       }
     } else if (diffArray[0] == diff2) {
       ans = Math.round((sys1+sys3)/2)
       if (name == 1) {
-        setCalSyst(ans)
+        calSyst = ans
       } else {
-        setCalDias(ans)
+        calDias = ans
       }
     } else {
       ans = Math.round((sys2+sys3)/2)
       if (name == 1) {
-        setCalSyst(ans)
+        calSyst = ans
       } else {
-        setCalDias(ans)
+        calDias = ans
       }
     }
     return ans
@@ -237,14 +240,14 @@ const TriageForm = () => {
         <RadioField name='triageQ7'/>
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
+          <CalcAvg label={sys1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
         </h3>
         <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ8'/>
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
+          <CalcAvg label={sys2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
         </h3>
         <br />
         <h3>Hypertension criteria:</h3>
