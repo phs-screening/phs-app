@@ -194,9 +194,11 @@ const MentalHealthForm = () => {
 
               <p className='blue'>DOC12: UNKNOWN DATA</p>
 
-              <p className='blue'>PHQ10: UNKNOWN DATA</p>
+              <p className='blue'>PHQ Score: {phq.PHQ10}</p>
 
-              <p className='blue'>PHQ11: UNKNOWN DATA</p>
+              <p className='underlined'>Would the patient benefit from counselling:</p>
+              <p className='blue'>{phq.PHQ11},</p>
+              <p className='blue'>{phq.PHQShortAns11}</p>
 
 
             </div>

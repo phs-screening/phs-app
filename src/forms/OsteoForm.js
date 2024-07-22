@@ -41,12 +41,25 @@ const OsteoForm = (props) => {
   const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
+  const [regi, setRegi] = useState({})
+  const [triage, setTriage] = useState({})
+  const [social, setSocial] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
       setSaveData(savedData)
-      isLoadingSidePanel(false)
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
+      const socialData = getSavedData(patientId, allForms.hxSocialForm)
+      
+      Promise.all([regiData, triageData, socialData]).then((result) => {
+          setRegi(result[0])
+          setTriage(result[1])
+          setSocial(result[2])
+          isLoadingSidePanel(false)
+        }
+      )
     }
 
     fetchData()
@@ -102,14 +115,14 @@ const OsteoForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      <Grid container direction='row'>
-        <Grid item xs={9}>
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
           <Paper elevation={2} p={0} m={0}>
             {newForm()}
           </Paper>
         </Grid>
         <Grid 
-          item p={1} 
+          p={1} 
           width='30%' 
           display='flex' 
           flexDirection='column' 
@@ -119,7 +132,43 @@ const OsteoForm = (props) => {
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2></h2>
+              <h2>Patient Info</h2>
+              {
+                regi ? (
+                  <>
+                    {
+                      (regi.registrationQ3 instanceof Date? 
+                      <p>Birthday: <strong>{regi.registrationQ3.toDateString()}</strong></p>
+                       : <p className='red'>registrationQ3 is invalid!</p>)
+                    }
+                    <p>Age: <strong>{regi.registrationQ4}</strong></p>
+                    <p>Gender: <strong>{String(regi.registrationQ5)}</strong></p>
+                  </>
+              ) : null
+              }
+
+              {
+                triage && triage ? (
+                    <>
+                    <p>Height (in cm): <strong>{triage.triageQ10}</strong></p>
+                    <p>Weight (in kg): <strong>{triage.triageQ11}</strong></p>
+                    </>
+                ) : null
+              }
+
+              {
+                social ? (
+                  <>
+                  <p>Does patient currently smoke: <strong>{String(social.SOCIAL10)}</strong></p>
+                  <p>How many pack years: <strong>{String(social.SOCIALShortAns10)}</strong></p>
+
+                  <p>Does patient consume alcoholic drinks: <strong>{String(social.SOCIAL12)}</strong></p>
+                  </>
+                ) : null
+              // SOCIAL 10
+              // SOCIAL 12
+              }
+              
             </div>
           )}
         </Grid>
