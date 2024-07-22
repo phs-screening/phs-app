@@ -51,21 +51,25 @@ const FitForm = (props) => {
 
   const [regi, setRegi] = useState({})
   const [pmhx, setPMHX] = useState({})
+  const [lung, setLung] = useState({})
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
     const regiData = getSavedData(patientId, allForms.registrationForm)
     const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+    const lungData = getSavedData(patientId, allForms.lungForm)
     setSaveData(savedData)
 
     Promise.all([
       savedData,
       regiData,
       pmhxData,
+      lungData
     ]).then((result) => {
       setSaveData(result[0])
       setRegi(result[1])
       setPMHX(result[2])
+      setLung(result[3])
       isLoadingSidePanel(false)
     })
   }, [])
@@ -149,6 +153,13 @@ const FitForm = (props) => {
               <h2>Patient Info</h2>
               <p className='underlined'>Patient Age:</p>
               {regi && regi.registrationQ4 ? (
+                <p className='blue'>{regi.registrationQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Lung Function:</p>
+              {lung && lung.LUNG5 ? (
                 <p className='blue'>{regi.registrationQ4}</p>
               ) : (
                 <p className='blue'>nil</p>
