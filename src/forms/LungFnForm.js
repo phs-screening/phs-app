@@ -49,6 +49,10 @@ const schema = new SimpleSchema({
     type: Number,
     optional: false,
   },
+  LUNG5: {
+    type: Number,
+    optional: true,
+  },
   LUNG7: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -120,12 +124,13 @@ const LungFnForm = (props) => {
     const [{ value: FEV1 }] = useField('LUNG4', {})
 
     if (FVC && FEV1) {
-      const ratio = FEV1 / FVC
+      const ratio = Math.round((FEV1 / FVC) * 100) / 100 //round it to 2dp
       setRatio(ratio)
       return <p className='blue'>{ratio}</p>
+    } else {
+      setRatio(null)
+      return <p className='blue'>nil</p>
     }
-    setRatio(null)
-    return <p className='blue'>nil</p>
   }
 
   const GetResultType = () => {
@@ -144,6 +149,7 @@ const LungFnForm = (props) => {
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
+        model.LUNG5 = ratio
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           isLoading(false)
