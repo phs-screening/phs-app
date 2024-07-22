@@ -66,7 +66,7 @@ const RegForm = () => {
   const [patientAge, setPatientAge] = useState(0)
 
   useEffect(async () => {
-    console.log("Patient ID: "+ patientId) //patientID == -1, if registration of new patient
+    console.log("Patient ID: "+ patientId)
     const savedData = await getSavedData(patientId, formName)
 
     const phlebCountersCollection = getClinicSlotsCollection()
@@ -77,9 +77,7 @@ const RegForm = () => {
         temp[postalCode] -= counterItems.length
       }
     }
-    if (patientId == -1) { // only when registration of new patient
-      savedData.registrationQ3 = birthday
-    }
+    savedData.registrationQ3 = birthday
     setSlots(temp)
     setSaveData(savedData)
   }, [])
