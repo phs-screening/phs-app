@@ -59,14 +59,17 @@ const FitForm = (props) => {
     setSaveData(savedData)
 
     Promise.all([
+      savedData,
       regiData,
       pmhxData,
     ]).then((result) => {
-      setRegi(result[0])
-      setPMHX(result[1])
+      setSaveData(result[0])
+      setRegi(result[1])
+      setPMHX(result[2])
       isLoadingSidePanel(false)
     })
   }, [])
+
 
   const formOptions = {
     /* fitQ1: [

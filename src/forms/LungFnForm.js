@@ -87,6 +87,7 @@ const LungFnForm = (props) => {
     Promise.all([savedData, socialData]).then((result) => {
       setSaveData(result[0])
       setSocial(result[1])
+      isLoadingSidePanel(false)
     })
   }, [])
 
