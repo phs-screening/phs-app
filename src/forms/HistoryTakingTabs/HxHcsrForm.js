@@ -140,11 +140,6 @@ const HxHcsrForm = (props) => {
         </h4>
         <h3>Booth number and History-taker&apos;s Surname followed by Initials</h3>
         <LongTextField name='hxHcsrQ1' label='Hx HCSR Q1' />
-        <p className='red'>
-          **On Page 2 of Form A, under Doctor&apos;s Consultation (Hx-taking column, 1st row),
-          please write down booth number and history taker&apos;s name. **
-        </p>
-        <p>(Eg. Booth 18 David Choo Ah Beng = 18 David Choo A B)</p>
         <h2>HISTORY TAKING PART 1: HEALTH CONCERNS AND SYSTEMS REVIEW</h2>
         <h2>1. HEALTH CONCERNS</h2>
         <h3>

@@ -92,6 +92,9 @@ const DoctorSConsultForm = () => {
   const [geriSppb, setGeriSppb] = useState({})
   const [geriPhysical, setGeriPhysical] = useState({})
   const [geriAudio, setGeriAudio] = useState({})
+  const [geriPHQ, setPHQ] = useState({})
+  const [lung, setLung] = useState({})
+  const [triage, setTriage] = useState({})
   useEffect(async () => {
     const loadPastForms = async () => {
       const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
@@ -104,6 +107,9 @@ const DoctorSConsultForm = () => {
       const geriPhysicalData = getSavedData(patientId, allForms.geriPhysicalActivityLevelForm)
       const geriAudioData = getSavedData(patientId, allForms.geriAudiometryForm)
       const savedData = getSavedData(patientId, formName)
+      const lungData = getSavedData(patientId, allForms.lungForm)
+      const PHQDATA = getSavedData(patientId, allForms.geriPhqForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
       Promise.all([
         hcsrData,
         nssData,
@@ -115,18 +121,24 @@ const DoctorSConsultForm = () => {
         geriSppbData,
         geriPhysicalData,
         geriAudioData,
+        lungData,
+        PHQDATA,
+        triageData,
       ]).then((result) => {
         setHcsr(result[0])
         setNss(result[1])
         setCancer(result[2])
         setGeriOt(result[3])
         setGeriPt(result[4])
-        isLoadingSidePanel(false)
         setSaveData(result[5])
         setGeriVision(result[6])
         setGeriSppb(result[7])
         setGeriPhysical(result[8])
-        setGeriAudio(result[9])
+        setGeriAudio(result[9]),
+        setLung(result[10])
+        setPHQ(result[11])
+        setTriage(result[12]),
+        isLoadingSidePanel(false)
       })
     }
 
@@ -208,6 +220,90 @@ const DoctorSConsultForm = () => {
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
+              <h2>Patient Requires Referrals For: </h2>
+              <ul>
+                {lung && lung.LUNG7 == 'Yes' ? 
+                <li>
+                  <p>Patient scores <strong>{lung.LUNG5}</strong> in his lung function test</p>
+                </li> : null}
+
+                <li>{geriPHQ && geriPHQ.PHQ10 ? (
+                  <p>Patient scores <strong>{geriPHQ.PHQ10}</strong> in the PHQ.</p>
+                ) : (
+                  <p className='red'>nil PHQ10 data!</p>
+                )}
+                  <ul>
+                    <li>{geriPHQ && geriPHQ.PHQ9 ? (
+                      <p>The patient answered: <strong>{geriPHQ.PHQ9}</strong> to ‘Thoughts that you would be better off dead or hurting yourself in some way’.</p>
+                    ) : (
+                      <p className='red'>nil PHQ9 data!</p>
+                    )}
+                    </li>
+
+                    <li>{geriPHQ && geriPHQ.PHQextra9 ? (
+                      <p>When asked ‘Do you want to take your life now’, patient said <strong>{geriPHQ.PHQextra9}</strong></p>
+                    ) : (
+                      <p className='red'>nil PHQextra9 data!</p>
+                    )}
+                    </li>
+                  </ul>
+                </li>
+
+                
+                {triage.triageQ9 ? (
+                  <li>
+                  <p>Patient was flagged for review for blood pressure of <strong>{triage.triageQ7}/{triage.triageQ8}</strong></p>
+                  </li>
+                ) : null}
+
+                {geriVision.geriVisionQ9 ? (
+                  <li>
+                  <p>Patient was flagged for review for vision.</p>
+
+                  <ul>
+                    <li>
+                      <p>Visual Acuity</p>
+                      <table style={{border: "1px solid black", width: "100%", borderCollapse: "collapse"}}>
+                        <tr style={{border: "1px solid black"}}>
+                          <th style={{border: "1px solid black"}}></th>
+                          <th style={{border: "1px solid black"}}>Right Eye</th>
+                          <th style={{border: "1px solid black"}}>Left Eye</th>
+                        </tr>
+                        <tr style={{border: "1px solid black"}}>
+                          <th style={{border: "1px solid black"}}>Without Pinhole Occluder</th>
+                          <th style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ3}</th>
+                          <th style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ4}</th>
+                        </tr>
+                        <tr style={{border: "1px solid black"}}>
+                          <th style={{border: "1px solid black"}}>With Pinhole Occluder</th>
+                          <th style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ5}</th>
+                          <th style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ6}</th>
+                        </tr>
+                      </table>                        
+                    </li>
+                    <li>
+                      <p>Type of vision error, if any: <strong>{geriVision.geriVisionQ8}</strong></p>
+                    </li>
+                  </ul>
+                  </li>
+                ) : null
+              }
+
+              {geriAudio ? (
+                <li>
+                <p>Patient was flagged for review for audiometry.</p>
+                <ul>
+                  <li>
+                    <p><strong>{geriAudio.geriAudiometryQ12}</strong></p>
+                  </li>
+                </ul>
+                </li>
+              ) : null
+              }
+
+              </ul>
+
+              <Divider />
               <h2>Health Concerns</h2>
               <p className='underlined'>Requires scrutiny by doctor?</p>
               {hcsr && hcsr.hxHcsrQ11 ? (

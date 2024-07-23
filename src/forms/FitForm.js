@@ -20,7 +20,7 @@ import allForms from './forms.json'
 import PopupText from 'src/utils/popupText.js'
 
 const schema = new SimpleSchema({
-  fitQ1: {
+  /* fitQ1: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
@@ -28,7 +28,7 @@ const schema = new SimpleSchema({
   fitShortAnsQ1: {
     type: String,
     optional: true,
-  },
+  }, */
   fitQ2: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -51,28 +51,35 @@ const FitForm = (props) => {
 
   const [regi, setRegi] = useState({})
   const [pmhx, setPMHX] = useState({})
+  const [lung, setLung] = useState({})
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
     const regiData = getSavedData(patientId, allForms.registrationForm)
     const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+    const lungData = getSavedData(patientId, allForms.lungForm)
     setSaveData(savedData)
 
     Promise.all([
+      savedData,
       regiData,
       pmhxData,
+      lungData
     ]).then((result) => {
-      setRegi(result[0])
-      setPMHX(result[1])
+      setSaveData(result[0])
+      setRegi(result[1])
+      setPMHX(result[2])
+      setLung(result[3])
       isLoadingSidePanel(false)
     })
   }, [])
 
+
   const formOptions = {
-    fitQ1: [
+    /* fitQ1: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-    ],
+    ], */
     fitQ2: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
@@ -103,10 +110,10 @@ const FitForm = (props) => {
     >
       <div className='form--div'>
         <h1>FIT</h1>
-        <h3>Does the patient have any gastrointestinal symptoms?</h3>
+        {/* <h3>Does the patient have any gastrointestinal symptoms?</h3>
         <RadioField name='fitQ1' label='fitQ1' options={formOptions.fitQ1} />
         <h4>Please specify:</h4>
-        <LongTextField name='fitShortAnsQ1' label='fitQ1' />
+        <LongTextField name='fitShortAnsQ1' label='fitQ1' /> */}
         <h3>Sign-up for FIT home delivery</h3>
         <RadioField name='fitQ2' label='fitQ2' options={formOptions.fitQ2} />
         <PopupText qnNo='fitQ2' triggerValue='No'>
@@ -146,6 +153,13 @@ const FitForm = (props) => {
               <h2>Patient Info</h2>
               <p className='underlined'>Patient Age:</p>
               {regi && regi.registrationQ4 ? (
+                <p className='blue'>{regi.registrationQ4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+
+              <p className='underlined'>Lung Function:</p>
+              {lung && lung.LUNG5 ? (
                 <p className='blue'>{regi.registrationQ4}</p>
               ) : (
                 <p className='blue'>nil</p>

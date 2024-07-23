@@ -1,5 +1,4 @@
-import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -12,6 +11,7 @@ import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
+import PopupText from 'src/utils/popupText'
 
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
@@ -22,13 +22,15 @@ const dayRange = [
   '2 - More than half the days',
   '3 - Nearly everyday',
 ]
+
 const dayRangeFormOptions = [
   { label: '0 - Not at all', value: '0 - Not at all' },
   { label: '1 - Several days', value: '1 - Several days' },
   { label: '2 - More than half the days', value: '2 - More than half the days' },
   { label: '3 - Nearly everyday', value: '3 - Nearly everyday' },
 ]
-export const schema = new SimpleSchema({
+
+const schema = new SimpleSchema({
   PHQ1: {
     type: String,
     allowedValues: dayRange,
@@ -74,6 +76,11 @@ export const schema = new SimpleSchema({
     allowedValues: dayRange,
     optional: false,
   },
+  PHQextra9: {
+    type: String,
+    allowedValues: ['Yes', 'No'],
+    optional: false,
+  },
   PHQ11: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -88,16 +95,21 @@ export const schema = new SimpleSchema({
 const formName = 'hxPhqForm'
 
 const HxPhqForm = (props) => {
-  const [loading, isLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    setSaveData(savedData)
-  }, [])
+  let score = 0
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
+  }, [patientId])
 
   const formOptions = {
     PHQ1: dayRangeFormOptions,
@@ -109,18 +121,29 @@ const HxPhqForm = (props) => {
     PHQ7: dayRangeFormOptions,
     PHQ8: dayRangeFormOptions,
     PHQ9: dayRangeFormOptions,
+    PHQextra9: [
+      {
+        label: 'Yes',
+        value: 'Yes',
+      },
+      { 
+        label: 'No', 
+        value: 'No' 
+      },
+    ],
     PHQ11: [
       {
         label: 'Yes',
         value: 'Yes',
       },
-      { label: 'No', value: 'No' },
+      { 
+        label: 'No', 
+        value: 'No' 
+      },
     ],
   }
 
   const GetScore = () => {
-    let score = 0
-
     const [{ value: q1 }] = useField('PHQ1', {})
     const [{ value: q2 }] = useField('PHQ2', {})
     const [{ value: q3 }] = useField('PHQ3', {})
@@ -140,12 +163,15 @@ const HxPhqForm = (props) => {
 
     const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
 
-    questions.forEach((qn) => {
+    /*questions.forEach((qn) => {
       while (qn) {
         score += points[qn]
         break
       }
-    })
+    })*/
+
+    score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
+
     if (score >= 10) {
       return (
         <Fragment>
@@ -166,17 +192,20 @@ const HxPhqForm = (props) => {
       schema={form_schema}
       className='fieldPadding'
       onSubmit={async (model) => {
-        isLoading(true)
+        setLoading(true)
+
+        model.PHQ10 = score //update score
+
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             changeTab(event, nextTab)
           }, 80)
         } else {
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
@@ -185,6 +214,10 @@ const HxPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
+        <h2>
+          **When asking these questions, please let patient know that it can be sensitive**
+        </h2>
+        <br />
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
         </h2>
@@ -212,6 +245,15 @@ const HxPhqForm = (props) => {
         <RadioField name='PHQ8' label='PHQ8' options={formOptions.PHQ8} />
         <h3>9. Thoughts that you would be better off dead or hurting yourself in some way</h3>
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
+        <PopupText qnNo='PHQ9' triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}>
+          <h3>*Do you want to take your life now?*</h3>
+          <RadioField name='PHQextra9' label='PHQextra9' options={formOptions.PHQextra9} />
+        </PopupText>
+        <PopupText qnNo='PHQextra9' triggerValue='Yes'>
+          <font color='red'>
+            <b>*Patient requires urgent attention, please escalate*</b>
+          </font>{' '}
+        </PopupText>
         <h3>Score:</h3>
         <GetScore />
         <h3>Do you feel like the patient will benefit from counselling? Specify why.</h3>

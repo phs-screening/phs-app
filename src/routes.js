@@ -25,7 +25,7 @@ import React from 'react'
 
 import HsgForm from './forms/HsgForm'
 import LungFnForm from './forms/LungFnForm'
-//import OsteoForm from './forms/OsteoForm'
+import OsteoForm from './forms/OsteoForm'
 import NkfForm from './forms/NkfForm'
 import MentalHealthForm from './forms/MentalHealthForm'
 import HpvForm from './forms/HpvForm'
@@ -60,7 +60,7 @@ const routes = [
       { path: 'gerivision', element: <GeriVisionForm /> },
       { path: 'gericog', element: <GeriCognitiveTabs /> },
       { path: 'triage', element: <TriageForm /> },
-      //{ path: 'osteoporosis', element: <OsteoForm /> },
+      { path: 'osteoporosis', element: <OsteoForm /> },
       { path: 'nkf', element: <NkfForm /> },
       { path: 'dietitiansconsultation', element: <DietitiansConsultForm /> },
       { path: 'socialservice', element: <SocialServiceForm /> },

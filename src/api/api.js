@@ -67,7 +67,7 @@ export async function submitForm(args, patientId, formCollection) {
     let gender = args.registrationQ5
     let initials = args.registrationQ2
     let age = args.registrationQ4
-    let preferredLanguage = args.registrationQ1
+    let preferredLanguage = args.registrationQ14
     let goingForPhlebotomy = args.registrationQ15
 
     let data = {
@@ -77,10 +77,11 @@ export async function submitForm(args, patientId, formCollection) {
       preferredLanguage: preferredLanguage,
       goingForPhlebotomy: goingForPhlebotomy,
     }
+
+    console.log("patient id: " + record2)
     if (record2 == null) { 
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
-      await registrationForms.insertOne({ _id: patientId, ...args })
       patientId = qNum
     }
 
@@ -89,16 +90,15 @@ export async function submitForm(args, patientId, formCollection) {
     if (record) {
       if (record[formCollection] === undefined) {
         // first time form is filled, create document for form
-        console.log("record formcollection: "+ record[formCollection])
         await patientsRecord.updateOne(
           { queueNo: patientId },
           { $set: { [formCollection]: patientId } },
         )
+        
         await registrationForms.insertOne({ _id: patientId, ...args })
         return { result: true, data: data , qNum: patientId}
       } else {
         if (await isAdmin()) {
-          console.log("record formcollection admin: "+ record[formCollection])
           args.lastEdited = new Date()
           args.lastEditedBy = getName()
           await registrationForms.updateOne({ _id: patientId }, { $set: { ...args } })
@@ -121,6 +121,7 @@ export async function submitForm(args, patientId, formCollection) {
       // Can check in every form page if there is valid patientId instead
       // cannot use useEffect since the form component is class component
       const errorMsg = 'An error has occurred.'
+      console.log("There is an error here")
       // You will be directed to the registration page." logic not done
       return { result: false, error: errorMsg }
     }

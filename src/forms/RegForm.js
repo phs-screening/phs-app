@@ -27,8 +27,6 @@ import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
 import { isInteger } from 'formik'
 
-let patientAge
-
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
   600130: 'Trinity Medical Clinic\nBIk 130, Jurong Gateway Road #02-205, S600130',
@@ -65,8 +63,10 @@ const RegForm = () => {
   const [saveData, setSaveData] = useState({})
   const [birthday, setBirthday] = useState(new Date())
   const [slots, setSlots] = useState(defaultSlots)
+  const [patientAge, setPatientAge] = useState(0)
 
   useEffect(async () => {
+    console.log("Patient ID: "+ patientId) //patientID == -1, if registration of new patient
     const savedData = await getSavedData(patientId, formName)
 
     const phlebCountersCollection = getClinicSlotsCollection()
@@ -77,7 +77,9 @@ const RegForm = () => {
         temp[postalCode] -= counterItems.length
       }
     }
-    savedData.registrationQ3 = birthday
+    if (patientId == -1) { // only when registration of new patient
+      savedData.registrationQ3 = birthday
+    }
     setSlots(temp)
     setSaveData(savedData)
   }, [])
@@ -104,12 +106,8 @@ const RegForm = () => {
     const today = new Date()
     if (birthday) {
       var age = today.getFullYear() - birthday.getFullYear()
-      const monthDiff = today.getMonth() - birthday.getMonth()
-      if (monthDiff < 0 || (monthDiff == 0 && today.getDate() < birthday.getDate())) {
-        age--
-      }
       setBirthday(birthday)
-      patientAge = age
+      setPatientAge(age)
       return <p className='blue'>{age}</p>
     }
     return null
@@ -172,7 +170,7 @@ const RegForm = () => {
     registrationQ12: [
       { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'CHAS Green', value: 'CHAS Green' },
-      { label: 'CHAS Blue', value: 'CHAS blue' },
+      { label: 'CHAS Blue', value: 'CHAS Blue' },
       { label: 'No CHAS', value: 'No CHAS' },
     ],
     registrationQ13: [
@@ -409,7 +407,7 @@ const RegForm = () => {
     },
     registrationQ15: {
       type: String,
-      allowedValues: ['Yes', 'No'],
+      allowedValues: ['Yes', 'No'], 
       optional: false,
     },
     registrationQ16: {

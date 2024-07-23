@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
+import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -93,6 +94,7 @@ const GeriOtConsultForm = (props) => {
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const { changeTab, nextTab } = props
+  const navigate = useNavigate()
 
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
@@ -100,6 +102,7 @@ const GeriOtConsultForm = (props) => {
     const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
     const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
     const geriTugData = getSavedData(patientId, allForms.geriTugForm)
+    
 
     Promise.all([savedData, geriVisionData, geriOtQData, geriSppbData, geriTugData]).then(
       (result) => {
@@ -152,7 +155,7 @@ const GeriOtConsultForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)

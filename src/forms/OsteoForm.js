@@ -19,7 +19,7 @@ import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import { useNavigate } from 'react-router'
 
-const schema = SimpleSchema({
+const schema = new SimpleSchema({
   BONE1: {
     type: String,
     allowedValues: ['High', 'Moderate', 'Low'],
@@ -36,16 +36,34 @@ const formName = 'osteoForm'
 
 const OsteoForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
+  const [regi, setRegi] = useState({})
+  const [triage, setTriage] = useState({})
+  const [social, setSocial] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
-  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
+      const socialData = getSavedData(patientId, allForms.hxSocialForm)
+      
+      Promise.all([regiData, triageData, socialData]).then((result) => {
+          setRegi(result[0])
+          setTriage(result[1])
+          setSocial(result[2])
+          isLoadingSidePanel(false)
+        }
+      )
+    }
+
+    fetchData()
+  }, [patientId])
 
   const formOptions = {
     BONE1: [
@@ -54,10 +72,8 @@ const OsteoForm = (props) => {
       { label: 'Low', value: 'Low' },
     ],
     BONE2: [
-      { label: 'Yes',
-        value: 'Yes' },
-      { label: 'No', 
-        value: 'No' },
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
     ],
   }
 
@@ -66,17 +82,16 @@ const OsteoForm = (props) => {
       schema={form_schema}
       className='fieldPadding'
       onSubmit={async (model) => {
-        isLoading(true)
+        setLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
             navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
-          isLoading(false)
+          setLoading(false)
           setTimeout(() => {
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
@@ -86,7 +101,7 @@ const OsteoForm = (props) => {
     >
       <div className='form--div'>
         <h1>Osteoporosis</h1>
-        <h3>OSTA: Based on the picture below, patient s osteoporosis risk is: </h3>
+        <h3>OSTA: Based on the picture below, patient&apos;s osteoporosis risk is: </h3>
         <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
         <br />
         <h3>Patient requires a follow up</h3>
@@ -94,7 +109,6 @@ const OsteoForm = (props) => {
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-
       <Divider />
     </AutoForm>
   )
@@ -107,18 +121,54 @@ const OsteoForm = (props) => {
             {newForm()}
           </Paper>
         </Grid>
-        <Grid
-          p={1}
-          width='30%'
-          display='flex'
-          flexDirection='column'
+        <Grid 
+          p={1} 
+          width='30%' 
+          display='flex' 
+          flexDirection='column' 
           alignItems={loadingSidePanel ? 'center' : 'left'}
         >
           {loadingSidePanel ? (
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2>Regi, tri, social</h2>
+              <h2>Patient Info</h2>
+              {
+                regi ? (
+                  <>
+                    {
+                      (regi.registrationQ3 instanceof Date? 
+                      <p>Birthday: <strong>{regi.registrationQ3.toDateString()}</strong></p>
+                       : <p className='red'>registrationQ3 is invalid!</p>)
+                    }
+                    <p>Age: <strong>{regi.registrationQ4}</strong></p>
+                    <p>Gender: <strong>{String(regi.registrationQ5)}</strong></p>
+                  </>
+              ) : null
+              }
+
+              {
+                triage && triage ? (
+                    <>
+                    <p>Height (in cm): <strong>{triage.triageQ10}</strong></p>
+                    <p>Weight (in kg): <strong>{triage.triageQ11}</strong></p>
+                    </>
+                ) : null
+              }
+
+              {
+                social ? (
+                  <>
+                  <p>Does patient currently smoke: <strong>{String(social.SOCIAL10)}</strong></p>
+                  <p>How many pack years: <strong>{String(social.SOCIALShortAns10)}</strong></p>
+
+                  <p>Does patient consume alcoholic drinks: <strong>{String(social.SOCIAL12)}</strong></p>
+                  </>
+                ) : null
+              // SOCIAL 10
+              // SOCIAL 12
+              }
+              
             </div>
           )}
         </Grid>

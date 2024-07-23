@@ -30,7 +30,15 @@ const schema = new SimpleSchema({
   },
   SOCIAL4: {
     type: String,
-    allowedValues: ['Yes', 'No'],
+    allowedValues: [
+      '1200 and below per month', 
+      '1,201 - 2,000 per month', 
+      '2,001 - 3,999 per month',
+      '4,000 - 5,999 per month',
+      '6,000 - 9,999 per month',
+      '10,000 & above',
+      'NIL'
+    ],
     optional: false,
   },
   SOCIAL5: {
@@ -157,10 +165,33 @@ const HxSocialForm = (props) => {
     ],
     SOCIAL4: [
       {
-        label: 'Yes',
-        value: 'Yes',
+        label: '1200 and below per month',
+        value: '1200 and below per month',
       },
-      { label: 'No', value: 'No' },
+      { 
+        label: '1,201 - 2,000 per month', 
+        value: '1,201 - 2,000 per month' 
+      },
+      {
+        label: '2,001 - 3,999 per month',
+        value: '2,001 - 3,999 per month',
+      },
+      {
+        label: '4,000 - 5,999 per month',
+        value: '4,000 - 5,999 per month',
+      },
+      {
+        label: '6,000 - 9,999 per month',
+        value: '6,000 - 9,999 per month',
+      },
+      {
+        label: '10,000 & above',
+        value: '10,000 & above',
+      },
+      {
+        label: 'NIL',
+        value: 'NIL',
+      },
     ],
     SOCIAL6: [
       {
