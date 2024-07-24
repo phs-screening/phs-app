@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
+import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -14,6 +15,7 @@ import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
+
 
 const schema = new SimpleSchema({
   geriVisionQ1: {
@@ -90,6 +92,7 @@ const GeriVisionForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
+  const navigate = useNavigate()
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
@@ -163,7 +166,7 @@ const GeriVisionForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)

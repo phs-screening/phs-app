@@ -51,9 +51,37 @@ const schema = new SimpleSchema({
   },
   LUNG5: {
     type: Number,
-    optional: true,
+    optional: false,
+  },
+  LUNG6: {
+    type: Number,
+    optional: false,
   },
   LUNG7: {
+    type: Number,
+    optional: false,
+  },
+  LUNG8: {
+    type: Number,
+    optional: false,
+  },
+  LUNG9: {
+    type: Number,
+    optional: false,
+  },
+  LUNG10: {
+    type: Number,
+    optional: false,
+  },
+  LUNG11: {
+    type: Number,
+    optional: false,
+  },
+  LUNG12: {
+    type: Number,
+    optional: false,
+  },
+  LUNG14: {
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
@@ -68,7 +96,7 @@ const LungFnForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const [ratio, setRatio] = useState(null)
+  const [lungType, setLungType] = useState(null)
 
   const [social, setSocial] = useState({})
 
@@ -110,7 +138,7 @@ const LungFnForm = (props) => {
       },
       { label: 'No', value: 'No' },
     ],
-    LUNG7: [
+    LUNG14: [
       {
         label: 'Yes',
         value: 'Yes',
@@ -119,9 +147,34 @@ const LungFnForm = (props) => {
     ],
   }
 
-  const GetRatio = () => {
-    const [{ value: FVC }] = useField('LUNG3', {})
-    const [{ value: FEV1 }] = useField('LUNG4', {})
+  const Lung13_cal = () => {
+    const [{ value: lung5 }] = useField('LUNG5', {})
+    const [{ value: lung7 }] = useField('LUNG7', {})
+
+    if ((lung5 >= 80) && (lung7 < 0.7)) {
+      const typeOfLung = "Obstructive Defect" 
+      setLungType(typeOfLung)
+      return <p className='blue'>{typeOfLung}</p>
+    } else if ((lung5 < 80) && (lung7 < 0.7)) {
+      const typeOfLung = "Mixed Pattern" 
+      setLungType(typeOfLung)
+      return <p className='blue'>{typeOfLung}</p>
+    } else if ((lung5 < 80) && (lung7 >= 0.7)) {
+      const typeOfLung = "Restrictive Defect" 
+      setLungType(typeOfLung)
+      return <p className='blue'>{typeOfLung}</p>
+    } else if ((lung5 >= 80) && (lung7 >= 0.7)) {
+      const typeOfLung = "Normal" 
+      setLungType(typeOfLung)
+      return <p className='blue'>{typeOfLung}</p>
+    } else {
+      setLungType(null)
+      return <p className='blue'>nil</p>
+    }
+  }
+  /* const GetRatio = () => {
+    const [{ value: FVC }] = useField('LUNG5', {})
+    const [{ value: FEV1 }] = useField('LUNG6', {})
 
     if (FVC && FEV1) {
       const ratio = Math.round((FEV1 / FVC) * 100) / 100 //round it to 2dp
@@ -141,7 +194,7 @@ const LungFnForm = (props) => {
       return <p className='blue'>Result is normal (&ge; 0.7)</p>
     }
     return <p className='red'>Result is abnormal (&lt; 0.7)</p>
-  }
+  } */
 
   const newForm = () => (
     <AutoForm
@@ -149,7 +202,7 @@ const LungFnForm = (props) => {
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
-        model.LUNG5 = ratio
+        model.LUNG13 = lungType
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           isLoading(false)
@@ -179,16 +232,35 @@ const LungFnForm = (props) => {
             <LongTextField name='LUNGShortAns2' label='LUNG2' />
           </p>
         </PopupText>
-        <h2>Results of lung function test:</h2>
-        <h3>FVC</h3>
+        <h2>Results of lung function test:</h2><br />
+        <h2>Pre-bronchodilator</h2>
+        <h3>FBC (L)</h3>
         <NumField name='LUNG3' label='LUNG3' />
-        <h3>FEV1</h3>
+        <h3>FEV1 (L)</h3>
         <NumField name='LUNG4' label='LUNG4' />
-        <h3>FEV1:FVC ratio</h3>
-        <GetRatio />
-        <GetResultType />
+        <h3>FVC (%pred)</h3>
+        <NumField name='LUNG5' label='LUNG5' />
+        <h3>FEV1 (%pred)</h3>
+        <NumField name='LUNG6' label='LUNG6' />
+        <h3>FEV1:FVC (%)</h3>
+        <NumField name='LUNG7' label='LUNG7' /><br />
+        <h2>Post-bronchodilator</h2>
+        <h3>FBC (L)</h3>
+        <NumField name='LUNG8' label='LUNG8' />
+        <h3>FEV1 (L)</h3>
+        <NumField name='LUNG9' label='LUNG9' />
+        <h3>FVC (%pred)</h3>
+        <NumField name='LUNG10' label='LUNG10' />
+        <h3>FEV1 (%pred)</h3>
+        <NumField name='LUNG11' label='LUNG11' />
+        <h3>FEV1:FVC (%)</h3>
+        <NumField name='LUNG12' label='LUNG12' />
+        <h3>What defect does the patient have? </h3>
+        <Lung13_cal />
+        {/* <GetRatio />
+        <GetResultType /> */}
         <h3>Patient needs to be referred to doctor&apos;s station for followup on their result?</h3>
-        <RadioField name='LUNG7' label='LUNG7' options={formOptions.LUNG7} />
+        <RadioField name='LUNG14' label='LUNG14' options={formOptions.LUNG14} />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
