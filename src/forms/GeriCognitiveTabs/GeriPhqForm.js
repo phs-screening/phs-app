@@ -202,7 +202,9 @@ const GeriPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
+        const responsePHQ = await submitForm(model, patientId, formNamePHQ)
         const response = await submitForm(model, patientId, formName)
+        
         if (response.result) {
           const event = null // not interested in this value
           setLoading(false)

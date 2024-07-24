@@ -197,6 +197,8 @@ const MentalPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
+        const responseHistPHQ = await submitForm(model, patientId, "hxPhqForm")
+        const responseGeriPHQ = await submitForm(model, patientId, formNamePHQ)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value

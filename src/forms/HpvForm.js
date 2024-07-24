@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
+import { SubmitField, ErrorsField, RadioField, SelectField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { BoolField } from 'uniforms-mui'
@@ -16,10 +16,13 @@ import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
 const schema = new SimpleSchema({
-  SOCIAL16: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
+  HPV1: {
+    type: Array,
     optional: false,
+  },
+  'HPV1.$': {
+    type: String,
+    allowedValues: ['Has completed the registration forms and finished the on-site testing.'],
   },
 })
 
@@ -39,12 +42,11 @@ const HpvForm = () => {
   }, [])
 
   const formOptions = {
-    SOCIAL16: [
+    HPV1: [
       {
-        label: 'Yes',
-        value: 'Yes',
+        label: 'Has completed the registration forms and finished the on-site testing.',
+        value: 'Has completed the registration forms and finished the on-site testing.',
       },
-      { label: 'No', value: 'No' },
     ],
   }
 
@@ -71,12 +73,20 @@ const HpvForm = () => {
     >
       <div className='form--div'>
         <h1>On-Site HPV Testing</h1>
-        <h3>Are you sexually active, have you engaged in sexual intercourse?</h3>
+        {/* <h3>Are you sexually active, have you engaged in sexual intercourse?</h3>
         <p>
           We are asking this so that we know if you are eligible and interested for Pap Smear,
           provided free and on-the-spot
           <RadioField name='SOCIAL16' label='SOCIAL16' options={formOptions.SOCIAL16} />
-        </p>
+        </p> */}
+        <h3>Registration & Testing</h3>
+        <SelectField
+          appearance='checkbox'
+          checkboxes
+          name='HPV1'
+          label='HPV1'
+          options={formOptions.HPV1}
+        />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
