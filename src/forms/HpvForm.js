@@ -73,12 +73,6 @@ const HpvForm = () => {
     >
       <div className='form--div'>
         <h1>On-Site HPV Testing</h1>
-        {/* <h3>Are you sexually active, have you engaged in sexual intercourse?</h3>
-        <p>
-          We are asking this so that we know if you are eligible and interested for Pap Smear,
-          provided free and on-the-spot
-          <RadioField name='SOCIAL16' label='SOCIAL16' options={formOptions.SOCIAL16} />
-        </p> */}
         <h3>Registration & Testing</h3>
         <SelectField
           appearance='checkbox'

@@ -100,19 +100,6 @@ const LungFnForm = (props) => {
 
   const [social, setSocial] = useState({})
 
-  /* useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const socialData = getSavedData(patientId, allForms.hxSocialForm)
-    setSaveData(savedData)
-
-    Promise.all([
-      socialData,
-    ]).then((result) => {
-      setSocial(result[0])
-      isLoadingSidePanel(false)
-    })
-  }, []) */
-
   useEffect(async () => {
     const savedData = getSavedData(patientId, formName)
     const socialData = getSavedData(patientId, allForms.hxSocialForm)
@@ -147,7 +134,7 @@ const LungFnForm = (props) => {
     ],
   }
 
-  const Lung13_cal = () => {
+  const LungType_cal = () => {
     const [{ value: lung5 }] = useField('LUNG5', {})
     const [{ value: lung7 }] = useField('LUNG7', {})
 
@@ -172,29 +159,6 @@ const LungFnForm = (props) => {
       return <p className='blue'>nil</p>
     }
   }
-  /* const GetRatio = () => {
-    const [{ value: FVC }] = useField('LUNG5', {})
-    const [{ value: FEV1 }] = useField('LUNG6', {})
-
-    if (FVC && FEV1) {
-      const ratio = Math.round((FEV1 / FVC) * 100) / 100 //round it to 2dp
-      setRatio(ratio)
-      return <p className='blue'>{ratio}</p>
-    } else {
-      setRatio(null)
-      return <p className='blue'>nil</p>
-    }
-  }
-
-  const GetResultType = () => {
-    if (!ratio) {
-      return null
-    }
-    if (ratio >= 0.7) {
-      return <p className='blue'>Result is normal (&ge; 0.7)</p>
-    }
-    return <p className='red'>Result is abnormal (&lt; 0.7)</p>
-  } */
 
   const newForm = () => (
     <AutoForm
@@ -256,9 +220,7 @@ const LungFnForm = (props) => {
         <h3>FEV1:FVC (%)</h3>
         <NumField name='LUNG12' label='LUNG12' />
         <h3>What defect does the patient have? </h3>
-        <Lung13_cal />
-        {/* <GetRatio />
-        <GetResultType /> */}
+        <LungType_cal />
         <h3>Patient needs to be referred to doctor&apos;s station for followup on their result?</h3>
         <RadioField name='LUNG14' label='LUNG14' options={formOptions.LUNG14} />
       </div>
