@@ -23,7 +23,6 @@ const dayRange = [
   '3 - Nearly everyday',
 ]
 
-
 const dayRangeFormOptions = [
   { label: '0 - Not at all', value: '0 - Not at all' },
   { label: '1 - Several days', value: '1 - Several days' },
@@ -82,10 +81,6 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
-  PHQ10: {
-    type: Number,
-    optional: true,
-  },
   PHQ11: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -97,10 +92,10 @@ const schema = new SimpleSchema({
   },
 })
 
-const formName = 'geriPhqForm'
-const formNamePHQ = 'hxPhqForm' // In this form, you get the info from the HX PHQ Form
+const formName = 'mentalPhqForm'
+const formNamePHQ = 'geriPhqForm' // In this form, you get the info from the HX PHQ Form
 
-const GeriPhqForm = (props) => {
+const MentalPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -202,9 +197,9 @@ const GeriPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
-        const responsePHQ = await submitForm(model, patientId, formNamePHQ)
+        const responseHistPHQ = await submitForm(model, patientId, "hxPhqForm")
+        const responseGeriPHQ = await submitForm(model, patientId, formNamePHQ)
         const response = await submitForm(model, patientId, formName)
-        
         if (response.result) {
           const event = null // not interested in this value
           setLoading(false)
@@ -222,6 +217,10 @@ const GeriPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
+        <h2>
+          **When asking these questions, please let patient know that it can be sensitive**
+        </h2>
+        <br />
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
         </h2>
@@ -280,6 +279,6 @@ const GeriPhqForm = (props) => {
   )
 }
 
-GeriPhqForm.contextType = FormContext
+MentalPhqForm.contextType = FormContext
 
-export default GeriPhqForm
+export default MentalPhqForm
