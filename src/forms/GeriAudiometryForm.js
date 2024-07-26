@@ -91,8 +91,8 @@ const schema = new SimpleSchema({
   geriAudiometryQ13: {
     type: String,
     allowedValues: [
-      'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
-      "There is no hearing loss detected, the patient's hearing is normal.",
+      'There is some hearing loss detected. This test is not diagnostic, and the participant needs to undergo a more comprehensive hearing assessment.',
+      "There is no hearing loss detected, the participant's hearing is normal.",
     ],
     optional: false,
   },
@@ -107,16 +107,20 @@ const GeriAudiometryForm = (props) => {
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
   const [hcsr, setHcsr] = useState({})
+  const [pmhx, setPMHX] = useState({})
+  
   const navigate = useNavigate()
 
   useEffect(() => {
     const loadForms = async () => {
       const savedData = getSavedData(patientId, formName)
       const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
+      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
 
-      Promise.all([savedData, hcsrData]).then((result) => {
+      Promise.all([savedData, hcsrData, pmhxData]).then((result) => {
         setSaveData(result[0])
         setHcsr(result[1])
+        setPMHX(result[2])
         isLoadingSidePanel(false)
       })
     }
@@ -205,13 +209,13 @@ const GeriAudiometryForm = (props) => {
     geriAudiometryQ13: [
       {
         label:
-          'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+          'There is some hearing loss detected. This test is not diagnostic, and the participant needs to undergo a more comprehensive hearing assessment.',
         value:
-          'There is some hearing loss detected. This test is not diagnostic, and the patient needs to undergo a more comprehensive hearing assessment.',
+          'There is some hearing loss detected. This test is not diagnostic, and the participant needs to undergo a more comprehensive hearing assessment.',
       },
       {
-        label: "There is no hearing loss detected, the patient's hearing is normal.",
-        value: "There is no hearing loss detected, the patient's hearing is normal.",
+        label: "There is no hearing loss detected, the participant's hearing is normal.",
+        value: "There is no hearing loss detected, the participant's hearing is normal.",
       },
     ],
   }
@@ -385,6 +389,35 @@ const GeriAudiometryForm = (props) => {
               ) : (
                 <p className='blue'>nil</p>
               )}
+
+              {
+                pmhx ? (
+                  <>
+                    <p className='underlined'>If participant is 60 and above, do they currently use hearing aids/have been detected to require hearing aids?</p>
+                    <p className='blue'>{pmhx.PMHX13}</p>
+
+                    <p className='underlined'>For geriatric participants, has the senior seen an ENT specialist before?</p>
+                    <p className='blue'>{pmhx.PMHX14}</p>
+                    <p className='blue'>{pmhx.PMHXShortAns14}</p>
+
+                    <p className='underlined'>
+                      <span className='red'>For geriatric participants,</span> did he/she answer yes to any of
+                      the following questions?
+                    </p>
+                    <ol type='a'>
+                      <li>Have you had your hearing aids for more than 5 years?</li>
+                      <li>
+                        Has it been 3 years or more since you used your hearing aids (i.e. did not use the
+                        hearing aids for more than 3 years)?
+                      </li>
+                      <li>Are your hearing aids spoilt/not working?</li>
+                    </ol>
+                    <p className='blue'>{pmhx.PMHX15}</p>
+                    <p className='blue'>{pmhx.PMHXShortAns15}</p>
+                  </>
+                ) : 
+                <p className='red'>nil pmhx data</p>
+              }
             </div>
           )}
         </Grid>
