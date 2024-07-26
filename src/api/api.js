@@ -3,7 +3,7 @@ import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services
 import { jsPDF } from 'jspdf'
 import { defaultSlots } from 'src/forms/RegForm'
 import logo from 'src/icons/Icon'
-import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
+import { bloodpressureQR, bmiQR } from 'src/icons/QRCodes'
 import 'jspdf-autotable'
 import { parseFromLangKey } from './langutil'
 
@@ -68,6 +68,7 @@ export async function submitForm(args, patientId, formCollection) {
     let gender = args.registrationQ5
     let initials = args.registrationQ2
     let age = args.registrationQ4
+    console.log(age)
     let preferredLanguage = args.registrationQ14
     let goingForPhlebotomy = args.registrationQ15
 
@@ -79,8 +80,8 @@ export async function submitForm(args, patientId, formCollection) {
       goingForPhlebotomy: goingForPhlebotomy,
     }
 
-    console.log("patient id: " + record2)
-    if (record2 == null) { 
+    console.log('patient id: ' + record2)
+    if (record2 == null) {
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
       patientId = qNum
@@ -95,9 +96,9 @@ export async function submitForm(args, patientId, formCollection) {
           { queueNo: patientId },
           { $set: { [formCollection]: patientId } },
         )
-        
+
         await registrationForms.insertOne({ _id: patientId, ...args })
-        return { result: true, data: data , qNum: patientId}
+        return { result: true, data: data, qNum: patientId }
       } else {
         if (await isAdmin()) {
           args.lastEdited = new Date()
@@ -108,7 +109,7 @@ export async function submitForm(args, patientId, formCollection) {
           // throw error message
           // const errorMsg = "This form has already been submitted. If you need to make "
           //         + "any changes, please contact the admin."
-          return { result: true, data: data, qNum: patientId}
+          return { result: true, data: data, qNum: patientId }
         } else {
           const errorMsg =
             'This form has already been submitted. If you need to make ' +
@@ -122,7 +123,7 @@ export async function submitForm(args, patientId, formCollection) {
       // Can check in every form page if there is valid patientId instead
       // cannot use useEffect since the form component is class component
       const errorMsg = 'An error has occurred.'
-      console.log("There is an error here")
+      console.log('There is an error here')
       // You will be directed to the registration page." logic not done
       return { result: false, error: errorMsg }
     }
@@ -455,16 +456,16 @@ export function kNewlines(k) {
  * As such, we need use "k" to keep track of the current line number of the text.
  *
  * This approach works, so we have chosen to keep it.
- * 
- * For Future devs pt2 (29/6/2024): 
+ *
+ * For Future devs pt2 (29/6/2024):
  * please for the love of god make this code more flexible
  * right now it doesn't even manage page overflow automatically
  * and is terrible to expand upon
- * 
+ *
  * Also you see that "justification" to use a running tracker of newlines? yeah that breaks
  * as soon as you start to actually format the document so IF YOU HAVE THE TIME please nuke that
  * entire system.
- * 
+ *
  * Incase you're wondering why I'm not doing it myself, because the deadline is in 1 month
  * Do not repeat the mistakes of ghosts long past
  */
@@ -503,7 +504,7 @@ export function generate_pdf(
   const weight = triage.triageQ11
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, height, weight)
-  
+
   k = addOtherScreeningModularities(doc, lung, geriVision, k)
   
   k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth, mental)
@@ -592,15 +593,20 @@ export function addBmi(doc, k, height, weight) {
   doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
   const original_font_size = doc.getFontSize()
   doc.setFontSize(8)
-  doc.text(160, 170, doc.splitTextToSize(
-    "https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems"
-  , 40))
+  doc.text(
+    160,
+    170,
+    doc.splitTextToSize(
+      'https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems',
+      40,
+    ),
+  )
   doc.setFontSize(original_font_size)
 
   doc.autoTable({
     theme: 'grid',
     styles: {
-      cellWidth: 57
+      cellWidth: 57,
     },
     startY: calculateY(k),
     head: [[parseFromLangKey("bmi_tbl_l_header"), parseFromLangKey("bmi_tbl_r_header")]],
@@ -686,12 +692,17 @@ export function addBloodPressure(doc, triage, k) {
       ' mmHg.',
   )
 
-  doc.addImage(bloodpressureQR, "png", 165, 75, 32, 32);
+  doc.addImage(bloodpressureQR, 'png', 165, 75, 32, 32)
   const original_font_size = doc.getFontSize()
   doc.setFontSize(8)
-  doc.text(160, 110, doc.splitTextToSize(
-    "https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings"
-  , 40))
+  doc.text(
+    160,
+    110,
+    doc.splitTextToSize(
+      'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
+      40,
+    ),
+  )
   doc.setFontSize(original_font_size)
 
   var bloodPressure = doc.splitTextToSize(
@@ -699,7 +710,7 @@ export function addBloodPressure(doc, triage, k) {
     145,
   )
   doc.text(10, 10, bloodPressure)
-  
+
   k = k + 6
 
   return k
@@ -712,15 +723,19 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   doc.setFont(undefined, 'normal')
 
   // TODO: LUNG
-  doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_lung", lung.LUNG4, lung.LUNG6))
-  doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
+  doc.text(10, 
+           10, 
+           kNewlines((k = k + 1)) + parseFromLangKey("other_lung", lung.LUNG4, lung.LUNG6))
+  doc.text(10, 
+           10, 
+           kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
   k++
 
   // EYE
   doc.autoTable({
     theme: 'grid',
     styles: {
-      cellWidth: 46.6
+      cellWidth: 46.6,
     },
     startY: calculateY(k),
     head: [['', parseFromLangKey("other_eye_tbl_l_header"), parseFromLangKey("other_eye_tbl_r_header")]],
@@ -736,7 +751,22 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   return k
 }
 
-export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, geriWhForm, oral, mental) {
+
+export function addFollowUp(
+  doc,
+  k,
+  reg,
+  vaccine,
+  hsg,
+  phlebotomy,
+  fit,
+  wce,
+  nkf,
+  grace,
+  geriWhForm,
+  oral,
+  mental
+) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("fw_title"))
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey("fw_title")), calculateY(k))
@@ -800,6 +830,7 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
     // Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
     // - Contact us: 1800-KIDNEYS / 1800-5436397`
   
+
   // MENTAL
   k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes', 
     parseFromLangKey("fw_samh"))
@@ -824,38 +855,29 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
 
   k = followUpWith(doc, k, null, 0, k == clean_k,
     parseFromLangKey("fw_empty")
-  )
 
-  return k;
+  return k
 }
 
 export function followUpWith(doc, k, trip, indent, condition, statement, symbol = 'l') {
   const width = 180
   if (condition) {
     if (trip) k = trip(k)
-    var text = doc.splitTextToSize(
-      statement,
-      width,
-    )
+    var text = doc.splitTextToSize(statement, width)
     k = testOverflow(doc, k, text.length)
 
     if (indent > 0) {
-      doc.setFont("Zapfdingbats", 'normal')
+      doc.setFont('Zapfdingbats', 'normal')
       const old_size = doc.getFontSize()
       doc.text(10 + indent - 5, 10, kNewlines(k) + symbol)
       doc.setFont("helvetica", "normal")
     }
 
-    doc.text(10 + indent, 10, 
-      doc.splitTextToSize(
-        kNewlines(k) + statement,
-        width,
-      )
-    )
+    doc.text(10 + indent, 10, doc.splitTextToSize(kNewlines(k) + statement, width))
 
     k = k + text.length
   }
-  return k;
+  return k
 }
 
 export function addMemos(doc, k, audioData, dietData, ptData, otData) {
@@ -888,36 +910,32 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
       cellWidth: 180,
       textColor: 20,
       lineColor: 20,
-      fillColor: null
+      fillColor: null,
     },
-    startY: calculateY(k = k + 1),
+    startY: calculateY((k = k + 1)),
     head: [],
-    body: [
-      [audio],
-      [diet],
-      [pt],
-      [ot]
-    ],
-    didDrawPage: function(data) {
+    body: [[audio], [diet], [pt], [ot]],
+    didDrawPage: function (data) {
       console.log(`Final cursor at ${data.cursor.y}`)
       k = Math.floor(data.cursor.y / 4.2)
     },
-    willDrawCell: function(data) {  // copied from https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/src/models.ts
+    willDrawCell: function (data) {
+      // copied from https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/src/models.ts
       if (data.section === 'body' && Array.isArray(data.cell.text)) {
         const PHYSICAL_LINE_HEIGHT = 1.15
         const k = doc.internal.scaleFactor
         const fontSize = doc.internal.getFontSize() / k
 
-        var {x, y} = data.cell.getTextPos()
+        var { x, y } = data.cell.getTextPos()
         y += fontSize * (2 - PHYSICAL_LINE_HEIGHT)
         doc.setFont(undefined, 'bold')
-        doc.text(x, y, data.cell.text[0]);
+        doc.text(x, y, data.cell.text[0])
         doc.setFont(undefined, 'normal')
         data.cell.text[0] = '\n'
       }
-    }
+    },
   })
-  k = k+1
+  k = k + 1
 
   return k
 }
@@ -931,7 +949,7 @@ const checkOverflow = (doc, k) => {
 }
 
 const testOverflow = (doc, k, offset) => {
-  if (k+offset > 70) {
+  if (k + offset > 70) {
     doc.addPage()
     return 0
   }
