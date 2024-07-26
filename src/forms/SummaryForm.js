@@ -50,6 +50,7 @@ const SummaryForm = (props) => {
   const [hsg, setHSG] = useState({})
   const [grace, setGrace] = useState({})
   const [hearts, setHearts] = useState({})
+  const [mental, setMental] = useState({})
 
   const [refresh, setRefresh] = useState(false)
 
@@ -86,6 +87,7 @@ const SummaryForm = (props) => {
       const hsgData = getSavedData(patientId, allForms.hsgForm)
       const graceData = getSavedData(patientId, allForms.geriGraceForm)
       const heartsData = getSavedData(patientId, allForms.geriWhForm)
+      const mentalData = getSavedData(patientId, allForms.mentalHealthForm)
 
       Promise.all([
         hcsrData,
@@ -115,7 +117,8 @@ const SummaryForm = (props) => {
         nkfData,
         hsgData,
         graceData,
-        heartsData
+        heartsData,
+        mentalData
         //sacsData,
       ]).then((result) => {
         setHcsr(result[0])
@@ -146,6 +149,7 @@ const SummaryForm = (props) => {
         setHSG(result[25])
         setGrace(result[26])
         setHearts(result[27])
+        setMental(result[28])
         //setSacs(result[])
         isLoadingPrevData(false)
       })
@@ -262,7 +266,7 @@ const SummaryForm = (props) => {
                 '-'
               )}
               <p className='underlined'>Body Mass Index (BMI)</p>
-              {triage ? formatBmi(triage.triageQ9, triage.triageQ10) : '-'}
+              {triage ? formatBmi(triage.triageQ10, triage.triageQ11) : '-'}
             </div>
 
             <div className='summary--question-div'>
@@ -1024,7 +1028,8 @@ const SummaryForm = (props) => {
                   grace,
                   hearts,
                   geriPtConsult,
-                  geriOtConsult
+                  geriOtConsult,
+                  mental
                 )
               }
             >
