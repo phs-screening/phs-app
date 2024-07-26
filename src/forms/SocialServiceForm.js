@@ -66,7 +66,7 @@ const SocialServiceForm = (props) => {
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
   const [doctorConsult, setDoctorConsult] = useState({})
-  const [geriEbas, setGeriEbas] = useState({})
+  const [geriVision, setVision] = useState({})
   const [geriOt, setGeriOt] = useState({})
   const [geriPt, setGeriPt] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
@@ -76,7 +76,7 @@ const SocialServiceForm = (props) => {
     const regData = getSavedData(patientId, allForms.registrationForm)
     const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
     const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-    const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
+    const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
     const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
     const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
 
@@ -85,7 +85,7 @@ const SocialServiceForm = (props) => {
       regData,
       hxSocialData,
       doctorConsultData,
-      geriEbasDepData,
+      geriVisionData,
       geriOtData,
       geriPtData,
     ]).then((result) => {
@@ -93,7 +93,7 @@ const SocialServiceForm = (props) => {
       setReg(result[1])
       setHxSocial(result[2])
       setDoctorConsult(result[3])
-      setGeriEbas(result[4])
+      setVision(result[4])
       setGeriOt(result[5])
       setGeriPt(result[6])
       isLoadingSidePanel(false)
@@ -188,98 +188,6 @@ const SocialServiceForm = (props) => {
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2>Financial Status</h2>
-              <p className='underlined'>CHAS Status</p>
-              {reg && reg.registrationQ8 ? (
-                <p className='blue'>{reg.registrationQ8}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Pioneer/ Merdeka Generation Status</p>
-              {reg && reg.registrationQ9 ? (
-                <p className='blue'>{reg.registrationQ9}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>
-                Is the participant on any Government Financial Assistance?
-              </p>
-              {hxSocial && hxSocial.hxSocialQ1 ? (
-                <p className='blue'>{hxSocial.hxSocialQ1}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              {hxSocial && hxSocial.hxSocialQ2 ? (
-                <p className='blue'>{hxSocial.hxSocialQ2}</p>
-              ) : (
-                <p className='blue'>no</p>
-              )}
-              <p className='underlined'>Household Income Per Month</p>
-              {hxSocial && hxSocial.hxSocialQ3 ? (
-                <p className='blue'>{hxSocial.hxSocialQ3}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Number of Household Members (Including Participant)</p>
-              {hxSocial && hxSocial.hxSocialQ4 ? (
-                <p className='blue'>{hxSocial.hxSocialQ4}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Interest in CHAS Card Application</p>
-              {hxSocial && hxSocial.hxSocialQ5 ? (
-                <p className='blue'>{hxSocial.hxSocialQ5}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              {hxSocial && hxSocial.hxSocialQ6 ? (
-                <p className='blue'>{hxSocial.hxSocialQ6}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>
-                Does the participant need advice on financial schemes in Singapore or financial
-                assistance?
-              </p>
-              {hxSocial && hxSocial.hxSocialQ7 ? (
-                <p className='blue'>{hxSocial.hxSocialQ7}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              {hxSocial && hxSocial.hxSocialQ8 ? (
-                <p className='blue'>{hxSocial.hxSocialQ8}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <Divider />
-              <h2>Social Issues</h2>
-              <p className='underlined'>Is the participant caring for a loved one</p>
-              {hxSocial && hxSocial.hxSocialQ9 ? (
-                <p className='blue'>{hxSocial.hxSocialQ9}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Does the participant require caregiver training?</p>
-              {hxSocial && hxSocial.hxSocialQ10 ? (
-                <p className='blue'>{hxSocial.hxSocialQ10}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>
-                Does the participant need assistance in caring for a loved one?
-              </p>
-              {hxSocial && hxSocial.hxSocialQ11 ? (
-                <p className='blue'>{hxSocial.hxSocialQ11}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Does the participant require social support?</p>
-              {hxSocial && hxSocial.hxSocialQ12 ? (
-                <p className='blue'>{hxSocial.hxSocialQ12}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <Divider />
               <h2>Referrals</h2>
               <p className='underlined'>Reasons for referral from Doctor&apos;s Consult:</p>
               {doctorConsult && doctorConsult.doctorSConsultQ6 ? (
@@ -292,46 +200,149 @@ const SocialServiceForm = (props) => {
               ) : (
                 <p className='blue'>nil</p>
               )}
-              <p className='underlined'>Failed EBAS-DEP?</p>
-              {geriEbas && geriEbas.geriEbasDepQ10 ? (
-                <p className='blue'>{geriEbas.geriEbasDepQ10}</p>
+
+              <h2>Financial Status</h2>
+              <p className='underlined'>CHAS Status</p>
+              {reg && reg.registrationQ12 ? (
+                <p className='blue'>{reg.registrationQ12}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
-              <p className='underlined'>Potential financial/ family difficulties?</p>
-              {geriEbas && geriEbas.geriEbasDepQ11 ? (
-                <p className='blue'>{geriEbas.geriEbasDepQ11}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Reasons for referral from Geri-EBAS & AMT:</p>
-              {geriEbas && geriEbas.geriEbasDepQ12 ? (
-                <p className='blue'>{geriEbas.geriEbasDepQ12}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Reasons for referral from OT consult</p>
-              {geriOt && geriOt.geriOtConsultQ5 ? (
-                <p className='blue'>{geriOt.geriOtConsultQ5}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Reasons for referral from PT consult</p>
-              {geriPt && geriPt.geriPtConsultQ5 ? (
-                <p className='blue'>{geriPt.geriPtConsultQ5}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-              <p className='underlined'>Referred to Social Service for HDB EASE application?</p>
-              <p className='underlined'>Functional Assessment Report completed?</p>
-              {doctorConsult && doctorConsult.doctorSConsultQ12 ? (
-                <p className='blue'>{doctorConsult.doctorSConsultQ12.toString()}</p>
+              <p className='underlined'>Pioneer/ Merdeka Generation Status</p>
+              {reg && reg.registrationQ13 ? (
+                <p className='blue'>{reg.registrationQ13}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
               <p className='underlined'>
-                Participant signed up for SWCDC&apos;s Safe & Sustainable Homes (Geri Appointment)?
+                Is the participant on any other Government Financial Assistance, other than CHAS and PG
+                (e.g. Public Assistance Scheme)
               </p>
+              {hxSocial && hxSocial.SOCIAL3 ? (
+                <p className='blue'>{hxSocial.SOCIAL3}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.SOCIALShortAns3 ? (
+                <p className='blue'>{hxSocial.SOCIALShortAns3}</p>
+              ) : (
+                <p className='blue'>no</p>
+              )}
+              <p className='underlined'>Average Household Income Per Month</p>
+              {hxSocial && hxSocial.SOCIAL4 ? (
+                <p className='blue'>{hxSocial.SOCIAL4}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Number of Household Members (Including Participant)</p>
+              {hxSocial && hxSocial.SOCIAL5 ? (
+                <p className='blue'>{hxSocial.SOCIAL5}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Interest in CHAS Card Application</p>
+              {hxSocial && hxSocial.SOCIAL6 ? (
+                <p className='blue'>{hxSocial.SOCIAL6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.SOCIALShortAns6 ? (
+                <p className='blue'>{hxSocial.SOCIALShortAns6}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>
+                Does the participant need advice on financial schemes in Singapore or financial
+                assistance?
+              </p>
+              {hxSocial && hxSocial.SOCIAL7 ? (
+                <p className='blue'>{hxSocial.SOCIAL7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {hxSocial && hxSocial.SOCIALShortAns7 ? (
+                <p className='blue'>{hxSocial.SOCIALShortAns7}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <Divider />
+
+              <h2>Social Issues</h2>
+              <p className='underlined'>Is the participant caring for a loved one</p>
+              {hxSocial && hxSocial.SOCIAL8 ? (
+                <p className='blue'>{hxSocial.SOCIAL8}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Do the participant feel equipped to provide care to their loved one?</p>
+              {hxSocial && hxSocial.SOCIAL9 ? (
+                <p className='blue'>{hxSocial.SOCIAL9}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              {/* <p className='underlined'>
+                Does the participant need assistance in caring for a loved one?
+              </p>
+              {hxSocial && hxSocial.SOCIAL31 ? (
+                <p className='blue'>{hxSocial.SOCIAL31}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Does the participant require social support?</p>
+              {hxSocial && hxSocial.SOCIAL32 ? (
+                <p className='blue'>{hxSocial.SOCIAL32}</p>
+              ) : (
+                <p className='blue'>nil</p>
+              )} */}
+              <Divider />
+
+              {
+                geriVision ? (
+                  <>
+                    <p className='underlined'>Is participant currently on any eye review/ consulting any eye specialist?</p>
+                    <p className='blue'>{geriVision.geriVisionQ10}</p>
+                    <p className='blue'>{geriVision.geriVisionQ11}</p>
+                  </>
+                ) : <p className='red'>nil geriVision data!</p>
+              }
+              <Divider />
+
+              <p className='underlined'>Referral from PT consult?</p>
+              {geriPt && geriPt.geriPtConsultQ4 ? (
+                <>
+                <p className='blue'>{geriPt.geriPtConsultQ4}</p>
+                <p className='blue'>{geriPt.geriPtConsultQ5}</p>
+                </>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              <p className='underlined'>Referral from OT consult?</p>
+              {geriOt && geriOt.geriOtConsultQ4 ? (
+                <>
+                <p className='blue'>{geriOt.geriOtConsultQ4}</p>
+                <p className='blue'>{geriOt.geriOtConsultQ5}</p>
+                </>
+              ) : (
+                <p className='blue'>nil</p>
+              )}
+              
+              {
+                geriOt ? (
+                  <>
+                    <p className='underlined'>Recommended programme for participant</p>
+                    <p className='blue'>{geriOt.geriOtConsultQ6}</p>
+
+                    <p className='underlined'>Is participant eligible for HDB EASE?</p>
+                    <p className='blue'>{geriOt.geriOtConsultQ7}</p>
+
+                    <p className='underlined'>Does participant wish to sign up for HDB EASE?</p>
+                    <p className='blue'>{geriOt.geriOtConsultQ8}</p>
+
+                    <p className='underlined'>Functional Assessment Report completed & given to participant?</p>
+                    <p className='blue'>{geriOt.geriOtConsultQ9}</p>
+                  </>
+                ) : <p className='red'>nil geriOt data!</p>
+              }
             </div>
           )}
         </Grid>

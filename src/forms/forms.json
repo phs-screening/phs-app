@@ -24,6 +24,8 @@
   "hxFamilyForm": "hxFamilyForm",
   "hxHcsrForm": "hxHcsrForm",
   "hxNssForm": "hxNssForm",
+  "hxPhqForm": "hxPhqForm",
+  "hxOralForm": "hxOralForm",
   "hxSocialForm": "hxSocialForm",
   "phleboForm": "phleboForm",
   "registrationForm": "registrationForm",
@@ -37,6 +39,7 @@
   "hsgForm": "hsgForm",
   "geriGraceForm": "geriGraceForm",
   "geriWhForm": "geriWhForm",
+  "mentalHealthForm": "mentalHealthForm",
 
   "Comments": "Please refactor away this name list because it makes no gurantees of the actual form name in the js file, doesn't autocomplete and isn't automatically maintained"
 }

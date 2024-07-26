@@ -158,13 +158,6 @@ const FitForm = (props) => {
                 <p className='blue'>nil</p>
               )}
 
-              <p className='underlined'>Lung Function:</p>
-              {lung && lung.LUNG5 ? (
-                <p className='blue'>{regi.registrationQ4}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-
               <h2>History</h2>
               <p className='underlined'>Has patient done a FIT test in the last 1 year:</p>
               {pmhx && pmhx.PMHX10 ? (

@@ -38,15 +38,19 @@ const VaccineForm = (props) => {
   const [saveData, setSaveData] = useState({})
 
   const [pmhx, setPMHXData] = useState({})
+  const [regi, setRegi] = useState({})
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
 
     const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+    const regiData = getSavedData(patientId, allForms.registrationForm)
     Promise.all([
       pmhxData,
+      regiData,
     ]).then((result) => {
       setPMHXData(result[0])
+      setRegi(result[1])
       isLoadingSidePanel(false)
     })
   }, [])
@@ -121,6 +125,16 @@ const VaccineForm = (props) => {
                 <p className='blue'>{pmhx.PMHX16}</p>
               ) : (
                 <p className='blue'>nil</p>
+              )}
+
+              <h2>Patient Info</h2>
+              {regi ? (
+                <>
+                  <p className='blue'>Age: {regi.registrationQ4}</p>
+                  <p className='blue'>Citizenship: {regi.registrationQ7}</p>
+                </>
+              ) : (
+                <p className='red'>NO REGI DATA</p>
               )}
             </div>
           )}

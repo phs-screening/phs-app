@@ -165,8 +165,6 @@ const OsteoForm = (props) => {
                   <p>Does patient consume alcoholic drinks: <strong>{String(social.SOCIAL12)}</strong></p>
                   </>
                 ) : null
-              // SOCIAL 10
-              // SOCIAL 12
               }
               
             </div>
