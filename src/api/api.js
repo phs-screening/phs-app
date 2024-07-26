@@ -3,7 +3,7 @@ import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services
 import { jsPDF } from 'jspdf'
 import { defaultSlots } from 'src/forms/RegForm'
 import logo from 'src/icons/Icon'
-import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
+import { bloodpressureQR, bmiQR } from 'src/icons/QRCodes'
 import 'jspdf-autotable'
 
 const axios = require('axios').default
@@ -67,6 +67,7 @@ export async function submitForm(args, patientId, formCollection) {
     let gender = args.registrationQ5
     let initials = args.registrationQ2
     let age = args.registrationQ4
+    console.log(age)
     let preferredLanguage = args.registrationQ14
     let goingForPhlebotomy = args.registrationQ15
 
@@ -78,8 +79,8 @@ export async function submitForm(args, patientId, formCollection) {
       goingForPhlebotomy: goingForPhlebotomy,
     }
 
-    console.log("patient id: " + record2)
-    if (record2 == null) { 
+    console.log('patient id: ' + record2)
+    if (record2 == null) {
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
       patientId = qNum
@@ -94,9 +95,9 @@ export async function submitForm(args, patientId, formCollection) {
           { queueNo: patientId },
           { $set: { [formCollection]: patientId } },
         )
-        
+
         await registrationForms.insertOne({ _id: patientId, ...args })
-        return { result: true, data: data , qNum: patientId}
+        return { result: true, data: data, qNum: patientId }
       } else {
         if (await isAdmin()) {
           args.lastEdited = new Date()
@@ -107,7 +108,7 @@ export async function submitForm(args, patientId, formCollection) {
           // throw error message
           // const errorMsg = "This form has already been submitted. If you need to make "
           //         + "any changes, please contact the admin."
-          return { result: true, data: data, qNum: patientId}
+          return { result: true, data: data, qNum: patientId }
         } else {
           const errorMsg =
             'This form has already been submitted. If you need to make ' +
@@ -121,7 +122,7 @@ export async function submitForm(args, patientId, formCollection) {
       // Can check in every form page if there is valid patientId instead
       // cannot use useEffect since the form component is class component
       const errorMsg = 'An error has occurred.'
-      console.log("There is an error here")
+      console.log('There is an error here')
       // You will be directed to the registration page." logic not done
       return { result: false, error: errorMsg }
     }
@@ -454,16 +455,16 @@ export function kNewlines(k) {
  * As such, we need use "k" to keep track of the current line number of the text.
  *
  * This approach works, so we have chosen to keep it.
- * 
- * For Future devs pt2 (29/6/2024): 
+ *
+ * For Future devs pt2 (29/6/2024):
  * please for the love of god make this code more flexible
  * right now it doesn't even manage page overflow automatically
  * and is terrible to expand upon
- * 
+ *
  * Also you see that "justification" to use a running tracker of newlines? yeah that breaks
  * as soon as you start to actually format the document so IF YOU HAVE THE TIME please nuke that
  * entire system.
- * 
+ *
  * Incase you're wondering why I'm not doing it myself, because the deadline is in 1 month
  * Do not repeat the mistakes of ghosts long past
  */
@@ -489,7 +490,7 @@ export function generate_pdf(
   grace,
   hearts,
   geriPtConsult,
-  geriOtConsult
+  geriOtConsult,
 ) {
   var doc = new jsPDF()
   var k = 0
@@ -501,9 +502,9 @@ export function generate_pdf(
   const weight = triage.triageQ10
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, height, weight)
-  
+
   k = addOtherScreeningModularities(doc, lung, geriVision, k)
-  
+
   k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth)
 
   k = addMemos(doc, k, geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult)
@@ -543,11 +544,7 @@ export function patient(doc, reg, patients, k) {
   doc.setFont(undefined, 'bold')
   const original_font_size = doc.getFontSize()
   doc.setFontSize(17)
-  doc.text(
-    10,
-    10,
-    kNewlines((k = k + 2)) + 'Public Health Service 2024 Health Screening Report',
-  )
+  doc.text(10, 10, kNewlines((k = k + 2)) + 'Public Health Service 2024 Health Screening Report')
   k = k + 4
 
   doc.setFontSize(original_font_size)
@@ -597,15 +594,20 @@ export function addBmi(doc, k, height, weight) {
   doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
   const original_font_size = doc.getFontSize()
   doc.setFontSize(8)
-  doc.text(160, 170, doc.splitTextToSize(
-    "https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems"
-  , 40))
+  doc.text(
+    160,
+    170,
+    doc.splitTextToSize(
+      'https://www.healthhub.sg/live-healthy/weight_putting_me_at_risk_of_health_problems',
+      40,
+    ),
+  )
   doc.setFontSize(original_font_size)
 
   doc.autoTable({
     theme: 'grid',
     styles: {
-      cellWidth: 57
+      cellWidth: 57,
     },
     startY: calculateY(k),
     head: [['Asian BMI cut-off points for action', 'Cardiovascular disease risk']],
@@ -613,8 +615,8 @@ export function addBmi(doc, k, height, weight) {
       ['18.5 - 22.9', 'Low'],
       ['23.0 - 27.4', 'Moderate'],
       ['27.5 - 32.4', 'High'],
-      ['32.5 - 37.4', 'Very High']
-    ]
+      ['32.5 - 37.4', 'Very High'],
+    ],
   })
   k = k + 10
 
@@ -691,12 +693,17 @@ export function addBloodPressure(doc, triage, k) {
       ' mmHg.',
   )
 
-  doc.addImage(bloodpressureQR, "png", 165, 75, 32, 32);
+  doc.addImage(bloodpressureQR, 'png', 165, 75, 32, 32)
   const original_font_size = doc.getFontSize()
   doc.setFontSize(8)
-  doc.text(160, 110, doc.splitTextToSize(
-    "https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings"
-  , 40))
+  doc.text(
+    160,
+    110,
+    doc.splitTextToSize(
+      'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
+      40,
+    ),
+  )
   doc.setFontSize(original_font_size)
 
   var bloodPressure = doc.splitTextToSize(
@@ -710,7 +717,7 @@ export function addBloodPressure(doc, triage, k) {
     145,
   )
   doc.text(10, 10, bloodPressure)
-  
+
   k = k + 6
 
   return k
@@ -723,7 +730,12 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   doc.setFont(undefined, 'normal')
 
   // TODO: LUNG
-  doc.text(10, 10, kNewlines((k = k + 1)) + `The results of your FEV1:FEC ratio is ${lung.LUNG4}, results are [LUNG6]`)
+  doc.text(
+    10,
+    10,
+    kNewlines((k = k + 1)) +
+      `The results of your FEV1:FEC ratio is ${lung.LUNG4}, results are [LUNG6]`,
+  )
   doc.text(10, 10, kNewlines((k = k + 1)) + 'The results of your visual acuity are')
   k++
 
@@ -731,14 +743,14 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   doc.autoTable({
     theme: 'grid',
     styles: {
-      cellWidth: 46.6
+      cellWidth: 46.6,
     },
     startY: calculateY(k),
     head: [['', 'Right Eye', 'Left Eye']],
     body: [
       ['Without Pinhole Occluder', `6/${eye.geriVisionQ3}`, `6/${eye.geriVisionQ4}`],
-      ['With Pinhole Occluder', `6/${eye.geriVisionQ5}`, `6/${eye.geriVisionQ6}`]
-    ]
+      ['With Pinhole Occluder', `6/${eye.geriVisionQ5}`, `6/${eye.geriVisionQ6}`],
+    ],
   })
   k = k + 6
 
@@ -747,7 +759,20 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   return k
 }
 
-export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, geriWhForm, oral) {
+export function addFollowUp(
+  doc,
+  k,
+  reg,
+  vaccine,
+  hsg,
+  phlebotomy,
+  fit,
+  wce,
+  nkf,
+  grace,
+  geriWhForm,
+  oral,
+) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + 'Follow-Up')
   doc.line(10, calculateY(k), 10 + doc.getTextWidth('Follow-Up'), calculateY(k))
@@ -756,31 +781,66 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
 
   const clean_k = k
 
-  const trip = (k) => followUpWith(doc, k, null, 0, k == clean_k, 
-    'You have indicated interest for or signed-up for follow up with'
-    + 'our external partners, details can be found below:')
+  const trip = (k) =>
+    followUpWith(
+      doc,
+      k,
+      null,
+      0,
+      k == clean_k,
+      'You have indicated interest for or signed-up for follow up with' +
+        'our external partners, details can be found below:',
+    )
 
   const indent = 10
-  // TODO: 
+  // TODO:
   // VACCINE
-  k = followUpWith(doc, k, trip, indent, vaccine.VAX1 == 'Yes', 
-    'You signed up for an influenza vaccine with [unsure yet] on [unsure].'
-    + 'Please contact [unsure] for further details.')
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    vaccine.VAX1 == 'Yes',
+    'You signed up for an influenza vaccine with [unsure yet] on [unsure].' +
+      'Please contact [unsure] for further details.',
+  )
   // HSG
-  k = followUpWith(doc, k, trip, indent, hsg.HSG1 == 'Yes, I signed up for HSG today', 
-    'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.'
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    hsg.HSG1 == 'Yes, I signed up for HSG today',
+    'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.',
   )
   // PHLEBOTOMY
-  k = followUpWith(doc, k, trip, indent, phlebotomy.phlebotomyQ1, 
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    phlebotomy.phlebotomyQ1,
     `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. 
     When your results are ready for collection, our PHS volunteers will call you to remind you.  
-    You have indicated your preferred clinic to be ${reg.registrationQ18}`)
+    You have indicated your preferred clinic to be ${reg.registrationQ18}`,
+  )
   // FIT
-  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes', 
-    'You signed up for FIT home kits to be delivered to you, '
-    + 'please follow instructions from our partner Singapore Cancer Society.')
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    fit.fitQ2 == 'Yes',
+    'You signed up for FIT home kits to be delivered to you, ' +
+      'please follow instructions from our partner Singapore Cancer Society.',
+  )
   // HPV
-  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes', 
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    wce.wceQ5 == 'Yes',
     `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below. 
     - Address: 
     9 Bishan Place Junction 8 Office Tower
@@ -788,70 +848,89 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
     - Clinic operating hours:
     Mondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm)
     Saturdays, 9.00am to 4.00pm (last appointment at 3.15pm)
-    - Contact us: 6499 9133`)
+    - Contact us: 6499 9133`,
+  )
   // OSTEO
 
   // NKF
-  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes', 
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    nkf.NKF1 == 'Yes',
     `You have indicated interest with National Kidney Foundation on ${nkf.NKF2} at CKD Clinic
     - Address:
     109 Whampoa Road
     #01-09/11, Singapore 321109
     - Clinic operating hours:
     Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
-    - Contact us: 1800-KIDNEYS / 1800-5436397`
+    - Contact us: 1800-KIDNEYS / 1800-5436397`,
   )
   // MENTAL
 
   // GRACE
-  k = followUpWith(doc, k, trip, indent, grace.GRACE2 == 'Yes', 
-    `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. `
-    + `Please contact G-RACE at: g_race@nuhs.edu.sg`)
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    grace.GRACE2 == 'Yes',
+    `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. ` +
+      `Please contact G-RACE at: g_race@nuhs.edu.sg`,
+  )
   // WHISPERING
-  k = followUpWith(doc, k, trip, indent, geriWhForm.WH1 == 'Yes', 
-    'You have indicated interest to be followed-up with Whispering Hearts. Whispering Hearts '
-    + 'will contact you for follow up. Whispering Hearts can be contacted at: contact@viriya.org.sg'
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    geriWhForm.WH1 == 'Yes',
+    'You have indicated interest to be followed-up with Whispering Hearts. Whispering Hearts ' +
+      'will contact you for follow up. Whispering Hearts can be contacted at: contact@viriya.org.sg',
   )
   // NUS DENTISTRY
-  k = followUpWith(doc, k, trip, indent, oral.DENT4 == 'Yes',
-    'You have indicated interest with NUS Dentistry to be followed up. '
-    + 'Please contact NUS Dentistry at smileclinic@nus.edu.sg for further enquiries.'
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    oral.DENT4 == 'Yes',
+    'You have indicated interest with NUS Dentistry to be followed up. ' +
+      'Please contact NUS Dentistry at smileclinic@nus.edu.sg for further enquiries.',
   )
 
-  k = followUpWith(doc, k, null, 0, k == clean_k,
-    'You have not indicated or signed-up for any follow-ups.'
+  k = followUpWith(
+    doc,
+    k,
+    null,
+    0,
+    k == clean_k,
+    'You have not indicated or signed-up for any follow-ups.',
   )
 
-  return k;
+  return k
 }
 
 export function followUpWith(doc, k, trip, indent, condition, statement) {
   const width = 180
   if (condition) {
     if (trip) k = trip(k)
-    var text = doc.splitTextToSize(
-      statement,
-      width,
-    )
+    var text = doc.splitTextToSize(statement, width)
     k = testOverflow(doc, k, text.length)
 
     if (indent > 0) {
-      doc.setFont("Zapfdingbats", 'normal')
+      doc.setFont('Zapfdingbats', 'normal')
       const old_size = doc.getFontSize()
-      doc.text(10 + indent - 5, 10, kNewlines(k) + "l")
-      doc.setFont("helvetica", "normal")
+      doc.text(10 + indent - 5, 10, kNewlines(k) + 'l')
+      doc.setFont('helvetica', 'normal')
     }
 
-    doc.text(10 + indent, 10, 
-      doc.splitTextToSize(
-        kNewlines(k) + statement,
-        width,
-      )
-    )
+    doc.text(10 + indent, 10, doc.splitTextToSize(kNewlines(k) + statement, width))
 
     k = k + text.length
   }
-  return k;
+  return k
 }
 
 export function addMemos(doc, k, audioData, dietData, ptData, otData) {
@@ -864,19 +943,17 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
 
   const width = 180
   // TODO: AUDIOLOGY
-  var audio = 'Audiology:\n\n'
-    + `The audiology team believes that [AUDIO3]\n\n`
-    + `The audiology team has written a recommended follow-up: ${audioData.geriAudiometryQ12}`
+  var audio =
+    'Audiology:\n\n' +
+    `The audiology team believes that [AUDIO3]\n\n` +
+    `The audiology team has written a recommended follow-up: ${audioData.geriAudiometryQ12}`
   // TODO: DIET
-  var diet = 'Dietitian’s Station:\n\n'
-    + `${dietData.dietitiansConsultQ4}`
+  var diet = 'Dietitian’s Station:\n\n' + `${dietData.dietitiansConsultQ4}`
   if (dietData.dietitiansConsultQ5) {
     diet += `\n\nThe dietitian has indicated that you [DIET5] urgent follow up due to ${dietData.dietitiansConsultQ6}. `
   }
-  var pt = 'Physical Therapist Station:\n\n'
-    + `${ptData.geriPtConsultQ1}`
-  var ot = 'Occupational Therapist Station:\n\n'
-    + `${otData.geriOtConsultQ1}`
+  var pt = 'Physical Therapist Station:\n\n' + `${ptData.geriPtConsultQ1}`
+  var ot = 'Occupational Therapist Station:\n\n' + `${otData.geriOtConsultQ1}`
 
   doc.autoTable({
     theme: 'grid',
@@ -884,36 +961,32 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
       cellWidth: 180,
       textColor: 20,
       lineColor: 20,
-      fillColor: null
+      fillColor: null,
     },
-    startY: calculateY(k = k + 1),
+    startY: calculateY((k = k + 1)),
     head: [],
-    body: [
-      [audio],
-      [diet],
-      [pt],
-      [ot]
-    ],
-    didDrawPage: function(data) {
+    body: [[audio], [diet], [pt], [ot]],
+    didDrawPage: function (data) {
       console.log(`Final cursor at ${data.cursor.y}`)
       k = Math.floor(data.cursor.y / 4.2)
     },
-    willDrawCell: function(data) {  // copied from https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/src/models.ts
+    willDrawCell: function (data) {
+      // copied from https://github.com/simonbengtsson/jsPDF-AutoTable/blob/master/src/models.ts
       if (data.section === 'body' && Array.isArray(data.cell.text)) {
         const PHYSICAL_LINE_HEIGHT = 1.15
         const k = doc.internal.scaleFactor
         const fontSize = doc.internal.getFontSize() / k
 
-        var {x, y} = data.cell.getTextPos()
+        var { x, y } = data.cell.getTextPos()
         y += fontSize * (2 - PHYSICAL_LINE_HEIGHT)
         doc.setFont(undefined, 'bold')
-        doc.text(x, y, data.cell.text[0]);
+        doc.text(x, y, data.cell.text[0])
         doc.setFont(undefined, 'normal')
         data.cell.text[0] = '\n'
       }
-    }
+    },
   })
-  k = k+1
+  k = k + 1
 
   return k
 }
@@ -927,7 +1000,7 @@ const checkOverflow = (doc, k) => {
 }
 
 const testOverflow = (doc, k, offset) => {
-  if (k+offset > 70) {
+  if (k + offset > 70) {
     doc.addPage()
     return 0
   }
@@ -949,7 +1022,7 @@ export function addRecommendation(doc, k) {
       'As mentioned above, PHS members may be calling you soon as a form of follow-up in a few weeks time,' +
       ' if you have not opted out of our Telehealth Initiative. Should you have any queries, feel free to contact us at hello@publichealthservice.org.' +
       ' Thank you for participating in PHS 2024 and we hope that you have benefited and would continue to support us in the future.',
-    180
+    180,
   )
   doc.text(10, 10, recommendation)
 }

@@ -52,6 +52,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     if (openMobile && onMobileClose) {
       onMobileClose()
     }
+    console.log(patientInfo)
   }, [location.pathname])
 
   const { patientId, patientInfo } = useContext(FormContext)
