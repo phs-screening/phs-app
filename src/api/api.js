@@ -5,7 +5,7 @@ import { defaultSlots } from 'src/forms/RegForm'
 import logo from 'src/icons/Icon'
 import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
 import 'jspdf-autotable'
-import { parseFromLangKey } from './langutil'
+import { parseFromLangKey, setLang } from './langutil'
 
 const axios = require('axios').default
 
@@ -491,18 +491,20 @@ export function generate_pdf(
   hearts,
   geriPtConsult,
   geriOtConsult,
-  mental
+  mental,
+  social
 ) {
   var doc = new jsPDF()
   var k = 0
   doc.setFontSize(10)
+  setLang(doc, reg.registrationQ14)
 
   k = patient(doc, reg, patients, k)
 
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, triage.triageQ10, triage.triageQ11)
   
-  k = addOtherScreeningModularities(doc, lung, geriVision, k)
+  k = addOtherScreeningModularities(doc, lung, geriVision, social, k)
   k = testOverflow(doc, k, 10)
   
   k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth, mental)
@@ -544,25 +546,21 @@ export function patient(doc, reg, patients, k) {
   doc.setFont(undefined, 'bold')
   const original_font_size = doc.getFontSize()
   doc.setFontSize(17)
-  doc.text(
-    10,
-    10,
+  var title = doc.splitTextToSize(
     kNewlines((k = k + 2)) + parseFromLangKey("title"),
+    190,
   )
-  k = k + 4
+  doc.text(10, 10, title)
+  k = title.length+3
 
   doc.setFontSize(original_font_size)
   doc.setFont(undefined, 'normal')
   // Thanks note
   var thanksNote = doc.splitTextToSize(
     kNewlines((k = k + 2)) +
-      parseFromLangKey("dear") +
-      salutation +
-      ' ' +
-      patients.initials +
-      ',\n' +
+      parseFromLangKey("dear", salutation, patients.initials) + '\n' +
       parseFromLangKey("intro"),
-    180,
+    190,
   )
   doc.text(10, 10, thanksNote)
   k = k + 2
@@ -586,7 +584,7 @@ export function addBmi(doc, k, height, weight) {
       parseFromLangKey("bmi_reading", height, weight, bmi.toString()),
   )
 
-  k = k + 2
+  k++
 
   doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
   const original_font_size = doc.getFontSize()
@@ -599,6 +597,7 @@ export function addBmi(doc, k, height, weight) {
   doc.autoTable({
     theme: 'plain',
     styles: {
+      font: doc.getFont().fontName,
       lineWidth: 0.1,
       lineColor: 0,
       cellWidth: 57
@@ -697,27 +696,26 @@ export function addBloodPressure(doc, triage, k) {
 
   var bloodPressure = doc.splitTextToSize(
     kNewlines((k = k + 2)) + parseFromLangKey("bp_tip"),
-    145,
+    150,
   )
   doc.text(10, 10, bloodPressure)
-  
-  k = k + 6
+  k = bloodPressure.length-1
 
   return k
 }
 
-export function addOtherScreeningModularities(doc, lung, eye, k) {
+export function addOtherScreeningModularities(doc, lung, eye, social, k) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_title"))
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey("other_title")), calculateY(k))
   doc.setFont(undefined, 'normal')
 
-  // TODO: LUNG
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_lung"))
   k++
   doc.autoTable({
     theme: 'plain',
     styles: {
+      font: doc.getFont().fontName,
       overflow: 'visible',
       lineWidth: 0.1,
       lineColor: 0,
@@ -748,7 +746,14 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
       ['FEV1/FVC (%)', `${lung.LUNG7}`,'FEV1/FVC (%)', `${lung.LUNG12}`],
     ]
   })
-  k = k + 13
+  k = k + 11
+
+  if (social.SOCIAL10) {
+    doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_lung_smoking"))
+  }
+  k += 2
+
+  k = testOverflow(doc, k, 13)
   
   // EYE
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
@@ -756,6 +761,7 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
   doc.autoTable({
     theme: 'plain',
     styles: {
+      font: doc.getFont().fontName,
       lineWidth: 0.1,
       lineColor: 0,
       cellWidth: 46.6
@@ -767,7 +773,7 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
       [parseFromLangKey("other_eye_tbl_b_row"), `6/${eye.geriVisionQ5}`, `6/${eye.geriVisionQ6}`]
     ]
   })
-  k = k + 6
+  k = k + 7
 
   doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_eye_error") + `${eye.geriVisionQ8}`)
 
@@ -878,10 +884,10 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
     k = testOverflow(doc, k, text.length)
 
     if (indent > 0) {
-      doc.setFont("Zapfdingbats", 'normal')
-      const old_size = doc.getFontSize()
+      const old_font = doc.getFont()
+      doc.setFont('Zapfdingbats', 'normal')
       doc.text(10 + indent - 5, 10, kNewlines(k) + symbol)
-      doc.setFont("helvetica", "normal")
+      doc.setFont(old_font.fontName, 'normal')
     }
 
     doc.text(10 + indent, 10, 
@@ -891,7 +897,7 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
       )
     )
 
-    k = k + text.length
+    k = k + text.length + 1
   }
   return k;
 }
@@ -922,6 +928,7 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.autoTable({
     theme: 'grid',
     styles: {
+      font: doc.getFont().fontName,
       cellWidth: 180,
       textColor: 20,
       lineColor: 20,
@@ -989,9 +996,10 @@ export function addRecommendation(doc, k) {
     180
   )
   doc.text(10, 10, recommendation)
-  kk = kk + 3
+  kk = kk + doc.splitTextToSize(parseFromLangKey("rec"), 180).length
 
-  kk = testOverflow(doc, kk, 13)
+  var disclaimer = doc.splitTextToSize(parseFromLangKey("disclaimer"), 180)
+  kk = testOverflow(doc, kk, disclaimer.length + 3)
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((kk = kk + 2)) + parseFromLangKey("disclaimer_title"))

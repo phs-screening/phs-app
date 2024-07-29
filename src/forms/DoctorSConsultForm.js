@@ -421,7 +421,7 @@ const DoctorSConsultForm = () => {
                 ) : <p className='red'>nil social data!</p>
               }
 
-              {family ? (
+              {family && family.FAMILY1 ? (
                 <li>
                   <p>Family History</p>
                   <ul>
