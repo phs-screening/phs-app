@@ -138,19 +138,19 @@ const LungFnForm = (props) => {
     const [{ value: lung5 }] = useField('LUNG5', {})
     const [{ value: lung7 }] = useField('LUNG7', {})
 
-    if ((lung5 >= 80) && (lung7 < 0.7)) {
+    if ((lung5 >= 80) && (lung7 < 70)) {
       const typeOfLung = "Obstructive Defect" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 < 80) && (lung7 < 0.7)) {
+    } else if ((lung5 < 80) && (lung7 < 70)) {
       const typeOfLung = "Mixed Pattern" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 < 80) && (lung7 >= 0.7)) {
+    } else if ((lung5 < 80) && (lung7 >= 70)) {
       const typeOfLung = "Restrictive Defect" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 >= 80) && (lung7 >= 0.7)) {
+    } else if ((lung5 >= 80) && (lung7 >= 70)) {
       const typeOfLung = "Normal" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
@@ -198,7 +198,7 @@ const LungFnForm = (props) => {
         </PopupText>
         <h2>Results of lung function test:</h2><br />
         <h2>Pre-bronchodilator</h2>
-        <h3>FBC (L)</h3>
+        <h3>FVC (L)</h3>
         <NumField name='LUNG3' label='LUNG3' />
         <h3>FEV1 (L)</h3>
         <NumField name='LUNG4' label='LUNG4' />

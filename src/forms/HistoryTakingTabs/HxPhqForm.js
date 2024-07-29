@@ -92,7 +92,7 @@ const schema = new SimpleSchema({
   },
 })
 
-const formName = 'hxPhqForm'
+const formName = 'geriPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
 
 const HxPhqForm = (props) => {
   const [loading, setLoading] = useState(false)

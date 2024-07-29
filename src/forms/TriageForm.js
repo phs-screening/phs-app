@@ -232,7 +232,7 @@ const TriageForm = () => {
           3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>&gt;5mmHg</b>)
         </h4>
         <NumField name='triageQ5' label='Triage Q5' />
-        <h4>3rd Reading Diastolic (ONLY if 1st and 2nd systolic reading differ by &gt;5mmHg)</h4>
+        <h4>3rd Reading Diastolic (ONLY if 1st and 2nd diastolic reading differ by &gt;5mmHg)</h4>
         <NumField name='triageQ6' label='Triage Q6' />
         <IsHighBP systolic_qn='triageQ5' diastolic_qn='triageQ6' />
 

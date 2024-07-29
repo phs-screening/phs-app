@@ -73,7 +73,7 @@ const schema = new SimpleSchema({
   },
   PMHX7: {
     type: Array,
-    optional: false,
+    optional: true,
   },
   'PMHX7.$': {
     type: String,
@@ -318,10 +318,6 @@ const HxNssForm = (props) => {
           e.g. Medication not effective? CAn be managed without medication? Forget to take? Lost/Ran
           out of medication?
         </p>
-        <h3>
-          Has a doctor ever told you that you have the following conditions? Please select all that
-          apply.
-        </h3>
         {/* <SelectField
           appearance='checkbox'
           checkboxes
