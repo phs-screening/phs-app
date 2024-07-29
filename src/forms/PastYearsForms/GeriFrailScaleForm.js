@@ -227,7 +227,8 @@ const GeriFrailScaleForm = (props) => {
         If participant cannot remember his/her weight, ask if there was any significant loss in
         weight the past year.
         <br />
-        <NumField name='geriFrailScaleQ5' label='Geri - Frail Scale Q5' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriFrailScaleQ5' label='Geri - Frail Scale Q5' />
         <h3>
           <br />
           Frail scale scores range from 0-5 (i.e. 1 point for each component; 0 = best to 5 = worst)

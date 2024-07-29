@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { NumField, RadioField } from 'uniforms-mui'
+import { NumField, RadioField, FloatField } from 'uniforms-mui'
 import { useField } from 'uniforms'
 import { submitForm, formatBmi } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -19,9 +19,6 @@ import './fieldPadding.css'
 
 let calSyst
 let calDias
-
-const sys1 = 1
-const sys2 = 2
 
 const schema = new SimpleSchema({
   triageQ1: {
@@ -219,35 +216,41 @@ const TriageForm = () => {
           minutes.)
         </p>
         <h3>1st Reading Systolic (units in mmHg)</h3>
-        <NumField name='triageQ1' label='Triage Q1' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ1' label='Triage Q1' /> 
         <h3>1st Reading Diastolic (units in mmHg)</h3>
-        <NumField name='triageQ2' label='Triage Q2' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ2' label='Triage Q2' />
         <IsHighBP systolic_qn='triageQ1' diastolic_qn='triageQ2' />
         <h3>2nd Reading Systolic (units in mmHg)</h3>
-        <NumField name='triageQ3' label='Triage Q3' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ3' label='Triage Q3' />
         <h3>2nd Reading Diastolic (units in mmHg)</h3>
-        <NumField name='triageQ4' label='Triage Q4' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ4' label='Triage Q4' />
         <IsHighBP systolic_qn='triageQ3' diastolic_qn='triageQ4' />
         <h4>
           3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>&gt;5mmHg</b>)
         </h4>
-        <NumField name='triageQ5' label='Triage Q5' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ5' label='Triage Q5' />
         <h4>3rd Reading Diastolic (ONLY if 1st and 2nd diastolic reading differ by &gt;5mmHg)</h4>
-        <NumField name='triageQ6' label='Triage Q6' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ6' label='Triage Q6' />
         <IsHighBP systolic_qn='triageQ5' diastolic_qn='triageQ6' />
 
         <h3>Average Reading Systolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ7'/>
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={sys1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
+          <CalcAvg label={1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
         </h3>
         <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
         <RadioField name='triageQ8'/>
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={sys2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
+          <CalcAvg label={2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
         </h3>
         <br />
         <h3>Hypertension criteria:</h3>
@@ -348,15 +351,18 @@ const TriageForm = () => {
         </PopupText> */}
         <h2>2) BMI</h2>
         <h3>Height (in cm)</h3>
-        <NumField name='triageQ10' label='Triage Q10' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ10' label='Triage Q10' /> <br />
         <h3>Weight (in kg)</h3>
-        <NumField name='triageQ11' label='Triage Q11' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ11' label='Triage Q11' /> <br />
         <h3>
           BMI: <CalcBMI />
         </h3>
         <h2>3) Waist Circumference (all participants)</h2>
         <h3>Waist Circumference (in cm)</h3>
-        <NumField name='triageQ13' label='Triage Q13' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='triageQ13' label='Triage Q13' /> <br />
       </div>
 
       <ErrorsField />

@@ -110,7 +110,8 @@ const GeriTugForm = (props) => {
           <TextField name='geriTugQ2' label='Geri - TUG Q2' />
         </PopupText>
         Time taken (in seconds):
-        <NumField name='geriTugQ3' label='Geri - TUG Q3' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriTugQ3' label='Geri - TUG Q3' />
         <br />
         Failed SLBT?
         <RadioField name='geriTugQ4' label='Geri - TUG Q4' />

@@ -206,19 +206,23 @@ const GeriVisionForm = (props) => {
         <h3>
           2. Visual acuity (w/o pinhole occluder) - Right Eye 6/__ <br />
         </h3>
-        <NumField name='geriVisionQ3' label='Geri - Vision Q3' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriVisionQ3' label='Geri - Vision Q3' /> <br />
         <h3>
           3. Visual acuity (w/o pinhole occluder) - Left Eye 6/__ <br />
         </h3>
-        <NumField name='geriVisionQ4' label='Geri - Vision Q4' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriVisionQ4' label='Geri - Vision Q4' /> <br />
         <h3>
           4. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye 6/__ <br />
         </h3>
-        <NumField name='geriVisionQ5' label='Geri - Vision Q5' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriVisionQ5' label='Geri - Vision Q5' /> <br />
         <h3>
           5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye 6/__ <br />
         </h3>
-        <NumField name='geriVisionQ6' label='Geri - Vision Q6' /> <br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriVisionQ6' label='Geri - Vision Q6' /> <br />
         <h3>6. Is participant currently on any eye review/ consulting any eye specialist?</h3>
         <RadioField
           name='geriVisionQ10'

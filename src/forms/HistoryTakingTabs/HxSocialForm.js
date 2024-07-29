@@ -336,7 +336,8 @@ const HxSocialForm = (props) => {
         <h3>What is the average earnings of participant&apos;s household per month?</h3>
         <RadioField name='SOCIAL4' label='SOCIAL4' options={formOptions.SOCIAL4} />
         <h3>Number of household members (including yourself)?</h3>
-        <NumField name='SOCIAL5' label='SOCIAL5' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='SOCIAL5' label='SOCIAL5' />
         <h3>
           <span className='red'>If you are currently not on CHAS but qualify, </span>do you want to
           apply for CHAS card?
