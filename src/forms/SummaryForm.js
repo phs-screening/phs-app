@@ -1029,7 +1029,8 @@ const SummaryForm = (props) => {
                   hearts,
                   geriPtConsult,
                   geriOtConsult,
-                  mental
+                  mental,
+                  social
                 )
               }
             >

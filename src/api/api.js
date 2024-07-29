@@ -5,7 +5,7 @@ import { defaultSlots } from 'src/forms/RegForm'
 import logo from 'src/icons/Icon'
 import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
 import 'jspdf-autotable'
-import { parseFromLangKey } from './langutil'
+import { parseFromLangKey, setLang } from './langutil'
 
 const axios = require('axios').default
 
@@ -491,20 +491,21 @@ export function generate_pdf(
   hearts,
   geriPtConsult,
   geriOtConsult,
-  mental
+  mental,
+  social
 ) {
   var doc = new jsPDF()
   var k = 0
   doc.setFontSize(10)
+  setLang(doc, reg.registrationQ14)
 
   k = patient(doc, reg, patients, k)
 
-  const height = triage.triageQ10
-  const weight = triage.triageQ11
   k = addBloodPressure(doc, triage, k)
-  k = addBmi(doc, k, height, weight)
+  k = addBmi(doc, k, triage.triageQ10, triage.triageQ11)
   
-  k = addOtherScreeningModularities(doc, lung, geriVision, k)
+  k = addOtherScreeningModularities(doc, lung, geriVision, social, k)
+  k = testOverflow(doc, k, 10)
   
   k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth, mental)
 
@@ -545,25 +546,21 @@ export function patient(doc, reg, patients, k) {
   doc.setFont(undefined, 'bold')
   const original_font_size = doc.getFontSize()
   doc.setFontSize(17)
-  doc.text(
-    10,
-    10,
+  var title = doc.splitTextToSize(
     kNewlines((k = k + 2)) + parseFromLangKey("title"),
+    190,
   )
-  k = k + 4
+  doc.text(10, 10, title)
+  k = title.length+3
 
   doc.setFontSize(original_font_size)
   doc.setFont(undefined, 'normal')
   // Thanks note
   var thanksNote = doc.splitTextToSize(
     kNewlines((k = k + 2)) +
-      parseFromLangKey("dear") +
-      salutation +
-      ' ' +
-      patients.initials +
-      ',\n' +
+      parseFromLangKey("dear", salutation, patients.initials) + '\n' +
       parseFromLangKey("intro"),
-    180,
+    190,
   )
   doc.text(10, 10, thanksNote)
   k = k + 2
@@ -583,11 +580,11 @@ export function addBmi(doc, k, height, weight) {
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) +
+    kNewlines((k = k + 1)) +
       parseFromLangKey("bmi_reading", height, weight, bmi.toString()),
   )
 
-  k = k + 2
+  k++
 
   doc.addImage(bmiQR, 'PNG', 165, 135, 32, 32)
   const original_font_size = doc.getFontSize()
@@ -598,8 +595,11 @@ export function addBmi(doc, k, height, weight) {
   doc.setFontSize(original_font_size)
 
   doc.autoTable({
-    theme: 'grid',
+    theme: 'plain',
     styles: {
+      font: doc.getFont().fontName,
+      lineWidth: 0.1,
+      lineColor: 0,
       cellWidth: 57
     },
     startY: calculateY(k),
@@ -678,7 +678,7 @@ export function addBloodPressure(doc, triage, k) {
   doc.text(
     10,
     10,
-    kNewlines((k = k + 2)) +
+    kNewlines((k = k + 1)) +
       parseFromLangKey("bp_reading") +
       triage.triageQ7 +
       '/' +
@@ -696,30 +696,74 @@ export function addBloodPressure(doc, triage, k) {
 
   var bloodPressure = doc.splitTextToSize(
     kNewlines((k = k + 2)) + parseFromLangKey("bp_tip"),
-    145,
+    150,
   )
   doc.text(10, 10, bloodPressure)
-  
-  k = k + 6
+  k = bloodPressure.length-1
 
   return k
 }
 
-export function addOtherScreeningModularities(doc, lung, eye, k) {
+export function addOtherScreeningModularities(doc, lung, eye, social, k) {
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_title"))
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey("other_title")), calculateY(k))
   doc.setFont(undefined, 'normal')
 
-  // TODO: LUNG
-  doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_lung", lung.LUNG4, lung.LUNG6))
+  doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_lung"))
+  k++
+  doc.autoTable({
+    theme: 'plain',
+    styles: {
+      font: doc.getFont().fontName,
+      overflow: 'visible',
+      lineWidth: 0.1,
+      lineColor: 0,
+      cellWidth: 32
+    },
+    startY: calculateY(k),
+    head: [[ 
+      { content: parseFromLangKey("other_lung_tbl_l_header"),
+        colSpan: 2,
+        styles: {
+          valign: "middle",
+          fillColor: [244, 247, 249],
+          fontStyle: "bold"
+        }}
+      , { content: parseFromLangKey("other_lung_tbl_r_header"),
+        colSpan: 2,
+        styles: {
+          valign: "middle",
+          fillColor: [244, 247, 249],
+          fontStyle: "bold"
+        }}
+      ]],
+    body: [
+      ['FVC (L)', `${lung.LUNG3}`,'FVC (L)', `${lung.LUNG8}`],
+      ['FEV1 (L)', `${lung.LUNG4}`,'FEV1 (L)', `${lung.LUNG9}`],
+      ['FVC (%pred)', `${lung.LUNG5}`,'FVC (%pred)', `${lung.LUNG10}`],
+      ['FEV1 (%pred)', `${lung.LUNG6}`,'FEV1 (%pred)', `${lung.LUNG11}`],
+      ['FEV1/FVC (%)', `${lung.LUNG7}`,'FEV1/FVC (%)', `${lung.LUNG12}`],
+    ]
+  })
+  k = k + 11
+
+  if (social.SOCIAL10) {
+    doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_lung_smoking"))
+  }
+  k += 2
+
+  k = testOverflow(doc, k, 13)
+  
+  // EYE
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
   k++
-
-  // EYE
   doc.autoTable({
-    theme: 'grid',
+    theme: 'plain',
     styles: {
+      font: doc.getFont().fontName,
+      lineWidth: 0.1,
+      lineColor: 0,
       cellWidth: 46.6
     },
     startY: calculateY(k),
@@ -729,9 +773,9 @@ export function addOtherScreeningModularities(doc, lung, eye, k) {
       [parseFromLangKey("other_eye_tbl_b_row"), `6/${eye.geriVisionQ5}`, `6/${eye.geriVisionQ6}`]
     ]
   })
-  k = k + 6
+  k = k + 7
 
-  doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_eye_error") + `${eye.geriVisionQ11}`)
+  doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey("other_eye_error") + `${eye.geriVisionQ8}`)
 
   return k
 }
@@ -759,9 +803,9 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
     // 'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.'
   )
   // PHLEBOTOMY
-  k = followUpWith(doc, k, trip, indent, phlebotomy.phlebotomyQ1, 
+  k = followUpWith(doc, k, trip, indent, reg.registrationQ15 == 'Yes', 
     parseFromLangKey("fw_phlebotomy"))
-  k = followUpWith(doc, k, trip, indent + 5, phlebotomy.phlebotomyQ1, 
+  k = followUpWith(doc, k, trip, indent + 5, reg.registrationQ15 == 'Yes', 
       parseFromLangKey("fw_phlebotomy_1", reg.registrationQ18), 'm')
     // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. 
     // When your results are ready for collection, our PHS volunteers will call you to remind you.  
@@ -773,7 +817,7 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
     // + 'please follow instructions from our partner Singapore Cancer Society.')
   // HPV
   k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes', 
-    parseFromLangKey("fw_wce", wce.wceQ6))
+    parseFromLangKey("fw_wce"))
   k = followUpWith(doc, k, trip, indent + 5, wce.wceQ5 == 'Yes', 
     parseFromLangKey("fw_wce_1"), 'm')
     // `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below. 
@@ -840,10 +884,10 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
     k = testOverflow(doc, k, text.length)
 
     if (indent > 0) {
-      doc.setFont("Zapfdingbats", 'normal')
-      const old_size = doc.getFontSize()
+      const old_font = doc.getFont()
+      doc.setFont('Zapfdingbats', 'normal')
       doc.text(10 + indent - 5, 10, kNewlines(k) + symbol)
-      doc.setFont("helvetica", "normal")
+      doc.setFont(old_font.fontName, 'normal')
     }
 
     doc.text(10 + indent, 10, 
@@ -853,7 +897,7 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
       )
     )
 
-    k = k + text.length
+    k = k + text.length + 1
   }
   return k;
 }
@@ -867,11 +911,10 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.setFont(undefined, 'normal')
 
   const width = 180
-  // TODO: AUDIOLOGY
+  
   var audio = parseFromLangKey("memo_audio")
     + parseFromLangKey("memo_audio_1", audioData.geriAudiometryQ13)
     + parseFromLangKey("memo_audio_2", audioData.geriAudiometryQ12)
-  // TODO: DIET
   var diet = parseFromLangKey("memo_diet")
     + `${dietData.dietitiansConsultQ4}`
   if (dietData.dietitiansConsultQ5) {
@@ -885,6 +928,7 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.autoTable({
     theme: 'grid',
     styles: {
+      font: doc.getFont().fontName,
       cellWidth: 180,
       textColor: 20,
       lineColor: 20,
@@ -939,7 +983,7 @@ const testOverflow = (doc, k, offset) => {
 }
 
 export function addRecommendation(doc, k) {
-  k = testOverflow(doc, k, 5)
+  k = testOverflow(doc, k, 10)
   let kk = k
 
   doc.setFont(undefined, 'bold')
@@ -952,9 +996,10 @@ export function addRecommendation(doc, k) {
     180
   )
   doc.text(10, 10, recommendation)
-  kk = kk + 3
+  kk = kk + doc.splitTextToSize(parseFromLangKey("rec"), 180).length
 
-  kk = testOverflow(doc, kk, 13)
+  var disclaimer = doc.splitTextToSize(parseFromLangKey("disclaimer"), 180)
+  kk = testOverflow(doc, kk, disclaimer.length + 3)
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((kk = kk + 2)) + parseFromLangKey("disclaimer_title"))
@@ -966,326 +1011,8 @@ export function addRecommendation(doc, k) {
   ))
 }
 
-// DEPRECATED
-export function addPhlebotomy(doc, phlebotomy, k) {
-  if (phlebotomy.phlebotomyQ1) {
-    doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((k = k + 2)) + 'Phlebotomy')
-    doc.line(10, calculateY(k), 10 + doc.getTextWidth('Phlebotomy'), calculateY(k))
-    doc.setFont(undefined, 'normal')
-
-    let phlebotomy = doc.splitTextToSize(
-      kNewlines((k = k + 2)) +
-        'The Blood Test Report will be mailed out to GP clinics' +
-        ' you have previously indicated. You will receive a call/SMS to' +
-        ' inform you about the GP appointment.',
-      180,
-    )
-    k++
-    doc.text(10, 10, phlebotomy)
-  }
-
-  return k
-}
-
-// DEPRECATED
-export function addFit(doc, fit, k) {
-  let kk = k
-
-  if (fit.fitQ2 == 'Yes') {
-    doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Faecal Immunochemical Test (FIT)')
-    doc.line(
-      10,
-      calculateY(kk),
-      10 + doc.getTextWidth('Faecal Immunochemical Test (FIT)'),
-      calculateY(kk),
-    )
-    doc.setFont(undefined, 'normal')
-    let fit = doc.splitTextToSize(
-      kNewlines((kk = kk + 2)) +
-        'Please remember the instructions that have been given to you, and remember to mail out' +
-        ' both of your kits within the stipulated time. You may contact the SIngapore Cancer Society' +
-        ' at 1800-727-3333 if you have any queries about using the FIT kit.',
-      180,
-    )
-    kk = kk + 2
-    doc.text(10, 10, fit)
-  }
-
-  return kk
-}
-
-// DEPRECATED
-export function addWce(doc, patients, wce, k) {
-  let kk = k
-
-  if ((wce.wceQ4 != 'Yes' && wce.wceQ5 != 'Yes') || patients.gender == 'Male') {
-    return kk
-  }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + "Women's Cancer Education")
-  doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Women's Cancer Education"), calculateY(kk))
-  doc.setFont(undefined, 'normal')
-
-  doc.setFont(undefined, 'bold')
-  doc.text(
-    10,
-    10,
-    kNewlines((kk = kk + 2)) + 'You have indicated interest for the following screening(s):',
-  )
-  doc.line(
-    10,
-    calculateY(kk),
-    10 + doc.getTextWidth('You have indicated interest for the following screening(s):'),
-    calculateY(kk),
-  )
-  doc.setFont(undefined, 'normal')
-
-  if (wce.wceQ4 == 'Yes') {
-    doc.text(
-      10,
-      10,
-      kNewlines((kk = kk + 1)) + '- Cervical Cancer Screening under Singapore Cancer Society',
-    )
-  }
-
-  if (wce.wceQ5 == 'Yes') {
-    doc.text(
-      10,
-      10,
-      kNewlines((kk = kk + 1)) + '- Mammogram screening under Singapore Cancer Society',
-    )
-  }
-
-  var summary = doc.splitTextToSize(
-    kNewlines((kk = kk + 2)) +
-      'Do note that the Singapore Cancer Society (SCS) will contact you regarding your appointment. Should you have any' +
-      ' queries, please contact the Singapore Cancer' +
-      ' Society at 1800-727-3333.',
-    180,
-  )
-  kk = kk + 2
-
-  if (wce.wceQ4 == 'Yes' || wce.wceQ5 == 'Yes') {
-    doc.text(10, 10, summary)
-  }
-
-  return kk
-}
-
-// DEPRECATED
-export function addDoctorSConsult(doc, doctorSConsult, k) {
-  let kk = k
-
-  if (
-    typeof doctorSConsult.doctorSConsultQ3 == 'string' ||
-    doctorSConsult.doctorSConsultQ3 instanceof String
-  ) {
-    doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((kk = kk + 2)) + "Doctor's Consultation")
-    doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Doctor's Consultation"), calculateY(kk))
-    doc.setFont(undefined, 'normal')
-
-    var dSC = doc.splitTextToSize(
-      kNewlines((kk = kk + 2)) +
-        'We strongly encourage you to visit your family doctor with the Doctor’s Memo obtained' +
-        ' from our screening. He/She will be able to advise you on your next steps with regards' +
-        ' to the health issue(s) raised in the memo.',
-      180,
-    )
-    doc.text(10, 10, dSC)
-    kk = kk + 1
-  }
-
-  return kk
-}
-
-// DEPRECATED
-export function addSocialService(doc, socialService, k) {
-  let kk = k
-
-  if (typeof socialService.socialServiceQ1 == 'undefined') {
-    return kk
-  }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Social Service')
-  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Social Service'), calculateY(kk))
-  doc.setFont(undefined, 'normal')
-
-  if (socialService.socialServiceQ1 == 'Yes') {
-    var socialServiceQ1 = doc.splitTextToSize(
-      kNewlines((kk = kk + 2)) +
-        'We strongly encourage you to follow through with the recommendations from Agency of Integrated Care (AIC)' +
-        ' so that you receive the help that you need.',
-      180,
-    )
-    doc.text(10, 10, socialServiceQ1)
-    kk++
-  }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'SACS')
-  doc.setFont(undefined, 'normal')
-  if (socialService.socialServiceQ6) {
-    var socialServiceQ6 = doc.splitTextToSize(
-      kNewlines((kk = kk + 1)) +
-        'Do note that the Singapore Anglican Community Service (SACS) will contact you regarding your' +
-        ' application status for their programmes.',
-      180,
-    )
-    doc.text(10, 10, socialServiceQ6)
-    kk++
-  }
-
-  doc.addPage()
-  kk = 0
-  kk++
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'HDB EASE')
-  doc.setFont(undefined, 'normal')
-  if (socialService.socialServiceQ7) {
-    var socialServiceQ7 = doc.splitTextToSize(
-      kNewlines((kk = kk + 1)) +
-        'The HDB Branch managing your estate will reply to you within 7 working days regarding your application.' +
-        ' HDB staff and/ or HDB appointed term contractor will contact you to arrange for a pre-condition survey/ installation date.' +
-        ' You may expect the process from applying for EASE (Direct Application) to having the improvement items installed in your flat to' +
-        ' be completed within a month.',
-      180,
-    )
-    doc.text(10, 10, socialServiceQ7)
-    kk = kk + 3
-  }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'CHAS Application')
-  doc.setFont(undefined, 'normal')
-  if (socialService.socialServiceQ8) {
-    var socialServiceQ8 = doc.splitTextToSize(
-      kNewlines((kk = kk + 1)) +
-        'Application takes 15 working days from the date of receipt of the completed application to process. Successful applicants and their' +
-        ' household members will receive a CHAS card that indicates the subsidy tier they are eligible for, as well as a welcome pack with information' +
-        ' on the use of the card. If you have not received the outcome after 15 working days, you can visit the CHAS online application page and login using' +
-        ' your SingPass. You can also call the CHAS hotline at 1800-275-2427 (1800-ASK-CHAS) to check on your application status or if you need assistance in applying' +
-        ' for CHAS.',
-      180,
-    )
-    doc.text(10, 10, socialServiceQ8)
-    kk = kk + 5
-  }
-
-  return kk
-}
-
 export function calculateY(coor) {
   return coor * 4.0569 + 10.2
-}
-
-// DEPRECATED
-export function addGeriatrics(doc, geriMmse, geriVision, geriAudiometry, k) {
-  let kk = k
-  const polyclinic = typeof geriMmse.geriMMSEQ4 != 'undefined' ? geriMmse.geriMMSEQ4 : '-'
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Geriatrics')
-  doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Geriatrics'), calculateY(kk))
-  doc.setFont(undefined, 'normal')
-
-  doc.setFont(undefined, 'bold')
-  doc.text(
-    10,
-    10,
-    kNewlines((kk = kk + 2)) + 'Please follow through with your appointment(s) with:',
-  )
-  doc.line(
-    10,
-    calculateY(kk),
-    10 + doc.getTextWidth('Please follow through with your appointment(s) with:'),
-    calculateY(kk),
-  )
-  doc.setFont(undefined, 'normal')
-
-  if (geriMmse.geriMMSEQ3 == 'Yes') {
-    doc.text(
-      10,
-      10,
-      kNewlines((kk = kk + 1)) + '- G-RACE and partnering polyclinics (' + polyclinic + ')',
-    )
-  }
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Physiotherapy')
-  doc.setFont(undefined, 'normal')
-  var geriatrics = doc.splitTextToSize(
-    kNewlines((kk = kk + 1)) +
-      'We strongly encourage you to follow through with the' +
-      ' recommendations from Physiotherapy lead a more active' +
-      ' and healthier lifestyle.',
-    180,
-  )
-  doc.text(10, 10, geriatrics)
-
-  doc.setFont(undefined, 'bold')
-  doc.text(10, 10, kNewlines((kk = kk + 3)) + 'Occupational Therapy')
-  doc.setFont(undefined, 'normal')
-  var otherGeriatrics = doc.splitTextToSize(
-    kNewlines((kk = kk + 1)) +
-      'We advice that you increase your lighting, declutter commonly used spaces to' +
-      ' prevent falls. As recommended by the Occupational Therapists as of any other arrangements' +
-      ' mentioned during the interview.',
-    180,
-  )
-  doc.text(10, 10, otherGeriatrics)
-
-  kk++
-  return kk
-}
-
-// DEPRECATED
-export function addDietitiansConsult(doc, dietitiansConsult, k) {
-  let kk = k
-  // const notes = dietitiansConsult.dietitiansConsultQ4
-
-  if (dietitiansConsult.dietitiansConsultQ7 == 'Yes') {
-    doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((kk = kk + 2)) + "Dietitian's Consult")
-    doc.line(10, calculateY(kk), 10 + doc.getTextWidth("Dietitian's Consult"), calculateY(kk))
-    doc.setFont(undefined, 'normal')
-
-    let dietitiansConsult = doc.splitTextToSize(
-      kNewlines((kk = kk + 2)) +
-        'We strongly encourage you to follow through with the recommendations from the' +
-        ' Dietitian to lead a more healthy lifestyle. Make changes to your diet and lifestyle for' +
-        ' a healthier you!',
-      180,
-    )
-    doc.text(10, 10, dietitiansConsult)
-    kk++
-  }
-
-  return kk
-}
-
-// DEPRECATED
-export function addOralHealth(doc, oralHealth, k) {
-  let kk = k
-  if (oralHealth.oralHealthQ2) {
-    doc.setFont(undefined, 'bold')
-    doc.text(10, 10, kNewlines((kk = kk + 2)) + 'Oral Health Consult')
-    doc.line(10, calculateY(kk), 10 + doc.getTextWidth('Oral Health Consult'), calculateY(kk))
-    doc.setFont(undefined, 'normal')
-
-    doc.text(
-      10,
-      10,
-      kNewlines((kk = kk + 2)) +
-        'We strongly encourage you to follow through with the recommendations from NUS Dentistry for adequate oral care.',
-    )
-  }
-
-  return kk
 }
 
 export const regexPasswordPattern =

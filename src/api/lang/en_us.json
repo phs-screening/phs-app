@@ -1,7 +1,7 @@
 {
     "salutation" : "Mr/Mrs",
     "title" : "Public Health Service 2024 Health Screening Report",
-    "dear_spaced": "Dear ",
+    "dear": "Dear {0} {1},",
     "intro": "Thank you for participating in our health screening at The Frontier CC and Jurong Medical Centre on 17th and 18th August this year. Here are your screening results:",
 
     "bp_title": "Blood Pressure",
@@ -18,13 +18,17 @@
     "bmi_tbl_vhigh": "Very High",
 
     "other_title": "Other Screening Modalities",
-    "other_lung": "The results of your FEV1:FEC ratio is {0}, results are [LUNG6]",
+    "other_lung": "Lung Function Results, if any",
+    "other_lung_tbl_l_header": "Pre-Bronchodilator",
+    "other_lung_tbl_r_header": "Post-Bronchodilator",
+    "other_lung_smoking": "Please visit this website for more information about smoking cessation:\nhttps://www.healthhub.sg/programmes/iquit",
+
     "other_eye": "The results of your visual acuity are",
     "other_eye_tbl_l_header": "Right Eye",
     "other_eye_tbl_r_header": "Left Eye",
     "other_eye_tbl_t_row": "Without Pinhole Occluder",
     "other_eye_tbl_b_row": "With Pinhole Occluder",
-    "other_eye_error": "Type of vision error, if any:",
+    "other_eye_error": "Type of vision error, if any: ",
 
     "fw_title": "Follow-Up",
     "fw_intro": "You have indicated interest for or signed-up for follow up with our external partners, details can be found below:",
@@ -34,8 +38,8 @@
     "fw_phlebotomy": "You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. When your results are ready for collection, our PHS volunteers will call you to remind you. They may ask for your full name and last three digits of NRIC to verify your identity. If you are unsure of the caller's identity, please contact hello@publichealthservice.org with their name and phone number.",
     "fw_phlebotomy_1": "You have indicated your preferred clinic to be {0}",
     "fw_fit": "You signed up for FIT home kits to be delivered to you, please follow instructions from our partner Singapore Cancer Society.",
-    "fw_wce": "You have indicated interest with Singapore Cancer Society for HPV Test on {0} at Singapore Cancer Society Clinic@Bishan, with the address found below.",
-    "fw_wce_1": "- Address: \n9 Bishan Place Junction 8 Office Tower \n#06-05, Singapore 579837 \n- Clinic operating hours: \nMondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm) \nSaturdays, 9.00am to 4.00pm (last appointment at 3.15pm \n- Contact us: 6499 9133)",
+    "fw_wce": "You have indicated interest with Singapore Cancer Society for HPV Test at Singapore Cancer Society Clinic@Bishan, with the address found below. They will contact you within 5 working days for an appointment.",
+    "fw_wce_1": "- Address: \n9 Bishan Place Junction 8 Office Tower \n#06-05, Singapore 579837 \n- Clinic operating hours: \nMondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm) \nSaturdays, 9.00am to 4.00pm (last appointment at 3.15pm) \n- Contact us: 6499 9133",
     "fw_nkf": "You have indicated interest with National Kidney Foundation on {0} at CKD Clinic",
     "fw_nkf_1": "- Address: \n109 Whampoa Road \n#01-09/11, Singapore 321109 \n- Clinic operating hours: \nEvery wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm \n- Contact us: 1800-KIDNEYS / 1800-5436397",
     "fw_samh": "You have signed up for follow-up with SAMH. SAMH will contact you shortly regarding your follow up. Please contact SAMH at: 6255 3222 if you have any queries.",
