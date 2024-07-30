@@ -174,7 +174,7 @@ const DoctorSConsultForm = () => {
         <BoolField name='doctorSConsultQ6' />
         <h4>Reason for referral</h4>
         <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
-        <h3>Refer to SACS? (and indicated on Form A)</h3>
+        <h3>Refer to Mental Health? (and indicated on Form A)</h3>
         <BoolField name='doctorSConsultQ13' />
         <h3>Refer to Dental?</h3>
         <BoolField name='doctorSConsultQ8' />

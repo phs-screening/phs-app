@@ -189,9 +189,9 @@ const SocialServiceForm = (props) => {
           ) : (
             <div className='summary--question-div'>
               <h2>Referrals</h2>
-              <p className='underlined'>Reasons for referral from Doctor&apos;s Consult:</p>
-              {doctorConsult && doctorConsult.doctorSConsultQ6 ? (
-                <p className='blue'>{doctorConsult.doctorSConsultQ6.toString()}</p>
+              <p className='underlined'>Referred to Social Services from Doctor&apos;s Consult?</p>
+              {doctorConsult ? (
+                <p className='blue'>{doctorConsult.doctorSConsultQ6 ? "Yes" : "No"}</p>
               ) : (
                 <p className='blue'>nil</p>
               )}
