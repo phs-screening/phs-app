@@ -231,14 +231,17 @@ const GetScores = () => {
       <b>Yes (calculated):</b> {score[0]}
       <br />
       <b>Yes :</b>
-      <NumField name='geriOtQuestionnaireQ29' label='geriOtQuestionnaire-Q29' step={1} />
+      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriOtQuestionnaireQ29' label='geriOtQuestionnaire-Q29' step={1} />
       <b>No (calculated):</b> {score[1]}
       <br />
       <b>No :</b>
-      <NumField name='geriOtQuestionnaireQ30' label='geriOtQuestionnaire-Q30' step={1} />
+      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriOtQuestionnaireQ30' label='geriOtQuestionnaire-Q30' step={1} />
       <b>NA (calculated):</b> {score[2]} <br />
       <b>NA :</b>
-      <NumField name='geriOtQuestionnaireQ31' label='geriOtQuestionnaire-Q31' step={1} />
+      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='geriOtQuestionnaireQ31' label='geriOtQuestionnaire-Q31' step={1} />
     </div>
   )
 }

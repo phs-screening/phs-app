@@ -12,6 +12,7 @@ import HxNssForm from './HxNssForm.js'
 import HxSocialForm from './HxSocialForm.js'
 import HxOralForm from './HxOralForm.js'
 import HxFamilyForm from './HxFamilyForm.js'
+import HxGynaeForm from './HxGynaeForm.js'
 import HxPhqForm from './HxPhqForm.js'
 import HxWellbeingForm from './HxWellbeingForm.js'
 
@@ -73,6 +74,7 @@ export default function HxTabs() {
           <Tab label='Social' {...a11yProps(2)} />
           <Tab label='Oral' {...a11yProps(3)} />
           <Tab label='Family' {...a11yProps(3)} />
+          <Tab label='Gynae' {...a11yProps(3)} />
           <Tab label='PHQ' {...a11yProps(3)} />
           <Tab label='Wellbeing' {...a11yProps(3)} />
         </Tabs>
@@ -93,9 +95,12 @@ export default function HxTabs() {
         <HxFamilyForm changeTab={handleChange} nextTab={5} />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <HxPhqForm changeTab={handleChange} nextTab={6} />
+        <HxGynaeForm changeTab={handleChange} nextTab={6} />
       </TabPanel>
       <TabPanel value={value} index={6}>
+        <HxPhqForm changeTab={handleChange} nextTab={6} />
+      </TabPanel>
+      <TabPanel value={value} index={7}>
         <HxWellbeingForm />
       </TabPanel>
     </HxWrapper>

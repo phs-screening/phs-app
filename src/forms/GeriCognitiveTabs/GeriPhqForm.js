@@ -98,7 +98,6 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'geriPhqForm'
-const formNamePHQ = 'hxPhqForm' // In this form, you get the info from the HX PHQ Form
 
 const GeriPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
@@ -111,7 +110,7 @@ const GeriPhqForm = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const savedData = await getSavedData(patientId, formNamePHQ)
+      const savedData = await getSavedData(patientId, formName)
       setSaveData(savedData)
     }
     fetchData()
@@ -202,7 +201,6 @@ const GeriPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
-        const responsePHQ = await submitForm(model, patientId, formNamePHQ)
         const response = await submitForm(model, patientId, formName)
         
         if (response.result) {

@@ -138,19 +138,19 @@ const LungFnForm = (props) => {
     const [{ value: lung5 }] = useField('LUNG5', {})
     const [{ value: lung7 }] = useField('LUNG7', {})
 
-    if ((lung5 >= 80) && (lung7 < 0.7)) {
+    if ((lung5 >= 80) && (lung7 < 70)) {
       const typeOfLung = "Obstructive Defect" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 < 80) && (lung7 < 0.7)) {
+    } else if ((lung5 < 80) && (lung7 < 70)) {
       const typeOfLung = "Mixed Pattern" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 < 80) && (lung7 >= 0.7)) {
+    } else if ((lung5 < 80) && (lung7 >= 70)) {
       const typeOfLung = "Restrictive Defect" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
-    } else if ((lung5 >= 80) && (lung7 >= 0.7)) {
+    } else if ((lung5 >= 80) && (lung7 >= 70)) {
       const typeOfLung = "Normal" 
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
@@ -198,27 +198,37 @@ const LungFnForm = (props) => {
         </PopupText>
         <h2>Results of lung function test:</h2><br />
         <h2>Pre-bronchodilator</h2>
-        <h3>FBC (L)</h3>
-        <NumField name='LUNG3' label='LUNG3' />
+        <h3>FVC (L)</h3>
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG3' label='LUNG3' />
         <h3>FEV1 (L)</h3>
-        <NumField name='LUNG4' label='LUNG4' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG4' label='LUNG4' />
         <h3>FVC (%pred)</h3>
-        <NumField name='LUNG5' label='LUNG5' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG5' label='LUNG5' />
         <h3>FEV1 (%pred)</h3>
-        <NumField name='LUNG6' label='LUNG6' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG6' label='LUNG6' />
         <h3>FEV1:FVC (%)</h3>
-        <NumField name='LUNG7' label='LUNG7' /><br />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG7' label='LUNG7' /><br />
         <h2>Post-bronchodilator</h2>
         <h3>FBC (L)</h3>
-        <NumField name='LUNG8' label='LUNG8' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG8' label='LUNG8' />
         <h3>FEV1 (L)</h3>
-        <NumField name='LUNG9' label='LUNG9' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG9' label='LUNG9' />
         <h3>FVC (%pred)</h3>
-        <NumField name='LUNG10' label='LUNG10' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG10' label='LUNG10' />
         <h3>FEV1 (%pred)</h3>
-        <NumField name='LUNG11' label='LUNG11' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG11' label='LUNG11' />
         <h3>FEV1:FVC (%)</h3>
-        <NumField name='LUNG12' label='LUNG12' />
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" name='LUNG12' label='LUNG12' />
         <h3>What defect does the patient have? </h3>
         <LungType_cal />
         <h3>Patient needs to be referred to doctor&apos;s station for followup on their result?</h3>
