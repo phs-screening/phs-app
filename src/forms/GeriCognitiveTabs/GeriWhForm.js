@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { RadioField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
@@ -21,6 +21,10 @@ const schema = new SimpleSchema({
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: false,
+  },
+  WH2shortAns: {
+    type: String,
+    optional: true,
   },
 })
 
@@ -46,6 +50,7 @@ const GeriWhForm = (props) => {
         value: 'Yes',
       },
       { label: 'No', value: 'No' },
+      
     ],
   }
 
@@ -76,6 +81,8 @@ const GeriWhForm = (props) => {
         <h1>Whispering Hearts</h1>
         <h3>Patient has signed up for referral with Whispering Hearts.</h3>
         <RadioField name='WH1' label='WH1' options={formOptions.WH1} />
+        <h3>Address of referral</h3>
+        <LongTextField name='WH2shortAns' label='WH2' />
         <br />
       </div>
 
