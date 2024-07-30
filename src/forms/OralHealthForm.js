@@ -243,6 +243,8 @@ const OralHealthForm = () => {
                   <p>{doctorConsult.doctorSConsultQ8 ? "Yes" : "No"}</p>
                   <p className='underlined'>Reason for referral: </p>
                   <p>{doctorConsult.doctorSConsultQ9}</p>
+                  <p className='underlined'>Does patient require urgent follow up?</p>
+                  <p>{doctorConsult.doctorSConsultQ10}</p>
                 </>
               ) : (
                 <p className='red'>nil doctorConsult data!</p>

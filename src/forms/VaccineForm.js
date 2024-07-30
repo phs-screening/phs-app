@@ -119,14 +119,6 @@ const VaccineForm = (props) => {
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <h2>Influenza Vaccination</h2>
-              <p className='underlined'>Has taken influenza vaccination in the past 1 year:</p>
-              {pmhx && pmhx.PMHX16 ? (
-                <p className='blue'>{pmhx.PMHX16}</p>
-              ) : (
-                <p className='blue'>nil</p>
-              )}
-
               <h2>Patient Info</h2>
               {regi ? (
                 <>
