@@ -149,7 +149,7 @@ const NkfForm = (props) => {
               )}
 
               {triage && triage.triageQ9 && triage.triageQ10 ? (
-                <p className='blue'>BMI: {formatBmi(triage.triageQ9, triage.triageQ10)}</p>
+                <p className='blue'>BMI: {triage.triageQ12}</p>
               ) : (
                 <p className='blue'>BMI: nil</p>
               )}
