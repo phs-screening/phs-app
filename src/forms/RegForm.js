@@ -187,6 +187,10 @@ const RegForm = () => {
     registrationQ15: [
       { label: 'Yes', value: 'Yes', },
       { label: 'No', value: 'No' },
+    ],
+    registrationQ19: [
+      { label: 'Yes', value: 'Yes', },
+      { label: 'No', value: 'No' },
     ]
   }
 
@@ -302,6 +306,10 @@ const RegForm = () => {
       <br />
       {displayVacancy}
       <RadioField name='registrationQ18' options={displayLocations()} />
+      <h3>
+        Patient consented to being considered for participation in Long Term Follow-Up (LTFU)? (Patient has to sign and tick Form C)
+      </h3>
+      <RadioField name='registrationQ19' options={formOptions.registrationQ19} />
     </div>
   )
   const form_layout = layout
@@ -425,6 +433,11 @@ const RegForm = () => {
     registrationShortAnsQ6: {
       type: String,
       optional: true,
+    },
+    registrationQ19: {
+      type: String,
+      allowedValues: ['Yes', 'No'], 
+      optional: false,
     },
   })
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))

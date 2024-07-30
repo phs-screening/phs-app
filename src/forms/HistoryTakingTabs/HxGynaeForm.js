@@ -352,16 +352,6 @@ const HxGynaeForm = (props) => {
         <RadioField name='GYNAE11' label='GYNAE11' options={formOptions.GYNAE11} />
         <h4>Please specify:</h4>
         <LongTextField name='GYNAEShortAns11' label='GYNAE11' />
-        <h3>
-          Based on Advanced Gynae Screening, please kindly refer her to the following gynecological
-          service for further evaluation:
-        </h3>
-        <GetReferral />
-        <h3>Referral was given</h3>
-        <RadioField name='GYNAE13' label='GYNAE13' options={formOptions.GYNAE13} />
-        <h4>Please specify:</h4>
-        <LongTextField name='GYNAEShortAns13' label='GYNAE13' />
-        <br />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

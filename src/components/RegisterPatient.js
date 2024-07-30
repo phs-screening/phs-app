@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
+import { ContactSupportOutlined } from '@mui/icons-material'
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -30,18 +31,6 @@ const RegisterPatient = (props) => {
   const ref = useRef()
 
   useEffect(() => {
-    const listener = (event) => {
-      if (event.code === 'Enter' || event.code === 'NumpadEnter') {
-        ref.current.click()
-      }
-    }
-    document.addEventListener('keydown', listener)
-    return () => {
-      document.removeEventListener('keydown', listener)
-    }
-  }, [])
-
-  useEffect(() => {
     const getPatientNames = async () => {
       const data = await getAllPatientNames('patients')
       setPatientNames(data)
@@ -53,7 +42,7 @@ const RegisterPatient = (props) => {
     const value = event.target.value
     if (value >= 0 || value === '') {
       setValues({
-        isQueueNumner: true,
+        isQueueNumber: true,
         selectedValue: parseInt(value),
       })
     } else {
@@ -94,7 +83,12 @@ const RegisterPatient = (props) => {
     const value = values.selectedValue
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     const data = await getPreRegDataById(value, 'patients')
+    console.log(data)
     if ('initials' in data) {
+      updatePatientInfo(data)
+      setIsLoadingQueueNumber(false)
+      navigate('/app/dashboard', { replace: true })
+    } else if ('age' in data) {
       updatePatientInfo(data)
       setIsLoadingQueueNumber(false)
       navigate('/app/dashboard', { replace: true })
@@ -153,6 +147,11 @@ const RegisterPatient = (props) => {
             size='small'
             variant='outlined'
             onChange={handleQueueNumberInput}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { //default it here
+                handleSubmitQueueNumber();
+              } 
+            }}
             sx={{ marginTop: '5px', marginBottom: '5px' }}
           />
           {isLoadingQueueNumber ? (
@@ -184,11 +183,11 @@ const RegisterPatient = (props) => {
             options={patientNames}
             getOptionLabel={(option) => option.initials}
             renderInput={handlePatientNameInput}
-            onKeyDown={(event) => {
+            /* onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.defaultMuiPrevented = true
               }
-            }}
+            }} */
             onChange={handlePatientNameSelect}
           />
           {isLoadingPatientName ? (
