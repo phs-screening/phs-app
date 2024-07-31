@@ -101,8 +101,7 @@ const MentalPhqForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
-
-  let score = 0
+  const [points, setPoints] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,9 +126,9 @@ const MentalPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
     PHQ11: [
@@ -137,14 +136,15 @@ const MentalPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
   }
 
   const GetScore = () => {
+    let score = 0
     const [{ value: q1 }] = useField('PHQ1', {})
     const [{ value: q2 }] = useField('PHQ2', {})
     const [{ value: q3 }] = useField('PHQ3', {})
@@ -164,14 +164,14 @@ const MentalPhqForm = (props) => {
 
     const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
 
-    /*questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
+    questions.forEach((qn) => {
+      if (!qn) {
+        return
       }
-    })*/
+      score += points[qn]
+    })
 
-    score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
+    setPoints(score)
 
     if (score >= 10) {
       return (
@@ -195,7 +195,7 @@ const MentalPhqForm = (props) => {
       onSubmit={async (model) => {
         setLoading(true)
 
-        model.PHQ10 = score //update score
+        model.PHQ10 = points //update score
 
         const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
@@ -216,9 +216,7 @@ const MentalPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h2>
-          **When asking these questions, please let patient know that it can be sensitive**
-        </h2>
+        <h2>**When asking these questions, please let patient know that it can be sensitive**</h2>
         <br />
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
@@ -247,7 +245,10 @@ const MentalPhqForm = (props) => {
         <RadioField name='PHQ8' label='PHQ8' options={formOptions.PHQ8} />
         <h3>9. Thoughts that you would be better off dead or hurting yourself in some way</h3>
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
-        <PopupText qnNo='PHQ9' triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}>
+        <PopupText
+          qnNo='PHQ9'
+          triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}
+        >
           <h3>*Do you want to take your life now?*</h3>
           <RadioField name='PHQextra9' label='PHQextra9' options={formOptions.PHQextra9} />
         </PopupText>

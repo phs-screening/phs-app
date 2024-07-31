@@ -81,6 +81,10 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
+  PHQ10: {
+    defaultValue: 0,
+    type: Number,
+  },
   PHQ11: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -99,9 +103,8 @@ const HxPhqForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
+  const [points, setPoints] = useState(0)
   const [saveData, setSaveData] = useState({})
-
-  let score = 0
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,9 +129,9 @@ const HxPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
     PHQ11: [
@@ -136,9 +139,9 @@ const HxPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
   }
@@ -154,6 +157,8 @@ const HxPhqForm = (props) => {
     const [{ value: q8 }] = useField('PHQ8', {})
     const [{ value: q9 }] = useField('PHQ9', {})
 
+    let score = 0
+
     const points = {
       '0 - Not at all': 0,
       '1 - Several days': 1,
@@ -163,15 +168,14 @@ const HxPhqForm = (props) => {
 
     const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
 
-    /*questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
+    questions.forEach((qn) => {
+      if (!qn) {
+        return
       }
-    })*/
+      score += points[qn]
+    })
 
-    score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
-
+    setPoints(score)
     if (score >= 10) {
       return (
         <Fragment>
@@ -194,7 +198,7 @@ const HxPhqForm = (props) => {
       onSubmit={async (model) => {
         setLoading(true)
 
-        model.PHQ10 = score //update score
+        model.PHQ10 = points //update score
 
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
@@ -214,9 +218,7 @@ const HxPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h2>
-          **When asking these questions, please let patient know that it can be sensitive**
-        </h2>
+        <h2>**When asking these questions, please let patient know that it can be sensitive**</h2>
         <br />
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
@@ -245,7 +247,10 @@ const HxPhqForm = (props) => {
         <RadioField name='PHQ8' label='PHQ8' options={formOptions.PHQ8} />
         <h3>9. Thoughts that you would be better off dead or hurting yourself in some way</h3>
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
-        <PopupText qnNo='PHQ9' triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}>
+        <PopupText
+          qnNo='PHQ9'
+          triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}
+        >
           <h3>*Do you want to take your life now?*</h3>
           <RadioField name='PHQextra9' label='PHQextra9' options={formOptions.PHQextra9} />
         </PopupText>

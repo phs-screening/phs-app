@@ -16,61 +16,56 @@ import allForms from '../forms/forms.json'
 const Eligibility = () => {
   const { patientId } = useContext(FormContext)
   const [reg, setReg] = useState({})
-  const [pmhx, setPMHX] = useState({})
-  const [social, setSocial] = useState({})
-  const [patient, setPatient] = useState({})
+  const [pmhx, setPmhx] = useState({})
+  const [hxsocial, setHxSocial] = useState({})
   const [hxfamily, setHxFamily] = useState({})
   const [triage, setTriage] = useState({})
   const [hcsr, setHcsr] = useState({})
-  const [oral, setOral] = useState({})
+  const [hxoral, setHxOral] = useState({})
   const [wce, setWce] = useState({})
   const [phq, setPhq] = useState({})
 
   useEffect(() => {
     const loadPastForms = async () => {
       const pmhxData = getSavedData(patientId, allForms.hxNssForm)
-      const socialData = getSavedData(patientId, allForms.hxSocialForm)
+      const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
       const regData = getSavedData(patientId, allForms.registrationForm)
-      const patientData = getSavedPatientData(patientId, 'patients')
       const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
       const triageData = getSavedData(patientId, allForms.triageForm)
       const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
-      const oralData = getSavedData(patientId, allForms.oralHealthForm)
+      const hxOralData = getSavedData(patientId, allForms.hxOralForm)
       const wceData = getSavedData(patientId, allForms.wceForm)
-      const phqData = getSavedData(patientId, allForms.hxPhqForm)
+      const phqData = getSavedData(patientId, allForms.geriPhqForm)
 
       Promise.all([
         pmhxData,
-        socialData,
+        hxSocialData,
         regData,
-        patientData,
         hxFamilyData,
         triageData,
         hcsrData,
-        oralData,
+        hxOralData,
         wceData,
         phqData,
       ]).then((result) => {
-        setPMHX(result[0])
-        setSocial(result[1])
+        setPmhx(result[0])
+        setHxSocial(result[1])
         setReg(result[2])
-        setPatient(result[3])
-        setHxFamily(result[4])
-        setTriage(result[5])
-        setHcsr(result[6])
-        setOral(result[7])
-        setWce(result[8])
-        setPhq(result[9])
+        setHxFamily(result[3])
+        setTriage(result[4])
+        setHcsr(result[5])
+        setHxOral(result[6])
+        setWce(result[7])
+        setPhq(result[8])
       })
     }
     loadPastForms()
   }, [patientId])
 
   useEffect(() => {
-    console.log(reg.registrationQ4)
-    console.log(hxfamily)
+    console.log(pmhx.PMHX9 === 'No')
     console.log(patientId)
-  }, [reg])
+  }, [pmhx])
 
   function createData(name, isEligible) {
     const eligibility = isEligible ? 'YES' : 'NO'
@@ -81,23 +76,29 @@ const Eligibility = () => {
   const isVaccinationEligible =
     reg?.registrationQ4 >= 65 && reg.registrationQ7 === 'Singapore Citizen 新加坡公民'
   const isHealthierSGEligible = reg.registrationQ11 !== 'Yes'
-  const isLungFunctionEligible = social.SOCIAL10 === 'Yes' || social.SOCIAL11 === 'Yes'
+  const isLungFunctionEligible =
+    hxsocial.SOCIAL10 === 'Yes, (please specify how many pack-years)' ||
+    hxsocial.SOCIAL11 === 'Yes, (please specify)'
   const isFITEligible = reg.registrationQ4 >= 50 && pmhx.PMHX10 === 'No' && pmhx?.PMHX11 === 'No'
-  const isWomenCancerEducationEligible = reg.gender === 'Female'
+  const isWomenCancerEducationEligible = reg.registrationQ5 === 'Female'
   const isOsteoporosisEligible =
-    (patient.gender === 'Female' && reg.registrationQ4 >= 45) ||
-    (patient.gender === 'Male' && reg.registrationQ4 >= 55)
+    (reg.registrationQ5 === 'Female' && reg.registrationQ4 >= 45) ||
+    (reg.registrationQ5 === 'Male' && reg.registrationQ4 >= 55)
+
+  const isHaveConditions =
+    pmhx.PMHX7 !== undefined &&
+    (pmhx.PMHX7.includes('Kidney Disease') ||
+      pmhx.PMHX7.includes('Diabetes') ||
+      pmhx.PMHX7.includes('Hypertension'))
+  const isHaveFamilyCondition = hxfamily.FAMILY3 !== undefined && hxfamily.FAMILY3.length > 0
+  const isExceedTriage = triage.triageQ12 >= 27.5
   const isNKFEligible =
-    (pmhx.PMHX7 === 'Kidney Disease' ||
-      pmhx.PMHX7 === 'Diabetes' ||
-      pmhx.PMHX7 === 'Hypertension' ||
-      (hxfamily.FAMILY3 !== undefined && hxfamily.FAMILY3.length > 0) ||
-      triage.triageQ12 >= 27.5) &&
-    pmhx.PMHX9 === 'No ' &&
+    (isHaveConditions || isHaveFamilyCondition || isExceedTriage) &&
+    pmhx.PMHX9 === 'No' &&
     reg.registrationQ4 <= 80
   const isMentalHealthEligible = phq.PHQ10 >= 10 && reg.registrationQ4 < 60
   const isAudiometryEligible = reg.registrationQ4 >= 60 && pmhx.PMHX13 === 'No'
-  const isGeriatricScreeningEligible = reg.registrationQ4 >= 60 && pmhx.PMHX13 === 'No'
+  const isGeriatricScreeningEligible = reg.registrationQ4 >= 60
   const isOnSiteHPVTestingEligible = wce.wceQ7 === 'Yes'
   const isDoctorStationEligible =
     triage.triageQ9 === 'Yes' ||
@@ -106,11 +107,12 @@ const Eligibility = () => {
     pmhx.PMHX12 === 'Yes' ||
     phq.PHQ10 >= 10 ||
     phq.PHQ9 !== '0 - Not at all'
-
-  const isDietitianEligible = social.SOCIAL15 === 'Yes'
+  const isDietitianEligible = hxsocial.SOCIAL15 === 'Yes'
   const isSocialServicesEligible =
-    social.SOCIAL6 === 'Yes' || social.SOCIAL7 === 'Yes' || social.SOCIAL9 !== 'Yes'
-  const isDentalEligible = oral.DENT5 === 'Yes'
+    hxsocial.SOCIAL6 === 'Yes' ||
+    hxsocial.SOCIAL7 === 'Yes' ||
+    (hxsocial.SOCIAL8 === 'Yes' && hxsocial.SOCIAL9 === 'No')
+  const isDentalEligible = hxoral.ORAL5 === 'Yes'
 
   const rows = [
     createData('Phlebotomy', isPhlebotomyEligible),
@@ -131,18 +133,10 @@ const Eligibility = () => {
     createData('Dental', isDentalEligible),
   ]
 
-  const getCellStyle = (isEligible) => {
-    if (isEligible) {
-      return 'blue'
-    } else {
-      return 'red'
-    }
-  }
-
   return (
     <>
       <Helmet>
-        <title>Patient Eligibility</title>
+        <title>registrationQ5 Eligibility</title>
       </Helmet>
       <Box
         sx={{
@@ -179,4 +173,3 @@ const Eligibility = () => {
 }
 
 export default Eligibility
-
