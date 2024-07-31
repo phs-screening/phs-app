@@ -98,7 +98,7 @@ export default function HxTabs() {
         <HxGynaeForm changeTab={handleChange} nextTab={6} />
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <HxPhqForm changeTab={handleChange} nextTab={6} />
+        <HxPhqForm changeTab={handleChange} nextTab={7} />
       </TabPanel>
       <TabPanel value={value} index={7}>
         <HxWellbeingForm />
