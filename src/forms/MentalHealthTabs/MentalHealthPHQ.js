@@ -92,8 +92,7 @@ const schema = new SimpleSchema({
   },
 })
 
-//const formName = 'mentalPhqForm'
-const formName = 'geriPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
+const formName = 'hxPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
 
 const MentalPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
@@ -127,9 +126,9 @@ const MentalPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
     PHQ11: [
@@ -137,9 +136,9 @@ const MentalPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No',
       },
     ],
   }
@@ -171,7 +170,16 @@ const MentalPhqForm = (props) => {
       }
     })*/
 
-    score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
+    score =
+      points[q1] +
+      points[q2] +
+      points[q3] +
+      points[q4] +
+      points[q5] +
+      points[q6] +
+      points[q7] +
+      points[q8] +
+      points[q9]
 
     if (score >= 10) {
       return (
@@ -197,7 +205,6 @@ const MentalPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
-        const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
@@ -216,9 +223,7 @@ const MentalPhqForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h2>
-          **When asking these questions, please let patient know that it can be sensitive**
-        </h2>
+        <h2>**When asking these questions, please let patient know that it can be sensitive**</h2>
         <br />
         <h2>
           Over the last 2 weeks, how often have you been bothered by any of the following problems?
@@ -247,7 +252,10 @@ const MentalPhqForm = (props) => {
         <RadioField name='PHQ8' label='PHQ8' options={formOptions.PHQ8} />
         <h3>9. Thoughts that you would be better off dead or hurting yourself in some way</h3>
         <RadioField name='PHQ9' label='PHQ9' options={formOptions.PHQ9} />
-        <PopupText qnNo='PHQ9' triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}>
+        <PopupText
+          qnNo='PHQ9'
+          triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}
+        >
           <h3>*Do you want to take your life now?*</h3>
           <RadioField name='PHQextra9' label='PHQextra9' options={formOptions.PHQextra9} />
         </PopupText>

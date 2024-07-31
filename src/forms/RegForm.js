@@ -20,12 +20,16 @@ import {
 import CircularProgress from '@mui/material/CircularProgress'
 import { submitForm, submitRegClinics, preRegister, submitPreRegForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { getClinicSlotsCollection, getSavedData, getPreRegDataById, isAdmin } from '../services/mongoDB'
+import {
+  getClinicSlotsCollection,
+  getSavedData,
+  getPreRegDataById,
+  isAdmin,
+} from '../services/mongoDB'
 import './fieldPadding.css'
 import './forms.css'
 import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
-import { isInteger } from 'formik'
 
 const postalCodeToLocations = {
   600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
@@ -57,7 +61,7 @@ export const defaultSlots = {
 
 const formName = 'registrationForm'
 const RegForm = () => {
-  const { patientId, updatePatientId, updatePatientInfo} = useContext(FormContext)
+  const { patientId, updatePatientId, updatePatientInfo } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
@@ -66,7 +70,7 @@ const RegForm = () => {
   const [patientAge, setPatientAge] = useState(0)
 
   useEffect(async () => {
-    console.log("Patient ID: "+ patientId) //patientID == -1, if registration of new patient
+    console.log('Patient ID: ' + patientId) //patientID == -1, if registration of new patient
     const savedData = await getSavedData(patientId, formName)
 
     const phlebCountersCollection = getClinicSlotsCollection()
@@ -77,7 +81,8 @@ const RegForm = () => {
         temp[postalCode] -= counterItems.length
       }
     }
-    if (patientId == -1) { // only when registration of new patient
+    if (patientId == -1) {
+      // only when registration of new patient
       savedData.registrationQ3 = birthday
     }
     setSlots(temp)
@@ -185,13 +190,13 @@ const RegForm = () => {
       { label: 'Tamil', value: 'Tamil' },
     ],
     registrationQ15: [
-      { label: 'Yes', value: 'Yes', },
+      { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
     ],
     registrationQ19: [
-      { label: 'Yes', value: 'Yes', },
+      { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-    ]
+    ],
   }
 
   const layout = (
@@ -307,7 +312,8 @@ const RegForm = () => {
       {displayVacancy}
       <RadioField name='registrationQ18' options={displayLocations()} />
       <h3>
-        Patient consented to being considered for participation in Long Term Follow-Up (LTFU)? (Patient has to sign and tick Form C)
+        Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
+        (Patient has to sign and tick Form C)
       </h3>
       <RadioField name='registrationQ19' options={formOptions.registrationQ19} />
     </div>
@@ -415,7 +421,7 @@ const RegForm = () => {
     },
     registrationQ15: {
       type: String,
-      allowedValues: ['Yes', 'No'], 
+      allowedValues: ['Yes', 'No'],
       optional: false,
     },
     registrationQ16: {
@@ -436,7 +442,7 @@ const RegForm = () => {
     },
     registrationQ19: {
       type: String,
-      allowedValues: ['Yes', 'No'], 
+      allowedValues: ['Yes', 'No'],
       optional: false,
     },
   })
@@ -451,10 +457,10 @@ const RegForm = () => {
         model.registrationQ4 = patientAge
 
         // Note: Q10 is optional
-        const location = model.registrationQ10
+        const location = model.registrationQ18
         if (location) {
           const postalCode =
-            model.registrationQ10 === 'None' ? 'None' : model.registrationQ10.trim().slice(-6)
+            model.registrationQ18 === 'None' ? 'None' : model.registrationQ18.trim().slice(-6)
 
           // Note we check on the backend if no slots left
           const counterResponse = await submitRegClinics(postalCode, patientId)
@@ -469,14 +475,14 @@ const RegForm = () => {
           }
         }
 
-        console.log("Patient ID: " + patientId)
+        console.log('Patient ID: ' + patientId)
         // If counters updated successfully, submit the new form information
         const response = await submitForm(model, patientId, formName)
 
-        console.log("test  _" + response.result + " " + patientAge)
+        console.log('test  _' + response.result + ' ' + patientAge)
         if (response.result) {
           setTimeout(() => {
-            console.log("response data: "+ response.qNum)
+            console.log('response data: ' + response.qNum)
             alert('Successfully submitted form')
             console.log('Successfully submitted form')
             updatePatientInfo(response.data)
@@ -485,7 +491,7 @@ const RegForm = () => {
           }, 80)
         } else {
           setTimeout(() => {
-            console.log("Form submission failed")
+            console.log('Form submission failed')
             alert(`Unsuccessful. ${response.error}`)
           }, 80)
         }
