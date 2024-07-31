@@ -101,8 +101,7 @@ const MentalPhqForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
-
-  let score = 0
+  const [points, setPoints] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,6 +144,7 @@ const MentalPhqForm = (props) => {
   }
 
   const GetScore = () => {
+    let score = 0
     const [{ value: q1 }] = useField('PHQ1', {})
     const [{ value: q2 }] = useField('PHQ2', {})
     const [{ value: q3 }] = useField('PHQ3', {})
@@ -164,23 +164,14 @@ const MentalPhqForm = (props) => {
 
     const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
 
-    /*questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
+    questions.forEach((qn) => {
+      if (!qn) {
+        return
       }
-    })*/
+      score += points[qn]
+    })
 
-    score =
-      points[q1] +
-      points[q2] +
-      points[q3] +
-      points[q4] +
-      points[q5] +
-      points[q6] +
-      points[q7] +
-      points[q8] +
-      points[q9]
+    setPoints(score)
 
     if (score >= 10) {
       return (
@@ -204,7 +195,7 @@ const MentalPhqForm = (props) => {
       onSubmit={async (model) => {
         setLoading(true)
 
-        model.PHQ10 = score //update score
+        model.PHQ10 = points //update score
 
         const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
