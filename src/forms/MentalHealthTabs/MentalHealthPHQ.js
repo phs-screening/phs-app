@@ -92,7 +92,8 @@ const schema = new SimpleSchema({
   },
 })
 
-const formName = 'hxPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
+//const formName = 'mentalPhqForm'
+const formName = 'geriPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
 
 const MentalPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
@@ -205,6 +206,7 @@ const MentalPhqForm = (props) => {
 
         model.PHQ10 = score //update score
 
+        const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
