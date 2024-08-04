@@ -33,7 +33,7 @@
     "fw_title": "Follow-Up",
     "fw_intro": "You have indicated interest for or signed-up for follow up with our external partners, details can be found below:",
     "fw_empty": "You have not indicated or signed-up for any follow-ups.",
-    "fw_vax": "You expressed interest in taking the influenza vaccine at {0}. Please refer to the appointment card for further details. You must bring the card to the clinic in order to receive your vaccination.",
+    "fw_vax": "You expressed interest in taking the influenza vaccine. Please refer to the appointment card for further details. You must bring the card to the clinic in order to receive your vaccination.",
     "fw_hsg": "You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.",
     "fw_phlebotomy": "You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. When your results are ready for collection, our PHS volunteers will call you to remind you. They may ask for your full name and last three digits of NRIC to verify your identity. If you are unsure of the caller's identity, please contact hello@publichealthservice.org with their name and phone number.",
     "fw_phlebotomy_1": "You have indicated your preferred clinic to be {0}",
