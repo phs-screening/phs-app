@@ -63,9 +63,9 @@ const Eligibility = () => {
   }, [patientId])
 
   useEffect(() => {
-    console.log(pmhx.PMHX9 === 'No')
+    console.log(hxsocial.SOCIAL8 === 'Yes' && hxsocial.SOCIAL9 === 'No')
     console.log(patientId)
-  }, [pmhx])
+  }, [hxsocial])
 
   function createData(name, isEligible) {
     const eligibility = isEligible ? 'YES' : 'NO'
@@ -96,10 +96,9 @@ const Eligibility = () => {
     (isHaveConditions || isHaveFamilyCondition || isExceedTriage) &&
     pmhx.PMHX9 === 'No' &&
     reg.registrationQ4 <= 80
-  const isMentalHealthEligible = phq.PHQ10 >= 10 && reg.registrationQ4 < 60
+  const isMentalHealthEligible = phq.PHQ10 >= 10 && reg.registrationQ4 < 60 && phq.PHQ11 === 'Yes'
   const isAudiometryEligible = reg.registrationQ4 >= 60 && pmhx.PMHX13 === 'No'
   const isGeriatricScreeningEligible = reg.registrationQ4 >= 60
-  const isOnSiteHPVTestingEligible = wce.wceQ7 === 'Yes'
   const isDoctorStationEligible =
     triage.triageQ9 === 'Yes' ||
     hcsr.hxHcsrQ3 === 'Yes' ||
@@ -110,7 +109,7 @@ const Eligibility = () => {
   const isDietitianEligible = hxsocial.SOCIAL15 === 'Yes'
   const isSocialServicesEligible =
     hxsocial.SOCIAL6 === 'Yes' ||
-    hxsocial.SOCIAL7 === 'Yes' ||
+    hxsocial.SOCIAL7 === 'Yes, (please specify)' ||
     (hxsocial.SOCIAL8 === 'Yes' && hxsocial.SOCIAL9 === 'No')
   const isDentalEligible = hxoral.ORAL5 === 'Yes'
 
@@ -125,7 +124,7 @@ const Eligibility = () => {
     createData('Kidney Screening', isNKFEligible),
     createData('Mental Health', isMentalHealthEligible),
     createData('Audiometry', isAudiometryEligible),
-    createData('HPV On-Site Testing', isOnSiteHPVTestingEligible),
+    { name: 'HPV On-Site Testing', eligibility: 'Determined at another station' },
     createData('Geriatric Screening', isGeriatricScreeningEligible),
     createData("Doctor's Station", isDoctorStationEligible),
     createData("Dietitian's Consult", isDietitianEligible),
