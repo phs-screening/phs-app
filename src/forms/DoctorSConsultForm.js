@@ -219,40 +219,29 @@ const DoctorSConsultForm = () => {
                 <li>
                   <p>Patient has <strong>{lung.LUNG13}</strong></p>
                   <p>Lung Function Results</p>
-                      <table style={{border: "1px solid black", width: "100%", borderCollapse: "collapse"}}>
+                      <table style={{border: "1px solid black", borderCollapse: "collapse"}}>
                         <tr style={{border: "1px solid black"}}>
                           <td colSpan={2} style={{border: "1px solid black"}}>Pre-Bronchodilator</td>
-                          <td colSpan={2} style={{border: "1px solid black"}}>Post-Bronchodilator</td>
                         </tr>
                         <tr style={{border: "1px solid black"}}>
                           <td style={{border: "1px solid black"}}>FVC (L)</td>
                           <td style={{border: "1px solid black"}}>{lung.LUNG3}</td>
-                          <td style={{border: "1px solid black"}}>FVC (L)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG8}</td>
                         </tr>
                         <tr style={{border: "1px solid black"}}>
                           <td style={{border: "1px solid black"}}>FEV1 (L)</td>
                           <td style={{border: "1px solid black"}}>{lung.LUNG4}</td>
-                          <td style={{border: "1px solid black"}}>FEV1 (L)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG9}</td>
                         </tr>
                         <tr style={{border: "1px solid black"}}>
                           <td style={{border: "1px solid black"}}>FVC (%pred)</td>
                           <td style={{border: "1px solid black"}}>{lung.LUNG5}</td>
-                          <td style={{border: "1px solid black"}}>FVC (%pred)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG10}</td>
                         </tr>
                         <tr style={{border: "1px solid black"}}>
                           <td style={{border: "1px solid black"}}>FEV1 (%pred)</td>
                           <td style={{border: "1px solid black"}}>{lung.LUNG6}</td>
-                          <td style={{border: "1px solid black"}}>FEV1 (%pred)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG11}</td>
                         </tr>
                         <tr style={{border: "1px solid black"}}>
                           <td style={{border: "1px solid black"}}>FEV1/FVC (%)</td>
                           <td style={{border: "1px solid black"}}>{lung.LUNG7}</td>
-                          <td style={{border: "1px solid black"}}>FEV1/FVC (%)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG12}</td>
                         </tr>
                       </table>    
                 </li> : null}
@@ -334,7 +323,8 @@ const DoctorSConsultForm = () => {
                 <p>Patient&apos;s audiometry results, if any:</p>
                 <ul>
                   <li>
-                    <p><strong>{geriAudio.geriAudiometryQ12}</strong></p>
+                    <p><strong>{geriAudio.geriAudiometryQ13}</strong></p>
+                    <p>Details: <strong>{geriAudio.geriAudiometryQ12}</strong></p>
                     { hcsr ? (
                         <p>Patient&apos;s history indicated: <strong>{hcsr.hxHcsrQ7}</strong></p>
                       ) : <p className='red'>nil hcsr data!</p>
@@ -370,13 +360,11 @@ const DoctorSConsultForm = () => {
                   <p>Presenting Complaints</p>
                   <ul>
                     <li>
-                      <p>Health Concerns: <strong>{hcsr.hxHcsrQ3}</strong></p>
-                      <p><strong>{hcsr.hxHcsrShortAnsQ3}</strong></p>
+                      <p>Health Concerns: <strong>{hcsr.hxHcsrQ3}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ3}</strong></p>
                       </li>
                     <li><p>Red Flags: <strong>{hcsr.hxHcsrQ4}</strong></p></li>
                     <li>
-                      <p>Problems passing urine: <strong>{hcsr.hxHcsrQ5}</strong></p>
-                      <p><strong>{hcsr.hxHcsrShortAnsQ5}</strong></p>
+                      <p>Problems passing urine: <strong>{hcsr.hxHcsrQ5}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ5}</strong></p>
                       </li>
                   </ul>
                 </li>
@@ -390,12 +378,10 @@ const DoctorSConsultForm = () => {
                     <li><p>Chronic conditions: <strong>{pmhx.PMHX1}</strong></p></li>
                     <li><p>Long term medications and compliance: <strong>{pmhx.PMHX2}</strong></p></li>
                     <li>
-                      <p>Drug allergies: <strong>{pmhx.PMHX5}</strong></p>
-                      <p><strong>{pmhx.PMHXShortAns5}</strong></p>
+                      <p>Drug allergies: <strong>{pmhx.PMHX5}</strong><br></br><strong>{pmhx.PMHXShortAns5}</strong></p>
                     </li>
                     <li>
-                      <p>Alternative medicine: <strong>{pmhx.PMHX6}</strong></p>
-                      <p><strong>{pmhx.PMHXShortAns6}</strong></p>
+                      <p>Alternative medicine: <strong>{pmhx.PMHX6}</strong><br></br><strong>{pmhx.PMHXShortAns6}</strong></p>
                     </li>
                     <li><p>Regular screening: <strong>{pmhx.PMHX8}</strong></p></li>
                     <li><p>Reason for referral: <strong>{pmhx.PMHXShortAns12}</strong></p></li>
@@ -409,10 +395,8 @@ const DoctorSConsultForm = () => {
                   <p>Social History</p>
                   <ul>
                     <li>
-                      <p>Smoking: <strong>{social.SOCIAL10}</strong></p>
-                      <p><strong>{social.SOCIALShortAns10}</strong></p>
-                      <p>Past Smoking: <strong>{social.SOCIAL11}</strong></p>
-                      <p><strong>{social.SOCIALShortAns11}</strong></p>
+                      <p>Smoking: <strong>{social.SOCIAL10}</strong><br></br><strong>{social.SOCIALShortAns10}</strong></p>
+                      <p>Past Smoking: <strong>{social.SOCIAL11}</strong><br></br><strong>{social.SOCIALShortAns11}</strong></p>
                     </li>
                     <li><p>Alcohol: <strong>{social.SOCIAL12}</strong></p></li>
                     <li><p>Exercise: <strong>{social.SOCIAL14}</strong></p></li>
