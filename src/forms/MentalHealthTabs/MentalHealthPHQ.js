@@ -79,7 +79,7 @@ const schema = new SimpleSchema({
   PHQextra9: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: false,
+    optional: true,
   },
   PHQ11: {
     type: String,

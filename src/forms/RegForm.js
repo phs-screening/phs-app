@@ -197,6 +197,10 @@ const RegForm = () => {
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
     ],
+    registrationQ20: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
   }
 
   const layout = (
@@ -316,6 +320,10 @@ const RegForm = () => {
         (Patient has to sign and tick Form C)
       </h3>
       <RadioField name='registrationQ19' options={formOptions.registrationQ19} />
+      <h3>
+        Patient consented to participation in Research? (Patient has to sign and tick Form C)
+      </h3>
+      <RadioField name='registrationQ20' options={formOptions.registrationQ20} />
     </div>
   )
   const form_layout = layout
@@ -441,6 +449,11 @@ const RegForm = () => {
       optional: true,
     },
     registrationQ19: {
+      type: String,
+      allowedValues: ['Yes', 'No'],
+      optional: false,
+    },
+    registrationQ20: {
       type: String,
       allowedValues: ['Yes', 'No'],
       optional: false,
