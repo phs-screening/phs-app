@@ -730,20 +730,13 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
           fillColor: [244, 247, 249],
           fontStyle: "bold"
         }}
-      , { content: parseFromLangKey("other_lung_tbl_r_header"),
-        colSpan: 2,
-        styles: {
-          valign: "middle",
-          fillColor: [244, 247, 249],
-          fontStyle: "bold"
-        }}
       ]],
     body: [
-      ['FVC (L)', `${lung.LUNG3}`,'FVC (L)', `${lung.LUNG8}`],
-      ['FEV1 (L)', `${lung.LUNG4}`,'FEV1 (L)', `${lung.LUNG9}`],
-      ['FVC (%pred)', `${lung.LUNG5}`,'FVC (%pred)', `${lung.LUNG10}`],
-      ['FEV1 (%pred)', `${lung.LUNG6}`,'FEV1 (%pred)', `${lung.LUNG11}`],
-      ['FEV1/FVC (%)', `${lung.LUNG7}`,'FEV1/FVC (%)', `${lung.LUNG12}`],
+      ['FVC (L)', `${lung.LUNG3}`],
+      ['FEV1 (L)', `${lung.LUNG4}`],
+      ['FVC (%pred)', `${lung.LUNG5}`],
+      ['FEV1 (%pred)', `${lung.LUNG6}`],
+      ['FEV1/FVC (%)', `${lung.LUNG7}`],
     ]
   })
   k = k + 11
