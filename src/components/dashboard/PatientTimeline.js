@@ -152,22 +152,6 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone?.triage ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <a
-              href='/app/triage'
-              onClick={(event) => navigateTo(event, navigate, 'triage', scrollTop)}
-            >
-              Triage
-              {!formDone?.triage ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
-            </a>
-          </TimelineContent>
-        </TimelineItem>
-
-        <TimelineItem>
-          <TimelineSeparator>
             {formDone?.hxtaking ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
@@ -184,13 +168,16 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
-            {formDone?.vax ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            {formDone?.triage ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            <a href='/app/vax' onClick={(event) => navigateTo(event, navigate, 'vax', scrollTop)}>
-              Vaccination
-              {!formDone?.vax ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            <a
+              href='/app/triage'
+              onClick={(event) => navigateTo(event, navigate, 'triage', scrollTop)}
+            >
+              Triage
+              {!formDone?.triage ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>
@@ -227,6 +214,8 @@ const BasicTimeline = (props) => {
             )}
           </TimelineContent>
         </TimelineItem>
+
+
 
         <TimelineItem>
           <TimelineSeparator>
@@ -298,6 +287,39 @@ const BasicTimeline = (props) => {
 
         <TimelineItem>
           <TimelineSeparator>
+            {formDone?.mentalhealth ? (
+              <TimelineDot color='primary' />
+            ) : (
+              <TimelineDot color='grey' />
+            )}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a
+              href='/app/mentalhealth'
+              onClick={(event) => navigateTo(event, navigate, 'mentalhealth', scrollTop)}
+            >
+              Mental Health
+              {!formDone?.mentalhealth ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
+            {formDone?.vax ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            <a href='/app/vax' onClick={(event) => navigateTo(event, navigate, 'vax', scrollTop)}>
+              Vaccination
+              {!formDone?.vax ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
+          </TimelineContent>
+        </TimelineItem>
+
+        <TimelineItem>
+          <TimelineSeparator>
             {formDone?.gericog ? <TimelineDot color='primary' /> : <TimelineDot color='grey' />}
             <TimelineConnector />
           </TimelineSeparator>
@@ -344,26 +366,6 @@ const BasicTimeline = (props) => {
             >
               Geriatrics - Vision
               {!formDone?.gerivision ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
-            </a>
-          </TimelineContent>
-        </TimelineItem>
-
-        <TimelineItem>
-          <TimelineSeparator>
-            {formDone?.mentalhealth ? (
-              <TimelineDot color='primary' />
-            ) : (
-              <TimelineDot color='grey' />
-            )}
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <a
-              href='/app/mentalhealth'
-              onClick={(event) => navigateTo(event, navigate, 'mentalhealth', scrollTop)}
-            >
-              Mental Health
-              {!formDone?.mentalhealth ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
             </a>
           </TimelineContent>
         </TimelineItem>

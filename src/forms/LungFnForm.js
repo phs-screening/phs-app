@@ -61,26 +61,6 @@ const schema = new SimpleSchema({
     type: Number,
     optional: false,
   },
-  LUNG8: {
-    type: Number,
-    optional: false,
-  },
-  LUNG9: {
-    type: Number,
-    optional: false,
-  },
-  LUNG10: {
-    type: Number,
-    optional: false,
-  },
-  LUNG11: {
-    type: Number,
-    optional: false,
-  },
-  LUNG12: {
-    type: Number,
-    optional: false,
-  },
   LUNG14: {
     type: String,
     allowedValues: ['Yes', 'No'],
@@ -213,22 +193,6 @@ const LungFnForm = (props) => {
         <h3>FEV1:FVC (%)</h3>
         <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
             type="number" name='LUNG7' label='LUNG7' /><br />
-        <h2>Post-bronchodilator</h2>
-        <h3>FBC (L)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG8' label='LUNG8' />
-        <h3>FEV1 (L)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG9' label='LUNG9' />
-        <h3>FVC (%pred)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG10' label='LUNG10' />
-        <h3>FEV1 (%pred)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG11' label='LUNG11' />
-        <h3>FEV1:FVC (%)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG12' label='LUNG12' />
         <h3>What defect does the patient have? </h3>
         <LungType_cal />
         <h3>Patient needs to be referred to doctor&apos;s station for followup on their result?</h3>

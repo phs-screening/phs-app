@@ -65,12 +65,7 @@ const schema = new SimpleSchema({
     type: String,
     allowedValues: ['Yes', 'No'],
     optional: true,
-  },
-  wceQ13: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
+  }
 })
 
 function CheckHpvEligibility(props) {
@@ -225,13 +220,6 @@ const WceForm = (props) => {
       },
       { label: 'No', value: 'No' },
     ],
-    wceQ13: [
-      {
-        label: 'Yes',
-        value: 'Yes',
-      },
-      { label: 'No', value: 'No' },
-    ],
   }
   const newForm = () => (
     <AutoForm
@@ -277,7 +265,7 @@ const WceForm = (props) => {
         <h3>Are you pregnant?</h3>
         <RadioField name='wceQ10' label='WCE Q10' options={formOptions.wceQ10} />
         <h3>
-          Was your last menstrual period within the window where the first day falls between 29 July and 5 August 2024?
+          Was your last menstrual period within the window where the first day falls between 29 July and 5 August 2024? If you are post-menopausal, please indicate ‘yes’
         </h3>
         <RadioField name='wceQ12' label='WCE Q12' options={formOptions.wceQ12} />
         <h3>Indicated interest for HPV Test under SCS?</h3>
@@ -288,15 +276,6 @@ const WceForm = (props) => {
         <RadioField name='wceQ7' label='WCE Q7' options={formOptions.wceQ7} />
         <h3>HPV Test Eligibility</h3>
         <CheckHpvEligibility wceQ8p='wceQ8' wceQ9p='wceQ9' wceQ10p='wceQ10' wceQ11p='wceQ11' wceQ12p='wceQ12'/>
-        <h3>
-          Is the patient experiencing any symptoms such as unusual bleeding, excessive discharge or lumps?
-        </h3>
-        <RadioField name='wceQ13' label='WCE Q13' options={formOptions.wceQ13} />
-        <PopupText qnNo='wceQ13' triggerValue='Yes'>
-          <Fragment>
-            <p className='blue'>Patient should see the doctor at On-Site HPV Booth, even if not necessarily to do a HPV Test</p>
-          </Fragment>
-        </PopupText>
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>

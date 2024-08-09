@@ -101,7 +101,8 @@ const OsteoForm = (props) => {
     >
       <div className='form--div'>
         <h1>Osteoporosis</h1>
-        <h3>OSTA: Based on the picture below, patient&apos;s osteoporosis risk is: </h3>
+        <h3>Based on OSTA, patient&apos;s osteoporosis risk is: </h3>
+        <img src='/images/Ost/ost_self_assessment_tool.png' alt='osta' /> <br />
         <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
         <br />
         <h3>Patient requires a follow up</h3>
