@@ -96,7 +96,7 @@ const Eligibility = () => {
     (isHaveConditions || isHaveFamilyCondition || isExceedTriage) &&
     pmhx.PMHX9 === 'No' &&
     reg.registrationQ4 <= 80
-  const isMentalHealthEligible = phq.PHQ10 >= 10 && reg.registrationQ4 < 60 && phq.PHQ11 === 'Yes'
+  const isMentalHealthEligible = (phq.PHQ10 >= 10 && reg.registrationQ4 < 60) || phq.PHQ11 === 'Yes'
   const isAudiometryEligible = reg.registrationQ4 >= 60 && pmhx.PMHX13 === 'No'
   const isGeriatricScreeningEligible = reg.registrationQ4 >= 60
   const isDoctorStationEligible =
@@ -114,22 +114,22 @@ const Eligibility = () => {
   const isDentalEligible = hxoral.ORAL5 === 'Yes'
 
   const rows = [
-    createData('Phlebotomy', isPhlebotomyEligible),
-    createData('Vaccination', isVaccinationEligible),
     createData('Healthier SG Booth', isHealthierSGEligible),
+    createData('Phlebotomy', isPhlebotomyEligible),
     createData('Faecal Immunochemical Testing (FIT)', isFITEligible),
     createData('Lung Function Testing', isLungFunctionEligible),
     createData("Women's Cancer Education", isWomenCancerEducationEligible),
     createData('Osteoporosis', isOsteoporosisEligible),
     createData('Kidney Screening', isNKFEligible),
     createData('Mental Health', isMentalHealthEligible),
+    createData('Vaccination', isVaccinationEligible),
+    createData('Geriatric Screening', isGeriatricScreeningEligible),
     createData('Audiometry', isAudiometryEligible),
     { name: 'HPV On-Site Testing', eligibility: 'Determined at another station' },
-    createData('Geriatric Screening', isGeriatricScreeningEligible),
     createData("Doctor's Station", isDoctorStationEligible),
     createData("Dietitian's Consult", isDietitianEligible),
+    createData('Oral Health', isDentalEligible),
     createData('Social Services', isSocialServicesEligible),
-    createData('Dental', isDentalEligible),
   ]
 
   return (
