@@ -36,6 +36,7 @@ const Login = () => {
       if (accountOption === accountOptions[1]) {
         //admin
         const credentials = Realm.Credentials.emailPassword(values.email, values.password)
+        //console.log("test")
         // Authenticate the user
         const user = await mongoDB.logIn(credentials)
         const userProfile = profilesCollection()

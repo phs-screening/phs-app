@@ -32,30 +32,25 @@ import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
 
 const postalCodeToLocations = {
-  600415: 'Pandan Clinic\nBIk 415, Pandan Gardens #01- 115, S600415',
-  600130: 'Trinity Medical Clinic\nBIk 130, Jurong Gateway Road #02-205, S600130',
-  129581: 'Frontier FMC\n3151 Commonwealth Ave West, #04-01 Grantral Mall, S129581',
-  650207: 'Bukit Batok Medical\nBIk 207, Bukit Batok Street 21 #01- 114, S650207',
-  650644: 'Kang An Clinic\nBIk 644 Bukit Batok Central #01-70 S650644',
-  610064: 'Drs Tangs and Partner\nBIk 64, Yung Kuang Road, #01- 115, S610064',
-  641518: 'Lakeside FMC\nBIk 518A, Jurong West Street 52 #01-02, S641518',
-  640638:
-    'Healthmark Pioneer MallClinic\nBIk 638, Jurong West Street 61 Pioneer Mall #02-08, S640638',
-  640762:
-    'Lee Family Clinic\nBIk 762 Jurong West Street 75, #02-262 Gek Poh Shopping Centre S640762',
+  648886: 
+    'Dr Koo & Loo Associate, +65 6792 2669: 1 Jurong West Central 2, 01-16a&b Jurong Point, S648886',
+  610064: 
+    'Drs Tangs & Partner, +65 6265 6077: Blk 64, Yung Kuang Rd #01- 115, S610064',
+  640638: 
+    'Healthmark Pionner Mall, +65 6861 3100: Blk 638, Jurong West St 61 Pioneer Mall #02-08, S640638 ',
+  641518: 
+    'Lakeside FMC, +65 6262 6434: Blk 518A, Jurong West St 52 #01-02, S641518',
+  640762: 
+    'Lee Family Clinic, +65 6794 0217: Blk 762 Jurong West St 75 #02-262 Gek Poh Shopping Ctr, S640762',
   None: 'None',
 }
 
 export const defaultSlots = {
-  600415: 35,
-  600130: 35,
-  129581: 35,
-  650207: 35,
-  650644: 35,
-  610064: 35,
-  641518: 35,
-  640638: 35,
-  640762: 35,
+  648886: 50,
+  610064: 50,
+  640638: 50,
+  641518: 50,
+  640762: 50,
   None: 10000,
 }
 
