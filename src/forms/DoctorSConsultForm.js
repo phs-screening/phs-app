@@ -159,27 +159,27 @@ const DoctorSConsultForm = () => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>Doctor&apos;s Consult</h1>
+        <h1>Doctor&apos;s Station</h1>
         <h3>Doctor&apos;s Name:</h3>
-        <LongTextField name='doctorSConsultQ1' label="Doctor's Consult Q1" />
+        <LongTextField name='doctorSConsultQ1' label="Doctor's Station Q1" />
         <h3>Clinical findings:</h3>
-        <LongTextField name='doctorSConsultQ2' label="Doctor's Consult Q2" />
+        <LongTextField name='doctorSConsultQ2' label="Doctor's Station Q2" />
         <h3>Doctor&apos;s Memo:</h3>
-        <LongTextField name='doctorSConsultQ3' label="Doctor's Consult Q3" />
+        <LongTextField name='doctorSConsultQ3' label="Doctor's Station Q3" />
         <h3>Refer to dietitian?</h3>
         <BoolField name='doctorSConsultQ4' />
         <h4>Reason for referral</h4>
-        <LongTextField name='doctorSConsultQ5' label="Doctor's Consult Q5" />
+        <LongTextField name='doctorSConsultQ5' label="Doctor's Station Q5" />
         <h3>Refer to Social Support?</h3>
         <BoolField name='doctorSConsultQ6' />
         <h4>Reason for referral</h4>
-        <LongTextField name='doctorSConsultQ7' label="Doctor's Consult Q7" />
+        <LongTextField name='doctorSConsultQ7' label="Doctor's Station Q7" />
         <h3>Refer to Mental Health? (and indicated on Form A)</h3>
         <BoolField name='doctorSConsultQ13' />
         <h3>Refer to Dental?</h3>
         <BoolField name='doctorSConsultQ8' />
         <h4>Reason for referral</h4>
-        <LongTextField name='doctorSConsultQ9' label="Doctor's Consult Q9" />
+        <LongTextField name='doctorSConsultQ9' label="Doctor's Station Q9" />
         <h3>Does patient require urgent follow up</h3>
         <BoolField name='doctorSConsultQ10' />
         <h3>Completed Doctor&apos;s Consult station. Please check that Form A is filled.</h3>
