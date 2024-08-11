@@ -57,6 +57,7 @@ const ManageVolunteers = () => {
 
           await guestProfiles.insertOne({
             username: values.email,
+            //email: values.email,
             password: hashHex,
           })
 
