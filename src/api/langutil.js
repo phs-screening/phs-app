@@ -27,10 +27,13 @@ export function setLang(doc, langName) {
             langFile = ms_my
             break
         case "tamil":
-            NotoSansTamil_normal.apply(doc)
-            NotoSansTamil_bold.apply(doc)
-            doc.setFont("NotoSansTamil", 'normal')
-            langFile = ta_in
+            langFile = en_us
+            alert("Unfortunately, the report generator does not work with Tamil.\nIf tamil is needed, generate the form manually.")
+            // TAMIL IS BROKEN IN JSPDF, THANKS OBAMA
+            // NotoSansTamil_normal.apply(doc)
+            // NotoSansTamil_bold.apply(doc)
+            // doc.setFont("NotoSansTamil", 'normal')
+            // langFile = ta_in
             break
         default:
             console.log("Tried to parse unknown language " + langName + " for report!")
