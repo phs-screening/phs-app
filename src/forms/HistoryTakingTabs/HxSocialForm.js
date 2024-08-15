@@ -321,7 +321,7 @@ const HxSocialForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>1. FINANCIAL STATUS</h1>
+        <h1>FINANCIAL STATUS</h1>
         <h3>CHAS Status</h3>
         <p className='blue'>{regForm ? regForm.registrationQ12 : '-'}</p>
         <h3>Pioneer Generation Status 建国一代配套</h3>

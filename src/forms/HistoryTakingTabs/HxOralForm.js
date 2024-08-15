@@ -127,7 +127,7 @@ const HxOralForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>4. ORAL ISSUES</h1>
+        <h1>ORAL ISSUES</h1>
         <h4 className='red'>
           Please do a quick inspection of participant&apos;s oral health status:
           <ol>

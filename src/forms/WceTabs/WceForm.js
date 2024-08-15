@@ -265,7 +265,7 @@ const WceForm = (props) => {
         <h3>Are you pregnant?</h3>
         <RadioField name='wceQ10' label='WCE Q10' options={formOptions.wceQ10} />
         <h3>
-          Was your last menstrual period within the window where the first day falls between 29 July and 5 August 2024? If you are post-menopausal, please indicate ‘yes’
+          Was your last menstrual period within the window where the first day falls between 29 July and 5 August 2024? If you are post-menopausal or use contraception, please indicate ‘yes’
         </h3>
         <RadioField name='wceQ12' label='WCE Q12' options={formOptions.wceQ12} />
         <h3>Indicated interest for HPV Test under SCS?</h3>

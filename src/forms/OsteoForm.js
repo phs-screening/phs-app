@@ -11,7 +11,7 @@ import allForms from './forms.json'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { SelectField, TextField, RadioField, LongTextField } from 'uniforms-mui'
+import { SelectField, TextField, NumField, RadioField, LongTextField } from 'uniforms-mui'
 import { useField } from 'uniforms'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
@@ -30,6 +30,10 @@ const schema = new SimpleSchema({
     allowedValues: ['Yes', 'No'],
     optional: false,
   },
+  BONE3: {
+    type: Number,
+    optional: false,
+  }
 })
 
 const formName = 'osteoForm'
@@ -105,6 +109,9 @@ const OsteoForm = (props) => {
         <img src='/images/Ost/ost_self_assessment_tool.png' alt='osta' /> <br />
         <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
         <br />
+        <h3>FRAX Hip Fracture Score</h3>
+        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
+            type="number" min={0} name='BONE3' label='BONE3' />
         <h3>Patient requires a follow up</h3>
         <RadioField name='BONE2' label='BONE2' options={formOptions.BONE2} />
       </div>
