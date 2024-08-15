@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
@@ -55,6 +56,7 @@ const schema = new SimpleSchema({
 const formName = 'hxWellbeingForm'
 const HxWellbeingForm = (props) => {
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const { patientId, updatePatientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
@@ -68,6 +70,7 @@ const HxWellbeingForm = (props) => {
     Promise.all([savedData, regFormData]).then((result) => {
       setSaveData(result[0])
       setRegForm(result[1])
+      isLoadingSidePanel(false)
     })
   }, [])
 
@@ -251,7 +254,30 @@ const HxWellbeingForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='50%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <h2>Registration</h2>
+              <p className='underlined'>Patient consented to participation in Research? (Patient has to sign and tick Form C)</p>
+              <p className='blue'>{regForm.registrationQ20}</p>
+            </div>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   )
 }
