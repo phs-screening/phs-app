@@ -121,7 +121,7 @@ const HxWellbeingForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           isLoading(false)

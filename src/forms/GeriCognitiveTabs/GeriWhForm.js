@@ -66,7 +66,7 @@ const GeriWhForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
+            changeTab(event, nextTab)
           }, 80)
         } else {
           isLoading(false)

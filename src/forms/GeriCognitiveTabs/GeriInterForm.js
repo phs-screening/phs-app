@@ -45,9 +45,9 @@ const schema = new SimpleSchema({
   },
 })
 
-const formName = 'hxInterForm'
+const formName = 'geriInterForm'
 
-const hxInterForm = (props) => {
+const geriInterForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -140,6 +140,6 @@ const hxInterForm = (props) => {
   )
 }
 
-hxInterForm.contextType = FormContext
+geriInterForm.contextType = FormContext
 
-export default hxInterForm
+export default geriInterForm
