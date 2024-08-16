@@ -5,7 +5,10 @@ import SimpleSchema from 'simpl-schema'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
+
+import allForms from '../forms.json'
 
 import { AutoForm, useField } from 'uniforms'
 import { SubmitField, ErrorsField, RadioField, LongTextField} from 'uniforms-mui'
@@ -50,15 +53,24 @@ const formName = 'geriInterForm'
 const geriInterForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
+  const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
   const [points, setPoints] = useState(0)
+  const [regi, setRegi] = useState({})
   const navigate = useNavigate()
 
   useEffect(async () => {
     const savedData = await getSavedData(patientId, formName)
     setSaveData(savedData)
+
+    const regiData = getSavedData(patientId, allForms.registrationForm)
+    Promise.all([regiData]).then((result) => {
+        setRegi(result[0])
+        isLoadingSidePanel(false)
+      }
+    )
   }, [])
 
   const formOptions = {
@@ -135,8 +147,30 @@ const geriInterForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {newForm()}
-    </Paper>
+    <Grid display='flex' flexDirection='row'>
+      <Grid xs={9}>
+        <Paper elevation={2} p={0} m={0}>
+          {newForm()}
+        </Paper>
+      </Grid>
+      <Grid
+        p={1}
+        width='50%'
+        display='flex'
+        flexDirection='column'
+        alignItems={loadingSidePanel ? 'center' : 'left'}
+      >
+        {loadingSidePanel ? (
+          <CircularProgress />
+        ) : (
+          <div className='summary--question-div'>
+            <p>Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
+            (Patient has to sign and tick Form C)<br></br><strong>{regi.registrationQ19}</strong></p>
+          </div>
+        )}
+      </Grid>
+    </Grid>
+  </Paper>
   )
 }
 
