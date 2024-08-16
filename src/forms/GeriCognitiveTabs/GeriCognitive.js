@@ -11,6 +11,7 @@ import GeriAmtForm from './GeriAmtForm.js'
 import GeriPhqForm from './GeriPhqForm.js'
 import GeriGraceForm from './GeriGraceForm.js'
 import GeriWhForm from './GeriWhForm.js'
+import GeriInterForm from './GeriInterForm.js'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -69,6 +70,7 @@ export default function GeriCognitiveTabs() {
           <Tab label='AMT' {...a11yProps(1)} />
           <Tab label='G-RACE' {...a11yProps(2)} />
           <Tab label='Whispering Hearts' {...a11yProps(3)} />
+          <Tab label='Interaction' {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -81,7 +83,10 @@ export default function GeriCognitiveTabs() {
         <GeriGraceForm changeTab={handleChange} nextTab={3} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <GeriWhForm />
+        <GeriWhForm changeTab={handleChange} nextTab={4} />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <GeriInterForm />
       </TabPanel>
     </GeriCognitiveWrapper>
   )
