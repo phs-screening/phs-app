@@ -48,8 +48,7 @@ function generateStatusObject(record) {
         record.hxOralForm !== undefined &&
         record.geriPhqForm !== undefined &&
         record.hxFamilyForm !== undefined &&
-        record.hxWellbeingForm !== undefined &&
-        record.hxInterForm !== undefined,
+        record.hxWellbeingForm !== undefined,
       triage: record.triageForm !== undefined, // triage
       hsg: record.hsgForm !== undefined,
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
@@ -64,7 +63,8 @@ function generateStatusObject(record) {
       gericog: 
         record.geriAmtForm !== undefined &&
         record.geriGraceForm !== undefined &&
-        record.geriWhForm !== undefined,
+        record.geriWhForm !== undefined &&
+        record.geriInterForm !== undefined,
       gerimobility:
         record.geriPhysicalActivityLevelForm !== undefined &&
         record.geriOtQuestionnaireForm !== undefined &&
