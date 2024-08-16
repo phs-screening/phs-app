@@ -7,8 +7,8 @@ import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, LongTextField } from 'uniforms-mui'
+import { AutoForm, useField } from 'uniforms'
+import { SubmitField, ErrorsField, RadioField, LongTextField} from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB.js'
@@ -53,6 +53,7 @@ const hxInterForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
+  const [points, setPoints] = useState(0)
   const navigate = useNavigate()
 
   useEffect(async () => {
@@ -64,6 +65,33 @@ const hxInterForm = (props) => {
     InterQ1: responsesValue,
     InterQ2: responsesValue,
     InterQ3: responsesValue,
+  }
+
+  const GetScore = () => {
+    const [{ value: q1 }] = useField('InterQ1', {})
+    const [{ value: q2 }] = useField('InterQ2', {})
+    const [{ value: q3 }] = useField('InterQ3', {})
+
+    let score = 0
+
+    const points = {
+      '1 - Hardly ever': 1,
+      '2 - Some of the time': 2,
+      '3 - Often': 3,
+    }
+
+    const questions = [q1, q2, q3]
+
+    questions.forEach((qn) => {
+      if (!qn) {
+        return
+      }
+      score += points[qn]
+    })
+
+    setPoints(score)
+    
+    return <p className='blue'>{score} / 9</p>
   }
 
   const newForm = () => (
@@ -95,6 +123,8 @@ const hxInterForm = (props) => {
         <RadioField name='InterQ2' label='InterQ2' options={formOptions.InterQ2} />
         <h3>How often do you feel isolated from others? </h3>
         <RadioField name='InterQ3' label='InterQ3' options={formOptions.InterQ3} />
+        <h3>Score:</h3>
+        <GetScore />
       </div>
       <ErrorsField />
       <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
