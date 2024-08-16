@@ -41,19 +41,18 @@ function generateStatusObject(record) {
   if (record) {
     return {
       reg: record.registrationForm !== undefined, // registration
-      triage: record.triageForm !== undefined, // triage
       hxtaking:
         record.hxHcsrForm !== undefined &&
         record.hxNssForm !== undefined &&
         record.hxSocialForm !== undefined &&
         record.hxOralForm !== undefined &&
-        record.hxPhqForm !== undefined &&
+        record.geriPhqForm !== undefined &&
         record.hxFamilyForm !== undefined &&
-        record.hxWellbeingForm !== undefined,
-      vax: record.vaccineForm !== undefined,
+        record.hxWellbeingForm !== undefined &&
+        record.hxInterForm !== undefined,
+      triage: record.triageForm !== undefined, // triage
       hsg: record.hsgForm !== undefined,
       phlebo: record.phlebotomyForm !== undefined, // phlebotomy
-      // historyTaking form consists of 4 forms
       fit: record.fitForm !== undefined, // fit
       lungfn: record.lungFnForm !== undefined,
       gynae: record.gynaeForm !== undefined,
@@ -61,17 +60,20 @@ function generateStatusObject(record) {
       osteo: record.osteoForm !== undefined,
       nkf: record.nkfForm !== undefined,
       mentalhealth: record.mentalHealthForm !== undefined,
-      hpv: record.hpvForm !== undefined,
-      // geriatrics form consists of 12 forms
+      vax: record.vaccineForm !== undefined,
+      gericog: 
+        record.geriAmtForm !== undefined &&
+        record.geriGraceForm !== undefined &&
+        record.geriWhForm !== undefined,
       gerimobility:
         record.geriPhysicalActivityLevelForm !== undefined &&
         record.geriOtQuestionnaireForm !== undefined &&
         record.geriSppbForm !== undefined &&
         record.geriPtConsultForm !== undefined &&
         record.geriOtConsultForm !== undefined,
-      gericog: record.geriAmtForm !== undefined,
-      geriaudio: record.geriAudiometryForm !== undefined,
       gerivision: record.geriVisionForm !== undefined,
+      geriaudio: record.geriAudiometryForm !== undefined,
+      hpv: record.hpvForm !== undefined,
       doctorsconsult: record.doctorConsultForm !== undefined, // doctor's consult
       dietitiansconsult: record.dietitiansConsultForm !== undefined, // dietitian's consult
       socialservice: record.socialServiceForm !== undefined, // social service,
