@@ -118,7 +118,7 @@ const HxWellbeingForm = (props) => {
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
+            changeTab(event, nextTab)
           }, 80)
         } else {
           isLoading(false)
@@ -130,6 +130,7 @@ const HxWellbeingForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
+        <h1>WELLBEING</h1>
         <h3>
           From a scale of 0 to 5, 0 being &apos;no all the time&apos; and 5 being &apos;all of the
           time&apos;, please give a number for each of the following statements.

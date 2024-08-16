@@ -76,7 +76,7 @@ const hxInterForm = (props) => {
         if (response.result) {
           setTimeout(() => {
             alert('Successfully submitted form')
-            changeTab(event, nextTab)
+            navigate('/app/dashboard', { replace: true })
           }, 80)
         } else {
           setTimeout(() => {

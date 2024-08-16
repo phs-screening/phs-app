@@ -289,7 +289,7 @@ const HxGynaeForm = (props) => {
       model={saveData}
     >
       <div className='form--div'>
-        <h1>Gynecology</h1>
+        <h1>GYNECOLOGY</h1>
         <h3 className='red'>Only ask if participant is female: </h3>
         <h3>Are you menopaused?</h3>
         <p>i.e. &gt; 1 year from your last menstrual period</p>

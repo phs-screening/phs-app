@@ -355,14 +355,14 @@ const HxSocialForm = (props) => {
         <h1>2. SOCIAL ISSUES</h1>
         <h3>Are you caring for a loved one?</h3>
         <RadioField name='SOCIAL8' label='SOCIAL8' options={formOptions.SOCIAL8} />
-        <h3>Do you feel equipped to provide care to your loved one?</h3>
+        <h3>Do you feel equipped to provide care to your loved one? (Please click Yes if not caring for any loved ones)</h3>
         <RadioField name='SOCIAL9' label='SOCIAL9' options={formOptions.SOCIAL9} />
         <h1>3. LIFESTYLE</h1>
         <h3>Do you currently smoke?</h3>
         <RadioField name='SOCIAL10' label='SOCIAL10' options={formOptions.SOCIAL10} />
         <h4>How many pack-years?</h4>
         <LongTextField name='SOCIALShortAns10' label='SOCIAL10' />
-        <h3>Have you smoked before? For how long and when did you stop?</h3>
+        <h3>Have you smoked before? For how long and when did you stop? (Please click Yes if still currently smoking)</h3>
         <RadioField name='SOCIAL11' label='SOCIAL11' options={formOptions.SOCIAL11} />
         <h4>Please specify:</h4>
         <LongTextField name='SOCIALShortAns11' label='SOCIAL11' />

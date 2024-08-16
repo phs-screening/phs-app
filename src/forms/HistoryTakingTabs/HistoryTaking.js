@@ -74,11 +74,11 @@ export default function HxTabs() {
           <Tab label='PMHx' {...a11yProps(1)} />
           <Tab label='Social' {...a11yProps(2)} />
           <Tab label='Oral' {...a11yProps(3)} />
-          <Tab label='Interaction' {...a11yProps(3)} />
           <Tab label='Family' {...a11yProps(3)} />
           <Tab label='Gynae' {...a11yProps(3)} />
           <Tab label='PHQ' {...a11yProps(3)} />
           <Tab label='Wellbeing' {...a11yProps(3)} />
+          <Tab label='Interaction' {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -94,19 +94,19 @@ export default function HxTabs() {
         <HxOralForm changeTab={handleChange} nextTab={4} />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <HxInterForm changeTab={handleChange} nextTab={5} />
+        <HxFamilyForm changeTab={handleChange} nextTab={5} />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <HxFamilyForm changeTab={handleChange} nextTab={6} />
+        <HxGynaeForm changeTab={handleChange} nextTab={6} />
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <HxGynaeForm changeTab={handleChange} nextTab={7} />
+        <HxPhqForm changeTab={handleChange} nextTab={7} />
       </TabPanel>
       <TabPanel value={value} index={7}>
-        <HxPhqForm changeTab={handleChange} nextTab={8} />
+        <HxWellbeingForm changeTab={handleChange} nextTab={8} />
       </TabPanel>
       <TabPanel value={value} index={8}>
-        <HxWellbeingForm />
+        <HxInterForm />
       </TabPanel>
     </HxWrapper>
   )

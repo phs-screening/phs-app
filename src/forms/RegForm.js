@@ -316,7 +316,7 @@ const RegForm = () => {
       </h3>
       <RadioField name='registrationQ19' options={formOptions.registrationQ19} />
       <h3>
-        Patient consented to participation in Research? (Patient has to sign and tick Form C)
+        Participant consent to participation in Research? (Participant has to sign IRB Consent Form)
       </h3>
       <RadioField name='registrationQ20' options={formOptions.registrationQ20} />
     </div>
