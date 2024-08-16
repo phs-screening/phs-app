@@ -273,7 +273,7 @@ const HxWellbeingForm = (props) => {
           ) : (
             <div className='summary--question-div'>
               <h2>Registration</h2>
-              <p className='underlined'>Patient consented to participation in Research? (Patient has to sign and tick Form C)</p>
+              <p className='underlined'>Participant consent to participation in Research? (Participant has to sign IRB Consent Form)</p>
               <p className='blue'>{regForm.registrationQ20}</p>
             </div>
           )}
