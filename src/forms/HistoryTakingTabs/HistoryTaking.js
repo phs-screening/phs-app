@@ -79,6 +79,7 @@ export default function HxTabs() {
           <Tab label='Gynae' {...a11yProps(3)} />
           <Tab label='PHQ' {...a11yProps(3)} />
           <Tab label='Wellbeing' {...a11yProps(3)} />
+          <Tab label='Interaction' {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -103,10 +104,10 @@ export default function HxTabs() {
         <HxGynaeForm changeTab={handleChange} nextTab={7} />
       </TabPanel>
       <TabPanel value={value} index={7}>
-        <HxPhqForm changeTab={handleChange} nextTab={8} />
+        <HxWellbeingForm changeTab={handleChange} nextTab={8} />
       </TabPanel>
       <TabPanel value={value} index={8}>
-        <HxWellbeingForm />
+        <HxInterForm />
       </TabPanel>
     </HxWrapper>
   )

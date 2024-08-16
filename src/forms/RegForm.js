@@ -203,7 +203,7 @@ const RegForm = () => {
       <h2>Registration</h2>
       <h3>Salutation 称谓</h3>
       <SelectField name='registrationQ1' options={formOptions.registrationQ1} />
-      <h3>Initials (E.g. Alan Simon Lee as S.L Alan)</h3>
+      <h3>Initials (e.g Chen Ren Ying - Chen RY, Christie Tan En Ning - Christie T E N)</h3>
       <LongTextField name='registrationQ2' />
       <h3>Birthday</h3>
       <DateField name='registrationQ3' type='date' />
@@ -316,7 +316,7 @@ const RegForm = () => {
       </h3>
       <RadioField name='registrationQ19' options={formOptions.registrationQ19} />
       <h3>
-        Patient consented to participation in Research? (Patient has to sign and tick Form C)
+        Participant consent to participation in Research? (Participant has to sign IRB Consent Form)
       </h3>
       <RadioField name='registrationQ20' options={formOptions.registrationQ20} />
     </div>
