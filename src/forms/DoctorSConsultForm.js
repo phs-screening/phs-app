@@ -339,6 +339,10 @@ const DoctorSConsultForm = () => {
               {osteo ? (
                 <li>
                 <p>Patient&apos;s OSTA risk is <strong>{osteo.BONE1}</strong></p>
+                <ul>
+                  <li><p>FRAX Hip Fracture Score is <strong>{osteo.BONE3}</strong></p></li>
+                  <li><p>Patient requires a follow up: <strong>{osteo.BONE2}</strong></p></li>
+                </ul>
                 </li>
               ) : null
               }

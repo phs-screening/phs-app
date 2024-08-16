@@ -269,7 +269,7 @@ const GeriOtQuestionnaireForm = (props) => {
       setReg(result[1])
       setTriage(result[2])
       setSocial(result[3])
-      //isLoadingSidePanel(false) //there is an issue here. Need to fix
+      isLoadingSidePanel(false)
     })
   }, [])
 
@@ -842,8 +842,8 @@ const GeriOtQuestionnaireForm = (props) => {
           ) : (
             <div className='summary--question-div'>
               <h2>Patient Info</h2>
-              {reg && reg.registrationQ3 ? (
-                <p className='blue'>Birthday: {reg.registrationQ3}</p>
+              {reg && reg.registrationQ3 instanceof Date ? (
+                <p className='blue'>Birthday: {reg.registrationQ3.toDateString()}</p>
               ) : (
                 <p className='blue'>Birthday: nil</p>
               )}
