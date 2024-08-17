@@ -203,7 +203,6 @@ const BasicTimeline = (props) => {
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            {goingForPhlebotomy ? (
               <a
                 href='/app/phlebo'
                 onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
@@ -211,9 +210,6 @@ const BasicTimeline = (props) => {
                 Phlebotomy
                 {!formDone?.phlebo ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
               </a>
-            ) : (
-              <p>Phlebotomy [Not going]</p>
-            )}
           </TimelineContent>
         </TimelineItem>
 
