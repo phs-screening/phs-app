@@ -112,7 +112,6 @@ const BasicTimeline = (props) => {
         if (record.goingForPhlebotomy == 'Yes') {
           setGoingForPhlebotomy(true)
         }
-
         setFormDone(generateStatusObject(record))
         setLoading(false)
       } catch (err) {
