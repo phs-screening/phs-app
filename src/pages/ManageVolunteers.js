@@ -24,18 +24,21 @@ const ManageVolunteers = () => {
   const [search, setSearch] = useState('')
   const [loadingDelete, isLoadingDelete] = useState(false)
 
-  useEffect(async () => {
-    if (await isAdmin()) {
-      const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
-      const guestProfiles = await mongoConnection
-        .db('phs')
-        .collection('profiles')
-        .find({ is_admin: { $ne: true } })
-      setGuestUsers(guestProfiles)
-    } else {
-      alert('Only Admins have access to this Page!')
-      navigate('/app/registration', { replace: true })
+  useEffect(() => {
+    const fetchData = async () => {
+      if (await isAdmin()) {
+        const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
+        const guestProfiles = await mongoConnection
+          .db('phs')
+          .collection('profiles')
+          .find({ is_admin: { $ne: true } })
+        setGuestUsers(guestProfiles)
+      } else {
+        alert('Only Admins have access to this Page!')
+        navigate('/app/registration', { replace: true })
+      }
     }
+    fetchData()
   }, [refresh])
 
   const handleCreateAccount = async (values) => {

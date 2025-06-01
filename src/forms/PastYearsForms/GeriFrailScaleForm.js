@@ -90,9 +90,12 @@ const GeriFrailScaleForm = (props) => {
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -227,8 +230,8 @@ const GeriFrailScaleForm = (props) => {
         If participant cannot remember his/her weight, ask if there was any significant loss in
         weight the past year.
         <br />
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='geriFrailScaleQ5' label='Geri - Frail Scale Q5' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" name='geriFrailScaleQ5' label='Geri - Frail Scale Q5' />
         <h3>
           <br />
           Frail scale scores range from 0-5 (i.e. 1 point for each component; 0 = best to 5 = worst)
@@ -252,7 +255,7 @@ const GeriFrailScaleForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

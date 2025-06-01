@@ -18,12 +18,15 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [admin, isAdmin] = useState(false)
   const [name, setName] = useState(isLoggedin() ? getName() : notLoggedIn())
 
-  useEffect(async () => {
-    const profile = await getProfile()
-    setProfile(profile)
-    if (profile !== null) {
-      isAdmin(profile.is_admin)
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const profile = await getProfile()
+      setProfile(profile)
+      if (profile !== null) {
+        isAdmin(profile.is_admin)
+      }
     }
+    fetchProfile();
   }, [])
 
   return (

@@ -61,9 +61,12 @@ const HxOralForm = (props) => {
   const { changeTab, nextTab } = props
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -173,7 +176,7 @@ const HxOralForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

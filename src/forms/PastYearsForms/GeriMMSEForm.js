@@ -48,9 +48,12 @@ const GeriMMSEForm = (props) => {
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -115,7 +118,7 @@ const GeriMMSEForm = (props) => {
         <RadioField name='geriMMSEQ5' label='geriMMSE - Q5' options={formOptions.geriMMSEQ5} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

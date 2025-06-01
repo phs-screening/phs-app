@@ -66,9 +66,12 @@ const SacsForm = () => {
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -143,7 +146,7 @@ const SacsForm = () => {
         <RadioField name='sacsQ3' label='SACS Q3' options={formOptions.sacsQ3} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

@@ -54,107 +54,110 @@ const SummaryForm = (props) => {
 
   const [refresh, setRefresh] = useState(false)
 
-  useEffect(async () => {
-    const loadPastForms = async () => {
-      isLoadingPrevData(true)
-      const registrationData = getSavedData(patientId, allForms.registrationForm)
-      const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
-      const nssData = getSavedData(patientId, allForms.hxNssForm)
-      const socialData = getSavedData(patientId, allForms.hxSocialForm)
-      const cancerData = getSavedData(patientId, allForms.hxCancerForm)
-      const visionData = getSavedData(patientId, allForms.geriVisionForm)
-      const fitData = getSavedData(patientId, allForms.fitForm)
-      const wceData = getSavedData(patientId, allForms.wceForm)
-      const patientsData = getSavedPatientData(patientId, 'patients')
-      const phlebotomyData = getSavedData(patientId, allForms.phlebotomyForm)
-      const geriPtConsultData = getSavedData(patientId, allForms.geriPtConsultForm)
-      const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
-      const geriAudiometryData = getSavedData(patientId, allForms.geriAudiometryForm)
-      const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
-      const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
-      const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
-      const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
-      //const sacsData = getSavedData(patientId, allForms.sacsForm)
-      const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
-      const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-      const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
-      const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
-      const triageData = getSavedData(patientId, allForms.triageForm)
+  useEffect(() => {
+    const loadForms = async () => {
+      const loadPastForms = async () => {
+        isLoadingPrevData(true)
+        const registrationData = getSavedData(patientId, allForms.registrationForm)
+        const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
+        const nssData = getSavedData(patientId, allForms.hxNssForm)
+        const socialData = getSavedData(patientId, allForms.hxSocialForm)
+        const cancerData = getSavedData(patientId, allForms.hxCancerForm)
+        const visionData = getSavedData(patientId, allForms.geriVisionForm)
+        const fitData = getSavedData(patientId, allForms.fitForm)
+        const wceData = getSavedData(patientId, allForms.wceForm)
+        const patientsData = getSavedPatientData(patientId, 'patients')
+        const phlebotomyData = getSavedData(patientId, allForms.phlebotomyForm)
+        const geriPtConsultData = getSavedData(patientId, allForms.geriPtConsultForm)
+        const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
+        const geriAudiometryData = getSavedData(patientId, allForms.geriAudiometryForm)
+        const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
+        const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
+        const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
+        const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
+        //const sacsData = getSavedData(patientId, allForms.sacsForm)
+        const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
+        const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
+        const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
+        const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
+        const triageData = getSavedData(patientId, allForms.triageForm)
 
-      const vaccineData = getSavedData(patientId, allForms.vaccineForm)
-      const lungData = getSavedData(patientId, allForms.lungForm)
-      const nkfData = getSavedData(patientId, allForms.nkfForm)
-      const hsgData = getSavedData(patientId, allForms.hsgForm)
-      const graceData = getSavedData(patientId, allForms.geriGraceForm)
-      const heartsData = getSavedData(patientId, allForms.geriWhForm)
-      const mentalData = getSavedData(patientId, allForms.mentalHealthForm)
+        const vaccineData = getSavedData(patientId, allForms.vaccineForm)
+        const lungData = getSavedData(patientId, allForms.lungForm)
+        const nkfData = getSavedData(patientId, allForms.nkfForm)
+        const hsgData = getSavedData(patientId, allForms.hsgForm)
+        const graceData = getSavedData(patientId, allForms.geriGraceForm)
+        const heartsData = getSavedData(patientId, allForms.geriWhForm)
+        const mentalData = getSavedData(patientId, allForms.mentalHealthForm)
 
-      Promise.all([
-        hcsrData,
-        nssData,
-        socialData,
-        cancerData,
-        visionData,
-        fitData,
-        wceData,
-        patientsData,
-        geriPtConsultData,
-        geriOtConsultData,
-        socialServiceData,
-        doctorConsultData,
-        registrationData,
-        phlebotomyData,
-        geriEbasDepData,
-        geriAmtData,
-        dietitiansConsultData,
-        oralHealthData,
-        geriMmseData,
-        geriVisionData,
-        geriAudiometryData,
-        triageData,
-        vaccineData,
-        lungData,
-        nkfData,
-        hsgData,
-        graceData,
-        heartsData,
-        mentalData
-        //sacsData,
-      ]).then((result) => {
-        setHcsr(result[0])
-        setNss(result[1])
-        setSocial(result[2])
-        setCancer(result[3])
-        setVision(result[4])
-        setFit(result[5])
-        setWce(result[6])
-        setPatients(result[7])
-        setGeriPtConsult(result[8])
-        setGeriOtConsult(result[9])
-        setSocialService(result[10])
-        setDoctorSConsult(result[11])
-        setRegistration(result[12])
-        setPhlebotomy(result[13])
-        setGeriEbasDep(result[14])
-        setGeriAmt(result[15])
-        setDietiatiansConsult(result[16])
-        setOralHealth(result[17])
-        setGeriMmse(result[18])
-        setGeriVision(result[19])
-        setGeriAudiometry(result[20])
-        setTriage(result[21])
-        setVaccine(result[22])
-        setLung(result[23])
-        setNKF(result[24])
-        setHSG(result[25])
-        setGrace(result[26])
-        setHearts(result[27])
-        setMental(result[28])
-        //setSacs(result[])
-        isLoadingPrevData(false)
-      })
+        Promise.all([
+          hcsrData,
+          nssData,
+          socialData,
+          cancerData,
+          visionData,
+          fitData,
+          wceData,
+          patientsData,
+          geriPtConsultData,
+          geriOtConsultData,
+          socialServiceData,
+          doctorConsultData,
+          registrationData,
+          phlebotomyData,
+          geriEbasDepData,
+          geriAmtData,
+          dietitiansConsultData,
+          oralHealthData,
+          geriMmseData,
+          geriVisionData,
+          geriAudiometryData,
+          triageData,
+          vaccineData,
+          lungData,
+          nkfData,
+          hsgData,
+          graceData,
+          heartsData,
+          mentalData
+          //sacsData,
+        ]).then((result) => {
+          setHcsr(result[0])
+          setNss(result[1])
+          setSocial(result[2])
+          setCancer(result[3])
+          setVision(result[4])
+          setFit(result[5])
+          setWce(result[6])
+          setPatients(result[7])
+          setGeriPtConsult(result[8])
+          setGeriOtConsult(result[9])
+          setSocialService(result[10])
+          setDoctorSConsult(result[11])
+          setRegistration(result[12])
+          setPhlebotomy(result[13])
+          setGeriEbasDep(result[14])
+          setGeriAmt(result[15])
+          setDietiatiansConsult(result[16])
+          setOralHealth(result[17])
+          setGeriMmse(result[18])
+          setGeriVision(result[19])
+          setGeriAudiometry(result[20])
+          setTriage(result[21])
+          setVaccine(result[22])
+          setLung(result[23])
+          setNKF(result[24])
+          setHSG(result[25])
+          setGrace(result[26])
+          setHearts(result[27])
+          setMental(result[28])
+          //setSacs(result[])
+          isLoadingPrevData(false)
+        })
+      }
+      await loadPastForms()
     }
-    await loadPastForms()
+    loadForms()
   }, [refresh])
 
   // TODO: add triage to summary form
@@ -210,4 +213,5 @@ SummaryForm.contextType = FormContext
 export default function Summaryform(props) {
   const navigate = useNavigate()
   return <SummaryForm {...props} navigate={navigate} />
+  // return <div>Test...</div>
 }

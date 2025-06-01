@@ -172,18 +172,24 @@ const StationQueue = () => {
   }
 
   // Set a listener to update the station queues when the refresh state changes
-  useEffect(async () => {
-    const collection = getQueueCollection()
-    const sq = await collection.find()
-    setStationQueues(sq)
+  useEffect(() => {
+    const updateStationQueue = async () => {
+      const collection = getQueueCollection()
+      const sq = await collection.find()
+      setStationQueues(sq)
+    }
+    updateStationQueue()
   }, [refresh])
 
   // Update if user is admin (to show delete station button for admins)
-  useEffect(async () => {
-    const profile = await getProfile()
-    if (profile !== null) {
-      isAdmin(profile.is_admin)
+  useEffect(() => {
+    const showDeleteForAdmins = async () => {
+      const profile = await getProfile()
+      if (profile !== null) {
+        isAdmin(profile.is_admin)
+      }
     }
+    showDeleteForAdmins()
   }, [])
 
   return (

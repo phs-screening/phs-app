@@ -71,33 +71,36 @@ const SocialServiceForm = (props) => {
   const [geriPt, setGeriPt] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regData = getSavedData(patientId, allForms.registrationForm)
-    const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-    const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-    const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
-    const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
-    const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regData = getSavedData(patientId, allForms.registrationForm)
+      const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+      const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
+      const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
+      const geriOtData = getSavedData(patientId, allForms.geriOtConsultForm)
+      const geriPtData = getSavedData(patientId, allForms.geriPtConsultForm)
 
-    Promise.all([
-      savedData,
-      regData,
-      hxSocialData,
-      doctorConsultData,
-      geriVisionData,
-      geriOtData,
-      geriPtData,
-    ]).then((result) => {
-      setSaveData(result[0])
-      setReg(result[1])
-      setHxSocial(result[2])
-      setDoctorConsult(result[3])
-      setVision(result[4])
-      setGeriOt(result[5])
-      setGeriPt(result[6])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([
+        savedData,
+        regData,
+        hxSocialData,
+        doctorConsultData,
+        geriVisionData,
+        geriOtData,
+        geriPtData,
+      ]).then((result) => {
+        setSaveData(result[0])
+        setReg(result[1])
+        setHxSocial(result[2])
+        setDoctorConsult(result[3])
+        setVision(result[4])
+        setGeriOt(result[5])
+        setGeriPt(result[6])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -162,7 +165,7 @@ const SocialServiceForm = (props) => {
         <LongTextField name='socialServiceQ9' label='Social Service Q9' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />
@@ -310,8 +313,8 @@ const SocialServiceForm = (props) => {
               <p className='underlined'>Referral from PT consult?</p>
               {geriPt && geriPt.geriPtConsultQ4 ? (
                 <>
-                <p className='blue'>{geriPt.geriPtConsultQ4}</p>
-                <p className='blue'>{geriPt.geriPtConsultQ5}</p>
+                  <p className='blue'>{geriPt.geriPtConsultQ4}</p>
+                  <p className='blue'>{geriPt.geriPtConsultQ5}</p>
                 </>
               ) : (
                 <p className='blue'>nil</p>
@@ -319,13 +322,13 @@ const SocialServiceForm = (props) => {
               <p className='underlined'>Referral from OT consult?</p>
               {geriOt && geriOt.geriOtConsultQ4 ? (
                 <>
-                <p className='blue'>{geriOt.geriOtConsultQ4}</p>
-                <p className='blue'>{geriOt.geriOtConsultQ5}</p>
+                  <p className='blue'>{geriOt.geriOtConsultQ4}</p>
+                  <p className='blue'>{geriOt.geriOtConsultQ5}</p>
                 </>
               ) : (
                 <p className='blue'>nil</p>
               )}
-              
+
               {
                 geriOt ? (
                   <>

@@ -31,8 +31,8 @@ const schema = new SimpleSchema({
   SOCIAL4: {
     type: String,
     allowedValues: [
-      '1200 and below per month', 
-      '1,201 - 2,000 per month', 
+      '1200 and below per month',
+      '1,201 - 2,000 per month',
       '2,001 - 3,999 per month',
       '4,000 - 5,999 per month',
       '6,000 - 9,999 per month',
@@ -146,13 +146,16 @@ const HxSocialForm = (props) => {
   const [saveData, setSaveData] = useState({})
   const [regForm, setRegForm] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regFormData = getSavedData(patientId, allForms.registrationForm)
-    Promise.all([savedData, regFormData]).then((result) => {
-      setSaveData(result[0])
-      setRegForm(result[1])
-    })
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regFormData = getSavedData(patientId, allForms.registrationForm)
+      Promise.all([savedData, regFormData]).then((result) => {
+        setSaveData(result[0])
+        setRegForm(result[1])
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -168,9 +171,9 @@ const HxSocialForm = (props) => {
         label: '1200 and below per month',
         value: '1200 and below per month',
       },
-      { 
-        label: '1,201 - 2,000 per month', 
-        value: '1,201 - 2,000 per month' 
+      {
+        label: '1,201 - 2,000 per month',
+        value: '1,201 - 2,000 per month'
       },
       {
         label: '2,001 - 3,999 per month',
@@ -336,8 +339,8 @@ const HxSocialForm = (props) => {
         <h3>What is the average earnings of participant&apos;s household per month?</h3>
         <RadioField name='SOCIAL4' label='SOCIAL4' options={formOptions.SOCIAL4} />
         <h3>Number of household members (including yourself)?</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='SOCIAL5' label='SOCIAL5' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" name='SOCIAL5' label='SOCIAL5' />
         <h3>
           <span className='red'>If you are currently not on CHAS but qualify, </span>do you want to
           apply for CHAS card?
@@ -414,7 +417,7 @@ const HxSocialForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

@@ -117,30 +117,33 @@ const GeriPtConsultForm = (props) => {
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const geriParqData = getSavedData(patientId, allForms.geriParQForm)
-    const geriPhysicalActivityData = getSavedData(patientId, allForms.geriPhysicalActivityLevelForm)
-    const geriFrailScaleData = getSavedData(patientId, allForms.geriFrailScaleForm)
-    const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
-    const geriTugData = getSavedData(patientId, allForms.geriTugForm)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const geriParqData = getSavedData(patientId, allForms.geriParQForm)
+      const geriPhysicalActivityData = getSavedData(patientId, allForms.geriPhysicalActivityLevelForm)
+      const geriFrailScaleData = getSavedData(patientId, allForms.geriFrailScaleForm)
+      const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
+      const geriTugData = getSavedData(patientId, allForms.geriTugForm)
 
-    Promise.all([
-      savedData,
-      geriParqData,
-      geriPhysicalActivityData,
-      geriFrailScaleData,
-      geriSppbData,
-      geriTugData,
-    ]).then((result) => {
-      setSaveData(result[0])
-      setGeriParq(result[1])
-      setGeriPhysicalActivity(result[2])
-      setGeriFrailScale(result[3])
-      setGeriSppb(result[4])
-      setGeriTug(result[5])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([
+        savedData,
+        geriParqData,
+        geriPhysicalActivityData,
+        geriFrailScaleData,
+        geriSppbData,
+        geriTugData,
+      ]).then((result) => {
+        setSaveData(result[0])
+        setGeriParq(result[1])
+        setGeriPhysicalActivity(result[2])
+        setGeriFrailScale(result[3])
+        setGeriSppb(result[4])
+        setGeriTug(result[5])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -217,7 +220,7 @@ const GeriPtConsultForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

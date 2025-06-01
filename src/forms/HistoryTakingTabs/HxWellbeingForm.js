@@ -64,14 +64,17 @@ const HxWellbeingForm = (props) => {
   const [regForm, setRegForm] = useState({})
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regFormData = getSavedData(patientId, allForms.registrationForm)
-    Promise.all([savedData, regFormData]).then((result) => {
-      setSaveData(result[0])
-      setRegForm(result[1])
-      isLoadingSidePanel(false)
-    })
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regFormData = getSavedData(patientId, allForms.registrationForm)
+      Promise.all([savedData, regFormData]).then((result) => {
+        setSaveData(result[0])
+        setRegForm(result[1])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -246,7 +249,7 @@ const HxWellbeingForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

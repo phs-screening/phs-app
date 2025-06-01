@@ -57,10 +57,12 @@ const HxFamilyForm = (props) => {
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -141,7 +143,7 @@ const HxFamilyForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

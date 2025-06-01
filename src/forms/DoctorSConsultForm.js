@@ -93,7 +93,8 @@ const DoctorSConsultForm = () => {
   const [pmhx, setPMHX] = useState({})
   const [social, setSocial] = useState({})
   const [family, setFamily] = useState({})
-  useEffect(async () => {
+
+  useEffect(() => {
     const loadPastForms = async () => {
       const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
       const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
@@ -123,17 +124,16 @@ const DoctorSConsultForm = () => {
         setSaveData(result[1])
         setGeriVision(result[2])
         setGeriAudio(result[3]),
-        setLung(result[4])
+          setLung(result[4])
         setPHQ(result[5])
         setTriage(result[6]),
-        setOsteo(result[7]),
-        setPMHX(result[8])
+          setOsteo(result[7]),
+          setPMHX(result[8])
         setSocial(result[9])
         setFamily(result[10])
         isLoadingSidePanel(false)
       })
     }
-
     loadPastForms()
   }, [])
   const newForm = () => (
@@ -187,7 +187,7 @@ const DoctorSConsultForm = () => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>
@@ -215,36 +215,36 @@ const DoctorSConsultForm = () => {
               <h2>Patient Requires Referrals For: </h2>
               <ul>
                 {!lung ? <p className='red'>nil lung data!</p> : <></>}
-                {lung && lung.LUNG14 == 'Yes' ? 
-                <li>
-                  <p>Patient has <strong>{lung.LUNG13}</strong></p>
-                  <p>Lung Function Results</p>
-                      <table style={{border: "1px solid black", borderCollapse: "collapse"}}>
-                        <tr style={{border: "1px solid black"}}>
-                          <td colSpan={2} style={{border: "1px solid black"}}>Pre-Bronchodilator</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>FVC (L)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG3}</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>FEV1 (L)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG4}</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>FVC (%pred)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG5}</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>FEV1 (%pred)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG6}</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>FEV1/FVC (%)</td>
-                          <td style={{border: "1px solid black"}}>{lung.LUNG7}</td>
-                        </tr>
-                      </table>    
-                </li> : null}
+                {lung && lung.LUNG14 == 'Yes' ?
+                  <li>
+                    <p>Patient has <strong>{lung.LUNG13}</strong></p>
+                    <p>Lung Function Results</p>
+                    <table style={{ border: "1px solid black", borderCollapse: "collapse" }}>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td colSpan={2} style={{ border: "1px solid black" }}>Pre-Bronchodilator</td>
+                      </tr>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td style={{ border: "1px solid black" }}>FVC (L)</td>
+                        <td style={{ border: "1px solid black" }}>{lung.LUNG3}</td>
+                      </tr>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td style={{ border: "1px solid black" }}>FEV1 (L)</td>
+                        <td style={{ border: "1px solid black" }}>{lung.LUNG4}</td>
+                      </tr>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td style={{ border: "1px solid black" }}>FVC (%pred)</td>
+                        <td style={{ border: "1px solid black" }}>{lung.LUNG5}</td>
+                      </tr>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td style={{ border: "1px solid black" }}>FEV1 (%pred)</td>
+                        <td style={{ border: "1px solid black" }}>{lung.LUNG6}</td>
+                      </tr>
+                      <tr style={{ border: "1px solid black" }}>
+                        <td style={{ border: "1px solid black" }}>FEV1/FVC (%)</td>
+                        <td style={{ border: "1px solid black" }}>{lung.LUNG7}</td>
+                      </tr>
+                    </table>
+                  </li> : null}
 
                 {!geriPHQ ? <p className='red'>nil geriPHQ data!</p> : <></>}
                 <li>{geriPHQ && geriPHQ.PHQ10 ? (
@@ -272,158 +272,158 @@ const DoctorSConsultForm = () => {
                 {!triage ? <p className='red'>nil triage data!</p> : <></>}
                 {triage.triageQ9 ? (
                   <li>
-                  <p>Patient had blood pressure of <strong>{triage.triageQ7}/{triage.triageQ8}</strong></p>
+                    <p>Patient had blood pressure of <strong>{triage.triageQ7}/{triage.triageQ8}</strong></p>
                   </li>
                 ) : null}
 
                 {!geriVision ? <p className='red'>nil geriVision data!</p> : <></>}
                 {geriVision.geriVisionQ9 ? (
                   <li>
-                  <p>Visual Check Results.</p>
+                    <p>Visual Check Results.</p>
 
-                  <ul>
-                    <li>
-                      <p>Visual Acuity</p>
-                      <table style={{border: "1px solid black", width: "100%", borderCollapse: "collapse", minWidth:"60%"}}>
-                        <tr style={{border: "1px solid black"}}>
-                          <th style={{border: "1px solid black"}}></th>
-                          <th style={{border: "1px solid black"}}>Right Eye</th>
-                          <th style={{border: "1px solid black"}}>Left Eye</th>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>Without Pinhole Occluder</td>
-                          <td style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ3}</td>
-                          <td style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ4}</td>
-                        </tr>
-                        <tr style={{border: "1px solid black"}}>
-                          <td style={{border: "1px solid black"}}>With Pinhole Occluder</td>
-                          <td style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ5}</td>
-                          <td style={{border: "1px solid black"}}>6/{geriVision.geriVisionQ6}</td>
-                        </tr>
-                      </table>                        
-                    </li>
-                    <li>
-                      <p>Type of vision error, if any: <strong>{geriVision.geriVisionQ8}</strong></p>
-                      <p>Previous eye surgery or condition: <strong>{geriVision.geriVisionQ1}</strong></p>
-                      <p>Is currently on any eye review/ consulting any eye specialist: <strong>{geriVision.geriVisionQ10}</strong></p>
-                      <p><strong>{geriVision.geriVisionQ11}</strong></p>
-                      { hcsr ? (
+                    <ul>
+                      <li>
+                        <p>Visual Acuity</p>
+                        <table style={{ border: "1px solid black", width: "100%", borderCollapse: "collapse", minWidth: "60%" }}>
+                          <tr style={{ border: "1px solid black" }}>
+                            <th style={{ border: "1px solid black" }}></th>
+                            <th style={{ border: "1px solid black" }}>Right Eye</th>
+                            <th style={{ border: "1px solid black" }}>Left Eye</th>
+                          </tr>
+                          <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Without Pinhole Occluder</td>
+                            <td style={{ border: "1px solid black" }}>6/{geriVision.geriVisionQ3}</td>
+                            <td style={{ border: "1px solid black" }}>6/{geriVision.geriVisionQ4}</td>
+                          </tr>
+                          <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>With Pinhole Occluder</td>
+                            <td style={{ border: "1px solid black" }}>6/{geriVision.geriVisionQ5}</td>
+                            <td style={{ border: "1px solid black" }}>6/{geriVision.geriVisionQ6}</td>
+                          </tr>
+                        </table>
+                      </li>
+                      <li>
+                        <p>Type of vision error, if any: <strong>{geriVision.geriVisionQ8}</strong></p>
+                        <p>Previous eye surgery or condition: <strong>{geriVision.geriVisionQ1}</strong></p>
+                        <p>Is currently on any eye review/ consulting any eye specialist: <strong>{geriVision.geriVisionQ10}</strong></p>
+                        <p><strong>{geriVision.geriVisionQ11}</strong></p>
+                        {hcsr ? (
                           <p>Patient&apos;s history indicated: <strong>{hcsr.hxHcsrQ6}</strong></p>
                         ) : <p className='red'>nil hcsr data!</p>
-                      }
-                    </li>
-                  </ul>
+                        }
+                      </li>
+                    </ul>
                   </li>
                 ) : null
-              }
+                }
 
-              {!geriAudio ? <p className='red'>nil geriAudio data!</p> : <></>}
-              {geriAudio ? (
-                <li>
-                <p>Patient&apos;s audiometry results, if any:</p>
-                <ul>
+                {!geriAudio ? <p className='red'>nil geriAudio data!</p> : <></>}
+                {geriAudio ? (
                   <li>
-                    <p><strong>{geriAudio.geriAudiometryQ13}</strong></p>
-                    <p>Details: <strong>{geriAudio.geriAudiometryQ12}</strong></p>
-                    { hcsr ? (
-                        <p>Patient&apos;s history indicated: <strong>{hcsr.hxHcsrQ7}</strong></p>
-                      ) : <p className='red'>nil hcsr data!</p>
-                    }
+                    <p>Patient&apos;s audiometry results, if any:</p>
+                    <ul>
+                      <li>
+                        <p><strong>{geriAudio.geriAudiometryQ13}</strong></p>
+                        <p>Details: <strong>{geriAudio.geriAudiometryQ12}</strong></p>
+                        {hcsr ? (
+                          <p>Patient&apos;s history indicated: <strong>{hcsr.hxHcsrQ7}</strong></p>
+                        ) : <p className='red'>nil hcsr data!</p>
+                        }
+                      </li>
+                    </ul>
                   </li>
-                </ul>
-                </li>
-              ) : null
-              }
-              
-              {!osteo ? <p className='red'>nil osteo data!</p> : <></>}
-              {osteo ? (
-                <li>
-                <p>Patient&apos;s OSTA risk is <strong>{osteo.BONE1}</strong></p>
-                <ul>
-                  <li><p>FRAX Hip Fracture Score is <strong>{osteo.BONE3}</strong></p></li>
-                  <li><p>Patient requires a follow up: <strong>{osteo.BONE2}</strong></p></li>
-                </ul>
-                </li>
-              ) : null
-              }
+                ) : null
+                }
 
-              <h2>Patient&apos;s Relevant History: </h2>
-              {triage ? (
-                <li>
-                  <p>Biodata</p>
-                  <ul>
-                    <li><p>BMI: <strong>{triage.triageQ12}</strong></p></li>
-                    <li><p>Waist Circumference: <strong>{triage.triageQ13}</strong></p></li>
-                  </ul>
-                </li>
+                {!osteo ? <p className='red'>nil osteo data!</p> : <></>}
+                {osteo ? (
+                  <li>
+                    <p>Patient&apos;s OSTA risk is <strong>{osteo.BONE1}</strong></p>
+                    <ul>
+                      <li><p>FRAX Hip Fracture Score is <strong>{osteo.BONE3}</strong></p></li>
+                      <li><p>Patient requires a follow up: <strong>{osteo.BONE2}</strong></p></li>
+                    </ul>
+                  </li>
+                ) : null
+                }
+
+                <h2>Patient&apos;s Relevant History: </h2>
+                {triage ? (
+                  <li>
+                    <p>Biodata</p>
+                    <ul>
+                      <li><p>BMI: <strong>{triage.triageQ12}</strong></p></li>
+                      <li><p>Waist Circumference: <strong>{triage.triageQ13}</strong></p></li>
+                    </ul>
+                  </li>
                 ) : <p className='red'>nil triage data!</p>
-              }
+                }
 
-              {hcsr ? (
-                <li>
-                  <p>Presenting Complaints</p>
-                  <ul>
-                    <li>
-                      <p>Health Concerns: <strong>{hcsr.hxHcsrQ3}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ3}</strong></p>
+                {hcsr ? (
+                  <li>
+                    <p>Presenting Complaints</p>
+                    <ul>
+                      <li>
+                        <p>Health Concerns: <strong>{hcsr.hxHcsrQ3}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ3}</strong></p>
                       </li>
-                    <li><p>Red Flags: <strong>{hcsr.hxHcsrQ4}</strong></p></li>
-                    <li>
-                      <p>Problems passing urine: <strong>{hcsr.hxHcsrQ5}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ5}</strong></p>
+                      <li><p>Red Flags: <strong>{hcsr.hxHcsrQ4}</strong></p></li>
+                      <li>
+                        <p>Problems passing urine: <strong>{hcsr.hxHcsrQ5}</strong><br></br><strong>{hcsr.hxHcsrShortAnsQ5}</strong></p>
                       </li>
-                  </ul>
-                </li>
+                    </ul>
+                  </li>
                 ) : <p className='red'>nil hcsr data!</p>
-              }
+                }
 
-              {pmhx ? (
-                <li>
-                  <p>Past Medical History</p>
-                  <ul>
-                    <li><p>Chronic conditions: <strong>{pmhx.PMHX1}</strong></p></li>
-                    <li><p>Long term medications and compliance: <strong>{pmhx.PMHX2}</strong></p></li>
-                    <li>
-                      <p>Drug allergies: <strong>{pmhx.PMHX5}</strong><br></br><strong>{pmhx.PMHXShortAns5}</strong></p>
-                    </li>
-                    <li>
-                      <p>Alternative medicine: <strong>{pmhx.PMHX6}</strong><br></br><strong>{pmhx.PMHXShortAns6}</strong></p>
-                    </li>
-                    <li><p>Regular screening: <strong>{pmhx.PMHX8}</strong></p></li>
-                    <li><p>Reason for referral: <strong>{pmhx.PMHXShortAns12}</strong></p></li>
-                  </ul>
-                </li>
+                {pmhx ? (
+                  <li>
+                    <p>Past Medical History</p>
+                    <ul>
+                      <li><p>Chronic conditions: <strong>{pmhx.PMHX1}</strong></p></li>
+                      <li><p>Long term medications and compliance: <strong>{pmhx.PMHX2}</strong></p></li>
+                      <li>
+                        <p>Drug allergies: <strong>{pmhx.PMHX5}</strong><br></br><strong>{pmhx.PMHXShortAns5}</strong></p>
+                      </li>
+                      <li>
+                        <p>Alternative medicine: <strong>{pmhx.PMHX6}</strong><br></br><strong>{pmhx.PMHXShortAns6}</strong></p>
+                      </li>
+                      <li><p>Regular screening: <strong>{pmhx.PMHX8}</strong></p></li>
+                      <li><p>Reason for referral: <strong>{pmhx.PMHXShortAns12}</strong></p></li>
+                    </ul>
+                  </li>
                 ) : <p className='red'>nil pmhx data!</p>
-              }
+                }
 
-              {social ? (
-                <li>
-                  <p>Social History</p>
-                  <ul>
-                    <li>
-                      <p>Smoking: <strong>{social.SOCIAL10}</strong><br></br><strong>{social.SOCIALShortAns10}</strong></p>
-                      <p>Past Smoking: <strong>{social.SOCIAL11}</strong><br></br><strong>{social.SOCIALShortAns11}</strong></p>
-                    </li>
-                    <li><p>Alcohol: <strong>{social.SOCIAL12}</strong></p></li>
-                    <li><p>Exercise: <strong>{social.SOCIAL14}</strong></p></li>
-                  </ul>
-                </li>
+                {social ? (
+                  <li>
+                    <p>Social History</p>
+                    <ul>
+                      <li>
+                        <p>Smoking: <strong>{social.SOCIAL10}</strong><br></br><strong>{social.SOCIALShortAns10}</strong></p>
+                        <p>Past Smoking: <strong>{social.SOCIAL11}</strong><br></br><strong>{social.SOCIALShortAns11}</strong></p>
+                      </li>
+                      <li><p>Alcohol: <strong>{social.SOCIAL12}</strong></p></li>
+                      <li><p>Exercise: <strong>{social.SOCIAL14}</strong></p></li>
+                    </ul>
+                  </li>
                 ) : <p className='red'>nil social data!</p>
-              }
+                }
 
-              {family && family.FAMILY1 ? (
-                <li>
-                  <p>Family History</p>
-                  <ul>
-                    <li>
-                      <p>Cancers:</p>
-                      <ul>{family.FAMILY1.map(c => <li key = {c}>{c}</li>)}</ul>
-                    </li>
-                    <li>
-                      <p>Others: <strong>{family.FAMILY2}</strong></p>
-                    </li>
-                  </ul>
-                </li>
+                {family && family.FAMILY1 ? (
+                  <li>
+                    <p>Family History</p>
+                    <ul>
+                      <li>
+                        <p>Cancers:</p>
+                        <ul>{family.FAMILY1.map(c => <li key={c}>{c}</li>)}</ul>
+                      </li>
+                      <li>
+                        <p>Others: <strong>{family.FAMILY2}</strong></p>
+                      </li>
+                    </ul>
+                  </li>
                 ) : <p className='red'>nil family data!</p>
-              }
+                }
               </ul>
             </div>
           )}

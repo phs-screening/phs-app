@@ -53,25 +53,28 @@ const FitForm = (props) => {
   const [pmhx, setPMHX] = useState({})
   const [lung, setLung] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regiData = getSavedData(patientId, allForms.registrationForm)
-    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
-    const lungData = getSavedData(patientId, allForms.lungForm)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+      const lungData = getSavedData(patientId, allForms.lungForm)
+      setSaveData(savedData)
 
-    Promise.all([
-      savedData,
-      regiData,
-      pmhxData,
-      lungData
-    ]).then((result) => {
-      setSaveData(result[0])
-      setRegi(result[1])
-      setPMHX(result[2])
-      setLung(result[3])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([
+        savedData,
+        regiData,
+        pmhxData,
+        lungData
+      ]).then((result) => {
+        setSaveData(result[0])
+        setRegi(result[1])
+        setPMHX(result[2])
+        setLung(result[3])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
 
@@ -125,7 +128,7 @@ const FitForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>

@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import allForms from '../forms.json'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, LongTextField} from 'uniforms-mui'
+import { SubmitField, ErrorsField, RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB.js'
@@ -61,16 +61,18 @@ const geriInterForm = (props) => {
   const [regi, setRegi] = useState({})
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
 
-    const regiData = getSavedData(patientId, allForms.registrationForm)
-    Promise.all([regiData]).then((result) => {
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      Promise.all([regiData]).then((result) => {
         setRegi(result[0])
         isLoadingSidePanel(false)
-      }
-    )
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -102,7 +104,7 @@ const geriInterForm = (props) => {
     })
 
     setPoints(score)
-    
+
     return <p className='blue'>{score} / 9</p>
   }
 
@@ -139,7 +141,7 @@ const geriInterForm = (props) => {
         <GetScore />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>
@@ -147,30 +149,30 @@ const geriInterForm = (props) => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-    <Grid display='flex' flexDirection='row'>
-      <Grid xs={9}>
-        <Paper elevation={2} p={0} m={0}>
-          {newForm()}
-        </Paper>
+      <Grid display='flex' flexDirection='row'>
+        <Grid xs={9}>
+          <Paper elevation={2} p={0} m={0}>
+            {newForm()}
+          </Paper>
+        </Grid>
+        <Grid
+          p={1}
+          width='50%'
+          display='flex'
+          flexDirection='column'
+          alignItems={loadingSidePanel ? 'center' : 'left'}
+        >
+          {loadingSidePanel ? (
+            <CircularProgress />
+          ) : (
+            <div className='summary--question-div'>
+              <p>Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
+                (Patient has to sign and tick Form C)<br></br><strong>{regi.registrationQ19}</strong></p>
+            </div>
+          )}
+        </Grid>
       </Grid>
-      <Grid
-        p={1}
-        width='50%'
-        display='flex'
-        flexDirection='column'
-        alignItems={loadingSidePanel ? 'center' : 'left'}
-      >
-        {loadingSidePanel ? (
-          <CircularProgress />
-        ) : (
-          <div className='summary--question-div'>
-            <p>Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
-            (Patient has to sign and tick Form C)<br></br><strong>{regi.registrationQ19}</strong></p>
-          </div>
-        )}
-      </Grid>
-    </Grid>
-  </Paper>
+    </Paper>
   )
 }
 

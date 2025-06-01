@@ -39,20 +39,24 @@ const VaccineForm = (props) => {
 
   const [pmhx, setPMHXData] = useState({})
   const [regi, setRegi] = useState({})
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
 
-    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
-    const regiData = getSavedData(patientId, allForms.registrationForm)
-    Promise.all([
-      pmhxData,
-      regiData,
-    ]).then((result) => {
-      setPMHXData(result[0])
-      setRegi(result[1])
-      isLoadingSidePanel(false)
-    })
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+
+      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      Promise.all([
+        pmhxData,
+        regiData,
+      ]).then((result) => {
+        setPMHXData(result[0])
+        setRegi(result[1])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -94,7 +98,7 @@ const VaccineForm = (props) => {
         <RadioField name='VAX1' label='VAX1' options={formOptions.VAX1} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>

@@ -32,15 +32,15 @@ import { useField } from 'uniforms'
 import PopupText from 'src/utils/popupText.js'
 
 const postalCodeToLocations = {
-  648886: 
+  648886:
     'Dr Koo & Loo Associate, +65 6792 2669: 1 Jurong West Central 2, 01-16a&b Jurong Point, S648886',
-  610064: 
+  610064:
     'Drs Tangs & Partner, +65 6265 6077: Blk 64, Yung Kuang Rd #01- 115, S610064',
-  640638: 
+  640638:
     'Healthmark Pionner Mall, +65 6861 3100: Blk 638, Jurong West St 61 Pioneer Mall #02-08, S640638',
-  641518: 
+  641518:
     'Lakeside FMC, +65 6262 6434: Blk 518A, Jurong West St 52 #01-02, S641518',
-  640762: 
+  640762:
     'Lee Family Clinic, +65 6794 0217: Blk 762 Jurong West St 75 #02-262 Gek Poh Shopping Ctr, S640762',
   None: 'None',
 }
@@ -64,24 +64,27 @@ const RegForm = () => {
   const [slots, setSlots] = useState(defaultSlots)
   const [patientAge, setPatientAge] = useState(0)
 
-  useEffect(async () => {
-    console.log('Patient ID: ' + patientId) //patientID == -1, if registration of new patient
-    const savedData = await getSavedData(patientId, formName)
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('Patient ID: ' + patientId) //patientID == -1, if registration of new patient
+      const savedData = await getSavedData(patientId, formName)
 
-    const phlebCountersCollection = getClinicSlotsCollection()
-    const phlebCounters = await phlebCountersCollection.find()
-    const temp = { ...defaultSlots }
-    for (const { postalCode, counterItems } of phlebCounters) {
-      if (postalCode && counterItems) {
-        temp[postalCode] -= counterItems.length
+      const phlebCountersCollection = getClinicSlotsCollection()
+      const phlebCounters = await phlebCountersCollection.find()
+      const temp = { ...defaultSlots }
+      for (const { postalCode, counterItems } of phlebCounters) {
+        if (postalCode && counterItems) {
+          temp[postalCode] -= counterItems.length
+        }
       }
+      if (patientId == -1) {
+        // only when registration of new patient
+        savedData.registrationQ3 = birthday
+      }
+      setSlots(temp)
+      setSaveData(savedData)
     }
-    if (patientId == -1) {
-      // only when registration of new patient
-      savedData.registrationQ3 = birthday
-    }
-    setSlots(temp)
-    setSaveData(savedData)
+    fetchData()
   }, [])
 
   const displayVacancy = Object.entries(slots).map(([postalCode, n], i) => {
@@ -510,7 +513,7 @@ const RegForm = () => {
     >
       {form_layout}
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

@@ -71,10 +71,15 @@ const GeriTugForm = (props) => {
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
+
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -110,8 +115,8 @@ const GeriTugForm = (props) => {
           <TextField name='geriTugQ2' label='Geri - TUG Q2' />
         </PopupText>
         Time taken (in seconds):
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='geriTugQ3' label='Geri - TUG Q3' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" name='geriTugQ3' label='Geri - TUG Q3' />
         <br />
         Failed SLBT?
         <RadioField name='geriTugQ4' label='Geri - TUG Q4' />
@@ -123,7 +128,7 @@ const GeriTugForm = (props) => {
         <RadioField name='geriTugQ5' label='Geri - TUG Q5' />
       </Fragment>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

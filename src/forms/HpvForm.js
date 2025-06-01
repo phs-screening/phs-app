@@ -35,10 +35,12 @@ const HpvForm = () => {
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -83,7 +85,7 @@ const HpvForm = () => {
         />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

@@ -80,14 +80,16 @@ const LungFnForm = (props) => {
 
   const [social, setSocial] = useState({})
 
-  useEffect(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
     const savedData = getSavedData(patientId, formName)
     const socialData = getSavedData(patientId, allForms.hxSocialForm)
     Promise.all([savedData, socialData]).then((result) => {
       setSaveData(result[0])
       setSocial(result[1])
       isLoadingSidePanel(false)
-    })
+    })}
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -119,19 +121,19 @@ const LungFnForm = (props) => {
     const [{ value: lung7 }] = useField('LUNG7', {})
 
     if ((lung5 >= 80) && (lung7 < 70)) {
-      const typeOfLung = "Obstructive Defect" 
+      const typeOfLung = "Obstructive Defect"
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
     } else if ((lung5 < 80) && (lung7 < 70)) {
-      const typeOfLung = "Mixed Pattern" 
+      const typeOfLung = "Mixed Pattern"
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
     } else if ((lung5 < 80) && (lung7 >= 70)) {
-      const typeOfLung = "Restrictive Defect" 
+      const typeOfLung = "Restrictive Defect"
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
     } else if ((lung5 >= 80) && (lung7 >= 70)) {
-      const typeOfLung = "Normal" 
+      const typeOfLung = "Normal"
       setLungType(typeOfLung)
       return <p className='blue'>{typeOfLung}</p>
     } else {

@@ -60,7 +60,7 @@ function generateStatusObject(record) {
       nkf: record.nkfForm !== undefined,
       mentalhealth: record.mentalHealthForm !== undefined,
       vax: record.vaccineForm !== undefined,
-      gericog: 
+      gericog:
         record.geriAmtForm !== undefined &&
         record.geriGraceForm !== undefined &&
         record.geriWhForm !== undefined &&
@@ -99,7 +99,7 @@ const BasicTimeline = (props) => {
   const [admin, isAdmins] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
 
-  useEffect(async () => {
+  useEffect(() => {
     const createFormsStatus = async () => {
       try {
         const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
@@ -114,6 +114,7 @@ const BasicTimeline = (props) => {
         }
         setFormDone(generateStatusObject(record))
         setLoading(false)
+        isAdmins(await isAdmin())
       } catch (err) {
         alert(err)
         console.log("error is here")
@@ -121,7 +122,6 @@ const BasicTimeline = (props) => {
       }
     }
     createFormsStatus()
-    isAdmins(await isAdmin())
   }, [navigate, props.patientId])
   if (loading) {
     return (
@@ -202,13 +202,13 @@ const BasicTimeline = (props) => {
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-              <a
-                href='/app/phlebo'
-                onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
-              >
-                Phlebotomy
-                {!formDone?.phlebo ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
-              </a>
+            <a
+              href='/app/phlebo'
+              onClick={(event) => navigateTo(event, navigate, 'phlebo', scrollTop)}
+            >
+              Phlebotomy
+              {!formDone?.phlebo ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+            </a>
           </TimelineContent>
         </TimelineItem>
 
@@ -395,7 +395,7 @@ const BasicTimeline = (props) => {
             </a>
           </TimelineContent>
         </TimelineItem>
-        
+
         <TimelineItem>
           <TimelineSeparator>
             {formDone?.doctorsconsult ? (
@@ -451,7 +451,7 @@ const BasicTimeline = (props) => {
             </a>
           </TimelineContent>
         </TimelineItem>
-        
+
         <TimelineItem>
           <TimelineSeparator>
             {formDone?.socialservice ? (

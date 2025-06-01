@@ -49,22 +49,25 @@ const NkfForm = (props) => {
   const [hxfamily, setHxFamily] = useState({})
   const [pmhx, setPMHXData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
 
-    const regData = getSavedData(patientId, allForms.registrationForm)
-    const triageData = getSavedData(patientId, allForms.triageForm)
-    const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
-    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+      const regData = getSavedData(patientId, allForms.registrationForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
+      const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
+      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
 
-    Promise.all([regData,triageData,hxFamilyData,pmhxData]).then((result) => {
-      setReg(result[0])
-      setTriage(result[1])
-      setHxFamily(result[2])
-      setPMHXData(result[3])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([regData, triageData, hxFamilyData, pmhxData]).then((result) => {
+        setReg(result[0])
+        setTriage(result[1])
+        setHxFamily(result[2])
+        setPMHXData(result[3])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -115,7 +118,7 @@ const NkfForm = (props) => {
         </p>
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

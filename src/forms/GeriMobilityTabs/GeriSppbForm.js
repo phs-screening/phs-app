@@ -108,9 +108,12 @@ const GeriSppbForm = (props) => {
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -236,7 +239,7 @@ const GeriSppbForm = (props) => {
         <LongTextField name='geriSppbQ12' label='Geri - SPPB Q12' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

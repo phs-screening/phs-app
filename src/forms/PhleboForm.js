@@ -28,19 +28,22 @@ const schema = new SimpleSchema({
   },
 })
 
+const form_schema = new SimpleSchema2Bridge(schema)
+
 const formName = 'phlebotomyForm'
 
 const PhleboForm = () => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const newForm = () => (
@@ -62,7 +65,7 @@ const PhleboForm = () => {
         }
         isLoading(false)
       }}
-      model={saveData}
+      model={saveData || {}}
     >
       <div className='form--div'>
         <h1>Phlebotomy</h1>
@@ -73,11 +76,13 @@ const PhleboForm = () => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>
   )
+
+  if (!form_schema) return <CircularProgress />
 
   return (
     <Paper elevation={2} p={0} m={0}>

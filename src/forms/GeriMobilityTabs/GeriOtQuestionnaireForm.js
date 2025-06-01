@@ -231,17 +231,17 @@ const GetScores = () => {
       <b>Yes (calculated):</b> {score[0]}
       <br />
       <b>Yes :</b>
-      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='geriOtQuestionnaireQ29' label='geriOtQuestionnaire-Q29' step={1} />
+      <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+        type="number" name='geriOtQuestionnaireQ29' label='geriOtQuestionnaire-Q29' step={1} />
       <b>No (calculated):</b> {score[1]}
       <br />
       <b>No :</b>
-      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='geriOtQuestionnaireQ30' label='geriOtQuestionnaire-Q30' step={1} />
+      <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+        type="number" name='geriOtQuestionnaireQ30' label='geriOtQuestionnaire-Q30' step={1} />
       <b>NA (calculated):</b> {score[2]} <br />
       <b>NA :</b>
-      <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='geriOtQuestionnaireQ31' label='geriOtQuestionnaire-Q31' step={1} />
+      <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+        type="number" name='geriOtQuestionnaireQ31' label='geriOtQuestionnaire-Q31' step={1} />
     </div>
   )
 }
@@ -259,18 +259,21 @@ const GeriOtQuestionnaireForm = (props) => {
   const [social, setSocial] = useState({})
   const [triage, setTriage] = useState({})
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regData = getSavedData(patientId, allForms.registrationForm)
-    const triageData = getSavedData(patientId, allForms.triageForm)
-    const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-    Promise.all([savedData, regData, triageData, hxSocialData]).then((result) => {
-      setSaveData(result[0])
-      setReg(result[1])
-      setTriage(result[2])
-      setSocial(result[3])
-      isLoadingSidePanel(false)
-    })
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regData = getSavedData(patientId, allForms.registrationForm)
+      const triageData = getSavedData(patientId, allForms.triageForm)
+      const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+      Promise.all([savedData, regData, triageData, hxSocialData]).then((result) => {
+        setSaveData(result[0])
+        setReg(result[1])
+        setTriage(result[2])
+        setSocial(result[3])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -815,7 +818,7 @@ const GeriOtQuestionnaireForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

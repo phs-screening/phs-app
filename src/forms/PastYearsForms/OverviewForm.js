@@ -44,21 +44,25 @@ const OverviewForm = (props) => {
   const [nss, setNss] = useState({})
   const [social, setSocial] = useState({})
   const [cancer, setCancer] = useState({})
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    const loadPastForms = async () => {
-      const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm)
-      const nssData = await getSavedData(patientId, allForms.hxNssForm)
-      const socialData = await getSavedData(patientId, allForms.hxSocialForm)
-      const cancerData = await getSavedData(patientId, allForms.hxCancerForm)
-      setHcsr(hcsrData)
-      setNss(nssData)
-      setSocial(socialData)
-      setCancer(cancerData)
-      isLoadingPrevData(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      const loadPastForms = async () => {
+        const hcsrData = await getSavedData(patientId, allForms.hxHcsrForm)
+        const nssData = await getSavedData(patientId, allForms.hxNssForm)
+        const socialData = await getSavedData(patientId, allForms.hxSocialForm)
+        const cancerData = await getSavedData(patientId, allForms.hxCancerForm)
+        setHcsr(hcsrData)
+        setNss(nssData)
+        setSocial(socialData)
+        setCancer(cancerData)
+        isLoadingPrevData(false)
+      }
+      setSaveData(savedData)
+      loadPastForms()
     }
-    setSaveData(savedData)
-    loadPastForms()
+    fetchData()
   }, [])
 
   const newForm = () => (
@@ -83,7 +87,7 @@ const OverviewForm = (props) => {
       model={saveData}
     >
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

@@ -25,15 +25,18 @@ const PreregForm = (props) => {
   const form_layout = layout
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getPreRegDataById(patientId, formName)
-    if (!(await isAdmin())) {
-      if ('initials' in savedData) {
-        alert('You are not an admin!')
-        navigate('/app/dashboard', { replace: true })
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getPreRegDataById(patientId, formName)
+      if (!(await isAdmin())) {
+        if ('initials' in savedData) {
+          alert('You are not an admin!')
+          navigate('/app/dashboard', { replace: true })
+        }
       }
+      setSaveData(savedData)
     }
-    setSaveData(savedData)
+    fetchData()
   }, [])
 
   const newForm = () => (
@@ -82,7 +85,7 @@ const PreregForm = (props) => {
       model={saveData}
     >
       {form_layout}
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

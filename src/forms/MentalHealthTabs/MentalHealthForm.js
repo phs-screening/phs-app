@@ -50,20 +50,23 @@ const MentalHealthForm = () => {
   const [doc, setDoc] = useState({})
   const [phq, setPHQ] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
 
-    const regData = getSavedData(patientId, allForms.registrationForm)
-    // const docData = getSavedData(patientId, allForms.triageForm)
-    const phqData = getSavedData(patientId, allForms.geriPhqForm)
+      const regData = getSavedData(patientId, allForms.registrationForm)
+      // const docData = getSavedData(patientId, allForms.triageForm)
+      const phqData = getSavedData(patientId, allForms.geriPhqForm)
 
-    Promise.all([regData,phqData]).then((result) => {
-      setReg(result[0]),
-      // setHxFamily(result[1])
-      setPHQ(result[1])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([regData, phqData]).then((result) => {
+        setReg(result[0]),
+          // setHxFamily(result[1])
+          setPHQ(result[1])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const GetScore = () => {
@@ -158,7 +161,7 @@ const MentalHealthForm = () => {
         <RadioField name='SAMH2' label='SAMH2' options={formOptions.SAMH2} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

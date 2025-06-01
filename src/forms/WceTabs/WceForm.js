@@ -76,29 +76,29 @@ function CheckHpvEligibility(props) {
   const [{ value: wceQ12p }] = useField(props.wceQ12p, {})
 
   if (
-    (wceQ8p == '5 years or longer' || wceQ8p == 'Never before') && 
-    (wceQ9p == 'Yes') && 
-    (wceQ10p == 'No') && 
+    (wceQ8p == '5 years or longer' || wceQ8p == 'Never before') &&
+    (wceQ9p == 'Yes') &&
+    (wceQ10p == 'No') &&
     (wceQ11p == '3 years or longer' || wceQ11p == 'Never before')) {
-      if (wceQ12p == 'Yes') {
-        return (
-          <Fragment>
-            <p className='blue'>Patient is eligibile for HPV Test at both off-site clinic site and on-site</p>
-          </Fragment>
-        )
-      } else if (wceQ12p == 'No') {
-        return (
-          <Fragment>
-            <p className='blue'>Patient is eligibile for HPV Test only at off-site clinic site</p>
-          </Fragment>
-        )
-      } else {
-        return ( //just in case there is some error
-          <Fragment>
-            <p className='red'>ERROR</p> 
-          </Fragment>
-        )
-      }
+    if (wceQ12p == 'Yes') {
+      return (
+        <Fragment>
+          <p className='blue'>Patient is eligibile for HPV Test at both off-site clinic site and on-site</p>
+        </Fragment>
+      )
+    } else if (wceQ12p == 'No') {
+      return (
+        <Fragment>
+          <p className='blue'>Patient is eligibile for HPV Test only at off-site clinic site</p>
+        </Fragment>
+      )
+    } else {
+      return ( //just in case there is some error
+        <Fragment>
+          <p className='red'>ERROR</p>
+        </Fragment>
+      )
+    }
   } else {
     return (
       <Fragment>
@@ -122,21 +122,24 @@ const WceForm = (props) => {
   const [hxFamily, setHxFamily] = useState({})
   const { changeTab, nextTab } = props
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const regData = getSavedData(patientId, allForms.registrationForm)
-    const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-    const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
-    const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const regData = getSavedData(patientId, allForms.registrationForm)
+      const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+      const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
+      const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
 
-    Promise.all([savedData, regData, hxSocialData, hxCancerData, hxFamilyData]).then((result) => {
-      setSaveData(result[0])
-      setReg(result[1])
-      setHxSocial(result[2])
-      setHxCancer(result[3])
-      setHxFamily(result[4])
-      isLoadingSidePanel(false)
-    })
+      Promise.all([savedData, regData, hxSocialData, hxCancerData, hxFamilyData]).then((result) => {
+        setSaveData(result[0])
+        setReg(result[1])
+        setHxSocial(result[2])
+        setHxCancer(result[3])
+        setHxFamily(result[4])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -176,13 +179,13 @@ const WceForm = (props) => {
         label: 'Never before',
         value: 'Never before',
       },
-      { 
-        label: 'Less than 5 years', 
-        value: 'Less than 5 years' 
+      {
+        label: 'Less than 5 years',
+        value: 'Less than 5 years'
       },
-      { 
-        label: '5 years or longer', 
-        value: '5 years or longer' 
+      {
+        label: '5 years or longer',
+        value: '5 years or longer'
       },
     ],
     wceQ9: [
@@ -204,13 +207,13 @@ const WceForm = (props) => {
         label: 'Never before',
         value: 'Never before',
       },
-      { 
-        label: 'Within the last 3 years', 
-        value: 'Within the last 3 years' 
+      {
+        label: 'Within the last 3 years',
+        value: 'Within the last 3 years'
       },
-      { 
-        label: '3 years or longer', 
-        value: '3 years or longer' 
+      {
+        label: '3 years or longer',
+        value: '3 years or longer'
       },
     ],
     wceQ12: [
@@ -275,10 +278,10 @@ const WceForm = (props) => {
         </h3>
         <RadioField name='wceQ7' label='WCE Q7' options={formOptions.wceQ7} />
         <h3>HPV Test Eligibility</h3>
-        <CheckHpvEligibility wceQ8p='wceQ8' wceQ9p='wceQ9' wceQ10p='wceQ10' wceQ11p='wceQ11' wceQ12p='wceQ12'/>
+        <CheckHpvEligibility wceQ8p='wceQ8' wceQ9p='wceQ9' wceQ10p='wceQ10' wceQ11p='wceQ11' wceQ12p='wceQ12' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />
@@ -333,7 +336,7 @@ const WceForm = (props) => {
 
               <h2>Family History</h2>
               <p className='underlined'>Is there positive family history{' '}
-              <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following cancers?:</p>
+                <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following cancers?:</p>
               {hxFamily && hxFamily.FAMILY1 ? (
                 <p className='blue'>{hxFamily.FAMILY1}</p>
               ) : (

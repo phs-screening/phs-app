@@ -96,24 +96,27 @@ const GeriOtConsultForm = (props) => {
   const { changeTab, nextTab } = props
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = getSavedData(patientId, formName)
-    const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
-    const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
-    const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
-    const geriTugData = getSavedData(patientId, allForms.geriTugForm)
-    
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = getSavedData(patientId, formName)
+      const geriVisionData = getSavedData(patientId, allForms.geriVisionForm)
+      const geriOtQData = getSavedData(patientId, allForms.geriOtQuestionnaireForm)
+      const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
+      const geriTugData = getSavedData(patientId, allForms.geriTugForm)
 
-    Promise.all([savedData, geriVisionData, geriOtQData, geriSppbData, geriTugData]).then(
-      (result) => {
-        setSaveData(result[0])
-        setGeriVision(result[1])
-        setGeriOtQ(result[2])
-        setGeriSppb(result[3])
-        setGeriTug(result[4])
-        isLoadingSidePanel(false)
-      },
-    )
+
+      Promise.all([savedData, geriVisionData, geriOtQData, geriSppbData, geriTugData]).then(
+        (result) => {
+          setSaveData(result[0])
+          setGeriVision(result[1])
+          setGeriOtQ(result[2])
+          setGeriSppb(result[3])
+          setGeriTug(result[4])
+          isLoadingSidePanel(false)
+        },
+      )
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -232,7 +235,7 @@ const GeriOtConsultForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>

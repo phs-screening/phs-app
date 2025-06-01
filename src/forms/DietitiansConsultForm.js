@@ -68,22 +68,25 @@ const DietitiansConsultForm = (props) => {
   const [triage, setTriage] = useState({})
   const [hxSocial, setSocial] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    const loadPastForms = async () => {
-      const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-      const triageData = getSavedData(patientId, allForms.triageForm)
-      const socialData = getSavedData(patientId, allForms.hxSocialForm)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      const loadPastForms = async () => {
+        const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
+        const triageData = getSavedData(patientId, allForms.triageForm)
+        const socialData = getSavedData(patientId, allForms.hxSocialForm)
 
-      Promise.all([doctorConsultData, triageData, socialData]).then((result) => {
-        setDoctorConsult(result[0])
-        setTriage(result[1])
-        setSocial(result[2])
-      })
-      isLoadingSidePanel(false)
+        Promise.all([doctorConsultData, triageData, socialData]).then((result) => {
+          setDoctorConsult(result[0])
+          setTriage(result[1])
+          setSocial(result[2])
+        })
+        isLoadingSidePanel(false)
+      }
+      setSaveData(savedData)
+      loadPastForms()
     }
-    setSaveData(savedData)
-    loadPastForms()
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -158,7 +161,7 @@ const DietitiansConsultForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>

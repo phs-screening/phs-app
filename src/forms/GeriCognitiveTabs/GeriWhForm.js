@@ -38,9 +38,12 @@ const GeriWhForm = (props) => {
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -50,7 +53,7 @@ const GeriWhForm = (props) => {
         value: 'Yes',
       },
       { label: 'No', value: 'No' },
-      
+
     ],
   }
 
@@ -87,7 +90,7 @@ const GeriWhForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <Divider />
     </AutoForm>

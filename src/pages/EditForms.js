@@ -13,11 +13,14 @@ const ManageVolunteers = () => {
     queueNumber: 1,
   })
 
-  useEffect(async () => {
-    if (!(await isAdmin())) {
-      alert('Only Admins have access to this Page!')
-      navigate('/app/registration', { replace: true })
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!(await isAdmin())) {
+        alert('Only Admins have access to this Page!')
+        navigate('/app/registration', { replace: true })
+      }
     }
+    fetchData()
   }, [])
 
   const handleChange = (event) => {

@@ -77,25 +77,30 @@ const OralHealthForm = () => {
   const [hxOral, setHxOral] = useState({})
   const [social, setSocial] = useState({})
   const [pmhx, setPMHX] = useState({})
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
 
-    const dcData = getSavedData(patientId, allForms.doctorConsultForm)
-    const regiData = getSavedData(patientId, allForms.registrationForm)
-    const hxOralData = getSavedData(patientId, allForms.hxOralForm)
-    const socialData = getSavedData(patientId, allForms.hxSocialForm)
-    const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
 
-    Promise.all([dcData, regiData, hxOralData, socialData, pmhxData]).then((result) => {
-      setDoctorConsult(result[0])
-      setRegi(result[1])
-      setHxOral(result[2])
-      setSocial(result[3])
-      setPMHX(result[4])
-      isLoadingSidePanel(false)
-    })
+      const dcData = getSavedData(patientId, allForms.doctorConsultForm)
+      const regiData = getSavedData(patientId, allForms.registrationForm)
+      const hxOralData = getSavedData(patientId, allForms.hxOralForm)
+      const socialData = getSavedData(patientId, allForms.hxSocialForm)
+      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
+
+      Promise.all([dcData, regiData, hxOralData, socialData, pmhxData]).then((result) => {
+        setDoctorConsult(result[0])
+        setRegi(result[1])
+        setHxOral(result[2])
+        setSocial(result[3])
+        setPMHX(result[4])
+        isLoadingSidePanel(false)
+      })
+    }
+    fetchData()
   }, [])
+
   const formOptions = {
     DENT1: [
       {
@@ -210,7 +215,7 @@ const OralHealthForm = () => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />

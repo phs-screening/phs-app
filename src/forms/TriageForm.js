@@ -114,7 +114,7 @@ function CalcAvg(props) {
   let ans
 
   if (sys3 == null) {
-    ans = Math.round((sys1+sys2)/2)
+    ans = Math.round((sys1 + sys2) / 2)
     if (name == 1) {
       calSyst = ans
     } else {
@@ -122,30 +122,30 @@ function CalcAvg(props) {
     }
     return ans
   } else {
-    let diff1 = Math.abs(sys1-sys2)
-    let diff2 = Math.abs(sys1-sys3)
-    let diff3 = Math.abs(sys3-sys2)
+    let diff1 = Math.abs(sys1 - sys2)
+    let diff2 = Math.abs(sys1 - sys3)
+    let diff3 = Math.abs(sys3 - sys2)
 
     const diffArray = [diff1, diff2, diff3]
 
     diffArray.sort(compareNumbers);
 
     if (diffArray[0] == diff1) {
-      ans = Math.round((sys1+sys2)/2)
+      ans = Math.round((sys1 + sys2) / 2)
       if (name == 1) {
         calSyst = ans
       } else {
         calDias = ans
       }
     } else if (diffArray[0] == diff2) {
-      ans = Math.round((sys1+sys3)/2)
+      ans = Math.round((sys1 + sys3) / 2)
       if (name == 1) {
         calSyst = ans
       } else {
         calDias = ans
       }
     } else {
-      ans = Math.round((sys2+sys3)/2)
+      ans = Math.round((sys2 + sys3) / 2)
       if (name == 1) {
         calSyst = ans
       } else {
@@ -165,9 +165,12 @@ const TriageForm = () => {
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
 
-  useEffect(async () => {
-    const savedData = await getSavedData(patientId, formName)
-    setSaveData(savedData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const savedData = await getSavedData(patientId, formName)
+      setSaveData(savedData)
+    }
+    fetchData()
   }, [])
 
   const formOptions = {
@@ -216,41 +219,41 @@ const TriageForm = () => {
           minutes.)
         </p>
         <h3>1st Reading Systolic (units in mmHg)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ1' label='Triage Q1' /> 
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ1' label='Triage Q1' />
         <h3>1st Reading Diastolic (units in mmHg)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ2' label='Triage Q2' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ2' label='Triage Q2' />
         <IsHighBP systolic_qn='triageQ1' diastolic_qn='triageQ2' />
         <h3>2nd Reading Systolic (units in mmHg)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ3' label='Triage Q3' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ3' label='Triage Q3' />
         <h3>2nd Reading Diastolic (units in mmHg)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ4' label='Triage Q4' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ4' label='Triage Q4' />
         <IsHighBP systolic_qn='triageQ3' diastolic_qn='triageQ4' />
         <h4>
           3rd Reading Systolic (ONLY if 1st and 2nd systolic reading differ by <b>&gt;5mmHg</b>)
         </h4>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ5' label='Triage Q5' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ5' label='Triage Q5' />
         <h4>3rd Reading Diastolic (ONLY if 1st and 2nd diastolic reading differ by &gt;5mmHg)</h4>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ6' label='Triage Q6' />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ6' label='Triage Q6' />
         <IsHighBP systolic_qn='triageQ5' diastolic_qn='triageQ6' />
 
         <h3>Average Reading Systolic (average of closest 2 readings):</h3>
-        <RadioField name='triageQ7'/>
+        <RadioField name='triageQ7' />
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5'/>
+          <CalcAvg label={1} reading1='triageQ1' reading2='triageQ3' reading3='triageQ5' />
         </h3>
         <br />
         <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
-        <RadioField name='triageQ8'/>
+        <RadioField name='triageQ8' />
         <h3>
           Calculated Average: &nbsp;
-          <CalcAvg label={2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6'/>
+          <CalcAvg label={2} reading1='triageQ2' reading2='triageQ4' reading3='triageQ6' />
         </h3>
         <br />
         <h3>Hypertension criteria:</h3>
@@ -351,22 +354,22 @@ const TriageForm = () => {
         </PopupText> */}
         <h2>2) BMI</h2>
         <h3>Height (in cm)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ10' label='Triage Q10' /> <br />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ10' label='Triage Q10' /> <br />
         <h3>Weight (in kg)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ11' label='Triage Q11' /> <br />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ11' label='Triage Q11' /> <br />
         <h3>
           BMI: <CalcBMI />
         </h3>
         <h2>3) Waist Circumference (all participants)</h2>
         <h3>Waist Circumference (in cm)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='triageQ13' label='Triage Q13' /> <br />
+        <NumField sx={{ "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": { display: "none", }, "& input[type=number]": { MozAppearance: "textfield", }, }}
+          type="number" min={0} name='triageQ13' label='Triage Q13' /> <br />
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
 
       <br />
       <Divider />
