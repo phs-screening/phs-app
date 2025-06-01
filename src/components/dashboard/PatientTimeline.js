@@ -506,22 +506,27 @@ const BasicTimeline = (props) => {
   }
 }
 
-const PatientTimeline = (props) => (
-  <Card {...props}>
-    <CardHeader title='Patient Dashboard' />
-    <Divider />
-    <CardContent>
-      <Box
-        sx={{
-          height: 'auto',
-          position: 'relative',
-        }}
-      >
-        <BasicTimeline patientId={props.patientId} />
-      </Box>
-    </CardContent>
-    <Divider />
-  </Card>
-)
+
+
+const PatientTimeline = (props) => {
+  const { patientId, ...cardProps } = props
+  return (
+    <Card {...cardProps}>
+      <CardHeader title='Patient Dashboard' />
+      <Divider />
+      <CardContent>
+        <Box
+          sx={{
+            height: 'auto',
+            position: 'relative',
+          }}
+        >
+          <BasicTimeline patientId={patientId} />
+        </Box>
+      </CardContent>
+      <Divider />
+    </Card>
+  )
+}
 
 export default PatientTimeline

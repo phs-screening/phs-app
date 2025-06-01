@@ -7,11 +7,9 @@ import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
+import { AutoForm, BoolField, SubmitField, ErrorsField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { BoolField } from 'uniforms-mui'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
@@ -28,7 +26,7 @@ const schema = new SimpleSchema({
   },
 })
 
-const form_schema = new SimpleSchema2Bridge(schema)
+const bridge = new SimpleSchema2Bridge(schema)
 
 const formName = 'phlebotomyForm'
 
@@ -48,7 +46,7 @@ const PhleboForm = () => {
 
   const newForm = () => (
     <AutoForm
-      schema={form_schema}
+      schema={bridge}
       className='fieldPadding'
       onSubmit={async (model) => {
         isLoading(true)
@@ -65,7 +63,7 @@ const PhleboForm = () => {
         }
         isLoading(false)
       }}
-      model={saveData || {}}
+      model={saveData}
     >
       <div className='form--div'>
         <h1>Phlebotomy</h1>
@@ -82,15 +80,11 @@ const PhleboForm = () => {
     </AutoForm>
   )
 
-  if (!form_schema) return <CircularProgress />
-
   return (
-    <Paper elevation={2} p={0} m={0}>
+    <Paper elevation={2} sx={{ p: 0, m: 0 }}>
       {newForm()}
     </Paper>
   )
 }
-
-PhleboForm.contextType = FormContext
 
 export default PhleboForm
