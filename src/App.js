@@ -1,7 +1,6 @@
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import { useRoutes } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material'
-import 'src/mixins/chartjs'
 import routes from 'src/routes'
 import React, { useContext, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
