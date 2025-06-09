@@ -100,14 +100,20 @@ const RegisterPatient = (props) => {
   }
   const handleSubmitPatientName = async () => {
     setIsLoadingPatientName(true)
-    const value = values.selectedValue.initials
-    const data = await getPreRegDataByName(value, 'patients')
-    if ('initials' in data) {
-      updatePatientInfo(data)
-      setIsLoadingPatientName(false)
-      navigate('/app/dashboard', { replace: true })
+    const value = values.selectedValue?.initials
+    if (value) {
+      const data = await getPreRegDataByName(value, 'patients')
+      console.log('Value', value)
+      if ('initials' in data) {
+        updatePatientInfo(data)
+        setIsLoadingPatientName(false)
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        alert('Unsuccessful. There is no patient with this name.')
+        setIsLoadingPatientName(false)
+      }
     } else {
-      alert('Unsuccessful. There is no patient with this name.')
+      alert('Unsuccessful. Please enter patient name.')
       setIsLoadingPatientName(false)
     }
   }
@@ -148,9 +154,10 @@ const RegisterPatient = (props) => {
             variant='outlined'
             onChange={handleQueueNumberInput}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') { //default it here
-                handleSubmitQueueNumber();
-              } 
+              if (e.key === 'Enter') {
+                //default it here
+                handleSubmitQueueNumber()
+              }
             }}
             sx={{ marginTop: '5px', marginBottom: '5px' }}
           />
