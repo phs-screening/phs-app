@@ -1,10 +1,11 @@
 import React from 'react'
 import mongoDB, { getName, isAdmin, getClinicSlotsCollection } from '../services/mongoDB'
 import { jsPDF } from 'jspdf'
+import { autoTable } from "jspdf-autotable";
 import { defaultSlots } from 'src/forms/RegForm'
 import logo from 'src/icons/Icon'
 import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
-import 'jspdf-autotable'
+//import 'jspdf-autotable'
 import { parseFromLangKey, setLang } from './langutil'
 
 const axios = require('axios').default
@@ -599,7 +600,7 @@ export function addBmi(doc, k, height, weight) {
   , 40))
   doc.setFontSize(original_font_size)
 
-  doc.autoTable({
+  autoTable(doc, {
     theme: 'plain',
     styles: {
       font: doc.getFont().fontName,
@@ -717,7 +718,7 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
 
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_lung"))
   k++
-  doc.autoTable({
+  autoTable(doc,{
     theme: 'plain',
     styles: {
       font: doc.getFont().fontName,
@@ -756,7 +757,7 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
   // EYE
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
   k++
-  doc.autoTable({
+  autoTable(doc,{
     theme: 'plain',
     styles: {
       font: doc.getFont().fontName,
@@ -923,7 +924,7 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   var ot = parseFromLangKey("memo_ot")
     + `${otData.geriOtConsultQ1}`
 
-  doc.autoTable({
+  autoTable(doc,{
     theme: 'grid',
     styles: {
       font: doc.getFont().fontName,
