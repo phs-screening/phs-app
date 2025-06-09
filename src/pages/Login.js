@@ -5,6 +5,8 @@ import mongoDB, { hashPassword, profilesCollection } from '../services/mongoDB'
 import * as Realm from 'realm-web'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
+import Link from '@mui/material/Link'
+import CircularProgress from '@mui/material/CircularProgress'
 import {
   Box,
   Button,
@@ -26,8 +28,50 @@ const Login = () => {
   const { setProfile } = useContext(LoginContext)
   const [loading, isLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const handleMouseDownPassword = () => setShowPassword(!showPassword)
+
+
+  // we need to allow anonymous users to sign up(settle in mongoDB)
+  const handleSignUp = async (values) => {
+    isLoading(true)
+    try {
+      // Log in as anonymous user if not already logged in
+      if (!mongoDB.currentUser) {
+        const credentials = Realm.Credentials.anonymous();
+        await mongoDB.logIn(credentials);
+      }
+      const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas');
+      const guestProfiles = mongoConnection.db('phs').collection('profiles');
+      const searchUnique = await guestProfiles.findOne({ username: values.email });
+      if (searchUnique === null) {
+        if (values.password.length < 6) {
+          alert('Password must contain at least one six characters!');
+          isLoading(false);
+        } else {
+          const hashHex = await hashPassword(values.password);
+          await guestProfiles.insertOne({
+            username: values.email,
+            email: values.email,
+            password: hashHex,
+            is_admin: false,
+            lastLogin: null,
+          });
+          alert('Account Created: ' + values.email + '\nYou can now sign in.');
+          setTimeout(() => setIsSignUp(false), 1500);
+          isLoading(false);
+        }
+      } else {
+        alert('Username ' + values.email + ' taken! Try another username!');
+        isLoading(false);
+      }
+    } catch (e) {
+      alert('Contact Developer: ' + e);
+      isLoading(false);
+    }
+  }
+
 
   const handleLogin = async (values) => {
     try {
@@ -83,9 +127,9 @@ const Login = () => {
   }
 
   return (
-    <>
+     <>
       <Helmet>
-        <title>Login</title>
+        <title>{isSignUp ? 'Sign up' : 'Login'}</title>
       </Helmet>
       <Box
         sx={{
@@ -101,13 +145,29 @@ const Login = () => {
             initialValues={{
               email: '',
               password: '',
+              confirmPassword: '',
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().max(255).required('Username is required'),
-              password: Yup.string().max(255).required('Password is required'),
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Username is required, you can use your email'),
+              password: Yup.string()
+                .min(6, 'Password must be at least 6 characters')
+                .max(255)
+                .required('Password is required'),
+              ...(isSignUp && {
+                confirmPassword: Yup.string()
+                  .oneOf([Yup.ref('password'), null], 'Passwords must match')
+                  .required('Confirm Password is required'),
+              }),
             })}
             onSubmit={(values) => {
-              handleLogin(values)
+              if (isSignUp) {
+                handleSignUp(values)
+              } else {
+                handleLogin(values)
+              }
             }}
           >
             {({
@@ -122,27 +182,26 @@ const Login = () => {
               <form onSubmit={handleSubmit}>
                 <Box sx={{ mb: 3 }}>
                   <Typography color='textPrimary' variant='h2'>
-                    Sign in
+                    {isSignUp ? 'Sign up' : 'Sign in'}
                   </Typography>
-
                   <Typography color='textSecondary' gutterBottom variant='body2'>
                     PHS {new Date().getFullYear()}
                   </Typography>
-
-                  <select
-                    onChange={(e) => {
-                      setAccountOption(e.target.value)
-                    }}
-                  >
-                    {accountOptions.map((account) => (
-                      <option name={'account'} value={account} key={account}>
-                        {account}
-                      </option>
-                    ))}
-                  </select>
+                  {!isSignUp && (
+                    <select
+                      onChange={(e) => {
+                        setAccountOption(e.target.value)
+                      }}
+                    >
+                      {accountOptions.map((account) => (
+                        <option name={'account'} value={account} key={account}>
+                          {account}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </Box>
                 <TextField
-                  // error={Boolean(touched.email && errors.email)}
                   fullWidth
                   helperText={touched.email && errors.email}
                   label='Username'
@@ -150,12 +209,10 @@ const Login = () => {
                   name='email'
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type=''
                   value={values.email}
                   variant='outlined'
                 />
                 <TextField
-                  // error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
                   label='Password'
@@ -181,23 +238,72 @@ const Login = () => {
                     ),
                   }}
                 />
+                {isSignUp && (
+                  <TextField
+                    fullWidth
+                    helperText={touched.confirmPassword && errors.confirmPassword}
+                    label='Confirm Password'
+                    margin='normal'
+                    name='confirmPassword'
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type='password'
+                    value={values.confirmPassword}
+                    variant='outlined'
+                  />
+                )}
 
                 <Box sx={{ py: 2 }}>
                   <Button
                     color='primary'
-                    // disabled={isSubmitting}
                     fullWidth
                     size='large'
                     type='submit'
                     variant='contained'
+                    disabled={loading}
+                    sx={{
+                      ...(loading && {
+                        backgroundColor: '#bdbdbd',
+                        color: '#fff',
+                      }),
+                    }}
                   >
-                    {loading ? 'Logging in...' : 'Sign in now'}
+                    {loading ? (
+                      <>
+                        <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+                        {isSignUp ? 'Signing up...' : 'Logging in...'}
+                      </>
+                    ) : (
+                      isSignUp ? 'Sign up' : 'Sign in now'
+                    )}
                   </Button>
                 </Box>
-                {accountOption === accountOptions[1] && (
+
+                {/* Toggle between Sign In and Sign Up */}
+                <Box sx={{ textAlign: 'center', mt: 2 }}>
+                  {!isSignUp ? (
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={() => setIsSignUp(true)}
+                    >
+                      Don&apos;t have an account? Sign up here.
+                    </Link>
+                  ) : (
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={() => setIsSignUp(false)}
+                    >
+                      Already have an account? Sign in here.
+                    </Link>
+                  )}
+                </Box>
+
+                {/* Reset Password only for Sign In and Admin */}
+                {!isSignUp && accountOption === accountOptions[1] && (
                   <Button
                     color='primary'
-                    // disabled={isSubmitting}
                     fullWidth
                     size='large'
                     type='button'
