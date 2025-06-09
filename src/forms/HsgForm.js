@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -9,14 +9,13 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { SelectField, RadioField, LongTextField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
 import PopupText from 'src/utils/popupText'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
-import allForms from './forms.json'
 import { useNavigate } from 'react-router'
 
 const schema = new SimpleSchema({
@@ -36,9 +35,9 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'hsgForm'
-const HsgForm = (props) => {
+const HsgForm = () => {
   const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
@@ -69,7 +68,6 @@ const HsgForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
@@ -96,7 +94,7 @@ const HsgForm = (props) => {
         </PopupText>
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
       <br />
       <Divider />
     </AutoForm>

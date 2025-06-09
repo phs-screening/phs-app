@@ -16,7 +16,6 @@ import { getSavedData } from '../../services/mongoDB.js'
 import '../fieldPadding.css'
 import '../forms.css'
 import PopupText from 'src/utils/popupText.js'
-import { useNavigate } from 'react-router'
 
 const schema = new SimpleSchema({
   GYNAE1: {
@@ -123,9 +122,8 @@ const schema = new SimpleSchema({
 
 const formName = 'gynaeForm'
 const HxGynaeForm = (props) => {
-  const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
@@ -357,7 +355,7 @@ const HxGynaeForm = (props) => {
         <LongTextField name='GYNAEShortAns11' label='GYNAE11' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

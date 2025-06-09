@@ -10,8 +10,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
-import { LongTextField, BoolField } from 'uniforms-mui'
-import { submitForm, formatBmi } from '../api/api.js'
+import { LongTextField } from 'uniforms-mui'
+import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -36,8 +36,8 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'nkfForm'
-const NkfForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const NkfForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -118,7 +118,7 @@ const NkfForm = (props) => {
         </p>
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

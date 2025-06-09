@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -248,7 +248,7 @@ const GetScores = () => {
 
 const formName = 'geriOtQuestionnaireForm'
 const GeriOtQuestionnaireForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
@@ -818,7 +818,7 @@ const GeriOtQuestionnaireForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

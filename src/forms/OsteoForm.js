@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -11,8 +11,7 @@ import allForms from './forms.json'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { SelectField, TextField, NumField, RadioField, LongTextField } from 'uniforms-mui'
-import { useField } from 'uniforms'
+import { NumField, RadioField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -38,8 +37,8 @@ const schema = new SimpleSchema({
 
 const formName = 'osteoForm'
 
-const OsteoForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const OsteoForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
@@ -56,7 +55,7 @@ const OsteoForm = (props) => {
       const regiData = getSavedData(patientId, allForms.registrationForm)
       const triageData = getSavedData(patientId, allForms.triageForm)
       const socialData = getSavedData(patientId, allForms.hxSocialForm)
-      
+
       Promise.all([regiData, triageData, socialData]).then((result) => {
           setRegi(result[0])
           setTriage(result[1])
@@ -116,7 +115,7 @@ const OsteoForm = (props) => {
         <RadioField name='BONE2' label='BONE2' options={formOptions.BONE2} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
       <Divider />
     </AutoForm>
   )
@@ -129,11 +128,11 @@ const OsteoForm = (props) => {
             {newForm()}
           </Paper>
         </Grid>
-        <Grid 
-          p={1} 
-          width='30%' 
-          display='flex' 
-          flexDirection='column' 
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
         >
           {loadingSidePanel ? (
@@ -145,7 +144,7 @@ const OsteoForm = (props) => {
                 regi ? (
                   <>
                     {
-                      (regi.registrationQ3 instanceof Date? 
+                      (regi.registrationQ3 instanceof Date?
                       <p>Birthday: <strong>{regi.registrationQ3.toDateString()}</strong></p>
                        : <p className='red'>registrationQ3 is invalid!</p>)
                     }
@@ -174,7 +173,7 @@ const OsteoForm = (props) => {
                   </>
                 ) : null
               }
-              
+
             </div>
           )}
         </Grid>

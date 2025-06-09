@@ -94,7 +94,6 @@ function navigateTo(event, navigate, page, scrollTop) {
 const BasicTimeline = (props) => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
-  const [goingForPhlebotomy, setGoingForPhlebotomy] = useState(false)
   const [formDone, setFormDone] = useState({})
   const [admin, isAdmins] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
@@ -109,9 +108,6 @@ const BasicTimeline = (props) => {
         // hence, if there is no record, likely there is implementation bug
         const record = await patientsRecord.findOne({ queueNo: props.patientId })
 
-        if (record.goingForPhlebotomy == 'Yes') {
-          setGoingForPhlebotomy(true)
-        }
         setFormDone(generateStatusObject(record))
         setLoading(false)
         isAdmins(await isAdmin())

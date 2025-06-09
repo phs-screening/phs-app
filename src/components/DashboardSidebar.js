@@ -9,7 +9,6 @@ import {
   UserPlus as UserPlusIcon,
   LogIn as LogInIcon,
   FileText as FileTextIcon,
-  UserCheck as UserCheckIcon,
 } from 'react-feather'
 import NavItem from './NavItem'
 import { FormContext } from 'src/api/utils'
@@ -38,11 +37,6 @@ const items = [
     icon: ShoppingBagIcon,
     title: 'Patient Summary',
   },
-  /* {
-    href: '/app/manage',
-    icon: UserCheckIcon,
-    title: 'Manage Volunteers',
-  }, */
   {
     href: '/app/queue',
     icon: LogInIcon,

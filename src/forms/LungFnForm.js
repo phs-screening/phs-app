@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -10,7 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
-import { SelectField, RadioField, LongTextField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
@@ -69,11 +69,11 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'lungFnForm'
-const LungFnForm = (props) => {
+const LungFnForm = () => {
   const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [lungType, setLungType] = useState(null)
@@ -201,7 +201,7 @@ const LungFnForm = (props) => {
         <RadioField name='LUNG14' label='LUNG14' options={formOptions.LUNG14} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
 
       <br />
       <Divider />

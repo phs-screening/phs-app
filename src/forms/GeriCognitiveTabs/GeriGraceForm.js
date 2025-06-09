@@ -43,7 +43,7 @@ const schema = new SimpleSchema({
 const formName = 'geriGraceForm'
 
 const GeriGraceForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
@@ -112,7 +112,7 @@ const GeriGraceForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

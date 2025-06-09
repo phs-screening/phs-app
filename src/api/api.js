@@ -80,7 +80,7 @@ export async function submitForm(args, patientId, formCollection) {
     }
 
     console.log("patient id: " + record2)
-    if (record2 == null) { 
+    if (record2 == null) {
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
       patientId = qNum
@@ -95,7 +95,7 @@ export async function submitForm(args, patientId, formCollection) {
           { queueNo: patientId },
           { $set: { [formCollection]: patientId } },
         )
-        
+
         await registrationForms.insertOne({ _id: patientId, ...args })
         return { result: true, data: data , qNum: patientId}
       } else {
@@ -107,7 +107,7 @@ export async function submitForm(args, patientId, formCollection) {
             await patientsRecord.updateOne({ queueNo: patientId }, { $set: {initials: args.registrationQ2}})
             await patientsRecord.updateOne({ queueNo: patientId }, { $set: {age: args.registrationQ4}})
           }
-          
+
           // replace form
           // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
           // throw error message
@@ -460,16 +460,16 @@ export function kNewlines(k) {
  * As such, we need use "k" to keep track of the current line number of the text.
  *
  * This approach works, so we have chosen to keep it.
- * 
- * For Future devs pt2 (29/6/2024): 
+ *
+ * For Future devs pt2 (29/6/2024):
  * please for the love of god make this code more flexible
  * right now it doesn't even manage page overflow automatically
  * and is terrible to expand upon
- * 
+ *
  * Also you see that "justification" to use a running tracker of newlines? yeah that breaks
  * as soon as you start to actually format the document so IF YOU HAVE THE TIME please nuke that
  * entire system.
- * 
+ *
  * Incase you're wondering why I'm not doing it myself, because the deadline is in 1 month
  * Do not repeat the mistakes of ghosts long past
  */
@@ -508,10 +508,10 @@ export function generate_pdf(
 
   k = addBloodPressure(doc, triage, k)
   k = addBmi(doc, k, triage.triageQ10, triage.triageQ11)
-  
+
   k = addOtherScreeningModularities(doc, lung, geriVision, social, k)
   k = testOverflow(doc, k, 10)
-  
+
   k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth, mental)
 
   k = addMemos(doc, k, geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult)
@@ -727,7 +727,7 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
       cellWidth: 32
     },
     startY: calculateY(k),
-    head: [[ 
+    head: [[
       { content: parseFromLangKey("other_lung_tbl_l_header"),
         colSpan: 2,
         styles: {
@@ -752,7 +752,7 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
   k += 2
 
   k = testOverflow(doc, k, 13)
-  
+
   // EYE
   doc.text(10, 10, kNewlines((k = k + 1)) + parseFromLangKey("other_eye"))
   k++
@@ -791,35 +791,35 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
 
   const indent = 10
   // VACCINE
-  k = followUpWith(doc, k, trip, indent, vaccine.VAX1 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, vaccine.VAX1 == 'Yes',
     parseFromLangKey("fw_vax", vaccine.VAX2))
     // 'You signed up for an influenza vaccine with [unsure yet] on [unsure].'
     // + 'Please contact [unsure] for further details.')
   // HSG
-  k = followUpWith(doc, k, trip, indent, hsg.HSG1 == 'Yes, I signed up for HSG today', 
+  k = followUpWith(doc, k, trip, indent, hsg.HSG1 == 'Yes, I signed up for HSG today',
     parseFromLangKey("fw_hsg")
     // 'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.'
   )
   // PHLEBOTOMY
-  k = followUpWith(doc, k, trip, indent, reg.registrationQ15 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, reg.registrationQ15 == 'Yes',
     parseFromLangKey("fw_phlebotomy"))
-  k = followUpWith(doc, k, trip, indent + 5, reg.registrationQ15 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent + 5, reg.registrationQ15 == 'Yes',
       parseFromLangKey("fw_phlebotomy_1", reg.registrationQ18), 'm')
-    // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic. 
-    // When your results are ready for collection, our PHS volunteers will call you to remind you.  
+    // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic.
+    // When your results are ready for collection, our PHS volunteers will call you to remind you.
     // You have indicated your preferred clinic to be ${reg.registrationQ18}`)
   // FIT
-  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes',
     parseFromLangKey("fw_fit"))
     // 'You signed up for FIT home kits to be delivered to you, '
     // + 'please follow instructions from our partner Singapore Cancer Society.')
   // HPV
-  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes',
     parseFromLangKey("fw_wce"))
-  k = followUpWith(doc, k, trip, indent + 5, wce.wceQ5 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent + 5, wce.wceQ5 == 'Yes',
     parseFromLangKey("fw_wce_1"), 'm')
-    // `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below. 
-    // - Address: 
+    // `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below.
+    // - Address:
     // 9 Bishan Place Junction 8 Office Tower
     // #06-05, Singapore 579837
     // - Clinic operating hours:
@@ -829,9 +829,9 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
   // OSTEO
 
   // NKF
-  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes',
     parseFromLangKey("fw_nkf", nkf.NKF2))
-  k = followUpWith(doc, k, trip, indent + 5, nkf.NKF1 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent + 5, nkf.NKF1 == 'Yes',
     parseFromLangKey("fw_nkf_1"), 'm')
 
     // `You have indicated interest with National Kidney Foundation on ${nkf.NKF2} at CKD Clinic
@@ -841,18 +841,18 @@ export function addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf
     // - Clinic operating hours:
     // Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
     // - Contact us: 1800-KIDNEYS / 1800-5436397`
-  
+
   // MENTAL
-  k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes',
     parseFromLangKey("fw_samh"))
 
   // GRACE
-  k = followUpWith(doc, k, trip, indent, grace.GRACE2 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, grace.GRACE2 == 'Yes',
     parseFromLangKey("fw_grace", grace.GRACE3))
     // `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. `
     // + `Please contact G-RACE at: g_race@nuhs.edu.sg`)
   // WHISPERING
-  k = followUpWith(doc, k, trip, indent, geriWhForm.WH1 == 'Yes', 
+  k = followUpWith(doc, k, trip, indent, geriWhForm.WH1 == 'Yes',
     parseFromLangKey("fw_wh")
     // 'You have indicated interest to be followed-up with Whispering Hearts. Whispering Hearts '
     // + 'will contact you for follow up. Whispering Hearts can be contacted at: contact@viriya.org.sg'
@@ -888,7 +888,7 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
       doc.setFont(old_font.fontName, 'normal')
     }
 
-    doc.text(10 + indent, 10, 
+    doc.text(10 + indent, 10,
       doc.splitTextToSize(
         kNewlines(k) + statement,
         width,
@@ -908,8 +908,7 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey("memo_title")), calculateY(k))
   doc.setFont(undefined, 'normal')
 
-  const width = 180
-  
+
   var audio = parseFromLangKey("memo_audio")
     + parseFromLangKey("memo_audio_1", audioData.geriAudiometryQ13)
     + parseFromLangKey("memo_audio_2", audioData.geriAudiometryQ12)

@@ -18,13 +18,11 @@ import {
   DateField,
 } from 'uniforms-mui'
 import CircularProgress from '@mui/material/CircularProgress'
-import { submitForm, submitRegClinics, preRegister, submitPreRegForm } from '../api/api.js'
+import { submitForm, submitRegClinics } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import {
   getClinicSlotsCollection,
   getSavedData,
-  getPreRegDataById,
-  isAdmin,
 } from '../services/mongoDB'
 import './fieldPadding.css'
 import './forms.css'
@@ -513,7 +511,7 @@ const RegForm = () => {
     >
       {form_layout}
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

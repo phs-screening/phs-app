@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
-import { ContactSupportOutlined } from '@mui/icons-material'
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -150,7 +149,7 @@ const RegisterPatient = (props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') { //default it here
                 handleSubmitQueueNumber();
-              } 
+              }
             }}
             sx={{ marginTop: '5px', marginBottom: '5px' }}
           />

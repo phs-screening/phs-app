@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -97,7 +97,7 @@ const formName = 'geriPhqForm' // this is the Hx form but the summary is referen
 
 const MentalPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
@@ -197,7 +197,6 @@ const MentalPhqForm = (props) => {
 
         model.PHQ10 = points //update score
 
-        const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
@@ -266,7 +265,7 @@ const MentalPhqForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
 
       <Divider />
     </AutoForm>

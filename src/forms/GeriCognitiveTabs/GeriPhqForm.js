@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -101,7 +101,7 @@ const formName = 'geriPhqForm'
 
 const GeriPhqForm = (props) => {
   const [loading, setLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
@@ -131,9 +131,9 @@ const GeriPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No'
       },
     ],
     PHQ11: [
@@ -141,9 +141,9 @@ const GeriPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No'
       },
     ],
   }
@@ -202,7 +202,7 @@ const GeriPhqForm = (props) => {
         model.PHQ10 = score //update score
 
         const response = await submitForm(model, patientId, formName)
-        
+
         if (response.result) {
           const event = null // not interested in this value
           setLoading(false)
@@ -265,7 +265,7 @@ const GeriPhqForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
 
       <Divider />
     </AutoForm>

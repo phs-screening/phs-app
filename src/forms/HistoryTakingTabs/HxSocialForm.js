@@ -140,7 +140,7 @@ const schema = new SimpleSchema({
 const formName = 'hxSocialForm'
 const HxSocialForm = (props) => {
   const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
@@ -417,7 +417,7 @@ const HxSocialForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

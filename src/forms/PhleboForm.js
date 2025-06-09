@@ -31,7 +31,7 @@ const bridge = new SimpleSchema2Bridge(schema)
 const formName = 'phlebotomyForm'
 
 const PhleboForm = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
   const navigate = useNavigate()
@@ -74,7 +74,7 @@ const PhleboForm = () => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

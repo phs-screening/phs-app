@@ -1,6 +1,5 @@
 import React from 'react'
 import { Fragment, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -10,7 +9,7 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, LongTextField } from 'uniforms-mui'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField } from 'uniforms-mui'
 import { submitFormSpecial } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -18,7 +17,6 @@ import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
 import allForms from '../forms.json'
-import PopupText from 'src/utils/popupText.js'
 
 const schema = new SimpleSchema({
   wceQ3: {
@@ -110,11 +108,10 @@ function CheckHpvEligibility(props) {
 
 const formName = 'wceForm'
 const WceForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
@@ -281,7 +278,7 @@ const WceForm = (props) => {
         <CheckHpvEligibility wceQ8p='wceQ8' wceQ9p='wceQ9' wceQ10p='wceQ10' wceQ11p='wceQ11' wceQ12p='wceQ12' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

@@ -69,7 +69,7 @@ const schema = new SimpleSchema({
   },
 })
 
-function GetScore(props) {
+function GetScore() {
   let score = 0
   const [{ value: q1 }] = useField('geriAmtQ1', {})
   const [{ value: q2 }] = useField('geriAmtQ2', {})
@@ -96,7 +96,7 @@ function GetScore(props) {
 }
 const formName = 'geriAmtForm'
 const GeriAmtForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
@@ -248,7 +248,7 @@ const GeriAmtForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

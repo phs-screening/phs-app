@@ -4,27 +4,23 @@ import { ThemeProvider } from '@mui/material'
 import routes from 'src/routes'
 import React, { useContext, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { getProfile, isLoggedin } from './services/mongoDB'
+import { isLoggedin } from './services/mongoDB'
 import { FormContext } from './api/utils'
 import './App.css'
 
 export const LoginContext = React.createContext({
   login: false,
-  isLogin: (status) => {},
+  isLogin: () => {},
   profile: {},
-  setProfile: (status) => {},
+  setProfile: () => {},
 })
 
 const App = () => {
-  const waitProfile = async () => {
-    const profile = await getProfile()
-    return profile
-  }
   const { setProfile } = useContext(LoginContext)
   const [patientId, setPatientId] = useState(-1)
   const [patientInfo, setPatientInfo] = useState({})
   const [login, isLogin] = useState(isLoggedin())
-  const [profile, setProfiles] = useState()
+  const profile = undefined
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id)

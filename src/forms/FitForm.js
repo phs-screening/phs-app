@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema from 'simpl-schema'
 
@@ -41,8 +41,8 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'fitForm'
-const FitForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const FitForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const navigate = useNavigate()
@@ -128,7 +128,7 @@ const FitForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

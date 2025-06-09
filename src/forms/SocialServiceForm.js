@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
@@ -57,8 +57,8 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'socialServiceForm'
-const SocialServiceForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const SocialServiceForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
@@ -165,7 +165,7 @@ const SocialServiceForm = (props) => {
         <LongTextField name='socialServiceQ9' label='Social Service Q9' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

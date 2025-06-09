@@ -12,18 +12,14 @@ import { AutoForm } from 'uniforms'
 import {
   SubmitField,
   ErrorsField,
-  TextField,
   SelectField,
   RadioField,
   LongTextField,
 } from 'uniforms-mui'
-import { BoolField } from 'uniforms-mui'
-import { submitForm, formatBmi } from '../api/api.js'
+import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
-import './fieldPadding.css'
-import { get } from 'react-hook-form'
 
 const schema = new SimpleSchema({
   DENT1: {
@@ -65,7 +61,7 @@ const schema = new SimpleSchema({
 
 const formName = 'oralHealthForm'
 const OralHealthForm = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
@@ -215,7 +211,7 @@ const OralHealthForm = () => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

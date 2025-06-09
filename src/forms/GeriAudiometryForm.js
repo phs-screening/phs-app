@@ -99,16 +99,15 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'geriAudiometryForm'
-const GeriAudiometryForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const GeriAudiometryForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const { changeTab, nextTab } = props
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
   const [hcsr, setHcsr] = useState({})
   const [pmhx, setPMHX] = useState({})
-  
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -227,7 +226,6 @@ const GeriAudiometryForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
@@ -331,7 +329,7 @@ const GeriAudiometryForm = (props) => {
         />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
       <Divider />
     </AutoForm>
   )
@@ -415,7 +413,7 @@ const GeriAudiometryForm = (props) => {
                     <p className='blue'>{pmhx.PMHX15}</p>
                     <p className='blue'>{pmhx.PMHXShortAns15}</p>
                   </>
-                ) : 
+                ) :
                 <p className='red'>nil pmhx data</p>
               }
             </div>

@@ -202,7 +202,7 @@ const ManageVolunteers = () => {
             handleCreateAccount(values).then(() => resetForm())
           }}
         >
-          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+          {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
             <form onSubmit={handleSubmit}>
               <Box sx={{ mb: 3 }}>
                 <Typography color='textPrimary' variant='h2'>

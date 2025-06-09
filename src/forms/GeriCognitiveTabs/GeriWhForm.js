@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
-import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
@@ -31,12 +30,11 @@ const schema = new SimpleSchema({
 const formName = 'geriWhForm'
 
 const GeriWhForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +88,7 @@ const GeriWhForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>
