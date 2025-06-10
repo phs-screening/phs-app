@@ -55,12 +55,13 @@ const schema = new SimpleSchema({
 
 const formName = 'hxWellbeingForm'
 const HxWellbeingForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [regForm, setRegForm] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {

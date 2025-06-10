@@ -60,8 +60,6 @@ const formName = 'socialServiceForm'
 const SocialServiceForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
@@ -70,6 +68,9 @@ const SocialServiceForm = () => {
   const [geriOt, setGeriOt] = useState({})
   const [geriPt, setGeriPt] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

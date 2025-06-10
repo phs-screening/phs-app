@@ -53,10 +53,10 @@ const geriInterForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const [points, setPoints] = useState(0)
   const [regi, setRegi] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -100,8 +100,6 @@ const geriInterForm = () => {
       }
       score += points[qn]
     })
-
-    setPoints(score)
 
     return <p className='blue'>{score} / 9</p>
   }

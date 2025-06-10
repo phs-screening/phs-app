@@ -96,12 +96,13 @@ const schema = new SimpleSchema({
 const formName = 'geriPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
 
 const MentalPhqForm = (props) => {
-  const [loading, setLoading] = useState(false)
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
+  const [loading, setLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
   const [points, setPoints] = useState(0)
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,7 +179,7 @@ const MentalPhqForm = (props) => {
         <Fragment>
           <p className='blue'>{score} / 27</p>
           <font color='red'>
-            <b>Patient fails PHQ, score is 10 and above </b>
+            <b>Patient fails PHQ, score is 10 and above</b>
           </font>{' '}
           <br />
         </Fragment>

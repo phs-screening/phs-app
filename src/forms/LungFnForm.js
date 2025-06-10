@@ -70,15 +70,17 @@ const schema = new SimpleSchema({
 
 const formName = 'lungFnForm'
 const LungFnForm = () => {
-  const navigate = useNavigate()
+  const { patientId } = useContext(FormContext)
+
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const [lungType, setLungType] = useState(null)
 
+  const [lungType, setLungType] = useState(null)
   const [social, setSocial] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

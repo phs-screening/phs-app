@@ -58,15 +58,17 @@ const schema = new SimpleSchema({
 const formName = 'dietitiansConsultForm'
 const DietitiansConsultForm = () => {
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
+
   // forms to retrieve for side panel
   const [doctorConsult, setDoctorConsult] = useState({})
   const [triage, setTriage] = useState({})
   const [hxSocial, setSocial] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

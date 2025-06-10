@@ -100,11 +100,12 @@ const schema = new SimpleSchema({
 const formName = 'geriPhqForm'
 
 const GeriPhqForm = (props) => {
-  const [loading, setLoading] = useState(false)
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
+  const [loading, setLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   let score = 0
 
@@ -165,15 +166,6 @@ const GeriPhqForm = (props) => {
       '2 - More than half the days': 2,
       '3 - Nearly everyday': 3,
     }
-
-    const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
-
-    /*questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
-      }
-    })*/
 
     score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
 

@@ -963,14 +963,6 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   return k
 }
 
-const checkOverflow = (doc, k) => {
-  if (k > 70) {
-    doc.addPage()
-    return 0
-  }
-  return k
-}
-
 const testOverflow = (doc, k, offset) => {
   if (k+offset > 70) {
     doc.addPage()
@@ -1015,9 +1007,9 @@ export function calculateY(coor) {
 export const regexPasswordPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
 
-export const deleteFromAllDatabase = async () => {
-  const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
-  const mongoDBConnection = mongoConnection.db('phs')
+// export const deleteFromAllDatabase = async () => {
+//   const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
+//   const mongoDBConnection = mongoConnection.db('phs')
 
   // console.log(await mongoDBConnection.collection("patients").deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.geriPtConsultForm).deleteMany({}))
@@ -1048,7 +1040,7 @@ export const deleteFromAllDatabase = async () => {
   // console.log(await mongoDBConnection.collection(forms.oralHealthForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.socialServiceForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.wceForm).deleteMany({}))
-  console.log('done')
+  // console.log('done')
   // deletes volunteer accounts
   // console.log(await mongoDBConnection.collection("profiles").deleteMany({is_admin:{$eq : undefined}}))
-}
+// }

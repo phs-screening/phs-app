@@ -41,13 +41,14 @@ const OsteoForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [regi, setRegi] = useState({})
   const [triage, setTriage] = useState({})
   const [social, setSocial] = useState({})
 
+  const navigate = useNavigate()
+  const form_schema = new SimpleSchema2Bridge(schema)
+  
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)

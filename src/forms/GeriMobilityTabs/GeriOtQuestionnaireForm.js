@@ -249,15 +249,16 @@ const GetScores = () => {
 const formName = 'geriOtQuestionnaireForm'
 const GeriOtQuestionnaireForm = (props) => {
   const { patientId } = useContext(FormContext)
+  const { changeTab, nextTab } = props
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const { changeTab, nextTab } = props
   const [saveData, setSaveData] = useState({})
 
   const [reg, setReg] = useState({})
   const [social, setSocial] = useState({})
   const [triage, setTriage] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {

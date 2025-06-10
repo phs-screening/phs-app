@@ -160,9 +160,10 @@ const formName = 'triageForm'
 const TriageForm = () => {
   const [loading, isLoading] = useState(false)
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

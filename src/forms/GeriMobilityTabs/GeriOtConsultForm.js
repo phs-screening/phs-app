@@ -86,13 +86,14 @@ const formName = 'geriOtConsultForm'
 const GeriOtConsultForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [geriVision, setGeriVision] = useState({})
   const [geriOtQ, setGeriOtQ] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
+
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {

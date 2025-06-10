@@ -77,11 +77,10 @@ const schema = new SimpleSchema({
 const formName = 'doctorConsultForm'
 const DoctorSConsultForm = () => {
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
+  
   // forms to retrieve for side panel
   const [hcsr, setHcsr] = useState({})
   const [geriVision, setGeriVision] = useState({})
@@ -93,6 +92,9 @@ const DoctorSConsultForm = () => {
   const [pmhx, setPMHX] = useState({})
   const [social, setSocial] = useState({})
   const [family, setFamily] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadPastForms = async () => {

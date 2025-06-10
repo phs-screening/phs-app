@@ -30,8 +30,9 @@ const formName = 'hpvForm'
 const HpvForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
+  
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {

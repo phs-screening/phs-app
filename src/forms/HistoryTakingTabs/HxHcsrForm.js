@@ -74,11 +74,12 @@ const schema = new SimpleSchema({
 
 const formName = 'hxHcsrForm'
 const HxHcsrForm = (props) => {
-  const [loading, isLoading] = useState(false)
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
+  const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {

@@ -40,14 +40,15 @@ const NkfForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const navigate = useNavigate()
 
   const [reg, setReg] = useState({})
   const [triage, setTriage] = useState({})
   const [hxfamily, setHxFamily] = useState({})
   const [pmhx, setPMHXData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

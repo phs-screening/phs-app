@@ -32,26 +32,19 @@ const VaccineForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-
-  const [pmhx, setPMHXData] = useState({})
   const [regi, setRegi] = useState({})
+
+  const navigate = useNavigate()
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
       setSaveData(savedData)
-
-      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
       const regiData = getSavedData(patientId, allForms.registrationForm)
-      Promise.all([
-        pmhxData,
-        regiData,
-      ]).then((result) => {
-        setPMHXData(result[0])
-        setRegi(result[1])
+      Promise.all([ regiData ]).then((result) => {
+        setRegi(result[0])
         isLoadingSidePanel(false)
       })
     }

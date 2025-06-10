@@ -109,30 +109,28 @@ function CheckHpvEligibility(props) {
 const formName = 'wceForm'
 const WceForm = (props) => {
   const { patientId } = useContext(FormContext)
+  const { changeTab, nextTab } = props
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
-  const [hxCancer, setHxCancer] = useState({})
   const [hxFamily, setHxFamily] = useState({})
-  const { changeTab, nextTab } = props
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = getSavedData(patientId, formName)
       const regData = getSavedData(patientId, allForms.registrationForm)
       const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-      const hxCancerData = getSavedData(patientId, allForms.hxCancerForm)
       const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
 
-      Promise.all([savedData, regData, hxSocialData, hxCancerData, hxFamilyData]).then((result) => {
+      Promise.all([savedData, regData, hxSocialData, hxFamilyData]).then((result) => {
         setSaveData(result[0])
         setReg(result[1])
         setHxSocial(result[2])
-        setHxCancer(result[3])
-        setHxFamily(result[4])
+        setHxFamily(result[3])
         isLoadingSidePanel(false)
       })
     }

@@ -455,7 +455,7 @@ const RegForm = () => {
       optional: false,
     },
   })
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   const newForm = () => (
     <AutoForm

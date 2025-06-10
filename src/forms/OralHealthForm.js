@@ -62,8 +62,6 @@ const schema = new SimpleSchema({
 const formName = 'oralHealthForm'
 const OralHealthForm = () => {
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
@@ -73,6 +71,9 @@ const OralHealthForm = () => {
   const [hxOral, setHxOral] = useState({})
   const [social, setSocial] = useState({})
   const [pmhx, setPMHX] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {

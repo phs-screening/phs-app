@@ -139,12 +139,13 @@ const schema = new SimpleSchema({
 
 const formName = 'hxSocialForm'
 const HxSocialForm = (props) => {
-  const [loading, isLoading] = useState(false)
   const { patientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
   const [regForm, setRegForm] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {

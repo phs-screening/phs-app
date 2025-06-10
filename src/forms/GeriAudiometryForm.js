@@ -102,12 +102,12 @@ const formName = 'geriAudiometryForm'
 const GeriAudiometryForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
   const [hcsr, setHcsr] = useState({})
   const [pmhx, setPMHX] = useState({})
 
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {

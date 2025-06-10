@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm, useField } from 'uniforms'
+import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -42,12 +42,13 @@ const MentalHealthForm = () => {
   const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const navigate = useNavigate()
 
   const [regi, setReg] = useState({})
   const [phq, setPHQ] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,37 +68,6 @@ const MentalHealthForm = () => {
     }
     fetchData()
   }, [])
-
-  const GetScore = () => {
-    let score = 0
-
-    const [{ value: q1 }] = useField('PHQ1', {})
-    const [{ value: q2 }] = useField('PHQ2', {})
-    const [{ value: q3 }] = useField('PHQ3', {})
-    const [{ value: q4 }] = useField('PHQ4', {})
-    const [{ value: q5 }] = useField('PHQ5', {})
-    const [{ value: q6 }] = useField('PHQ6', {})
-    const [{ value: q7 }] = useField('PHQ7', {})
-    const [{ value: q8 }] = useField('PHQ8', {})
-    const [{ value: q9 }] = useField('PHQ9', {})
-
-    const points = {
-      '0 - Not at all': 0,
-      '1 - Several days': 1,
-      '2 - More than half the days': 2,
-      '3 - Nearly everyday': 3,
-    }
-
-    const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
-
-    questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
-      }
-    })
-    return <p className='blue'>{score}</p>
-  }
 
   const formOptions = {
     PHQ1: dayRangeFormOptions,

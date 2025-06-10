@@ -97,10 +97,11 @@ function GetScore() {
 const formName = 'geriAmtForm'
 const GeriAmtForm = (props) => {
   const { patientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {

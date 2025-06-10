@@ -225,7 +225,7 @@ const GynaeForm = () => {
   }
 
   const GetReferral = () => {
-    const [{ value: q1 }] = useField('GYNAE1', {})
+    // const [{ value: q1 }] = useField('GYNAE1', {}) // Not used in checking for further referral
     const [{ value: q2 }] = useField('GYNAE2', {})
     const [{ value: q3 }] = useField('GYNAE3', {})
     const [{ value: q4 }] = useField('GYNAE4', {})
