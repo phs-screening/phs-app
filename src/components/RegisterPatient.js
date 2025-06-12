@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
-import { ContactSupportOutlined } from '@mui/icons-material'
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -26,7 +25,7 @@ const RegisterPatient = (props) => {
     selectedValue: null,
   })
   const [patientNames, setPatientNames] = useState([])
-  const { patientId, updatePatientInfo } = useContext(FormContext)
+  const { updatePatientInfo } = useContext(FormContext)
   const navigate = useNavigate()
   const ref = useRef()
 
@@ -126,10 +125,7 @@ const RegisterPatient = (props) => {
           >
             Register
           </Button>
-          <Typography></Typography>
-          <Typography color='textSecondary' gutterBottom variant='h5'>
-            OR
-          </Typography>
+          <Typography color='textSecondary' gutterBottom variant='h5'>OR</Typography>
           <Typography color='textPrimary' gutterBottom variant='h4'>
             Enter queue number below
           </Typography>
@@ -150,7 +146,7 @@ const RegisterPatient = (props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') { //default it here
                 handleSubmitQueueNumber();
-              } 
+              }
             }}
             sx={{ marginTop: '5px', marginBottom: '5px' }}
           />

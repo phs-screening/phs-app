@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { AutoForm, useField } from 'uniforms'
+import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
@@ -16,7 +16,6 @@ import { getSavedData } from '../../services/mongoDB.js'
 import '../fieldPadding.css'
 import '../forms.css'
 import PopupText from 'src/utils/popupText.js'
-import { useNavigate } from 'react-router'
 
 const schema = new SimpleSchema({
   GYNAE1: {
@@ -123,12 +122,12 @@ const schema = new SimpleSchema({
 
 const formName = 'gynaeForm'
 const HxGynaeForm = (props) => {
-  const navigate = useNavigate()
-  const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
+  const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -225,49 +224,6 @@ const HxGynaeForm = (props) => {
     ],
   }
 
-  const GetReferral = () => {
-    const [{ value: q1 }] = useField('GYNAE1', {})
-    const [{ value: q2 }] = useField('GYNAE2', {})
-    const [{ value: q3 }] = useField('GYNAE3', {})
-    const [{ value: q4 }] = useField('GYNAE4', {})
-    const [{ value: q5 }] = useField('GYNAE5', {})
-    const [{ value: q6 }] = useField('GYNAE6', {})
-    const [{ value: q7 }] = useField('GYNAE7', {})
-    const [{ value: q8 }] = useField('GYNAE8', {})
-    const [{ value: q9 }] = useField('GYNAE9', {})
-    const [{ value: q10 }] = useField('GYNAE10', {})
-    const [{ value: q11 }] = useField('GYNAE11', {})
-
-    const generalGynae = [q2, q3, q4, q5, q6, q7]
-    const reproMedicine = [q8, q9]
-    const urogynae = [q10, q11]
-
-    let result = ''
-    for (const qn of generalGynae) {
-      if (qn === 'Yes') {
-        result += 'General Gynecology Clinic'
-        break
-      }
-    }
-    for (const qn of reproMedicine) {
-      if (qn === 'Yes') {
-        result += '\nReproductive Medicine Clinic (if patient is keen for fertility)'
-        break
-      }
-    }
-    for (const qn of urogynae) {
-      if (qn === 'Yes') {
-        result += '\nUrogynecology Clinic'
-        break
-      }
-    }
-    return (
-      <p style={{ whiteSpace: 'pre-line' }} className='blue'>
-        {result}
-      </p>
-    )
-  }
-
   const newForm = () => (
     <AutoForm
       schema={form_schema}
@@ -357,7 +313,7 @@ const HxGynaeForm = (props) => {
         <LongTextField name='GYNAEShortAns11' label='GYNAE11' />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

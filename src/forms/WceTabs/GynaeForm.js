@@ -122,13 +122,12 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'gynaeForm'
-const GynaeForm = (props) => {
+const GynaeForm = () => {
   const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { patientId } = useContext(FormContext)
+  const form_schema = new SimpleSchema2Bridge(schema)
   const [saveData, setSaveData] = useState({})
-  const { changeTab, nextTab } = props
 
   useEffect(() => {
     const fetchData = async () => {
@@ -226,7 +225,7 @@ const GynaeForm = (props) => {
   }
 
   const GetReferral = () => {
-    const [{ value: q1 }] = useField('GYNAE1', {})
+    // const [{ value: q1 }] = useField('GYNAE1', {}) // Not used in checking for further referral
     const [{ value: q2 }] = useField('GYNAE2', {})
     const [{ value: q3 }] = useField('GYNAE3', {})
     const [{ value: q4 }] = useField('GYNAE4', {})
@@ -276,7 +275,6 @@ const GynaeForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
@@ -367,7 +365,7 @@ const GynaeForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

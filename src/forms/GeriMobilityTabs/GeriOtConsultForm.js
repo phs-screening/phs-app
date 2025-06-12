@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 import { useNavigate } from 'react-router-dom'
@@ -83,17 +83,17 @@ function GetSppbScore(q2, q6, q8) {
 }
 
 const formName = 'geriOtConsultForm'
-const GeriOtConsultForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const GeriOtConsultForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [geriVision, setGeriVision] = useState({})
   const [geriOtQ, setGeriOtQ] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { changeTab, nextTab } = props
+
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -154,7 +154,6 @@ const GeriOtConsultForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
@@ -235,7 +234,7 @@ const GeriOtConsultForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

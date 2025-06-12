@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -75,11 +75,12 @@ const schema = new SimpleSchema({
 
 const formName = 'geriPhysicalActivityLevelForm'
 const GeriPhysicalActivityLevelForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -278,7 +279,7 @@ const GeriPhysicalActivityLevelForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

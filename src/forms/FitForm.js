@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SimpleSchema from 'simpl-schema'
 
@@ -41,36 +41,33 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'fitForm'
-const FitForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const FitForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
 
   const [regi, setRegi] = useState({})
   const [pmhx, setPMHX] = useState({})
-  const [lung, setLung] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = getSavedData(patientId, formName)
       const regiData = getSavedData(patientId, allForms.registrationForm)
       const pmhxData = getSavedData(patientId, allForms.hxNssForm)
-      const lungData = getSavedData(patientId, allForms.lungForm)
       setSaveData(savedData)
 
       Promise.all([
         savedData,
         regiData,
         pmhxData,
-        lungData
       ]).then((result) => {
         setSaveData(result[0])
         setRegi(result[1])
         setPMHX(result[2])
-        setLung(result[3])
         isLoadingSidePanel(false)
       })
     }
@@ -128,7 +125,7 @@ const FitForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>
