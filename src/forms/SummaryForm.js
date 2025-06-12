@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-import { formatBmi, formatGeriVision, formatWceStation, generate_pdf } from '../api/api.js'
+import { formatBmi, formatGeriVision, formatWceStation, generate_pdf, generate_pdf_updated } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -170,7 +170,7 @@ const SummaryForm = (props) => {
           <div>
             <Button
               onClick={() =>
-                generate_pdf(
+                generate_pdf_updated(
                   // TODO: add triage here
                   registration,
                   patients,
