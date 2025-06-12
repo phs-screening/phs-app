@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
+import React, {  useContext, useEffect, useState } from 'react'
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
 import SimpleSchema from 'simpl-schema'
 
@@ -11,8 +11,7 @@ import allForms from './forms.json'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { SelectField, TextField, RadioField, LongTextField } from 'uniforms-mui'
-import { useField } from 'uniforms'
+import { RadioField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
@@ -29,30 +28,23 @@ const schema = new SimpleSchema({
 
 const formName = 'vaccineForm'
 
-const VaccineForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const VaccineForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-
-  const [pmhx, setPMHXData] = useState({})
   const [regi, setRegi] = useState({})
+
+  const navigate = useNavigate()
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
       setSaveData(savedData)
-
-      const pmhxData = getSavedData(patientId, allForms.hxNssForm)
       const regiData = getSavedData(patientId, allForms.registrationForm)
-      Promise.all([
-        pmhxData,
-        regiData,
-      ]).then((result) => {
-        setPMHXData(result[0])
-        setRegi(result[1])
+      Promise.all([ regiData ]).then((result) => {
+        setRegi(result[0])
         isLoadingSidePanel(false)
       })
     }
@@ -77,7 +69,6 @@ const VaccineForm = (props) => {
         isLoading(true)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
-          const event = null // not interested in this value
           isLoading(false)
           setTimeout(() => {
             alert('Successfully submitted form')
@@ -98,7 +89,7 @@ const VaccineForm = (props) => {
         <RadioField name='VAX1' label='VAX1' options={formOptions.VAX1} />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

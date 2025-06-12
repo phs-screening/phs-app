@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
 import { LongTextField, BoolField } from 'uniforms-mui'
-import { submitForm, formatBmi, calculateBMI } from '../api/api.js'
+import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -56,17 +56,19 @@ const schema = new SimpleSchema({
 })
 
 const formName = 'dietitiansConsultForm'
-const DietitiansConsultForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
+const DietitiansConsultForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
+
   // forms to retrieve for side panel
   const [doctorConsult, setDoctorConsult] = useState({})
   const [triage, setTriage] = useState({})
   const [hxSocial, setSocial] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,7 +163,7 @@ const DietitiansConsultForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

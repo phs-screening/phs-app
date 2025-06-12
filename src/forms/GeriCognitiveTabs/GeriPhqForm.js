@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -100,11 +100,12 @@ const schema = new SimpleSchema({
 const formName = 'geriPhqForm'
 
 const GeriPhqForm = (props) => {
-  const [loading, setLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, setLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   let score = 0
 
@@ -131,9 +132,9 @@ const GeriPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No'
       },
     ],
     PHQ11: [
@@ -141,9 +142,9 @@ const GeriPhqForm = (props) => {
         label: 'Yes',
         value: 'Yes',
       },
-      { 
-        label: 'No', 
-        value: 'No' 
+      {
+        label: 'No',
+        value: 'No'
       },
     ],
   }
@@ -165,15 +166,6 @@ const GeriPhqForm = (props) => {
       '2 - More than half the days': 2,
       '3 - Nearly everyday': 3,
     }
-
-    const questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
-
-    /*questions.forEach((qn) => {
-      while (qn) {
-        score += points[qn]
-        break
-      }
-    })*/
 
     score = points[q1] + points[q2] + points[q3]+ points[q4]+ points[q5]+ points[q6]+ points[q7]+ points[q8]+ points[q9]
 
@@ -202,7 +194,7 @@ const GeriPhqForm = (props) => {
         model.PHQ10 = score //update score
 
         const response = await submitForm(model, patientId, formName)
-        
+
         if (response.result) {
           const event = null // not interested in this value
           setLoading(false)
@@ -265,7 +257,7 @@ const GeriPhqForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
 
       <Divider />
     </AutoForm>

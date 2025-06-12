@@ -9,7 +9,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import { getSavedData, getSavedPatientData } from '../services/mongoDB'
+import { getSavedData } from '../services/mongoDB'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
 
@@ -61,11 +61,6 @@ const Eligibility = () => {
     }
     loadPastForms()
   }, [patientId])
-
-  useEffect(() => {
-    console.log(hxsocial.SOCIAL8 === 'Yes' && hxsocial.SOCIAL9 === 'No')
-    console.log(patientId)
-  }, [hxsocial])
 
   function createData(name, isEligible) {
     const eligibility = isEligible ? 'YES' : 'NO'

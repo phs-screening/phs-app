@@ -85,7 +85,9 @@ export async function submitForm(args, patientId, formCollection) {
       goingForPhlebotomy: goingForPhlebotomy,
     }
 
-    console.log('patient id: ' + record2)
+
+    console.log("patient id: " + record2)
+
     if (record2 == null) {
       qNum = await mongoDB.currentUser.functions.getNextQueueNo()
       await patientsRecord.insertOne({ queueNo: qNum, ...data })
@@ -524,21 +526,8 @@ export function generate_pdf(
   k = addOtherScreeningModularities(doc, lung, geriVision, social, k)
   k = testOverflow(doc, k, 10)
 
-  k = addFollowUp(
-    doc,
-    k,
-    reg,
-    vaccine,
-    hsg,
-    phlebotomy,
-    fit,
-    wce,
-    nkf,
-    grace,
-    hearts,
-    oralHealth,
-    mental,
-  )
+
+  k = addFollowUp(doc, k, reg, vaccine, hsg, phlebotomy, fit, wce, nkf, grace, hearts, oralHealth, mental)
 
   k = addMemos(doc, k, geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult)
 
@@ -758,19 +747,17 @@ export function addOtherScreeningModularities(doc, lung, eye, social, k) {
       cellWidth: 32,
     },
     startY: calculateY(k),
-    head: [
-      [
-        {
-          content: parseFromLangKey('other_lung_tbl_l_header'),
-          colSpan: 2,
-          styles: {
-            valign: 'middle',
-            fillColor: [244, 247, 249],
-            fontStyle: 'bold',
-          },
-        },
-      ],
-    ],
+
+    head: [[
+      { content: parseFromLangKey("other_lung_tbl_l_header"),
+        colSpan: 2,
+        styles: {
+          valign: "middle",
+          fillColor: [244, 247, 249],
+          fontStyle: "bold"
+        }}
+      ]],
+
     body: [
       ['FVC (L)', `${lung.LUNG3}`],
       ['FEV1 (L)', `${lung.LUNG4}`],
@@ -846,98 +833,71 @@ export function addFollowUp(
 
   const indent = 10
   // VACCINE
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent,
-    vaccine.VAX1 == 'Yes',
-    parseFromLangKey('fw_vax', vaccine.VAX2),
-  )
-  // 'You signed up for an influenza vaccine with [unsure yet] on [unsure].'
-  // + 'Please contact [unsure] for further details.')
+
+  k = followUpWith(doc, k, trip, indent, vaccine.VAX1 == 'Yes',
+    parseFromLangKey("fw_vax", vaccine.VAX2))
+    // 'You signed up for an influenza vaccine with [unsure yet] on [unsure].'
+    // + 'Please contact [unsure] for further details.')
   // HSG
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent,
-    hsg.HSG1 == 'Yes, I signed up for HSG today',
-    parseFromLangKey('fw_hsg'),
+  k = followUpWith(doc, k, trip, indent, hsg.HSG1 == 'Yes, I signed up for HSG today',
+    parseFromLangKey("fw_hsg")
     // 'You signed up for HealthierSG today, please check with HealthierSG for your registered HealthierSG clinic.'
   )
   // PHLEBOTOMY
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent,
-    reg.registrationQ15 == 'Yes',
-    parseFromLangKey('fw_phlebotomy'),
-  )
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent + 5,
-    reg.registrationQ15 == 'Yes',
-    parseFromLangKey('fw_phlebotomy_1', reg.registrationQ18),
-    'm',
-  )
-  // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic.
-  // When your results are ready for collection, our PHS volunteers will call you to remind you.
-  // You have indicated your preferred clinic to be ${reg.registrationQ18}`)
+  k = followUpWith(doc, k, trip, indent, reg.registrationQ15 == 'Yes',
+    parseFromLangKey("fw_phlebotomy"))
+  k = followUpWith(doc, k, trip, indent + 5, reg.registrationQ15 == 'Yes',
+      parseFromLangKey("fw_phlebotomy_1", reg.registrationQ18), 'm')
+    // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic.
+    // When your results are ready for collection, our PHS volunteers will call you to remind you.
+    // You have indicated your preferred clinic to be ${reg.registrationQ18}`)
   // FIT
-  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes', parseFromLangKey('fw_fit'))
-  // 'You signed up for FIT home kits to be delivered to you, '
-  // + 'please follow instructions from our partner Singapore Cancer Society.')
+  k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes',
+    parseFromLangKey("fw_fit"))
+    // 'You signed up for FIT home kits to be delivered to you, '
+    // + 'please follow instructions from our partner Singapore Cancer Society.')
   // HPV
-  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes', parseFromLangKey('fw_wce'))
-  k = followUpWith(doc, k, trip, indent + 5, wce.wceQ5 == 'Yes', parseFromLangKey('fw_wce_1'), 'm')
-  // `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below.
-  // - Address:
-  // 9 Bishan Place Junction 8 Office Tower
-  // #06-05, Singapore 579837
-  // - Clinic operating hours:
-  // Mondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm)
-  // Saturdays, 9.00am to 4.00pm (last appointment at 3.15pm)
-  // - Contact us: 6499 9133`)
+  k = followUpWith(doc, k, trip, indent, wce.wceQ5 == 'Yes',
+    parseFromLangKey("fw_wce"))
+  k = followUpWith(doc, k, trip, indent + 5, wce.wceQ5 == 'Yes',
+    parseFromLangKey("fw_wce_1"), 'm')
+    // `You have indicated interest with Singapore Cancer Society for HPV Test on ${wce.wceQ6} at Singapore Cancer Society Clinic@Bishan, with the address found below.
+    // - Address:
+    // 9 Bishan Place Junction 8 Office Tower
+    // #06-05, Singapore 579837
+    // - Clinic operating hours:
+    // Mondays to Fridays, 9.00am to 6.00pm (last appointment at 5pm)
+    // Saturdays, 9.00am to 4.00pm (last appointment at 3.15pm)
+    // - Contact us: 6499 9133`)
   // OSTEO
 
   // NKF
-  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes', parseFromLangKey('fw_nkf', nkf.NKF2))
-  k = followUpWith(doc, k, trip, indent + 5, nkf.NKF1 == 'Yes', parseFromLangKey('fw_nkf_1'), 'm')
+  k = followUpWith(doc, k, trip, indent, nkf.NKF1 == 'Yes',
+    parseFromLangKey("fw_nkf", nkf.NKF2))
+  k = followUpWith(doc, k, trip, indent + 5, nkf.NKF1 == 'Yes',
+    parseFromLangKey("fw_nkf_1"), 'm')
 
-  // `You have indicated interest with National Kidney Foundation on ${nkf.NKF2} at CKD Clinic
-  // - Address:
-  // 109 Whampoa Road
-  // #01-09/11, Singapore 321109
-  // - Clinic operating hours:
-  // Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
-  // - Contact us: 1800-KIDNEYS / 1800-5436397`
+    // `You have indicated interest with National Kidney Foundation on ${nkf.NKF2} at CKD Clinic
+    // - Address:
+    // 109 Whampoa Road
+    // #01-09/11, Singapore 321109
+    // - Clinic operating hours:
+    // Every wednesday (except public holidays), 9.00am to 11.15am, 2.15pm to 3.00pm
+    // - Contact us: 1800-KIDNEYS / 1800-5436397`
 
   // MENTAL
-  k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes', parseFromLangKey('fw_samh'))
+  k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes',
+    parseFromLangKey("fw_samh"))
 
   // GRACE
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent,
-    grace.GRACE2 == 'Yes',
-    parseFromLangKey('fw_grace', grace.GRACE3),
-  )
-  // `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. `
-  // + `Please contact G-RACE at: g_race@nuhs.edu.sg`)
+  k = followUpWith(doc, k, trip, indent, grace.GRACE2 == 'Yes',
+    parseFromLangKey("fw_grace", grace.GRACE3))
+    // `You have been referred to a G-RACE associated partners/polyclinic, ${grace.GRACE3}. `
+    // + `Please contact G-RACE at: g_race@nuhs.edu.sg`)
   // WHISPERING
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent,
-    geriWhForm.WH1 == 'Yes',
-    parseFromLangKey('fw_wh'),
+  k = followUpWith(doc, k, trip, indent, geriWhForm.WH1 == 'Yes',
+    parseFromLangKey("fw_wh")
+
     // 'You have indicated interest to be followed-up with Whispering Hearts. Whispering Hearts '
     // + 'will contact you for follow up. Whispering Hearts can be contacted at: contact@viriya.org.sg'
   )
@@ -972,7 +932,13 @@ export function followUpWith(doc, k, trip, indent, condition, statement, symbol 
       doc.setFont(old_font.fontName, 'normal')
     }
 
-    doc.text(10 + indent, 10, doc.splitTextToSize(kNewlines(k) + statement, width))
+
+    doc.text(10 + indent, 10,
+      doc.splitTextToSize(
+        kNewlines(k) + statement,
+        width,
+      )
+    )
 
     k = k + text.length + 1
   }
@@ -987,7 +953,20 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey('memo_title')), calculateY(k))
   doc.setFont(undefined, 'normal')
 
-  const width = 180
+
+
+  var audio = parseFromLangKey("memo_audio")
+    + parseFromLangKey("memo_audio_1", audioData.geriAudiometryQ13)
+    + parseFromLangKey("memo_audio_2", audioData.geriAudiometryQ12)
+  var diet = parseFromLangKey("memo_diet")
+    + `${dietData.dietitiansConsultQ4}`
+  if (dietData.dietitiansConsultQ5) {
+    diet += parseFromLangKey("memo_diet_1", dietData.dietitiansConsultQ5, dietData.dietitiansConsultQ6)
+  }
+  var pt = parseFromLangKey("memo_pt")
+    + `${ptData.geriPtConsultQ1}`
+  var ot = parseFromLangKey("memo_ot")
+    + `${otData.geriOtConsultQ1}`
 
   var audio =
     parseFromLangKey('memo_audio') +
@@ -1041,14 +1020,6 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   return k
 }
 
-const checkOverflow = (doc, k) => {
-  if (k > 70) {
-    doc.addPage()
-    return 0
-  }
-  return k
-}
-
 const testOverflow = (doc, k, offset) => {
   if (k + offset > 70) {
     doc.addPage()
@@ -1091,9 +1062,9 @@ export function calculateY(coor) {
 export const regexPasswordPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
 
-export const deleteFromAllDatabase = async () => {
-  const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
-  const mongoDBConnection = mongoConnection.db('phs')
+// export const deleteFromAllDatabase = async () => {
+//   const mongoConnection = mongoDB.currentUser.mongoClient('mongodb-atlas')
+//   const mongoDBConnection = mongoConnection.db('phs')
 
   // console.log(await mongoDBConnection.collection("patients").deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.geriPtConsultForm).deleteMany({}))
@@ -1124,10 +1095,10 @@ export const deleteFromAllDatabase = async () => {
   // console.log(await mongoDBConnection.collection(forms.oralHealthForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.socialServiceForm).deleteMany({}))
   // console.log(await mongoDBConnection.collection(forms.wceForm).deleteMany({}))
-  console.log('done')
+  // console.log('done')
   // deletes volunteer accounts
   // console.log(await mongoDBConnection.collection("profiles").deleteMany({is_admin:{$eq : undefined}}))
-}
+
 
 export function generate_pdf_updated(
   reg,
@@ -1212,3 +1183,4 @@ function patientSection(reg, patients) {
 
   return [mainLogo, ...title, ...thanksNote]
 }
+

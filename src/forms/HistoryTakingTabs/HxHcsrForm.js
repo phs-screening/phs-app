@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { BoolField, RadioField, LongTextField } from 'uniforms-mui'
+import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 
@@ -74,11 +74,12 @@ const schema = new SimpleSchema({
 
 const formName = 'hxHcsrForm'
 const HxHcsrForm = (props) => {
-  const [loading, isLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
+  const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -216,7 +217,7 @@ const HxHcsrForm = (props) => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
+import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
@@ -96,12 +96,13 @@ const schema = new SimpleSchema({
 const formName = 'geriPhqForm' // this is the Hx form but the summary is reference from geriPhqForm
 
 const MentalPhqForm = (props) => {
-  const [loading, setLoading] = useState(false)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, setLoading] = useState(false)
   const [saveData, setSaveData] = useState({})
   const [points, setPoints] = useState(0)
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,7 +179,7 @@ const MentalPhqForm = (props) => {
         <Fragment>
           <p className='blue'>{score} / 27</p>
           <font color='red'>
-            <b>Patient fails PHQ, score is 10 and above </b>
+            <b>Patient fails PHQ, score is 10 and above</b>
           </font>{' '}
           <br />
         </Fragment>
@@ -197,7 +198,6 @@ const MentalPhqForm = (props) => {
 
         model.PHQ10 = points //update score
 
-        const responseGeriPHQ = await submitForm(model, patientId, formName)
         const response = await submitForm(model, patientId, formName)
         if (response.result) {
           const event = null // not interested in this value
@@ -266,7 +266,7 @@ const MentalPhqForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
 
       <Divider />
     </AutoForm>

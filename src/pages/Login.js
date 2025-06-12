@@ -20,7 +20,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 const Login = () => {
   const navigate = useNavigate()
-  const [accountOptions, setAccountOptions] = useState(['Guest', 'Admin'])
+  const accountOptions = ['Guest', 'Admin']
+
   const [accountOption, setAccountOption] = useState('Guest')
   const { isLogin } = useContext(LoginContext)
   const { setProfile } = useContext(LoginContext)
@@ -36,9 +37,9 @@ const Login = () => {
       if (accountOption === accountOptions[1]) {
         //admin
         const credentials = Realm.Credentials.emailPassword(values.email, values.password)
-        //console.log("test")
+
         // Authenticate the user
-        const user = await mongoDB.logIn(credentials)
+        await mongoDB.logIn(credentials)
         const userProfile = profilesCollection()
         const profile = await userProfile.findOne({ username: values.email })
         setProfile(profile)
@@ -50,7 +51,7 @@ const Login = () => {
           password: hashHex,
         })
         // Authenticate the user
-        const user = await mongoDB.logIn(credentials)
+        await mongoDB.logIn(credentials)
         const userProfile = profilesCollection()
         const profile = await userProfile.findOne({ username: values.email })
         isLogin(true)
@@ -115,7 +116,6 @@ const Login = () => {
               handleBlur,
               handleChange,
               handleSubmit,
-              isSubmitting,
               touched,
               values,
             }) => (
@@ -185,7 +185,6 @@ const Login = () => {
                 <Box sx={{ py: 2 }}>
                   <Button
                     color='primary'
-                    // disabled={isSubmitting}
                     fullWidth
                     size='large'
                     type='submit'
@@ -197,7 +196,6 @@ const Login = () => {
                 {accountOption === accountOptions[1] && (
                   <Button
                     color='primary'
-                    // disabled={isSubmitting}
                     fullWidth
                     size='large'
                     type='button'

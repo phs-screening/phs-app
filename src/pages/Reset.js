@@ -2,7 +2,6 @@ import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import mongoDB from '../services/mongoDB'
-import * as Realm from 'realm-web'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import {
@@ -14,8 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useContext, useState } from 'react'
-import { LoginContext } from '../App.js'
+import { useState } from 'react'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { regexPasswordPattern as pattern } from '../api/api'
 
@@ -80,7 +78,6 @@ const Reset = () => {
             handleBlur,
             handleChange,
             handleSubmit,
-            isSubmitting,
             touched,
             values,
           }) => (

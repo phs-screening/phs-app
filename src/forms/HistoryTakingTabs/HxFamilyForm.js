@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, LongTextField, SelectField } from 'uniforms-mui'
+import { SubmitField, ErrorsField, LongTextField, SelectField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
@@ -51,11 +51,12 @@ const schema = new SimpleSchema({
 const formName = 'hxFamilyForm'
 
 const HxFamilyForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, isLoading] = useState(false)
+  const [saveData, setSaveData] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,7 +144,7 @@ const HxFamilyForm = (props) => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <br />
       <Divider />

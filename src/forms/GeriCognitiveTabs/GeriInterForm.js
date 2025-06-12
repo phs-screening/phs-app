@@ -11,12 +11,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import allForms from '../forms.json'
 
 import { AutoForm, useField } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, LongTextField } from 'uniforms-mui'
+import { SubmitField, ErrorsField, RadioField } from 'uniforms-mui'
 import { submitForm } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB.js'
 import '../fieldPadding.css'
-import PopupText from 'src/utils/popupText.js'
 
 const responses = [
   '1 - Hardly ever',
@@ -50,15 +49,14 @@ const schema = new SimpleSchema({
 
 const formName = 'geriInterForm'
 
-const geriInterForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const geriInterForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const { changeTab, nextTab } = props
-  const [points, setPoints] = useState(0)
   const [regi, setRegi] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -103,8 +101,6 @@ const geriInterForm = (props) => {
       score += points[qn]
     })
 
-    setPoints(score)
-
     return <p className='blue'>{score} / 9</p>
   }
 
@@ -141,7 +137,7 @@ const geriInterForm = (props) => {
         <GetScore />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

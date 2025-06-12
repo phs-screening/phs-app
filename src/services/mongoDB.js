@@ -50,7 +50,7 @@ export const getQueueCollection = () => {
   return queue
 }
 
-export const getProfile = async (type) => {
+export const getProfile = async () => {
   if (isLoggedin()) {
     const profile = await app.currentUser
       .mongoClient('mongodb-atlas')
@@ -63,7 +63,7 @@ export const getProfile = async (type) => {
   return null
 }
 
-export const isAdmin = async (type) => {
+export const isAdmin = async () => {
   // admins have email, guests do not
   if (isLoggedin()) {
     return app.currentUser.profile.email !== undefined
