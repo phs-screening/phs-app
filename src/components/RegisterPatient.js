@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
+import { updateAllStationCounts } from '../services/stationCounts'
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -85,6 +86,7 @@ const RegisterPatient = (props) => {
     console.log(data)
     if ('initials' in data) {
       updatePatientInfo(data)
+      await updateAllStationCounts(data.queueNo)
       setIsLoadingQueueNumber(false)
       navigate('/app/dashboard', { replace: true })
     } else if ('age' in data) {
@@ -103,6 +105,7 @@ const RegisterPatient = (props) => {
     const data = await getPreRegDataByName(value, 'patients')
     if ('initials' in data) {
       updatePatientInfo(data)
+      await updateAllStationCounts(data.queueNo)
       setIsLoadingPatientName(false)
       navigate('/app/dashboard', { replace: true })
     } else {

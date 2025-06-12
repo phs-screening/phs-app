@@ -6,6 +6,7 @@ import logo from 'src/icons/Icon'
 import {bloodpressureQR, bmiQR} from 'src/icons/QRCodes'
 import 'jspdf-autotable'
 import { parseFromLangKey, setLang } from './langutil'
+import { updateAllStationCounts } from '../services/stationCounts'
 
 const axios = require('axios').default
 
@@ -97,6 +98,8 @@ export async function submitForm(args, patientId, formCollection) {
         )
 
         await registrationForms.insertOne({ _id: patientId, ...args })
+        await updateAllStationCounts(patientId)
+
         return { result: true, data: data , qNum: patientId}
       } else {
         if (await isAdmin()) {
@@ -107,6 +110,7 @@ export async function submitForm(args, patientId, formCollection) {
             await patientsRecord.updateOne({ queueNo: patientId }, { $set: {initials: args.registrationQ2}})
             await patientsRecord.updateOne({ queueNo: patientId }, { $set: {age: args.registrationQ4}})
           }
+          await updateAllStationCounts(patientId)
 
           // replace form
           // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
@@ -150,11 +154,13 @@ export async function submitFormSpecial(args, patientId, formCollection) {
           { $set: { [formCollection]: patientId } },
         )
         await registrationForms.insertOne({ _id: patientId, ...args })
+        await updateAllStationCounts(patientId)
         return { result: true }
       } else {
         args.lastEdited = new Date()
         args.lastEditedBy = getName()
         await registrationForms.updateOne({ _id: patientId }, { $set: { ...args } })
+        await updateAllStationCounts(patientId)
 
         return { result: true }
       }
