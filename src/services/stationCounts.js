@@ -102,6 +102,7 @@ export function computeVisitedStationsCount(record) {
   let visitedCount = 0
 
   for (const [stationKeys, formKeys] of Object.entries(stationFormMap)) {
+    console.log(stationKeys)
     const allFilled = formKeys.every((formKey) => {
     const form = record[formKey]
     return form != undefined
