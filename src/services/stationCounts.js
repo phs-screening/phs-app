@@ -76,7 +76,6 @@ export const getEligibilityRows = (forms = {}) => {
   ]
 }
 
-
 // groups station keys which are counted as one logical station
 export function computeVisitedStationsCount(record) {
   const stationFormMap = {
@@ -100,17 +99,17 @@ export function computeVisitedStationsCount(record) {
     hpv: ['hpvForm'],
   }
 
-    let visitedCount = 0
+  let visitedCount = 0
 
-    for (const [stationKeys, formKeys] of Object.entries(stationFormMap)) {
-      const allFilled = formKeys.every((formKey) => {
-      const form = record[formKey]
-      return form != undefined
-    })
+  for (const [stationKeys, formKeys] of Object.entries(stationFormMap)) {
+    const allFilled = formKeys.every((formKey) => {
+    const form = record[formKey]
+    return form != undefined
+  })
 
     if (allFilled) {
       visitedCount++
-      }
+    }
   }
   return visitedCount
 }

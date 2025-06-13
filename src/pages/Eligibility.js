@@ -57,6 +57,7 @@ const Eligibility = () => {
       setRows(eligibilityRows)
 
       await updateStationCounts(patientId, visitedCount, eligibleCount)
+      console.log('visited:', visitedCount, 'eligible:', eligibleCount)
     }
 
     if (patientId) loadAndCompute()

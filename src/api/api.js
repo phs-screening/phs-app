@@ -111,7 +111,6 @@ export async function submitForm(args, patientId, formCollection) {
             await patientsRecord.updateOne({ queueNo: patientId }, { $set: {age: args.registrationQ4}})
           }
           await updateAllStationCounts(patientId)
-
           // replace form
           // registrationForms.findOneAndReplace({_id: record[formCollection]}, args);
           // throw error message
