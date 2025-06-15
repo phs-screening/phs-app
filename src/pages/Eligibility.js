@@ -8,10 +8,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Button
 } from '@mui/material'
 import { getSavedData } from '../services/mongoDB'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
+
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+pdfMake.vfs = pdfFonts.vfs
 
 const Eligibility = () => {
   const { patientId } = useContext(FormContext)
@@ -127,6 +132,41 @@ const Eligibility = () => {
     createData('Social Services', isSocialServicesEligible),
   ]
 
+  function generate_pdf_updated(){
+    let content = [];
+    const docDefinition = {
+      content: content,
+      styles: {
+        header: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 10, 0, 5],
+        },
+        subheader: {
+          fontSize: 11,
+          bold: true,
+        },
+        normal: {
+          fontSize: 10,
+        },
+        italicSmall: {
+          italics: true,
+          fontSize: 8,
+        },
+      },
+      defaultStyle: {
+        fontSize: 10,
+      },
+      pageMargins: [40, 60, 40, 60],
+    }
+    let fileName = 'Report.pdf'
+    if (patients.initials) {
+      fileName = patients.initials.split(' ').join('_') + '_Eligiblity_Report.pdf'
+    }
+  
+    pdfMake.createPdf(docDefinition).download(fileName)
+  }
+
   return (
     <>
       <Helmet>
@@ -139,6 +179,11 @@ const Eligibility = () => {
           py: 3,
         }}
       >
+        <Button onClick={() =>
+                generate_pdf_updated()
+              }>
+          Download Eligibility Report
+        </Button>
         <TableContainer>
           <Table>
             <TableHead>
