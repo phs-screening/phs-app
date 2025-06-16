@@ -8,9 +8,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Button
+  Button,
 } from '@mui/material'
-import { getSavedData } from '../services/mongoDB'
+import logo from 'src/icons/Icon'
+import { getSavedData, getSavedPatientData } from '../services/mongoDB'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
 
@@ -132,8 +133,59 @@ const Eligibility = () => {
     createData('Social Services', isSocialServicesEligible),
   ]
 
-  function generate_pdf_updated(){
-    let content = [];
+  function patientSection() {
+    //const salutation = reg.registrationQ1 || 'Dear'
+  
+    const mainLogo = {
+      image: logo,
+      width: 220,
+    }
+
+    const patientsData = getSavedPatientData(patientId, 'patients');
+    const thanksNote = [
+      { text: `${patientsData.initials}`, style: 'normal' },
+    ]
+  
+    // const title = [{ text: parseFromLangKey('title'), style: 'header' }]
+  
+    // const thanksNote = [
+    //   { text: `${parseFromLangKey('dear', salutation, patients.initials)}`, style: 'normal' },
+    //   { text: `${parseFromLangKey('intro')}`, style: 'normal' },
+    // ]
+  
+    return [mainLogo, 
+      //...title, 
+      ...thanksNote
+    ]
+  }
+
+  function eligibilitySection() {
+    return [
+      {
+        style: 'tableExample',
+        table: {
+          widths: ['*', '*'],
+          body: [
+            [
+              { text: 'Modality', style: 'tableHeader' },
+              { text: 'Eligibility', style: 'tableHeader' },
+            ],
+            ...rows.map((row) => [
+              { text: row.name },
+              {
+                text: row.eligibility,
+                color: row.eligibility === 'YES' ? 'blue' : 'red', // Conditional color
+              },
+            ]),
+          ],
+        },
+        layout: 'lightHorizontalLines',
+      },
+    ]
+  }
+
+  function generate_pdf_updated() {
+    let content = []
     const docDefinition = {
       content: content,
       styles: {
@@ -159,11 +211,13 @@ const Eligibility = () => {
       },
       pageMargins: [40, 60, 40, 60],
     }
+    content.push(...patientSection())
+    content.push(...eligibilitySection())
     let fileName = 'Report.pdf'
-    if (patients.initials) {
-      fileName = patients.initials.split(' ').join('_') + '_Eligiblity_Report.pdf'
-    }
-  
+    // if (patients.initials) {
+    //   fileName = patients.initials.split(' ').join('_') + '_Eligiblity_Report.pdf'
+    // }
+
     pdfMake.createPdf(docDefinition).download(fileName)
   }
 
@@ -179,11 +233,7 @@ const Eligibility = () => {
           py: 3,
         }}
       >
-        <Button onClick={() =>
-                generate_pdf_updated()
-              }>
-          Download Eligibility Report
-        </Button>
+        <Button onClick={() => generate_pdf_updated()}>Download Eligibility Report</Button>
         <TableContainer>
           <Table>
             <TableHead>
