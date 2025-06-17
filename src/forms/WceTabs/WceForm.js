@@ -22,47 +22,47 @@ const schema = new SimpleSchema({
   wceQ3: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
-    optional: true,
+    optional: false,
   },
   wceQ4: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
-    optional: true,
+    optional: false,
   },
   wceQ5: {
     type: String,
     allowedValues: ['Yes', 'No', 'Not Applicable'],
-    optional: true,
+    optional: false,
   },
   wceQ7: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   wceQ8: {
     type: String,
     allowedValues: ['Never before', 'Less than 5 years', '5 years or longer'],
-    optional: true,
+    optional: false,
   },
   wceQ9: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   wceQ10: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   wceQ11: {
     type: String,
     allowedValues: ['Never before', 'Within the last 3 years', '3 years or longer'],
-    optional: true,
+    optional: false,
   },
   wceQ12: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   }
 })
 

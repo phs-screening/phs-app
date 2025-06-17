@@ -22,102 +22,102 @@ const schema = new SimpleSchema({
   GYNAE1: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAE2: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns2: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE3: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns3: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE4: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns4: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE5: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns5: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE6: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns6: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE7: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns7: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE8: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns8: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE9: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAE10: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns10: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE11: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns11: {
     type: String,
-    optional: true,
+    optional: false,
   },
   GYNAE13: {
     type: String,
     allowedValues: ['Yes', 'No'],
-    optional: true,
+    optional: false,
   },
   GYNAEShortAns13: {
     type: String,
-    optional: true,
+    optional: false,
   },
 })
 
