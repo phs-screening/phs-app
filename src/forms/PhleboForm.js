@@ -74,7 +74,7 @@ const PhleboForm = () => {
         <br />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => {}} />}</div>
       <br />
       <Divider />
     </AutoForm>
