@@ -137,13 +137,18 @@ export const updatePhlebotomyCounter = async (seq) => {
   return
 }
 
-export const updateStationCounts = async (patientId, visitedStationsCount, eligibleStationsCount) => {
+export const updateStationCounts = async (patientId, visitedStationsCount, eligibleStationsCount, visitedStations = [], eligibleStations = []) => {
   const mongoConnection = app.currentUser.mongoClient('mongodb-atlas')
   await mongoConnection
     .db('phs')
     .collection('patients')
     .updateOne(
       { queueNo: patientId },
-      { $set: { visitedStationsCount, eligibleStationsCount } }
+      { 
+        $set: { 
+          visitedStationsCount, 
+          eligibleStationsCount,
+          visitedStations,
+          eligibleStations} }
   )
 }

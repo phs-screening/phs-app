@@ -150,7 +150,62 @@ export const updateAllStationCounts = async (patientId) => {
   
   const rows = getEligibilityRows(formData)
   const eligibleStationsCount = rows.filter((r) => r.eligibility === 'YES').length
-  
-  await updateStationCounts(patientId, visitedStationsCount, eligibleStationsCount)
+
+  const eligibleStations = getEligibleStationNames(formData)
+  const visitedStations = getVisitedStationNames(patient)
+
+  await updateStationCounts(patientId, visitedStationsCount, eligibleStationsCount, visitedStations, eligibleStations)
+
   console.log('visited:', visitedStationsCount, 'eligible:', eligibleStationsCount)
+  console.log('eligible stations:', eligibleStations)
+  console.log('visited stations:', visitedStations)
+}
+
+export const getEligibleStationNames = (forms = {}) => {
+  const eligibleStations = []
+  const rows = getEligibilityRows(forms)
+  
+  rows.forEach(row => {
+    if (row.eligibility === 'YES') {
+      eligibleStations.push(row.name)
+    }
+  })
+  
+  return eligibleStations
+}
+
+export const getVisitedStationNames = (record) => {
+  const visitedStations = []
+  const stationFormMap = {
+    'Healthier SG Booth': ['hsgForm'],
+    'Phlebotomy': ['phlebotomyForm'],
+    'Faecal Immunochemical Testing (FIT)': ['fitForm'],
+    'Lung Function Testing': ['lungFnForm'],
+    "Women's Cancer Education": ['wceForm', 'gynaeForm'],
+    'Osteoporosis': ['osteoForm'],
+    'Kidney Screening': ['nkfForm'],
+    'Mental Health': ['mentalHealthForm'],
+    'Vaccination': ['vaccineForm'],
+    'Geriatric Screening': ['geriAmtForm', 'geriGraceForm', 'geriWhForm', 'geriInterForm', 
+      'geriPhysicalActivityLevelForm', 'geriOtQuestionnaireForm', 'geriSppbForm', 'geriPtConsultForm', 'geriOtConsultForm',
+      'geriVisionForm'],
+    'Audiometry': ['geriAudiometryForm'],
+    "Doctor's Station": ['doctorConsultForm'],
+    "Dietitian's Consult": ['dietitiansConsultForm'],
+    'Oral Health': ['oralHealthForm'],
+    'Social Services': ['socialServiceForm'],
+    'HPV On-Site Testing': ['hpvForm'],
+  }
+
+  for (const [stationName, formKeys] of Object.entries(stationFormMap)) {
+    const allFilled = formKeys.every((formKey) => {
+      return record[formKey] !== undefined
+    })
+    
+    if (allFilled) {
+      visitedStations.push(stationName)
+    }
+  }
+  
+  return visitedStations
 }

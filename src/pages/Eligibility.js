@@ -12,7 +12,7 @@ import {
 import { getSavedData, getSavedPatientData, updateStationCounts } from '../services/mongoDB'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
-import { getEligibilityRows, computeVisitedStationsCount } from '../services/stationCounts'
+import { getEligibilityRows, computeVisitedStationsCount, getVisitedStationNames} from '../services/stationCounts'
 
 const Eligibility = () => {
   const { patientId } = useContext(FormContext)
@@ -56,8 +56,18 @@ const Eligibility = () => {
       const eligibleCount = eligibilityRows.filter(r => r.eligibility === 'YES').length
       setRows(eligibilityRows)
 
-      await updateStationCounts(patientId, visitedCount, eligibleCount)
+      // NEW: Get the actual station names (not just counts)
+      const visitedStationNames = getVisitedStationNames(patient)
+      const eligibleStationNames = eligibilityRows
+        .filter(r => r.eligibility === 'YES')
+        .map(r => r.name)
+
+      // Update existing counts and station names
+      await updateStationCounts(patientId, visitedCount, eligibleCount, visitedStationNames, eligibleStationNames)
+
       console.log('visited:', visitedCount, 'eligible:', eligibleCount)
+      console.log('visited stations:', visitedStationNames)
+      console.log('eligible stations:', eligibleStationNames)
     }
 
     if (patientId) loadAndCompute()
