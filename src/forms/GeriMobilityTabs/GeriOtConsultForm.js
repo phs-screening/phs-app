@@ -1,69 +1,72 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
-import Divider from '@mui/material/Divider'
-import Paper from '@mui/material/Paper'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Divider, Paper, CircularProgress, FormControl, FormLabel, Box, 
+  FormControlLabel, Checkbox, RadioGroup, Radio, TextField, Button, Grid } from '@mui/material'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { RadioField, LongTextField, SelectField } from 'uniforms-mui'
 import { submitForm, calculateSppbScore } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
 import allForms from '../forms.json'
-import Grid from '@mui/material/Grid'
 
-const schema = new SimpleSchema({
-  geriOtConsultQ1: {
-    type: String,
-    optional: false,
-  },
-  geriOtConsultQ2: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriOtConsultQ3: {
-    type: String,
-    optional: true,
-  },
-  geriOtConsultQ4: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriOtConsultQ5: {
-    type: String,
-    optional: true,
-  },
-  geriOtConsultQ6: {
-    type: Array,
-    optional: true,
-  },
-  'geriOtConsultQ6.$': {
-    type: String,
-    allowedValues: ['HDB EASE', 'Own vendors'],
-  },
-  geriOtConsultQ7: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriOtConsultQ8: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
-  geriOtConsultQ9: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: true,
-  },
+const formName = 'geriOtConsultForm'
+
+const formOptions = {
+  geriOtConsultQ2: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  geriOtConsultQ4: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  geriOtConsultQ6: [
+    { label: 'HDB EASE', value: 'HDB EASE' },
+    { label: 'Own vendors', value: 'Own vendors' },
+  ],
+  geriOtConsultQ7: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  geriOtConsultQ8: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  geriOtConsultQ9: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+}
+
+const validationSchema = Yup.object({
+  geriOtConsultQ1: Yup.string().required(),
+  geriOtConsultQ2: Yup.string().oneOf(formOptions.geriOtConsultQ2.map(opt => opt.value)).required(),
+  geriOtConsultQ3: Yup.string(),
+  geriOtConsultQ4: Yup.string().oneOf(formOptions.geriOtConsultQ4.map(opt => opt.value)).required(),
+  geriOtConsultQ5: Yup.string(),
+  geriOtConsultQ6: Yup.array().of(Yup.string().oneOf(formOptions.geriOtConsultQ6.map(opt => opt.value))),
+  geriOtConsultQ7: Yup.string().oneOf(formOptions.geriOtConsultQ7.map(opt => opt.value)),
+  geriOtConsultQ8: Yup.string().oneOf(formOptions.geriOtConsultQ8.map(opt => opt.value)),
+  geriOtConsultQ9: Yup.string().oneOf(formOptions.geriOtConsultQ9.map(opt => opt.value)),
 })
+
+const isRequiredField = (schema, fieldName) => {
+  try {
+    const tests = schema.fields[fieldName]?.tests || []
+    return tests.some((test) => test.OPTIONS?.name === 'required')
+  } catch {
+    return false
+  }
+}
+
+const formatLabel = (name, schema) => {
+  const match = name.match(/geriOtConsultQ(\d+)/i)
+  const label = match ? `Geri - OT Consult Q${match[1]}` : name
+  return `${label}${isRequiredField(schema, name) ? ' *' : ''}`
+}
 
 function GetSppbScore(q2, q6, q8) {
   let score = 0
@@ -82,19 +85,47 @@ function GetSppbScore(q2, q6, q8) {
   return score
 }
 
-const formName = 'geriOtConsultForm'
-const GeriOtConsultForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
+const GeriOtConsultForm = () => {
+  const { patientId } = useContext(FormContext)
+  const navigate = useNavigate()
+
+  const [initialValues, setInitialValues] = useState({
+    geriOtConsultQ1: '',
+    geriOtConsultQ2: '',
+    geriOtConsultQ3: '',
+    geriOtConsultQ4: '',
+    geriOtConsultQ5: '',
+    geriOtConsultQ6: [],
+    geriOtConsultQ7: '',
+    geriOtConsultQ8: '',
+    geriOtConsultQ9: '',
+  })
+
   const [geriVision, setGeriVision] = useState({})
   const [geriOtQ, setGeriOtQ] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { changeTab, nextTab } = props
-  const navigate = useNavigate()
+  const [loading, isLoading] = useState(false)
+
+  const formik = useFormik({
+    initialValues,
+    enableReinitialize: true,
+    validationSchema,
+    onSubmit: async (values) => {
+      isLoading(true)
+      const response = await submitForm(values, patientId, formName)
+      setTimeout(() => {
+        isLoading(false)
+        if (response.result) {
+          alert('Successfully submitted form')
+          navigate('/app/dashboard', { replace: true })
+        } else {
+          alert(`Unsuccessful. ${response.error}`)
+        }
+      }, 80)
+    },
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,149 +135,134 @@ const GeriOtConsultForm = (props) => {
       const geriSppbData = getSavedData(patientId, allForms.geriSppbForm)
       const geriTugData = getSavedData(patientId, allForms.geriTugForm)
 
-
-      Promise.all([savedData, geriVisionData, geriOtQData, geriSppbData, geriTugData]).then(
-        (result) => {
-          setSaveData(result[0])
-          setGeriVision(result[1])
-          setGeriOtQ(result[2])
-          setGeriSppb(result[3])
-          setGeriTug(result[4])
-          isLoadingSidePanel(false)
-        },
-      )
+      Promise.all([savedData, geriVisionData, geriOtQData, geriSppbData, geriTugData]).then((result) => {
+        setInitialValues(result[0])
+        setGeriVision(result[1])
+        setGeriOtQ(result[2])
+        setGeriSppb(result[3])
+        setGeriTug(result[4])
+        isLoadingSidePanel(false)
+      })
     }
     fetchData()
   }, [])
 
-  const formOptions = {
-    geriOtConsultQ2: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    geriOtConsultQ4: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    geriOtConsultQ6: [
-      { label: 'HDB EASE', value: 'HDB EASE' },
-      { label: 'Own vendors', value: 'Own vendors' },
-    ],
-    geriOtConsultQ7: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    geriOtConsultQ8: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    geriOtConsultQ9: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-  }
-
-  const newForm = () => (
-    <AutoForm
-      schema={form_schema}
-      className='fieldPadding'
-      onSubmit={async (model) => {
-        isLoading(true)
-        const response = await submitForm(model, patientId, formName)
-        if (response.result) {
-          const event = null // not interested in this value
-          isLoading(false)
-          setTimeout(() => {
-            alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
-          }, 80)
-        } else {
-          isLoading(false)
-          setTimeout(() => {
-            alert(`Unsuccessful. ${response.error}`)
-          }, 80)
-        }
-      }}
-      model={saveData}
-    >
-      <div className='form--div'>
-        <h1>OT Consult</h1>
-        <h3>Memo (for participant):</h3>
-        <LongTextField name='geriOtConsultQ1' label='Geri - OT Consult Q1' />
-        <h3>To be referred for doctor&apos;s consult (OT)?</h3>
-        If referral to long-term OT rehab services is necessary, this will be done through the
-        doctor&apos;s consult route.
-        <RadioField
-          name='geriOtConsultQ2'
-          label='Geri - OT Consult Q2'
-          options={formOptions.geriOtConsultQ2}
-        />
-        <h4>Reasons for referral to Doctor&apos;s consult (OT):</h4>
-        For Referral to Polyclinic for OT Rehabilitation Services
-        <LongTextField name='geriOtConsultQ3' label='Geri - OT Consult Q3' />
-        <h3>To be referred for social services (OT):</h3>
-        <RadioField
-          name='geriOtConsultQ4'
-          label='Geri - OT Consult Q4'
-          options={formOptions.geriOtConsultQ4}
-        />
-        <h4>Reasons for referral to social services (OT):</h4>
-        <LongTextField name='geriOtConsultQ5' label='Geri - OT Consult Q5' />
-        <h4>Which of the following programmes would you recommend the participant for?</h4>
-        (Please select the most appropriate programme)
-        <br />
-        <SelectField
-          name='geriOtConsultQ6'
-          checkboxes='true'
-          label='Geri - OT Consult Q6'
-          options={formOptions.geriOtConsultQ6}
-        />
-        <h3>HDB EASE</h3>
-        <p className='remove-bottom-margin'>
-          SC flat owners qualify for EASE (Direct Application) if a family member in the household:
-        </p>
-        <ul>
-          <li>is 65 years old and above; or</li>
-          <li>aged between 60 and 64 years and requires assistance for one or more of the</li>
-        </ul>
-        <h4>Activities of Daily Living (ADL)</h4>
-        ADL refers to daily self-care activities within an individual&apos;s place of residence.
-        These activities include washing/ bathing, dressing, feeding, toileting, mobility, and
-        transferring.
-        <p className='underlined'>Note: Age criterion is not applicable for EASE under HIP.</p>
-        <h3>Is participant eligible for HDB EASE?</h3>
-        <RadioField
-          name='geriOtConsultQ7'
-          label='Geri - OT Consult Q7'
-          options={formOptions.geriOtConsultQ7}
-        />
-        <h3>Does participant wish to sign up for HDB EASE?</h3>
-        <RadioField
-          name='geriOtConsultQ8'
-          label='Geri - OT Consult Q8'
-          options={formOptions.geriOtConsultQ8}
-        />
-        <h3>Functional Assessment Report completed & given to participant?</h3>
-        <RadioField
-          name='geriOtConsultQ9'
-          label='Geri - OT Consult Q9'
-          options={formOptions.geriOtConsultQ9}
-        />
-      </div>
-
-      <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
-
-      <Divider />
-    </AutoForm>
+  const renderRadioGroup = (name, options = formOptions[name]) => (
+    <FormControl sx = {{ mt: 1 }}>
+      <FormLabel sx={{ color: 'text.secondary' }}>{formatLabel(name, validationSchema)}</FormLabel>
+      <RadioGroup value={formik.values[name]} onChange={formik.handleChange} name={name}>
+        {options.map((opt) => (
+          <FormControlLabel
+            key={opt.value}
+            value={opt.value}
+            control={<Radio />}
+            label={`${opt.label}${isRequiredField(validationSchema, name) ? ' *' : ''}`}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
   )
 
+  const renderCheckboxGroup = (name, options = formOptions[name].map(o => o.value)) => (
+    <FormControl sx = {{ mt: 1 }}>
+      <FormLabel sx={{ color: 'text.secondary' }}>{formatLabel(name, validationSchema)}</FormLabel>
+      <Box display='flex' flexDirection='column'>
+        {options.map((val) => (
+          <FormControlLabel
+            key={val}
+            control={
+              <Checkbox
+                name={name}
+                checked={(formik.values[name] || []).includes(val)}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  const newArr = checked
+                    ? [...(formik.values[name] || []), val]
+                    : (formik.values[name] || []).filter((v) => v !== val)
+                  formik.setFieldValue(name, newArr)
+                }}
+              />
+            }
+            label={`${val}${isRequiredField(validationSchema, name) ? ' *' : ''}`}
+          />
+        ))}
+      </Box>
+    </FormControl>
+  )
+  
+  const renderTextField = (name) => (
+    <TextField
+      name={name}
+      label={formatLabel(name, validationSchema)}
+      value={formik.values[name] || ''}
+      onChange={formik.handleChange}
+      error={formik.touched[name] && Boolean(formik.errors[name])}
+      helperText={formik.touched[name] && formik.errors[name]}
+      fullWidth
+      multiline
+      sx={{ mt: 1 }}
+    />
+  )
+  
   return (
     <Paper elevation={2} p={0} m={0}>
       <Grid display='flex' flexDirection='row'>
         <Grid xs={9}>
           <Paper elevation={2} p={0} m={0}>
-            {newForm()}
+            <form onSubmit={formik.handleSubmit} className='fieldPadding'>
+              <div className='form--div'>
+                <h1>OT Consult</h1>
+                <h3>Memo (for participant):</h3>
+                {renderTextField('geriOtConsultQ1')}
+
+                <h3>To be referred for doctor&apos;s consult (OT)?</h3>
+                If referral to long-term OT rehab services is necessary, this will be done through the doctor&apos;s consult route.
+                <br />
+                {renderRadioGroup('geriOtConsultQ2')}
+
+                <h4>Reasons for referral to Doctor&apos;s consult (OT):</h4>
+                For Referral to Polyclinic for OT Rehabilitation Services
+                {renderTextField('geriOtConsultQ3')}
+
+                <h3>To be referred for social services (OT):</h3>
+                {renderRadioGroup('geriOtConsultQ4')}
+
+                <h4>Reasons for referral to social services (OT):</h4>
+                {renderTextField('geriOtConsultQ5')}
+
+                <h4>Which of the following programmes would you recommend the participant for?</h4>
+                (Please select the most appropriate programme)
+                <br />
+                {renderCheckboxGroup('geriOtConsultQ6')}
+
+                <h3>HDB EASE</h3>
+                <p className='remove-bottom-margin'>
+                  SC flat owners qualify for EASE (Direct Application) if a family member in the household:
+                </p>
+                <ul>
+                  <li>is 65 years old and above; or</li>
+                  <li>aged between 60 and 64 years and requires assistance for one or more of the</li>
+                </ul>
+
+                <h4>Activities of Daily Living (ADL)</h4>
+                ADL refers to daily self-care activities within an individual&apos;s place of residence. These activities include washing/ bathing, dressing, feeding, toileting, mobility, and transferring.
+                <p className='underlined'>Note: Age criterion is not applicable for EASE under HIP.</p>
+
+                <h3>Is participant eligible for HDB EASE?</h3>
+                {renderRadioGroup('geriOtConsultQ7')}
+
+                <h3>Does participant wish to sign up for HDB EASE?</h3>
+                {renderRadioGroup('geriOtConsultQ8')}
+                
+                <h3>Functional Assessment Report completed & given to participant?</h3>
+                {renderRadioGroup('geriOtConsultQ9')}
+              </div>
+              <div> 
+                {loading ? <CircularProgress /> : <Button type='submit' variant='contained' color='primary'>Submit</Button>}
+              </div>
+              <br />
+              <Divider />
+            </form>
           </Paper>
         </Grid>
         <Grid
@@ -395,7 +411,5 @@ const GeriOtConsultForm = (props) => {
     </Paper>
   )
 }
-
-GeriOtConsultForm.contextType = FormContext
 
 export default GeriOtConsultForm

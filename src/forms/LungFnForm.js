@@ -1,84 +1,87 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import { useContext, useEffect, useState } from 'react'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
-import Divider from '@mui/material/Divider'
-import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
-import CircularProgress from '@mui/material/CircularProgress'
+import {
+  Divider,
+  Paper,
+  Grid,
+  CircularProgress,
+  Button,
+  TextField,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Box
+} from '@mui/material'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, NumField } from 'uniforms-mui'
-import { SelectField, RadioField, LongTextField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 
 import allForms from './forms.json'
 
-import PopupText from 'src/utils/popupText'
+
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
-import { useField } from 'uniforms'
+
 import { useNavigate } from 'react-router'
 
-const schema = new SimpleSchema({
-  LUNG1: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  LUNGShortAns1: {
-    type: String,
-    optional: true,
-  },
-  LUNG2: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  LUNGShortAns2: {
-    type: String,
-    optional: true,
-  },
-  LUNG3: {
-    type: Number,
-    optional: false,
-  },
-  LUNG4: {
-    type: Number,
-    optional: false,
-  },
-  LUNG5: {
-    type: Number,
-    optional: false,
-  },
-  LUNG6: {
-    type: Number,
-    optional: false,
-  },
-  LUNG7: {
-    type: Number,
-    optional: false,
-  },
-  LUNG14: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
+// Yup validation schema
+const schema = Yup.object({
+  LUNG1: Yup.string()
+    .oneOf(['Yes', 'No'], 'Please select a valid option')
+    .required('This field is required'),
+  LUNGShortAns1: Yup.string()
+    .when('LUNG1', {
+      is: 'No',
+      then: (schema) => schema.required('Please specify'),
+      otherwise: (schema) => schema
+    }),
+  LUNG2: Yup.string()
+    .oneOf(['Yes', 'No'], 'Please select a valid option')
+    .required('This field is required'),
+  LUNGShortAns2: Yup.string()
+    .when('LUNG2', {
+      is: 'No',
+      then: (schema) => schema.required('Please specify why'),
+      otherwise: (schema) => schema
+    }),
+  LUNG3: Yup.number()
+    .typeError('Must be a number')
+    .required('This field is required'),
+  LUNG4: Yup.number()
+    .typeError('Must be a number')
+    .required('This field is required'),
+  LUNG5: Yup.number()
+    .typeError('Must be a number')
+    .required('This field is required'),
+  LUNG6: Yup.number()
+    .typeError('Must be a number')
+    .required('This field is required'),
+  LUNG7: Yup.number()
+    .typeError('Must be a number')
+    .required('This field is required'),
+  LUNG14: Yup.string()
+    .oneOf(['Yes', 'No'], 'Please select a valid option')
+    .required('This field is required'),
 })
 
 const formName = 'lungFnForm'
-const LungFnForm = (props) => {
-  const navigate = useNavigate()
+
+const LungFnForm = () => {
+  const { patientId } = useContext(FormContext)
+
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
-  const [lungType, setLungType] = useState(null)
 
+  const [lungType, setLungType] = useState(null)
   const [social, setSocial] = useState({})
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,10 +119,7 @@ const LungFnForm = (props) => {
     ],
   }
 
-  const LungType_cal = () => {
-    const [{ value: lung5 }] = useField('LUNG5', {})
-    const [{ value: lung7 }] = useField('LUNG7', {})
-
+  const LungType_cal = (lung5, lung7) => {
     if ((lung5 >= 80) && (lung7 < 70)) {
       const typeOfLung = "Obstructive Defect"
       setLungType(typeOfLung)
@@ -142,77 +142,236 @@ const LungFnForm = (props) => {
     }
   }
 
-  const newForm = () => (
-    <AutoForm
-      schema={form_schema}
-      className='fieldPadding'
-      onSubmit={async (model) => {
-        isLoading(true)
-        model.LUNG13 = lungType
-        const response = await submitForm(model, patientId, formName)
-        if (response.result) {
-          isLoading(false)
-          setTimeout(() => {
-            alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
-          }, 80)
-        } else {
-          isLoading(false)
-          setTimeout(() => {
-            alert(`Unsuccessful. ${response.error}`)
-          }, 80)
-        }
+  const RadioField = ({ name, label, options, values, setFieldValue, errors, touched }) => (
+    <FormControl component="fieldset" margin="normal" fullWidth>
+      <FormLabel component="legend">{label}</FormLabel>
+      <RadioGroup
+        value={values[name] || ''}
+        onChange={(e) => setFieldValue(name, e.target.value)}
+      >
+        {options.map((option) => (
+          <FormControlLabel
+            key={option.value}
+            value={option.value}
+            control={<Radio />}
+            label={option.label}
+          />
+        ))}
+      </RadioGroup>
+      {errors[name] && touched[name] && (
+        <Box color="error.main" fontSize="0.75rem" mt={0.5}>
+          {errors[name]}
+        </Box>
+      )}
+    </FormControl>
+  )
+
+  const NumField = ({ name, label, values, setFieldValue, errors, touched }) => (
+    <TextField
+      fullWidth
+      margin="normal"
+      name={name}
+      label={label}
+      type="number"
+      value={values[name] || ''}
+      onChange={(e) => setFieldValue(name, parseFloat(e.target.value) || '')}
+      error={errors[name] && touched[name]}
+      helperText={errors[name] && touched[name] ? errors[name] : ''}
+      sx={{
+        "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+          display: "none",
+        },
+        "& input[type=number]": {
+          MozAppearance: "textfield",
+        },
       }}
-      model={saveData}
-    >
+    />
+  )
+
+  const LongTextField = ({ name, label, values, setFieldValue, errors, touched }) => (
+    <TextField
+      fullWidth
+      margin="normal"
+      name={name}
+      label={label}
+      multiline
+      rows={3}
+      value={values[name] || ''}
+      onChange={(e) => setFieldValue(name, e.target.value)}
+      error={errors[name] && touched[name]}
+      helperText={errors[name] && touched[name] ? errors[name] : ''}
+    />
+  )
+
+  const newForm = (values, setFieldValue, errors, touched, isSubmitting) => (
+    <Form className='fieldPadding'>
       <div className='form--div'>
         <h1>Lung Function</h1>
         <h3>Are you well today? (Any flu, fever etc)</h3>
-        <RadioField name='LUNG1' label='LUNG1' options={formOptions.LUNG1} />
-        <LongTextField name='LUNGShortAns1' label='LUNG1' />
+        <RadioField 
+          name='LUNG1' 
+          label='LUNG1' 
+          options={formOptions.LUNG1}
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
+        <LongTextField 
+          name='LUNGShortAns1' 
+          label='LUNG1'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
         <h3>Lung function test completed?</h3>
-        <RadioField name='LUNG2' label='LUNG2' options={formOptions.LUNG2} />
-        <PopupText qnNo='LUNG2' triggerValue='No'>
-          <p>
+        <RadioField 
+          name='LUNG2' 
+          label='LUNG2' 
+          options={formOptions.LUNG2}
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
+        {values.LUNG2 === 'No' && (
+          <div>
             <h4>If no, why?</h4>
-            <LongTextField name='LUNGShortAns2' label='LUNG2' />
-          </p>
-        </PopupText>
+            <LongTextField 
+              name='LUNGShortAns2' 
+              label='LUNG2'
+              values={values}
+              setFieldValue={setFieldValue}
+              errors={errors}
+              touched={touched}
+            />
+          </div>
+        )}
         <h2>Results of lung function test:</h2><br />
         <h2>Pre-bronchodilator</h2>
         <h3>FVC (L)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG3' label='LUNG3' />
+        <NumField 
+          name='LUNG3' 
+          label='LUNG3'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
         <h3>FEV1 (L)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG4' label='LUNG4' />
+        <NumField 
+          name='LUNG4' 
+          label='LUNG4'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
         <h3>FVC (%pred)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG5' label='LUNG5' />
+        <NumField 
+          name='LUNG5' 
+          label='LUNG5'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
         <h3>FEV1 (%pred)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG6' label='LUNG6' />
+        <NumField 
+          name='LUNG6' 
+          label='LUNG6'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
         <h3>FEV1:FVC (%)</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" name='LUNG7' label='LUNG7' /><br />
+        <NumField 
+          name='LUNG7' 
+          label='LUNG7'
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        /><br />
         <h3>What defect does the patient have? </h3>
-        <LungType_cal />
+        <LungType_cal lung5={values.LUNG5} lung7={values.LUNG7} />
         <h3>Patient needs to be referred to doctor&apos;s station for followup on their result?</h3>
-        <RadioField name='LUNG14' label='LUNG14' options={formOptions.LUNG14} />
+        <RadioField 
+          name='LUNG14' 
+          label='LUNG14' 
+          options={formOptions.LUNG14}
+          values={values}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          touched={touched}
+        />
       </div>
-      <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
+      
+      <Box mt={2}>
+        {loading || isSubmitting ? (
+          <CircularProgress />
+        ) : (
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary"
+            disabled={isSubmitting}
+          >
+            Submit
+          </Button>
+        )}
+      </Box>
 
       <br />
       <Divider />
-    </AutoForm>
+    </Form>
   )
+
   return (
     <Paper elevation={2} p={0} m={0}>
       <Grid display='flex' flexDirection='row'>
         <Grid xs={9}>
           <Paper elevation={2} p={0} m={0}>
-            {newForm()}
+            <Formik
+              initialValues={{
+                LUNG1: saveData.LUNG1 || '',
+                LUNGShortAns1: saveData.LUNGShortAns1 || '',
+                LUNG2: saveData.LUNG2 || '',
+                LUNGShortAns2: saveData.LUNGShortAns2 || '',
+                LUNG3: saveData.LUNG3 || '',
+                LUNG4: saveData.LUNG4 || '',
+                LUNG5: saveData.LUNG5 || '',
+                LUNG6: saveData.LUNG6 || '',
+                LUNG7: saveData.LUNG7 || '',
+                LUNG14: saveData.LUNG14 || '',
+              }}
+              validationSchema={schema}
+              enableReinitialize={true}
+              onSubmit={async (model, { setSubmitting }) => {
+                isLoading(true)
+                model.LUNG13 = lungType
+                const response = await submitForm(model, patientId, formName)
+                if (response.result) {
+                  isLoading(false)
+                  setTimeout(() => {
+                    alert('Successfully submitted form')
+                    navigate('/app/dashboard', { replace: true })
+                  }, 80)
+                } else {
+                  isLoading(false)
+                  setTimeout(() => {
+                    alert(`Unsuccessful. ${response.error}`)
+                  }, 80)
+                }
+                setSubmitting(false)
+              }}
+            >
+              {({ values, errors, touched, setFieldValue, isSubmitting }) => 
+                newForm(values, setFieldValue, errors, touched, isSubmitting)
+              }
+            </Formik>
           </Paper>
         </Grid>
         <Grid

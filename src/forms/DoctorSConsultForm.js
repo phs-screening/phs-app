@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AutoForm } from 'uniforms'
 import { SubmitField, ErrorsField } from 'uniforms-mui'
 import { LongTextField, BoolField } from 'uniforms-mui'
-import { submitForm, formatBmi, calculateSppbScore } from '../api/api.js'
+import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import allForms from './forms.json'
@@ -76,12 +76,11 @@ const schema = new SimpleSchema({
 
 const formName = 'doctorConsultForm'
 const DoctorSConsultForm = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const navigate = useNavigate()
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState({})
+  
   // forms to retrieve for side panel
   const [hcsr, setHcsr] = useState({})
   const [geriVision, setGeriVision] = useState({})
@@ -93,6 +92,9 @@ const DoctorSConsultForm = () => {
   const [pmhx, setPMHX] = useState({})
   const [social, setSocial] = useState({})
   const [family, setFamily] = useState({})
+
+  const form_schema = new SimpleSchema2Bridge(schema)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadPastForms = async () => {
@@ -187,7 +189,7 @@ const DoctorSConsultForm = () => {
       </div>
 
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
 
       <Divider />
     </AutoForm>

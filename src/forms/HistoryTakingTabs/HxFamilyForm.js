@@ -1,162 +1,135 @@
 import React, { useContext, useEffect, useState } from 'react'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
-
-import Divider from '@mui/material/Divider'
-import Paper from '@mui/material/Paper'
-import CircularProgress from '@mui/material/CircularProgress'
-
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, LongTextField, SelectField } from 'uniforms-mui'
-import { submitForm } from '../../api/api.js'
+import {
+  Paper, Divider, Typography, CircularProgress,
+  FormControl, FormLabel, FormGroup, FormControlLabel,
+  Checkbox, TextField, Button
+} from '@mui/material'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
-import '../fieldPadding.css'
-
-const schema = new SimpleSchema({
-  FAMILY1: {
-    type: Array,
-    optional: false,
-  },
-  'FAMILY1.$': {
-    type: String,
-    allowedValues: [
-      'Cervical Cancer 子宫颈癌',
-      'Breast Cancer 乳癌',
-      'Colorectal Cancer 大肠癌',
-      'Others',
-      'No, I have never been told I have any of these conditions before',
-    ],
-    optional: false,
-  },
-  FAMILYShortAns1: {
-    type: String,
-    optional: true,
-  },
-  FAMILY2: {
-    type: String,
-    optional: true,
-  },
-  FAMILY3: {
-    type: Array,
-    optional: true,
-  },
-  'FAMILY3.$': {
-    type: String,
-    allowedValues: ['Kidney Disease', 'Diabetes', 'Hypertension'],
-    optional: true,
-  },
-})
+import { submitForm } from '../../api/api.js'
 
 const formName = 'hxFamilyForm'
 
-const HxFamilyForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
-  const [saveData, setSaveData] = useState({})
-  const { changeTab, nextTab } = props
+const initialValues = {
+  FAMILY1: [],
+  FAMILYShortAns1: '',
+  FAMILY2: '',
+  FAMILY3: []
+}
+
+const validationSchema = Yup.object({
+  FAMILY1: Yup.array().min(1, 'At least one option must be selected'),
+})
+
+const checkboxOptions1 = [
+  'Cervical Cancer 子宫颈癌',
+  'Breast Cancer 乳癌',
+  'Colorectal Cancer 大肠癌',
+  'Others',
+  'No, I have never been told I have any of these conditions before',
+]
+
+const checkboxOptions3 = [
+  'Kidney Disease',
+  'Diabetes',
+  'Hypertension'
+]
+
+const CheckboxGroupField = ({ name, label, options }) => (
+  <FormControl fullWidth sx={{ mb: 3 }} component="fieldset">
+    <FormLabel component="legend">
+      <Typography variant="subtitle1" fontWeight="bold">{label}</Typography>
+    </FormLabel>
+    <Field name={name}>
+      {({ field, form }) => (
+        <FormGroup>
+          {options.map(option => (
+            <FormControlLabel
+              key={option}
+              control={
+                <Checkbox
+                  checked={field.value.includes(option)}
+                  onChange={() => {
+                    const set = new Set(field.value)
+                    set.has(option) ? set.delete(option) : set.add(option)
+                    form.setFieldValue(name, Array.from(set))
+                  }}
+                />
+              }
+              label={option}
+            />
+          ))}
+        </FormGroup>
+      )}
+    </Field>
+    <ErrorMessage name={name} component="div" style={{ color: 'red' }} />
+  </FormControl>
+)
+
+export default function HxFamilyForm({ changeTab, nextTab }) {
+  const { patientId } = useContext(FormContext)
+  const [savedValues, setSavedValues] = useState(initialValues)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const fetchData = async () => {
-      const savedData = await getSavedData(patientId, formName)
-      setSaveData(savedData)
-    }
-    fetchData()
-  }, [])
+    getSavedData(patientId, formName).then((res) => {
+      setSavedValues({ ...initialValues, ...res })
+    })
+  }, [patientId])
 
-  const formOptions = {
-    FAMILY1: [
-      {
-        label: 'Cervical Cancer 子宫颈癌',
-        value: 'Cervical Cancer 子宫颈癌',
-      },
-      { label: 'Breast Cancer 乳癌', value: 'Breast Cancer 乳癌' },
-      { label: 'Colorectal Cancer 大肠癌', value: 'Colorectal Cancer 大肠癌' },
-      { label: 'Others', value: 'Others' },
-      {
-        label: 'No, I have never been told I have any of these conditions before',
-        value: 'No, I have never been told I have any of these conditions before',
-      },
-    ],
-    FAMILY3: [
-      {
-        label: 'Kidney Disease',
-        value: 'Kidney Disease',
-      },
-      { label: 'Diabetes', value: 'Diabetes' },
-      { label: 'Hypertension', value: 'Hypertension' },
-    ],
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setLoading(true)
+    const response = await submitForm(values, patientId, formName)
+    setLoading(false)
+    setSubmitting(false)
+    if (response.result) {
+      alert('Successfully submitted form')
+      changeTab(null, nextTab)
+    } else {
+      alert(`Unsuccessful. ${response.error}`)
+    }
   }
 
-  const newForm = () => (
-    <AutoForm
-      schema={form_schema}
-      className='fieldPadding'
-      onSubmit={async (model) => {
-        isLoading(true)
-        const response = await submitForm(model, patientId, formName)
-        if (response.result) {
-          const event = null // not interested in this value
-          isLoading(false)
-          setTimeout(() => {
-            alert('Successfully submitted form')
-            changeTab(event, nextTab)
-          }, 80)
-        } else {
-          isLoading(false)
-          setTimeout(() => {
-            alert(`Unsuccessful. ${response.error}`)
-          }, 80)
-        }
-      }}
-      model={saveData}
-    >
-      <div className='form--div'>
-        <h3>
-          Is there positive family history{' '}
-          <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following cancers?
-          Please specify age of diagnosis.
-        </h3>
-        <SelectField
-          appearance='checkbox'
-          checkboxes
-          name='FAMILY1'
-          label='FAMILY1'
-          options={formOptions.FAMILY1}
-        />
-        <h4>Please specify:</h4>
-        <LongTextField name='FAMILYShortAns1' label='FAMILY1' />
-        <h3>
-          Does the patient have any relevant family history they would like the doctor to know
-          about?
-        </h3>
-        <LongTextField name='FAMILY2' label='FAMILY2' />
-        <h3>Any positive family history for these conditions?</h3>
-        <SelectField
-          appearance='checkbox'
-          checkboxes
-          name='FAMILY3'
-          label='FAMILY3'
-          options={formOptions.FAMILY3}
-        />
-        <br />
-      </div>
-      <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
-
-      <br />
-      <Divider />
-    </AutoForm>
-  )
-
   return (
-    <Paper elevation={2} p={0} m={0}>
-      {newForm()}
+    <Paper elevation={2}>
+      <Formik
+        initialValues={savedValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form className="fieldPadding">
+            <Typography variant="h6" gutterBottom>
+              Is there positive family history <span style={{ color: 'red' }}>(AMONG FIRST DEGREE RELATIVES)</span> for the following cancers?
+              Please specify age of diagnosis.
+            </Typography>
+
+            <CheckboxGroupField name="FAMILY1" label="FAMILY1" options={checkboxOptions1} />
+
+            <Typography variant="subtitle1" fontWeight="bold">Please specify:</Typography>
+            <Field name="FAMILYShortAns1" as={TextField} label="FAMILYShortAns1" fullWidth multiline sx={{ mb: 3, mt: 1 }} />
+
+            <Typography variant="h6">Does the patient have any relevant family history they would like the doctor to know about?</Typography>
+            <Field name="FAMILY2" as={TextField} label="FAMILY2" fullWidth multiline sx={{ mb: 3, mt: 1 }} />
+
+            <Typography variant="h6">Any positive family history for these conditions?</Typography>
+            <CheckboxGroupField name="FAMILY3" label="FAMILY3" options={checkboxOptions3} />
+
+            <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+              {loading || isSubmitting ? <CircularProgress /> : (
+                <Button type="submit" variant="contained" color="primary">
+                  Submit
+                </Button>
+              )}
+            </div>
+            <br />
+            <Divider />
+          </Form>
+        )}
+      </Formik>
     </Paper>
   )
 }
-
-HxFamilyForm.contextType = FormContext
-
-export default HxFamilyForm

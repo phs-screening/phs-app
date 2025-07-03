@@ -8,10 +8,9 @@ import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField, RadioField, SelectField } from 'uniforms-mui'
+import { SubmitField, ErrorsField, SelectField } from 'uniforms-mui'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
-import { BoolField } from 'uniforms-mui'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 
@@ -29,10 +28,11 @@ const schema = new SimpleSchema({
 const formName = 'hpvForm'
 
 const HpvForm = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
+  
+  const form_schema = new SimpleSchema2Bridge(schema)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const HpvForm = () => {
         />
       </div>
       <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={() => { }} />}</div>
       <br />
       <Divider />
     </AutoForm>

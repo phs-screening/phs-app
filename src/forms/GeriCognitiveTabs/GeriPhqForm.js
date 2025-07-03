@@ -60,9 +60,9 @@ function getScore(values) {
 }
 
 const GeriPhqForm = (props) => {
-  const [loading, setLoading] = useState(false)
   const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
+  const [loading, setLoading] = useState(false)
   const [initialValues, setInitialValues] = useState({
     PHQ1: '',
     PHQ2: '',

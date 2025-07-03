@@ -6,7 +6,7 @@ import { FormContext } from 'src/api/utils'
 import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+  const { patientId } = useContext(FormContext)
   const [isValid, setValid] = useState(false)
   const navigate = useNavigate()
 

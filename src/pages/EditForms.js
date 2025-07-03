@@ -4,6 +4,7 @@ import { isAdmin, getPreRegDataById } from '../services/mongoDB'
 import { useNavigate } from 'react-router-dom'
 import { Search as SearchIcon } from 'react-feather'
 import { FormContext } from '../api/utils'
+import { updateAllStationCounts } from '../services/stationCounts'
 
 const ManageVolunteers = () => {
   const navigate = useNavigate()
@@ -40,6 +41,7 @@ const ManageVolunteers = () => {
     const data = await getPreRegDataById(value, 'patients')
     if ('initials' in data) {
       updatePatientInfo(data)
+      await updateAllStationCounts(data.patientId)
       navigate('/app/dashboard', { replace: true })
     } else {
       // if response is unsuccessful/id does not exist, show error style/popup.

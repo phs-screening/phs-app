@@ -49,7 +49,7 @@ function a11yProps(index) {
 const GeriCognitiveWrapper = styled('div')(
   ({ theme }) => `
   flex-grow: 1;
-  background-color: $(theme.palette.background.paper);
+  background-color: ${theme.palette.background.paper};
 `,
 )
 

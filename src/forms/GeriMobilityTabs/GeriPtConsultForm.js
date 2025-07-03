@@ -1,15 +1,11 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React, { useContext, useEffect, useState } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
-import Divider from '@mui/material/Divider'
-import Paper from '@mui/material/Paper'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Divider, Paper, CircularProgress, FormControl, FormLabel, Box, 
+  FormControlLabel, Checkbox, RadioGroup, Radio, TextField, Button } from '@mui/material'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { RadioField, LongTextField, SelectField } from 'uniforms-mui'
-import { submitForm } from '../../api/api.js'
+import { submitForm, calculateSppbScore } from '../../api/api.js'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/mongoDB'
 import '../fieldPadding.css'
@@ -17,43 +13,53 @@ import allForms from '../forms.json'
 import Grid from '@mui/material/Grid'
 import '../forms.css'
 
-const schema = new SimpleSchema({
-  geriPtConsultQ1: {
-    type: String,
-    optional: false,
-  },
-  geriPtConsultQ2: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriPtConsultQ3: {
-    type: Array,
-    optional: true,
-  },
-  'geriPtConsultQ3.$': {
-    type: String,
-    allowedValues: [
-      'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
-      'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
-      'Others (please specify:)',
-    ],
-    optional: true,
-  },
-  geriPtConsultQ8: {
-    type: String,
-    optional: true,
-  },
-  geriPtConsultQ4: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  geriPtConsultQ5: {
-    type: String,
-    optional: true,
-  },
-})
+const formName = 'geriPtConsultForm';
+
+const formOptions = {
+  geriPtConsultQ2: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  geriPtConsultQ3: [
+    {
+      label: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
+      value: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
+    },
+    {
+      label: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
+      value: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
+    },
+    { label: 'Others (please specify:)', value: 'Others (please specify:)' },
+  ],
+  geriPtConsultQ4: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+}
+
+const validationSchema = Yup.object({
+  geriPtConsultQ1: Yup.string().required(),
+  geriPtConsultQ2: Yup.string().oneOf(formOptions.geriPtConsultQ2.map(option => option.value)).required(),
+  geriPtConsultQ3: Yup.array().of(Yup.string().oneOf(formOptions.geriPtConsultQ3.map(option => option.value))).nullable(),
+  geriPtConsultQ4: Yup.string().oneOf(formOptions.geriPtConsultQ4.map(option => option.value)).required(),
+  geriPtConsultQ5: Yup.string(),
+  geriPtConsultQ8: Yup.string(),
+});
+
+const isRequiredField = (schema, fieldName) => {
+  try {
+    const tests = schema.fields[fieldName]?.tests || []
+    return tests.some((test) => test.OPTIONS?.name === 'required')
+  } catch {
+    return false
+  }
+}
+
+const formatLabel = (name, schema) => {
+  const match = name.match(/geriPtConsultQ(\d+)/i)
+  const label = match ? `Geri - PT Consult Q${match[1]}` : name
+  return `${label}${isRequiredField(schema, name) ? ' *' : ''}`
+}
 
 function GetSppbScore(q2, q6, q8) {
   let score = 0
@@ -103,19 +109,44 @@ const getTotalFrailScaleScore = (doc) => {
   }
 }
 
-const formName = 'geriPtConsultForm'
 const GeriPtConsultForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
-  const [loading, isLoading] = useState(false)
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
+  const { patientId } = useContext(FormContext)
   const { changeTab, nextTab } = props
-  const [saveData, setSaveData] = useState({})
+  const [loading, isLoading] = useState(false)
+  const [initialValues, setInitialValues] = useState({
+    geriPtConsultQ1: '',
+    geriPtConsultQ2: '',
+    geriPtConsultQ3: [],
+    geriPtConsultQ4: '',
+    geriPtConsultQ5: '',
+    geriPtConsultQ8: ''
+  })
   const [geriParq, setGeriParq] = useState({})
   const [geriPhysicalActivity, setGeriPhysicalActivity] = useState({})
   const [geriFrailScale, setGeriFrailScale] = useState({})
   const [geriSppb, setGeriSppb] = useState({})
   const [geriTug, setGeriTug] = useState({})
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
+
+  const formik = useFormik({
+    initialValues,
+    enableReinitialize: true,
+    validationSchema,
+    onSubmit: async (values) => {
+      isLoading(true)
+      const response = await submitForm(values, patientId, formName)
+      setTimeout(() => {
+        isLoading(false)
+        if (response.result) {
+          const event = null // not interested in this value
+          alert('Successfully submitted form')
+          changeTab(event, nextTab)
+        } else {
+          alert(`Unsuccessful. ${response.error}`)
+        }
+      }, 80)
+    }
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,7 +165,7 @@ const GeriPtConsultForm = (props) => {
         geriSppbData,
         geriTugData,
       ]).then((result) => {
-        setSaveData(result[0])
+        setInitialValues(result[0])
         setGeriParq(result[1])
         setGeriPhysicalActivity(result[2])
         setGeriFrailScale(result[3])
@@ -146,85 +177,61 @@ const GeriPtConsultForm = (props) => {
     fetchData()
   }, [])
 
-  const formOptions = {
-    geriPtConsultQ2: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    geriPtConsultQ3: [
-      {
-        label: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
-        value: 'Fall risk (i.e. 2 or more falls/1 fall with injury in the past 1 year)',
-      },
-      {
-        label: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
-        value: 'Reduced functional mobility (i.e. Short Physical Performance Battery <10)',
-      },
-      { label: 'Others (please specify:)', value: 'Others (please specify:)' },
-    ],
-    geriPtConsultQ4: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-  }
-  const newForm = () => (
-    <AutoForm
-      schema={form_schema}
-      className='fieldPadding'
-      onSubmit={async (model) => {
-        isLoading(true)
-        const response = await submitForm(model, patientId, formName)
-        if (response.result) {
-          const event = null // not interested in this value
-          isLoading(false)
-          setTimeout(() => {
-            alert('Successfully submitted form')
-            changeTab(event, nextTab)
-          }, 80)
-        } else {
-          isLoading(false)
-          setTimeout(() => {
-            alert(`Unsuccessful. ${response.error}`)
-          }, 80)
-        }
-      }}
-      model={saveData}
-    >
-      <div className='form--div'>
-        <h1>PT Consult</h1>
-        <h3>Memo (for participant):</h3>
-        <LongTextField name='geriPtConsultQ1' label='Geri - PT Consult Q1' />
-        <h3>To be referred for doctor&apos;s consult (PT)?</h3>
-        <RadioField
-          name='geriPtConsultQ2'
-          label='Geri - PT Consult Q2'
-          options={formOptions.geriPtConsultQ2}
-        />
-        <h4>Reasons for referral to Doctor&apos;s consult (PT):</h4>
-        <SelectField
-          name='geriPtConsultQ3'
-          checkboxes='true'
-          label='Geri - PT Consult Q3'
-          options={formOptions.geriPtConsultQ3}
-        />
-        <h4>Please specify (if others):</h4>
-        <LongTextField name='geriPtConsultQ8' label='Geri - PT Consult Q8' />
-        <h3>To be referred for social support (PT):</h3>
-        <RadioField
-          name='geriPtConsultQ4'
-          label='Geri - PT Consult Q4'
-          options={formOptions.geriPtConsultQ4}
-        />
-        <h4>Please specify:</h4>
-        <LongTextField name='geriPtConsultQ5' label='Geri - PT Consult Q5' />
-        <br />
-      </div>
-      <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => { }} />}</div>
+  const renderRadioGroup = (name, options = formOptions[name]) => (
+    <FormControl sx = {{ mt: 1 }}>
+      <FormLabel sx={{ color: 'text.secondary' }}>{formatLabel(name, validationSchema)}</FormLabel>
+      <RadioGroup value={formik.values[name]} onChange={formik.handleChange} name={name}>
+        {options.map((opt) => (
+          <FormControlLabel
+            key={opt.value}
+            value={opt.value}
+            control={<Radio />}
+            label={`${opt.label}${isRequiredField(validationSchema, name) ? ' *' : ''}`}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
+  )
 
-      <br />
-      <Divider />
-    </AutoForm>
+  const renderCheckboxGroup = (name, options = formOptions[name].map(o => o.value)) => (
+    <FormControl sx = {{ mt: 1 }}>
+      <FormLabel sx={{ color: 'text.secondary' }}>{formatLabel(name, validationSchema)}</FormLabel>
+      <Box display='flex' flexDirection='column'>
+        {options.map((val) => (
+          <FormControlLabel
+            key={val}
+            control={
+              <Checkbox
+                name={name}
+                checked={(formik.values[name] || []).includes(val)}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  const newArr = checked
+                    ? [...(formik.values[name] || []), val]
+                    : (formik.values[name] || []).filter((v) => v !== val)
+                  formik.setFieldValue(name, newArr)
+                }}
+              />
+            }
+            label={`${val}${isRequiredField(validationSchema, name) ? ' *' : ''}`}
+          />
+        ))}
+      </Box>
+    </FormControl>
+  )
+
+  const renderTextField = (name) => (
+    <TextField
+      name={name}
+      label={formatLabel(name, validationSchema)}
+      value={formik.values[name] || ''}
+      onChange={formik.handleChange}
+      error={formik.touched[name] && Boolean(formik.errors[name])}
+      helperText={formik.touched[name] && formik.errors[name]}
+      fullWidth
+      multiline
+      sx={{ mt: 1 }}
+    />
   )
 
   return (
@@ -232,9 +239,40 @@ const GeriPtConsultForm = (props) => {
       <Grid display='flex' flexDirection='row'>
         <Grid xs={9}>
           <Paper elevation={2} p={0} m={0}>
-            {newForm()}
+            <form onSubmit={formik.handleSubmit} className='fieldPadding'>
+              <div className='form--div'>
+                <h1>PT Consult</h1>
+                <h3>Memo (for participant):</h3>
+                {renderTextField('geriPtConsultQ1')}
+
+                <h3>To be referred for doctor&apos;s consult (PT)?</h3>
+                {renderRadioGroup('geriPtConsultQ2')}
+
+                <h4>Reasons for referral to Doctor&apos;s consult (PT):</h4>
+                {renderCheckboxGroup('geriPtConsultQ3')}
+
+                <h4>Please specify (if others):</h4>
+                {renderTextField('geriPtConsultQ8')}
+
+                <h3>To be referred for social support (PT):</h3>
+                {renderRadioGroup('geriPtConsultQ4')} 
+
+                <h4>Please specify:</h4>
+                {renderTextField('geriPtConsultQ5')}
+              </div>
+
+              <br />
+              <div> 
+                {loading ? <CircularProgress /> : <Button type='submit' variant='contained' color='primary'>Submit</Button>}
+              </div>
+
+              <br />
+              <Divider />
+
+            </form>
           </Paper>
         </Grid>
+
         <Grid
           p={1}
           width='50%'
@@ -314,10 +352,13 @@ const GeriPtConsultForm = (props) => {
               <Divider />
               <h2>SPPB Scores</h2>
               <p className='underlined'>Short Physical Performance Battery Score (out of 12):</p>
-              {geriSppb ? (
+              {geriSppb && geriSppb.geriSppbQ2 && geriSppb.geriSppbQ6 && geriSppb.geriSppbQ8 ? (
                 <p className='blue'>
-                  calculateSppbScore( geriSppb.geriSppbQ2, geriSppb.geriSppbQ6, geriSppb.geriSppbQ8,
-                  )
+                  {calculateSppbScore(
+                    geriSppb.geriSppbQ2,
+                    geriSppb.geriSppbQ6,
+                    geriSppb.geriSppbQ8,
+                  )}
                 </p>
               ) : (
                 <p className='blue'>nil</p>
@@ -383,7 +424,7 @@ const GeriPtConsultForm = (props) => {
                 <p className='blue'>nil</p>
               )}
               <p className='underlined'>Notes:</p>
-              {geriSppb ? (
+              {geriSppb && geriSppb.geriSppbQ12 ? (
                 <p className='blue'>{geriSppb.geriSppbQ12}</p>
               ) : (
                 <p className='blue'>nil</p>
@@ -395,7 +436,5 @@ const GeriPtConsultForm = (props) => {
     </Paper>
   )
 }
-
-GeriPtConsultForm.contextType = FormContext
 
 export default GeriPtConsultForm

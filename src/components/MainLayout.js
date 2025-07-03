@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom'
 import { styled } from '@mui/system'
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import MainNavbar from './MainNavbar'
 import React from 'react'
 

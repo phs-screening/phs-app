@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
-import { ContactSupportOutlined } from '@mui/icons-material'
+import { updateAllStationCounts } from '../services/stationCounts'
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -26,7 +26,7 @@ const RegisterPatient = (props) => {
     selectedValue: null,
   })
   const [patientNames, setPatientNames] = useState([])
-  const { patientId, updatePatientInfo } = useContext(FormContext)
+  const { updatePatientInfo } = useContext(FormContext)
   const navigate = useNavigate()
   const ref = useRef()
 
@@ -86,6 +86,7 @@ const RegisterPatient = (props) => {
     console.log(data)
     if ('initials' in data) {
       updatePatientInfo(data)
+      await updateAllStationCounts(data.queueNo)
       setIsLoadingQueueNumber(false)
       navigate('/app/dashboard', { replace: true })
     } else if ('age' in data) {
@@ -104,6 +105,7 @@ const RegisterPatient = (props) => {
     const data = await getPreRegDataByName(value, 'patients')
     if ('initials' in data) {
       updatePatientInfo(data)
+      await updateAllStationCounts(data.queueNo)
       setIsLoadingPatientName(false)
       navigate('/app/dashboard', { replace: true })
     } else {
@@ -126,10 +128,7 @@ const RegisterPatient = (props) => {
           >
             Register
           </Button>
-          <Typography></Typography>
-          <Typography color='textSecondary' gutterBottom variant='h5'>
-            OR
-          </Typography>
+          <Typography color='textSecondary' gutterBottom variant='h5'>OR</Typography>
           <Typography color='textPrimary' gutterBottom variant='h4'>
             Enter queue number below
           </Typography>
@@ -150,7 +149,7 @@ const RegisterPatient = (props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') { //default it here
                 handleSubmitQueueNumber();
-              } 
+              }
             }}
             sx={{ marginTop: '5px', marginBottom: '5px' }}
           />

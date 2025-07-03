@@ -1,54 +1,61 @@
-import React, { Component, Fragment, useContext, useEffect, useState } from 'react'
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2'
-import SimpleSchema from 'simpl-schema'
+import React, { useContext, useEffect, useState } from 'react'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
+import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
+import TextField from '@mui/material/TextField'
+import FormHelperText from '@mui/material/FormHelperText'
 
 import allForms from './forms.json'
 
-import { AutoForm } from 'uniforms'
-import { SubmitField, ErrorsField } from 'uniforms-mui'
-import { SelectField, TextField, NumField, RadioField, LongTextField } from 'uniforms-mui'
-import { useField } from 'uniforms'
 import { submitForm } from '../api/api.js'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/mongoDB'
 import './fieldPadding.css'
 import { useNavigate } from 'react-router'
 
-const schema = new SimpleSchema({
-  BONE1: {
-    type: String,
-    allowedValues: ['High', 'Moderate', 'Low'],
-    optional: false,
-  },
-  BONE2: {
-    type: String,
-    allowedValues: ['Yes', 'No'],
-    optional: false,
-  },
-  BONE3: {
-    type: Number,
-    optional: false,
-  }
+// Yup validation schema (equivalent to the original SimpleSchema)
+const validationSchema = Yup.object({
+  BONE1: Yup.string()
+    .oneOf(['High', 'Moderate', 'Low'], 'Please select a valid option')
+    .required('This field is required'),
+  BONE2: Yup.string()
+    .oneOf(['Yes', 'No'], 'Please select Yes or No')
+    .required('This field is required'),
+  BONE3: Yup.number()
+    .min(0, 'Value must be greater than or equal to 0')
+    .required('This field is required')
 })
+
+// Initial values (equivalent to schema defaults)
+const initialValues = {
+  BONE1: '',
+  BONE2: '',
+  BONE3: ''
+}
 
 const formName = 'osteoForm'
 
-const OsteoForm = (props) => {
-  const { patientId, updatePatientId } = useContext(FormContext)
+const OsteoForm = () => {
+  const { patientId } = useContext(FormContext)
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
-  const [form_schema, setForm_schema] = useState(new SimpleSchema2Bridge(schema))
   const [saveData, setSaveData] = useState({})
   const [regi, setRegi] = useState({})
   const [triage, setTriage] = useState({})
   const [social, setSocial] = useState({})
 
+  const navigate = useNavigate()
+  
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
@@ -56,7 +63,7 @@ const OsteoForm = (props) => {
       const regiData = getSavedData(patientId, allForms.registrationForm)
       const triageData = getSavedData(patientId, allForms.triageForm)
       const socialData = getSavedData(patientId, allForms.hxSocialForm)
-      
+
       Promise.all([regiData, triageData, socialData]).then((result) => {
           setRegi(result[0])
           setTriage(result[1])
@@ -81,44 +88,150 @@ const OsteoForm = (props) => {
     ],
   }
 
-  const newForm = () => (
-    <AutoForm
-      schema={form_schema}
-      className='fieldPadding'
-      onSubmit={async (model) => {
-        setLoading(true)
-        const response = await submitForm(model, patientId, formName)
-        if (response.result) {
-          setLoading(false)
-          setTimeout(() => {
-            alert('Successfully submitted form')
-            navigate('/app/dashboard', { replace: true })
-          }, 80)
-        } else {
-          setLoading(false)
-          setTimeout(() => {
-            alert(`Unsuccessful. ${response.error}`)
-          }, 80)
-        }
+  // Custom Radio Field Component
+  const RadioField = ({ name, options, label, formik }) => (
+    <FormControl component="fieldset" error={formik.touched[name] && !!formik.errors[name]}>
+      <FormLabel component="legend">{label}</FormLabel>
+      <RadioGroup
+        name={name}
+        value={formik.values[name] || ''}
+        onChange={formik.handleChange}
+      >
+        {options.map((option) => (
+          <FormControlLabel
+            key={option.value}
+            value={option.value}
+            control={<Radio />}
+            label={option.label}
+          />
+        ))}
+      </RadioGroup>
+      {formik.touched[name] && formik.errors[name] && (
+        <FormHelperText>{formik.errors[name]}</FormHelperText>
+      )}
+    </FormControl>
+  )
+
+  // Custom Number Field Component
+  const NumField = ({ name, label, formik, ...props }) => (
+    <TextField
+      name={name}
+      label={label}
+      type="number"
+      value={formik.values[name] || ''}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      error={formik.touched[name] && !!formik.errors[name]}
+      helperText={formik.touched[name] && formik.errors[name]}
+      sx={{
+        "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+          display: "none",
+        },
+        "& input[type=number]": {
+          MozAppearance: "textfield",
+        },
       }}
-      model={saveData}
+      {...props}
+    />
+  )
+
+  const handleSubmit = async (values) => {
+    setLoading(true)
+    const response = await submitForm(values, patientId, formName)
+    if (response.result) {
+      setLoading(false)
+      setTimeout(() => {
+        alert('Successfully submitted form')
+        navigate('/app/dashboard', { replace: true })
+      }, 80)
+    } else {
+      setLoading(false)
+      setTimeout(() => {
+        alert(`Unsuccessful. ${response.error}`)
+      }, 80)
+    }
+  }
+
+  // Merge saved data with initial values
+  const getInitialValues = () => {
+    return {
+      ...initialValues,
+      ...saveData
+    }
+  }
+
+  const newForm = () => (
+    <Formik
+      initialValues={getInitialValues()}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize={true}
     >
-      <div className='form--div'>
-        <h1>Osteoporosis</h1>
-        <h3>Based on OSTA, patient&apos;s osteoporosis risk is: </h3>
-        <img src='/images/Ost/ost_self_assessment_tool.png' alt='osta' /> <br />
-        <RadioField name='BONE1' label='BONE1' options={formOptions.BONE1} />
-        <br />
-        <h3>FRAX Hip Fracture Score</h3>
-        <NumField sx={{"& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":{display: "none",},"& input[type=number]": {MozAppearance: "textfield",},}}
-            type="number" min={0} name='BONE3' label='BONE3' />
-        <h3>Patient requires a follow up</h3>
-        <RadioField name='BONE2' label='BONE2' options={formOptions.BONE2} />
-      </div>
-      <ErrorsField />
-      <div>{loading ? <CircularProgress /> : <SubmitField inputRef={(ref) => {}} />}</div>
-      <Divider />
-    </AutoForm>
+      {(formik) => (
+        <Form className='fieldPadding'>
+          <div className='form--div'>
+            <h1>Osteoporosis</h1>
+            <h3>Based on OSTA, patient&apos;s osteoporosis risk is: </h3>
+            <img src='/images/Ost/ost_self_assessment_tool.png' alt='osta' /> <br />
+            
+            <RadioField 
+              name='BONE1' 
+              label='BONE1' 
+              options={formOptions.BONE1}
+              formik={formik}
+            />
+            <br />
+            <br />
+            
+            <h3>FRAX Hip Fracture Score</h3>
+            <NumField 
+              name='BONE3' 
+              label='BONE3'
+              min={0}
+              formik={formik}
+              style={{ marginTop: '10px' }}
+            />
+            <br />
+            
+            <h3>Patient requires a follow up</h3>
+            <RadioField 
+              name='BONE2' 
+              label='BONE2' 
+              options={formOptions.BONE2}
+              formik={formik}
+            />
+          </div>
+          
+          {/* Error Display */}
+          {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
+            <div style={{ color: 'red', margin: '10px 0' }}>
+              <h4>Please fix the following errors:</h4>
+              <ul>
+                {Object.entries(formik.errors).map(([field, error]) => (
+                  <li key={field}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          <div>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Button 
+                type="submit" 
+                variant="contained" 
+                color="primary"
+                disabled={!formik.isValid || loading}
+              >
+                Submit
+              </Button>
+            )}
+          </div>
+          <Divider />
+        </Form>
+      )}
+    </Formik>
   )
 
   return (
@@ -129,11 +242,11 @@ const OsteoForm = (props) => {
             {newForm()}
           </Paper>
         </Grid>
-        <Grid 
-          p={1} 
-          width='30%' 
-          display='flex' 
-          flexDirection='column' 
+        <Grid
+          p={1}
+          width='30%'
+          display='flex'
+          flexDirection='column'
           alignItems={loadingSidePanel ? 'center' : 'left'}
         >
           {loadingSidePanel ? (
@@ -145,7 +258,7 @@ const OsteoForm = (props) => {
                 regi ? (
                   <>
                     {
-                      (regi.registrationQ3 instanceof Date? 
+                      (regi.registrationQ3 instanceof Date?
                       <p>Birthday: <strong>{regi.registrationQ3.toDateString()}</strong></p>
                        : <p className='red'>registrationQ3 is invalid!</p>)
                     }
@@ -174,7 +287,7 @@ const OsteoForm = (props) => {
                   </>
                 ) : null
               }
-              
+
             </div>
           )}
         </Grid>
