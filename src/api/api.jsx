@@ -1755,7 +1755,7 @@ export const generateFormAPdf = async (patientId) => {
       chasStatusSection(reg),
       pioneerGenSection(reg),
       triageTableSection(triage),
-      eligibilitySection(eligibilityRows),
+      eligibilitySection(eligibilityRows, pmhx),
       ...picSections()
     ]
   };
@@ -1782,8 +1782,7 @@ function patientIdSection(patient) {
   };
 }
 
-function eligibilitySection(eligibilityRows, {pmhx}) {
-
+function eligibilitySection(eligibilityRows, pmhx = {}) {
   const isNutritionistEligible = pmhx?.PMHX5?.includes("Hypertension") || pmhx?.PMHX5?.includes("Hyperlipidemia") || pmhx?.PMHX5?.includes("Diabetes/Pre-Diabetic")
   const isDieticianEligible = pmhx?.PMHX5?.includes("Kidney Disease") || pmhx?.PMHX5?.includes("Heart disease") || pmhx?.PMHX5?.includes("Others")
   const dietText =
