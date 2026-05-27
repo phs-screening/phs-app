@@ -9,7 +9,16 @@ import {
 } from '../api/queuesApi'
 import { getProfile } from '../services/authSession'
 import { getPreRegDataById, getSavedData } from '../services/patientData'
-import { Box, Button, Typography, TextField, CircularProgress, Tooltip } from '@mui/material'
+import {
+  Box,
+  Button,
+  Typography,
+  TextField,
+  CircularProgress,
+  Tooltip,
+  Paper,
+  Divider,
+} from '@mui/material'
 import allForms from '../forms/forms.json'
 
 const StationQueue = () => {
@@ -181,82 +190,103 @@ const StationQueue = () => {
   }, [])
 
   return (
-    <>
+    <Box sx={{ p: 3, bgcolor: '#f7f8fb', minHeight: '100vh' }}>
       <Typography
         color='textPrimary'
         gutterBottom
         variant='h3'
-        sx={{
-          marginBottom: '20px',
-        }}
+        sx={{ marginBottom: 3, fontWeight: 700 }}
       >
-        Stations
+        Station Queue Management
       </Typography>
 
-      <TextField
-        id='station-name'
-        name='station-name'
-        label='Add Station'
-        type='text'
-        placeholder='Enter station name'
-        size='small'
-        variant='outlined'
-        onChange={handleChange}
+      <Paper
+        elevation={2}
         sx={{
-          marginRight: '8px',
+          p: 3,
+          mb: 4,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: 'center',
+          gap: 2,
+          bgcolor: '#fff',
+          maxWidth: '100%',
         }}
-      />
+      >
+        <TextField
+          id='station-name'
+          name='station-name'
+          label='Station Name'
+          type='text'
+          placeholder='Enter station name'
+          size='small'
+          variant='outlined'
+          onChange={handleChange}
+          value={stationName}
+          sx={{ flex: 1, minWidth: 0 }}
+        />
 
-      {admin && (
-        <Button color='primary' size='large' type='submit' onClick={handleAddStation}>
-          Add
-        </Button>
-      )}
+        {admin && (
+          <Button
+            color='primary'
+            variant='contained'
+            type='submit'
+            onClick={handleAddStation}
+            disabled={loading || !stationName.trim()}
+            sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
+          >
+            Add Station
+          </Button>
+        )}
+      </Paper>
 
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '32px',
-          marginTop: '24px',
+          gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, minmax(420px, 1fr))' },
+          gap: 3,
         }}
       >
-        {stationQueues.map(({ stationName, queueItems }) => {
-          return (
+        {stationQueues.map(({ stationName, queueItems }) => (
+          <Paper
+            key={stationName}
+            elevation={3}
+            sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2, bgcolor: '#fff' }}
+          >
             <Box
-              key={stationName}
               sx={{
                 display: 'flex',
-                flexDirection: 'column',
-                width: '400px',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 2,
               }}
             >
               <Tooltip title={stationName}>
                 <Typography
-                  color='textPrimary'
-                  gutterBottom
-                  variant='h4'
-                  noWrap
-                  sx={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
+                  variant='h5'
+                  sx={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis' }}
                 >
                   {stationName}
                 </Typography>
               </Tooltip>
+              <Typography variant='caption' color='text.secondary'>
+                {queueItems?.length || 0} in queue
+              </Typography>
+            </Box>
 
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
-                id={stationName}
+                id={`${stationName}-add`}
                 name={stationName}
-                label='Add Patient'
+                label='Add patient IDs'
                 type='text'
-                placeholder='Enter one or more patient IDs, e.g. 1 2 3 4'
+                placeholder='e.g. 1 2 3 4'
                 size='small'
                 variant='outlined'
+                value={stationPatientAddId[stationName] || ''}
                 onChange={handlePatientAddInput}
+                fullWidth
               />
-
               <Button
                 color='primary'
                 size='large'
@@ -264,90 +294,110 @@ const StationQueue = () => {
                 variant='contained'
                 disabled={loading}
                 onClick={(event) => handlePatientAdd(event, stationName)}
+                sx={{ textTransform: 'none' }}
               >
-                Add to back
+                Add to Back
               </Button>
+            </Box>
 
-              <br />
+            <Divider />
 
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
-                id={stationName + '-remove'}
+                id={`${stationName}-remove`}
                 name={stationName}
-                label='Remove patient'
+                label='Remove patient IDs'
                 type='text'
-                placeholder='Enter one or more patient IDs, e.g. 1 2 3 4'
+                placeholder='e.g. 1 2 3 4'
                 size='small'
                 variant='outlined'
+                value={stationPatientRemoveId[stationName] || ''}
                 onChange={handlePatientRemoveInput}
+                fullWidth
               />
               <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
+                sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 1 }}
               >
                 <Button
                   color='primary'
                   size='large'
                   type='submit'
+                  variant='outlined'
                   disabled={loading}
                   onClick={(event) => handlePatientRemoveFirst(event, stationName)}
-                  sx={{
-                    flex: '1',
-                  }}
+                  sx={{ textTransform: 'none' }}
                 >
                   Remove First
                 </Button>
-
                 <Button
                   color='primary'
-                  size='large'
-                  type='submit'
-                  disabled={loading}
-                  onClick={(event) => handlePatientRemove(event, stationName)}
-                  sx={{
-                    flex: '1',
-                  }}
-                >
-                  Remove
-                </Button>
-              </Box>
-
-              <Box
-                sx={{
-                  marginTop: '8px',
-                  marginBottom: '16px',
-                  height: '200px',
-                  overflow: 'auto',
-                }}
-              >
-                <div>Patient IDs in Queue:</div>
-                {queueItems &&
-                  queueItems.map((e) => {
-                    return (
-                      <div key={e}>
-                        <strong>{e}</strong>
-                      </div>
-                    )
-                  })}
-              </Box>
-              {admin && (
-                <Button
-                  color='error'
                   size='large'
                   type='submit'
                   variant='contained'
                   disabled={loading}
-                  onClick={(event) => handleDeleteStation(event, stationName)}
+                  onClick={(event) => handlePatientRemove(event, stationName)}
+                  sx={{ textTransform: 'none' }}
                 >
-                  Delete Station
+                  Remove
                 </Button>
+              </Box>
+            </Box>
+
+            <Divider />
+
+            <Box
+              sx={{ p: 2, bgcolor: '#f4f6fa', borderRadius: 1, minHeight: 180, overflow: 'auto' }}
+            >
+              <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 600 }}>
+                Patient IDs in Queue
+              </Typography>
+              {queueItems && queueItems.length > 0 ? (
+                queueItems.map((patientId) => (
+                  <Box
+                    key={patientId}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      bgcolor: '#fff',
+                      p: 1,
+                      mb: 1,
+                      borderRadius: 1,
+                      border: '1px solid #e0e0e0',
+                    }}
+                  >
+                    <Typography variant='body2' sx={{ fontWeight: 500 }}>
+                      {patientId}
+                    </Typography>
+                    <Typography variant='caption' color='text.secondary'>
+                      #{queueItems.indexOf(patientId) + 1}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant='body2' color='text.secondary'>
+                  No patients in queue yet.
+                </Typography>
               )}
             </Box>
-          )
-        })}
+
+            {admin && (
+              <Button
+                color='error'
+                size='large'
+                type='submit'
+                variant='contained'
+                disabled={loading}
+                onClick={(event) => handleDeleteStation(event, stationName)}
+                sx={{ textTransform: 'none' }}
+              >
+                Delete Station
+              </Button>
+            )}
+          </Paper>
+        ))}
       </Box>
-    </>
+    </Box>
   )
 }
 

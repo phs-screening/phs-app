@@ -26,6 +26,8 @@ function Eligibility() {
   const [loadError, setLoadError] = useState('')
   const generatePDFRef = useRef(() => {})
 
+  const isValidPatientId = Number.isFinite(patientId) && patientId > 0
+
   useEffect(() => {
     let mounted = true
 
@@ -43,19 +45,27 @@ function Eligibility() {
         console.error('Failed to load backend station eligibility:', error)
         if (mounted) {
           setRows([])
-          setLoadError('Unable to load station eligibility from the backend.')
+          setLoadError(error?.message || 'Unable to load station eligibility from the backend.')
         }
       } finally {
         if (mounted) isLoadingPrevData(false)
       }
     }
 
-    if (patientId !== null && patientId !== undefined) loadStationEligibility()
+    if (isValidPatientId) {
+      loadStationEligibility()
+    } else {
+      if (mounted) {
+        setRows([])
+        setLoadError('Please select a valid patient before checking eligibility.')
+        isLoadingPrevData(false)
+      }
+    }
 
     return () => {
       mounted = false
     }
-  }, [patientId])
+  }, [patientId, isValidPatientId])
 
   generatePDFRef.current = async () => {
     try {
@@ -81,7 +91,9 @@ function Eligibility() {
         {loadingPrevData ? (
           <CircularProgress />
         ) : (
-          <Button onClick={() => generatePDFRef.current()}>Download Form A</Button>
+          <Button disabled={!isValidPatientId} onClick={() => generatePDFRef.current()}>
+            Download Form A
+          </Button>
         )}
         {loadError ? (
           <Alert severity='error' sx={{ my: 2 }}>
