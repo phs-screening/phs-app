@@ -16,24 +16,24 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
 
   useEffect(() => {
     if (!isLoggedin()) {
-      navigate('/login', { replace: true });
-      return;
+      navigate('/login', { replace: true })
+      return
     }
     if (!profile) {
-      (async () => {
-        const p = await getProfile();
+      ;(async () => {
+        const p = await getProfile()
         if (p) {
-          setProfile(p);
-          setAdmin(!!p.is_admin);
-          localStorage.setItem('profile', JSON.stringify(p));
+          setProfile(p)
+          setAdmin(!!p.is_admin)
+          localStorage.setItem('profile', JSON.stringify(p))
         }
-      })();
+      })()
     } else {
-      setAdmin(!!profile.is_admin);
+      setAdmin(!!profile.is_admin)
     }
-  }, [profile, navigate, setProfile]);
+  }, [profile, navigate, setProfile])
 
-  const name = profile ? getName(profile) : '';
+  const name = profile ? getName(profile) : ''
 
   return (
     <AppBar elevation={0} {...rest}>
@@ -46,9 +46,9 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
           <Button
             color='primary'
             size='large'
-            type='submit'
             variant='contained'
-            href='/app/manage'
+            component={RouterLink}
+            to='/app/manage'
             sx={{ marginLeft: 2 }}
           >
             Manage Volunteers
@@ -58,9 +58,9 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
           <Button
             color='primary'
             size='large'
-            type='submit'
             variant='contained'
-            href='/app/edit'
+            component={RouterLink}
+            to='/app/edit'
             sx={{ marginLeft: 2 }}
           >
             Edit Forms
@@ -70,9 +70,9 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
           <Button
             color='primary'
             size='large'
-            type='submit'
             variant='contained'
-            href='/app/docadmin'
+            component={RouterLink}
+            to='/app/docadmin'
             sx={{ marginLeft: 2 }}
           >
             Doctor PDF
@@ -82,9 +82,9 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
           <Button
             color='primary'
             size='large'
-            type='submit'
             variant='contained'
-            href='/app/formAadmin'
+            component={RouterLink}
+            to='/app/formAadmin'
             sx={{ marginLeft: 2 }}
           >
             Form A
