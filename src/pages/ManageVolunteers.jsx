@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material'
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Pagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { isAdmin } from '../services/authSession'
@@ -7,7 +19,11 @@ import { getProfiles } from '../api/profilesApi'
 import { Visibility, VisibilityOff, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { regexPasswordPattern as pattern } from '../api/api'
-import { deleteAccount as deleteAccountRequest, resetPassword as resetPasswordRequest, signup } from '../api/authApi'
+import {
+  deleteAccount as deleteAccountRequest,
+  resetPassword as resetPasswordRequest,
+  signup,
+} from '../api/authApi'
 
 const ManageVolunteers = () => {
   const navigate = useNavigate()
@@ -18,6 +34,7 @@ const ManageVolunteers = () => {
   const [guestUsers, setGuestUsers] = useState([])
   const [showPasswordReset, setShowPasswordReset] = useState(false)
   const handleClickShowPasswordReset = () => setShowPasswordReset(!showPasswordReset)
+  const [showResetDialog, setShowResetDialog] = useState(false)
   const handleMouseDownPasswordReset = () => setShowPasswordReset(!showPasswordReset)
   const [resetPassword, setResetPassword] = useState('')
   const [loadingReset, isLoadingReset] = useState(false)
@@ -25,13 +42,15 @@ const ManageVolunteers = () => {
   const [refresh, setRefresh] = useState(false)
   const [search, setSearch] = useState('')
   const [loadingDelete, isLoadingDelete] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   useEffect(() => {
     const fetchData = async () => {
       if (await isAdmin()) {
         const profilesResponse = await getProfiles()
         const profiles = profilesResponse.data || []
-        const guestProfiles = await profiles.filter(p => !p.is_admin)
+        const guestProfiles = await profiles.filter((p) => !p.is_admin)
         setGuestUsers(guestProfiles)
       } else {
         alert('Only Admins have access to this Page!')
@@ -66,7 +85,7 @@ const ManageVolunteers = () => {
     }
   }
 
-  const listItemManageVolunteers = guestUsers
+  const filteredUsers = guestUsers
     .sort(sortUsers)
     .filter((x) =>
       x.username
@@ -75,44 +94,50 @@ const ManageVolunteers = () => {
         .substr(0, search.length)
         .includes(search.toLowerCase().trim()),
     )
-    .map((guest, index) => {
-      return (
-        <li style={styles.manageVolunteersItem} key={index}>
-          <div style={styles.manageVolunteersDetails}>
-            <div>{guest.username}</div>
-            <div>
-              Last Login: {guest.last_login ? new Date(guest.last_login).toString() : 'Has not Logged In'}
-            </div>
-          </div>
 
-          <div style={styles.manageVolunteersItemButtonLayout}>
-            <Button
-              color='primary'
-              style={styles.manageVolunteersItemButton}
-              size='small'
-              type='submit'
-              variant='contained'
-              onClick={() => {
-                setNameReset(guest.username)
-              }}
-            >
-              Reset Password
-            </Button>
-            <Button
-              color='primary'
-              // disabled={isSubmitting}
-              style={styles.manageVolunteersItemButton}
-              size='small'
-              type='submit'
-              variant='contained'
-              onClick={() => deleteAccount(guest.username)}
-            >
-              Delete Account
-            </Button>
-          </div>
-        </li>
-      )
-    })
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex)
+
+  const listItemManageVolunteers = paginatedUsers.map((guest, index) => {
+    return (
+      <li style={styles.manageVolunteersItem} key={index}>
+        <div style={styles.manageVolunteersDetails}>
+          <Typography variant='body1' sx={{ fontWeight: '600', fontSize: '16px' }}>
+            {guest.username}
+          </Typography>
+          <Typography variant='caption' sx={{ color: '#666', mt: 0.5 }}>
+            Last Login: {guest.last_login ? new Date(guest.last_login).toLocaleString() : 'Never'}
+          </Typography>
+        </div>
+
+        <div style={styles.manageVolunteersItemButtonLayout}>
+          <Button
+            color='primary'
+            size='small'
+            variant='contained'
+            onClick={() => {
+              setShowResetDialog(true)
+              setNameReset(guest.username)
+            }}
+            sx={{ textTransform: 'none' }}
+          >
+            Reset Password
+          </Button>
+          <Button
+            color='error'
+            size='small'
+            variant='outlined'
+            onClick={() => deleteAccount(guest.username)}
+            sx={{ textTransform: 'none' }}
+          >
+            Delete
+          </Button>
+        </div>
+      </li>
+    )
+  })
 
   const deleteAccount = async (username) => {
     isLoadingDelete(true)
@@ -151,11 +176,11 @@ const ManageVolunteers = () => {
     try {
       const data = await resetPasswordRequest(nameReset, resetPassword)
       if (!data.result) {
-        alert('Error resetting password!: ' + data.error);
+        alert('Error resetting password!: ' + data.error)
       } else {
-        isLoadingReset(false);
-        setResetPassword('');
-        alert('Password successfully reset for: ' + nameReset);
+        setShowResetDialog(false)
+        setNameReset(null)
+        alert('Password successfully reset for: ' + nameReset)
       }
     } catch (e) {
       alert('Error resetting password!: ' + e)
@@ -164,262 +189,277 @@ const ManageVolunteers = () => {
     }
   }
 
+  const handleCloseResetDialog = () => {
+    setShowResetDialog(false)
+    setResetPassword('')
+    setNameReset(null)
+  }
+
   return (
     <div style={styles.page}>
-      <div style={styles.create}>
-        <Formik
-          initialValues={{
-            email: '',
-            password: '',
-          }}
-          validationSchema={Yup.object().shape({
-            email: Yup.string().max(255).required('Username is required'),
-            password: Yup.string().max(255).required('Password is required'),
-          })}
-          onSubmit={(values, { resetForm }) => {
-            handleCreateAccount(values).then(() => resetForm())
-          }}
-        >
-          {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
-            <form onSubmit={handleSubmit}>
-              <Box sx={{ mb: 3 }}>
-                <Typography color='textPrimary' variant='h2'>
-                  Create Volunteer Account
-                </Typography>
-              </Box>
-              <TextField
-                // error={Boolean(touched.email && errors.email)}
-                fullWidth
-                helperText={touched.email && errors.email}
-                label='Username'
-                margin='normal'
-                name='email'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                type=''
-                value={values.email}
-                variant='outlined'
-                inputProps={{
-                  autocomplete: 'new-password',
-                  form: {
-                    autocomplete: 'off',
-                  },
-                }}
-              />
-              <TextField
-                // error={Boolean(touched.password && errors.password)}
-                fullWidth
-                helperText={touched.password && errors.password}
-                label='Password'
-                margin='normal'
-                name='password'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                type={showPassword ? 'text' : 'password'}
-                value={values.password}
-                variant='outlined'
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        aria-label='toggle password visibility'
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        size="large">
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  form: {
-                    autocomplete: 'off',
-                  },
-                }}
-              />
-              <Box sx={{ py: 2 }}>
-                {loading ? (
-                  <div>Creating Account..</div>
-                ) : (
-                  <Button
-                    color='primary'
-                    // disabled={isSubmitting}
-                    fullWidth
-                    size='large'
-                    type='submit'
-                    variant='contained'
-                  >
-                    Create Account
-                  </Button>
-                )}
-              </Box>
-            </form>
-          )}
-        </Formik>
-      </div>
-
-      <Box sx={{ pl: 7, mb: 3 }}>
-        <Typography color='textPrimary' variant='h2'>
-          Manage Volunteer Accounts ({guestUsers.length})
-        </Typography>
-      </Box>
-
-      <Box sx={{ px: 7, mb: 3 }}>
-        <div>Search Volunteer Accounts</div>
-        <TextField
-          fullWidth
-          label='Search'
-          margin='normal'
-          name='search'
-          value={search}
-          variant='outlined'
-          onChange={(x) => {
-            setSearch(x.target.value)
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <Search />
-              </InputAdornment>
-            ),
-            form: {
-              autocomplete: 'off',
-            },
-          }}
-        />
-      </Box>
-
-      <Box sx={{ px: 7, mb: 3 }}>
-        <ul style={styles.manageVolunteers}>
-          {loadingDelete ? <div> Deleting Account... </div> : listItemManageVolunteers}
-        </ul>
-      </Box>
-
-      <Box sx={{ px: 7, mb: 3 }}>
-        <div>
-          Resetting Password for:{' '}
-          <span style={styles.boldVolunteerName}>{nameReset === null ? 'None' : nameReset}</span>
-        </div>
-        <TextField
-          // error={Boolean(touched.password && errors.password)}
-          fullWidth
-          label='Password'
-          margin='normal'
-          name='password'
-          type={showPasswordReset ? 'text' : 'password'}
-          value={resetPassword}
-          variant='outlined'
-          onChange={(x) => {
-            setResetPassword(x.target.value)
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <IconButton
-                  aria-label='toggle password visibility'
-                  onClick={handleClickShowPasswordReset}
-                  onMouseDown={handleMouseDownPasswordReset}
-                  size="large">
-                  {showPasswordReset ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-            autocomplete: 'new-password',
-            form: {
-              autocomplete: 'off',
-            },
-          }}
-        />
-        {loadingReset ? (
-          <div> Resetting ... </div>
-        ) : (
-          <Button
-            color='primary'
-            // disabled={isSubmitting}
-            size='large'
-            type='submit'
-            variant='contained'
-            onClick={handleResetPassword}
+      {/* Create Account Section */}
+      <Box
+        sx={{
+          mb: 5,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          bgcolor: '#f5f5f5',
+          py: 4,
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: 1000, px: 3 }}>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            validationSchema={Yup.object().shape({
+              email: Yup.string().max(255).required('Username is required'),
+              password: Yup.string().max(255).required('Password is required'),
+            })}
+            onSubmit={(values, { resetForm }) => {
+              handleCreateAccount(values).then(() => resetForm())
+            }}
           >
-            CONFIRM
-          </Button>
-        )}
+            {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+              <form onSubmit={handleSubmit}>
+                <Box sx={{ mb: 3 }}>
+                  <Typography color='textPrimary' variant='h4' sx={{ fontWeight: 'bold' }}>
+                    Create Volunteer Account
+                  </Typography>
+                </Box>
+                <TextField
+                  fullWidth
+                  helperText={touched.email && errors.email}
+                  label='Username'
+                  margin='normal'
+                  name='email'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.email}
+                  variant='outlined'
+                  inputProps={{
+                    autocomplete: 'new-password',
+                    form: {
+                      autocomplete: 'off',
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  helperText={touched.password && errors.password}
+                  label='Password'
+                  margin='normal'
+                  name='password'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type={showPassword ? 'text' : 'password'}
+                  value={values.password}
+                  variant='outlined'
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          aria-label='toggle password visibility'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          size='large'
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    form: {
+                      autocomplete: 'off',
+                    },
+                  }}
+                />
+                <Box sx={{ py: 3 }}>
+                  {loading ? (
+                    <Typography sx={{ textAlign: 'center', color: 'gray' }}>
+                      Creating Account..
+                    </Typography>
+                  ) : (
+                    <Button
+                      color='primary'
+                      fullWidth
+                      size='large'
+                      type='submit'
+                      variant='contained'
+                    >
+                      Create Account
+                    </Button>
+                  )}
+                </Box>
+              </form>
+            )}
+          </Formik>
+        </Box>
       </Box>
+
+      {/* Manage Accounts Section */}
+      <Box
+        sx={{
+          mb: 5,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: 1000, px: 3 }}>
+          <Typography color='textPrimary' variant='h4' sx={{ fontWeight: 'bold', mb: 3 }}>
+            Manage Volunteer Accounts ({filteredUsers.length})
+          </Typography>
+
+          <TextField
+            fullWidth
+            label='Search Volunteers'
+            margin='normal'
+            name='search'
+            value={search}
+            placeholder='Enter username to search...'
+            variant='outlined'
+            onChange={(x) => {
+              setSearch(x.target.value)
+              setCurrentPage(1)
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <Search />
+                </InputAdornment>
+              ),
+              form: {
+                autocomplete: 'off',
+              },
+            }}
+            sx={{ mb: 3 }}
+          />
+
+          <ul style={styles.manageVolunteers}>
+            {loadingDelete ? (
+              <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                Deleting Account...
+              </div>
+            ) : listItemManageVolunteers.length > 0 ? (
+              listItemManageVolunteers
+            ) : (
+              <div style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                No volunteers found
+              </div>
+            )}
+          </ul>
+
+          {totalPages > 1 && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(event, page) => setCurrentPage(page)}
+                color='primary'
+              />
+            </Box>
+          )}
+        </Box>
+      </Box>
+
+      {/* Reset Password Dialog Modal */}
+      <Dialog open={showResetDialog} onClose={handleCloseResetDialog} maxWidth='sm' fullWidth>
+        <DialogTitle sx={{ fontWeight: 'bold', pb: 1 }}>Reset Password for {nameReset}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label='New Password'
+              name='password'
+              type={showPasswordReset ? 'text' : 'password'}
+              value={resetPassword}
+              placeholder='Enter new password'
+              variant='outlined'
+              onChange={(x) => {
+                setResetPassword(x.target.value)
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      aria-label='toggle password visibility'
+                      onClick={handleClickShowPasswordReset}
+                      onMouseDown={handleMouseDownPasswordReset}
+                      size='small'
+                    >
+                      {showPasswordReset ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Typography variant='caption' sx={{ color: '#666', mt: 1, display: 'block' }}>
+              Password must contain at least one uppercase, one lowercase, one number, one special
+              character, and be 12+ characters long.
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleCloseResetDialog} variant='outlined'>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleResetPassword}
+            variant='contained'
+            color='primary'
+            disabled={loadingReset}
+          >
+            {loadingReset ? 'Resetting...' : 'Reset Password'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
-  );
+  )
 }
 
 const styles = {
   page: {
     display: 'flex',
     flexDirection: 'column',
-    // justifyContent: "center",
-    // alignItems:"center",
     width: '100%',
-    height: '100%',
-    // borderStyle: "solid",
-  },
-  create: {
-    display: 'flex',
-    flexDirection: 'column',
-    // justifyContent: "center",
-    // alignItems:"center",
-    width: '100%',
-    // borderStyle: "solid",
-    fontSize: 20,
-    paddingLeft: 10,
-  },
-  createInput: {
-    display: 'flex',
-    flexDirection: 'column',
-    // justifyContent: "center",
-    // alignItems:"center",
-    width: '50%',
-    // borderStyle: "solid",
-    fontSize: 20,
-    paddingLeft: 10,
+    minHeight: '100vh',
+    bgcolor: '#fafafa',
   },
   manageVolunteers: {
-    // paddingLeft: 30,
-    height: 300,
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    height: 400,
     width: '100%',
     overflow: 'hidden',
     overflowY: 'scroll',
+    border: '1px solid #e0e0e0',
+    borderRadius: '8px',
   },
   manageVolunteersItem: {
-    // paddingLeft: 30,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    // alignItems:"center",
-    // height: 50,
     width: '100%',
-    borderStyle: 'solid',
-    borderWidth: 2,
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-  manageVolunteersItemButton: {
-    // background: "#6865bf",
-    marginLeft: 10,
-    marginRight: 10,
-    width: '100%',
+    borderBottom: '1px solid #e0e0e0',
+    padding: '16px',
+    boxSizing: 'border-box',
   },
   manageVolunteersDetails: {
     display: 'flex',
     flexDirection: 'column',
-    paddingLeft: 10,
-    paddingBottom: 5,
+    marginBottom: '12px',
   },
   manageVolunteersItemButtonLayout: {
     display: 'flex',
+    gap: '8px',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '100%',
-    paddingLeft: 10,
-    paddingRight: 10,
+    justifyContent: 'space-between',
   },
-  boldVolunteerName: {
-    fontWeight: 'bold',
-    fontSize: 20,
+  manageVolunteersItemButton: {
+    flex: 1,
   },
 }
 
