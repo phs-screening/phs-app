@@ -143,7 +143,7 @@ const BasicTimeline = (props) => {
           />
         ))}
 
-        {/* Summary and End items */}
+        {/* Screening review and End items */}
         <TimelineItem>
           <TimelineSeparator>
             <TimelineDot
@@ -156,7 +156,7 @@ const BasicTimeline = (props) => {
               href='/app/summary'
               onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
             >
-              Summary [View Only]
+              Screening Review [View Only]
             </a>
           </TimelineContent>
         </TimelineItem>
