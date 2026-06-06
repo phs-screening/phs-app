@@ -54,7 +54,7 @@ const MammobusForm = () => {
     setSubmitting(false)
     if (response.result) {
       alert('Successfully submitted form')
-      navigate('/app/dashboard', { replace: true })
+      navigate('/app/dashboard')
     } else {
       alert(`Unsuccessful. ${response.error}`)
     }
