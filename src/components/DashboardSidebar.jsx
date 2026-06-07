@@ -18,14 +18,14 @@ import { logOut } from '../services/authSession'
 const title1 = 'Patient Dashboard'
 const items = [
   {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: title1,
-  },
-  {
     href: '/app/registration',
     icon: UserPlusIcon,
     title: 'Change Patient',
+  },
+  {
+    href: '/app/dashboard',
+    icon: BarChartIcon,
+    title: title1,
   },
   {
     href: '/app/eligibility',
