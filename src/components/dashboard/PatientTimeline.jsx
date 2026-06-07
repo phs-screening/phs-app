@@ -25,7 +25,7 @@ function navigateTo(event, navigate, page, scrollTop) {
   event.preventDefault()
   scrollTop()
   const path = '/app/' + page
-  navigate(path, { replace: true })
+  navigate(path)
 }
 
 const TimelineItemComponent = ({ item, formDone, admin, navigate, scrollTop }) => {

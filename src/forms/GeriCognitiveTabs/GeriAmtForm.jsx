@@ -102,7 +102,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
           if (values.geriAmtQ12 === 'Yes (Eligible for G-RACE)') {
             changeTab(null, nextTab)
           } else if (values.geriAmtQ12 === 'No (Not eligible for G-RACE)') {
-            navigate('/app/dashboard', { replace: true })
+            navigate('/app/dashboard')
           }
         } else {
           alert(`Unsuccessful. ${response.error}`)

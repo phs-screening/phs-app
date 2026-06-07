@@ -117,7 +117,7 @@ const RegForm = () => {
         console.log('Successfully submitted form')
         updatePatientInfo(response.data)
         updatePatientId(response.qNum)
-        navigate('/app/dashboard', { replace: true })
+        navigate('/app/dashboard')
       }, 80)
     } else {
       setTimeout(() => {

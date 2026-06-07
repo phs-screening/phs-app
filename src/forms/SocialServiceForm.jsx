@@ -120,7 +120,7 @@ const SocialServiceForm = () => {
       if (response.result) {
         setTimeout(() => {
           alert('Successfully submitted form')
-          navigate('/app/dashboard', { replace: true })
+          navigate('/app/dashboard')
         }, 80)
       } else {
         setTimeout(() => {
