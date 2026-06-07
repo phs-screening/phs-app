@@ -38,7 +38,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   return (
     <AppBar elevation={0} {...rest}>
       <Toolbar>
-        <RouterLink to='/app/dashboard'>
+        <RouterLink to='/app/registration'>
           <Logo />
         </RouterLink>
         <div style={{ marginLeft: 4 }}>{name}</div>
