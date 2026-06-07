@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useContext, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { getAllPatientNames, getPreRegDataById, getPreRegDataByName } from '../services/patientData'
 import { FormContext } from '../api/utils.js'
 import {
@@ -129,7 +129,8 @@ const RegisterPatient = (props) => {
             size='large'
             type='submit'
             variant='contained'
-            href='/app/reg'
+            component={RouterLink}
+            to='/app/reg'
             sx={{ marginTop: '10px', marginBottom: '20px' }}
           >
             Register
