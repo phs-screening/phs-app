@@ -60,18 +60,6 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
             size='large'
             variant='contained'
             component={RouterLink}
-            to='/app/edit'
-            sx={{ marginLeft: 2 }}
-          >
-            Edit Forms
-          </Button>
-        )}
-        {admin && (
-          <Button
-            color='primary'
-            size='large'
-            variant='contained'
-            component={RouterLink}
             to='/app/docadmin'
             sx={{ marginLeft: 2 }}
           >
