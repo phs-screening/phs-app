@@ -19,7 +19,7 @@ import HxTabs from './forms/HistoryTakingTabs/HistoryTaking'
 import ManageVolunteers from 'src/pages/ManageVolunteers'
 import DoctorAdmin from 'src/pages/DoctorAdmin'
 import FormAAdmin from 'src/pages/FormAAdmin'
-import Edit from 'src/pages/EditForms'
+
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
 
@@ -66,7 +66,6 @@ const routes = [
       { path: 'oralhealth', element: <OralHealthForm /> },
       { path: 'hpv', element: <HpvForm /> },
       { path: 'manage', element: <ManageVolunteers /> },
-      { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
       { path: 'eligibility', element: <Eligibility /> },
@@ -74,8 +73,7 @@ const routes = [
       { path: 'docadmin', element: <DoctorAdmin /> },
       { path: 'mammobus', element: <MammobusForm /> },
       { path: 'podiatry', element: <PodiatryForm /> },
-      { path: 'formAadmin', element: <FormAAdmin />}
-
+      { path: 'formAadmin', element: <FormAAdmin /> },
     ],
   },
   {

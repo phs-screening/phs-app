@@ -87,6 +87,22 @@ const StationQueue = () => {
     setStationAddPatientId({ ...stationPatientAddId, [stationName]: text })
   }
 
+  const getExistingQueuePatientIds = (stationName) => {
+    const station = stationQueues.find((station) => station.stationName === stationName)
+    if (!station?.queueItems?.length) {
+      return new Set()
+    }
+
+    return new Set(
+      station.queueItems
+        .map((item) => {
+          const id = parseInt(item.split(':')[0], 10)
+          return Number.isFinite(id) ? id : null
+        })
+        .filter((id) => id !== null),
+    )
+  }
+
   // Handler for add patient button
   const handlePatientAdd = async (event, stationName) => {
     event.preventDefault()
@@ -100,19 +116,46 @@ const StationQueue = () => {
       return
     }
 
-    const patientIds = patientIdText
+    const rawPatientIds = patientIdText
       .trim()
-      .split(' ')
+      .split(/\s+/)
       .filter((id) => !isNaN(parseInt(id)))
       .map((id) => parseInt(id))
 
-    if (patientIds.length === 0) {
+    const uniquePatientIds = Array.from(new Set(rawPatientIds))
+    const duplicateEnteredIds = rawPatientIds.filter(
+      (id, index) => rawPatientIds.indexOf(id) !== index,
+    )
+
+    if (duplicateEnteredIds.length > 0) {
+      alert(
+        `Duplicate patient IDs entered and ignored: ${Array.from(new Set(duplicateEnteredIds)).join(
+          ', ',
+        )}`,
+      )
+    }
+
+    if (uniquePatientIds.length === 0) {
       alert('Patient ID must be a number.')
       isLoading(false)
       return
     }
 
-    const patientStrings = await getPatientStrings(patientIds)
+    const existingQueueIds = getExistingQueuePatientIds(stationName)
+    const duplicateExisting = uniquePatientIds.filter((id) => existingQueueIds.has(id))
+
+    if (duplicateExisting.length > 0) {
+      alert(`Patient ID(s) ${duplicateExisting.join(', ')} already exist in this station queue.`)
+    }
+
+    const newPatientIds = uniquePatientIds.filter((id) => !existingQueueIds.has(id))
+
+    if (newPatientIds.length === 0) {
+      isLoading(false)
+      return
+    }
+
+    const patientStrings = await getPatientStrings(newPatientIds)
     await addPatientsToStationQueue(stationName, patientStrings)
     setRefresh(!refresh)
     setStationAddPatientId({ ...stationPatientAddId, [stationName]: '' })
