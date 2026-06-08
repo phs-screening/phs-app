@@ -36,6 +36,8 @@ import GeriMobilityTabs from './forms/GeriMobilityTabs/GeriMobility'
 import GeriCognitiveTabs from './forms/GeriCognitiveTabs/GeriCognitive'
 import MammobusForm from './forms/MammobusForm'
 import PodiatryForm from './forms/PodiatryForm'
+import FitForm from './forms/FitForm'
+import ScoliosisForm from './forms/ScoliosisForm'
 
 import Eligibility from './pages/Eligibility'
 
@@ -55,8 +57,10 @@ const routes = [
       { path: 'reg', element: <RegForm /> },
       { path: 'vax', element: <VaccineForm /> },
       { path: 'hsg', element: <HsgForm /> },
+      { path: 'fit', element: <FitForm /> },
       { path: 'audio', element: <AudiometryForm /> },
       { path: 'ophthal', element: <OphthalForm /> },
+      { path: 'scoliosis', element: <ScoliosisForm /> },
       { path: 'gericog', element: <GeriCognitiveTabs /> },
       { path: 'triage', element: <TriageForm /> },
       { path: 'osteoporosis', element: <OsteoForm /> },
