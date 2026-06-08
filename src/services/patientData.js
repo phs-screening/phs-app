@@ -11,9 +11,9 @@ export const getPatientRecord = async (patientId) => {
   }
 }
 
-export const getPatientNamesList = async () => {
+export const getPatientNamesList = async (options) => {
   try {
-    const res = await getPatientNames()
+    const res = await getPatientNames(options)
     return res.data || []
   } catch {
     return []
@@ -65,9 +65,9 @@ export const getPreRegDataByName = async (initials, resourceName) => {
   return {}
 }
 
-export const getAllPatientNames = async (resourceName) => {
+export const getAllPatientNames = async (resourceName, options) => {
   if (resourceName === 'patients') {
-    return getPatientNamesList()
+    return getPatientNamesList(options)
   }
 
   return []
