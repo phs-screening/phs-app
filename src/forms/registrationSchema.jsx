@@ -7,14 +7,9 @@ export const validationSchema = Yup.object({
 
   registrationQ2: Yup.string().required('Initials are required'),
 
-  registrationQ3: Yup.mixed()
-    .test('is-valid-date', 'Birthday is required', value => {
-      return value instanceof Date && !isNaN(value.getTime());
-    })
-    .test('not-in-future', 'Birthday cannot be in the future', value => {
-      if (!(value instanceof Date) || isNaN(value.getTime())) return false;
-      return value <= new Date();
-    })
+  registrationQ3: Yup.date()
+    .typeError('Birthday is required')
+    .max(new Date(), 'Birthday cannot be in the future')
     .required('Birthday is required'),
 
   registrationQ4: Yup.number()
