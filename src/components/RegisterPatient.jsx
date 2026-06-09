@@ -20,6 +20,8 @@ import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
 import { updateAllStationCounts } from '../services/stationCounts'
 
+const PATIENT_NAME_PAGE_LIMIT = 20
+
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
   const [isLoadingPatientName, setIsLoadingPatientName] = useState(false)
@@ -28,16 +30,32 @@ const RegisterPatient = (props) => {
     selectedValue: null,
   })
   const [patientNames, setPatientNames] = useState([])
+  const [patientNameSearch, setPatientNameSearch] = useState('')
   const { updatePatientInfo } = useContext(FormContext)
   const navigate = useNavigate()
 
   useEffect(() => {
+    let isCurrent = true
+
     const getPatientNames = async () => {
-      const data = await getAllPatientNames('patients')
-      setPatientNames(data)
+      const data = await getAllPatientNames('patients', {
+        q: patientNameSearch,
+        page: 1,
+        limit: PATIENT_NAME_PAGE_LIMIT,
+      })
+
+      if (isCurrent) {
+        setPatientNames(data)
+      }
     }
-    getPatientNames()
-  }, [])
+
+    const timeoutId = setTimeout(getPatientNames, patientNameSearch ? 250 : 0)
+
+    return () => {
+      isCurrent = false
+      clearTimeout(timeoutId)
+    }
+  }, [patientNameSearch])
 
   const handleQueueNumberInput = (event) => {
     const value = event.target.value
@@ -77,6 +95,12 @@ const RegisterPatient = (props) => {
       isQueueNumber: false,
       selectedValue: value,
     })
+  }
+
+  const handlePatientNameSearch = (event, value, reason) => {
+    if (reason === 'input' || reason === 'clear') {
+      setPatientNameSearch(value)
+    }
   }
 
   const handleSubmitQueueNumber = async () => {
@@ -206,9 +230,12 @@ const RegisterPatient = (props) => {
                   size='small'
                   disableClearable
                   options={patientNames}
-                  getOptionLabel={(option) => option.initials}
+                  getOptionLabel={(option) =>
+                    typeof option === 'string' ? option : option.initials || ''
+                  }
                   renderInput={handlePatientNameInput}
                   onChange={handlePatientNameSelect}
+                  onInputChange={handlePatientNameSearch}
                   fullWidth
                 />
                 {isLoadingPatientName ? (

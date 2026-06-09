@@ -61,23 +61,27 @@ const RegForm = () => {
     const fetchData = async () => {
       console.log('Patient ID: ' + patientId)
       const res = await getSavedData(patientId, formName)
+      const formData = { ...initialValues, ...res }
 
       // Calculate age if birthday exists in saved data, otherwise use today
-      if (res.registrationQ3) {
-        const dayjsBirthday = dayjs(res.registrationQ3)
+      if (formData.registrationQ3) {
+        const dayjsBirthday = dayjs(formData.registrationQ3)
         setBirthday(dayjsBirthday)
         const calculatedAge = calculateAgeFromDayjs(dayjsBirthday)
         setPatientAge(calculatedAge)
+        formData.registrationQ3 = dayjsBirthday.toDate()
+        formData.registrationQ4 = calculatedAge
       } else {
         // If no saved birthday, default to today
         const today = dayjs()
         setBirthday(today)
         const calculatedAge = calculateAgeFromDayjs(today)
         setPatientAge(calculatedAge)
-        res.registrationQ3 = today // Update the saved data object
+        formData.registrationQ3 = today.toDate()
+        formData.registrationQ4 = calculatedAge
       }
 
-      setSavedData(res)
+      setSavedData(formData)
       isLoading(false)
     }
     fetchData()

@@ -11,16 +11,26 @@ import {
 } from '../api/printQueuesApi'
 import { isLoggedin } from './authSession'
 
-export const getUnprintedDocPdfQueue = async () => {
-  if (!isLoggedin()) return []
-  const response = await getUnprintedDoctorPdfQueue()
-  return response.data || []
+const queueResponse = (response) => ({
+  items: response.data || [],
+  pagination: response.pagination || null,
+})
+
+const maybePaginated = (response, options) => {
+  const normalized = queueResponse(response)
+  return options?.includePagination ? normalized : normalized.items
 }
 
-export const getPrintedDocPdfQueue = async () => {
-  if (!isLoggedin()) return []
-  const response = await getPrintedDoctorPdfQueue()
-  return response.data || []
+export const getUnprintedDocPdfQueue = async (options) => {
+  if (!isLoggedin()) return options?.includePagination ? { items: [], pagination: null } : []
+  const response = await getUnprintedDoctorPdfQueue(options)
+  return maybePaginated(response, options)
+}
+
+export const getPrintedDocPdfQueue = async (options) => {
+  if (!isLoggedin()) return options?.includePagination ? { items: [], pagination: null } : []
+  const response = await getPrintedDoctorPdfQueue(options)
+  return maybePaginated(response, options)
 }
 
 export const addToDocPdfQueue = async (patientId, doctorName) => {
@@ -41,16 +51,16 @@ export const deleteDocPdfFromQueue = async (docId) => {
   return true
 }
 
-export const getUnprintedFormAPdfQueue = async () => {
-  if (!isLoggedin()) return []
-  const response = await getUnprintedFormAQueue()
-  return response.data || []
+export const getUnprintedFormAPdfQueue = async (options) => {
+  if (!isLoggedin()) return options?.includePagination ? { items: [], pagination: null } : []
+  const response = await getUnprintedFormAQueue(options)
+  return maybePaginated(response, options)
 }
 
-export const getPrintedFormAPdfQueue = async () => {
-  if (!isLoggedin()) return []
-  const response = await getPrintedFormAQueue()
-  return response.data || []
+export const getPrintedFormAPdfQueue = async (options) => {
+  if (!isLoggedin()) return options?.includePagination ? { items: [], pagination: null } : []
+  const response = await getPrintedFormAQueue(options)
+  return maybePaginated(response, options)
 }
 
 export const markFormAAsPrinted = async (docId) => {
