@@ -85,7 +85,6 @@ const routes = [
           </AdminRoute>
         ),
       },
-      { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
       { path: 'eligibility', element: <Eligibility /> },
