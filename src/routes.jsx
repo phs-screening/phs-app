@@ -1,6 +1,10 @@
 import { Navigate } from 'react-router-dom'
+import AdminRoute from 'src/components/AdminRoute'
 import DashboardLayout from 'src/components/DashboardLayout'
+import DefaultRoute from 'src/components/DefaultRoute'
+import GuestOnlyRoute from 'src/components/GuestOnlyRoute'
 import MainLayout from 'src/components/MainLayout'
+import ProtectedRoute from 'src/components/ProtectedRoute'
 import Queue from './pages/Queue'
 import Dashboard from 'src/pages/Dashboard'
 import Login from 'src/pages/Login'
@@ -44,7 +48,11 @@ import Eligibility from './pages/Eligibility'
 const routes = [
   {
     path: 'app',
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { path: 'registration', element: <Registration /> },
       { path: 'dashboard', element: <Dashboard /> },
@@ -69,7 +77,14 @@ const routes = [
       { path: 'mentalhealth', element: <MentalHealthForm /> },
       { path: 'oralhealth', element: <OralHealthForm /> },
       { path: 'hpv', element: <HpvForm /> },
-      { path: 'manage', element: <ManageVolunteers /> },
+      {
+        path: 'manage',
+        element: (
+          <AdminRoute>
+            <ManageVolunteers />
+          </AdminRoute>
+        ),
+      },
       { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
       { path: 'eligibility', element: <Eligibility /> },
@@ -84,11 +99,18 @@ const routes = [
     path: '/',
     element: <MainLayout />,
     children: [
-      { path: 'login', element: <Login /> },
+      {
+        path: 'login',
+        element: (
+          <GuestOnlyRoute>
+            <Login />
+          </GuestOnlyRoute>
+        ),
+      },
       { path: 'reset', element: <Reset /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to='/login' /> },
+      { path: '/', element: <DefaultRoute /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },
