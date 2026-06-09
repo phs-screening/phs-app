@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom'
+import AdminRoute from 'src/components/AdminRoute'
 import DashboardLayout from 'src/components/DashboardLayout'
 import DefaultRoute from 'src/components/DefaultRoute'
 import GuestOnlyRoute from 'src/components/GuestOnlyRoute'
@@ -72,7 +73,14 @@ const routes = [
       { path: 'mentalhealth', element: <MentalHealthForm /> },
       { path: 'oralhealth', element: <OralHealthForm /> },
       { path: 'hpv', element: <HpvForm /> },
-      { path: 'manage', element: <ManageVolunteers /> },
+      {
+        path: 'manage',
+        element: (
+          <AdminRoute>
+            <ManageVolunteers />
+          </AdminRoute>
+        ),
+      },
       { path: 'edit', element: <Edit /> },
       { path: 'wce', element: <WceTabs /> },
       { path: 'queue', element: <Queue /> },
