@@ -13,10 +13,25 @@ const DoctorAdmin = () => {
   const [pdfQueue, setPdfQueue] = useState([])
   const [printedQueue, setPrintedQueue] = useState([])
   const [loading, setLoading] = useState(true)
-  const [refresh, setRefresh] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [checkingAdmin, setCheckingAdmin] = useState(true) // NEW
   const [view, setView] = useState('queue') // 'queue' = active jobs, 'history' = printed jobs
+  const [hasLoadedHistory, setHasLoadedHistory] = useState(false)
+
+  const sortNewestFirst = (items) =>
+    [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
+  const fetchCurrentQueue = async () => {
+    const unprinted = await getUnprintedDocPdfQueue()
+    setPdfQueue(sortNewestFirst(unprinted))
+  }
+
+  const fetchPrintHistory = async () => {
+    const printed = await getPrintedDocPdfQueue()
+    setPrintedQueue(sortNewestFirst(printed))
+    setHasLoadedHistory(true)
+  }
 
   // runs only on page load
   useEffect(() => {
@@ -32,22 +47,15 @@ const DoctorAdmin = () => {
 
         if (!isAdminUser) return
 
-        // Use the new separate functions
         const unprinted = await getUnprintedDocPdfQueue()
-        const printed = await getPrintedDocPdfQueue()
 
         if (!isMounted) return
-
-        // Sort by newest first
-        unprinted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        printed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-
-        setPdfQueue(unprinted)
-        setPrintedQueue(printed)
+        setPdfQueue(sortNewestFirst(unprinted))
         setLoading(false)
       } catch (err) {
         console.error('Initial fetch error:', err)
         setCheckingAdmin(false)
+        setLoading(false)
       }
     }
 
@@ -57,50 +65,45 @@ const DoctorAdmin = () => {
     }
   }, [])
 
-  // polling to refresh queue every 5sec while tab is visible
-  useEffect(() => {
-    let isMounted = true
-
-    const fetchQueue = async () => {
-      try {
-        const unprinted = await getUnprintedDocPdfQueue()
-        const printed = await getPrintedDocPdfQueue()
-
-        if (!isMounted) return
-
-        unprinted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        printed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-
-        setPdfQueue(unprinted)
-        setPrintedQueue(printed)
-      } catch (err) {
-        console.error('Failed to fetch PDF queue:', err)
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    try {
+      if (view === 'history') {
+        await fetchPrintHistory()
+      } else {
+        await fetchCurrentQueue()
       }
+    } catch (err) {
+      console.error('Failed to refresh PDF queue:', err)
+    } finally {
+      setRefreshing(false)
     }
+  }
 
-    fetchQueue()
+  const handleShowHistory = async () => {
+    setView('history')
+    if (hasLoadedHistory) return
 
-    const interval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        setRefresh((r) => !r)
-      }
-    }, 5000)
-
-    return () => {
-      isMounted = false
-      clearInterval(interval)
+    setRefreshing(true)
+    try {
+      await fetchPrintHistory()
+    } catch (err) {
+      console.error('Failed to fetch print history:', err)
+    } finally {
+      setRefreshing(false)
     }
-  }, [refresh])
+  }
 
   const handlePrint = async (entry) => {
     await generateDoctorPdf(entry)
     await markDocPdfAsPrinted(entry._id)
-    setRefresh((r) => !r)
+    setHasLoadedHistory(false)
+    await fetchCurrentQueue()
   }
 
   const handleRemove = async (entry) => {
     await deleteDocPdfFromQueue(entry._id)
-    setRefresh((r) => !r)
+    await fetchCurrentQueue()
   }
 
   if (checkingAdmin) return <CircularProgress />
@@ -122,13 +125,16 @@ const DoctorAdmin = () => {
         </Button>
         <Button
           variant={view === 'history' ? 'contained' : 'outlined'}
-          onClick={() => setView('history')}
+          onClick={handleShowHistory}
         >
           Show Print History
         </Button>
+        <Button variant='outlined' onClick={handleRefresh} disabled={refreshing}>
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </Button>
       </Stack>
 
-      {loading ? (
+      {loading || refreshing ? (
         <CircularProgress />
       ) : view === 'history' ? (
         printedQueue.length === 0 ? (

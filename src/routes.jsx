@@ -23,7 +23,7 @@ import HxTabs from './forms/HistoryTakingTabs/HistoryTaking'
 import ManageVolunteers from 'src/pages/ManageVolunteers'
 import DoctorAdmin from 'src/pages/DoctorAdmin'
 import FormAAdmin from 'src/pages/FormAAdmin'
-import Edit from 'src/pages/EditForms'
+
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
 
@@ -40,6 +40,8 @@ import GeriMobilityTabs from './forms/GeriMobilityTabs/GeriMobility'
 import GeriCognitiveTabs from './forms/GeriCognitiveTabs/GeriCognitive'
 import MammobusForm from './forms/MammobusForm'
 import PodiatryForm from './forms/PodiatryForm'
+import FitForm from './forms/FitForm'
+import ScoliosisForm from './forms/ScoliosisForm'
 
 import Eligibility from './pages/Eligibility'
 
@@ -63,8 +65,10 @@ const routes = [
       { path: 'reg', element: <RegForm /> },
       { path: 'vax', element: <VaccineForm /> },
       { path: 'hsg', element: <HsgForm /> },
+      { path: 'fit', element: <FitForm /> },
       { path: 'audio', element: <AudiometryForm /> },
       { path: 'ophthal', element: <OphthalForm /> },
+      { path: 'scoliosis', element: <ScoliosisForm /> },
       { path: 'gericog', element: <GeriCognitiveTabs /> },
       { path: 'triage', element: <TriageForm /> },
       { path: 'osteoporosis', element: <OsteoForm /> },
@@ -89,8 +93,7 @@ const routes = [
       { path: 'docadmin', element: <DoctorAdmin /> },
       { path: 'mammobus', element: <MammobusForm /> },
       { path: 'podiatry', element: <PodiatryForm /> },
-      { path: 'formAadmin', element: <FormAAdmin />}
-
+      { path: 'formAadmin', element: <FormAAdmin /> },
     ],
   },
   {

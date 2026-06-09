@@ -20,6 +20,7 @@ export const FORM_COLLECTION_TO_KEY = {
   ophthalForm: 'ophthal',
   osteoForm: 'osteo',
   fitForm: 'fit',
+  scoliosisForm: 'scoliosis',
   geriEbasDepForm: 'geriEbasDep',
   geriFrailScaleForm: 'geriFrailScale',
   geriParQForm: 'geriParQ',
