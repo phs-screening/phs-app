@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { getAllPatientNames, getPreRegDataById, getPreRegDataByName } from '../services/patientData'
 import { FormContext } from '../api/utils.js'
@@ -8,6 +8,8 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
+  Stack,
   Typography,
   TextField,
   InputAdornment,
@@ -31,7 +33,6 @@ const RegisterPatient = (props) => {
   const [patientNameSearch, setPatientNameSearch] = useState('')
   const { updatePatientInfo } = useContext(FormContext)
   const navigate = useNavigate()
-  const ref = useRef()
 
   useEffect(() => {
     let isCurrent = true
@@ -145,102 +146,118 @@ const RegisterPatient = (props) => {
   }
 
   return (
-    <Card {...props}>
+    <Card {...props} sx={{ maxWidth: 520, width: '100%', mx: 'auto' }}>
       <CardContent>
-        <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
-          <Button
-            color='secondary'
-            size='large'
-            type='submit'
-            variant='contained'
-            component={RouterLink}
-            to='/app/reg'
-            sx={{ marginTop: '10px', marginBottom: '20px' }}
-          >
-            Register
-          </Button>
-          <Typography color='textSecondary' gutterBottom variant='h5'>
-            OR
-          </Typography>
-          <Typography color='textPrimary' gutterBottom variant='h4'>
-            Enter queue number below
-          </Typography>
-          <TextField
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SvgIcon fontSize='small' color='action'>
-                    <SearchIcon />
-                  </SvgIcon>
-                </InputAdornment>
-              ),
-            }}
-            placeholder='Queue number'
-            size='small'
-            variant='outlined'
-            onChange={handleQueueNumberInput}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                //default it here
-                handleSubmitQueueNumber()
-              }
-            }}
-            sx={{ marginTop: '5px', marginBottom: '5px' }}
-          />
-          {isLoadingQueueNumber ? (
-            <CircularProgress />
-          ) : (
+        <Stack spacing={4} alignItems='center'>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography color='textPrimary' variant='h4' gutterBottom>
+              Patient Lookup
+            </Typography>
+            <Typography color='textSecondary' variant='body2'>
+              Register a new patient or select an existing patient to continue.
+            </Typography>
+          </Box>
+
+          <Stack spacing={2} sx={{ width: '100%' }}>
             <Button
-              ref={ref}
-              color='primary'
+              color='secondary'
               size='large'
               type='submit'
               variant='contained'
-              onClick={handleSubmitQueueNumber}
-              sx={{ marginTop: '10px', marginBottom: '20px' }}
+              component={RouterLink}
+              to='/app/reg'
+              fullWidth
             >
-              Go
+              Register New Patient
             </Button>
-          )}
-          <Typography color='textSecondary' gutterBottom variant='h5'>
-            OR
-          </Typography>
-          <Typography color='textPrimary' gutterBottom variant='h4'>
-            Select name below
-          </Typography>
-          <Autocomplete
-            sx={{ width: '300px', marginTop: '5px', marginBottom: '5px' }}
-            freeSolo
-            size='small'
-            disableClearable
-            options={patientNames}
-            getOptionLabel={(option) => (typeof option === 'string' ? option : option.initials || '')}
-            renderInput={handlePatientNameInput}
-            /* onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.defaultMuiPrevented = true
-              }
-            }} */
-            onChange={handlePatientNameSelect}
-            onInputChange={handlePatientNameSearch}
-          />
-          {isLoadingPatientName ? (
-            <CircularProgress />
-          ) : (
-            <Button
-              ref={ref}
-              color='primary'
-              size='large'
-              type='submit'
-              variant='contained'
-              onClick={handleSubmitPatientName}
-              className='button'
-              sx={{ marginTop: '10px', marginBottom: '20px' }}
-            >
-              Go
-            </Button>
-          )}
-        </Box>
+
+            <Divider>OR</Divider>
+
+            <Box>
+              <Typography color='textPrimary' variant='h6' gutterBottom>
+                Enter queue number
+              </Typography>
+              <Stack spacing={2}>
+                <TextField
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <SvgIcon fontSize='small' color='action'>
+                          <SearchIcon />
+                        </SvgIcon>
+                      </InputAdornment>
+                    ),
+                  }}
+                  placeholder='Queue number'
+                  size='small'
+                  variant='outlined'
+                  fullWidth
+                  onChange={handleQueueNumberInput}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSubmitQueueNumber()
+                    }
+                  }}
+                />
+                {isLoadingQueueNumber ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <Button
+                    color='primary'
+                    size='large'
+                    type='submit'
+                    variant='contained'
+                    onClick={handleSubmitQueueNumber}
+                    fullWidth
+                  >
+                    Search by Queue Number
+                  </Button>
+                )}
+              </Stack>
+            </Box>
+
+            <Divider>OR</Divider>
+
+            <Box>
+              <Typography color='textPrimary' variant='h6' gutterBottom>
+                Search by patient name
+              </Typography>
+              <Stack spacing={2}>
+                <Autocomplete
+                  freeSolo
+                  size='small'
+                  disableClearable
+                  options={patientNames}
+                  getOptionLabel={(option) =>
+                    typeof option === 'string' ? option : option.initials || ''
+                  }
+                  renderInput={handlePatientNameInput}
+                  onChange={handlePatientNameSelect}
+                  onInputChange={handlePatientNameSearch}
+                  fullWidth
+                />
+                {isLoadingPatientName ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <Button
+                    color='primary'
+                    size='large'
+                    type='submit'
+                    variant='contained'
+                    onClick={handleSubmitPatientName}
+                    fullWidth
+                  >
+                    Search by Name
+                  </Button>
+                )}
+              </Stack>
+            </Box>
+          </Stack>
+        </Stack>
       </CardContent>
     </Card>
   )
