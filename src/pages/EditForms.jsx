@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Box, Typography, TextField, Button, InputAdornment, SvgIcon } from '@mui/material'
+import { Box, Typography, TextField, Button, InputAdornment, SvgIcon, CircularProgress } from '@mui/material'
 import { isAdmin } from '../services/authSession'
-import { getPreRegDataById } from '../services/patientData'
+import { getPreRegDataByIdStrict } from '../services/patientData'
+import { toLoadErrorMessage } from '../utils/retryRequest'
 import { useNavigate } from 'react-router-dom'
 import { Search as SearchIcon } from 'react-feather'
 import { FormContext } from '../api/utils'
@@ -11,6 +12,7 @@ const ManageVolunteers = () => {
   const navigate = useNavigate()
   const ref = useRef()
   const { updatePatientInfo } = useContext(FormContext)
+  const [loading, setLoading] = useState(false)
   const [values, setValues] = useState({
     queueNumber: 1,
   })
@@ -39,14 +41,22 @@ const ManageVolunteers = () => {
   const handleSubmit = async () => {
     const value = values.queueNumber
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-    const data = await getPreRegDataById(value, 'patients')
-    if ('initials' in data) {
-      updatePatientInfo(data)
-      await updateAllStationCounts(data.patientId)
-      navigate('/app/dashboard', { replace: true })
-    } else {
-      // if response is unsuccessful/id does not exist, show error style/popup.
-      alert('Unsuccessful. There is no patient with this queue number.')
+    try {
+      setLoading(true)
+      const data = await getPreRegDataByIdStrict(value, 'patients')
+      if (data && 'initials' in data) {
+        updatePatientInfo(data)
+        await updateAllStationCounts(data.queueNo ?? data.patientId)
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        // if response is unsuccessful/id does not exist, show error style/popup.
+        alert('Unsuccessful. There is no patient with this queue number.')
+      }
+    } catch (error) {
+      console.error('Failed to load patient for editing:', error)
+      alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -84,16 +94,20 @@ const ManageVolunteers = () => {
             variant='outlined'
             onChange={handleChange}
           />
-          <Button
-            ref={ref}
-            color='primary'
-            size='large'
-            type='submit'
-            variant='contained'
-            onClick={handleSubmit}
-          >
-            Go
-          </Button>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              ref={ref}
+              color='primary'
+              size='large'
+              type='submit'
+              variant='contained'
+              onClick={handleSubmit}
+            >
+              Go
+            </Button>
+          )}
         </Box>
       </div>
     </div>

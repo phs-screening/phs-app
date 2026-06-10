@@ -8,11 +8,13 @@ import { Divider, Paper, CircularProgress, Button, Box, Grid } from '@mui/materi
 
 import { submitForm, formatBmi } from '../api/api.jsx'
 import { FormContext } from '../api/utils.js'
-import { getSavedData } from '../services/patientData'
+import { getPatientFormDataStrict } from '../services/patientData'
+import { toLoadErrorMessage } from '../utils/retryRequest'
 import './fieldPadding.css'
 import CustomNumberField from '../components/form-components/CustomNumberField'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
+import DataLoadError from 'src/components/DataLoadError'
 
 const validationSchema = Yup.object({
   triageQ1: Yup.number()
@@ -120,15 +122,40 @@ const TriageForm = () => {
   const [loading, isLoading] = useState(false)
   const { patientId } = useContext(FormContext)
   const [saveData, setSaveData] = useState(initialValues)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
+    let isCurrent = true
+
     const fetchData = async () => {
-      const savedData = await getSavedData(patientId, formName)
-      setSaveData({ ...initialValues, ...savedData })
+      try {
+        isLoading(true)
+        setLoadError('')
+        const savedData = await getPatientFormDataStrict(patientId, formName)
+        if (isCurrent) {
+          setSaveData({ ...initialValues, ...(savedData || {}) })
+        }
+      } catch (error) {
+        console.error('Failed to load triage form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(error, 'Unable to load triage data. Refresh or try again.'),
+          )
+        }
+      } finally {
+        if (isCurrent) {
+          isLoading(false)
+        }
+      }
     }
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   const formOptions = {
     triageQ9: [
@@ -166,14 +193,17 @@ const TriageForm = () => {
   }
   return (
     <Paper elevation={2} p={0} m={0}>
-      <Formik
-        initialValues={saveData}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        enableReinitialize={true}
-      >
-        {({ values, isSubmitting, submitCount, ...formikProps }) => (
-          <Form>
+      {loadError ? (
+        <DataLoadError message={loadError} onRetry={() => setLoadAttempt((attempt) => attempt + 1)} />
+      ) : (
+        <Formik
+          initialValues={saveData}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+          enableReinitialize={true}
+        >
+          {({ values, isSubmitting, submitCount, ...formikProps }) => (
+            <Form>
             <div className='form--div'>
               <h1>Triage</h1>
               <h2>VITALS</h2>
@@ -385,9 +415,10 @@ const TriageForm = () => {
 
             <br />
             <Divider />
-          </Form>
-        )}
-      </Formik>
+            </Form>
+          )}
+        </Formik>
+      )}
     </Paper>
   )
 }
