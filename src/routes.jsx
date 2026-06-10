@@ -23,6 +23,7 @@ import HxTabs from './forms/HistoryTakingTabs/HistoryTaking'
 import ManageVolunteers from 'src/pages/ManageVolunteers'
 import DoctorAdmin from 'src/pages/DoctorAdmin'
 import FormAAdmin from 'src/pages/FormAAdmin'
+import EventDashboard from 'src/pages/EventDashboard'
 
 import SummaryForm from 'src/forms/SummaryForm'
 import React from 'react'
@@ -56,6 +57,7 @@ const routes = [
     children: [
       { path: 'registration', element: <Registration /> },
       { path: 'dashboard', element: <Dashboard /> },
+      { path: 'event-dashboard', element: <EventDashboard /> },
       { path: 'settings', element: <Settings /> },
       { path: 'doctorsconsult', element: <DoctorsConsultForm /> },
       { path: 'summary', element: <SummaryForm /> },
