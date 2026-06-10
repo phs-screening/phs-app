@@ -28,6 +28,11 @@ const items = [
     title: title1,
   },
   {
+    href: '/app/event-dashboard',
+    icon: BarChartIcon,
+    title: 'Event Dashboard',
+  },
+  {
     href: '/app/eligibility',
     icon: FileTextIcon,
     title: 'Eligibility',
