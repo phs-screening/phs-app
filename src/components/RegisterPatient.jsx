@@ -1,8 +1,13 @@
 import React from 'react'
 import { useState, useContext, useEffect } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { getAllPatientNames, getPreRegDataById, getPreRegDataByName } from '../services/patientData'
+import {
+  getAllPatientNamesStrict,
+  getPreRegDataByIdStrict,
+  getPreRegDataByNameStrict,
+} from '../services/patientData'
 import { FormContext } from '../api/utils.js'
+import { toLoadErrorMessage } from '../utils/retryRequest'
 import {
   Box,
   Button,
@@ -20,6 +25,8 @@ import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
 import { updateAllStationCounts } from '../services/stationCounts'
 
+const PATIENT_NAME_PAGE_LIMIT = 20
+
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
   const [isLoadingPatientName, setIsLoadingPatientName] = useState(false)
@@ -28,16 +35,44 @@ const RegisterPatient = (props) => {
     selectedValue: null,
   })
   const [patientNames, setPatientNames] = useState([])
+  const [patientNameSearch, setPatientNameSearch] = useState('')
+  const [patientNamesError, setPatientNamesError] = useState('')
   const { updatePatientInfo } = useContext(FormContext)
   const navigate = useNavigate()
 
   useEffect(() => {
+    let isCurrent = true
+
     const getPatientNames = async () => {
-      const data = await getAllPatientNames('patients')
-      setPatientNames(data)
+      try {
+        const data = await getAllPatientNamesStrict('patients', {
+          q: patientNameSearch,
+          page: 1,
+          limit: PATIENT_NAME_PAGE_LIMIT,
+        })
+
+        if (isCurrent) {
+          setPatientNames(data)
+          setPatientNamesError('')
+        }
+      } catch (error) {
+        console.error('Failed to load patient names:', error)
+        if (isCurrent) {
+          setPatientNames([])
+          setPatientNamesError(
+            toLoadErrorMessage(error, 'Unable to load patient names. Refresh or try again.'),
+          )
+        }
+      }
     }
-    getPatientNames()
-  }, [])
+
+    const timeoutId = setTimeout(getPatientNames, patientNameSearch ? 250 : 0)
+
+    return () => {
+      isCurrent = false
+      clearTimeout(timeoutId)
+    }
+  }, [patientNameSearch])
 
   const handleQueueNumberInput = (event) => {
     const value = event.target.value
@@ -79,24 +114,34 @@ const RegisterPatient = (props) => {
     })
   }
 
+  const handlePatientNameSearch = (event, value, reason) => {
+    if (reason === 'input' || reason === 'clear') {
+      setPatientNameSearch(value)
+    }
+  }
+
   const handleSubmitQueueNumber = async () => {
     setIsLoadingQueueNumber(true)
     const value = values.selectedValue
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
-    const data = await getPreRegDataById(value, 'patients')
-    console.log(data)
-    if ('initials' in data) {
-      updatePatientInfo(data)
-      await updateAllStationCounts(data.queueNo)
-      setIsLoadingQueueNumber(false)
-      navigate('/app/dashboard', { replace: true })
-    } else if ('age' in data) {
-      updatePatientInfo(data)
-      setIsLoadingQueueNumber(false)
-      navigate('/app/dashboard', { replace: true })
-    } else {
-      // if response is unsuccessful/id does not exist, show error style/popup.
-      alert('Unsuccessful. There is no patient with this queue number.')
+    try {
+      const data = await getPreRegDataByIdStrict(value, 'patients')
+      console.log(data)
+      if (data && 'initials' in data) {
+        updatePatientInfo(data)
+        await updateAllStationCounts(data.queueNo)
+        navigate('/app/dashboard', { replace: true })
+      } else if (data && 'age' in data) {
+        updatePatientInfo(data)
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        // if response is unsuccessful/id does not exist, show error style/popup.
+        alert('Unsuccessful. There is no patient with this queue number.')
+      }
+    } catch (error) {
+      console.error('Failed to search patient by queue number:', error)
+      alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
+    } finally {
       setIsLoadingQueueNumber(false)
     }
   }
@@ -105,14 +150,19 @@ const RegisterPatient = (props) => {
 
     const value = values.selectedValue?.initials
     if (value) {
-      const data = await getPreRegDataByName(value, 'patients')
-      console.log('Value', value)
-      if ('initials' in data) {
-        updatePatientInfo(data)
-        setIsLoadingPatientName(false)
-        navigate('/app/dashboard', { replace: true })
-      } else {
-        alert('Unsuccessful. There is no patient with this name.')
+      try {
+        const data = await getPreRegDataByNameStrict(value, 'patients')
+        console.log('Value', value)
+        if (data && 'initials' in data) {
+          updatePatientInfo(data)
+          navigate('/app/dashboard', { replace: true })
+        } else {
+          alert('Unsuccessful. There is no patient with this name.')
+        }
+      } catch (error) {
+        console.error('Failed to search patient by name:', error)
+        alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
+      } finally {
         setIsLoadingPatientName(false)
       }
     } else {
@@ -206,11 +256,19 @@ const RegisterPatient = (props) => {
                   size='small'
                   disableClearable
                   options={patientNames}
-                  getOptionLabel={(option) => option.initials}
+                  getOptionLabel={(option) =>
+                    typeof option === 'string' ? option : option.initials || ''
+                  }
                   renderInput={handlePatientNameInput}
                   onChange={handlePatientNameSelect}
+                  onInputChange={handlePatientNameSearch}
                   fullWidth
                 />
+                {patientNamesError && (
+                  <Typography color='error' variant='body2'>
+                    {patientNamesError}
+                  </Typography>
+                )}
                 {isLoadingPatientName ? (
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <CircularProgress />

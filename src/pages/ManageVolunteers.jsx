@@ -215,7 +215,10 @@ const ManageVolunteers = () => {
               password: '',
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().max(255).required('Username is required'),
+              email: Yup.string()
+                .email('Enter a valid email address, e.g. volunteer@example.com')
+                .max(255)
+                .required('Email is required'),
               password: Yup.string().max(255).required('Password is required'),
             })}
             onSubmit={(values, { resetForm }) => {
@@ -230,13 +233,20 @@ const ManageVolunteers = () => {
                   </Typography>
                 </Box>
                 <TextField
+                  error={Boolean(touched.email && errors.email)}
                   fullWidth
-                  helperText={touched.email && errors.email}
-                  label='Username'
+                  helperText={
+                    touched.email && errors.email
+                      ? errors.email
+                      : 'Use the volunteer email address they will use to log in.'
+                  }
+                  label='Email'
                   margin='normal'
                   name='email'
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  placeholder='e.g. volunteer@example.com'
+                  type='email'
                   value={values.email}
                   variant='outlined'
                   inputProps={{

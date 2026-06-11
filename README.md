@@ -14,6 +14,7 @@ Prefer these API wrappers for new code:
 ```text
 src/api/apiClient.js     # Shared HTTP client and auth headers
 src/api/authApi.js       # Login, signup, account deletion, password reset
+src/api/eventDashboardApi.js # Event dashboard summary and incomplete-patient search
 src/api/formsApi.js      # Patient form reads and submissions
 src/api/patientsApi.js   # Patient creation, lookup, names, and search
 src/api/stationsApi.js   # Patient station completion status and eligibility
@@ -35,6 +36,7 @@ For new frontend work:
 - Use `patientsApi`, `formsApi`, and `authApi` instead of direct `fetch('/api/...')`.
 - Use `stationsApi.getPatientStationSummary` for dashboard station display, completion, eligibility, and count data.
 - Use `stationsApi.getPatientStationEligibility` when a report or page needs the Form A style eligibility rows.
+- Use `eventDashboardApi` for event-level summary stats and paginated incomplete-patient search.
 - Use `stationsApi.recalculatePatientStationCounts` instead of writing station counts through generic collection routes.
 - Avoid passing MongoDB collection names from UI components when a domain key is available.
 - Add new form collection-to-key mappings in `src/forms/formKeys.js`.
@@ -70,6 +72,32 @@ Stage 9 continues that report extraction. `generateFormAPdf` and its private For
 Stage 10A moves the legacy `generate_pdf` jsPDF report and its direct rendering helpers into `src/reports/patientReportPdf.js`. `src/api/api.jsx` continues to re-export those helpers as a compatibility facade for existing callers.
 
 Stage 10B moves `generate_pdf_updated` and its direct pdfMake section helpers into `src/reports/patientReportPdfUpdated.js`. `src/api/api.jsx` continues to re-export those helpers as a compatibility facade for existing callers.
+
+## Event Dashboard
+
+`src/pages/EventDashboard.jsx` provides a read-only event operations view at:
+
+```text
+/app/event-dashboard
+```
+
+It uses manual refresh rather than SSE or polling. The page calls:
+
+```text
+GET /api/event-dashboard/summary
+GET /api/event-dashboard/incomplete-patients?q=...&page=1&limit=25
+```
+
+The MVP dashboard shows:
+
+- registered patient count
+- still-screening patient count
+- completed patient count
+- station queue counts and current bottleneck
+- pending print queue counts
+- paginated registered-but-not-completed patients searchable by name or ID, including their current station queue when present
+
+For the MVP, completion means the backend patient document has a `summaryForm` marker. This is intentionally simple and should be revisited only if event operations define a different final completion checkpoint.
 
 ## Past Versions
 

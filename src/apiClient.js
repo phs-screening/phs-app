@@ -5,10 +5,17 @@ function authHeaders() {
   return t ? { Authorization: `Bearer ${t}` } : {};
 }
 
+function createApiError(res, data) {
+  const error = new Error(data.error || `HTTP ${res.status}`);
+  error.status = res.status;
+  error.data = data;
+  return error;
+}
+
 export async function apiGet(path) {
   const res = await fetch(`${API_BASE}${path}`, { headers: { ...authHeaders() } });
   const data = await parseResponse(res)
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  if (!res.ok) throw createApiError(res, data);
   return data;
 }
 
@@ -21,7 +28,7 @@ export async function apiPost(path, body) {
 
   const data = await parseResponse(res);
 
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  if (!res.ok) throw createApiError(res, data);
   return data;
 }
 
@@ -33,7 +40,7 @@ export async function apiPatch(path, body) {
   });
 
   const data = await parseResponse(res);
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  if (!res.ok) throw createApiError(res, data);
   return data;
 }
 
@@ -44,7 +51,7 @@ export async function apiDelete(path) {
   });
 
   const data = await parseResponse(res);
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  if (!res.ok) throw createApiError(res, data);
   return data;
 }
 

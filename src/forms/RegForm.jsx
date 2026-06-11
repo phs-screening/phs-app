@@ -7,7 +7,8 @@ import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } 
 
 import { submitForm } from '../api/api.jsx'
 import { FormContext } from '../api/utils.js'
-import { getSavedData } from '../services/patientData'
+import { getPatientFormDataStrict } from '../services/patientData'
+import { toLoadErrorMessage } from '../utils/retryRequest'
 import PopupText from 'src/utils/popupText'
 import './fieldPadding.css'
 import './forms.css'
@@ -17,6 +18,7 @@ import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomSelect from '../components/form-components/CustomSelect'
 
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
+import DataLoadError from 'src/components/DataLoadError'
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -56,32 +58,69 @@ const RegForm = () => {
   const [savedData, setSavedData] = useState(initialValues)
   const [birthday, setBirthday] = useState(dayjs())
   const [patientAge, setPatientAge] = useState(0)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
+    let isCurrent = true
+
     const fetchData = async () => {
-      console.log('Patient ID: ' + patientId)
-      const res = await getSavedData(patientId, formName)
+      try {
+        isLoading(true)
+        setLoadError('')
+        console.log('Patient ID: ' + patientId)
+        const res =
+          patientId === -1 || patientId == null
+            ? {}
+            : await getPatientFormDataStrict(patientId, formName)
+        const formData = { ...initialValues, ...(res || {}) }
 
-      // Calculate age if birthday exists in saved data, otherwise use today
-      if (res.registrationQ3) {
-        const dayjsBirthday = dayjs(res.registrationQ3)
-        setBirthday(dayjsBirthday)
-        const calculatedAge = calculateAgeFromDayjs(dayjsBirthday)
-        setPatientAge(calculatedAge)
-      } else {
-        // If no saved birthday, default to today
-        const today = dayjs()
-        setBirthday(today)
-        const calculatedAge = calculateAgeFromDayjs(today)
-        setPatientAge(calculatedAge)
-        res.registrationQ3 = today // Update the saved data object
+        // Calculate age if birthday exists in saved data, otherwise use today
+        if (formData.registrationQ3) {
+          const dayjsBirthday = dayjs(formData.registrationQ3)
+          const calculatedAge = calculateAgeFromDayjs(dayjsBirthday)
+          formData.registrationQ3 = dayjsBirthday.toDate()
+          formData.registrationQ4 = calculatedAge
+
+          if (isCurrent) {
+            setBirthday(dayjsBirthday)
+            setPatientAge(calculatedAge)
+          }
+        } else {
+          // If no saved birthday, default to today
+          const today = dayjs()
+          const calculatedAge = calculateAgeFromDayjs(today)
+          formData.registrationQ3 = today.toDate()
+          formData.registrationQ4 = calculatedAge
+
+          if (isCurrent) {
+            setBirthday(today)
+            setPatientAge(calculatedAge)
+          }
+        }
+
+        if (isCurrent) {
+          setSavedData(formData)
+        }
+      } catch (error) {
+        console.error('Failed to load registration form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(error, 'Unable to load registration data. Refresh or try again.'),
+          )
+        }
+      } finally {
+        if (isCurrent) {
+          isLoading(false)
+        }
       }
-
-      setSavedData(res)
-      isLoading(false)
     }
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   // Calculates based on birth year only [e.g. all participants born in 1985 are considered 40 y/o in 2025]
   const calculateAgeFromDayjs = (birthDayjs) => {
@@ -498,7 +537,11 @@ const RegForm = () => {
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      {renderForm()}
+      {loadError ? (
+        <DataLoadError message={loadError} onRetry={() => setLoadAttempt((attempt) => attempt + 1)} />
+      ) : (
+        renderForm()
+      )}
     </Paper>
   )
 }

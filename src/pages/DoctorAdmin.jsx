@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, CircularProgress, Typography, Paper, Stack } from '@mui/material'
+import { Box, Button, CircularProgress, Typography, Pagination, Paper, Stack } from '@mui/material'
 import { getProfile } from '../services/authSession'
 import {
   deleteDocPdfFromQueue,
@@ -9,9 +9,15 @@ import {
 } from '../services/printQueues'
 import { generateDoctorPdf } from '../api/api.jsx'
 
+const PRINT_QUEUE_PAGE_SIZE = 25
+
 const DoctorAdmin = () => {
   const [pdfQueue, setPdfQueue] = useState([])
   const [printedQueue, setPrintedQueue] = useState([])
+  const [queuePage, setQueuePage] = useState(1)
+  const [historyPage, setHistoryPage] = useState(1)
+  const [queuePagination, setQueuePagination] = useState(null)
+  const [historyPagination, setHistoryPagination] = useState(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [admin, setAdmin] = useState(false)
@@ -22,14 +28,26 @@ const DoctorAdmin = () => {
   const sortNewestFirst = (items) =>
     [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
-  const fetchCurrentQueue = async () => {
-    const unprinted = await getUnprintedDocPdfQueue()
-    setPdfQueue(sortNewestFirst(unprinted))
+  const fetchCurrentQueue = async (page = queuePage) => {
+    const response = await getUnprintedDocPdfQueue({
+      page,
+      limit: PRINT_QUEUE_PAGE_SIZE,
+      includePagination: true,
+    })
+    setPdfQueue(sortNewestFirst(response.items))
+    setQueuePagination(response.pagination)
+    setQueuePage(response.pagination?.page || page)
   }
 
-  const fetchPrintHistory = async () => {
-    const printed = await getPrintedDocPdfQueue()
-    setPrintedQueue(sortNewestFirst(printed))
+  const fetchPrintHistory = async (page = historyPage) => {
+    const response = await getPrintedDocPdfQueue({
+      page,
+      limit: PRINT_QUEUE_PAGE_SIZE,
+      includePagination: true,
+    })
+    setPrintedQueue(sortNewestFirst(response.items))
+    setHistoryPagination(response.pagination)
+    setHistoryPage(response.pagination?.page || page)
     setHasLoadedHistory(true)
   }
 
@@ -47,10 +65,16 @@ const DoctorAdmin = () => {
 
         if (!isAdminUser) return
 
-        const unprinted = await getUnprintedDocPdfQueue()
+        const response = await getUnprintedDocPdfQueue({
+          page: 1,
+          limit: PRINT_QUEUE_PAGE_SIZE,
+          includePagination: true,
+        })
 
         if (!isMounted) return
-        setPdfQueue(sortNewestFirst(unprinted))
+        setPdfQueue(sortNewestFirst(response.items))
+        setQueuePagination(response.pagination)
+        setQueuePage(response.pagination?.page || 1)
         setLoading(false)
       } catch (err) {
         console.error('Initial fetch error:', err)
@@ -106,6 +130,24 @@ const DoctorAdmin = () => {
     await fetchCurrentQueue()
   }
 
+  const handlePageChange = async (_event, page) => {
+    setRefreshing(true)
+    try {
+      if (view === 'history') {
+        await fetchPrintHistory(page)
+      } else {
+        await fetchCurrentQueue(page)
+      }
+    } catch (err) {
+      console.error('Failed to change PDF queue page:', err)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
+  const activePagination = view === 'history' ? historyPagination : queuePagination
+  const activePage = view === 'history' ? historyPage : queuePage
+
   if (checkingAdmin) return <CircularProgress />
 
   if (!admin) return <Typography variant='h6'>Access denied. Admins only.</Typography>
@@ -123,10 +165,7 @@ const DoctorAdmin = () => {
         >
           Show Current Queue
         </Button>
-        <Button
-          variant={view === 'history' ? 'contained' : 'outlined'}
-          onClick={handleShowHistory}
-        >
+        <Button variant={view === 'history' ? 'contained' : 'outlined'} onClick={handleShowHistory}>
           Show Print History
         </Button>
         <Button variant='outlined' onClick={handleRefresh} disabled={refreshing}>
@@ -193,6 +232,17 @@ const DoctorAdmin = () => {
             </Stack>
           </Paper>
         ))
+      )}
+
+      {!loading && !refreshing && activePagination?.totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={activePagination.totalPages}
+            page={activePage}
+            onChange={handlePageChange}
+            color='primary'
+          />
+        </Box>
       )}
     </Box>
   )
