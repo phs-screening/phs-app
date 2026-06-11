@@ -437,7 +437,6 @@ export function followUpSection(
     //...(vaccineString ? [{ text: vaccineString, style: 'normal' }] : []),
     ...(hsgString ? [{ text: hsgString, style: 'normal' }] : []),
     ...(lungString ? [{ text: lungString, style: 'normal' }] : []),
-    ,
     // ...(phlebotomyString ? [{ text: phlebotomyString, style: 'normal' }] : []),
     // ...(fitString ? [{ text: fitString, style: 'normal' }] : []),
     // ...(hpvString ? [{ text: hpvString, style: 'normal' }] : []),
@@ -506,4 +505,3 @@ export function recommendationSection() {
     { text: `${parseFromLangKey('disclaimer')}\n`, style: 'normal' },
   ]
 }
-

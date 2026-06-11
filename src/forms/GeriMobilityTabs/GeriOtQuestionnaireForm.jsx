@@ -268,7 +268,7 @@ const GeriOtQuestionnaireForm = (props) => {
         const hxSocialData = await getSavedData(patientId, allForms.hxSocialForm)
 
         const results = await Promise.all([savedData, regData, triageData, hxSocialData])
-        
+
         setInitialValues({ ...generateInitialValues(), ...results[0] })
         setReg(results[1] || {})
         setTriage(results[2] || {})
@@ -394,8 +394,8 @@ const GeriOtQuestionnaireForm = (props) => {
                     />
                     <h3>3. Are your floor surfaces non slip?</h3>
                     <p>
-                      <b>Definition:</b> Score "NO" if kitchen, toilet are non-slip, Score "YES" if
-                      kitchen, toilet are non-slip
+                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score
+                      &quot;YES&quot; if kitchen, toilet are non-slip
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ3'
@@ -703,7 +703,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       <b>Definition:</b> Supportive, firmly fitting shoes / slippers with low heels
                       and non-slip soles.
                     </p>
-                    No shoes = "NO"
+                    No shoes = &quot;NO&quot;
                     <br />
                     <FastField
                       name='geriOtQuestionnaireQ26'
@@ -717,8 +717,8 @@ const GeriOtQuestionnaireForm = (props) => {
                       of falling over?
                     </h3>
                     <p>
-                      <b>Definition: </b> "YES" when client does NOT need to bend down to feed pets,
-                      clean, refill bowls etc
+                      <b>Definition:</b> &quot;YES&quot; when client does NOT need to bend down to
+                      feed pets, clean, refill bowls etc
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ27'
@@ -739,12 +739,10 @@ const GeriOtQuestionnaireForm = (props) => {
                     <h2>SCORING</h2>
                     <GetScores />
                     <br />
-
-                    <ErrorNotification 
+                    <ErrorNotification
                       show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                      message="Please fill in all required fields correctly."
+                      message='Please fill in all required fields correctly.'
                     />
-
                     <div>
                       {loading || isSubmitting ? (
                         <CircularProgress />

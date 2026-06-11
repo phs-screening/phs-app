@@ -1,3 +1,7 @@
+# Ignore compiled output and generated font wrapper files
+build/
+src/api/lang/NotoSans*.js
+
 src/forms/SummaryForm.jsx
 src/api/api.jsx
 src/pages/Eligibility.jsx

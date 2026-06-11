@@ -323,7 +323,7 @@ const TriageForm = () => {
                 <li>BP &gt; 180/120</li>
               </ul>
               <Typography fontWeight='bold' variant='h4'>
-                Q9. Does the patient's blood pressure require closer scrutiny by doctors later?
+                Q9. Does the patient&apos;s blood pressure require closer scrutiny by doctors later?
                 (e.g. Systolic above 180/120)
               </Typography>
 

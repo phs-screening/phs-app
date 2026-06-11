@@ -1,0 +1,2 @@
+# Ignore generated font wrapper files that Prettier cannot safely parse
+src/api/lang/NotoSans*.js

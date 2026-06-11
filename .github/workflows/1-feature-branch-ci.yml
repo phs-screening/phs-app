@@ -1,0 +1,40 @@
+# .github/workflows/1-feature-branch-ci.yml
+name: Feature Branch CI
+
+# Trigger:
+# - Runs on every push to any non-trunk branch.
+# - Purpose: give developers fast feedback on each push before they open a PR.
+#   Runs the cheap layers only (static checks).
+#   `next build`, typecheck, fixture checks and integration are reserved for later gates.
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  fast-feedback:
+    name: Fast Feedback (static)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: 3. Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 4. Prettier Check
+        run: npm run format:check
+
+      - name: 5. Lint
+        run: npm run lint
+
+      - name: 6. Unit Tests
+        run: npm run test:ci
