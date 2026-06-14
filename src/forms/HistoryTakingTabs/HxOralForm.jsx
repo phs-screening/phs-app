@@ -5,6 +5,8 @@ import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/mater
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
@@ -74,10 +76,10 @@ export default function HxOralForm({ changeTab, nextTab }) {
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
-      alert('Successfully submitted form')
+      await showFormSubmitSuccess()
       changeTab(null, nextTab)
     } else {
-      alert(`Unsuccessful. ${response.error}`)
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
   }
 

@@ -5,6 +5,8 @@ import * as Yup from 'yup'
 import { Divider, Paper, CircularProgress, Box, Button } from '@mui/material'
 
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -118,10 +120,10 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
         const response = await submitForm(values, patientId, formName)
         setLoading(false)
         if (response.result) {
-          alert('Successfully submitted form')
+          await showFormSubmitSuccess()
           changeTab(null, nextTab)
         } else {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }
         actions.setSubmitting(false)
       }}

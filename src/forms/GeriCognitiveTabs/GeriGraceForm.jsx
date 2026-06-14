@@ -3,6 +3,8 @@ import { Paper, CircularProgress, Button } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -69,13 +71,13 @@ const GeriGraceForm = () => {
           setSubmitting(false)
           if (response.result) {
             //const event = null
-            setTimeout(() => {
-              alert('Successfully submitted form')
+            setTimeout(async () => {
+              await showFormSubmitSuccess()
               navigate('/app/dashboard')
             }, 80)
           } else {
             setTimeout(() => {
-              alert(`Unsuccessful. ${response.error}`)
+              showFormSubmitError(`Unsuccessful. ${response.error}`)
             }, 80)
           }
         }}

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 import * as Yup from 'yup'
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../../api/utils.js'
 import CustomNumberField from '../../components/form-components/CustomNumberField.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
@@ -97,7 +99,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
         const response = await submitForm(values, patientId, formName)
         setLoading(false)
         if (response.result) {
-          alert('Successfully submitted form')
+          await showFormSubmitSuccess()
           // If patient is eligible for G-RACE, navigate to next tab. If not, navigate to PatientTimeline.
           if (values.geriAmtQ12 === 'Yes (Eligible for G-RACE)') {
             changeTab(null, nextTab)
@@ -105,7 +107,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
             navigate('/app/dashboard')
           }
         } else {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }
       }}
     >

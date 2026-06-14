@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
 import { getSavedData } from '../services/patientData'
@@ -119,14 +121,14 @@ const OphthalForm = () => {
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             navigate('/app/dashboard')
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

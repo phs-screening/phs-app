@@ -6,6 +6,8 @@ import { Divider, Paper, Grid, CircularProgress, Button, Typography } from '@mui
 
 import allForms from './forms.json'
 import { submitForm } from '../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -82,13 +84,13 @@ const OsteoForm = () => {
       onSubmit={async (values) => {
         setLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           setLoading(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             navigate('/app/dashboard')
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

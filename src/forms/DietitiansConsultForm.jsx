@@ -11,6 +11,8 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
 
 import { submitForm } from '../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
@@ -102,18 +104,18 @@ const DietitiansConsultForm = () => {
     try {
       const response = await submitForm(values, patientId, formName)
       if (response.result) {
-        setTimeout(() => {
-          alert('Successfully submitted form')
+        setTimeout(async () => {
+          await showFormSubmitSuccess()
           navigate('/app/dashboard')
         }, 80)
       } else {
         setTimeout(() => {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }, 80)
       }
     } catch (error) {
       setTimeout(() => {
-        alert(`Error: ${error.message}`)
+        showFormSubmitError(`Error: ${error.message}`)
       }, 80)
     } finally {
       isLoading(false)

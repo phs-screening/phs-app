@@ -6,6 +6,7 @@ import React, { useContext, useState } from 'react'
 import customTheme from './theme'
 // import { isLoggedin } from './services/authSession'
 import { FormContext } from './api/utils'
+import FormSubmitStatusHost from './components/form-components/FormSubmitStatusHost'
 import './App.css'
 
 export const LoginContext = React.createContext({
@@ -50,7 +51,10 @@ const App = () => {
   return (
     <LoginContext.Provider value={{ login, isLogin, profile, setProfile }}>
       <FormContext.Provider value={{ patientId, updatePatientId, patientInfo, updatePatientInfo }}>
-        <ThemeProvider theme={theme}>{routing}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          {routing}
+          <FormSubmitStatusHost />
+        </ThemeProvider>
       </FormContext.Provider>
     </LoginContext.Provider>
   )
