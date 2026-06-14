@@ -25,3 +25,13 @@ export function getPatientNames({ q, page = 1, limit = 20 } = {}) {
 export function searchPatientsByInitials(initials) {
   return apiGet(`/patients/search?initials=${encodeURIComponent(initials)}`)
 }
+
+export function getPatientNameMatches({ initials, page = 1, limit = 10 } = {}) {
+  const params = new URLSearchParams({
+    initials: String(initials ?? '').trim(),
+    page: String(page),
+    limit: String(limit),
+  })
+
+  return apiGet(`/patients/name-matches?${params.toString()}`)
+}
