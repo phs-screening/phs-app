@@ -9,7 +9,7 @@ import {
   restoreLastRemovedToFront,
 } from '../api/queuesApi'
 import { getProfile } from '../services/authSession'
-import { getPreRegDataById, getSavedData } from '../services/patientData'
+import { getPreRegDataByIdStrict, getSavedData } from '../services/patientData'
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import {
   Tooltip,
   Paper,
   Divider,
+  MenuItem,
 } from '@mui/material'
 import allForms from '../forms/forms.json'
 
@@ -30,6 +31,7 @@ const StationQueue = () => {
   const [stationName, setStationName] = useState('')
   const [stationPatientAddId, setStationAddPatientId] = useState({})
   const [stationPatientRemoveId, setStationRemovePatientId] = useState({})
+  const [pinnedStation, setPinnedStation] = useState('')
 
   const [admin, isAdmin] = useState(false)
 
@@ -38,19 +40,29 @@ const StationQueue = () => {
     return Number.isFinite(id) ? id : null
   }
 
-  // Form a string of <id>: <salutation> <initials> for each patient id
-  const getPatientStrings = async (patientIds) => {
-    const patientStrings = await Promise.all(
+  // Form a string of <id>: <salutation> <initials> for each existing patient id.
+  const getPatientQueueItems = async (patientIds) => {
+    const patients = await Promise.all(
       patientIds.map(async (id) => {
-        const patient = await getPreRegDataById(id, 'patients')
+        const patient = await getPreRegDataByIdStrict(id, 'patients')
+
+        if (!patient?.initials) {
+          return { id, queueItem: null }
+        }
+
         const registrationData = await getSavedData(id, allForms.registrationForm)
         const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
-        const initials = patient?.initials ?? 'Not Found'
 
-        return `${id}: ${salutation} ${initials}`
+        return { id, queueItem: `${id}: ${salutation} ${patient.initials}` }
       }),
     )
-    return patientStrings
+
+    return {
+      patientStrings: patients.map((patient) => patient.queueItem).filter(Boolean),
+      missingPatientIds: patients
+        .filter((patient) => !patient.queueItem)
+        .map((patient) => patient.id),
+    }
   }
 
   // Handler for Add Station button
@@ -84,6 +96,10 @@ const StationQueue = () => {
   const handleChange = (event) => {
     const text = event.target.value
     setStationName(text)
+  }
+
+  const handlePinnedStationChange = (event) => {
+    setPinnedStation(event.target.value)
   }
 
   // Handdler for add patient input field
@@ -168,7 +184,17 @@ const StationQueue = () => {
       return
     }
 
-    const patientStrings = await getPatientStrings(newPatientIds)
+    const { patientStrings, missingPatientIds } = await getPatientQueueItems(newPatientIds)
+
+    if (missingPatientIds.length > 0) {
+      alert(`Patient ID(s) ${missingPatientIds.join(', ')} do not exist and were not added.`)
+    }
+
+    if (patientStrings.length === 0) {
+      isLoading(false)
+      return
+    }
+
     await addPatientsToStationQueue(stationName, patientStrings)
     setRefresh(!refresh)
     setStationAddPatientId({ ...stationPatientAddId, [stationName]: '' })
@@ -276,6 +302,14 @@ const StationQueue = () => {
     showDeleteForAdmins()
   }, [])
 
+  const displayedStationQueues =
+    pinnedStation && stationQueues.some((station) => station.stationName === pinnedStation)
+      ? [
+          ...stationQueues.filter((station) => station.stationName === pinnedStation),
+          ...stationQueues.filter((station) => station.stationName !== pinnedStation),
+        ]
+      : stationQueues
+
   return (
     <Box sx={{ p: 3, bgcolor: '#f7f8fb', minHeight: '100vh' }}>
       <Typography
@@ -327,6 +361,39 @@ const StationQueue = () => {
         )}
       </Paper>
 
+      <Paper
+        elevation={1}
+        sx={{
+          p: 2,
+          mb: 3,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'stretch', sm: 'center' },
+          justifyContent: 'space-between',
+          gap: 2,
+          bgcolor: '#fff',
+        }}
+      >
+        <Typography variant='subtitle1' sx={{ fontWeight: 600 }}>
+          Queue Display
+        </Typography>
+        <TextField
+          select
+          label='Pin station to top'
+          size='small'
+          value={pinnedStation}
+          onChange={handlePinnedStationChange}
+          sx={{ minWidth: { xs: '100%', sm: 260 } }}
+        >
+          <MenuItem value=''>Default order</MenuItem>
+          {stationQueues.map((station) => (
+            <MenuItem key={station.stationName} value={station.stationName}>
+              {station.stationName}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Paper>
+
       <Box
         sx={{
           display: 'grid',
@@ -334,7 +401,7 @@ const StationQueue = () => {
           gap: 3,
         }}
       >
-        {stationQueues.map(({ stationName, queueItems, lastRemoved }) => (
+        {displayedStationQueues.map(({ stationName, queueItems, lastRemoved }) => (
           <Paper
             key={stationName}
             elevation={3}
@@ -472,7 +539,14 @@ const StationQueue = () => {
             <Divider />
 
             <Box
-              sx={{ p: 2, bgcolor: '#f4f6fa', borderRadius: 1, minHeight: 180, overflow: 'auto' }}
+              sx={{
+                p: 2,
+                bgcolor: '#f4f6fa',
+                borderRadius: 1,
+                minHeight: 180,
+                maxHeight: 360,
+                overflow: 'auto',
+              }}
             >
               <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 600 }}>
                 Patient IDs in Queue
