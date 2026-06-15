@@ -6,6 +6,7 @@ import {
   getQueueEntries,
   removeFirstPatientFromStationQueue,
   removePatientsFromStationQueue,
+  restoreLastRemovedToFront,
 } from '../api/queuesApi'
 import { getProfile } from '../services/authSession'
 import { getPreRegDataById, getSavedData } from '../services/patientData'
@@ -31,6 +32,11 @@ const StationQueue = () => {
   const [stationPatientRemoveId, setStationRemovePatientId] = useState({})
 
   const [admin, isAdmin] = useState(false)
+
+  const parseQueueItemPatientId = (queueItem) => {
+    const id = parseInt(String(queueItem).split(':')[0], 10)
+    return Number.isFinite(id) ? id : null
+  }
 
   // Form a string of <id>: <salutation> <initials> for each patient id
   const getPatientStrings = async (patientIds) => {
@@ -95,12 +101,19 @@ const StationQueue = () => {
 
     return new Set(
       station.queueItems
-        .map((item) => {
-          const id = parseInt(item.split(':')[0], 10)
-          return Number.isFinite(id) ? id : null
-        })
+        .map(parseQueueItemPatientId)
         .filter((id) => id !== null),
     )
+  }
+
+  const getQueueItemsByPatientIds = (stationName, patientIds) => {
+    const station = stationQueues.find((station) => station.stationName === stationName)
+    if (!station?.queueItems?.length) {
+      return []
+    }
+
+    const patientIdSet = new Set(patientIds)
+    return station.queueItems.filter((item) => patientIdSet.has(parseQueueItemPatientId(item)))
   }
 
   // Handler for add patient button
@@ -174,32 +187,46 @@ const StationQueue = () => {
     event.preventDefault()
     isLoading(true)
 
-    const patientIdText = stationPatientRemoveId[stationName]
+    try {
+      const patientIdText = stationPatientRemoveId[stationName]
 
-    if (!patientIdText || patientIdText.trim() === '') {
-      alert('Patient ID must be a number.')
+      if (!patientIdText || patientIdText.trim() === '') {
+        alert('Patient ID must be a number.')
+        return
+      }
+
+      const patientIds = patientIdText
+        .trim()
+        .split(/\s+/)
+        .filter((id) => !isNaN(parseInt(id)))
+        .map((id) => parseInt(id))
+
+      if (patientIds.length === 0) {
+        alert('Patient ID must be a number.')
+        return
+      }
+
+      const queueItemsToRemove = getQueueItemsByPatientIds(stationName, patientIds)
+      const existingIds = new Set(queueItemsToRemove.map(parseQueueItemPatientId))
+      const missingIds = patientIds.filter((id) => !existingIds.has(id))
+
+      if (missingIds.length > 0) {
+        alert(`Patient ID(s) ${missingIds.join(', ')} are not in this station queue.`)
+      }
+
+      if (queueItemsToRemove.length === 0) {
+        return
+      }
+
+      await removePatientsFromStationQueue(stationName, queueItemsToRemove)
+
+      setRefresh(!refresh)
+      setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: '' })
+    } catch (error) {
+      alert(error.message || 'Unable to remove patient from queue.')
+    } finally {
       isLoading(false)
-      return
     }
-
-    const patientIds = patientIdText
-      .trim()
-      .split(' ')
-      .filter((id) => !isNaN(parseInt(id)))
-      .map((id) => parseInt(id))
-
-    if (patientIds.length === 0) {
-      alert('Patient ID must be a number.')
-      isLoading(false)
-      return
-    }
-
-    const patientStrings = await getPatientStrings(patientIds)
-    await removePatientsFromStationQueue(stationName, patientStrings)
-
-    setRefresh(!refresh)
-    setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: '' })
-    isLoading(false)
   }
 
   // Handler for remove first button (remove first patient from queue)
@@ -210,6 +237,23 @@ const StationQueue = () => {
     await removeFirstPatientFromStationQueue(stationName)
     setRefresh(!refresh)
     isLoading(false)
+  }
+
+  const handleRestoreLastRemoved = async (event, stationName) => {
+    event.preventDefault()
+    isLoading(true)
+
+    try {
+      const response = await restoreLastRemovedToFront(stationName)
+      if (response.restoredCount === 0) {
+        alert('No patients were restored because they are already in the queue.')
+      }
+      setRefresh(!refresh)
+    } catch (error) {
+      alert(error.message || 'Unable to restore the last removed patient.')
+    } finally {
+      isLoading(false)
+    }
   }
 
   // Set a listener to update the station queues when the refresh state changes
@@ -290,7 +334,7 @@ const StationQueue = () => {
           gap: 3,
         }}
       >
-        {stationQueues.map(({ stationName, queueItems }) => (
+        {stationQueues.map(({ stationName, queueItems, lastRemoved }) => (
           <Paper
             key={stationName}
             elevation={3}
@@ -383,6 +427,45 @@ const StationQueue = () => {
                 >
                   Remove
                 </Button>
+              </Box>
+
+              <Box
+                sx={{
+                  p: 1.5,
+                  bgcolor: '#f8fafc',
+                  borderRadius: 1,
+                  border: '1px solid #e5e7eb',
+                }}
+              >
+                <Typography variant='subtitle2' sx={{ fontWeight: 600, mb: 1 }}>
+                  Last removed
+                </Typography>
+                {lastRemoved?.queueItems?.length > 0 ? (
+                  <>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1.5 }}>
+                      {lastRemoved.queueItems.map((item) => (
+                        <Typography key={item} variant='body2'>
+                          {item}
+                        </Typography>
+                      ))}
+                    </Box>
+                    <Button
+                      color='primary'
+                      size='small'
+                      type='button'
+                      variant='outlined'
+                      disabled={loading}
+                      onClick={(event) => handleRestoreLastRemoved(event, stationName)}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      Restore to Front
+                    </Button>
+                  </>
+                ) : (
+                  <Typography variant='body2' color='text.secondary'>
+                    No recently removed patients.
+                  </Typography>
+                )}
               </Box>
             </Box>
 

@@ -16,6 +16,7 @@ src/api/apiClient.js     # Shared HTTP client and auth headers
 src/api/authApi.js       # Login, signup, account deletion, password reset
 src/api/formsApi.js      # Patient form reads and submissions
 src/api/patientsApi.js   # Patient creation, lookup, names, duplicate-safe name matches, and search
+src/api/queuesApi.js     # Station queue reads, add/remove, and restore-last-removed actions
 src/api/stationsApi.js   # Patient station completion status and eligibility
 src/reports/doctorPdf.js # Doctor consult PDF generation
 src/reports/formAPdf.js  # Form A PDF generation
@@ -34,6 +35,7 @@ For new frontend work:
 
 - Use `patientsApi`, `formsApi`, and `authApi` instead of direct `fetch('/api/...')`.
 - Use `patientsApi.getPatientNameMatches` when resolving patients by name, because patient names are not unique.
+- Use `queuesApi.restoreLastRemovedToFront` for the station queue undo action. Removed queue items are persisted on the backend per station.
 - Use `stationsApi.getPatientStationSummary` for dashboard station display, completion, eligibility, and count data.
 - Use `stationsApi.getPatientStationEligibility` when a report or page needs the Form A style eligibility rows.
 - Use `stationsApi.recalculatePatientStationCounts` instead of writing station counts through generic collection routes.

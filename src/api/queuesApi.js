@@ -35,3 +35,10 @@ export function removePatientsFromStationQueue(stationName, queueItems) {
 export function removeFirstPatientFromStationQueue(stationName) {
   return apiPatch(`/queues/stations/${encodeURIComponent(stationName)}/items/first`, {})
 }
+
+export function restoreLastRemovedToFront(stationName) {
+  return apiPatch(
+    `/queues/stations/${encodeURIComponent(stationName)}/items/restore-last-removed`,
+    {},
+  )
+}
