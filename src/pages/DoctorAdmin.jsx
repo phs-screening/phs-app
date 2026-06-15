@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, CircularProgress, Typography, Pagination, Paper, Stack } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Pagination,
+  Paper,
+  Stack,
+  TextField,
+} from '@mui/material'
 import { getProfile } from '../services/authSession'
 import {
   deleteDocPdfFromQueue,
@@ -23,15 +32,17 @@ const DoctorAdmin = () => {
   const [admin, setAdmin] = useState(false)
   const [checkingAdmin, setCheckingAdmin] = useState(true) // NEW
   const [view, setView] = useState('queue') // 'queue' = active jobs, 'history' = printed jobs
-  const [hasLoadedHistory, setHasLoadedHistory] = useState(false)
+  const [searchPatientId, setSearchPatientId] = useState('')
+  const [activePatientIdFilter, setActivePatientIdFilter] = useState('')
 
   const sortNewestFirst = (items) =>
     [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
-  const fetchCurrentQueue = async (page = queuePage) => {
+  const fetchCurrentQueue = async (page = queuePage, patientId = activePatientIdFilter) => {
     const response = await getUnprintedDocPdfQueue({
       page,
       limit: PRINT_QUEUE_PAGE_SIZE,
+      patientId,
       includePagination: true,
     })
     setPdfQueue(sortNewestFirst(response.items))
@@ -39,16 +50,16 @@ const DoctorAdmin = () => {
     setQueuePage(response.pagination?.page || page)
   }
 
-  const fetchPrintHistory = async (page = historyPage) => {
+  const fetchPrintHistory = async (page = historyPage, patientId = activePatientIdFilter) => {
     const response = await getPrintedDocPdfQueue({
       page,
       limit: PRINT_QUEUE_PAGE_SIZE,
+      patientId,
       includePagination: true,
     })
     setPrintedQueue(sortNewestFirst(response.items))
     setHistoryPagination(response.pagination)
     setHistoryPage(response.pagination?.page || page)
-    setHasLoadedHistory(true)
   }
 
   // runs only on page load
@@ -104,9 +115,20 @@ const DoctorAdmin = () => {
     }
   }
 
+  const handleShowQueue = async () => {
+    setView('queue')
+    setRefreshing(true)
+    try {
+      await fetchCurrentQueue(1)
+    } catch (err) {
+      console.error('Failed to fetch current PDF queue:', err)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   const handleShowHistory = async () => {
     setView('history')
-    if (hasLoadedHistory) return
 
     setRefreshing(true)
     try {
@@ -118,10 +140,52 @@ const DoctorAdmin = () => {
     }
   }
 
+  const handleSearch = async (event) => {
+    event.preventDefault()
+    const nextFilter = searchPatientId.trim()
+
+    if (nextFilter && !/^\d+$/.test(nextFilter)) {
+      alert('Patient ID must be a number.')
+      return
+    }
+
+    setActivePatientIdFilter(nextFilter)
+    setRefreshing(true)
+
+    try {
+      if (view === 'history') {
+        await fetchPrintHistory(1, nextFilter)
+      } else {
+        await fetchCurrentQueue(1, nextFilter)
+      }
+    } catch (err) {
+      console.error('Failed to search PDF queue:', err)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
+  const handleClearSearch = async () => {
+    setSearchPatientId('')
+    setActivePatientIdFilter('')
+    setRefreshing(true)
+
+    try {
+      if (view === 'history') {
+        await fetchPrintHistory(1, '')
+      } else {
+        await fetchCurrentQueue(1, '')
+      }
+    } catch (err) {
+      console.error('Failed to clear PDF queue search:', err)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   const handlePrint = async (entry) => {
     await generateDoctorPdf(entry)
     await markDocPdfAsPrinted(entry._id)
-    setHasLoadedHistory(false)
     await fetchCurrentQueue()
   }
 
@@ -161,7 +225,7 @@ const DoctorAdmin = () => {
       <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
         <Button
           variant={view === 'queue' ? 'contained' : 'outlined'}
-          onClick={() => setView('queue')}
+          onClick={handleShowQueue}
         >
           Show Current Queue
         </Button>
@@ -173,11 +237,38 @@ const DoctorAdmin = () => {
         </Button>
       </Stack>
 
+      <Box component='form' onSubmit={handleSearch} sx={{ mb: 2 }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+          <TextField
+            label='Search patient ID'
+            size='small'
+            value={searchPatientId}
+            onChange={(event) => setSearchPatientId(event.target.value)}
+            sx={{ width: { xs: '100%', sm: 240 } }}
+          />
+          <Button type='submit' variant='contained' disabled={refreshing}>
+            Search
+          </Button>
+          <Button type='button' variant='outlined' onClick={handleClearSearch} disabled={refreshing}>
+            Clear
+          </Button>
+        </Stack>
+        {activePatientIdFilter && (
+          <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
+            Showing records for patient ID {activePatientIdFilter}
+          </Typography>
+        )}
+      </Box>
+
       {loading || refreshing ? (
         <CircularProgress />
       ) : view === 'history' ? (
         printedQueue.length === 0 ? (
-          <Typography>No printed records found.</Typography>
+          <Typography>
+            {activePatientIdFilter
+              ? `No printed records found for patient ID ${activePatientIdFilter}.`
+              : 'No printed records found.'}
+          </Typography>
         ) : (
           printedQueue.map((entry) => (
             <Paper
@@ -204,34 +295,42 @@ const DoctorAdmin = () => {
           ))
         )
       ) : (
-        pdfQueue.map((entry) => (
-          <Paper
-            key={entry._id}
-            sx={{
-              padding: 2,
-              marginBottom: 2,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Box>
-              <Typography variant='subtitle1'>Patient ID: {entry.patientId}</Typography>
-              <Typography variant='body2'>Doctor: {entry.doctorName}</Typography>
-              <Typography variant='body2'>
-                Created At: {new Date(entry.createdAt).toLocaleString()}
-              </Typography>
-            </Box>
-            <Stack direction='row' spacing={1}>
-              <Button variant='contained' color='primary' onClick={() => handlePrint(entry)}>
-                Print
-              </Button>
-              <Button variant='outlined' color='error' onClick={() => handleRemove(entry)}>
-                Remove
-              </Button>
-            </Stack>
-          </Paper>
-        ))
+        pdfQueue.length === 0 ? (
+          <Typography>
+            {activePatientIdFilter
+              ? `No current queue records found for patient ID ${activePatientIdFilter}.`
+              : 'No current queue records found.'}
+          </Typography>
+        ) : (
+          pdfQueue.map((entry) => (
+            <Paper
+              key={entry._id}
+              sx={{
+                padding: 2,
+                marginBottom: 2,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box>
+                <Typography variant='subtitle1'>Patient ID: {entry.patientId}</Typography>
+                <Typography variant='body2'>Doctor: {entry.doctorName}</Typography>
+                <Typography variant='body2'>
+                  Created At: {new Date(entry.createdAt).toLocaleString()}
+                </Typography>
+              </Box>
+              <Stack direction='row' spacing={1}>
+                <Button variant='contained' color='primary' onClick={() => handlePrint(entry)}>
+                  Print
+                </Button>
+                <Button variant='outlined' color='error' onClick={() => handleRemove(entry)}>
+                  Remove
+                </Button>
+              </Stack>
+            </Paper>
+          ))
+        )
       )}
 
       {!loading && !refreshing && activePagination?.totalPages > 1 && (

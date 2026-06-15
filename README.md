@@ -74,6 +74,10 @@ Stage 10A moves the legacy `generate_pdf` jsPDF report and its direct rendering 
 
 Stage 10B moves `generate_pdf_updated` and its direct pdfMake section helpers into `src/reports/patientReportPdfUpdated.js`. `src/api/api.jsx` continues to re-export those helpers as a compatibility facade for existing callers.
 
+## Print Queue Admin Search
+
+`DoctorAdmin.jsx` and `FormAAdmin.jsx` support exact patient ID search in both current queue and print history views. The search is server-side and uses the existing paginated print queue endpoints with `patientId`, so results are not limited to the currently visible page.
+
 ## Past Versions
 
 For reference:

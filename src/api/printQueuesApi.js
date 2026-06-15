@@ -4,6 +4,7 @@ const withPagination = (path, options = {}) => {
   const params = new URLSearchParams()
   if (options.page) params.set('page', options.page)
   if (options.limit) params.set('limit', options.limit)
+  if (options.patientId) params.set('patientId', options.patientId)
   const query = params.toString()
   return query ? `${path}?${query}` : path
 }
