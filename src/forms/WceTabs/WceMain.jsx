@@ -4,6 +4,7 @@ import { styled } from '@mui/system'
 import { AppBar, Tabs, Tab, Typography, Box, Paper } from '@mui/material'
 
 import { ScrollTopContext } from '../../api/utils.js'
+import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import WceForm from './WceForm.jsx'
 import GynaeForm from './GynaeForm.jsx'
 
@@ -48,6 +49,7 @@ const WceWrapper = styled('div')(({ theme }) => ({
 export default function WceTabs() {
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
+  const wrapperRef = useScrollToTopOnChange(value, scrollTop)
 
   const handleChange = (event, newValue) => {
     scrollTop()
@@ -55,7 +57,7 @@ export default function WceTabs() {
   }
 
   return (
-    <WceWrapper>
+    <WceWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='WCE tabs'>
           <Tab label='WCE' {...a11yProps(0)} />
