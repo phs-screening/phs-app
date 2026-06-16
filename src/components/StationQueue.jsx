@@ -11,6 +11,7 @@ import {
 import { getProfile } from '../services/authSession'
 import { getPreRegDataByIdStrict, getSavedData } from '../services/patientData'
 import {
+  Alert,
   Box,
   Button,
   Typography,
@@ -23,6 +24,12 @@ import {
 } from '@mui/material'
 import allForms from '../forms/forms.json'
 
+const formatLastRefreshed = (date) =>
+  date ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Never'
+
+const buildQueueError = (message, error) =>
+  error?.message ? `${message} Details: ${error.message}` : `${message} Please try again.`
+
 const StationQueue = () => {
   const [loading, isLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
@@ -32,8 +39,17 @@ const StationQueue = () => {
   const [stationPatientAddId, setStationAddPatientId] = useState({})
   const [stationPatientRemoveId, setStationRemovePatientId] = useState({})
   const [pinnedStation, setPinnedStation] = useState('')
+  const [lastRefreshedAt, setLastRefreshedAt] = useState(null)
+  const [queueError, setQueueError] = useState('')
 
   const [admin, isAdmin] = useState(false)
+
+  const loadStationQueues = async () => {
+    const response = await getQueueEntries()
+    setStationQueues(response.data || [])
+    setLastRefreshedAt(new Date())
+    setQueueError('')
+  }
 
   const parseQueueItemPatientId = (queueItem) => {
     const id = parseInt(String(queueItem).split(':')[0], 10)
@@ -282,11 +298,27 @@ const StationQueue = () => {
     }
   }
 
+  const handleManualRefresh = async () => {
+    isLoading(true)
+    try {
+      await loadStationQueues()
+    } catch (error) {
+      console.error('Failed to refresh station queues:', error)
+      setQueueError(buildQueueError('Unable to refresh station queues.', error))
+    } finally {
+      isLoading(false)
+    }
+  }
+
   // Set a listener to update the station queues when the refresh state changes
   useEffect(() => {
     const updateStationQueue = async () => {
-      const response = await getQueueEntries()
-      setStationQueues(response.data || [])
+      try {
+        await loadStationQueues()
+      } catch (error) {
+        console.error('Failed to load station queues:', error)
+        setQueueError(buildQueueError('Unable to load station queues.', error))
+      }
     }
     updateStationQueue()
   }, [refresh])
@@ -312,14 +344,34 @@ const StationQueue = () => {
 
   return (
     <Box sx={{ p: 3, bgcolor: '#f7f8fb', minHeight: '100vh' }}>
-      <Typography
-        color='textPrimary'
-        gutterBottom
-        variant='h3'
-        sx={{ marginBottom: 3, fontWeight: 700 }}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          justifyContent: 'space-between',
+          gap: 2,
+          mb: 3,
+          flexDirection: { xs: 'column', sm: 'row' },
+        }}
       >
-        Station Queue Management
-      </Typography>
+        <Typography color='textPrimary' variant='h3' sx={{ fontWeight: 700 }}>
+          Station Queue Management
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Button variant='outlined' onClick={handleManualRefresh} disabled={loading}>
+            {loading ? 'Working...' : 'Refresh'}
+          </Button>
+          <Typography variant='body2' color='text.secondary'>
+            Last refreshed: {formatLastRefreshed(lastRefreshedAt)}
+          </Typography>
+        </Box>
+      </Box>
+
+      {queueError && (
+        <Alert severity='error' sx={{ mb: 3 }}>
+          {queueError}
+        </Alert>
+      )}
 
       <Paper
         elevation={2}
