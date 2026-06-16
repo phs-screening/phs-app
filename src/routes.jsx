@@ -53,6 +53,7 @@ const routes = [
       </ProtectedRoute>
     ),
     children: [
+      { index: true, element: <Navigate to='registration' replace /> },
       { path: 'registration', element: <Registration /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'event-dashboard', element: <EventDashboard /> },
