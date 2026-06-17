@@ -77,17 +77,6 @@ const Login = () => {
     isLoading(false)
   }
 
-  const handleReset = async (values) => {
-    // const email = values.email
-    // try {
-    //   await mongoDB.emailPasswordAuth.sendResetPasswordEmail(email)
-    //   alert('Email sent to your account!')
-    // } catch (e) {
-    //   alert('Invalid Email!')
-    // }
-    alert('Password reset is not implemented yet.')
-  }
-
   return (
     <>
       <Helmet>
@@ -235,21 +224,6 @@ const Login = () => {
                   </Button>
                 </Box>
 
-                {/* Reset Password only for Sign In and Admin */}
-                {!isSignUp && accountOption === accountOptions[1] && (
-                  <Button
-                    color='primary'
-                    fullWidth
-                    size='large'
-                    type='button'
-                    variant='contained'
-                    onClick={() => {
-                      handleReset(values)
-                    }}
-                  >
-                    Reset Password
-                  </Button>
-                )}
                 {/* Toggle between Sign In and Sign Up */}
                 <Box sx={{ textAlign: 'center', mt: 2 }}>
                   {!isSignUp ? (
