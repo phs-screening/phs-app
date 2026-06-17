@@ -8,9 +8,7 @@ import ProtectedRoute from 'src/components/ProtectedRoute'
 import Queue from './pages/Queue'
 import Dashboard from 'src/pages/Dashboard'
 import Login from 'src/pages/Login'
-import Reset from 'src/pages/Reset'
 import NotFound from 'src/pages/NotFound'
-import Register from 'src/pages/Register'
 import Registration from 'src/pages/Registration'
 import Settings from 'src/pages/Settings'
 import DoctorsConsultForm from 'src/forms/DoctorsConsultForm'
@@ -55,6 +53,7 @@ const routes = [
       </ProtectedRoute>
     ),
     children: [
+      { index: true, element: <Navigate to='registration' replace /> },
       { path: 'registration', element: <Registration /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'event-dashboard', element: <EventDashboard /> },
@@ -109,8 +108,6 @@ const routes = [
           </GuestOnlyRoute>
         ),
       },
-      { path: 'reset', element: <Reset /> },
-      { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
       { path: '/', element: <DefaultRoute /> },
       { path: '*', element: <Navigate to='/404' /> },

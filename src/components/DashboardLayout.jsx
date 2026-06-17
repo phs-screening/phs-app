@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useState, useRef, useLayoutEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { styled } from '@mui/system'
 import DashboardNavbar from './DashboardNavbar'
 import DashboardSidebar from './DashboardSidebar'
 import { ScrollTopContext } from '../api/utils'
+import { scrollAncestorsToTop } from '../hooks/useScrollToTopOnChange'
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -38,7 +39,13 @@ const DashboardLayoutContent = styled('div')({
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const ref = useRef(null)
+  const { pathname } = useLocation()
   const scrollTop = () => (ref.current.scrollTop = 0)
+
+  useLayoutEffect(() => {
+    scrollAncestorsToTop(ref.current)
+  }, [pathname])
+
   return (
     <DashboardLayoutRoot>
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
