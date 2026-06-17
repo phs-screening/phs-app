@@ -7,6 +7,7 @@ import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
 import React, { useState, useContext, useEffect } from 'react'
 import { ScrollTopContext, FormContext } from '../../api/utils.js'
+import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import HxFamilyForm from './HxFamilyForm.jsx'
 import HxGynaeForm from './HxGynaeForm.jsx'
 import HxHcsrForm from './HxHcsrForm.jsx'
@@ -62,6 +63,7 @@ export default function HxTabs() {
   const [value, setValue] = useState(0)
   const [isFemale, setIsFemale] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
+  const wrapperRef = useScrollToTopOnChange(value, scrollTop)
   const { patientId } = useContext(FormContext)
 
   // Fetches regForm data to show hxGynae tab based on whether patient is female or not
@@ -87,7 +89,7 @@ export default function HxTabs() {
   }
 
   return (
-    <HxWrapper>
+    <HxWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='simple tabs example'>
           <Tab label='HCSR' {...a11yProps(0)} />

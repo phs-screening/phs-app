@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScrollTopContext } from '../../api/utils.js'
+import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import GeriAmtForm from './GeriAmtForm.jsx'
 import GeriPhqForm from './GeriPhqForm.jsx'
 import GeriGraceForm from './GeriGraceForm.jsx'
@@ -54,6 +55,7 @@ const GeriCognitiveWrapper = styled('div')(
 export default function GeriCognitiveTabs() {
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
+  const wrapperRef = useScrollToTopOnChange(value, scrollTop)
 
   const handleChange = (event, newValue) => {
     scrollTop()
@@ -61,7 +63,7 @@ export default function GeriCognitiveTabs() {
   }
 
   return (
-    <GeriCognitiveWrapper>
+    <GeriCognitiveWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs
           value={value}

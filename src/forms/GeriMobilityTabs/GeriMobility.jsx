@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScrollTopContext } from '../../api/utils.js'
+import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import GeriPhysicalActivityLevelForm from './GeriPhysicalActivityLevelForm.jsx'
 import GeriOtQuestionnaireForm from './GeriOtQuestionnaireForm.jsx'
 import GeriSppbForm from './GeriSppbForm.jsx'
@@ -56,6 +57,7 @@ const GeriMobilityWrapper = styled('div')(
 export default function GeriMobilityTabs() {
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
+  const wrapperRef = useScrollToTopOnChange(value, scrollTop)
 
   const handleChange = (event, newValue) => {
     scrollTop()
@@ -63,7 +65,7 @@ export default function GeriMobilityTabs() {
   }
 
   return (
-    <GeriMobilityWrapper>
+    <GeriMobilityWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='GeriMobility tabs'>
           <Tab label='Physical Activity Level' {...a11yProps(0)} />
