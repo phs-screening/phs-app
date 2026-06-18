@@ -6,6 +6,8 @@ import * as Yup from 'yup'
 import { Divider, Paper, Grid, CircularProgress, Button, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 
@@ -111,18 +113,18 @@ const LungFnForm = () => {
       const response = await submitForm(finalValues, patientId, formName)
       
       if (response.result) {
-        setTimeout(() => {
-          alert('Successfully submitted form')
+        setTimeout(async () => {
+          await showFormSubmitSuccess()
           navigate('/app/dashboard')
         }, 80)
       } else {
         setTimeout(() => {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }, 80)
       }
     } catch (error) {
       console.error('Submission error:', error)
-      alert('An error occurred during submission')
+      showFormSubmitError('An error occurred during submission')
     } finally {
       setLoading(false)
       setSubmitting(false)

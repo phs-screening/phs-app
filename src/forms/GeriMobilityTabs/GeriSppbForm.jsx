@@ -9,6 +9,7 @@ import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import { submitForm, calculateSppbScore } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -117,10 +118,10 @@ const GeriSppbForm = (props) => {
         const response = await submitForm(values, patientId, formName)
         setLoading(false)
         if (response.result) {
-          alert('Successfully submitted form')
+          await showFormSubmitSuccess()
           changeTab(null, nextTab)
         } else {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }
       }}
     >

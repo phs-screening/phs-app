@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { Divider, Paper, CircularProgress, Button, Grid, Typography } from '@mui/material'
 
 import { submitForm, calculateSppbScore } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -119,14 +120,14 @@ const GeriOtConsultForm = () => {
       onSubmit={async (values, { setSubmitting }) => {
         isLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           isLoading(false)
           setSubmitting(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             navigate('/app/dashboard')
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

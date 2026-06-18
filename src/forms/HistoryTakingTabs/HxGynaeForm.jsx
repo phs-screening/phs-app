@@ -5,6 +5,8 @@ import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import PopupText from 'src/utils/popupText.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
@@ -79,10 +81,10 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
-      alert('Successfully submitted form')
+      await showFormSubmitSuccess()
       changeTab(null, nextTab)
     } else {
-      alert(`Unsuccessful. ${response.error}`)
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
   }
 

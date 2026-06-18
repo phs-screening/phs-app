@@ -5,6 +5,8 @@ import { Button, CircularProgress, Paper, Grid } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
@@ -63,14 +65,14 @@ const MentalHealthForm = () => {
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             navigate('/app/dashboard')
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

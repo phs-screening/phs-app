@@ -7,6 +7,7 @@ import { Typography } from '@mui/material'
 import { Divider, Paper, CircularProgress, Button, Box, Grid } from '@mui/material'
 
 import { submitForm, formatBmi } from '../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
 import { toLoadErrorMessage } from '../utils/retryRequest'
@@ -179,15 +180,15 @@ const TriageForm = () => {
     if (response.result) {
       isLoading(false)
       setSubmitting(false)
-      setTimeout(() => {
-        alert('Successfully submitted form')
+      setTimeout(async () => {
+        await showFormSubmitSuccess()
         navigate('/app/dashboard')
       }, 80)
     } else {
       isLoading(false)
       setSubmitting(false)
       setTimeout(() => {
-        alert(`Unsuccessful. ${response.error}`)
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
       }, 80)
     }
   }

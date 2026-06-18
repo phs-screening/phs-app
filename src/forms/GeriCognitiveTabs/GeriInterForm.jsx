@@ -18,6 +18,8 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import allForms from '../forms.json'
 import { submitForm } from '../../api/api.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -122,13 +124,13 @@ const GeriInterForm = () => {
                 setLoading(false)
                 setSubmitting(false)
                 if (response.result) {
-                  setTimeout(() => {
-                    alert('Successfully submitted form')
+                  setTimeout(async () => {
+                    await showFormSubmitSuccess()
                     navigate('/app/dashboard')
                   }, 80)
                 } else {
                   setTimeout(() => {
-                    alert(`Unsuccessful. ${response.error}`)
+                    showFormSubmitError(`Unsuccessful. ${response.error}`)
                   }, 80)
                 }
               }}
