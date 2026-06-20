@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import PopupText from 'src/utils/popupText.jsx'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import CustomTextField from 'src/components/form-components/CustomTextField.jsx'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
@@ -106,10 +107,10 @@ export default function HxNssForm({ changeTab, nextTab }) {
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
-      alert('Successfully submitted form')
+      await showFormSubmitSuccess()
       changeTab(null, nextTab)
     } else {
-      alert(`Unsuccessful. ${response.error}`)
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
   }
 

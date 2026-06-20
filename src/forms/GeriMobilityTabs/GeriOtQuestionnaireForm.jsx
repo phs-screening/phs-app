@@ -5,6 +5,7 @@ import { Paper, CircularProgress, Button, Grid } from '@mui/material'
 
 import allForms from '../forms.json'
 import { formatBmi, submitForm } from '../../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -324,14 +325,14 @@ const GeriOtQuestionnaireForm = (props) => {
           )
 
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             changeTab(null, nextTab)
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         } catch (error) {
           console.error('Submission error:', error)
-          alert('An error occurred during submission')
+          showFormSubmitError('An error occurred during submission')
         } finally {
           setLoading(false)
           setSubmitting(false)

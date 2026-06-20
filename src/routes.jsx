@@ -1,19 +1,18 @@
-import { Navigate } from 'react-router-dom'
+import React, { lazy, Suspense } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
+import { Navigate } from 'react-router-dom'
 import AdminRoute from 'src/components/AdminRoute'
 import DashboardLayout from 'src/components/DashboardLayout'
 import DefaultRoute from 'src/components/DefaultRoute'
 import GuestOnlyRoute from 'src/components/GuestOnlyRoute'
 import MainLayout from 'src/components/MainLayout'
 import ProtectedRoute from 'src/components/ProtectedRoute'
-import React, { lazy, Suspense } from 'react'
 
 const Queue = lazy(() => import('./pages/Queue'))
 const Dashboard = lazy(() => import('src/pages/Dashboard'))
+const EventDashboard = lazy(() => import('src/pages/EventDashboard'))
 const Login = lazy(() => import('src/pages/Login'))
-const Reset = lazy(() => import('src/pages/Reset'))
 const NotFound = lazy(() => import('src/pages/NotFound'))
-const Register = lazy(() => import('src/pages/Register'))
 const Registration = lazy(() => import('src/pages/Registration'))
 const Settings = lazy(() => import('src/pages/Settings'))
 const DoctorsConsultForm = lazy(() => import('src/forms/DoctorsConsultForm'))
@@ -59,8 +58,10 @@ const routes = [
       </ProtectedRoute>
     ),
     children: [
+      { index: true, element: <Navigate to='registration' replace /> },
       { path: 'registration', element: loadable(Registration) },
       { path: 'dashboard', element: loadable(Dashboard) },
+      { path: 'event-dashboard', element: loadable(EventDashboard) },
       { path: 'settings', element: loadable(Settings) },
       { path: 'doctorsconsult', element: loadable(DoctorsConsultForm) },
       { path: 'summary', element: loadable(SummaryForm) },
@@ -112,8 +113,6 @@ const routes = [
           </GuestOnlyRoute>
         ),
       },
-      { path: 'reset', element: loadable(Reset) },
-      { path: 'register', element: loadable(Register) },
       { path: '404', element: loadable(NotFound) },
       { path: '/', element: <DefaultRoute /> },
       { path: '*', element: <Navigate to='/404' /> },

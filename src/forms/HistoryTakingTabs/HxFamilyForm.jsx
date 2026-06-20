@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
@@ -55,10 +56,10 @@ export default function HxFamilyForm({ changeTab, nextTab }) {
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
-      alert('Successfully submitted form')
+      await showFormSubmitSuccess()
       changeTab(null, nextTab)
     } else {
-      alert(`Unsuccessful. ${response.error}`)
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
   }
 

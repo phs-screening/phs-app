@@ -14,6 +14,7 @@ Prefer these API wrappers for new code:
 ```text
 src/api/apiClient.js     # Shared HTTP client and auth headers
 src/api/authApi.js       # Login, signup, account deletion, password reset
+src/api/eventDashboardApi.js # Event dashboard summary and incomplete-patient search
 src/api/formsApi.js      # Patient form reads and submissions
 src/api/patientsApi.js   # Patient creation, lookup, names, duplicate-safe name matches, and search
 src/api/queuesApi.js     # Station queue reads, add/remove, and restore-last-removed actions
@@ -38,6 +39,7 @@ For new frontend work:
 - Use `queuesApi.restoreLastRemovedToFront` for the station queue undo action. Removed queue items are persisted on the backend per station.
 - Use `stationsApi.getPatientStationSummary` for dashboard station display, completion, eligibility, and count data.
 - Use `stationsApi.getPatientStationEligibility` when a report or page needs the Form A style eligibility rows.
+- Use `eventDashboardApi` for event-level summary stats and paginated incomplete-patient search.
 - Use `stationsApi.recalculatePatientStationCounts` instead of writing station counts through generic collection routes.
 - Avoid passing MongoDB collection names from UI components when a domain key is available.
 - Add new form collection-to-key mappings in `src/forms/formKeys.js`.
@@ -77,6 +79,32 @@ Stage 10B moves `generate_pdf_updated` and its direct pdfMake section helpers in
 ## Print Queue Admin Search
 
 `DoctorAdmin.jsx` and `FormAAdmin.jsx` support exact patient ID search in both current queue and print history views. The search is server-side and uses the existing paginated print queue endpoints with `patientId`, so results are not limited to the currently visible page.
+
+## Event Dashboard
+
+`src/pages/EventDashboard.jsx` provides a read-only event operations view at:
+
+```text
+/app/event-dashboard
+```
+
+It uses manual refresh rather than SSE or polling. The page calls:
+
+```text
+GET /api/event-dashboard/summary
+GET /api/event-dashboard/incomplete-patients?q=...&page=1&limit=25
+```
+
+The MVP dashboard shows:
+
+- registered patient count
+- still-screening patient count
+- completed patient count
+- station queue counts and current bottleneck
+- pending print queue counts
+- paginated registered-but-not-completed patients searchable by name or ID, including their current station queue when present
+
+For the MVP, completion means the backend patient document has a `summaryForm` marker. This is intentionally simple and should be revisited only if event operations define a different final completion checkpoint.
 
 ## Past Versions
 

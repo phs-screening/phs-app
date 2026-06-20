@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { Paper, CircularProgress, Divider, Button, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -53,17 +54,17 @@ const HpvForm = () => {
     try {
       const response = await submitForm(values, patientId, formName)
       if (response.result) {
-        setTimeout(() => {
-          alert('Successfully submitted form')
+        setTimeout(async () => {
+          await showFormSubmitSuccess()
           navigate('/app/dashboard')
         }, 80)
       } else {
         setTimeout(() => {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }, 80)
       }
     } catch (error) {
-      alert(`Error: ${error.message}`)
+      showFormSubmitError(`Error: ${error.message}`)
     } finally {
       setLoading(false)
       setSubmitting(false)

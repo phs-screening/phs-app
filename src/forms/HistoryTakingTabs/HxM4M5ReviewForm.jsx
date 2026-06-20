@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification.jsx'
@@ -52,10 +53,10 @@ const HxM4M5ReviewForm = () => {
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
-      alert('Successfully submitted form')
+      await showFormSubmitSuccess()
       navigate('/app/dashboard')
     } else {
-      alert(`Unsuccessful. ${response.error}`)
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
   }
 

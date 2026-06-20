@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import { addToDocPdfQueue } from '../services/printQueues'
@@ -140,17 +141,17 @@ const DoctorsConsultForm = () => {
           await addToDocPdfQueue(patientId, values.doctorSConsultQ1)
         }
 
-        setTimeout(() => {
-          alert('Successfully submitted form')
+        setTimeout(async () => {
+          await showFormSubmitSuccess()
           navigate('/app/dashboard')
         }, 80)
       } else {
         setTimeout(() => {
-          alert(`Unsuccessful. ${response.error}`)
+          showFormSubmitError(`Unsuccessful. ${response.error}`)
         }, 80)
       }
     } catch (error) {
-      alert(`Error: ${error.message}`)
+      showFormSubmitError(`Error: ${error.message}`)
     } finally {
       setLoading(false)
       setSubmitting(false)

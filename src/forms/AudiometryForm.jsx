@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { submitForm } from '../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -133,14 +134,14 @@ const AudiometryForm = () => {
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             navigate('/app/dashboard')
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

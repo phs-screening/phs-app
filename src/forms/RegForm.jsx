@@ -6,6 +6,7 @@ import { validationSchema } from './registrationSchema'
 import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
 import { toLoadErrorMessage } from '../utils/retryRequest'
@@ -150,9 +151,9 @@ const RegForm = () => {
 
     console.log('test  _' + response.result + ' ' + patientAge)
     if (response.result) {
-      setTimeout(() => {
+      setTimeout(async () => {
         console.log('response data: ' + response.qNum)
-        alert('Successfully submitted form')
+        await showFormSubmitSuccess()
         console.log('Successfully submitted form')
         updatePatientInfo(response.data)
         updatePatientId(response.qNum)
@@ -161,7 +162,7 @@ const RegForm = () => {
     } else {
       setTimeout(() => {
         console.log('Form submission failed')
-        alert(`Unsuccessful. ${response.error}`)
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
       }, 80)
     }
     isLoading(false)

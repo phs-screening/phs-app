@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { Divider, Paper, Grid, CircularProgress, Button } from '@mui/material'
 
 import { submitForm } from '../../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 
 import { getSavedData } from '../../services/patientData'
@@ -121,14 +122,14 @@ const WceForm = (props) => {
       onSubmit={async (values, { setSubmitting }) => {
         isLoading(true)
         const response = await submitForm(values, patientId, formName)
-        setTimeout(() => {
+        setTimeout(async () => {
           isLoading(false)
           setSubmitting(false)
           if (response.result) {
-            alert('Successfully submitted form')
+            await showFormSubmitSuccess()
             changeTab(null, nextTab)
           } else {
-            alert(`Unsuccessful. ${response.error}`)
+            showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
         }, 80)
       }}

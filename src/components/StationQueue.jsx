@@ -30,6 +30,17 @@ const formatLastRefreshed = (date) =>
 const buildQueueError = (message, error) =>
   error?.message ? `${message} Details: ${error.message}` : `${message} Please try again.`
 
+const parseQueueItem = (queueItem) => {
+  const [idPart, ...nameParts] = String(queueItem).split(':')
+  const id = idPart.trim()
+  const name = nameParts.join(':').trim()
+
+  return {
+    id,
+    name: name || queueItem,
+  }
+}
+
 const StationQueue = () => {
   const [loading, isLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
@@ -601,31 +612,54 @@ const StationQueue = () => {
               }}
             >
               <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 600 }}>
-                Patient IDs in Queue
+                Patients in Queue
               </Typography>
               {queueItems && queueItems.length > 0 ? (
-                queueItems.map((patientId) => (
-                  <Box
-                    key={patientId}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      bgcolor: '#fff',
-                      p: 1,
-                      mb: 1,
-                      borderRadius: 1,
-                      border: '1px solid #e0e0e0',
-                    }}
-                  >
-                    <Typography variant='body2' sx={{ fontWeight: 500 }}>
-                      {patientId}
-                    </Typography>
-                    <Typography variant='caption' color='text.secondary'>
-                      #{queueItems.indexOf(patientId) + 1}
-                    </Typography>
-                  </Box>
-                ))
+                queueItems.map((patientId, index) => {
+                  const patient = parseQueueItem(patientId)
+
+                  return (
+                    <Box
+                      key={`${patientId}-${index}`}
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'auto minmax(0, 1fr) auto',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        bgcolor: '#fff',
+                        p: 1,
+                        mb: 1,
+                        borderRadius: 1,
+                        border: '1px solid #e0e0e0',
+                      }}
+                    >
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          fontWeight: 700,
+                          color: 'primary.main',
+                          minWidth: 32,
+                          textAlign: 'center',
+                        }}
+                      >
+                        #{index + 1}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        sx={{ fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                      >
+                        {patient.name}
+                      </Typography>
+                      <Typography
+                        variant='caption'
+                        color='text.secondary'
+                        sx={{ whiteSpace: 'nowrap' }}
+                      >
+                        id: {patient.id}
+                      </Typography>
+                    </Box>
+                  )
+                })
               ) : (
                 <Typography variant='body2' color='text.secondary'>
                   No patients in queue yet.

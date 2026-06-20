@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
+import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
@@ -79,15 +80,15 @@ const HsgForm = () => {
     if (response.result) {
       isLoading(false)
       setSubmitting(false)
-      setTimeout(() => {
-        alert('Successfully submitted form')
+      setTimeout(async () => {
+        await showFormSubmitSuccess()
         navigate('/app/dashboard')
       }, 80)
     } else {
       isLoading(false)
       setSubmitting(false)
       setTimeout(() => {
-        alert(`Unsuccessful. ${response.error}`)
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
       }, 80)
     }
   }

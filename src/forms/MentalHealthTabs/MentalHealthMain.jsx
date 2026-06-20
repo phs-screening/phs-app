@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScrollTopContext } from '../../api/utils.js'
+import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import PhqForm from './MentalHealthPHQ.jsx'
 import MentalHealthForm from './MentalHealthForm.jsx'
 
@@ -52,6 +53,7 @@ const WceWrapper = styled('div')(
 export default function MentalHealthTabs() {
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
+  const wrapperRef = useScrollToTopOnChange(value, scrollTop)
 
   const handleChange = (event, newValue) => {
     scrollTop()
@@ -59,7 +61,7 @@ export default function MentalHealthTabs() {
   }
 
   return (
-    <WceWrapper>
+    <WceWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='simple tabs example'>
           <Tab label='PHQ' {...a11yProps(0)} />

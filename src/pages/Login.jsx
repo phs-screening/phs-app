@@ -5,6 +5,7 @@ import { Formik } from 'formik'
 import Link from '@mui/material/Link'
 import CircularProgress from '@mui/material/CircularProgress'
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -27,30 +28,43 @@ const Login = () => {
   const [loading, isLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
+  const [authMessage, setAuthMessage] = useState(null)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const handleMouseDownPassword = () => setShowPassword(!showPassword)
 
   // sign up API version
   const handleSignUp = async (values) => {
     isLoading(true)
+    setAuthMessage(null)
     try {
       const data = await signup(values.email, values.password)
 
       if (data.result) {
-        alert('Account Created: ' + values.email + '\nYou can now sign in.')
+        setAuthMessage({
+          severity: 'success',
+          text: `Account created: ${values.email}. You can now sign in.`,
+        })
         setTimeout(() => setIsSignUp(false), 1)
       } else {
-        alert('Error: ' + data.error)
+        setAuthMessage({
+          severity: 'error',
+          text: data.error || 'Unable to create account.',
+        })
       }
     } catch (e) {
-      alert('Contact Developer: ' + e.message)
+      setAuthMessage({
+        severity: 'error',
+        text: `Unable to create account: ${e.message}`,
+      })
+    } finally {
+      isLoading(false)
     }
-    isLoading(false)
   }
 
   // login API version
   const handleLogin = async (values) => {
     isLoading(true)
+    setAuthMessage(null)
     try {
       let type = 'Guest'
       if (accountOption === accountOptions[1]) {
@@ -63,29 +77,24 @@ const Login = () => {
         if (data.token) {
           localStorage.setItem('authToken', data.token)
         }
-        alert('Login successful!')
         localStorage.setItem('profile', JSON.stringify(data.user))
         setProfile(data.user)
         isLogin(true)
         navigate('/app/registration', { replace: true })
       } else {
-        alert(data.error || 'Invalid username or password!')
+        setAuthMessage({
+          severity: 'error',
+          text: data.error || 'Invalid username or password.',
+        })
       }
     } catch (e) {
-      alert('Login error: ' + e.message + ' Invalid username or password!')
+      setAuthMessage({
+        severity: 'error',
+        text: `Login failed: ${e.message || 'Invalid username or password.'}`,
+      })
+    } finally {
+      isLoading(false)
     }
-    isLoading(false)
-  }
-
-  const handleReset = async (values) => {
-    // const email = values.email
-    // try {
-    //   await mongoDB.emailPasswordAuth.sendResetPasswordEmail(email)
-    //   alert('Email sent to your account!')
-    // } catch (e) {
-    //   alert('Invalid Email!')
-    // }
-    alert('Password reset is not implemented yet.')
   }
 
   return (
@@ -145,6 +154,7 @@ const Login = () => {
                     <select
                       onChange={(e) => {
                         setAccountOption(e.target.value)
+                        setAuthMessage(null)
                       }}
                     >
                       {accountOptions.map((account) => (
@@ -155,6 +165,11 @@ const Login = () => {
                     </select>
                   )}
                 </Box>
+                {authMessage && (
+                  <Alert severity={authMessage.severity} sx={{ mb: 2 }}>
+                    {authMessage.text}
+                  </Alert>
+                )}
                 <TextField
                   fullWidth
                   helperText={touched.email && errors.email}
@@ -235,29 +250,28 @@ const Login = () => {
                   </Button>
                 </Box>
 
-                {/* Reset Password only for Sign In and Admin */}
-                {!isSignUp && accountOption === accountOptions[1] && (
-                  <Button
-                    color='primary'
-                    fullWidth
-                    size='large'
-                    type='button'
-                    variant='contained'
-                    onClick={() => {
-                      handleReset(values)
-                    }}
-                  >
-                    Reset Password
-                  </Button>
-                )}
                 {/* Toggle between Sign In and Sign Up */}
                 <Box sx={{ textAlign: 'center', mt: 2 }}>
                   {!isSignUp ? (
-                    <Link component='button' variant='body2' onClick={() => setIsSignUp(true)}>
+                    <Link
+                      component='button'
+                      variant='body2'
+                      onClick={() => {
+                        setIsSignUp(true)
+                        setAuthMessage(null)
+                      }}
+                    >
                       Don&apos;t have an account? Sign up here.
                     </Link>
                   ) : (
-                    <Link component='button' variant='body2' onClick={() => setIsSignUp(false)}>
+                    <Link
+                      component='button'
+                      variant='body2'
+                      onClick={() => {
+                        setIsSignUp(false)
+                        setAuthMessage(null)
+                      }}
+                    >
                       Already have an account? Sign in here.
                     </Link>
                   )}
