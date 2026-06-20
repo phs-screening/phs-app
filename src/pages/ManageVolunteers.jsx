@@ -18,7 +18,7 @@ import { isAdmin } from '../services/authSession'
 import { getProfiles } from '../api/profilesApi'
 import { Visibility, VisibilityOff, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
-import { regexPasswordPattern as pattern } from '../api/api'
+import { regexPasswordPattern as pattern } from '../api/formHelpers.jsx'
 import {
   deleteAccount as deleteAccountRequest,
   resetPassword as resetPasswordRequest,

@@ -17,7 +17,6 @@ import {
   markFormAAsPrinted,
 } from '../services/printQueues'
 import { getProfile } from '../services/authSession'
-import { generateFormAPdf } from '../api/api.jsx'
 
 const PRINT_QUEUE_PAGE_SIZE = 25
 
@@ -26,6 +25,11 @@ const formatLastRefreshed = (date) =>
 
 const buildQueueError = (message, error) =>
   error?.message ? `${message} Details: ${error.message}` : `${message} Please try again.`
+
+const generateFormAPdfForPatient = async (patientId) => {
+  const { generateFormAPdf } = await import('../reports/formAPdf')
+  return generateFormAPdf(patientId)
+}
 
 const FormAAdmin = () => {
   const [pdfQueue, setPdfQueue] = useState([])
@@ -208,7 +212,7 @@ const FormAAdmin = () => {
   const handlePrint = async (entry) => {
     setRefreshing(true)
     try {
-      await generateFormAPdf(entry.patientId)
+      await generateFormAPdfForPatient(entry.patientId)
       await markFormAAsPrinted(entry._id)
       await fetchCurrentQueue()
     } catch (error) {
@@ -222,7 +226,7 @@ const FormAAdmin = () => {
 
   const handleReprint = async (patientId) => {
     try {
-      await generateFormAPdf(patientId)
+      await generateFormAPdfForPatient(patientId)
     } catch (error) {
       console.error('Failed to generate Form A PDF:', error)
       alert('Unable to generate Form A PDF because backend station eligibility is unavailable.')

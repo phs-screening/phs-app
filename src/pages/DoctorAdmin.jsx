@@ -17,7 +17,6 @@ import {
   getUnprintedDocPdfQueue,
   markDocPdfAsPrinted,
 } from '../services/printQueues'
-import { generateDoctorPdf } from '../api/api.jsx'
 
 const PRINT_QUEUE_PAGE_SIZE = 25
 
@@ -26,6 +25,11 @@ const formatLastRefreshed = (date) =>
 
 const buildQueueError = (message, error) =>
   error?.message ? `${message} Details: ${error.message}` : `${message} Please try again.`
+
+const generateDoctorPdfForEntry = async (entry) => {
+  const { generateDoctorPdf } = await import('../reports/doctorPdf')
+  return generateDoctorPdf(entry)
+}
 
 const DoctorAdmin = () => {
   const [pdfQueue, setPdfQueue] = useState([])
@@ -207,12 +211,24 @@ const DoctorAdmin = () => {
   const handlePrint = async (entry) => {
     setRefreshing(true)
     try {
-      await generateDoctorPdf(entry)
+      await generateDoctorPdfForEntry(entry)
       await markDocPdfAsPrinted(entry._id)
       await fetchCurrentQueue()
     } catch (err) {
       console.error('Failed to print Doctor PDF:', err)
       setFetchError(buildQueueError('Unable to print and update the Doctor PDF queue.', err))
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
+  const handleReprint = async (entry) => {
+    setRefreshing(true)
+    try {
+      await generateDoctorPdfForEntry(entry)
+    } catch (err) {
+      console.error('Failed to reprint Doctor PDF:', err)
+      setFetchError(buildQueueError('Unable to reprint the Doctor PDF.', err))
     } finally {
       setRefreshing(false)
     }
@@ -335,7 +351,7 @@ const DoctorAdmin = () => {
                   Created At: {new Date(entry.createdAt).toLocaleString()}
                 </Typography>
               </Box>
-              <Button variant='outlined' onClick={() => generateDoctorPdf(entry)}>
+              <Button variant='outlined' onClick={() => handleReprint(entry)}>
                 Reprint
               </Button>
             </Paper>

@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { Paper, CircularProgress, Button, Divider, Typography, Alert } from '@mui/material'
 import { useNavigate } from 'react-router'
 
-import { submitForm } from '../../api/api.jsx'
+import { submitForm } from '../../api/formHelpers.jsx'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'

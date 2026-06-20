@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { regexPasswordPattern as pattern } from '../api/api'
+import { regexPasswordPattern as pattern } from '../api/formHelpers.jsx'
 import { LoginContext } from '../App.jsx'
 import { resetPassword } from '../api/authApi'
 

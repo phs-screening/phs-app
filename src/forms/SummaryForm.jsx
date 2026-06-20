@@ -2,7 +2,8 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-import { formatBmi, formatGeriVision, formatWceStation, generate_pdf, generate_pdf_updated } from '../api/api.jsx'
+import Alert from '@mui/material/Alert'
+import { formatBmi, formatGeriVision, formatWceStation } from '../api/formHelpers.jsx'
 import { FormContext } from '../api/utils.js'
 import { getSavedData, getSavedPatientData } from '../services/patientData'
 import allForms from './forms.json'
@@ -16,15 +17,8 @@ const SummaryForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loadingPrevData, isLoadingPrevData] = useState(true)
   const [saveData, setSaveData] = useState({})
-
-  async function preloadFonts() {
-    const urls = [
-      'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-      'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
-      'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
-    ]
-    await Promise.all(urls.map(url => fetch(url)))
-  }
+  const [generatingReport, setGeneratingReport] = useState(false)
+  const [reportError, setReportError] = useState('')
 
   // Oh my god this is terrible PLEASE SOMEONE FIX THIS
   // All the forms
@@ -177,10 +171,56 @@ const SummaryForm = (props) => {
         })
       }
       await loadPastForms()
-      await preloadFonts()
     }
     loadForms()
   }, [refresh])
+
+  const handleDownloadReport = async () => {
+    setGeneratingReport(true)
+    setReportError('')
+
+    try {
+      const { generate_pdf_updated } = await import('../reports/patientReportPdfUpdated')
+      await generate_pdf_updated(
+        registration,
+        patients,
+        cancer,
+        phlebotomy,
+        fit,
+        wce,
+        doctorSConsult,
+        socialService,
+        geriMmse,
+        geriVision,
+        geriAudiometry,
+        dietitiansConsult,
+        oralHealth,
+        triage,
+        vaccine,
+        lung,
+        nkf,
+        hsg,
+        grace,
+        hearts,
+        geriPtConsult,
+        geriOtConsult,
+        mental,
+        social,
+        podiatry,
+        mammobus,
+        hpv,
+      )
+    } catch (error) {
+      console.error('Failed to generate screening report:', error)
+      setReportError(
+        error?.message
+          ? `Unable to generate screening report. Details: ${error.message}`
+          : 'Unable to generate screening report. Please try again.',
+      )
+    } finally {
+      setGeneratingReport(false)
+    }
+  }
 
   // TODO: add triage to summary form
   return (
@@ -190,41 +230,13 @@ const SummaryForm = (props) => {
       ) : (
         <Fragment>
           <div>
-            <Button
-              onClick={() =>
-                generate_pdf_updated(
-                  // TODO: add triage here
-                  registration,
-                  patients,
-                  cancer,
-                  phlebotomy,
-                  fit,
-                  wce,
-                  doctorSConsult,
-                  socialService,
-                  geriMmse,
-                  geriVision,
-                  geriAudiometry,
-                  dietitiansConsult,
-                  oralHealth,
-                  triage,
-                  vaccine,
-                  lung,
-                  nkf,
-                  hsg,
-                  grace,
-                  hearts,
-                  geriPtConsult,
-                  geriOtConsult,
-                  mental,
-                  social,
-                  podiatry,
-                  mammobus,
-                  hpv,
-                )
-              }
-            >
-              Download Screening Report
+            {reportError && (
+              <Alert severity='error' sx={{ mb: 2 }}>
+                {reportError}
+              </Alert>
+            )}
+            <Button onClick={handleDownloadReport} disabled={generatingReport}>
+              {generatingReport ? 'Generating Report...' : 'Download Screening Report'}
             </Button>
           </div>
         </Fragment>

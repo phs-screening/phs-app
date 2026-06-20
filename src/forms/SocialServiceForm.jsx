@@ -11,7 +11,7 @@ import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGro
 import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 
-import { submitForm } from '../api/api.jsx'
+import { submitForm } from '../api/formHelpers.jsx'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'

@@ -5,7 +5,7 @@ import { validationSchema } from './registrationSchema'
 
 import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
-import { submitForm } from '../api/api.jsx'
+import { submitForm } from '../api/formHelpers.jsx'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
 import { toLoadErrorMessage } from '../utils/retryRequest'
