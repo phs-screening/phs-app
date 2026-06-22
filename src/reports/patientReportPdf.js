@@ -394,6 +394,8 @@ export function addFollowUp(
   k++
 
   const indent = 10
+  const trip = null
+  const clean_k = k
   // VACCINE
 
   k = followUpWith(
