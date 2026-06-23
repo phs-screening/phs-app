@@ -70,13 +70,9 @@ const RegisterPatient = (props) => {
   const [patientNames, setPatientNames] = useState([])
   const [patientNameSearch, setPatientNameSearch] = useState('')
   const [patientNamesError, setPatientNamesError] = useState('')
-<<<<<<< HEAD
   const [patientMatches, setPatientMatches] = useState([])
   const [patientMatchesError, setPatientMatchesError] = useState('')
-  const { updatePatientInfo } = useContext(FormContext)
-=======
   const { updatePatientInfo, clearPatient } = useContext(FormContext)
->>>>>>> d297679a25d1bb844af93d45eb703f6e31c4ce0e
   const navigate = useNavigate()
 
   useEffect(() => {
