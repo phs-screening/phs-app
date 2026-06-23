@@ -5,13 +5,13 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
-    setupFiles: './src/test/setup.js',
+    setupFiles: './test/unit/setup.js',
     globals: true,
     clearMocks: true,
     coverage: {
       include: ['src/**/*.{js,jsx}'],
       exclude: [
-        'src/test/**',
+        'test/**',
         'src/**/*.test.{js,jsx}',
         'src/**/*.spec.{js,jsx}',
         'src/api/lang/**',
