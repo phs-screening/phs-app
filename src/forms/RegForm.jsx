@@ -6,7 +6,10 @@ import { validationSchema } from './registrationSchema'
 import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
@@ -172,10 +175,11 @@ const RegForm = () => {
 
   const formOptions = {
     registrationQ1: [
-      { label: 'Mr', value: 'Mr' },
-      { label: 'Ms', value: 'Ms' },
-      { label: 'Mrs', value: 'Mrs' },
       { label: 'Dr', value: 'Dr' },
+      { label: 'Mdm', value: 'Mdm' },
+      { label: 'Mr', value: 'Mr' },
+      { label: 'Mrs', value: 'Mrs' },
+      { label: 'Ms', value: 'Ms' },
     ],
     registrationQ5: [
       { label: 'Male', value: 'Male' },
@@ -205,7 +209,6 @@ const RegForm = () => {
     registrationQ11: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-      { label: 'Unsure', value: 'Unsure' },
     ],
     registrationQ12: [
       { label: 'CHAS Orange', value: 'CHAS Orange' },
@@ -381,7 +384,7 @@ const RegForm = () => {
               options={formOptions.registrationQ7}
             />
 
-            <Typography variant='h4' fontWeight='bold'>
+            {/* <Typography variant='h4' fontWeight='bold'>
               Marital Status 婚姻状况
             </Typography>
             <FastField
@@ -394,7 +397,7 @@ const RegForm = () => {
             <Typography variant='h4' fontWeight='bold'>
               Occupation 工作
             </Typography>
-            <FastField name='registrationQ9' label='registrationQ9' component={CustomTextField} />
+            <FastField name='registrationQ9' label='registrationQ9' component={CustomTextField} /> */}
 
             <Typography variant='h4' fontWeight='bold'>
               Are you currently part of HealthierSG?
@@ -438,34 +441,6 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-              Compliance to PDPA 同意书
-            </Typography>
-            <Typography paragraph>
-              I hereby give consent to having photos and/or videos taken of me for publicity
-              purposes. I hereby give my consent to the Public Health Service Executive Committee to
-              collect my personal information for the purpose of participating in the Public Health
-              Service (hereby called &quot;PHS&quot;) and its related events, and to contact me via
-              calls, SMS, text messages or emails regarding the event and follow-up process.
-            </Typography>
-            <Typography paragraph>
-              Should you wish to withdraw your consent for us to contact you for the purposes stated
-              above, please notify a member of the PHS Executive Committee at &nbsp;
-              <a href='mailto:ask.phs@gmail.com'>ask.phs@gmail.com</a> &nbsp; in writing. We will
-              then remove your personal information from our database. Please allow 3 business days
-              for your withdrawal of consent to take effect. All personal information will be kept
-              confidential, will only be disseminated to members of the PHS Executive Committee, and
-              will be strictly used by these parties for the purposes stated.
-            </Typography>
-            <Typography variant='body2' color='text.secondary'>
-              registrationQ17
-            </Typography>
-            <Field
-              name='registrationQ17'
-              component={CustomCheckbox}
-              label='I agree and consent to the above.'
-            />
-
-            <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
               Has patient attended any health screenings before? (e.g. Annual Health Screening etc.)
             </Typography>
             <FastField
@@ -498,7 +473,7 @@ const RegForm = () => {
               options={formOptions.registrationQ20}
               row
             />
-
+            {/* 
             <Typography variant='h4' fontWeight='bold'>
               Does the patient speak English or Chinese?
             </Typography>
@@ -508,6 +483,34 @@ const RegForm = () => {
               component={CustomRadioGroup}
               options={formOptions.registrationQ21}
               row
+            /> */}
+
+            <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
+              Compliance to PDPA 同意书
+            </Typography>
+            <Typography paragraph>
+              I hereby give consent to having photos and/or videos taken of me for publicity
+              purposes. I hereby give my consent to the Public Health Service Executive Committee to
+              collect my personal information for the purpose of participating in the Public Health
+              Service (hereby called &quot;PHS&quot;) and its related events, and to contact me via
+              calls, SMS, text messages or emails regarding the event and follow-up process.
+            </Typography>
+            <Typography paragraph>
+              Should you wish to withdraw your consent for us to contact you for the purposes stated
+              above, please notify a member of the PHS Executive Committee at &nbsp;
+              <a href='mailto:ask.phs@gmail.com'>ask.phs@gmail.com</a> &nbsp; in writing. We will
+              then remove your personal information from our database. Please allow 3 business days
+              for your withdrawal of consent to take effect. All personal information will be kept
+              confidential, will only be disseminated to members of the PHS Executive Committee, and
+              will be strictly used by these parties for the purposes stated.
+            </Typography>
+            <Typography variant='body2' color='text.secondary'>
+              registrationQ17
+            </Typography>
+            <Field
+              name='registrationQ17'
+              component={CustomCheckbox}
+              label='I agree and consent to the above.'
             />
           </div>
 
@@ -540,7 +543,10 @@ const RegForm = () => {
   return (
     <Paper elevation={2} p={0} m={0}>
       {loadError ? (
-        <DataLoadError message={loadError} onRetry={() => setLoadAttempt((attempt) => attempt + 1)} />
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
       ) : (
         renderForm()
       )}
