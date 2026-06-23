@@ -6,7 +6,7 @@ import { Typography } from '@mui/material'
 
 import { Divider, Paper, CircularProgress, Button, Box, Grid } from '@mui/material'
 
-import { submitForm, formatBmi } from '../api/api.jsx'
+import { submitForm, formatBmi } from '../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'

@@ -1,4 +1,10 @@
-import { getPatient, getPatientNames, searchPatientsByInitials } from '../api/patientsApi'
+import {
+  getPatient,
+  getPatientNameMatches,
+  getPatientNames,
+  getSummaryReportData,
+  searchPatientsByInitials,
+} from '../api/patientsApi'
 import { getPatientForm } from '../api/formsApi'
 import { toFormKey } from '../forms/formKeys'
 import { withRetry } from '../utils/retryRequest'
@@ -12,6 +18,11 @@ export const getPatientRecordStrict = async (patientId) => {
   return res.data || null
 }
 
+export const getSummaryReportDataStrict = async (patientId) => {
+  const res = await withRetry(() => getSummaryReportData(patientId))
+  return res.data || null
+}
+
 export const findPatientByInitialsStrict = async (initials) => {
   const res = await withRetry(() => searchPatientsByInitials(initials))
   return res.data || null
@@ -20,6 +31,14 @@ export const findPatientByInitialsStrict = async (initials) => {
 export const getPatientNamesListStrict = async (options) => {
   const res = await withRetry(() => getPatientNames(options))
   return res.data || []
+}
+
+export const getPatientNameMatchesStrict = async (options) => {
+  const res = await withRetry(() => getPatientNameMatches(options))
+  return {
+    data: res.data || [],
+    pagination: res.pagination || null,
+  }
 }
 
 export const getPatientRecord = async (patientId) => {

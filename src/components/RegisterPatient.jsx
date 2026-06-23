@@ -3,8 +3,8 @@ import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   getAllPatientNamesStrict,
+  getPatientNameMatchesStrict,
   getPreRegDataByIdStrict,
-  getPreRegDataByNameStrict,
 } from '../services/patientData'
 import { FormContext } from '../api/utils.js'
 import { toLoadErrorMessage } from '../utils/retryRequest'
@@ -20,12 +20,45 @@ import {
   InputAdornment,
   SvgIcon,
   CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
 import { updateAllStationCounts } from '../services/stationCounts'
 
 const PATIENT_NAME_PAGE_LIMIT = 20
+const PATIENT_MATCH_PAGE_LIMIT = 10
+
+const dedupePatientNames = (patients) => {
+  const seen = new Set()
+
+  return patients.filter((patient) => {
+    const name = patient.initials
+    if (!name || seen.has(name.toLowerCase())) {
+      return false
+    }
+
+    seen.add(name.toLowerCase())
+    return true
+  })
+}
+
+const formatBirthday = (value) => {
+  if (!value) return 'Not recorded'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'Not recorded'
+
+  return date.toLocaleDateString(undefined, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+}
 
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
@@ -37,6 +70,8 @@ const RegisterPatient = (props) => {
   const [patientNames, setPatientNames] = useState([])
   const [patientNameSearch, setPatientNameSearch] = useState('')
   const [patientNamesError, setPatientNamesError] = useState('')
+  const [patientMatches, setPatientMatches] = useState([])
+  const [patientMatchesError, setPatientMatchesError] = useState('')
   const { updatePatientInfo, clearPatient } = useContext(FormContext)
   const navigate = useNavigate()
 
@@ -52,7 +87,7 @@ const RegisterPatient = (props) => {
         })
 
         if (isCurrent) {
-          setPatientNames(data)
+          setPatientNames(dedupePatientNames(data))
           setPatientNamesError('')
         }
       } catch (error) {
@@ -112,12 +147,23 @@ const RegisterPatient = (props) => {
       isQueueNumber: false,
       selectedValue: value,
     })
+    setPatientMatches([])
+    setPatientMatchesError('')
   }
 
   const handlePatientNameSearch = (event, value, reason) => {
     if (reason === 'input' || reason === 'clear') {
       setPatientNameSearch(value)
+      setPatientMatches([])
+      setPatientMatchesError('')
     }
+  }
+
+  const getSelectedPatientName = () => {
+    const selected = values.selectedValue
+    if (typeof selected === 'string') return selected.trim()
+    if (selected?.initials) return selected.initials.trim()
+    return patientNameSearch.trim()
   }
 
   const handleSubmitQueueNumber = async () => {
@@ -147,26 +193,49 @@ const RegisterPatient = (props) => {
   }
   const handleSubmitPatientName = async () => {
     setIsLoadingPatientName(true)
+    setPatientMatches([])
+    setPatientMatchesError('')
 
-    const value = values.selectedValue?.initials
-    if (value) {
-      try {
-        const data = await getPreRegDataByNameStrict(value, 'patients')
-        console.log('Value', value)
-        if (data && 'initials' in data) {
-          updatePatientInfo(data)
-          navigate('/app/dashboard', { replace: true })
-        } else {
-          alert('Unsuccessful. There is no patient with this name.')
-        }
-      } catch (error) {
-        console.error('Failed to search patient by name:', error)
-        alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
-      } finally {
-        setIsLoadingPatientName(false)
-      }
-    } else {
+    const value = getSelectedPatientName()
+    if (!value) {
       alert('Unsuccessful. Please enter patient name.')
+      setIsLoadingPatientName(false)
+      return
+    }
+
+    try {
+      const result = await getPatientNameMatchesStrict({
+        initials: value,
+        page: 1,
+        limit: PATIENT_MATCH_PAGE_LIMIT,
+      })
+
+      setPatientMatches(result.data)
+
+      if (result.data.length === 0) {
+        setPatientMatchesError('No patients found with this exact name.')
+      }
+    } catch (error) {
+      console.error('Failed to search patient by name:', error)
+      setPatientMatchesError(
+        toLoadErrorMessage(error, 'Unable to load matching patients. Refresh or try again.'),
+      )
+    } finally {
+      setIsLoadingPatientName(false)
+    }
+  }
+
+  const handleSelectPatientMatch = async (patient) => {
+    setIsLoadingPatientName(true)
+
+    try {
+      updatePatientInfo(patient)
+      await updateAllStationCounts(patient.queueNo)
+      navigate('/app/dashboard', { replace: true })
+    } catch (error) {
+      console.error('Failed to select patient by name:', error)
+      alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
+    } finally {
       setIsLoadingPatientName(false)
     }
   }
@@ -273,6 +342,11 @@ const RegisterPatient = (props) => {
                     {patientNamesError}
                   </Typography>
                 )}
+                {patientMatchesError && (
+                  <Typography color='error' variant='body2'>
+                    {patientMatchesError}
+                  </Typography>
+                )}
                 {isLoadingPatientName ? (
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <CircularProgress />
@@ -288,6 +362,42 @@ const RegisterPatient = (props) => {
                   >
                     Search by Name
                   </Button>
+                )}
+                {patientMatches.length > 0 && (
+                  <Box sx={{ overflowX: 'auto' }}>
+                    <Typography color='textSecondary' variant='body2' sx={{ mb: 1 }}>
+                      Select the matching patient by birthday.
+                    </Typography>
+                    <Table size='small'>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>ID</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Birthday</TableCell>
+                          <TableCell align='right'>Action</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {patientMatches.map((patient) => (
+                          <TableRow key={patient.queueNo}>
+                            <TableCell>{patient.queueNo}</TableCell>
+                            <TableCell>{patient.initials}</TableCell>
+                            <TableCell>{formatBirthday(patient.birthday)}</TableCell>
+                            <TableCell align='right'>
+                              <Button
+                                size='small'
+                                variant='contained'
+                                onClick={() => handleSelectPatientMatch(patient)}
+                                sx={{ textTransform: 'none' }}
+                              >
+                                Select
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Box>
                 )}
               </Stack>
             </Box>

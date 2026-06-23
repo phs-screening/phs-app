@@ -6,10 +6,12 @@ import {
   getQueueEntries,
   removeFirstPatientFromStationQueue,
   removePatientsFromStationQueue,
+  restoreLastRemovedToFront,
 } from '../api/queuesApi'
 import { getProfile } from '../services/authSession'
-import { getPreRegDataById, getSavedData } from '../services/patientData'
+import { getPreRegDataByIdStrict, getSavedData } from '../services/patientData'
 import {
+  Alert,
   Box,
   Button,
   Typography,
@@ -18,8 +20,15 @@ import {
   Tooltip,
   Paper,
   Divider,
+  MenuItem,
 } from '@mui/material'
 import allForms from '../forms/forms.json'
+
+const formatLastRefreshed = (date) =>
+  date ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Never'
+
+const buildQueueError = (message, error) =>
+  error?.message ? `${message} Details: ${error.message}` : `${message} Please try again.`
 
 const parseQueueItem = (queueItem) => {
   const [idPart, ...nameParts] = String(queueItem).split(':')
@@ -40,22 +49,47 @@ const StationQueue = () => {
   const [stationName, setStationName] = useState('')
   const [stationPatientAddId, setStationAddPatientId] = useState({})
   const [stationPatientRemoveId, setStationRemovePatientId] = useState({})
+  const [pinnedStation, setPinnedStation] = useState('')
+  const [lastRefreshedAt, setLastRefreshedAt] = useState(null)
+  const [queueError, setQueueError] = useState('')
 
   const [admin, isAdmin] = useState(false)
 
-  // Form a string of <id>: <salutation> <initials> for each patient id
-  const getPatientStrings = async (patientIds) => {
-    const patientStrings = await Promise.all(
+  const loadStationQueues = async () => {
+    const response = await getQueueEntries()
+    setStationQueues(response.data || [])
+    setLastRefreshedAt(new Date())
+    setQueueError('')
+  }
+
+  const parseQueueItemPatientId = (queueItem) => {
+    const id = parseInt(String(queueItem).split(':')[0], 10)
+    return Number.isFinite(id) ? id : null
+  }
+
+  // Form a string of <id>: <salutation> <initials> for each existing patient id.
+  const getPatientQueueItems = async (patientIds) => {
+    const patients = await Promise.all(
       patientIds.map(async (id) => {
-        const patient = await getPreRegDataById(id, 'patients')
+        const patient = await getPreRegDataByIdStrict(id, 'patients')
+
+        if (!patient?.initials) {
+          return { id, queueItem: null }
+        }
+
         const registrationData = await getSavedData(id, allForms.registrationForm)
         const salutation = registrationData?.registrationQ1 ?? 'Mr/Mrs/Ms'
-        const initials = patient?.initials ?? 'Not Found'
 
-        return `${id}: ${salutation} ${initials}`
+        return { id, queueItem: `${id}: ${salutation} ${patient.initials}` }
       }),
     )
-    return patientStrings
+
+    return {
+      patientStrings: patients.map((patient) => patient.queueItem).filter(Boolean),
+      missingPatientIds: patients
+        .filter((patient) => !patient.queueItem)
+        .map((patient) => patient.id),
+    }
   }
 
   // Handler for Add Station button
@@ -91,6 +125,10 @@ const StationQueue = () => {
     setStationName(text)
   }
 
+  const handlePinnedStationChange = (event) => {
+    setPinnedStation(event.target.value)
+  }
+
   // Handdler for add patient input field
   const handlePatientAddInput = (event) => {
     const text = event.target.value
@@ -106,12 +144,19 @@ const StationQueue = () => {
 
     return new Set(
       station.queueItems
-        .map((item) => {
-          const id = parseInt(item.split(':')[0], 10)
-          return Number.isFinite(id) ? id : null
-        })
+        .map(parseQueueItemPatientId)
         .filter((id) => id !== null),
     )
+  }
+
+  const getQueueItemsByPatientIds = (stationName, patientIds) => {
+    const station = stationQueues.find((station) => station.stationName === stationName)
+    if (!station?.queueItems?.length) {
+      return []
+    }
+
+    const patientIdSet = new Set(patientIds)
+    return station.queueItems.filter((item) => patientIdSet.has(parseQueueItemPatientId(item)))
   }
 
   // Handler for add patient button
@@ -166,7 +211,17 @@ const StationQueue = () => {
       return
     }
 
-    const patientStrings = await getPatientStrings(newPatientIds)
+    const { patientStrings, missingPatientIds } = await getPatientQueueItems(newPatientIds)
+
+    if (missingPatientIds.length > 0) {
+      alert(`Patient ID(s) ${missingPatientIds.join(', ')} do not exist and were not added.`)
+    }
+
+    if (patientStrings.length === 0) {
+      isLoading(false)
+      return
+    }
+
     await addPatientsToStationQueue(stationName, patientStrings)
     setRefresh(!refresh)
     setStationAddPatientId({ ...stationPatientAddId, [stationName]: '' })
@@ -185,32 +240,46 @@ const StationQueue = () => {
     event.preventDefault()
     isLoading(true)
 
-    const patientIdText = stationPatientRemoveId[stationName]
+    try {
+      const patientIdText = stationPatientRemoveId[stationName]
 
-    if (!patientIdText || patientIdText.trim() === '') {
-      alert('Patient ID must be a number.')
+      if (!patientIdText || patientIdText.trim() === '') {
+        alert('Patient ID must be a number.')
+        return
+      }
+
+      const patientIds = patientIdText
+        .trim()
+        .split(/\s+/)
+        .filter((id) => !isNaN(parseInt(id)))
+        .map((id) => parseInt(id))
+
+      if (patientIds.length === 0) {
+        alert('Patient ID must be a number.')
+        return
+      }
+
+      const queueItemsToRemove = getQueueItemsByPatientIds(stationName, patientIds)
+      const existingIds = new Set(queueItemsToRemove.map(parseQueueItemPatientId))
+      const missingIds = patientIds.filter((id) => !existingIds.has(id))
+
+      if (missingIds.length > 0) {
+        alert(`Patient ID(s) ${missingIds.join(', ')} are not in this station queue.`)
+      }
+
+      if (queueItemsToRemove.length === 0) {
+        return
+      }
+
+      await removePatientsFromStationQueue(stationName, queueItemsToRemove)
+
+      setRefresh(!refresh)
+      setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: '' })
+    } catch (error) {
+      alert(error.message || 'Unable to remove patient from queue.')
+    } finally {
       isLoading(false)
-      return
     }
-
-    const patientIds = patientIdText
-      .trim()
-      .split(' ')
-      .filter((id) => !isNaN(parseInt(id)))
-      .map((id) => parseInt(id))
-
-    if (patientIds.length === 0) {
-      alert('Patient ID must be a number.')
-      isLoading(false)
-      return
-    }
-
-    const patientStrings = await getPatientStrings(patientIds)
-    await removePatientsFromStationQueue(stationName, patientStrings)
-
-    setRefresh(!refresh)
-    setStationRemovePatientId({ ...stationPatientRemoveId, [stationName]: '' })
-    isLoading(false)
   }
 
   // Handler for remove first button (remove first patient from queue)
@@ -223,11 +292,44 @@ const StationQueue = () => {
     isLoading(false)
   }
 
+  const handleRestoreLastRemoved = async (event, stationName) => {
+    event.preventDefault()
+    isLoading(true)
+
+    try {
+      const response = await restoreLastRemovedToFront(stationName)
+      if (response.restoredCount === 0) {
+        alert('No patients were restored because they are already in the queue.')
+      }
+      setRefresh(!refresh)
+    } catch (error) {
+      alert(error.message || 'Unable to restore the last removed patient.')
+    } finally {
+      isLoading(false)
+    }
+  }
+
+  const handleManualRefresh = async () => {
+    isLoading(true)
+    try {
+      await loadStationQueues()
+    } catch (error) {
+      console.error('Failed to refresh station queues:', error)
+      setQueueError(buildQueueError('Unable to refresh station queues.', error))
+    } finally {
+      isLoading(false)
+    }
+  }
+
   // Set a listener to update the station queues when the refresh state changes
   useEffect(() => {
     const updateStationQueue = async () => {
-      const response = await getQueueEntries()
-      setStationQueues(response.data || [])
+      try {
+        await loadStationQueues()
+      } catch (error) {
+        console.error('Failed to load station queues:', error)
+        setQueueError(buildQueueError('Unable to load station queues.', error))
+      }
     }
     updateStationQueue()
   }, [refresh])
@@ -243,16 +345,44 @@ const StationQueue = () => {
     showDeleteForAdmins()
   }, [])
 
+  const displayedStationQueues =
+    pinnedStation && stationQueues.some((station) => station.stationName === pinnedStation)
+      ? [
+          ...stationQueues.filter((station) => station.stationName === pinnedStation),
+          ...stationQueues.filter((station) => station.stationName !== pinnedStation),
+        ]
+      : stationQueues
+
   return (
     <Box sx={{ p: 3, bgcolor: '#f7f8fb', minHeight: '100vh' }}>
-      <Typography
-        color='textPrimary'
-        gutterBottom
-        variant='h3'
-        sx={{ marginBottom: 3, fontWeight: 700 }}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          justifyContent: 'space-between',
+          gap: 2,
+          mb: 3,
+          flexDirection: { xs: 'column', sm: 'row' },
+        }}
       >
-        Station Queue Management
-      </Typography>
+        <Typography color='textPrimary' variant='h3' sx={{ fontWeight: 700 }}>
+          Station Queue Management
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Button variant='outlined' onClick={handleManualRefresh} disabled={loading}>
+            {loading ? 'Working...' : 'Refresh'}
+          </Button>
+          <Typography variant='body2' color='text.secondary'>
+            Last refreshed: {formatLastRefreshed(lastRefreshedAt)}
+          </Typography>
+        </Box>
+      </Box>
+
+      {queueError && (
+        <Alert severity='error' sx={{ mb: 3 }}>
+          {queueError}
+        </Alert>
+      )}
 
       <Paper
         elevation={2}
@@ -294,6 +424,39 @@ const StationQueue = () => {
         )}
       </Paper>
 
+      <Paper
+        elevation={1}
+        sx={{
+          p: 2,
+          mb: 3,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'stretch', sm: 'center' },
+          justifyContent: 'space-between',
+          gap: 2,
+          bgcolor: '#fff',
+        }}
+      >
+        <Typography variant='subtitle1' sx={{ fontWeight: 600 }}>
+          Queue Display
+        </Typography>
+        <TextField
+          select
+          label='Pin station to top'
+          size='small'
+          value={pinnedStation}
+          onChange={handlePinnedStationChange}
+          sx={{ minWidth: { xs: '100%', sm: 260 } }}
+        >
+          <MenuItem value=''>Default order</MenuItem>
+          {stationQueues.map((station) => (
+            <MenuItem key={station.stationName} value={station.stationName}>
+              {station.stationName}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Paper>
+
       <Box
         sx={{
           display: 'grid',
@@ -301,7 +464,7 @@ const StationQueue = () => {
           gap: 3,
         }}
       >
-        {stationQueues.map(({ stationName, queueItems }) => (
+        {displayedStationQueues.map(({ stationName, queueItems, lastRemoved }) => (
           <Paper
             key={stationName}
             elevation={3}
@@ -395,12 +558,58 @@ const StationQueue = () => {
                   Remove
                 </Button>
               </Box>
+
+              <Box
+                sx={{
+                  p: 1.5,
+                  bgcolor: '#f8fafc',
+                  borderRadius: 1,
+                  border: '1px solid #e5e7eb',
+                }}
+              >
+                <Typography variant='subtitle2' sx={{ fontWeight: 600, mb: 1 }}>
+                  Last removed
+                </Typography>
+                {lastRemoved?.queueItems?.length > 0 ? (
+                  <>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1.5 }}>
+                      {lastRemoved.queueItems.map((item) => (
+                        <Typography key={item} variant='body2'>
+                          {item}
+                        </Typography>
+                      ))}
+                    </Box>
+                    <Button
+                      color='primary'
+                      size='small'
+                      type='button'
+                      variant='outlined'
+                      disabled={loading}
+                      onClick={(event) => handleRestoreLastRemoved(event, stationName)}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      Restore to Front
+                    </Button>
+                  </>
+                ) : (
+                  <Typography variant='body2' color='text.secondary'>
+                    No recently removed patients.
+                  </Typography>
+                )}
+              </Box>
             </Box>
 
             <Divider />
 
             <Box
-              sx={{ p: 2, bgcolor: '#f4f6fa', borderRadius: 1, minHeight: 180, overflow: 'auto' }}
+              sx={{
+                p: 2,
+                bgcolor: '#f4f6fa',
+                borderRadius: 1,
+                minHeight: 180,
+                maxHeight: 360,
+                overflow: 'auto',
+              }}
             >
               <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 600 }}>
                 Patients in Queue

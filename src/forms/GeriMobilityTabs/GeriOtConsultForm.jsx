@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import { Divider, Paper, CircularProgress, Button, Grid, Typography } from '@mui/material'
 
-import { submitForm, calculateSppbScore } from '../../api/api.jsx'
+import { submitForm, calculateSppbScore } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
