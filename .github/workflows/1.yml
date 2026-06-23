@@ -26,7 +26,7 @@ jobs:
       - name: 2. Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'package.json'
+          node-version-file: 'package.json'
           cache: npm
 
       - name: 3. Install Dependencies

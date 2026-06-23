@@ -107,5 +107,8 @@
   "bugs": {
     "url": "https://github.com/phs-screening/phs-app/issues"
   },
-  "homepage": "https://github.com/phs-screening/phs-app#readme"
+  "homepage": "https://github.com/phs-screening/phs-app#readme",
+  "engines": {
+    "node": ">=22.0.0"
+  }
 }
