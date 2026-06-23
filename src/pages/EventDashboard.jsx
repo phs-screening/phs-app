@@ -20,10 +20,7 @@ import {
   Typography,
 } from '@mui/material'
 import { RefreshCw } from 'react-feather'
-import {
-  getEventDashboardSummary,
-  getIncompletePatients,
-} from '../api/eventDashboardApi'
+import { getEventDashboardSummary, getIncompletePatients } from '../api/eventDashboardApi'
 
 const LIMIT = 25
 
@@ -120,7 +117,6 @@ const EventDashboard = () => {
 
   useEffect(() => {
     loadDashboard({ nextPage: 1, nextQuery: '' })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSearch = (event) => {
@@ -179,7 +175,10 @@ const EventDashboard = () => {
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
-                <MetricCard label='Registered Patients' value={summary?.registeredPatients ?? '-'} />
+                <MetricCard
+                  label='Registered Patients'
+                  value={summary?.registeredPatients ?? '-'}
+                />
               </Grid>
               <Grid item xs={12} md={4}>
                 <MetricCard label='Still Screening' value={summary?.screeningPatients ?? '-'} />
