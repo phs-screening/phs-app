@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useContext, useEffect } from 'react'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   getAllPatientNamesStrict,
   getPreRegDataByIdStrict,
@@ -37,7 +37,7 @@ const RegisterPatient = (props) => {
   const [patientNames, setPatientNames] = useState([])
   const [patientNameSearch, setPatientNameSearch] = useState('')
   const [patientNamesError, setPatientNamesError] = useState('')
-  const { updatePatientInfo } = useContext(FormContext)
+  const { updatePatientInfo, clearPatient } = useContext(FormContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -171,6 +171,11 @@ const RegisterPatient = (props) => {
     }
   }
 
+  const handleRegisterNewPatient = () => {
+    clearPatient()
+    navigate('/app/reg')
+  }
+
   return (
     <Card {...props} sx={{ maxWidth: 520, width: '100%', mx: 'auto' }}>
       <CardContent>
@@ -190,8 +195,7 @@ const RegisterPatient = (props) => {
               size='large'
               type='submit'
               variant='contained'
-              component={RouterLink}
-              to='/app/reg'
+              onClick={handleRegisterNewPatient}
               fullWidth
             >
               Register New Patient
