@@ -394,6 +394,8 @@ export function addFollowUp(
   k++
 
   const indent = 10
+  const trip = null
+  const clean_k = k
   // VACCINE
 
   k = followUpWith(
@@ -553,21 +555,6 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   var pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1}`
   var ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1}`
 
-  var audio =
-    parseFromLangKey('memo_audio') +
-    parseFromLangKey('memo_audio_1', audioData.geriAudiometryQ13) +
-    parseFromLangKey('memo_audio_2', audioData.geriAudiometryQ12)
-  var diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4}`
-  if (dietData.dietitiansConsultQ5) {
-    diet += parseFromLangKey(
-      'memo_diet_1',
-      dietData.dietitiansConsultQ5,
-      dietData.dietitiansConsultQ6,
-    )
-  }
-  var pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1}`
-  var ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1}`
-
   autoTable(doc, {
     theme: 'grid',
     styles: {
@@ -643,4 +630,3 @@ export function addRecommendation(doc, k) {
 export function calculateY(coor) {
   return coor * 4.0569 + 10.2
 }
-

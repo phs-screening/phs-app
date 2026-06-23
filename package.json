@@ -8,7 +8,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --ext .js,.jsx",
+    "typecheck": "echo \"No typecheck configured for this repo\"",
+    "fixtures:check": "echo \"No fixtures drift check configured for this repo\"",
     "test": "vitest",
+    "test:ci": "vitest run --coverage",
     "test:run": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage"
