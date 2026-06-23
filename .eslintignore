@@ -1,3 +1,9 @@
+# Ignore generated and build output
+build/
+coverage/
+public/
+node_modules/
+
 src/forms/SummaryForm.jsx
 src/api/api.jsx
 src/pages/Eligibility.jsx

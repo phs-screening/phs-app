@@ -395,7 +395,7 @@ const GeriOtQuestionnaireForm = (props) => {
                     />
                     <h3>3. Are your floor surfaces non slip?</h3>
                     <p>
-                      <b>Definition:</b> Score "NO" if kitchen, toilet are non-slip, Score "YES" if
+                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score &quot;YES&quot; if
                       kitchen, toilet are non-slip
                     </p>
                     <FastField
@@ -704,7 +704,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       <b>Definition:</b> Supportive, firmly fitting shoes / slippers with low heels
                       and non-slip soles.
                     </p>
-                    No shoes = "NO"
+                    No shoes = &quot;NO&quot;
                     <br />
                     <FastField
                       name='geriOtQuestionnaireQ26'
@@ -718,7 +718,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       of falling over?
                     </h3>
                     <p>
-                      <b>Definition: </b> "YES" when client does NOT need to bend down to feed pets,
+                      <b>Definition:</b> &quot;YES&quot;  when client does NOT need to bend down to feed pets,
                       clean, refill bowls etc
                     </p>
                     <FastField

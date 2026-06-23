@@ -2,6 +2,7 @@ import {
   getPatient,
   getPatientNameMatches,
   getPatientNames,
+  getSummaryReportData,
   searchPatientsByInitials,
 } from '../api/patientsApi'
 import { getPatientForm } from '../api/formsApi'
@@ -14,6 +15,11 @@ function logLoadFailure(label, error) {
 
 export const getPatientRecordStrict = async (patientId) => {
   const res = await withRetry(() => getPatient(patientId))
+  return res.data || null
+}
+
+export const getSummaryReportDataStrict = async (patientId) => {
+  const res = await withRetry(() => getSummaryReportData(patientId))
   return res.data || null
 }
 

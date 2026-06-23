@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useContext, useEffect } from 'react'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   getAllPatientNamesStrict,
   getPatientNameMatchesStrict,
@@ -70,9 +70,13 @@ const RegisterPatient = (props) => {
   const [patientNames, setPatientNames] = useState([])
   const [patientNameSearch, setPatientNameSearch] = useState('')
   const [patientNamesError, setPatientNamesError] = useState('')
+<<<<<<< HEAD
   const [patientMatches, setPatientMatches] = useState([])
   const [patientMatchesError, setPatientMatchesError] = useState('')
   const { updatePatientInfo } = useContext(FormContext)
+=======
+  const { updatePatientInfo, clearPatient } = useContext(FormContext)
+>>>>>>> d297679a25d1bb844af93d45eb703f6e31c4ce0e
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -240,6 +244,11 @@ const RegisterPatient = (props) => {
     }
   }
 
+  const handleRegisterNewPatient = () => {
+    clearPatient()
+    navigate('/app/reg')
+  }
+
   return (
     <Card {...props} sx={{ maxWidth: 520, width: '100%', mx: 'auto' }}>
       <CardContent>
@@ -259,8 +268,7 @@ const RegisterPatient = (props) => {
               size='large'
               type='submit'
               variant='contained'
-              component={RouterLink}
-              to='/app/reg'
+              onClick={handleRegisterNewPatient}
               fullWidth
             >
               Register New Patient

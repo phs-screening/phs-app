@@ -354,7 +354,7 @@ const TriageForm = () => {
                 <li>BP &gt; 180/120</li>
               </ul>
               <Typography fontWeight='bold' variant='h4'>
-                Q9. Does the patient's blood pressure require closer scrutiny by doctors later?
+                 Q9. Does the patient&apos;s blood pressure require closer scrutiny by doctors later?
                 (e.g. Systolic above 180/120)
               </Typography>
 
@@ -395,7 +395,7 @@ const TriageForm = () => {
             {/* Display form errors */}
             <ErrorNotification
               show={submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-              message='Please fill in all required fields correctly.'
+              message="Please fill in all required fields correctly."
             />
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>

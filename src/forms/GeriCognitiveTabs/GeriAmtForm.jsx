@@ -171,7 +171,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
                 Follow the criteria shown in the image above.
                 <br />
-                12) Based on the patient's age ({regForm?.registrationQ4}), years of education and AMT score, is the patient
+                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), years of education and AMT score, is the patient
                 eligible for G-RACE for MMSE?
               </Typography>
               <Field
@@ -185,7 +185,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
             <ErrorNotification
               show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-              message="Please fill in all required fields correctly."
+             message="Please fill in all required fields correctly."
             />
 
             <br />
@@ -208,7 +208,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
   const renderSidePanel = () => (
     <div className='summary--question-div'>
       <h2>Patient Registration</h2>
-      <p className='underlined'>Patient's Age</p>
+      <p className='underlined'>Patient&apos;s Age</p>
       {regForm ? <p className='blue'>{regForm.registrationQ4}</p> : null}
       <Divider />
     </div>

@@ -4,8 +4,17 @@ import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
+<<<<<<< HEAD
 import { submitForm } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+=======
+import { submitForm } from '../../api/api.jsx'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
+
+>>>>>>> d297679a25d1bb844af93d45eb703f6e31c4ce0e
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import CustomNumberField from 'src/components/form-components/CustomNumberField.jsx'
@@ -260,7 +269,8 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           />
 
           <Typography fontWeight='bold'>
-            If you are currently not on CHAS but qualify, do you want to apply for CHAS card? <br/>For SG PRs, they do not qualify. Select 'No' if patient is a PR.
+            If you are currently not on CHAS but qualify, do you want to apply for CHAS card? <br />
+            For SG PRs, they do not qualify. Select &apos;No&apos; if patient is a PR.
           </Typography>
           <FastField
             name='SOCIAL6'

@@ -8,6 +8,10 @@ export function getPatient(patientId) {
   return apiGet(`/patients/${encodeURIComponent(patientId)}`)
 }
 
+export function getSummaryReportData(patientId) {
+  return apiGet(`/patients/${encodeURIComponent(patientId)}/summary-report-data`)
+}
+
 export function getPatientNames({ q, page = 1, limit = 20 } = {}) {
   const params = new URLSearchParams()
   const search = String(q ?? '').trim()
