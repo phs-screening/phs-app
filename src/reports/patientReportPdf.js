@@ -540,6 +540,21 @@ export function addMemos(doc, k, audioData, dietData, ptData, otData) {
   doc.line(10, calculateY(k), 10 + doc.getTextWidth(parseFromLangKey('memo_title')), calculateY(k))
   doc.setFont(undefined, 'normal')
 
+  // var audio =
+  //   parseFromLangKey('memo_audio') +
+  //   parseFromLangKey('memo_audio_1', audioData.geriAudiometryQ13) +
+  //   parseFromLangKey('memo_audio_2', audioData.geriAudiometryQ12)
+  // var diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4}`
+  // if (dietData.dietitiansConsultQ5) {
+  //   diet += parseFromLangKey(
+  //     'memo_diet_1',
+  //     dietData.dietitiansConsultQ5,
+  //     dietData.dietitiansConsultQ6,
+  //   )
+  // }
+  // var pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1}`
+  // var ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1}`
+
   var audio =
     parseFromLangKey('memo_audio') +
     parseFromLangKey('memo_audio_1', audioData.geriAudiometryQ13) +

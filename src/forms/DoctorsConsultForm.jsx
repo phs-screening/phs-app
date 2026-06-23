@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material'
 
 import { submitForm } from '../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
@@ -84,7 +87,7 @@ const DoctorsConsultForm = () => {
   const [ophthal, setOphthal] = useState({})
   const [audio, setAudio] = useState({})
   const [geriPHQ, setPHQ] = useState({})
-  const [lung, setLung] = useState({})
+  // const [lung, setLung] = useState({})
   const [triage, setTriage] = useState({})
   const [pmhx, setPMHX] = useState({})
   const [social, setSocial] = useState({})
@@ -119,7 +122,7 @@ const DoctorsConsultForm = () => {
           setHcsr(result[0])
           setOphthal(result[1])
           setAudio(result[2])
-          setLung(result[3])
+          // setLung(result[3])
           setPHQ(result[4])
           setTriage(result[5])
           setPMHX(result[6])

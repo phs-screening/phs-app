@@ -9,16 +9,7 @@ import {
 } from '../api/queuesApi'
 import { getProfile } from '../services/authSession'
 import { getPreRegDataById, getSavedData } from '../services/patientData'
-import {
-  Box,
-  Button,
-  Typography,
-  TextField,
-  CircularProgress,
-  Tooltip,
-  Paper,
-  Divider,
-} from '@mui/material'
+import { Box, Button, Typography, TextField, Tooltip, Paper, Divider } from '@mui/material'
 import allForms from '../forms/forms.json'
 
 const parseQueueItem = (queueItem) => {

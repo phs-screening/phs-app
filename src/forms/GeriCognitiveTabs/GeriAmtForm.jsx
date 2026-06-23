@@ -1,4 +1,3 @@
-
 import { Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
@@ -6,7 +5,10 @@ import { useNavigate } from 'react-router-dom'
 
 import * as Yup from 'yup'
 import { submitForm } from '../../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
 import { FormContext } from '../../api/utils.js'
 import CustomNumberField from '../../components/form-components/CustomNumberField.jsx'
@@ -94,7 +96,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
       enableReinitialize
       initialValues={savedData}
       validationSchema={validationSchema}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values) => {
         setLoading(true)
         const response = await submitForm(values, patientId, formName)
         setLoading(false)
@@ -121,8 +123,8 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 alt='Scoring rubric for geri AMT'
               />
               <h2>
-                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if answered
-                incorrectly.
+                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if
+                answered incorrectly.
               </h2>
 
               {[...Array(10)].map((_, i) => {
@@ -172,8 +174,8 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
                 Follow the criteria shown in the image above.
                 <br />
-                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), years of education and AMT score, is the patient
-                eligible for G-RACE for MMSE?
+                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), years of education
+                and AMT score, is the patient eligible for G-RACE for MMSE?
               </Typography>
               <Field
                 name='geriAmtQ12'
@@ -186,7 +188,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
             <ErrorNotification
               show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-             message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <br />

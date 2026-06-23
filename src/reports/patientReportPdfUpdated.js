@@ -3,12 +3,12 @@ import updatedLogo from 'src/icons/UpdatedIcon'
 import { normalizeLangName, parseFromLangKey, setLangUpdated } from '../api/langutil'
 import pdfMake from './pdfMake'
 
-function calculateBMI(heightInCm, weightInKg) {
-  const height = heightInCm / 100
-  const bmi = (weightInKg / height / height).toFixed(1)
+// function calculateBMI(heightInCm, weightInKg) {
+//   const height = heightInCm / 100
+//   const bmi = (weightInKg / height / height).toFixed(1)
 
-  return bmi
-}
+//   return bmi
+// }
 export function generate_pdf_updated(
   reg,
   patients,
@@ -146,7 +146,7 @@ export function generate_pdf_updated(
   pdfMake.createPdf(docDefinition1).download(fileName)
 }
 
-function patientSection(reg, patients) {
+function patientSection(reg) {
   const salutation = reg.registrationQ1 || 'Dear'
 
   const mainLogo = {
@@ -235,7 +235,7 @@ export function bloodPressureSection(triage) {
 }
 
 export function bmiSection(height, weight, bmiString) {
-  const bmi = calculateBMI(Number(height), Number(weight))
+  // const bmi = calculateBMI(Number(height), Number(weight))
 
   const imageSection = [
     {
@@ -381,10 +381,10 @@ export function followUpSection(
   hpv,
   socialService,
 ) {
-  let vaccineString = null
-  if (vaccine.VAX1 == 'Yes') {
-    vaccineString = `${parseFromLangKey('fw_vax', vaccine.VAX2)}\n`
-  }
+  // let vaccineString = null
+  // if (vaccine.VAX1 == 'Yes') {
+  //   vaccineString = `${parseFromLangKey('fw_vax', vaccine.VAX2)}\n`
+  // }
 
   let hsgString = null
   if (hsg.HSG1 == 'Yes, I signed up for HSG today') {
@@ -416,10 +416,10 @@ export function followUpSection(
     graceString = `${parseFromLangKey('fw_grace', grace.GRACE3)}\n`
   }
 
-  let whisperString = null
-  if (geriWhForm.WH1 == 'Yes') {
-    whisperString = `${parseFromLangKey('fw_wh')}\n`
-  }
+  // let whisperString = null
+  // if (geriWhForm.WH1 == 'Yes') {
+  //   whisperString = `${parseFromLangKey('fw_wh')}\n`
+  // }
 
   let aicString = null
   if (socialService.socialServiceQ4 == 'Yes') {
@@ -505,4 +505,3 @@ export function recommendationSection() {
     { text: `${parseFromLangKey('disclaimer')}\n`, style: 'normal' },
   ]
 }
-

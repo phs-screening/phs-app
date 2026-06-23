@@ -5,7 +5,10 @@ import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
 import PopupText from 'src/utils/popupText.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
@@ -200,7 +203,7 @@ export default function HxPhqForm({ changeTab, nextTab }) {
         setFieldTouched,
         submitCount,
         errors,
-        ...formikProps
+        // ...formikProps
       }) => {
         const score = (pointsMap[values.PHQ1] || 0) + (pointsMap[values.PHQ2] || 0)
 

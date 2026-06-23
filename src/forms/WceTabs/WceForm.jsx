@@ -3,10 +3,13 @@ import { Fragment, useContext, useEffect, useState } from 'react'
 import { Formik, useFormikContext, Field } from 'formik'
 import * as Yup from 'yup'
 
-import { Divider, Paper, Grid, CircularProgress, Button } from '@mui/material'
+import { Paper, Grid, CircularProgress, Button } from '@mui/material'
 
 import { submitForm } from '../../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
 import { FormContext } from '../../api/utils.js'
 
@@ -164,9 +167,9 @@ const WceForm = (props) => {
                     <CheckHpvEligibility />
                   </div>
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

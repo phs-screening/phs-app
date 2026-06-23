@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Paper, Typography, CircularProgress, Button } from '@mui/material'
+import { Paper, Typography, CircularProgress } from '@mui/material'
 import { Formik, Form, FastField, ErrorMessage, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
-import { submitForm } from '../../api/api.jsx'
+// import { submitForm } from '../../api/api.jsx'
 import '../fieldPadding.css'
 import PopupText from 'src/utils/popupText'
 
@@ -49,7 +49,7 @@ const GetScore = () => {
   )
 }
 
-export default function GeriPhqForm({ changeTab, nextTab }) {
+export default function GeriPhqForm() {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(null)
 
@@ -160,7 +160,10 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
               </PopupText>
               <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
                 <Typography variant='subtitle1' sx={{ color: 'red' }}>
-                  <b>*Patient requires urgent attention, please escalate to supervisor of the station to bring to Doctor&apos;s station*</b>
+                  <b>
+                    *Patient requires urgent attention, please escalate to supervisor of the station
+                    to bring to Doctor&apos;s station*
+                  </b>
                 </Typography>
               </PopupText>
 

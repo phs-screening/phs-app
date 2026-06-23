@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, FastField } from 'formik'
 import { validationSchema } from './registrationSchema'
 
-import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
+import { Divider, Paper, CircularProgress, Button, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/api.jsx'
 import {
@@ -252,7 +252,7 @@ const RegForm = () => {
       onSubmit={handleSubmit}
       enableReinitialize={true}
     >
-      {({ isSubmitting, submitCount, setFieldValue, values, ...formikProps }) => (
+      {({ isSubmitting, submitCount, setFieldValue, ...formikProps }) => (
         <Form className='fieldPadding'>
           <div>
             <Typography variant='h2' fontWeight='bold' sx={{ mb: 2 }}>

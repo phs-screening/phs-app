@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Paper, Divider, Typography, CircularProgress, Button } from '@mui/material'
-import { Formik, Form, Field, FastField } from 'formik'
+import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/api.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 
-import PopupText from 'src/utils/popupText.jsx'
+// import PopupText from 'src/utils/popupText.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
-import CustomTextField from '../../components/form-components/CustomTextField'
+// import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import '../fieldPadding.css'
 import '../forms.css'
@@ -45,13 +48,13 @@ const formOptions = {
     { label: 'Never before', value: 'Never before' },
     { label: 'Less than 5 years ago', value: 'Less than 5 years ago' },
     { label: '5 years or longer', value: '5 years or longer' },
-    { label: 'Not answered', 'value': 'Never before'}
+    { label: 'Not answered', value: 'Never before' },
   ],
   GYNAE13: [
     { label: 'Never before', value: 'Never before' },
     { label: 'Within the last 3 years', value: 'Within the last 3 years' },
     { label: '3 years or longer', value: '3 years or longer' },
-    { label: 'Not answered', value: 'Never before' }
+    { label: 'Not answered', value: 'Never before' },
   ],
   GYNAE17: [
     { label: 'Yes', value: 'Yes' },
@@ -100,11 +103,9 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
           <Typography variant='h4'>
             <strong>GYNECOLOGY</strong>
           </Typography>
-          <Typography fontWeight='bold' color='error' sx={{ mb: 2}}>
+          <Typography fontWeight='bold' color='error' sx={{ mb: 2 }}>
             This form should only be submitted for female participants
           </Typography>
-
-
 
           <Typography variant='subtitle1' fontWeight='bold'>
             When, if any, was the last HPV test you have taken? <br />
@@ -143,7 +144,9 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
             row
           />
 
-          <Typography variant='subtitle1' fontWeight='bold'>Are you pregnant?</Typography>
+          <Typography variant='subtitle1' fontWeight='bold'>
+            Are you pregnant?
+          </Typography>
           <FastField
             name='GYNAE15'
             label='GYNAE15'
@@ -152,11 +155,10 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
             row
           />
 
-
           <Typography variant='subtitle1' fontWeight='bold'>
-            Was your last menstrual period within the window where the first day falls between 28 July and 4 Aug 2025? <br />
+            Was your last menstrual period within the window where the first day falls between 28
+            July and 4 Aug 2025? <br />
             If you are post-menopausal or use contraception, please indicate &apos;yes&apos;
-
           </Typography>
           <FastField
             name='GYNAE16'
@@ -178,7 +180,8 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Is patient indicated for on-site testing? Please circle On-Site Testing on Form A as well
+            Is patient indicated for on-site testing? Please circle On-Site Testing on Form A as
+            well
           </Typography>
           <FastField
             name='GYNAE18'
@@ -190,7 +193,7 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
 
           <ErrorNotification
             show={Object.keys(errors).length > 0 && submitCount > 0}
-            message="Please correct the errors above before submitting."
+            message='Please correct the errors above before submitting.'
           />
 
           <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
