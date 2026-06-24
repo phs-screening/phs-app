@@ -5,12 +5,11 @@ import * as Yup from 'yup'
 import { Paper, Grid, CircularProgress, Button, Typography } from '@mui/material'
 
 import allForms from './forms.json'
-import { submitForm } from '../api/api.jsx'
+import { submitForm } from '../api/formHelpers.jsx'
 import {
   showFormSubmitError,
   showFormSubmitSuccess,
 } from 'src/components/form-components/FormSubmitStatusHost'
-
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'

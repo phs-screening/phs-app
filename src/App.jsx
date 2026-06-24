@@ -47,12 +47,19 @@ const App = () => {
     }
   }
 
+  const clearPatient = () => {
+    setPatientId(-1)
+    setPatientInfo({})
+  }
+
   const theme = customTheme
   const routing = useRoutes(routes)
 
   return (
     <LoginContext.Provider value={{ login, isLogin, profile, setProfile }}>
-      <FormContext.Provider value={{ patientId, updatePatientId, patientInfo, updatePatientInfo }}>
+      <FormContext.Provider
+        value={{ patientId, updatePatientId, patientInfo, updatePatientInfo, clearPatient }}
+      >
         <ThemeProvider theme={theme}>
           {routing}
           <FormSubmitStatusHost />

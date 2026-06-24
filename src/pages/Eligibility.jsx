@@ -14,7 +14,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { Helmet } from 'react-helmet-async'
 
 import { FormContext } from '../api/utils.js'
-import { generateFormAPdf } from '../api/api.jsx'
 import { getPatientStationEligibility, recalculatePatientStationCounts } from '../api/stationsApi'
 
 // Eligibility page
@@ -69,6 +68,7 @@ function Eligibility() {
 
   generatePDFRef.current = async () => {
     try {
+      const { generateFormAPdf } = await import('../reports/formAPdf')
       await generateFormAPdf(patientId)
     } catch (error) {
       console.error('Failed to generate Form A PDF:', error)

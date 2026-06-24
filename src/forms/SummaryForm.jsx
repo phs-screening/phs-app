@@ -2,10 +2,10 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
-import { formatBmi, formatGeriVision, formatWceStation, generate_pdf, generate_pdf_updated } from '../api/api.jsx'
+import Alert from '@mui/material/Alert'
+import { formatBmi, formatGeriVision, formatWceStation } from '../api/formHelpers.jsx'
 import { FormContext } from '../api/utils.js'
-import { getSavedData, getSavedPatientData } from '../services/patientData'
-import allForms from './forms.json'
+import { getSummaryReportDataStrict } from '../services/patientData'
 import { Button } from '@mui/material'
 
 // TODO: add triage and SACS
@@ -16,15 +16,9 @@ const SummaryForm = (props) => {
   const { patientId, updatePatientId } = useContext(FormContext)
   const [loadingPrevData, isLoadingPrevData] = useState(true)
   const [saveData, setSaveData] = useState({})
-
-  async function preloadFonts() {
-    const urls = [
-      'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-      'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
-      'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
-    ]
-    await Promise.all(urls.map(url => fetch(url)))
-  }
+  const [generatingReport, setGeneratingReport] = useState(false)
+  const [reportError, setReportError] = useState('')
+  const [loadError, setLoadError] = useState('')
 
   // Oh my god this is terrible PLEASE SOMEONE FIX THIS
   // All the forms
@@ -67,164 +61,135 @@ const SummaryForm = (props) => {
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
+    let mounted = true
+
     const loadForms = async () => {
-      const loadPastForms = async () => {
-        isLoadingPrevData(true)
-        const registrationData = getSavedData(patientId, allForms.registrationForm)
-        const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
-        const nssData = getSavedData(patientId, allForms.hxNssForm)
-        const socialData = getSavedData(patientId, allForms.hxSocialForm)
-        const cancerData = getSavedData(patientId, allForms.hxCancerForm)
-        const visionData = getSavedData(patientId, allForms.geriVisionForm)
-        const fitData = getSavedData(patientId, allForms.fitForm)
-        const wceData = getSavedData(patientId, allForms.wceForm)
-        const patientsData = getSavedPatientData(patientId, 'patients')
-        const phlebotomyData = getSavedData(patientId, allForms.phlebotomyForm)
-        const geriPtConsultData = getSavedData(patientId, allForms.geriPtConsultForm)
-        const geriVisionData = getSavedData(patientId, allForms.ophthalForm)
-        const geriAudiometryData = getSavedData(patientId, allForms.audiometryForm)
-        const geriOtConsultData = getSavedData(patientId, allForms.geriOtConsultForm)
-        const geriEbasDepData = getSavedData(patientId, allForms.geriEbasDepForm)
-        const geriMmseData = getSavedData(patientId, allForms.geriMmseForm)
-        const geriAmtData = getSavedData(patientId, allForms.geriAmtForm)
-        //const sacsData = getSavedData(patientId, allForms.sacsForm)
-        const socialServiceData = getSavedData(patientId, allForms.socialServiceForm)
-        const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
-        const dietitiansConsultData = getSavedData(patientId, allForms.dietitiansConsultForm)
-        const oralHealthData = getSavedData(patientId, allForms.oralHealthForm)
-        const triageData = getSavedData(patientId, allForms.triageForm)
+      isLoadingPrevData(true)
+      setLoadError('')
 
-        const vaccineData = getSavedData(patientId, allForms.vaccineForm)
-        const lungData = getSavedData(patientId, allForms.lungForm)
-        const nkfData = getSavedData(patientId, allForms.nkfForm)
-        const hsgData = getSavedData(patientId, allForms.hsgForm)
-        const graceData = getSavedData(patientId, allForms.geriGraceForm)
-        const heartsData = getSavedData(patientId, allForms.geriWhForm)
-        const mentalData = getSavedData(patientId, allForms.mentalHealthForm)
-        const podiatryData = getSavedData(patientId, allForms.podiatryForm)
-        const mammobusData = getSavedData(patientId, allForms.mammobusForm)
-        const hpvData = getSavedData(patientId, allForms.hpvForm)
+      try {
+        const data = await getSummaryReportDataStrict(patientId)
+        if (!mounted) return
 
-        Promise.all([
-          hcsrData,
-          nssData,
-          socialData,
-          cancerData,
-          visionData,
-          fitData,
-          wceData,
-          patientsData,
-          geriPtConsultData,
-          geriOtConsultData,
-          socialServiceData,
-          doctorConsultData,
-          registrationData,
-          phlebotomyData,
-          geriEbasDepData,
-          geriAmtData,
-          dietitiansConsultData,
-          oralHealthData,
-          geriMmseData,
-          geriVisionData,
-          geriAudiometryData,
-          triageData,
-          vaccineData,
-          lungData,
-          nkfData,
-          hsgData,
-          graceData,
-          heartsData,
-          mentalData,
-          podiatryData,
-          mammobusData,
-          hpvData,
-          //sacsData,
-        ]).then((result) => {
-          setHcsr(result[0])
-          setNss(result[1])
-          setSocial(result[2])
-          setCancer(result[3])
-          setVision(result[4])
-          setFit(result[5])
-          setWce(result[6])
-          setPatients(result[7])
-          setGeriPtConsult(result[8])
-          setGeriOtConsult(result[9])
-          setSocialService(result[10])
-          setDoctorSConsult(result[11])
-          setRegistration(result[12])
-          setPhlebotomy(result[13])
-          setGeriEbasDep(result[14])
-          setGeriAmt(result[15])
-          setDietiatiansConsult(result[16])
-          setOralHealth(result[17])
-          setGeriMmse(result[18])
-          setGeriVision(result[19])
-          setGeriAudiometry(result[20])
-          setTriage(result[21])
-          setVaccine(result[22])
-          setLung(result[23])
-          setNKF(result[24])
-          setHSG(result[25])
-          setGrace(result[26])
-          setHearts(result[27])
-          setMental(result[28])
-          setPodiatry(result[29])
-          setMammobus(result[30])
-          setHpv(result[31])
-          //setSacs(result[])
-          isLoadingPrevData(false)
-        })
+        setHcsr(data?.hcsr || {})
+        setNss(data?.nss || {})
+        setSocial(data?.social || {})
+        setCancer(data?.cancer || {})
+        setVision(data?.vision || {})
+        setFit(data?.fit || {})
+        setWce(data?.wce || {})
+        setPatients(data?.patients || {})
+        setGeriPtConsult(data?.geriPtConsult || {})
+        setGeriOtConsult(data?.geriOtConsult || {})
+        setSocialService(data?.socialService || {})
+        setDoctorSConsult(data?.doctorSConsult || {})
+        setRegistration(data?.registration || {})
+        setPhlebotomy(data?.phlebotomy || {})
+        setGeriEbasDep(data?.geriEbasDep || {})
+        setGeriAmt(data?.geriAmt || {})
+        setDietiatiansConsult(data?.dietitiansConsult || {})
+        setOralHealth(data?.oralHealth || {})
+        setGeriMmse(data?.geriMmse || {})
+        setGeriVision(data?.geriVision || {})
+        setGeriAudiometry(data?.geriAudiometry || {})
+        setTriage(data?.triage || {})
+        setVaccine(data?.vaccine || {})
+        setLung(data?.lung || {})
+        setNKF(data?.nkf || {})
+        setHSG(data?.hsg || {})
+        setGrace(data?.grace || {})
+        setHearts(data?.hearts || {})
+        setMental(data?.mental || {})
+        setPodiatry(data?.podiatry || {})
+        setMammobus(data?.mammobus || {})
+        setHpv(data?.hpv || {})
+      } catch (error) {
+        console.error('Failed to load screening report data:', error)
+        if (mounted) {
+          setLoadError(
+            error?.message
+              ? `Unable to load screening report data. Details: ${error.message}`
+              : 'Unable to load screening report data. Please refresh and try again.',
+          )
+        }
+      } finally {
+        if (mounted) isLoadingPrevData(false)
       }
-      await loadPastForms()
-      await preloadFonts()
     }
+
     loadForms()
-  }, [refresh])
+
+    return () => {
+      mounted = false
+    }
+  }, [patientId, refresh])
+
+  const handleDownloadReport = async () => {
+    setGeneratingReport(true)
+    setReportError('')
+
+    try {
+      const { generate_pdf_updated } = await import('../reports/patientReportPdfUpdated')
+      await generate_pdf_updated(
+        registration,
+        patients,
+        cancer,
+        phlebotomy,
+        fit,
+        wce,
+        doctorSConsult,
+        socialService,
+        geriMmse,
+        geriVision,
+        geriAudiometry,
+        dietitiansConsult,
+        oralHealth,
+        triage,
+        vaccine,
+        lung,
+        nkf,
+        hsg,
+        grace,
+        hearts,
+        geriPtConsult,
+        geriOtConsult,
+        mental,
+        social,
+        podiatry,
+        mammobus,
+        hpv,
+      )
+    } catch (error) {
+      console.error('Failed to generate screening report:', error)
+      setReportError(
+        error?.message
+          ? `Unable to generate screening report. Details: ${error.message}`
+          : 'Unable to generate screening report. Please try again.',
+      )
+    } finally {
+      setGeneratingReport(false)
+    }
+  }
 
   // TODO: add triage to summary form
   return (
     <Paper elevation={2} pt={3} m={3}>
       {loadingPrevData ? (
         <CircularProgress />
+      ) : loadError ? (
+        <Alert severity='error' sx={{ m: 2 }}>
+          {loadError}
+        </Alert>
       ) : (
         <Fragment>
           <div>
-            <Button
-              onClick={() =>
-                generate_pdf_updated(
-                  // TODO: add triage here
-                  registration,
-                  patients,
-                  cancer,
-                  phlebotomy,
-                  fit,
-                  wce,
-                  doctorSConsult,
-                  socialService,
-                  geriMmse,
-                  geriVision,
-                  geriAudiometry,
-                  dietitiansConsult,
-                  oralHealth,
-                  triage,
-                  vaccine,
-                  lung,
-                  nkf,
-                  hsg,
-                  grace,
-                  hearts,
-                  geriPtConsult,
-                  geriOtConsult,
-                  mental,
-                  social,
-                  podiatry,
-                  mammobus,
-                  hpv,
-                )
-              }
-            >
-              Download Screening Report
+            {reportError && (
+              <Alert severity='error' sx={{ mb: 2 }}>
+                {reportError}
+              </Alert>
+            )}
+            <Button onClick={handleDownloadReport} disabled={generatingReport}>
+              {generatingReport ? 'Generating Report...' : 'Download Screening Report'}
             </Button>
           </div>
         </Fragment>

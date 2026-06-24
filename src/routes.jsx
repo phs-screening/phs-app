@@ -1,3 +1,5 @@
+import React, { lazy, Suspense } from 'react'
+import CircularProgress from '@mui/material/CircularProgress'
 import { Navigate } from 'react-router-dom'
 import AdminRoute from 'src/components/AdminRoute'
 import DashboardLayout from 'src/components/DashboardLayout'
@@ -5,44 +7,47 @@ import DefaultRoute from 'src/components/DefaultRoute'
 import GuestOnlyRoute from 'src/components/GuestOnlyRoute'
 import MainLayout from 'src/components/MainLayout'
 import ProtectedRoute from 'src/components/ProtectedRoute'
-import Queue from './pages/Queue'
-import Dashboard from 'src/pages/Dashboard'
-import Login from 'src/pages/Login'
-import NotFound from 'src/pages/NotFound'
-import Registration from 'src/pages/Registration'
-import Settings from 'src/pages/Settings'
-import DoctorsConsultForm from 'src/forms/DoctorsConsultForm'
-import DietitiansConsultForm from 'src/forms/DietitiansConsultForm'
-import OralHealthForm from 'src/forms/OralHealthForm'
-import RegForm from 'src/forms/RegForm'
-import TriageForm from 'src/forms/TriageForm'
-import SocialServiceForm from 'src/forms/SocialServiceForm'
-import HxTabs from './forms/HistoryTakingTabs/HistoryTaking'
-import ManageVolunteers from 'src/pages/ManageVolunteers'
-import DoctorAdmin from 'src/pages/DoctorAdmin'
-import FormAAdmin from 'src/pages/FormAAdmin'
-import EventDashboard from 'src/pages/EventDashboard'
 
-import SummaryForm from 'src/forms/SummaryForm'
-import React from 'react'
+const Queue = lazy(() => import('./pages/Queue'))
+const Dashboard = lazy(() => import('src/pages/Dashboard'))
+const EventDashboard = lazy(() => import('src/pages/EventDashboard'))
+const Login = lazy(() => import('src/pages/Login'))
+const NotFound = lazy(() => import('src/pages/NotFound'))
+const Registration = lazy(() => import('src/pages/Registration'))
+const Settings = lazy(() => import('src/pages/Settings'))
+const DoctorsConsultForm = lazy(() => import('src/forms/DoctorsConsultForm'))
+const DietitiansConsultForm = lazy(() => import('src/forms/DietitiansConsultForm'))
+const OralHealthForm = lazy(() => import('src/forms/OralHealthForm'))
+const RegForm = lazy(() => import('src/forms/RegForm'))
+const TriageForm = lazy(() => import('src/forms/TriageForm'))
+const SocialServiceForm = lazy(() => import('src/forms/SocialServiceForm'))
+const HxTabs = lazy(() => import('./forms/HistoryTakingTabs/HistoryTaking'))
+const ManageVolunteers = lazy(() => import('src/pages/ManageVolunteers'))
+const DoctorAdmin = lazy(() => import('src/pages/DoctorAdmin'))
+const FormAAdmin = lazy(() => import('src/pages/FormAAdmin'))
+const SummaryForm = lazy(() => import('src/forms/SummaryForm'))
+const HsgForm = lazy(() => import('./forms/HsgForm'))
+const LungFnForm = lazy(() => import('./forms/LungFnForm'))
+const OsteoForm = lazy(() => import('./forms/OsteoForm'))
+const MentalHealthForm = lazy(() => import('./forms/MentalHealthTabs/MentalHealthMain'))
+const HpvForm = lazy(() => import('./forms/HpvForm'))
+const VaccineForm = lazy(() => import('./forms/VaccineForm'))
+const WceTabs = lazy(() => import('./forms/WceTabs/WceMain'))
+const AudiometryForm = lazy(() => import('./forms/AudiometryForm'))
+const OphthalForm = lazy(() => import('./forms/OphthalForm'))
+const GeriMobilityTabs = lazy(() => import('./forms/GeriMobilityTabs/GeriMobility'))
+const GeriCognitiveTabs = lazy(() => import('./forms/GeriCognitiveTabs/GeriCognitive'))
+const MammobusForm = lazy(() => import('./forms/MammobusForm'))
+const PodiatryForm = lazy(() => import('./forms/PodiatryForm'))
+const FitForm = lazy(() => import('./forms/FitForm'))
+const ScoliosisForm = lazy(() => import('./forms/ScoliosisForm'))
+const Eligibility = lazy(() => import('./pages/Eligibility'))
 
-import HsgForm from './forms/HsgForm'
-import LungFnForm from './forms/LungFnForm'
-import OsteoForm from './forms/OsteoForm'
-import MentalHealthForm from './forms/MentalHealthTabs/MentalHealthMain'
-import HpvForm from './forms/HpvForm'
-import VaccineForm from './forms/VaccineForm'
-import WceTabs from './forms/WceTabs/WceMain'
-import AudiometryForm from './forms/AudiometryForm'
-import OphthalForm from './forms/OphthalForm'
-import GeriMobilityTabs from './forms/GeriMobilityTabs/GeriMobility'
-import GeriCognitiveTabs from './forms/GeriCognitiveTabs/GeriCognitive'
-import MammobusForm from './forms/MammobusForm'
-import PodiatryForm from './forms/PodiatryForm'
-import FitForm from './forms/FitForm'
-import ScoliosisForm from './forms/ScoliosisForm'
-
-import Eligibility from './pages/Eligibility'
+const loadable = (Component) => (
+  <Suspense fallback={<CircularProgress />}>
+    <Component />
+  </Suspense>
+)
 
 const routes = [
   {
@@ -54,46 +59,46 @@ const routes = [
     ),
     children: [
       { index: true, element: <Navigate to='registration' replace /> },
-      { path: 'registration', element: <Registration /> },
-      { path: 'dashboard', element: <Dashboard /> },
-      { path: 'event-dashboard', element: <EventDashboard /> },
-      { path: 'settings', element: <Settings /> },
-      { path: 'doctorsconsult', element: <DoctorsConsultForm /> },
-      { path: 'summary', element: <SummaryForm /> },
-      { path: 'lungfn', element: <LungFnForm /> },
-      { path: 'gerimobility', element: <GeriMobilityTabs /> },
-      { path: 'hxtaking', element: <HxTabs /> },
-      { path: 'reg', element: <RegForm /> },
-      { path: 'vax', element: <VaccineForm /> },
-      { path: 'hsg', element: <HsgForm /> },
-      { path: 'fit', element: <FitForm /> },
-      { path: 'audio', element: <AudiometryForm /> },
-      { path: 'ophthal', element: <OphthalForm /> },
-      { path: 'scoliosis', element: <ScoliosisForm /> },
-      { path: 'gericog', element: <GeriCognitiveTabs /> },
-      { path: 'triage', element: <TriageForm /> },
-      { path: 'osteoporosis', element: <OsteoForm /> },
-      { path: 'dietitiansconsultation', element: <DietitiansConsultForm /> },
-      { path: 'socialservice', element: <SocialServiceForm /> },
-      { path: 'mentalhealth', element: <MentalHealthForm /> },
-      { path: 'oralhealth', element: <OralHealthForm /> },
-      { path: 'hpv', element: <HpvForm /> },
+      { path: 'registration', element: loadable(Registration) },
+      { path: 'dashboard', element: loadable(Dashboard) },
+      { path: 'event-dashboard', element: loadable(EventDashboard) },
+      { path: 'settings', element: loadable(Settings) },
+      { path: 'doctorsconsult', element: loadable(DoctorsConsultForm) },
+      { path: 'summary', element: loadable(SummaryForm) },
+      { path: 'lungfn', element: loadable(LungFnForm) },
+      { path: 'gerimobility', element: loadable(GeriMobilityTabs) },
+      { path: 'hxtaking', element: loadable(HxTabs) },
+      { path: 'reg', element: loadable(RegForm) },
+      { path: 'vax', element: loadable(VaccineForm) },
+      { path: 'hsg', element: loadable(HsgForm) },
+      { path: 'fit', element: loadable(FitForm) },
+      { path: 'audio', element: loadable(AudiometryForm) },
+      { path: 'ophthal', element: loadable(OphthalForm) },
+      { path: 'scoliosis', element: loadable(ScoliosisForm) },
+      { path: 'gericog', element: loadable(GeriCognitiveTabs) },
+      { path: 'triage', element: loadable(TriageForm) },
+      { path: 'osteoporosis', element: loadable(OsteoForm) },
+      { path: 'dietitiansconsultation', element: loadable(DietitiansConsultForm) },
+      { path: 'socialservice', element: loadable(SocialServiceForm) },
+      { path: 'mentalhealth', element: loadable(MentalHealthForm) },
+      { path: 'oralhealth', element: loadable(OralHealthForm) },
+      { path: 'hpv', element: loadable(HpvForm) },
       {
         path: 'manage',
         element: (
           <AdminRoute>
-            <ManageVolunteers />
+            {loadable(ManageVolunteers)}
           </AdminRoute>
         ),
       },
-      { path: 'wce', element: <WceTabs /> },
-      { path: 'queue', element: <Queue /> },
-      { path: 'eligibility', element: <Eligibility /> },
+      { path: 'wce', element: loadable(WceTabs) },
+      { path: 'queue', element: loadable(Queue) },
+      { path: 'eligibility', element: loadable(Eligibility) },
       { path: '*', element: <Navigate to='/404' /> },
-      { path: 'docadmin', element: <DoctorAdmin /> },
-      { path: 'mammobus', element: <MammobusForm /> },
-      { path: 'podiatry', element: <PodiatryForm /> },
-      { path: 'formAadmin', element: <FormAAdmin /> },
+      { path: 'docadmin', element: loadable(DoctorAdmin) },
+      { path: 'mammobus', element: loadable(MammobusForm) },
+      { path: 'podiatry', element: loadable(PodiatryForm) },
+      { path: 'formAadmin', element: loadable(FormAAdmin) },
     ],
   },
   {
@@ -104,11 +109,11 @@ const routes = [
         path: 'login',
         element: (
           <GuestOnlyRoute>
-            <Login />
+            {loadable(Login)}
           </GuestOnlyRoute>
         ),
       },
-      { path: '404', element: <NotFound /> },
+      { path: '404', element: loadable(NotFound) },
       { path: '/', element: <DefaultRoute /> },
       { path: '*', element: <Navigate to='/404' /> },
     ],

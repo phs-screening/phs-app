@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { Paper, CircularProgress, Button, Grid } from '@mui/material'
 
 import allForms from '../forms.json'
-import { formatBmi, submitForm } from '../../api/api.jsx'
+import { formatBmi, submitForm } from '../../api/formHelpers.jsx'
 import {
   showFormSubmitError,
   showFormSubmitSuccess,

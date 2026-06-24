@@ -8,7 +8,7 @@ import CustomNumberField from '../../components/form-components/CustomNumberFiel
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
-import { submitForm, calculateSppbScore } from '../../api/api.jsx'
+import { submitForm, calculateSppbScore } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'

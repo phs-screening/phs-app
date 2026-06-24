@@ -4,12 +4,11 @@ import { Formik, Form, useFormikContext, FastField } from 'formik'
 import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
-import { submitForm } from '../../api/api.jsx'
+import { submitForm } from '../../api/formHelpers.jsx'
 import {
   showFormSubmitError,
   showFormSubmitSuccess,
 } from 'src/components/form-components/FormSubmitStatusHost'
-
 import PopupText from 'src/utils/popupText.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from 'src/components/form-components/CustomTextField.jsx'

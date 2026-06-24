@@ -3,13 +3,98 @@ import updatedLogo from 'src/icons/UpdatedIcon'
 import { normalizeLangName, parseFromLangKey, setLangUpdated } from '../api/langutil'
 import pdfMake from './pdfMake'
 
-// function calculateBMI(heightInCm, weightInKg) {
-//   const height = heightInCm / 100
-//   const bmi = (weightInKg / height / height).toFixed(1)
+const FONT_FILES = {
+  tamilRegular: {
+    local: '/fonts/NotoSansTamil-Regular.ttf',
+    fallback: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
+  },
+  tamilBold: {
+    local: '/fonts/NotoSansTamil-Bold.ttf',
+    fallback: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Bold.ttf',
+  },
+  mandarinRegular: {
+    local: '/fonts/NotoSansSC-Regular.ttf',
+    fallback: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
+  },
+  mandarinBold: {
+    local: '/fonts/NotoSansSC-Bold.ttf',
+    fallback: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Bold.ttf',
+  },
+}
 
-//   return bmi
-// }
-export function generate_pdf_updated(
+const fontUrlCache = new Map()
+
+function toAbsoluteFontUrl(url) {
+  if (/^https?:\/\//i.test(url)) return url
+  if (typeof window === 'undefined') return url
+
+  return new URL(url, window.location.origin).href
+}
+
+async function resolveFontUrl({ local, fallback }) {
+  if (fontUrlCache.has(local)) return fontUrlCache.get(local)
+
+  try {
+    const response = await fetch(local, { method: 'HEAD' })
+    if (response.ok) {
+      const absoluteLocalUrl = toAbsoluteFontUrl(local)
+      fontUrlCache.set(local, absoluteLocalUrl)
+      return absoluteLocalUrl
+    }
+  } catch {
+    // Fall back to the known CDN URL when a local font cannot be reached.
+  }
+
+  fontUrlCache.set(local, fallback)
+  return fallback
+}
+
+async function buildPdfMakeFonts(language) {
+  const fonts = {
+    Roboto: {
+      normal: 'Roboto-Regular.ttf',
+      bold: 'Roboto-Regular.ttf',
+      italics: 'Roboto-Regular.ttf',
+      bolditalics: 'Roboto-Regular.ttf',
+    },
+  }
+
+  if (language === 'tamil') {
+    const [tamilRegular, tamilBold] = await Promise.all([
+      resolveFontUrl(FONT_FILES.tamilRegular),
+      resolveFontUrl(FONT_FILES.tamilBold),
+    ])
+    fonts.NotoTamil = {
+      normal: tamilRegular,
+      bold: tamilBold,
+      italics: tamilRegular,
+      bolditalics: tamilRegular,
+    }
+  }
+
+  if (language === 'mandarin') {
+    const [mandarinRegular, mandarinBold] = await Promise.all([
+      resolveFontUrl(FONT_FILES.mandarinRegular),
+      resolveFontUrl(FONT_FILES.mandarinBold),
+    ])
+    fonts.PingFangSC = {
+      normal: mandarinRegular,
+      bold: mandarinBold,
+      italics: mandarinRegular,
+      bolditalics: mandarinRegular,
+    }
+  }
+
+  return fonts
+}
+
+function calculateBMI(heightInCm, weightInKg) {
+  const height = heightInCm / 100
+  const bmi = (weightInKg / height / height).toFixed(1)
+
+  return bmi
+}
+export async function generate_pdf_updated(
   reg,
   patients,
   cancer,
@@ -81,34 +166,7 @@ export function generate_pdf_updated(
     fileName = patients.initials.split(' ').join('_') + '_Report.pdf'
   }
 
-  pdfMake.fonts = {
-    // download default Roboto font from cdnjs.com
-    Roboto: {
-      normal:
-        'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-      bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
-      italics:
-        'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
-      bolditalics:
-        'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf',
-    },
-
-    NotoTamil: {
-      normal: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
-      bold: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Bold.ttf',
-      italics: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
-      bolditalics:
-        'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansTamil-Regular.ttf',
-    },
-
-    // example of usage fonts in collection
-    PingFangSC: {
-      normal: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
-      bold: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Bold.ttf',
-      italics: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
-      bolditalics: 'https://cdn.jsdelivr.net/gh/choijiwonsoc/my-fonts@main/NotoSansSC-Regular.ttf',
-    },
-  }
+  pdfMake.fonts = await buildPdfMakeFonts(language)
 
   const docDefinition1 = {
     content: content,

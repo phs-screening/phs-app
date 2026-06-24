@@ -4,12 +4,11 @@ import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
-import { submitForm } from '../../api/api.jsx'
+import { submitForm } from '../../api/formHelpers.jsx'
 import {
   showFormSubmitError,
   showFormSubmitSuccess,
 } from 'src/components/form-components/FormSubmitStatusHost'
-
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import CustomNumberField from 'src/components/form-components/CustomNumberField.jsx'

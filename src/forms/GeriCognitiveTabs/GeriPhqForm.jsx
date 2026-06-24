@@ -4,7 +4,7 @@ import { Formik, Form, FastField, ErrorMessage, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
-// import { submitForm } from '../../api/api.jsx'
+import { submitForm } from '../../api/formHelpers.jsx'
 import '../fieldPadding.css'
 import PopupText from 'src/utils/popupText'
 

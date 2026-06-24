@@ -16,7 +16,8 @@ src/api/apiClient.js     # Shared HTTP client and auth headers
 src/api/authApi.js       # Login, signup, account deletion, password reset
 src/api/eventDashboardApi.js # Event dashboard summary and incomplete-patient search
 src/api/formsApi.js      # Patient form reads and submissions
-src/api/patientsApi.js   # Patient creation, lookup, names, and search
+src/api/patientsApi.js   # Patient creation, lookup, names, duplicate-safe name matches, summary report data, and search
+src/api/queuesApi.js     # Station queue reads, add/remove, and restore-last-removed actions
 src/api/stationsApi.js   # Patient station completion status and eligibility
 src/reports/doctorPdf.js # Doctor consult PDF generation
 src/reports/formAPdf.js  # Form A PDF generation
@@ -34,6 +35,9 @@ Form components may still pass legacy collection names such as `registrationForm
 For new frontend work:
 
 - Use `patientsApi`, `formsApi`, and `authApi` instead of direct `fetch('/api/...')`.
+- Use `patientsApi.getPatientNameMatches` when resolving patients by name, because patient names are not unique.
+- Use `patientsApi.getSummaryReportData` for the screening summary report instead of loading each form individually.
+- Use `queuesApi.restoreLastRemovedToFront` for the station queue undo action. Removed queue items are persisted on the backend per station.
 - Use `stationsApi.getPatientStationSummary` for dashboard station display, completion, eligibility, and count data.
 - Use `stationsApi.getPatientStationEligibility` when a report or page needs the Form A style eligibility rows.
 - Use `eventDashboardApi` for event-level summary stats and paginated incomplete-patient search.
@@ -72,6 +76,10 @@ Stage 9 continues that report extraction. `generateFormAPdf` and its private For
 Stage 10A moves the legacy `generate_pdf` jsPDF report and its direct rendering helpers into `src/reports/patientReportPdf.js`. `src/api/api.jsx` continues to re-export those helpers as a compatibility facade for existing callers.
 
 Stage 10B moves `generate_pdf_updated` and its direct pdfMake section helpers into `src/reports/patientReportPdfUpdated.js`. `src/api/api.jsx` continues to re-export those helpers as a compatibility facade for existing callers.
+
+## Print Queue Admin Search
+
+`DoctorAdmin.jsx` and `FormAAdmin.jsx` support exact patient ID search in both current queue and print history views. The search is server-side and uses the existing paginated print queue endpoints with `patientId`, so results are not limited to the currently visible page.
 
 ## Event Dashboard
 
