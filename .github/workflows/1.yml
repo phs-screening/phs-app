@@ -1,18 +1,21 @@
 name: Feature Branch CI
 
 # Trigger:
-# - Runs on every push to any non-trunk branch.
-# - Purpose: give developers fast feedback on each push before they open a PR.
-#   Runs the cheap layers only (static checks).
-#   `next build`, typecheck, fixture checks and integration are reserved for later gates.
+# - Runs on every non-draft pull request when opened, updated, reopened,
+#   or marked ready for review.
+# - Purpose: give reviewers fast feedback before a PR is merged.
 
 on:
-  push:
-    branches-ignore:
-      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   fast-feedback:
+    if: github.event.pull_request.draft == false
     name: Fast Feedback (static)
     runs-on: ubuntu-latest
 
