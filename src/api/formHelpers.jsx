@@ -3,7 +3,13 @@ import { createPatient } from './patientsApi'
 import { submitPatientForm } from './formsApi'
 import { toFormKey } from '../forms/formKeys'
 
-export async function submitForm(args, patientId, formCollection) {
+const inFlightFormSubmissions = new Map()
+
+function getFormSubmissionKey(patientId, formCollection) {
+  return `${formCollection}:${patientId ?? 'new'}`
+}
+
+async function submitFormOnce(args, patientId, formCollection) {
   try {
     let effectiveId = patientId
     let patientData = {}
@@ -39,6 +45,22 @@ export async function submitForm(args, patientId, formCollection) {
   } catch (err) {
     return { result: false, error: err.message || String(err) }
   }
+}
+
+export async function submitForm(args, patientId, formCollection) {
+  const submissionKey = getFormSubmissionKey(patientId, formCollection)
+  const inFlightSubmission = inFlightFormSubmissions.get(submissionKey)
+
+  if (inFlightSubmission) {
+    return inFlightSubmission
+  }
+
+  const submission = submitFormOnce(args, patientId, formCollection).finally(() => {
+    inFlightFormSubmissions.delete(submissionKey)
+  })
+
+  inFlightFormSubmissions.set(submissionKey, submission)
+  return submission
 }
 
 export function formatBmi(heightInCm, weightInKg) {

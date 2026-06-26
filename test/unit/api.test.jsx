@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createPatient } from '../../src/api/patientsApi'
 import { submitPatientForm } from '../../src/api/formsApi'
-import { submitForm } from '../../src/api/api'
+import { submitForm } from '../../src/api/formHelpers'
 
 vi.mock('../../src/api/patientsApi', () => ({
   createPatient: vi.fn(),
@@ -11,39 +11,6 @@ vi.mock('../../src/api/formsApi', () => ({
   submitPatientForm: vi.fn(),
 }))
 
-vi.mock('../../src/reports/doctorPdf', () => ({
-  generateDoctorPdf: vi.fn(),
-}))
-
-vi.mock('../../src/reports/formAPdf', () => ({
-  generateFormAPdf: vi.fn(),
-}))
-
-vi.mock('../../src/reports/patientReportPdf', () => ({
-  addBmi: vi.fn(),
-  addBloodPressure: vi.fn(),
-  addFollowUp: vi.fn(),
-  addMemos: vi.fn(),
-  addOtherScreeningModularities: vi.fn(),
-  addRecommendation: vi.fn(),
-  calculateY: vi.fn(),
-  followUpWith: vi.fn(),
-  generate_pdf: vi.fn(),
-  kNewlines: '\n',
-  patient: {},
-}))
-
-vi.mock('../../src/reports/patientReportPdfUpdated', () => ({
-  bloodPressureSection: vi.fn(),
-  bmiSection: vi.fn(),
-  followUpSection: vi.fn(),
-  generate_pdf_updated: vi.fn(),
-  memoSection: vi.fn(),
-  otherScreeningModularitiesSection: vi.fn(),
-  recommendationSection: vi.fn(),
-  temperatureSection: vi.fn(),
-}))
-
 const registrationArgs = {
   registrationQ2: '  AL  ',
   registrationQ4: '42',
@@ -51,7 +18,7 @@ const registrationArgs = {
   registrationQ14: '  Mandarin  ',
 }
 
-describe('api submitForm', () => {
+describe('formHelpers submitForm', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
