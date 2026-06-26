@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { apiDelete, apiGet, apiPatch, apiPost } from '../apiClient'
+import { apiDelete, apiGet, apiPatch, apiPost } from '../../src/apiClient'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
 
