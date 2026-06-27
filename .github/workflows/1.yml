@@ -1,9 +1,9 @@
-name: Feature Branch CI
+name: PR CI
 
 # Trigger:
 # - Runs on every non-draft pull request when opened, updated, reopened,
 #   or marked ready for review.
-# - Purpose: give reviewers fast feedback before a PR is merged.
+# - Purpose: verify the app before a PR is merged.
 
 on:
   pull_request:
@@ -14,9 +14,9 @@ on:
       - ready_for_review
 
 jobs:
-  fast-feedback:
+  lint:
     if: github.event.pull_request.draft == false
-    name: Fast Feedback (static)
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -35,5 +35,44 @@ jobs:
       - name: 4. Lint
         run: npm run lint
 
-      - name: 5. Unit Tests
+  unit-tests:
+    if: github.event.pull_request.draft == false
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: 3. Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 4. Unit Tests
         run: npm run test:ci
+
+  build:
+    if: github.event.pull_request.draft == false
+    name: Production Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: 3. Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 4. Build
+        run: npm run build
