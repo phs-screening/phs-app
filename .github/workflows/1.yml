@@ -56,6 +56,27 @@ jobs:
       - name: 4. Unit Tests
         run: npm run test:ci
 
+  typecheck:
+    if: github.event.pull_request.draft == false
+    name: Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: 3. Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 4. Type Check
+        run: npm run typecheck
+
   build:
     if: github.event.pull_request.draft == false
     name: Production Build
