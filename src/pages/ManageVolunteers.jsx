@@ -25,6 +25,9 @@ import {
   signup,
 } from '../api/authApi'
 
+const passwordPolicyMessage =
+  'Password must contain at least one uppercase, one lowercase, one number and one special character and be 12+ characters long.'
+
 const ManageVolunteers = () => {
   const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
@@ -167,9 +170,7 @@ const ManageVolunteers = () => {
     }
 
     if (!pattern.test(resetPassword)) {
-      alert(
-        'Password must contain at least one uppercase, one lowercase, one number and one special character and 12 characters long',
-      )
+      alert(passwordPolicyMessage)
       return
     }
     isLoadingReset(true)
@@ -180,12 +181,14 @@ const ManageVolunteers = () => {
       } else {
         setShowResetDialog(false)
         setNameReset(null)
+        setResetPassword('')
         alert('Password successfully reset for: ' + nameReset)
       }
     } catch (e) {
       alert('Error resetting password!: ' + e)
-      isLoadingReset(false)
       setResetPassword('')
+    } finally {
+      isLoadingReset(false)
     }
   }
 
@@ -219,7 +222,10 @@ const ManageVolunteers = () => {
                 .email('Enter a valid email address, e.g. volunteer@example.com')
                 .max(255)
                 .required('Email is required'),
-              password: Yup.string().max(255).required('Password is required'),
+              password: Yup.string()
+                .matches(pattern, passwordPolicyMessage)
+                .max(255)
+                .required('Password is required'),
             })}
             onSubmit={(values, { resetForm }) => {
               handleCreateAccount(values).then(() => resetForm())
@@ -258,7 +264,9 @@ const ManageVolunteers = () => {
                 />
                 <TextField
                   fullWidth
-                  helperText={touched.password && errors.password}
+                  helperText={
+                    touched.password && errors.password ? errors.password : passwordPolicyMessage
+                  }
                   label='Password'
                   margin='normal'
                   name='password'
@@ -406,8 +414,7 @@ const ManageVolunteers = () => {
               }}
             />
             <Typography variant='caption' sx={{ color: '#666', mt: 1, display: 'block' }}>
-              Password must contain at least one uppercase, one lowercase, one number, one special
-              character, and be 12+ characters long.
+              {passwordPolicyMessage}
             </Typography>
           </Box>
         </DialogContent>
