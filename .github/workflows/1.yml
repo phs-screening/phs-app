@@ -54,7 +54,28 @@ jobs:
         run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: 4. Unit Tests
-        run: npm run test:ci
+        run: npm run test:unit:ci
+
+  integration-tests:
+    if: github.event.pull_request.draft == false
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: 3. Install Dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 4. Integration Tests
+        run: npm run test:integration:ci
 
   typecheck:
     if: github.event.pull_request.draft == false

@@ -14,6 +14,10 @@
     "fixtures:check": "echo \"No fixtures drift check configured for this repo\"",
     "test": "vitest",
     "test:ci": "vitest run --coverage",
+    "test:unit": "vitest run test/unit",
+    "test:unit:ci": "vitest run test/unit --coverage",
+    "test:integration": "vitest run test/integration",
+    "test:integration:ci": "vitest run test/integration --coverage",
     "test:run": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage"
