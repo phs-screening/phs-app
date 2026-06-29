@@ -2,7 +2,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 import { useRoutes } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import routes from 'src/routes'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import customTheme from './theme'
 // import { isLoggedin } from './services/authSession'
 import { FormContext } from './api/utils'
@@ -24,10 +24,12 @@ const App = () => {
   // const profile = undefined
   const [login, isLogin] = useState(!!localStorage.getItem('authToken')) // start as false, not isLoggedin()
   const [profile, setProfile] = useState(() => {
-  try {
-    return JSON.parse(localStorage.getItem('profile')) || null
-  } catch { return null }
-})
+    try {
+      return JSON.parse(localStorage.getItem('profile')) || null
+    } catch {
+      return null
+    }
+  })
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id)

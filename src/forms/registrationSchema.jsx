@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 export const validationSchema = Yup.object({
   registrationQ1: Yup.string()
-    .oneOf(['Mr', 'Ms', 'Mrs', 'Dr'], 'Invalid salutation')
+    .oneOf(['Mr', 'Ms', 'Mrs', 'Dr', 'Mdm'], 'Invalid salutation')
     .required('Salutation is required'),
 
   registrationQ2: Yup.string().required('Initials are required'),
@@ -41,15 +41,6 @@ export const validationSchema = Yup.object({
     )
     .required('Nationality is required'),
 
-  registrationQ8: Yup.string()
-    .oneOf(
-      ['Single 单身', 'Married 已婚', 'Widowed 已寡', 'Separated 已分居', 'Divorced 已离婚'],
-      'Invalid marital status',
-    )
-    .required('Marital status is required'),
-
-  registrationQ9: Yup.string().required('Occupation is required'),
-
   registrationQ11: Yup.string()
     .oneOf(['Yes', 'No', 'Unsure'], 'Invalid HealthierSG status')
     .required('HealthierSG status is required'),
@@ -84,8 +75,4 @@ export const validationSchema = Yup.object({
   registrationQ20: Yup.string()
     .oneOf(['Yes', 'No'], 'Invalid LTFU consent')
     .required('LTFU consent is required'),
-
-  registrationQ21: Yup.string().required('Please indicate if the patient can speak either English or Chinese')
 })
-
-
