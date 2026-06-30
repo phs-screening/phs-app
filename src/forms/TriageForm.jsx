@@ -12,6 +12,7 @@ import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import './fieldPadding.css'
+import './forms.css'
 import CustomNumberField from '../components/form-components/CustomNumberField'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
@@ -173,7 +174,6 @@ const TriageForm = () => {
     model.triageQ7 = calculateAverage(model.triageQ1, model.triageQ3, model.triageQ5)
     model.triageQ8 = calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6)
     model.triageQHRAvg = calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3)
-    model.triageQ12 = parseFloat(formatBmi(model.triageQ10, model.triageQ11).props.children)
 
     const response = await submitForm(model, patientId, formName)
 
@@ -373,9 +373,8 @@ const TriageForm = () => {
               <h3>Weight (in kg)</h3>
               <Field name='triageQ11' component={CustomNumberField} label='Triage Q11' min={0} />
 
-              <h3>
-                BMI: <CalcBMI values={values} />
-              </h3>
+              <h3>BMI:</h3>
+              <CalcBMI values={values} />
 
               <h2>3) Waist Circumference</h2>
               <h3>Waist Circumference (in cm)</h3>
