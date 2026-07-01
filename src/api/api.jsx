@@ -231,46 +231,6 @@ export async function submitForm(args, patientId, formCollection) {
   return submission
 }
 
-// Calcuates the BMI
-export function formatBmi(heightInCm, weightInKg) {
-  const bmi = calculateBMI(heightInCm, weightInKg)
-
-  if (bmi > 27.5) {
-    return (
-      <p className='summary--red-text'>
-        {bmi}
-        <br />
-        BMI is obese
-      </p>
-    )
-  } else if (bmi >= 23.0) {
-    return (
-      <p className='summary--red-text'>
-        {bmi}
-        <br />
-        BMI is overweight
-      </p>
-    )
-  } else if (bmi < 18.5) {
-    return (
-      <p className='summary--red-text'>
-        {bmi}
-        <br />
-        BMI is underweight
-      </p>
-    )
-  } else {
-    return <p className='summary--blue-text'>{bmi}</p>
-  }
-}
-
-export function calculateBMI(heightInCm, weightInKg) {
-  const height = heightInCm / 100
-  const bmi = (weightInKg / height / height).toFixed(1)
-
-  return bmi
-}
-
 // Formats the response for the geri vision section
 export const formatGeriVision = (acuityString, questionNo) => {
   const acuity = parseInt(acuityString)

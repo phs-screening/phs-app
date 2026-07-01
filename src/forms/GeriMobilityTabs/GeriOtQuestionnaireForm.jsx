@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { Paper, CircularProgress, Button, Grid } from '@mui/material'
 
 import allForms from '../forms.json'
-import { formatBmi, submitForm } from '../../api/formHelpers.jsx'
+import { submitForm } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
@@ -798,8 +798,8 @@ const GeriOtQuestionnaireForm = (props) => {
                     <p className='blue'>Weight (in kg): nil</p>
                   )}
 
-                  {triage && triage.triageQ10 && triage.triageQ11 ? (
-                    <p className='blue'>BMI: {formatBmi(triage.triageQ10, triage.triageQ11)}</p>
+                  {triage && triage.triageQ12 ? (
+                    <p className='blue'>BMI: {triage.triageQ12}</p>
                   ) : (
                     <p className='blue'>BMI: nil</p>
                   )}

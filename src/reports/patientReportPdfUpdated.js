@@ -88,12 +88,21 @@ async function buildPdfMakeFonts(language) {
   return fonts
 }
 
-function calculateBMI(heightInCm, weightInKg) {
+function calculateBmiFallback(heightInCm, weightInKg) {
   const height = heightInCm / 100
   const bmi = (weightInKg / height / height).toFixed(1)
 
   return bmi
 }
+
+function resolveBmi(height, weight, savedBmi) {
+  if (savedBmi !== null && savedBmi !== undefined && savedBmi !== '') {
+    return savedBmi
+  }
+
+  return calculateBmiFallback(Number(height), Number(weight))
+}
+
 export async function generate_pdf_updated(
   reg,
   patients,
@@ -293,7 +302,7 @@ export function bloodPressureSection(triage) {
 }
 
 export function bmiSection(height, weight, bmiString) {
-  const bmi = calculateBMI(Number(height), Number(weight))
+  const bmi = resolveBmi(height, weight, bmiString)
 
   const imageSection = [
     {
@@ -313,7 +322,7 @@ export function bmiSection(height, weight, bmiString) {
   return [
     { text: parseFromLangKey('bmi_title'), style: 'subheader' },
     {
-      text: parseFromLangKey('bmi_reading', height, weight, bmiString),
+      text: parseFromLangKey('bmi_reading', height, weight, bmi),
       style: 'normal',
     },
 
