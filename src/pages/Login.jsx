@@ -124,7 +124,6 @@ const Login = () => {
                 .max(255)
                 .required('Username is required, you can use your email'),
               password: Yup.string()
-                .min(6, 'Password must be at least 6 characters')
                 .max(255)
                 .required('Password is required'),
               ...(isSignUp && {
