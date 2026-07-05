@@ -250,7 +250,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ1'
-              label='registrationQ1'
+              label=''
               component={CustomSelect}
               options={formOptions.registrationQ1}
             />
@@ -261,12 +261,7 @@ const RegForm = () => {
             <Typography>
               For Indian/Malay/patients with no Chinese name, ask for their preferred name.
             </Typography>
-            <FastField
-              name='registrationQ2'
-              label='registrationQ2'
-              component={CustomTextField}
-              multiline
-            />
+            <FastField name='registrationQ2' label='' component={CustomTextField} multiline />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
               Birthday
@@ -275,7 +270,7 @@ const RegForm = () => {
               <DemoContainer components={['DatePicker']}>
                 <Box>
                   <DatePicker
-                    label='registrationQ3'
+                    label=''
                     value={birthday}
                     format='DD/MM/YYYY'
                     onChange={(newValue) => {
@@ -319,9 +314,6 @@ const RegForm = () => {
             <Typography variant='h4' fontWeight='bold' gutterBottom>
               Age
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
-              registrationQ4
-            </Typography>
             <Typography sx={{ color: 'blue', mb: 2 }}>{patientAge}</Typography>
 
             <Typography variant='h4' fontWeight='bold'>
@@ -329,7 +321,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ5'
-              label='registrationQ5'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ5}
               row
@@ -340,7 +332,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ6'
-              label='registrationQ6'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ6}
             />
@@ -365,7 +357,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ7'
-              label='registrationQ7'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ7}
             />
@@ -375,7 +367,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ11'
-              label='registrationQ11'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ11}
               row
@@ -386,7 +378,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ12'
-              label='registrationQ12'
+              label=''
               component={CustomSelect}
               options={formOptions.registrationQ12}
             />
@@ -396,7 +388,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ13'
-              label='registrationQ13'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ13}
             />
@@ -406,7 +398,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ14'
-              label='registrationQ14'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ14}
             />
@@ -416,7 +408,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ18'
-              label='registrationQ18'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ18}
               row
@@ -427,7 +419,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ19'
-              label='registrationQ19'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ19}
               row
@@ -439,7 +431,7 @@ const RegForm = () => {
             </Typography>
             <FastField
               name='registrationQ20'
-              label='registrationQ20'
+              label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ20}
               row
@@ -464,9 +456,6 @@ const RegForm = () => {
             your withdrawal of consent to take effect. All personal information will be kept
             confidential, will only be disseminated to members of the PHS Executive Committee, and
             will be strictly used by these parties for the purposes stated.
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
-            registrationQ17
           </Typography>
           <Field
             name='registrationQ17'
