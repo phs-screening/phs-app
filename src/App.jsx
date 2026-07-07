@@ -8,6 +8,7 @@ import customTheme from './theme'
 import { FormContext } from './api/utils'
 import FormSubmitStatusHost from './components/form-components/FormSubmitStatusHost'
 import './App.css'
+import { clearPersistedPatient, loadPersistedPatient, savePersistedPatient } from './utils/patientPersistence'
 
 export const LoginContext = React.createContext({
   login: false,
@@ -18,8 +19,8 @@ export const LoginContext = React.createContext({
 
 const App = () => {
   // const { setProfile } = useContext(LoginContext)
-  const [patientId, setPatientId] = useState(-1)
-  const [patientInfo, setPatientInfo] = useState({})
+  const [patientId, setPatientId] = useState(() => loadPersistedPatient().patientId)
+  const [patientInfo, setPatientInfo] = useState(() => loadPersistedPatient().patientInfo)
   // const [login, isLogin] = useState(isLoggedin())
   // const profile = undefined
   const [login, isLogin] = useState(!!localStorage.getItem('authToken')) // start as false, not isLoggedin()
@@ -33,6 +34,9 @@ const App = () => {
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id)
+    if (new_id === -1) {
+      clearPersistedPatient()
+    }
   }
 
   const updatePatientInfo = (new_info) => {
@@ -40,8 +44,10 @@ const App = () => {
     // need to do checks as data is named differently locally and in database
     if ('queueNo' in new_info) {
       updatePatientId(new_info.queueNo)
+      savePersistedPatient(new_info.queueNo, new_info)
     } else if ('patientId' in new_info) {
       updatePatientId(new_info.patientId)
+      savePersistedPatient(new_info.patientId, new_info)
     } else {
       updatePatientId(-1)
     }
@@ -50,6 +56,7 @@ const App = () => {
   const clearPatient = () => {
     setPatientId(-1)
     setPatientInfo({})
+    clearPersistedPatient()
   }
 
   const theme = customTheme
