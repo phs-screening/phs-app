@@ -32,6 +32,18 @@ const Login = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const handleMouseDownPassword = () => setShowPassword(!showPassword)
 
+  const renderHelperText = (error, touched) => {
+    if (!touched || !error) {
+      return null
+    }
+
+    return (
+      <Typography component='span' color='error' variant='caption'>
+        {error}
+      </Typography>
+    )
+  }
+
   // sign up API version
   const handleSignUp = async (values) => {
     isLoading(true)
@@ -171,7 +183,7 @@ const Login = () => {
                 )}
                 <TextField
                   fullWidth
-                  helperText={touched.email && errors.email}
+                  helperText={renderHelperText(errors.email, touched.email)}
                   label='Username'
                   margin='normal'
                   name='email'
@@ -182,7 +194,7 @@ const Login = () => {
                 />
                 <TextField
                   fullWidth
-                  helperText={touched.password && errors.password}
+                  helperText={renderHelperText(errors.password, touched.password)}
                   label='Password'
                   margin='normal'
                   name='password'
@@ -209,7 +221,7 @@ const Login = () => {
                 {isSignUp && (
                   <TextField
                     fullWidth
-                    helperText={touched.confirmPassword && errors.confirmPassword}
+                    helperText={renderHelperText(errors.confirmPassword, touched.confirmPassword)}
                     label='Confirm Password'
                     margin='normal'
                     name='confirmPassword'
