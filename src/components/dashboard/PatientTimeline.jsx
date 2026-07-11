@@ -46,6 +46,11 @@ const TimelineItemComponent = ({ item, formDone, admin, navigate, scrollTop }) =
     dotColor = 'grey' // Default color for incomplete but eligible stations
   }
 
+  const statusText =
+    item.key === 'screeningreview'
+      ? ' [View Only]'
+      : !formDone?.[item.key] ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'
+
   return (
     <TimelineItem>
       <TimelineSeparator>
@@ -58,7 +63,7 @@ const TimelineItemComponent = ({ item, formDone, admin, navigate, scrollTop }) =
           onClick={(event) => navigateTo(event, navigate, item.path, scrollTop)}
         >
           {item.label}
-          {!formDone?.[item.key] ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'}
+          {statusText}
         </a>
       </TimelineContent>
     </TimelineItem>
@@ -142,24 +147,6 @@ const BasicTimeline = (props) => {
             scrollTop={scrollTop}
           />
         ))}
-
-        {/* Screening review and End items */}
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot
-              color={timelineItems.every((item) => formDone?.[item.key]) ? 'primary' : 'grey'}
-            />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <a
-              href='/app/summary'
-              onClick={(event) => navigateTo(event, navigate, 'summary', scrollTop)}
-            >
-              Screening Review [View Only]
-            </a>
-          </TimelineContent>
-        </TimelineItem>
 
         <TimelineItem>
           <TimelineSeparator>
