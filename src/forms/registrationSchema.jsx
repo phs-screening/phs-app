@@ -56,6 +56,10 @@ export const validationSchema = Yup.object({
     )
     .required('Pioneer generation status is required'),
 
+  registrationQ16: Yup.string()
+    .oneOf(['Yes', 'No'], 'Invalid public assistance card status')
+    .required('Public assistance card status is required'),
+
   registrationQ14: Yup.string()
     .oneOf(['English', 'Mandarin', 'Malay', 'Tamil'], 'Invalid language preference')
     .required('Language preference is required'),

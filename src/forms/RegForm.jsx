@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, FastField } from 'formik'
 import { validationSchema } from './registrationSchema'
 
-import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
+import { Alert, Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
 import {
@@ -43,6 +43,7 @@ const initialValues = {
   registrationQ11: '',
   registrationQ12: '',
   registrationQ13: '',
+  registrationQ16: '',
   registrationQ14: '',
   registrationQ17: false,
   registrationQ18: '',
@@ -217,6 +218,10 @@ const RegForm = () => {
       { label: 'Malay', value: 'Malay' },
       { label: 'Tamil', value: 'Tamil' },
     ],
+    registrationQ16: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
     registrationQ18: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
@@ -315,6 +320,11 @@ const RegForm = () => {
               Age
             </Typography>
             <Typography sx={{ color: 'blue', mb: 2 }}>{patientAge}</Typography>
+            {patientAge > 0 && patientAge < 40 && (
+              <Alert severity='warning' sx={{ mb: 2 }}>
+                Patient is below 40 years old. Please verify eligibility before proceeding.
+              </Alert>
+            )}
 
             <Typography variant='h4' fontWeight='bold'>
               Gender
@@ -391,6 +401,17 @@ const RegForm = () => {
               label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ13}
+            />
+
+            <Typography variant='h4' fontWeight='bold'>
+              Do you have public assistance card?
+            </Typography>
+            <FastField
+              name='registrationQ16'
+              label=''
+              component={CustomRadioGroup}
+              options={formOptions.registrationQ16}
+              row
             />
 
             <Typography variant='h4' fontWeight='bold'>
