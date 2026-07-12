@@ -42,11 +42,14 @@ export const validationSchema = Yup.object({
     .required('Nationality is required'),
 
   registrationQ11: Yup.string()
-    .oneOf(['Yes', 'No', 'Unsure'], 'Invalid HealthierSG status')
+    .oneOf(['Yes', 'No'], 'Invalid HealthierSG status')
     .required('HealthierSG status is required'),
 
   registrationQ12: Yup.string()
-    .oneOf(['CHAS Orange', 'CHAS Green', 'CHAS Blue', 'No CHAS'], 'Invalid CHAS status')
+    .oneOf(
+      ['CHAS Green', 'CHAS Blue', 'CHAS Orange', 'Public Assistance'],
+      'Invalid CHAS status',
+    )
     .required('CHAS status is required'),
 
   registrationQ13: Yup.string()

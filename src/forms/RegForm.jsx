@@ -199,13 +199,12 @@ const RegForm = () => {
     registrationQ11: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-      { label: 'Unsure', value: 'Unsure' },
     ],
     registrationQ12: [
-      { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'CHAS Green', value: 'CHAS Green' },
       { label: 'CHAS Blue', value: 'CHAS Blue' },
-      { label: 'No CHAS', value: 'No CHAS' },
+      { label: 'CHAS Orange', value: 'CHAS Orange' },
+      { label: 'Public Assistance', value: 'Public Assistance' },
     ],
     registrationQ13: [
       { label: 'Pioneer generation card holder', value: 'Pioneer generation card holder' },
@@ -375,6 +374,11 @@ const RegForm = () => {
             <Typography variant='h4' fontWeight='bold'>
               Are you currently part of HealthierSG?
             </Typography>
+            <Typography>
+              If unsure, access HealthHub through app or Singpass. You are considered to have
+              enrolled when you are able to view your selected clinic&apos;s name under &quot;Your
+              Enrolled Clinic&quot; tab.
+            </Typography>
             <FastField
               name='registrationQ11'
               label=''
@@ -447,8 +451,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
-              (Patient has to sign and tick Form C)
+              Has Form C been signed?
             </Typography>
             <FastField
               name='registrationQ20'
