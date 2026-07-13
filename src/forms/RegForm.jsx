@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, FastField } from 'formik'
 import { validationSchema } from './registrationSchema'
 
-import { Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
+import { Alert, Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
 import {
@@ -43,6 +43,7 @@ const initialValues = {
   registrationQ11: '',
   registrationQ12: '',
   registrationQ13: '',
+  registrationQ16: '',
   registrationQ14: '',
   registrationQ17: false,
   registrationQ18: '',
@@ -198,13 +199,12 @@ const RegForm = () => {
     registrationQ11: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
-      { label: 'Unsure', value: 'Unsure' },
     ],
     registrationQ12: [
-      { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'CHAS Green', value: 'CHAS Green' },
       { label: 'CHAS Blue', value: 'CHAS Blue' },
-      { label: 'No CHAS', value: 'No CHAS' },
+      { label: 'CHAS Orange', value: 'CHAS Orange' },
+      { label: 'Public Assistance', value: 'Public Assistance' },
     ],
     registrationQ13: [
       { label: 'Pioneer generation card holder', value: 'Pioneer generation card holder' },
@@ -216,6 +216,10 @@ const RegForm = () => {
       { label: 'Mandarin', value: 'Mandarin' },
       { label: 'Malay', value: 'Malay' },
       { label: 'Tamil', value: 'Tamil' },
+    ],
+    registrationQ16: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
     ],
     registrationQ18: [
       { label: 'Yes', value: 'Yes' },
@@ -315,6 +319,11 @@ const RegForm = () => {
               Age
             </Typography>
             <Typography sx={{ color: 'blue', mb: 2 }}>{patientAge}</Typography>
+            {patientAge > 0 && patientAge < 40 && (
+              <Alert severity='warning' sx={{ mb: 2 }}>
+                Patient is below 40 years old. Please verify eligibility before proceeding.
+              </Alert>
+            )}
 
             <Typography variant='h4' fontWeight='bold'>
               Gender
@@ -365,6 +374,11 @@ const RegForm = () => {
             <Typography variant='h4' fontWeight='bold'>
               Are you currently part of HealthierSG?
             </Typography>
+            <Typography>
+              If unsure, access HealthHub through app or Singpass. You are considered to have
+              enrolled when you are able to view your selected clinic&apos;s name under &quot;Your
+              Enrolled Clinic&quot; tab.
+            </Typography>
             <FastField
               name='registrationQ11'
               label=''
@@ -391,6 +405,17 @@ const RegForm = () => {
               label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ13}
+            />
+
+            <Typography variant='h4' fontWeight='bold'>
+              Do you have public assistance card?
+            </Typography>
+            <FastField
+              name='registrationQ16'
+              label=''
+              component={CustomRadioGroup}
+              options={formOptions.registrationQ16}
+              row
             />
 
             <Typography variant='h4' fontWeight='bold'>
@@ -426,8 +451,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
-              (Patient has to sign and tick Form C)
+              Has Form C been signed?
             </Typography>
             <FastField
               name='registrationQ20'

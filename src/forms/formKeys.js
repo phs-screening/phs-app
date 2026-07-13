@@ -2,6 +2,7 @@ export const FORM_COLLECTION_TO_KEY = {
   registrationForm: 'registration',
   triageForm: 'triage',
   hsgForm: 'hsg',
+  cancer365Form: 'cancer365',
   lungFnForm: 'lungFunction',
   wceForm: 'wce',
   gynaeForm: 'gynae',

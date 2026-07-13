@@ -27,6 +27,7 @@ const DoctorAdmin = lazy(() => import('src/pages/DoctorAdmin'))
 const FormAAdmin = lazy(() => import('src/pages/FormAAdmin'))
 const SummaryForm = lazy(() => import('src/forms/SummaryForm'))
 const HsgForm = lazy(() => import('./forms/HsgForm'))
+const Cancer365Form = lazy(() => import('./forms/Cancer365Form'))
 const LungFnForm = lazy(() => import('./forms/LungFnForm'))
 const OsteoForm = lazy(() => import('./forms/OsteoForm'))
 const MentalHealthForm = lazy(() => import('./forms/MentalHealthTabs/MentalHealthMain'))
@@ -71,6 +72,7 @@ const routes = [
       { path: 'reg', element: loadable(RegForm) },
       { path: 'vax', element: loadable(VaccineForm) },
       { path: 'hsg', element: loadable(HsgForm) },
+      { path: 'cancer365', element: loadable(Cancer365Form) },
       { path: 'fit', element: loadable(FitForm) },
       { path: 'audio', element: loadable(AudiometryForm) },
       { path: 'ophthal', element: loadable(OphthalForm) },
