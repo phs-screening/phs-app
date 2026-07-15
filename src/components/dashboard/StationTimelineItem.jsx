@@ -34,7 +34,7 @@ const StationTimelineItem = ({ item, formDone, scrollTop }) => {
   }
 
   return (
-    <TimelineItem>
+    <TimelineItem className='station-timeline-item'>
       <TimelineSeparator>
         <TimelineDot color={dotColor} />
         <TimelineConnector />

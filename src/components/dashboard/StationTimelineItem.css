@@ -1,7 +1,15 @@
+.station-timeline-item::before {
+  flex: 0.25;
+  padding: 6px 8px;
+}
+
 .station-timeline-card {
   background-color: #ffffff;
   border-color: #dfe3e8;
   text-align: center;
+  margin-left: 30px;
+  margin-right: 60px;
+  transform: translateY(-8px);
 }
 
 .station-timeline-card.station-timeline-card--primary {
