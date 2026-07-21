@@ -1,7 +1,6 @@
 import { Button, CircularProgress, Divider, Paper, Typography } from '@mui/material'
 import { FastField, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../../api/formHelpers.jsx'
@@ -31,11 +30,10 @@ const formOptions = {
   ],
 }
 
-const HxM4M5ReviewForm = () => {
+const HxM4M5ReviewForm = ({ changeTab, nextTab }) => {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +52,7 @@ const HxM4M5ReviewForm = () => {
     setSubmitting(false)
     if (response.result) {
       await showFormSubmitSuccess()
-      navigate('/app/dashboard')
+      changeTab(null, nextTab)
     } else {
       showFormSubmitError(`Unsuccessful. ${response.error}`)
     }
