@@ -25,6 +25,7 @@ const initialValues = {
   dietitiansConsultQ6: '',
   dietitiansConsultQ7: '',
   dietitiansConsultQ8: '',
+  dietitiansConsultQ9: '',
 }
 
 const validationSchema = Yup.object({
@@ -43,6 +44,9 @@ const validationSchema = Yup.object({
   dietitiansConsultQ8: Yup.string()
     .oneOf(['Yes', 'No'], 'Please select Yes or No')
     .required('This field is required'),
+  dietitiansConsultQ9: Yup.string()
+    .oneOf(['Yes', 'No'], 'Please select Yes or No')
+    .required('This field is required'),
 })
 
 const formOptions = {
@@ -55,6 +59,10 @@ const formOptions = {
     { label: 'No', value: 'No' },
   ],
   dietitiansConsultQ5: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
+  dietitiansConsultQ9: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -214,6 +222,16 @@ const DietitiansConsultForm = () => {
               name='dietitiansConsultQ8'
               component={CustomRadioGroup}
               options={formOptions.dietitiansConsultQ8}
+              row
+            />
+
+            <Typography variant='h4' fontWeight='bold'>
+              Refer to Doctor&apos;s Station?
+            </Typography>
+            <FastField
+              name='dietitiansConsultQ9'
+              component={CustomRadioGroup}
+              options={formOptions.dietitiansConsultQ9}
               row
             />
           </div>
