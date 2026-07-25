@@ -18,10 +18,7 @@ const initialValues = {
   hxHcsrQ2: '',
   hxHcsrQ3: '',
   hxHcsrShortAnsQ3: '',
-  hxHcsrQ4: '',
-  hxHcsrShortAnsQ4: '',
   hxHcsrQ5: '',
-  hxHcsrQ6: '',
   hxHcsrQ7: '',
   hxHcsrShortAnsQ7: '',
   hxhcsrQ8: '',
@@ -31,20 +28,11 @@ const validationSchema = Yup.object({
   hxHcsrQ1: Yup.string().required('Required'),
   hxHcsrQ2: Yup.string().required('Required'),
   hxHcsrQ3: Yup.string().required('Required'),
-  hxHcsrQ6: Yup.string().required('Required'),
   hxHcsrQ7: Yup.string().required('Required'),
 })
 
 const formOptions = {
   hxHcsrQ3: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  hxHcsrQ4: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  hxHcsrQ6: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -109,7 +97,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold'>
-            Please enter History-taker&apos;s surname followed by initials (e.g. Tan J J)
+            Please enter History-taker&apos;s full name
           </Typography>
           <FastField
             name='hxHcsrQ1'
@@ -176,29 +164,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </PopupText>
 
           <Typography variant='h4' fontWeight='bold'>
-            Do you have any hearing problems? Please specify if yes.
-          </Typography>
-          <FastField
-            name='hxHcsrQ4'
-            label='hxHcsrQ4'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ4}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Please specify:
-          </Typography>
-          <FastField
-            name='hxHcsrShortAnsQ4'
-            label='hxHcsrShortAnsQ4'
-            component={CustomTextField}
-            fullWidth
-            multiline
-            sx={{ mb: 3, mt: 1 }}
-          />
-
-          <Typography variant='h4' fontWeight='bold'>
             If you are 60 and above, do you currently use hearing aids/have been detected to require
             hearing aids?
           </Typography>
@@ -207,18 +172,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             label='hxHcsrQ5'
             component={CustomRadioGroup}
             options={formOptions.hxHcsrQ5}
-            row
-          />
-
-          <Typography variant='h4' fontWeight='bold'>
-            Please tick to highlight if you feel SYSTEMS REVIEW require closer scrutiny by doctors
-            later or if participant strongly insists.
-          </Typography>
-          <FastField
-            name='hxHcsrQ6'
-            label='hxHcsrQ6'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ6}
             row
           />
 

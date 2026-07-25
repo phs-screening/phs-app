@@ -8,8 +8,8 @@ import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
-import CustomNumberField from '../../components/form-components/CustomNumberField.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
+import CustomSelect from '../../components/form-components/CustomSelect'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import { getSavedData } from '../../services/patientData'
@@ -29,10 +29,7 @@ const validationSchema = Yup.object({
         .required('Required'),
     ]),
   ),
-  geriAmtQ11: Yup.number()
-    .typeError('Must be a number')
-    .min(0, 'Must be at least 0')
-    .required('Required'),
+  geriAmtQ11: Yup.string().oneOf(['Before PSLE', 'After PSLE']).required('Required'),
   geriAmtQ12: Yup.string()
     .oneOf(['Yes (Eligible for G-RACE)', 'No (Not eligible for G-RACE)'])
     .required('Required'),
@@ -42,6 +39,10 @@ const formOptions = {
   YesNo: [
     { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
     { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+  ],
+  geriAmtQ11: [
+    { label: 'Before PSLE', value: 'Before PSLE' },
+    { label: 'After PSLE', value: 'After PSLE' },
   ],
   geriAmtQ12: [
     { label: 'Yes (Eligible for G-RACE)', value: 'Yes (Eligible for G-RACE)' },
@@ -65,7 +66,7 @@ const initialValues = {
   geriAmtQ8: '',
   geriAmtQ9: '',
   geriAmtQ10: '',
-  geriAmtQ11: '', // number field, keep as '' for Formik compatibility
+  geriAmtQ11: '',
   geriAmtQ12: '', // Yes/No field
 }
 
@@ -155,14 +156,13 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <h4>AMT Total Score: {getScore(formikProps.values)} /10</h4>
 
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                11) How many years of education does the patient have?
+                11) What is your highest education level attained?
               </Typography>
               <FastField
                 name='geriAmtQ11'
-                component={CustomNumberField}
-                label='geriAmtQ11'
-                placeholder='Enter number of years'
-                fullWidth
+                component={CustomSelect}
+                label=''
+                options={formOptions.geriAmtQ11}
               />
               <img
                 src='../../../images/geri-amt/g-race-criteria.png'
@@ -171,7 +171,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
                 Follow the criteria shown in the image above.
                 <br />
-                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), years of education and AMT score, is the patient
+                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), education level and AMT score, is the patient
                 eligible for G-RACE for MMSE?
               </Typography>
               <Field

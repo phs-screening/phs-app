@@ -23,8 +23,6 @@ const initialValues = {
   DENT2: '',
   DENTShortAns2: '',
   DENT3: [],
-  DENT4: '',
-  DENTShortAns4: '',
 }
 
 const validationSchema = Yup.object({
@@ -42,12 +40,6 @@ const validationSchema = Yup.object({
     .of(Yup.string().oneOf(['Yes']))
     .min(1, 'You must check this box to proceed')
     .required('Required'),
-  DENT4: Yup.string().oneOf(['Yes', 'No']).required('Required'),
-  DENTShortAns4: Yup.string().when('DENT4', {
-    is: 'No',
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema,
-  }),
 })
 
 const formOptions = {
@@ -62,10 +54,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
   ],
   DENT3: [{ label: 'Yes', value: 'Yes' }],
-  DENT4: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No, (specify why)', value: 'No' },
-  ],
 }
 
 const formName = 'oralHealthForm'
@@ -229,29 +217,6 @@ const OralHealthForm = () => {
               options={formOptions.DENT3}
             />
 
-            <Typography variant='h4' fontWeight='bold'>
-              Patient has registered with NUS Dentistry for follow-up? If no, why not.
-            </Typography>
-            <FastField
-              name='DENT4'
-              label='DENT4'
-              component={CustomRadioGroup}
-              options={formOptions.DENT4}
-              row
-            />
-
-            <PopupText qnNo='DENT4' triggerValue='No'>
-              <Typography variant='h6' component='h3' gutterBottom>
-                Please specify:
-              </Typography>
-              <FastField
-                name='DENTShortAns4'
-                label='DENTShortAns4'
-                component={CustomTextField}
-                multiline
-                minRows={2}
-              />
-            </PopupText>
           </div>
 
           <ErrorNotification 
@@ -305,7 +270,6 @@ const OralHealthForm = () => {
         <>
           <p className='underlined'>Patient&apos;s Oral Health:</p>
           <p className='blue'>{hxOral.ORAL1}</p>
-          <p className='blue'>{hxOral.ORALShortAns1}</p>
 
           <p className='underlined'>Does patient wear dentures?:</p>
           <p className='blue'>{hxOral.ORAL2}</p>
