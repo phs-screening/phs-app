@@ -1,6 +1,7 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
+import { HelmetProvider } from 'react-helmet-async'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import Dashboard from '../../src/pages/Dashboard'
 import { FormContext } from '../../src/api/utils'
@@ -21,15 +22,17 @@ function CurrentPath() {
 
 function renderDashboard(patientId) {
   return render(
-    <FormContext.Provider value={{ patientId }}>
-      <MemoryRouter initialEntries={['/app/dashboard']}>
-        <Routes>
-          <Route path='/app/dashboard' element={<Dashboard />} />
-          <Route path='/login' element={<CurrentPath />} />
-          <Route path='/app/registration' element={<CurrentPath />} />
-        </Routes>
-      </MemoryRouter>
-    </FormContext.Provider>
+    <HelmetProvider>
+      <FormContext.Provider value={{ patientId }}>
+        <MemoryRouter initialEntries={['/app/dashboard']}>
+          <Routes>
+            <Route path='/app/dashboard' element={<Dashboard />} />
+            <Route path='/login' element={<CurrentPath />} />
+            <Route path='/app/registration' element={<CurrentPath />} />
+          </Routes>
+        </MemoryRouter>
+      </FormContext.Provider>
+    </HelmetProvider>
   )
 }
 
