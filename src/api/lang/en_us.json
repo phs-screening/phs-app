@@ -1,8 +1,8 @@
 {
     "salutation" : "Mr/Mrs",
-    "title" : "Public Health Service 2025 Health Screening Report",
+    "title" : "Public Health Service 2026 Health Screening Report",
     "dear": "Dear {0} {1},",
-    "intro": "Thank you for participating in our health screening at The Frontier CC and Jurong Medical Centre on 16th and 17th August this year. Here are your screening results:",
+    "intro": "Thank you for participating in our health screening at The Frontier CC and Jurong Medical Centre on 22nd and 23rd August this year. Here are your screening results:",
 
     "temp_title": "Temperature",
     "temp_reading": "Your temperature is",
@@ -10,10 +10,10 @@
     
     "bp_title": "Blood Pressure",
     "bp_reading": "Your average blood pressure reading is ",
-    "bp_tip": "A normal blood pressure reading is lower than 130/85mmHg. As blood pressure is characterised by large spontaneous variations, the diagnosis of high blood pressure should be based on multiple blood pressure measurements taken on several separate occasions. This should be regularly followed-up by a doctor who can provide the appropriate diagnosis and management. If your average blood pressure reading is above 130/85, please consult a doctor who can better evaluate your risk of hypertension.",
+    "bp_tip": "A normal blood pressure reading is lower than 130/85 mmHg. As blood pressure is characterised by large spontaneous variations, the diagnosis of high blood pressure should be based on multiple blood pressure measurements taken on several separate occasions. This should be regularly followed-up by a doctor who can provide the appropriate diagnosis and management. If your average blood pressure reading is above 130/85, please consult a doctor who can better evaluate your risk of hypertension.",
 
     "bmi_title": "Body Mass Index (BMI)",
-    "bmi_reading": "Your height is {0}cm and your weight is {1}kg, with a BMI of {2}kg/m2.",
+    "bmi_reading": "Your height is {0} cm and your weight is {1} kg, with a BMI of {2} kg/m^2.",
     "bmi_tbl_l_header": "Asian BMI cut-off points for action",
     "bmi_tbl_r_header": "Cardiovascular Disease Risk",
     "bmi_tbl_low": "Low",
@@ -73,5 +73,5 @@
     "rec": "You are strongly recommended to seek follow-up based on your health screening result. \n\nAs mentioned above, PHS members may be calling you soon as a form of follow-up in a few weeks time, if you have not opted out of our Telehealth Initiative.",
 
     "disclaimer_title": "Health Screening Report Disclaimer",
-    "disclaimer" : "The health screening may identify certain medical risk factors, conditions or diseases but is not intended to be a comprehensive full health screening or to replace medical consultation for any medical symptoms or concerns. The absence of any abnormal findings in the screening results should never be treated as a guarantee that any medical conditions are not or will not be present. You are advised to continue to be vigilant in observing for any symptoms associated with these conditions, and to seek medical attention when in doubt. Some conditions including fever and other illnesses during or shortly before the time of the screening may affect the interpretation of the results and therefore you are advised to see your doctor for interpretation of the health report. Please ensure you meet the eligibility criteria before you return for your next health screening. \n\nShould you have any queries, feel free to contact us at hello@publichealthservice.org. Thank you for participating in PHS 2025 and we hope that you have benefited and would continue to support us in the future. "
+    "disclaimer" : "The health screening may identify certain medical risk factors, conditions or diseases but is not intended to be a comprehensive full health screening or to replace medical consultation for any medical symptoms or concerns. The absence of any abnormal findings in the screening results should never be treated as a guarantee that any medical conditions are not or will not be present. You are advised to continue to be vigilant in observing for any symptoms associated with these conditions, and to seek medical attention when in doubt. Some conditions including fever and other illnesses during or shortly before the time of the screening may affect the interpretation of the results and therefore you are advised to see your doctor for interpretation of the health report. Please ensure you meet the eligibility criteria before you return for your next health screening. \n\nShould you have any queries, feel free to contact us at hello@publichealthservice.org. Thank you for participating in PHS 2026 and we hope that you have benefited and would continue to support us in the future. "
 }
