@@ -17,6 +17,7 @@ import HxOralForm from './HxOralForm.jsx'
 import HxPhqForm from './HxPhqForm.jsx'
 import HxScoliosisForm from './HxScoliosisForm.jsx'
 import HxSocialForm from './HxSocialForm.jsx'
+import HxVaccineForm from './HxVaccineForm.jsx'
 import allForms from '../forms.json'
 import { getSavedData } from '../../services/patientData'
 
@@ -102,6 +103,7 @@ export default function HxTabs() {
           <Tab label='PHQ' {...a11yProps(6)} />
           <Tab label='M4/M5 Review' {...a11yProps(7)} />
           <Tab label='Scoliosis' {...a11yProps(8)} />
+          <Tab label='Vaccination' {...a11yProps(9)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -133,6 +135,9 @@ export default function HxTabs() {
       </TabPanel>
       <TabPanel value={value} index={isFemale ? 8 : 7}>
         <HxScoliosisForm changeTab={handleChange} nextTab={isFemale ? 8 : 7} />
+      </TabPanel>
+      <TabPanel value={value} index={isFemale ? 9 : 8}>
+        <HxVaccineForm changeTab={handleChange} nextTab={isFemale ? 9 : 8} />
       </TabPanel>
     </HxWrapper>
   )
