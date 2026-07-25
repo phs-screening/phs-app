@@ -24,6 +24,14 @@ const FONT_FILES = {
 
 const fontUrlCache = new Map()
 
+const PLACEHOLDER3 = '___'
+const PLACEHOLDER5 = '_____'
+const NIL = 'NIL'
+
+function hasReportValue(value) {
+  return value !== null && value !== undefined && value !== ''
+}
+
 function toAbsoluteFontUrl(url) {
   if (/^https?:\/\//i.test(url)) return url
   if (typeof window === 'undefined') return url
@@ -89,18 +97,24 @@ async function buildPdfMakeFonts(language) {
 }
 
 function calculateBmiFallback(heightInCm, weightInKg) {
-  const height = heightInCm / 100
-  const bmi = (weightInKg / height / height).toFixed(1)
+  const height = Number(heightInCm) / 100
+  const weight = Number(weightInKg)
+
+  if (!Number.isFinite(height) || !Number.isFinite(weight) || height <= 0 || weight <= 0) {
+    return PLACEHOLDER3
+  }
+
+  const bmi = (weight / height / height).toFixed(1)
 
   return bmi
 }
 
 function resolveBmi(height, weight, savedBmi) {
-  if (savedBmi !== null && savedBmi !== undefined && savedBmi !== '') {
+  if (hasReportValue(savedBmi)) {
     return savedBmi
   }
 
-  return calculateBmiFallback(Number(height), Number(weight))
+  return calculateBmiFallback(height, weight)
 }
 
 export async function generate_pdf_updated(
@@ -214,7 +228,7 @@ export async function generate_pdf_updated(
 }
 
 function patientSection(reg, patients) {
-  const salutation = reg.registrationQ1 || 'Dear'
+  const salutation = reg.registrationQ1 || 'Mr/Ms'
 
   const mainLogo = {
     image: updatedLogo,
@@ -224,7 +238,7 @@ function patientSection(reg, patients) {
   const title = [{ text: parseFromLangKey('title'), style: 'header' }]
 
   const thanksNote = [
-    { text: `${parseFromLangKey('dear', salutation, reg.registrationQ2)}`, style: 'normal' },
+    { text: `${parseFromLangKey('dear', salutation, reg.registrationQ2 ?? PLACEHOLDER5)}`, style: 'normal' },
     { text: `${parseFromLangKey('intro')}`, style: 'normal' },
   ]
 
@@ -235,7 +249,7 @@ export function temperatureSection(triage) {
   const textSection = [
     { text: `${parseFromLangKey('temp_title')}`, style: 'subheader' },
     {
-      text: `${parseFromLangKey('temp_reading')} ${triage.triageQ14} °C.\n`,
+      text: `${parseFromLangKey('temp_reading')} ${triage.triageQ14 ?? PLACEHOLDER3} °C.\n`,
       style: 'normal',
     },
     {
@@ -268,7 +282,7 @@ export function bloodPressureSection(triage) {
   const textSection = [
     { text: parseFromLangKey('bp_title'), style: 'subheader' },
     {
-      text: `${parseFromLangKey('bp_reading')} ${triage.triageQ7}/${triage.triageQ8} mmHg.\n`,
+      text: `${parseFromLangKey('bp_reading')} ${triage.triageQ7 ?? PLACEHOLDER3}/${triage.triageQ8 ?? PLACEHOLDER3} mmHg.\n`,
       style: 'normal',
     },
     { text: `${parseFromLangKey('bp_tip')}`, style: 'normal' },
@@ -322,7 +336,12 @@ export function bmiSection(height, weight, bmiString) {
   return [
     { text: parseFromLangKey('bmi_title'), style: 'subheader' },
     {
-      text: parseFromLangKey('bmi_reading', height, weight, bmi),
+      text: parseFromLangKey(
+        'bmi_reading',
+        hasReportValue(height) ? height : PLACEHOLDER3,
+        hasReportValue(weight) ? weight : PLACEHOLDER3,
+        bmi,
+      ),
       style: 'normal',
     },
 
@@ -388,13 +407,13 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_t_row'),
-                      `6/${eye.OphthalQ3}`,
-                      `6/${eye.OphthalQ4}`,
+                      `6/${eye.OphthalQ3 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ4 ?? PLACEHOLDER3}`,
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_b_row'),
-                      `6/${eye.OphthalQ5}`,
-                      `6/${eye.OphthalQ6}`,
+                      `6/${eye.OphthalQ5 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ6 ?? PLACEHOLDER3}`,
                     ],
                   ],
                 },
@@ -412,7 +431,7 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
             ],
           },
           { text: '', margin: [0, 5] },
-          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ8}\n`, style: 'normal' },
+          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ8 ?? NIL}\n`, style: 'normal' },
         ]
       : []),
     { text: '', margin: [0, 5] },
@@ -524,21 +543,21 @@ export function followUpSection(
 export function memoSection(audioData, dietData, ptData, otData, doctorData) {
   let audio =
     parseFromLangKey('memo_audio') +
-    parseFromLangKey('memo_audio_1', audioData.AudiometryQ12) +
-    parseFromLangKey('memo_audio_2', audioData.AudiometryQ13)
+    parseFromLangKey('memo_audio_1', audioData.AudiometryQ12 ?? PLACEHOLDER5) +
+    parseFromLangKey('memo_audio_2', audioData.AudiometryQ13 ?? PLACEHOLDER5)
 
-  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4}`
+  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4 ?? ""}`
   if (dietData.dietitiansConsultQ5) {
     diet += parseFromLangKey(
       'memo_diet_1',
-      dietData.dietitiansConsultQ5,
-      dietData.dietitiansConsultQ6,
+      dietData.dietitiansConsultQ5 ?? "",
+      dietData.dietitiansConsultQ6 ?? "",
     )
   }
 
-  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1}`
-  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1}`
-  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3}`
+  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1 ?? ""}`
+  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1 ?? ""}`
+  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3 ?? ""}`
 
   return [
     { text: parseFromLangKey('memo_title'), style: 'subheader' },
