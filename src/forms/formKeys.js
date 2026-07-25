@@ -39,6 +39,7 @@ export const FORM_COLLECTION_TO_KEY = {
   hxFamilyForm: 'hxFamily',
   hxHcsrForm: 'hxHcsr',
   hxOralForm: 'hxOral',
+  hxScoliosisForm: 'hxScoliosis',
   hxM4M5ReviewForm: 'hxM4M5Review',
   geriPhqForm: 'geriPhq',
   geriAmtForm: 'geriAmt',

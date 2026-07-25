@@ -15,6 +15,7 @@ import HxM4M5ReviewForm from './HxM4M5ReviewForm.jsx'
 import HxNssForm from './HxNssForm.jsx'
 import HxOralForm from './HxOralForm.jsx'
 import HxPhqForm from './HxPhqForm.jsx'
+import HxScoliosisForm from './HxScoliosisForm.jsx'
 import HxSocialForm from './HxSocialForm.jsx'
 import allForms from '../forms.json'
 import { getSavedData } from '../../services/patientData'
@@ -100,6 +101,7 @@ export default function HxTabs() {
           {isFemale && <Tab label='Gynae' {...a11yProps(5)} />}
           <Tab label='PHQ' {...a11yProps(6)} />
           <Tab label='M4/M5 Review' {...a11yProps(7)} />
+          <Tab label='Scoliosis' {...a11yProps(8)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -128,6 +130,9 @@ export default function HxTabs() {
       </TabPanel>
       <TabPanel value={value} index={isFemale ? 7 : 6}>
         <HxM4M5ReviewForm />
+      </TabPanel>
+      <TabPanel value={value} index={isFemale ? 8 : 7}>
+        <HxScoliosisForm changeTab={handleChange} nextTab={isFemale ? 8 : 7} />
       </TabPanel>
     </HxWrapper>
   )

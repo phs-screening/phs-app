@@ -123,6 +123,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     '18',
     '19',
     '20',
+    '21',
   ]
 
   const col2Texts = [
@@ -150,6 +151,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     { label: 'Doctors Station', eligibilityKey: "Doctor's Station" },
     { label: 'Screening Review', eligibilityKey: '' },
     { label: 'Long Term Follow Up', eligibilityKey: 'Long Term Follow Up' },
+    { label: 'Scoliosis', eligibilityKey: 'Scoliosis' },
   ]
 
   const col5Texts = [
@@ -222,6 +224,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     },
     { text: '' },
     { text: '' },
+    { text: '' },
   ]
 
   const col3Eligible = col2Texts.map(({ eligibilityKey }, i) => {
@@ -288,7 +291,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
           { text: col4Eligible[7], fontSize: 9 },
           col5Texts[7],
         ],
-        ...[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((i) => [
+        ...[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].map((i) => [
           { text: col1Labels[i], fontSize: 9 },
           { text: col2Texts[i].label, fontSize: 11 },
           { text: col3Eligible[i], fontSize: 9 },
