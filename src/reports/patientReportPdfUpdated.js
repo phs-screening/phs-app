@@ -546,18 +546,18 @@ export function memoSection(audioData, dietData, ptData, otData, doctorData) {
     parseFromLangKey('memo_audio_1', audioData.AudiometryQ12 ?? PLACEHOLDER5) +
     parseFromLangKey('memo_audio_2', audioData.AudiometryQ13 ?? PLACEHOLDER5)
 
-  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4 ?? ""}`
+  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4 ?? ''}`
   if (dietData.dietitiansConsultQ5) {
     diet += parseFromLangKey(
       'memo_diet_1',
-      dietData.dietitiansConsultQ5 ?? "",
-      dietData.dietitiansConsultQ6 ?? "",
+      dietData.dietitiansConsultQ5 ?? '',
+      dietData.dietitiansConsultQ6 ?? '',
     )
   }
 
-  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1 ?? ""}`
-  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1 ?? ""}`
-  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3 ?? ""}`
+  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1 ?? ''}`
+  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1 ?? ''}`
+  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3 ?? ''}`
 
   return [
     { text: parseFromLangKey('memo_title'), style: 'subheader' },
