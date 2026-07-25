@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'selectedPatient'
+export const PATIENT_CLEARED_EVENT = 'patient-selection-cleared'
 
 export function loadPersistedPatient() {
   try {
@@ -26,4 +27,5 @@ export function savePersistedPatient(patientId, patientInfo = {}) {
 
 export function clearPersistedPatient() {
   localStorage.removeItem(STORAGE_KEY)
+  window.dispatchEvent(new Event(PATIENT_CLEARED_EVENT))
 }

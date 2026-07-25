@@ -54,7 +54,7 @@ const initialValues = {
 const formName = 'registrationForm'
 
 const RegForm = () => {
-  const { patientId, updatePatientId, updatePatientInfo } = useContext(FormContext)
+  const { patientId, updatePatientInfo } = useContext(FormContext)
   const [loading, isLoading] = useState(true)
   const navigate = useNavigate()
   const [savedData, setSavedData] = useState(initialValues)
@@ -156,8 +156,7 @@ const RegForm = () => {
         console.log('response data: ' + response.qNum)
         await showFormSubmitSuccess()
         console.log('Successfully submitted form')
-        updatePatientInfo(response.data)
-        updatePatientId(response.qNum)
+        updatePatientInfo({ ...response.data, queueNo: response.qNum })
         navigate('/app/dashboard')
       }, 80)
     } else {
