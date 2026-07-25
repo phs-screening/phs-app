@@ -57,6 +57,8 @@ const initialValues = {
   PHQ8: '',
   PHQ9: '',
   PHQextra9: '',
+  GAD1: '',
+  GAD2: '',
   PHQ10: 0,
   PHQ11: '',
   PHQShortAns11: '',
@@ -128,6 +130,8 @@ const validationSchema = Yup.object({
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
+  GAD1: Yup.string().required('Required'),
+  GAD2: Yup.string().required('Required'),
   PHQ11: Yup.string().required('Required'),
 })
 
@@ -323,6 +327,25 @@ export default function HxPhqForm({ changeTab, nextTab }) {
             )}
 
             <GetScore />
+
+            <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2 }}>
+              GAD-2 (Anxiety): Over the last 2 weeks, how often have you been bothered by the
+              following problems?
+            </Typography>
+            <FastField
+              name='GAD1'
+              label='GAD1. Feeling nervous, anxious, or on edge'
+              component={CustomRadioGroup}
+              options={formOptions.DAYRANGE}
+              row
+            />
+            <FastField
+              name='GAD2'
+              label='GAD2. Not being able to stop or control worrying'
+              component={CustomRadioGroup}
+              options={formOptions.DAYRANGE}
+              row
+            />
 
             <FastField
               name='PHQ11'
