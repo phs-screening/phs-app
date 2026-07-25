@@ -60,6 +60,7 @@
     "fw_aic": "You have indicated interest with the Agency for Integrated Care to be followed up. Please contact 1800-650-6060 for further enquiries.",
     
     "memo_title": "Referral Memos",
+    "memo_scoliosis": "Scoliosis Station, if any:\n\n",
     "memo_audio" : "Audiology, if any:\n\n",
     "memo_audio_1" : "The audiology team believes that {0}\n\n",
     "memo_audio_2" : "The audiology team has written a recommended follow-up: {0}\n\n",

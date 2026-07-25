@@ -145,6 +145,7 @@ export async function generate_pdf_updated(
   podiatry,
   mammobus,
   hpv,
+  scoliosisData = {},
 ) {
   console.log('TRIAGE', triage)
   const language = normalizeLangName(reg?.registrationQ14)
@@ -180,7 +181,14 @@ export async function generate_pdf_updated(
     ),
   )
   content.push(
-    ...memoSection(geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult, doctorSConsult),
+    ...memoSection(
+      scoliosisData,
+      geriAudiometry,
+      dietitiansConsult,
+      geriPtConsult,
+      geriOtConsult,
+      doctorSConsult,
+    ),
   )
   content.push(...recommendationSection())
 
@@ -540,7 +548,10 @@ export function followUpSection(
   ]
 }
 
-export function memoSection(audioData, dietData, ptData, otData, doctorData) {
+export function memoSection(scoliosisData, audioData, dietData, ptData, otData, doctorData) {
+  const scoliosis =
+    parseFromLangKey('memo_scoliosis') + `${scoliosisData.scoliosisQ2 ?? ''}`
+
   let audio =
     parseFromLangKey('memo_audio') +
     parseFromLangKey('memo_audio_1', audioData.AudiometryQ12 ?? PLACEHOLDER5) +
@@ -565,6 +576,7 @@ export function memoSection(audioData, dietData, ptData, otData, doctorData) {
       table: {
         widths: ['*'],
         body: [
+          [{ text: scoliosis, style: 'normal' }],
           [{ text: diet, style: 'normal' }],
           [{ text: pt, style: 'normal' }],
           [{ text: ot, style: 'normal' }],
