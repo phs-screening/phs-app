@@ -35,10 +35,10 @@ describe('patientReportPdfUpdated memoSection', () => {
     )
   })
 
-  it('uses a placeholder when scoliosisQ2 is missing', () => {
+  it('leaves the scoliosis memo empty when scoliosisQ2 is missing', () => {
     setLangUpdated('english')
 
-    expect(getScoliosisMemo()).toBe(`${enUs.memo_scoliosis}_____`)
+    expect(getScoliosisMemo()).toBe(enUs.memo_scoliosis)
   })
 
   it.each([
