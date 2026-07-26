@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from '@mui/material/styles'
 import { FormContext, ScrollTopContext } from '../../src/api/utils'
 import HxTabs from '../../src/forms/HistoryTakingTabs/HistoryTaking'
 import HxHcsrForm from '../../src/forms/HistoryTakingTabs/HxHcsrForm'
@@ -14,6 +15,7 @@ import HxOralForm from '../../src/forms/HistoryTakingTabs/HxOralForm'
 import HxSocialForm from '../../src/forms/HistoryTakingTabs/HxSocialForm'
 import { getSavedData } from '../../src/services/patientData'
 import { submitForm } from '../../src/api/formHelpers.jsx'
+import customTheme from '../../src/theme'
 
 vi.mock('../../src/api/formHelpers.jsx', () => ({
   submitForm: vi.fn(),
@@ -72,11 +74,13 @@ describe('history-taking forms', () => {
   it('shows OSA immediately after scoliosis and before M4/M5 review', () => {
     window.scrollTo = vi.fn()
     render(
-      <FormContext.Provider value={{ patientId: 7 }}>
-        <ScrollTopContext.Provider value={{ scrollTop: vi.fn() }}>
-          <HxTabs />
-        </ScrollTopContext.Provider>
-      </FormContext.Provider>,
+      <ThemeProvider theme={customTheme}>
+        <FormContext.Provider value={{ patientId: 7 }}>
+          <ScrollTopContext.Provider value={{ scrollTop: vi.fn() }}>
+            <HxTabs />
+          </ScrollTopContext.Provider>
+        </FormContext.Provider>
+      </ThemeProvider>,
     )
 
     const tabLabels = screen.getAllByRole('tab').map((tab) => tab.textContent)
