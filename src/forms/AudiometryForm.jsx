@@ -40,8 +40,6 @@ const formOptions = {
   AudiometryQ4: PassRefer,
   AudiometryQ5: FreqAudible,
   AudiometryQ6: FreqAudible,
-  AudiometryQ7: FreqAudible,
-  AudiometryQ8: FreqAudible,
   AudiometryQ9: YesNo,
   AudiometryQ11: YesNo,
   AudiometryQ13: [
@@ -65,8 +63,6 @@ const validationSchema = Yup.object().shape({
   AudiometryQ4: Yup.string().required(),
   AudiometryQ5: Yup.array().required().of(Yup.string()),
   AudiometryQ6: Yup.array().required().of(Yup.string()),
-  AudiometryQ7: Yup.array().required().of(Yup.string()),
-  AudiometryQ8: Yup.array().required().of(Yup.string()),
   AudiometryQ9: Yup.string().required(),
   AudiometryQ10: Yup.string(),
   AudiometryQ11: Yup.string().required(),
@@ -117,8 +113,6 @@ const AudiometryForm = () => {
     AudiometryQ4: saveData.AudiometryQ4 || '',
     AudiometryQ5: saveData.AudiometryQ5 || [],
     AudiometryQ6: saveData.AudiometryQ6 || [],
-    AudiometryQ7: saveData.AudiometryQ7 || [],
-    AudiometryQ8: saveData.AudiometryQ8 || [],
     AudiometryQ9: saveData.AudiometryQ9 || '',
     AudiometryQ10: saveData.AudiometryQ10 || '',
     AudiometryQ11: saveData.AudiometryQ11 || '',
@@ -211,26 +205,6 @@ const AudiometryForm = () => {
                       options={formOptions.AudiometryQ6}
                     />
 
-                    <h3>Pure Tone Screening at 40dB for Left Ear:</h3>
-                    <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
-                    <p>Select frequencies</p>
-                    <FastField
-                      name='AudiometryQ7'
-                      label='AudiometryQ7'
-                      component={CustomCheckboxGroup}
-                      options={formOptions.AudiometryQ7}
-                    />
-
-                    <h3>Pure Tone Screening at 40dB for Right Ear:</h3>
-                    <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
-                    <p>Select frequencies</p>
-                    <FastField
-                      name='AudiometryQ8'
-                      label='AudiometryQ8'
-                      component={CustomCheckboxGroup}
-                      options={formOptions.AudiometryQ8}
-                    />
-
                     <h4>
                       When senior is found to have abnormal hearing results, please ask the
                       following questions:
@@ -317,17 +291,6 @@ const AudiometryForm = () => {
               ) : (
                 <div className='summary--question-div'>
                   <h2>Hearing Issues</h2>
-                  <p className='underlined'>Hearing problems</p>
-                  {hcsr && hcsr.hxHcsrQ4 ? (
-                    <p className='blue'>{hcsr.hxHcsrQ4}</p>
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
-                  {hcsr && hcsr.hxHcsrShortAnsQ4 ? (
-                    <p className='blue'>{hcsr.hxHcsrShortAnsQ4}</p>
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
                   {<p className='underlined'>Has participant seen an ENT Specialist before?</p>}
                   {hcsr && hcsr.hxHcsrQ13 ? (
                     <p className='blue'>{hcsr.hxHcsrQ13}</p>

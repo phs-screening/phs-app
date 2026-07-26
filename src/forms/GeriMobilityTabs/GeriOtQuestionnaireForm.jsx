@@ -312,9 +312,14 @@ const GeriOtQuestionnaireForm = (props) => {
 
         try {
           const scores = calculateScores(values)
+          const submittedValues = {
+            ...values,
+            geriOtQuestionnaireQ33:
+              values.geriOtQuestionnaireQ2 === 'No' ? values.geriOtQuestionnaireQ33 : '',
+          }
           const response = await submitForm(
             {
-              ...values,
+              ...submittedValues,
               geriOtQuestionnaireQ29: scores.yes,
               geriOtQuestionnaireQ30: scores.no,
               geriOtQuestionnaireQ31: scores.na,
@@ -339,7 +344,7 @@ const GeriOtQuestionnaireForm = (props) => {
         }
       }}
     >
-      {({ handleSubmit, errors, submitCount, isSubmitting }) => (
+      {({ handleSubmit, errors, submitCount, isSubmitting, values }) => (
         <Paper elevation={2} sx={{ p: 2 }}>
           <Grid container>
             <Grid item xs={9}>
@@ -384,15 +389,19 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ2}
                       row
                     />
-                    <h4>Please specify:</h4>
-                    <FastField
-                      name='geriOtQuestionnaireQ33'
-                      label='geriOtQuestionnaireQ33'
-                      component={CustomTextField}
-                      multiline
-                      rows={3}
-                      fullWidth
-                    />
+                    {values.geriOtQuestionnaireQ2 === 'No' && (
+                      <>
+                        <h4>Please specify:</h4>
+                        <FastField
+                          name='geriOtQuestionnaireQ33'
+                          label='geriOtQuestionnaireQ33'
+                          component={CustomTextField}
+                          multiline
+                          rows={3}
+                          fullWidth
+                        />
+                      </>
+                    )}
                     <h3>3. Are your floor surfaces non slip?</h3>
                     <p>
                       <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score &quot;YES&quot; if
