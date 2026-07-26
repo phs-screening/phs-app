@@ -9,7 +9,6 @@ import Box from '@mui/material/Box'
 import { ScrollTopContext } from '../../api/utils.js'
 import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import GeriAmtForm from './GeriAmtForm.jsx'
-import GeriPhqForm from './GeriPhqForm.jsx'
 import GeriGraceForm from './GeriGraceForm.jsx'
 
 function TabPanel(props) {
@@ -72,22 +71,17 @@ export default function GeriCognitiveTabs() {
           variant='scrollable'
           scrollButtons='auto'
         >
-          <Tab label='PHQ' {...a11yProps(0)} />
-          <Tab label='AMT' {...a11yProps(1)} />
-          <Tab label='G-RACE' {...a11yProps(2)} />
+          <Tab label='AMT' {...a11yProps(0)} />
+          <Tab label='G-RACE' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
 
       <TabPanel value={value} index={0}>
-        <GeriPhqForm changeTab={handleChange} nextTab={1} />
+        <GeriAmtForm changeTab={handleChange} nextTab={1} />
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        <GeriAmtForm changeTab={handleChange} nextTab={2} />
-      </TabPanel>
-
-      <TabPanel value={value} index={2}>
-        <GeriGraceForm changeTab={handleChange} nextTab={3} />
+        <GeriGraceForm changeTab={handleChange} nextTab={2} />
       </TabPanel>
     </GeriCognitiveWrapper>
   )

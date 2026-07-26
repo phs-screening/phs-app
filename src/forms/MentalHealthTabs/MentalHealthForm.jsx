@@ -5,7 +5,10 @@ import { Button, CircularProgress, Paper, Grid } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
@@ -45,11 +48,9 @@ const MentalHealthForm = () => {
       const savedData = await getSavedData(patientId, formName)
       setInitialValues(savedData)
       const regData = getSavedData(patientId, allForms.registrationForm)
-      const phqData = getSavedData(patientId, allForms.geriPhqForm)
 
-      Promise.all([regData, phqData]).then((result) => {
+      Promise.all([regData]).then((result) => {
         setReg(result[0])
-        setPHQ(result[1])
         isLoadingSidePanel(false)
       })
     }
@@ -105,7 +106,7 @@ const MentalHealthForm = () => {
 
                   <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>
@@ -143,12 +144,6 @@ const MentalHealthForm = () => {
                   ) : (
                     <p className='blue'>Age: nil</p>
                   )}
-
-                  <p className='blue'>PHQ Score: {phq.PHQ10}</p>
-                  {phq.PHQ10 >= 6 ? <p className='red'>Patient meets the PHQ score threshold for referral to SAMH. Patient is recommended to sign up for follow up to SAMH.</p> : null}
-                  <p className='underlined'>Would the patient benefit from counselling:</p>
-                  <p className='blue'>{phq.PHQ11}</p>
-                  <p className='blue'>{phq.PHQShortAns11}</p>
                 </div>
               )}
             </Grid>

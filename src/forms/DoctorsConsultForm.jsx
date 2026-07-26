@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import { addToDocPdfQueue } from '../services/printQueues'
@@ -82,7 +85,8 @@ const DoctorsConsultForm = () => {
   const [hcsr, setHcsr] = useState({})
   const [ophthal, setOphthal] = useState({})
   const [audio, setAudio] = useState({})
-  const [geriPHQ, setPHQ] = useState({})
+  // const [geriPHQ, setPHQ] = useState({})
+
   const [lung, setLung] = useState({})
   const [triage, setTriage] = useState({})
   const [pmhx, setPMHX] = useState({})
@@ -100,17 +104,18 @@ const DoctorsConsultForm = () => {
         const ophthalData = getSavedData(patientId, allForms.ophthalForm)
         const audioData = getSavedData(patientId, allForms.audiometryForm)
         const lungData = getSavedData(patientId, allForms.lungForm)
-        const PHQDATA = getSavedData(patientId, allForms.geriPhqForm)
+        // const PHQDATA = getSavedData(patientId, allForms.geriPhqForm)
         const triageData = getSavedData(patientId, allForms.triageForm)
         const pmhxData = getSavedData(patientId, allForms.hxNssForm)
         const socialData = getSavedData(patientId, allForms.hxSocialForm)
 
+        // Indices are used to map retrieved patient data to the corresponding state variables
         Promise.all([
           hcsrData,
           ophthalData,
           audioData,
           lungData,
-          PHQDATA,
+          // PHQDATA,
           triageData,
           pmhxData,
           socialData,
@@ -119,10 +124,9 @@ const DoctorsConsultForm = () => {
           setOphthal(result[1])
           setAudio(result[2])
           setLung(result[3])
-          setPHQ(result[4])
-          setTriage(result[5])
-          setPMHX(result[6])
-          setSocial(result[7])
+          setTriage(result[4])
+          setPMHX(result[5])
+          setSocial(result[6])
           setLoadingSidePanel(false)
         })
       }
@@ -323,39 +327,6 @@ const DoctorsConsultForm = () => {
     <div className='summary--question-div'>
       <h2>Patient Requires Referrals For: </h2>
       <ul>
-        {!geriPHQ ? <p className='red'>nil geriPHQ data!</p> : <></>}
-        <li>
-          {geriPHQ && geriPHQ.PHQ10 ? (
-            <p>
-              Patient scores <strong>{geriPHQ.PHQ10}</strong> in the PHQ.
-            </p>
-          ) : (
-            <p className='red'>nil PHQ10 data!</p>
-          )}
-          <ul>
-            <li>
-              {geriPHQ && geriPHQ.PHQ9 ? (
-                <p>
-                  The patient answered: <strong>{geriPHQ.PHQ9}</strong> to &apos;Thoughts that you
-                  would be better off dead or hurting yourself in some way&apos;.
-                </p>
-              ) : (
-                <p className='red'>nil PHQ9 data!</p>
-              )}
-            </li>
-            <li>
-              {geriPHQ && geriPHQ.PHQextra9 ? (
-                <p>
-                  When asked &apos;Do you want to take your life now&apos;, patient said{' '}
-                  <strong>{geriPHQ.PHQextra9}</strong>
-                </p>
-              ) : (
-                <p className='red'>nil PHQextra9 data!</p>
-              )}
-            </li>
-          </ul>
-        </li>
-
         {!triage ? <p className='red'>nil triage data!</p> : <></>}
         {triage.triageQ9 ? (
           <li>
