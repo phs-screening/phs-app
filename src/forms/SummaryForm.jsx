@@ -58,6 +58,7 @@ const SummaryForm = (props) => {
   const [mammobus, setMammobus] = useState({})
   const [hpv, setHpv] = useState({})
   const [scoliosisData, setScoliosisData] = useState({})
+  const [hxOsa, setHxOsa] = useState({})
 
   const [refresh, setRefresh] = useState(false)
 
@@ -105,6 +106,7 @@ const SummaryForm = (props) => {
         setMammobus(data?.mammobus || {})
         setHpv(data?.hpv || {})
         setScoliosisData(data?.scoliosis || {})
+        setHxOsa(data?.hxOsa || {})
       } catch (error) {
         console.error('Failed to load screening report data:', error)
         if (mounted) {
@@ -161,6 +163,7 @@ const SummaryForm = (props) => {
         mammobus,
         hpv,
         scoliosisData,
+        hxOsa,
       )
     } catch (error) {
       console.error('Failed to generate screening report:', error)

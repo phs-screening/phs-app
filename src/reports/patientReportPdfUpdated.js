@@ -146,6 +146,7 @@ export async function generate_pdf_updated(
   mammobus,
   hpv,
   scoliosisData = {},
+  hxOsa = {},
 ) {
   console.log('TRIAGE', triage)
   const language = normalizeLangName(reg?.registrationQ14)
@@ -160,6 +161,7 @@ export async function generate_pdf_updated(
   content.push(...bloodPressureSection(triage))
   content.push(...bmiSection(triage.triageQ10, triage.triageQ11, triage.triageQ12))
   content.push(...otherScreeningModularitiesSection(reg, geriVision, podiatry, vaccine))
+  content.push(...sleepApneaSection(hxOsa, reg, triage, triage.triageQ12))
   //content.push({ text: '', pageBreak: 'before' })
   content.push(
     ...followUpSection(
@@ -455,6 +457,44 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
     ...(vaccine?.VAX3 === 'Yes'
       ? [{ text: `${parseFromLangKey('vaccine_3')}\n`, style: 'normal', margin: [20, 0, 0, 20] }]
       : []),
+  ]
+}
+
+export function sleepApneaSection(hxOsa, reg, triage, bmi) {
+  const osaResponsesScore = [hxOsa?.OSA1, hxOsa?.OSA2, hxOsa?.OSA3].filter(
+    (response) => String(response ?? '').toLowerCase() === 'yes',
+  ).length
+  const sleepApneaScore =
+    (reg?.registrationQ4 > 50 ? 1 : 0) +
+    (String(reg?.registrationQ5 ?? '').toLowerCase() === 'male' ? 1 : 0) +
+    osaResponsesScore +
+    (hasReportValue(bmi) && Number(bmi) > 35 ? 1 : 0) +
+    (hasReportValue(triage?.triageQ15) && Number(triage.triageQ15) > 40 ? 1 : 0)
+
+  return [
+    { text: sleepApneaScore, style: 'normal' },
+    {
+      style: 'tableExample',
+      margin: [0, 5, 0, 5],
+      table: {
+        widths: ['*', '*'],
+        body: [
+          [
+            { text: 'STOP-Bang Score', style: 'tableHeader', bold: true },
+            { text: 'Sleep Apnea Risk', style: 'tableHeader', bold: true },
+          ],
+          ['0 - 2', 'Low'],
+          ['3 - 5', 'Intermediate'],
+          ['6 - 8','High'],
+        ],
+      },
+      layout: {
+        hLineWidth: () => 0.5,
+        vLineWidth: () => 0.5,
+        hLineColor: () => 'black',
+        vLineColor: () => 'black',
+      },
+    },
   ]
 }
 
