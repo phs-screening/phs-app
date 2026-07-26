@@ -17,12 +17,14 @@ const initialValues = {
   OSA1: '',
   OSA2: '',
   OSA3: '',
+  OSA4: '',
 }
 
 const validationSchema = Yup.object({
   OSA1: Yup.string().oneOf(['Yes', 'No']).required('Required'),
   OSA2: Yup.string().oneOf(['Yes', 'No']).required('Required'),
   OSA3: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+  OSA4: Yup.string().oneOf(['Yes', 'No']).required('Required'),
 })
 
 const yesNoOptions = [
@@ -89,6 +91,13 @@ export default function HxOsaForm({ changeTab, nextTab }) {
             <FastField
               name='OSA3'
               label='OSA3 - Has anyone observed you stop breathing during sleep?'
+              component={CustomRadioGroup}
+              options={yesNoOptions}
+              row
+            />
+            <FastField
+              name='OSA4'
+              label='OSA4 - Do you have (or are you being treated for) high blood pressure?'
               component={CustomRadioGroup}
               options={yesNoOptions}
               row
