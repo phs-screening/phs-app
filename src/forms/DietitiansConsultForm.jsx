@@ -8,7 +8,6 @@ import { Divider, Paper, Grid, CircularProgress, Button, Typography, Box } from 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
-import PopupText from 'src/utils/popupText'
 
 import { submitForm } from '../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
@@ -19,24 +18,14 @@ import './fieldPadding.css'
 
 const initialValues = {
   dietitiansConsultQ1: '',
-  dietitiansConsultQ3: '',
   dietitiansConsultQ4: '',
-  dietitiansConsultQ5: '',
-  dietitiansConsultQ6: '',
   dietitiansConsultQ7: '',
   dietitiansConsultQ8: '',
 }
 
 const validationSchema = Yup.object({
   dietitiansConsultQ1: Yup.string().required("Dietitian's name is required"),
-  dietitiansConsultQ3: Yup.string().required(
-    "Dietitian's notes are required. NIL response is required if there are no notes.",
-  ),
   dietitiansConsultQ4: Yup.string(),
-  dietitiansConsultQ5: Yup.string()
-    .oneOf(['Yes', 'No'], 'Please select Yes or No')
-    .required('This field is required'),
-  dietitiansConsultQ6: Yup.string(),
   dietitiansConsultQ7: Yup.string()
     .oneOf(['Yes', 'No'], 'Please select Yes or No')
     .required('This field is required'),
@@ -51,10 +40,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
   ],
   dietitiansConsultQ8: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  dietitiansConsultQ5: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -160,17 +145,6 @@ const DietitiansConsultForm = () => {
 
 
             <Typography variant='h4' fontWeight='bold'>
-              Dietitian&apos;s Notes:
-            </Typography>
-            <FastField
-              name='dietitiansConsultQ3'
-              label='dietitiansConsultQ3'
-              component={CustomTextField}
-              multiline
-              minRows={4}
-            />
-
-            <Typography variant='h4' fontWeight='bold'>
               Notes for participant (if applicable):
             </Typography>
             <FastField
@@ -180,32 +154,6 @@ const DietitiansConsultForm = () => {
               multiline
               minRows={4}
             />
-
-
-            <Typography variant='h4' fontWeight='bold'>
-              Does the participant require urgent follow up?
-            </Typography>
-            <FastField
-              name='dietitiansConsultQ5'
-              label='dietitiansConsultQ5'
-              component={CustomRadioGroup}
-              options={formOptions.dietitiansConsultQ5}
-              row
-            />
-            <PopupText qnNo='dietitiansConsultQ5' triggerValue='Yes'>
-
-              <Typography variant='h4' fontWeight='bold'>
-                Reasons for urgent follow up:
-              </Typography>
-              <FastField
-                name='dietitiansConsultQ6'
-                label='dietitiansConsultQ6'
-                component={CustomTextField}
-                multiline
-                minRows={4}
-              />
-            </PopupText>
-
 
             <Typography variant='h4' fontWeight='bold'>
               Referred to Polyclinic for follow-up?
@@ -276,13 +224,8 @@ const DietitiansConsultForm = () => {
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL12}</p> : null}
       <Divider />
       <h2>Diet</h2>
-      <p className='underlined'>
-        Does participant consciously try to the more fruits, vegetables, whole grain & cereals?
-      </p>
+      <p className='underlined'>Does the participant think they eat a balanced diet?</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL13}</p> : null}
-      {hxSocial ? <p className='blue'>Fruits: {hxSocial.SOCIAL13A}</p> : null}
-      {hxSocial ? <p className='blue'>Vegetables: {hxSocial.SOCIAL13B}</p> : null}
-      {hxSocial ? <p className='blue'>Whole grain and cereals: {hxSocial.SOCIAL13C}</p> : null}
       <p className='underlined'>
         Does the participant exercise in any form of moderate physical activity for at least 150
         minutes OR intense physical activity at least 75 minutes throuhgout the week?

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
@@ -57,11 +56,10 @@ const formOptions = {
   ],
 }
 
-export default function HxScoliosis() {
+export default function HxScoliosis({ changeTab, nextTab }) {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +77,7 @@ export default function HxScoliosis() {
     setSubmitting(false)
     if (response.result) {
       await showFormSubmitSuccess()
-      navigate('/app/dashboard')
+      changeTab(null, nextTab)
     } else {
       showFormSubmitError(`Unsuccessful. ${response.error}`)
     }

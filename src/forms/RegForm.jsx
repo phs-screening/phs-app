@@ -12,6 +12,7 @@ import {
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
+import { calculateAgeFromBirthday } from '../utils/calculateAge'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import PopupText from 'src/utils/popupText'
 import './fieldPadding.css'
@@ -80,7 +81,7 @@ const RegForm = () => {
         // Calculate age if birthday exists in saved data, otherwise use today
         if (formData.registrationQ3) {
           const dayjsBirthday = dayjs(formData.registrationQ3)
-          const calculatedAge = calculateAgeFromDayjs(dayjsBirthday)
+          const calculatedAge = calculateAgeFromBirthday(dayjsBirthday)
           formData.registrationQ3 = dayjsBirthday.toDate()
           formData.registrationQ4 = calculatedAge
 
@@ -91,7 +92,7 @@ const RegForm = () => {
         } else {
           // If no saved birthday, default to today
           const today = dayjs()
-          const calculatedAge = calculateAgeFromDayjs(today)
+          const calculatedAge = calculateAgeFromBirthday(today)
           formData.registrationQ3 = today.toDate()
           formData.registrationQ4 = calculatedAge
 
@@ -123,23 +124,6 @@ const RegForm = () => {
       isCurrent = false
     }
   }, [patientId, loadAttempt])
-
-  // Calculates based on birth year only [e.g. all participants born in 1985 are considered 40 y/o in 2025]
-  const calculateAgeFromDayjs = (birthDayjs) => {
-    if (!birthDayjs || !birthDayjs.isValid()) return 0
-    const today = dayjs()
-    let age = today.year() - birthDayjs.year()
-
-    // Logic for adjusting age if birthday hasn't occurred yet this year
-    // if (
-    //   today.month() < birthDayjs.month() ||
-    //   (today.month() === birthDayjs.month() && today.date() < birthDayjs.date())
-    // ) {
-    //   age--
-    // }
-    setPatientAge(age)
-    return age
-  }
 
   const handleSubmit = async (values, { setSubmitting }) => {
     isLoading(true)
@@ -205,6 +189,7 @@ const RegForm = () => {
       { label: 'CHAS Blue', value: 'CHAS Blue' },
       { label: 'CHAS Orange', value: 'CHAS Orange' },
       { label: 'Public Assistance', value: 'Public Assistance' },
+      { label: 'None', value: 'None' },
     ],
     registrationQ13: [
       { label: 'Pioneer generation card holder', value: 'Pioneer generation card holder' },
@@ -282,7 +267,7 @@ const RegForm = () => {
                         // Valid date selected
                         setBirthday(newValue)
                         setFieldValue('registrationQ3', newValue.toDate())
-                        const age = calculateAgeFromDayjs(newValue)
+                        const age = calculateAgeFromBirthday(newValue)
                         setPatientAge(age)
                         setFieldValue('registrationQ4', age)
                       } else {
@@ -290,7 +275,7 @@ const RegForm = () => {
                         const today = dayjs()
                         setBirthday(today)
                         setFieldValue('registrationQ3', today.toDate())
-                        const age = calculateAgeFromDayjs(today)
+                        const age = calculateAgeFromBirthday(today)
                         setPatientAge(age)
                         setFieldValue('registrationQ4', age)
                       }
