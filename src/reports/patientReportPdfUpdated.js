@@ -461,7 +461,7 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
 }
 
 export function sleepApneaSection(hxOsa, reg, triage, bmi) {
-  const osaResponsesScore = [hxOsa?.OSA1, hxOsa?.OSA2, hxOsa?.OSA3].filter(
+  const osaResponsesScore = [hxOsa?.OSA1, hxOsa?.OSA2, hxOsa?.OSA3, hxOsa?.OSA4].filter(
     (response) => String(response ?? '').toLowerCase() === 'yes',
   ).length
   const sleepApneaScore =

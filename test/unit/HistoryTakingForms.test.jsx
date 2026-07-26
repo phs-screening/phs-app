@@ -88,7 +88,7 @@ describe('history-taking forms', () => {
     expect(tabLabels.indexOf('OSA')).toBeLessThan(tabLabels.indexOf('M4/M5 Review'))
   })
 
-  it('shows and requires all three OSA questions', async () => {
+  it('shows and requires all four OSA questions', async () => {
     const user = userEvent.setup()
     renderHistoryForm(
       <MemoryRouter>
@@ -110,10 +110,15 @@ describe('history-taking forms', () => {
     expect(
       screen.getByText('OSA3 - Has anyone observed you stop breathing during sleep?'),
     ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'OSA4 - Do you have (or are you being treated for) high blood pressure?',
+      ),
+    ).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Submit' }))
 
-    expect(await screen.findAllByText('Required')).toHaveLength(3)
+    expect(await screen.findAllByText('Required')).toHaveLength(4)
     expect(submitForm).not.toHaveBeenCalled()
   })
 
