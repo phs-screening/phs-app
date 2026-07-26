@@ -304,13 +304,6 @@ export function bloodPressureSection(triage) {
       width: 60,
       margin: [0, 0, 0, 5],
     },
-    {
-      text: 'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
-      style: 'italicSmall',
-      fontSize: 7,
-      color: 'blue',
-      link: 'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
-    },
   ]
 
   return [
