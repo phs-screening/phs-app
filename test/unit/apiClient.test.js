@@ -83,7 +83,7 @@ describe('apiClient', () => {
         ok: false,
         status: 400,
         body: '{"error":"Invalid request","fields":["name"]}',
-      })
+      }),
     )
 
     await expect(apiGet('/patients')).rejects.toMatchObject({
@@ -91,5 +91,25 @@ describe('apiClient', () => {
       status: 400,
       data: { error: 'Invalid request', fields: ['name'] },
     })
+  })
+
+  it('preserves the session when the API denies an action with 403', async () => {
+    localStorage.setItem('authToken', 'token-789')
+    localStorage.setItem('profile', JSON.stringify({ is_admin: false }))
+    fetch.mockResolvedValue(
+      mockResponse({
+        ok: false,
+        status: 403,
+        body: '{"error":"This form has already been submitted."}',
+      }),
+    )
+
+    await expect(apiPost('/patients/1/forms/registration', {})).rejects.toMatchObject({
+      message: 'This form has already been submitted.',
+      status: 403,
+    })
+
+    expect(localStorage.getItem('authToken')).toBe('token-789')
+    expect(localStorage.getItem('profile')).toBe(JSON.stringify({ is_admin: false }))
   })
 })
