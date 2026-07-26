@@ -38,6 +38,18 @@
     "vaccine_2": "You have taken the Influenza vaccine.",
     "vaccine_3": "You have taken the Pneumococcal vaccine.",
 
+    "sleep_apnea_title": "Sleep Apnea Score",
+    "sleep_apnea_reading": "Your Sleep Apnea Score is {0}. ",
+    "sleep_reco_low": "No further action recommended.",
+    "sleep_reco_medium": "You are recommended to follow up at your preferred polyclinic.",
+    "sleep_reco_high": "You are highly recommended to follow up at your preferred polyclinic.",
+    "sleep_apnea_info": "The STOP-BANG Score estimates a person's risk of Obstructive Sleep Apnea based on eight factors: Snoring, Tiredness, Observed apnea, high blood Pressure, BMI, Age, Neck circumference, and Gender.",
+    "sleep_tbl_l_header": "STOP-BANG Score",
+    "sleep_tbl_r_header": "Sleep Apnea Risk",
+    "sleep_tbl_low": "Low",
+    "sleep_tbl_intermediate": "Intermediate",
+    "sleep_tbl_high": "High",
+
     "fw_title": "Follow-Up",
     "fw_intro": "You have indicated interest for or signed-up for follow up with our external partners, details can be found below:",
     "fw_empty": "You have not indicated or signed-up for any follow-ups.",

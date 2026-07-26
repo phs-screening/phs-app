@@ -470,9 +470,20 @@ export function sleepApneaSection(hxOsa, reg, triage, bmi) {
     osaResponsesScore +
     (hasReportValue(bmi) && Number(bmi) > 35 ? 1 : 0) +
     (hasReportValue(triage?.triageQ15) && Number(triage.triageQ15) > 40 ? 1 : 0)
+  const recommendationKey =
+    sleepApneaScore <= 2
+      ? 'sleep_reco_low'
+      : sleepApneaScore <= 5
+        ? 'sleep_reco_medium'
+        : 'sleep_reco_high'
 
   return [
-    { text: sleepApneaScore, style: 'normal' },
+    { text: parseFromLangKey('sleep_apnea_title'), style: 'subheader' },
+    {
+      text: parseFromLangKey('sleep_apnea_reading', sleepApneaScore) + parseFromLangKey(recommendationKey),
+      style: 'normal',
+    },
+    { text: parseFromLangKey('sleep_apnea_info'), style: 'normal' },
     {
       style: 'tableExample',
       margin: [0, 5, 0, 5],
@@ -480,12 +491,20 @@ export function sleepApneaSection(hxOsa, reg, triage, bmi) {
         widths: ['*', '*'],
         body: [
           [
-            { text: 'STOP-Bang Score', style: 'tableHeader', bold: true },
-            { text: 'Sleep Apnea Risk', style: 'tableHeader', bold: true },
+            {
+              text: parseFromLangKey('sleep_tbl_l_header'),
+              style: 'tableHeader',
+              bold: true,
+            },
+            {
+              text: parseFromLangKey('sleep_tbl_r_header'),
+              style: 'tableHeader',
+              bold: true,
+            },
           ],
-          ['0 - 2', 'Low'],
-          ['3 - 5', 'Intermediate'],
-          ['6 - 8','High'],
+          ['0 - 2', parseFromLangKey('sleep_tbl_low')],
+          ['3 - 5', parseFromLangKey('sleep_tbl_intermediate')],
+          ['6 - 8', parseFromLangKey('sleep_tbl_high')],
         ],
       },
       layout: {
@@ -495,6 +514,7 @@ export function sleepApneaSection(hxOsa, reg, triage, bmi) {
         vLineColor: () => 'black',
       },
     },
+    { text: '', margin: [0, 5] },
   ]
 }
 
