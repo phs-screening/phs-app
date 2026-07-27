@@ -24,6 +24,14 @@ const FONT_FILES = {
 
 const fontUrlCache = new Map()
 
+const PLACEHOLDER3 = '___'
+const PLACEHOLDER5 = '_____'
+const NIL = 'NIL'
+
+function hasReportValue(value) {
+  return value !== null && value !== undefined && value !== ''
+}
+
 function toAbsoluteFontUrl(url) {
   if (/^https?:\/\//i.test(url)) return url
   if (typeof window === 'undefined') return url
@@ -89,18 +97,24 @@ async function buildPdfMakeFonts(language) {
 }
 
 function calculateBmiFallback(heightInCm, weightInKg) {
-  const height = heightInCm / 100
-  const bmi = (weightInKg / height / height).toFixed(1)
+  const height = Number(heightInCm) / 100
+  const weight = Number(weightInKg)
+
+  if (!Number.isFinite(height) || !Number.isFinite(weight) || height <= 0 || weight <= 0) {
+    return PLACEHOLDER3
+  }
+
+  const bmi = (weight / height / height).toFixed(1)
 
   return bmi
 }
 
 function resolveBmi(height, weight, savedBmi) {
-  if (savedBmi !== null && savedBmi !== undefined && savedBmi !== '') {
+  if (hasReportValue(savedBmi)) {
     return savedBmi
   }
 
-  return calculateBmiFallback(Number(height), Number(weight))
+  return calculateBmiFallback(height, weight)
 }
 
 export async function generate_pdf_updated(
@@ -131,6 +145,8 @@ export async function generate_pdf_updated(
   podiatry,
   mammobus,
   hpv,
+  scoliosisData = {},
+  hxOsa = {},
 ) {
   console.log('TRIAGE', triage)
   const language = normalizeLangName(reg?.registrationQ14)
@@ -145,6 +161,7 @@ export async function generate_pdf_updated(
   content.push(...bloodPressureSection(triage))
   content.push(...bmiSection(triage.triageQ10, triage.triageQ11, triage.triageQ12))
   content.push(...otherScreeningModularitiesSection(reg, geriVision, podiatry, vaccine))
+  content.push(...sleepApneaSection(hxOsa, reg, triage, triage.triageQ12))
   //content.push({ text: '', pageBreak: 'before' })
   content.push(
     ...followUpSection(
@@ -166,7 +183,14 @@ export async function generate_pdf_updated(
     ),
   )
   content.push(
-    ...memoSection(geriAudiometry, dietitiansConsult, geriPtConsult, geriOtConsult, doctorSConsult),
+    ...memoSection(
+      scoliosisData,
+      geriAudiometry,
+      dietitiansConsult,
+      geriPtConsult,
+      geriOtConsult,
+      doctorSConsult,
+    ),
   )
   content.push(...recommendationSection())
 
@@ -214,7 +238,7 @@ export async function generate_pdf_updated(
 }
 
 function patientSection(reg, patients) {
-  const salutation = reg.registrationQ1 || 'Dear'
+  const salutation = reg.registrationQ1 || 'Mr/Ms'
 
   const mainLogo = {
     image: updatedLogo,
@@ -224,7 +248,7 @@ function patientSection(reg, patients) {
   const title = [{ text: parseFromLangKey('title'), style: 'header' }]
 
   const thanksNote = [
-    { text: `${parseFromLangKey('dear', salutation, reg.registrationQ2)}`, style: 'normal' },
+    { text: `${parseFromLangKey('dear', salutation, reg.registrationQ2 ?? PLACEHOLDER5)}`, style: 'normal' },
     { text: `${parseFromLangKey('intro')}`, style: 'normal' },
   ]
 
@@ -235,7 +259,7 @@ export function temperatureSection(triage) {
   const textSection = [
     { text: `${parseFromLangKey('temp_title')}`, style: 'subheader' },
     {
-      text: `${parseFromLangKey('temp_reading')} ${triage.triageQ14} °C.\n`,
+      text: `${parseFromLangKey('temp_reading')} ${triage.triageQ14 ?? PLACEHOLDER3} °C.\n`,
       style: 'normal',
     },
     {
@@ -268,7 +292,7 @@ export function bloodPressureSection(triage) {
   const textSection = [
     { text: parseFromLangKey('bp_title'), style: 'subheader' },
     {
-      text: `${parseFromLangKey('bp_reading')} ${triage.triageQ7}/${triage.triageQ8} mmHg.\n`,
+      text: `${parseFromLangKey('bp_reading')} ${triage.triageQ7 ?? PLACEHOLDER3}/${triage.triageQ8 ?? PLACEHOLDER3} mmHg.\n`,
       style: 'normal',
     },
     { text: `${parseFromLangKey('bp_tip')}`, style: 'normal' },
@@ -279,13 +303,6 @@ export function bloodPressureSection(triage) {
       image: bloodpressureQR,
       width: 60,
       margin: [0, 0, 0, 5],
-    },
-    {
-      text: 'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
-      style: 'italicSmall',
-      fontSize: 7,
-      color: 'blue',
-      link: 'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
     },
   ]
 
@@ -322,7 +339,12 @@ export function bmiSection(height, weight, bmiString) {
   return [
     { text: parseFromLangKey('bmi_title'), style: 'subheader' },
     {
-      text: parseFromLangKey('bmi_reading', height, weight, bmi),
+      text: parseFromLangKey(
+        'bmi_reading',
+        hasReportValue(height) ? height : PLACEHOLDER3,
+        hasReportValue(weight) ? weight : PLACEHOLDER3,
+        bmi,
+      ),
       style: 'normal',
     },
 
@@ -388,13 +410,13 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_t_row'),
-                      `6/${eye.OphthalQ3}`,
-                      `6/${eye.OphthalQ4}`,
+                      `6/${eye.OphthalQ3 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ4 ?? PLACEHOLDER3}`,
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_b_row'),
-                      `6/${eye.OphthalQ5}`,
-                      `6/${eye.OphthalQ6}`,
+                      `6/${eye.OphthalQ5 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ6 ?? PLACEHOLDER3}`,
                     ],
                   ],
                 },
@@ -412,7 +434,7 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
             ],
           },
           { text: '', margin: [0, 5] },
-          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ8}\n`, style: 'normal' },
+          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ10 ?? NIL}\n`, style: 'normal' },
         ]
       : []),
     { text: '', margin: [0, 5] },
@@ -428,6 +450,64 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
     ...(vaccine?.VAX3 === 'Yes'
       ? [{ text: `${parseFromLangKey('vaccine_3')}\n`, style: 'normal', margin: [20, 0, 0, 20] }]
       : []),
+  ]
+}
+
+export function sleepApneaSection(hxOsa, reg, triage, bmi) {
+  const osaResponsesScore = [hxOsa?.OSA1, hxOsa?.OSA2, hxOsa?.OSA3, hxOsa?.OSA4].filter(
+    (response) => String(response ?? '').toLowerCase() === 'yes',
+  ).length
+  const sleepApneaScore =
+    (reg?.registrationQ4 > 50 ? 1 : 0) +
+    (String(reg?.registrationQ5 ?? '').toLowerCase() === 'male' ? 1 : 0) +
+    osaResponsesScore +
+    (hasReportValue(bmi) && Number(bmi) > 35 ? 1 : 0) +
+    (hasReportValue(triage?.triageQ15) && Number(triage.triageQ15) > 40 ? 1 : 0)
+  const recommendationKey =
+    sleepApneaScore <= 2
+      ? 'sleep_reco_low'
+      : sleepApneaScore <= 5
+        ? 'sleep_reco_medium'
+        : 'sleep_reco_high'
+
+  return [
+    { text: parseFromLangKey('sleep_apnea_title'), style: 'subheader' },
+    {
+      text: parseFromLangKey('sleep_apnea_reading', sleepApneaScore) + parseFromLangKey(recommendationKey),
+      style: 'normal',
+    },
+    { text: parseFromLangKey('sleep_apnea_info'), style: 'normal' },
+    {
+      style: 'tableExample',
+      margin: [0, 5, 0, 5],
+      table: {
+        widths: ['*', '*'],
+        body: [
+          [
+            {
+              text: parseFromLangKey('sleep_tbl_l_header'),
+              style: 'tableHeader',
+              bold: true,
+            },
+            {
+              text: parseFromLangKey('sleep_tbl_r_header'),
+              style: 'tableHeader',
+              bold: true,
+            },
+          ],
+          ['0 - 2', parseFromLangKey('sleep_tbl_low')],
+          ['3 - 5', parseFromLangKey('sleep_tbl_intermediate')],
+          ['6 - 8', parseFromLangKey('sleep_tbl_high')],
+        ],
+      },
+      layout: {
+        hLineWidth: () => 0.5,
+        vLineWidth: () => 0.5,
+        hLineColor: () => 'black',
+        vLineColor: () => 'black',
+      },
+    },
+    { text: '', margin: [0, 5] },
   ]
 }
 
@@ -521,24 +601,27 @@ export function followUpSection(
   ]
 }
 
-export function memoSection(audioData, dietData, ptData, otData, doctorData) {
+export function memoSection(scoliosisData, audioData, dietData, ptData, otData, doctorData) {
+  const scoliosis =
+    parseFromLangKey('memo_scoliosis') + `${scoliosisData.scoliosisQ2 ?? ''}`
+
   let audio =
     parseFromLangKey('memo_audio') +
-    parseFromLangKey('memo_audio_1', audioData.AudiometryQ12) +
-    parseFromLangKey('memo_audio_2', audioData.AudiometryQ13)
+    parseFromLangKey('memo_audio_1', audioData.AudiometryQ12 ?? PLACEHOLDER5) +
+    parseFromLangKey('memo_audio_2', audioData.AudiometryQ13 ?? PLACEHOLDER5)
 
-  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4}`
+  let diet = parseFromLangKey('memo_diet') + `${dietData.dietitiansConsultQ4 ?? ''}`
   if (dietData.dietitiansConsultQ5) {
     diet += parseFromLangKey(
       'memo_diet_1',
-      dietData.dietitiansConsultQ5,
-      dietData.dietitiansConsultQ6,
+      dietData.dietitiansConsultQ5 ?? '',
+      dietData.dietitiansConsultQ6 ?? '',
     )
   }
 
-  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1}`
-  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1}`
-  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3}`
+  const pt = parseFromLangKey('memo_pt') + `${ptData.geriPtConsultQ1 ?? ''}`
+  const ot = parseFromLangKey('memo_ot') + `${otData.geriOtConsultQ1 ?? ''}`
+  const doctor = parseFromLangKey('memo_doctor') + `${doctorData.doctorSConsultQ3 ?? ''}`
 
   return [
     { text: parseFromLangKey('memo_title'), style: 'subheader' },
@@ -546,6 +629,7 @@ export function memoSection(audioData, dietData, ptData, otData, doctorData) {
       table: {
         widths: ['*'],
         body: [
+          [{ text: scoliosis, style: 'normal' }],
           [{ text: diet, style: 'normal' }],
           [{ text: pt, style: 'normal' }],
           [{ text: ot, style: 'normal' }],

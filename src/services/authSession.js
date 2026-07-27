@@ -1,8 +1,10 @@
 import { getCurrentProfile } from '../api/profilesApi'
+import { clearPersistedPatient } from '../utils/patientPersistence'
 
 const clearAuthSession = () => {
   localStorage.removeItem('authToken')
   localStorage.removeItem('profile')
+  clearPersistedPatient()
 }
 
 const decodeJwtPayload = (token) => {

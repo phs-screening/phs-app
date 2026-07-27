@@ -19,7 +19,6 @@ const initialValues = {
   hxHcsrQ3: '',
   hxHcsrShortAnsQ3: '',
   hxHcsrQ5: '',
-  hxHcsrQ6: '',
   hxHcsrQ7: '',
   hxHcsrShortAnsQ7: '',
   hxhcsrQ8: '',
@@ -29,16 +28,11 @@ const validationSchema = Yup.object({
   hxHcsrQ1: Yup.string().required('Required'),
   hxHcsrQ2: Yup.string().required('Required'),
   hxHcsrQ3: Yup.string().required('Required'),
-  hxHcsrQ6: Yup.string().required('Required'),
   hxHcsrQ7: Yup.string().required('Required'),
 })
 
 const formOptions = {
   hxHcsrQ3: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  hxHcsrQ6: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -103,7 +97,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold'>
-            Please enter History-taker&apos;s surname followed by initials (e.g. Tan J J)
+            Please enter History-taker&apos;s full name
           </Typography>
           <FastField
             name='hxHcsrQ1'
@@ -178,18 +172,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             label='hxHcsrQ5'
             component={CustomRadioGroup}
             options={formOptions.hxHcsrQ5}
-            row
-          />
-
-          <Typography variant='h4' fontWeight='bold'>
-            Please tick to highlight if you feel SYSTEMS REVIEW require closer scrutiny by doctors
-            later or if participant strongly insists.
-          </Typography>
-          <FastField
-            name='hxHcsrQ6'
-            label='hxHcsrQ6'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ6}
             row
           />
 

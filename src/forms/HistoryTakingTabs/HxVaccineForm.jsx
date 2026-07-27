@@ -8,21 +8,33 @@ import { submitForm } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import PopupText from '../../utils/popupText'
 
 const formName = 'hxVaccineForm'
 
+// Per-vaccine pairs: PMHXVAX(odd) = "received?", PMHXVAX(even) = "interested?"
+// (shown only when the corresponding vaccine was not received / unsure).
+// Pneumococcal (VAX3/4) is only for age > 65; shingles (VAX5/6) only for age > 50.
 const initialValues = {
-  VAXHX1: '',
-  VAXHX2: '',
-  VAXHX3: '',
-  VAXHX4: '',
+  PMHXVAX1: '',
+  PMHXVAX2: '',
+  PMHXVAX3: '',
+  PMHXVAX4: '',
+  PMHXVAX5: '',
+  PMHXVAX6: '',
 }
 
 const validationSchema = Yup.object({
-  VAXHX1: Yup.string().required('Required'),
-  VAXHX2: Yup.string().required('Required'),
-  VAXHX3: Yup.string().required('Required'),
-  VAXHX4: Yup.string().required('Required'),
+  PMHXVAX1: Yup.string().required('Required'),
+  PMHXVAX2: Yup.string().when('PMHXVAX1', {
+    is: (value) => value === 'No' || value === 'Unsure',
+    then: (schema) => schema.required('Required'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  PMHXVAX3: Yup.string().notRequired(),
+  PMHXVAX4: Yup.string().notRequired(),
+  PMHXVAX5: Yup.string().notRequired(),
+  PMHXVAX6: Yup.string().notRequired(),
 })
 
 const yesNoUnsure = [
@@ -36,22 +48,18 @@ const yesNo = [
   { label: 'No', value: 'No' },
 ]
 
-const formOptions = {
-  VAXHX1: yesNoUnsure,
-  VAXHX2: yesNoUnsure,
-  VAXHX3: yesNoUnsure,
-  VAXHX4: yesNo,
-}
-
 export default function HxVaccineForm({ changeTab, nextTab }) {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
+  const [age, setAge] = useState(0)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSavedData(patientId, formName)
+      const reg = await getSavedData(patientId, 'registrationForm')
       setSavedData({ ...initialValues, ...res })
+      setAge(Number(reg?.registrationQ4) || 0)
     }
 
     fetchData()
@@ -70,6 +78,15 @@ export default function HxVaccineForm({ changeTab, nextTab }) {
     }
   }
 
+  const interestQuestion = (name) => (
+    <>
+      <Typography variant='subtitle1' fontWeight='bold'>
+        Would you be interested in receiving this vaccine?
+      </Typography>
+      <FastField name={name} label={name} component={CustomRadioGroup} options={yesNo} row />
+    </>
+  )
+
   const renderForm = () => (
     <Formik
       initialValues={savedData}
@@ -83,54 +100,63 @@ export default function HxVaccineForm({ changeTab, nextTab }) {
             <strong>VACCINATION SCREENING</strong>
           </Typography>
           <Typography gutterBottom>
-            For vaccine history, if the participant is unsure, select <strong>Unsure</strong> (treated
-            as not received). Note: the pneumococcal vaccine applies to those above 65, and the
-            shingles vaccine to those above 50 &mdash; the age check is handled automatically.
+            If the participant is unsure, select <strong>Unsure</strong> (treated as not received).
+            For all vaccines, please advise that some are fully subsidised based on CHAS status and
+            age; otherwise charges may apply, and they can find out at the vaccination station.
           </Typography>
 
+          {/* Influenza — all participants */}
           <Typography variant='subtitle1' fontWeight='bold'>
             Have you received an influenza (flu) vaccine in the last year?
           </Typography>
           <FastField
-            name='VAXHX1'
-            label='VAXHX1'
+            name='PMHXVAX1'
+            label='PMHXVAX1'
             component={CustomRadioGroup}
-            options={formOptions.VAXHX1}
+            options={yesNoUnsure}
             row
           />
+          <PopupText qnNo='PMHXVAX1' triggerValue={['No', 'Unsure']}>
+            {interestQuestion('PMHXVAX2')}
+          </PopupText>
 
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Have you received a pneumococcal vaccine?
-          </Typography>
-          <FastField
-            name='VAXHX2'
-            label='VAXHX2'
-            component={CustomRadioGroup}
-            options={formOptions.VAXHX2}
-            row
-          />
+          {/* Pneumococcal — only for patients over 65 */}
+          {age > 65 && (
+            <>
+              <Typography variant='subtitle1' fontWeight='bold'>
+                Have you received a pneumococcal vaccine?
+              </Typography>
+              <FastField
+                name='PMHXVAX3'
+                label='PMHXVAX3'
+                component={CustomRadioGroup}
+                options={yesNoUnsure}
+                row
+              />
+              <PopupText qnNo='PMHXVAX3' triggerValue={['No', 'Unsure']}>
+                {interestQuestion('PMHXVAX4')}
+              </PopupText>
+            </>
+          )}
 
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Have you received a shingles vaccine?
-          </Typography>
-          <FastField
-            name='VAXHX3'
-            label='VAXHX3'
-            component={CustomRadioGroup}
-            options={formOptions.VAXHX3}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Are you interested in receiving vaccination?
-          </Typography>
-          <FastField
-            name='VAXHX4'
-            label='VAXHX4'
-            component={CustomRadioGroup}
-            options={formOptions.VAXHX4}
-            row
-          />
+          {/* Shingles — only for patients over 50 */}
+          {age > 50 && (
+            <>
+              <Typography variant='subtitle1' fontWeight='bold'>
+                Have you received a shingles vaccine?
+              </Typography>
+              <FastField
+                name='PMHXVAX5'
+                label='PMHXVAX5'
+                component={CustomRadioGroup}
+                options={yesNoUnsure}
+                row
+              />
+              <PopupText qnNo='PMHXVAX5' triggerValue={['No', 'Unsure']}>
+                {interestQuestion('PMHXVAX6')}
+              </PopupText>
+            </>
+          )}
 
           <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}

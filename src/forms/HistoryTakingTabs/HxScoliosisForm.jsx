@@ -12,21 +12,21 @@ import ErrorNotification from '../../components/form-components/ErrorNotificatio
 const formName = 'hxScoliosisForm'
 
 const initialValues = {
-  SCOL1: '',
-  SCOL2: '',
-  SCOL3: '',
-  SCOL4: '',
-  SCOL5: '',
-  SCOL6: '',
+  Scoliosis1: '',
+  Scoliosis2: '',
+  Scoliosis3: '',
+  Scoliosis4: '',
+  Scoliosis5: '',
+  Scoliosis6: '',
 }
 
 const validationSchema = Yup.object({
-  SCOL1: Yup.string().required('Required'),
-  SCOL2: Yup.string().required('Required'),
-  SCOL3: Yup.string().required('Required'),
-  SCOL4: Yup.string().required('Required'),
-  SCOL5: Yup.string().required('Required'),
-  SCOL6: Yup.string().required('Required'),
+  Scoliosis1: Yup.string().required('Required'),
+  Scoliosis2: Yup.string().required('Required'),
+  Scoliosis3: Yup.string().required('Required'),
+  Scoliosis4: Yup.string().required('Required'),
+  Scoliosis5: Yup.string().required('Required'),
+  Scoliosis6: Yup.string().required('Required'),
 })
 
 const yesNo = [
@@ -35,39 +35,39 @@ const yesNo = [
 ]
 
 const formOptions = {
-  SCOL1: yesNo,
-  SCOL2: yesNo,
-  SCOL3: yesNo,
-  SCOL4: yesNo,
-  SCOL5: yesNo,
-  SCOL6: yesNo,
+  Scoliosis1: yesNo,
+  Scoliosis2: yesNo,
+  Scoliosis3: yesNo,
+  Scoliosis4: yesNo,
+  Scoliosis5: yesNo,
+  Scoliosis6: yesNo,
 }
 
-// Each question maps to one of the 6 scoliosis eligibility criteria (SCOL1-6).
+// Each question maps to one of the 6 scoliosis eligibility criteria (Scoliosis1-6).
 // Any "Yes" makes the participant eligible for the Scoliosis station.
 const questions = [
   {
-    name: 'SCOL1',
+    name: 'Scoliosis1',
     text: 'Do you have chronic lower back pain or leg pain associated with numbness or tingling?',
   },
   {
-    name: 'SCOL2',
+    name: 'Scoliosis2',
     text: 'Do you have any noticeable postural changes? (e.g. forward lean while walking, leaning to one side, or uneven shoulder/hip heights)',
   },
   {
-    name: 'SCOL3',
+    name: 'Scoliosis3',
     text: 'Have you had a progressive loss of height (about 3cm) over the past few years?',
   },
   {
-    name: 'SCOL4',
+    name: 'Scoliosis4',
     text: 'Do you have a past history of childhood or adolescent scoliosis?',
   },
   {
-    name: 'SCOL5',
+    name: 'Scoliosis5',
     text: 'Have you previously had any lumbar (lower back) surgery?',
   },
   {
-    name: 'SCOL6',
+    name: 'Scoliosis6',
     text: 'Have you been diagnosed with osteopenia or osteoporosis?',
   },
 ]

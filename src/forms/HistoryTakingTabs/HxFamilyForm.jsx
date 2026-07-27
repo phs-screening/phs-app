@@ -68,10 +68,7 @@ export default function HxFamilyForm({ changeTab, nextTab }) {
           <Typography variant='h4'>
             <strong>FAMILY HISTORY</strong>
           </Typography>
-          <Typography variant='h6'>
-            Does the patient have any relevant family history they would like the doctor to know
-            about?
-          </Typography>
+          <Typography variant='h6'>Does the patient have any relevant family history?</Typography>
           <FastField
             name='FAMILY1'
             label='FAMILY1'
@@ -91,7 +88,7 @@ export default function HxFamilyForm({ changeTab, nextTab }) {
             />
           </PopupText>
 
-          <ErrorNotification
+          <ErrorNotification 
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
             message="Please fill in all required fields correctly."
           />

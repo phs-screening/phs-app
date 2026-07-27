@@ -3,15 +3,13 @@ import { useState, useEffect, useContext } from 'react'
 import Timeline from '@mui/lab/Timeline'
 import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
-import TimelineConnector from '@mui/lab/TimelineConnector'
 import TimelineContent from '@mui/lab/TimelineContent'
 import TimelineDot from '@mui/lab/TimelineDot'
-import { useNavigate } from 'react-router-dom'
-import { isAdmin } from '../../services/authSession'
 import { ScrollTopContext } from '../../api/utils.js'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Alert, Box, Card, CardContent, CardHeader, Divider } from '@mui/material'
 import { getPatientStationSummary } from 'src/api/stationsApi'
+import StationTimelineItem from './StationTimelineItem'
 
 const toTimelineItem = (station) => ({
   key: station.key,
@@ -21,62 +19,11 @@ const toTimelineItem = (station) => ({
   eligible: station.eligible,
 })
 
-function navigateTo(event, navigate, page, scrollTop) {
-  event.preventDefault()
-  scrollTop()
-  const path = '/app/' + page
-  navigate(path)
-}
-
-const TimelineItemComponent = ({ item, formDone, admin, navigate, scrollTop }) => {
-  // Check if this station is eligible
-  const eligibilityName = item.eligibilityName
-  const isEligible =
-    typeof item.eligible === 'boolean'
-      ? item.eligible
-      : formDone.eligibleStations?.includes(eligibilityName)
-
-  // Determine dot color based on completion status and eligibility
-  let dotColor
-  if (formDone?.[item.key]) {
-    dotColor = 'primary' // Completed stations are primary color
-  } else if (eligibilityName && !isEligible) {
-    dotColor = 'error' // Not eligible stations are red
-  } else {
-    dotColor = 'grey' // Default color for incomplete but eligible stations
-  }
-
-  const statusText =
-    item.key === 'screeningreview'
-      ? ' [View Only]'
-      : !formDone?.[item.key] ? ' [Incomplete]' : admin ? ' [Edit]' : ' [Completed]'
-
-  return (
-    <TimelineItem>
-      <TimelineSeparator>
-        <TimelineDot color={dotColor} />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent>
-        <a
-          href={`/app/${item.path}`}
-          onClick={(event) => navigateTo(event, navigate, item.path, scrollTop)}
-        >
-          {item.label}
-          {statusText}
-        </a>
-      </TimelineContent>
-    </TimelineItem>
-  )
-}
-
 const BasicTimeline = (props) => {
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [formDone, setFormDone] = useState({})
   const [timelineItems, setTimelineItems] = useState([])
   const [loadError, setLoadError] = useState('')
-  const [admin, isAdmins] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
 
   useEffect(() => {
@@ -98,7 +45,6 @@ const BasicTimeline = (props) => {
         if (mounted) {
           setTimelineItems(activeStations.map(toTimelineItem))
           setFormDone(status)
-          isAdmins(await isAdmin())
         }
       } catch (err) {
         console.error('Failed to load backend station summary:', err)
@@ -117,7 +63,7 @@ const BasicTimeline = (props) => {
     return () => {
       mounted = false
     }
-  }, [navigate, props.patientId])
+  }, [props.patientId])
   if (loading) {
     return (
       <div
@@ -138,12 +84,10 @@ const BasicTimeline = (props) => {
     return (
       <Timeline>
         {timelineItems.map((item) => (
-          <TimelineItemComponent
+          <StationTimelineItem
             key={item.key}
             item={item}
             formDone={formDone}
-            admin={admin}
-            navigate={navigate}
             scrollTop={scrollTop}
           />
         ))}

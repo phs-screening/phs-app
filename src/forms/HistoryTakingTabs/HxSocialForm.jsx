@@ -383,15 +383,19 @@ export default function HxSocialForm({ changeTab, nextTab }) {
               <li> Males: &lt;2 standard drinks per day</li>
               <li> Females: &lt;1 standard drink per day</li>
             </ul>
+            One standard drink contains 10 g of pure alcohol and is approximately:
+            <ul>
+              <li>1 can (330 ml) of regular beer at 5% alcohol</li>
+              <li>Half a glass (100 ml) of wine at 15% alcohol</li>
+              <li>1 shot (30 ml) of spirits at 40% alcohol</li>
+            </ul>
           </Typography>
           <Typography fontWeight='bold' sx={{ mt: 2 }}>
             Do you consume alcoholic drinks?
           </Typography>
           <FastField name='SOCIAL12' label='SOCIAL12' component={CustomTextField} />
 
-          <Typography fontWeight='bold'>
-            Do you consciously try to eat more fruits, vegetables, whole grain and cereals?
-          </Typography>
+          <Typography fontWeight='bold'>Do you think you eat a balanced diet?</Typography>
           <FastField
             name='SOCIAL13'
             label='SOCIAL13'

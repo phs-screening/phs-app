@@ -2,13 +2,18 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 import { useRoutes } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import routes from 'src/routes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import customTheme from './theme'
 // import { isLoggedin } from './services/authSession'
 import { FormContext } from './api/utils'
 import FormSubmitStatusHost from './components/form-components/FormSubmitStatusHost'
 import './App.css'
-import { clearPersistedPatient, loadPersistedPatient, savePersistedPatient } from './utils/patientPersistence'
+import {
+  clearPersistedPatient,
+  loadPersistedPatient,
+  PATIENT_CLEARED_EVENT,
+  savePersistedPatient,
+} from './utils/patientPersistence'
 
 export const LoginContext = React.createContext({
   login: false,
@@ -19,8 +24,9 @@ export const LoginContext = React.createContext({
 
 const App = () => {
   // const { setProfile } = useContext(LoginContext)
-  const [patientId, setPatientId] = useState(() => loadPersistedPatient().patientId)
-  const [patientInfo, setPatientInfo] = useState(() => loadPersistedPatient().patientInfo)
+  const [persistedPatient] = useState(loadPersistedPatient)
+  const [patientId, setPatientId] = useState(() => persistedPatient.patientId)
+  const [patientInfo, setPatientInfo] = useState(() => persistedPatient.patientInfo)
   // const [login, isLogin] = useState(isLoggedin())
   // const profile = undefined
   const [login, isLogin] = useState(!!localStorage.getItem('authToken')) // start as false, not isLoggedin()
@@ -31,6 +37,19 @@ const App = () => {
       return null
     }
   })
+
+  useEffect(() => {
+    const handlePatientCleared = () => {
+      setPatientId(-1)
+      setPatientInfo({})
+    }
+
+    window.addEventListener(PATIENT_CLEARED_EVENT, handlePatientCleared)
+
+    return () => {
+      window.removeEventListener(PATIENT_CLEARED_EVENT, handlePatientCleared)
+    }
+  }, [])
 
   const updatePatientId = (new_id) => {
     setPatientId(new_id)

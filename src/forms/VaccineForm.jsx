@@ -50,10 +50,8 @@ export default function VaccineForm() {
       setSaveData(savedData || initialValues)
 
       const regiData = await getSavedData(patientId, allForms.registrationForm)
-      Promise.all([regiData]).then((result) => {
-        setRegi(result[0])
-        setLoadingSidePanel(false)
-      })
+      setRegi(regiData)
+      setLoadingSidePanel(false)
     }
     fetchData()
   }, [patientId])
@@ -129,7 +127,7 @@ export default function VaccineForm() {
                     row
                   />
 
-                  <ErrorNotification
+                  <ErrorNotification 
                     show={submitCount > 0 && Object.keys(errors).length > 0}
                   />
 

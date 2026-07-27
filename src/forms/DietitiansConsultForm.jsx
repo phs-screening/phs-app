@@ -163,7 +163,6 @@ const DietitiansConsultForm = () => {
               minRows={4}
             />
 
-
             <Typography variant='h4' fontWeight='bold'>
               Referred to Polyclinic for follow-up?
             </Typography>
@@ -243,9 +242,7 @@ const DietitiansConsultForm = () => {
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL12}</p> : null}
       <Divider />
       <h2>Diet</h2>
-      <p className='underlined'>
-        Does participant consciously try to the more fruits, vegetables, whole grain & cereals?
-      </p>
+      <p className='underlined'>Does the participant think they eat a balanced diet?</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL13}</p> : null}
       <p className='underlined'>
         Does the participant exercise in any form of moderate physical activity for at least 150

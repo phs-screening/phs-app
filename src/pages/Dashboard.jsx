@@ -4,6 +4,7 @@ import PatientTimeline from 'src/components/dashboard/PatientTimeline'
 import { Helmet } from 'react-helmet-async'
 import { FormContext } from 'src/api/utils'
 import { useNavigate } from 'react-router-dom'
+import { isLoggedin } from '../services/authSession'
 
 const Dashboard = () => {
   const { patientId } = useContext(FormContext)
@@ -13,6 +14,11 @@ const Dashboard = () => {
   useEffect(() => {
     console.log("Current Patient ID: " + patientId)
     if (patientId === -1) {
+      if (!isLoggedin()) {
+        navigate('/login', { replace: true })
+        return
+      }
+
       alert('You need to enter the queue number for the patient you are attending to!')
       navigate('/app/registration', { replace: true })
     } else {

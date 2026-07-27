@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { Typography } from '@mui/material'
+import { Alert, Typography } from '@mui/material'
 
 import { Divider, Paper, CircularProgress, Button, Box, Grid } from '@mui/material'
 
@@ -53,6 +53,10 @@ const validationSchema = Yup.object({
     .required('Waist circumference is required')
     .min(0, 'Value must be positive'),
   triageQ14: Yup.number().required('Temperature is required').min(0, 'Value must be positive'),
+  triageQ15: Yup.number()
+    .required('Neck circumference is required')
+    .min(0, 'Value must be positive'),
+  triageQ16: Yup.number().required('SpO2 is required').min(0, 'Value must be positive'),
 })
 
 const initialValues = {
@@ -74,6 +78,8 @@ const initialValues = {
   triageQ12: '',
   triageQ13: '',
   triageQ14: '',
+  triageQ15: '',
+  triageQ16: '',
 }
 
 function CalcBMI({ values }) {
@@ -365,6 +371,11 @@ const TriageForm = () => {
                 options={formOptions.triageQ9}
                 row
               />
+              {values.triageQ9 === 'Yes' && (
+                <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                  Please inform a Comm member immediately.
+                </Alert>
+              )}
 
               <h2>2) BMI</h2>
               <h3>Height (in cm)</h3>
@@ -380,7 +391,11 @@ const TriageForm = () => {
               <h3>Waist Circumference (in cm)</h3>
               <Field name='triageQ13' component={CustomNumberField} label='Triage Q13' min={0} />
 
-              <h2>4) Ear Temperature Taking</h2>
+              <h2>4) Neck Circumference</h2>
+              <h3>Neck Circumference (in cm)</h3>
+              <Field name='triageQ15' component={CustomNumberField} label='Triage Q15' min={0} />
+
+              <h2>5) Ear Temperature Taking</h2>
               <h3>Temperature (in Celsius)</h3>
               <Field
                 name='triageQ14'
@@ -389,6 +404,10 @@ const TriageForm = () => {
                 min={0}
                 step={0.1}
               />
+
+              <h2>6) Oxygen Saturation</h2>
+              <h3>SpO2 (%)</h3>
+              <Field name='triageQ16' component={CustomNumberField} label='Triage Q16' min={0} />
             </div>
 
             {/* Display form errors */}

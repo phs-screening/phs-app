@@ -90,21 +90,24 @@ const WceForm = (props) => {
   const [saveData, setSaveData] = useState(initialValues)
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
+  const [hxFamily, setHxFamily] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = getSavedData(patientId, formName)
       const regData = getSavedData(patientId, allForms.registrationForm)
       const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
+      const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
       const reg = await getSavedData(patientId, 'registrationForm')
       if (reg?.registrationQ5 === 'Male') {
         alert('This patient is not female. Are you sure you want to proceed with the HPV form?')
       }
 
-      Promise.all([savedData, regData, hxSocialData]).then((result) => {
+      Promise.all([savedData, regData, hxSocialData, hxFamilyData]).then((result) => {
         setSaveData({ ...initialValues, ...result[0] })
         setReg(result[1])
         setHxSocial(result[2])
+        setHxFamily(result[3])
         isLoadingSidePanel(false)
       })
     }
@@ -216,6 +219,12 @@ const WceForm = (props) => {
                     <p className='blue'>{hxSocial.SOCIALShortAns3}</p>
                   ) : null}
 
+                  <h2>Family History</h2>
+                  <p className='underlined'>Does the patient have any relevant family history?</p>
+                  <p className='blue'>{hxFamily?.FAMILY1 || 'nil'}</p>
+                  {hxFamily?.FAMILYShortAns1 ? (
+                    <p className='blue'>{hxFamily.FAMILYShortAns1}</p>
+                  ) : null}
                 </div>
               )}
             </Grid>
