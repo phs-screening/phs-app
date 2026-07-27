@@ -13,7 +13,6 @@ import './fieldPadding.css'
 import allForms from './forms.json'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
-import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
 
 const formName = 'vaccineForm'
@@ -22,7 +21,6 @@ const initialValues = {
   VAX1: '',
   VAX2: '',
   VAX3: '',
-  VAX4: '',
 }
 
 const formOptions = {
@@ -36,7 +34,6 @@ const validationSchema = Yup.object({
   VAX1: Yup.string().required(),
   VAX2: Yup.string().required(),
   VAX3: Yup.string().required(),
-  VAX4: Yup.string().required(),
 })
 
 export default function VaccineForm() {
@@ -135,18 +132,7 @@ export default function VaccineForm() {
                     row
                   />
 
-                  <Typography variant='subtitle1' fontWeight='bold'>
-                    Patient&apos;s Vaccination history
-                  </Typography>
-                  <FastField
-                    name='VAX4'
-                    label='VAX4'
-                    component={CustomTextField}
-                    multiline
-                    minRows={3}
-                  />
-                      
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors).length > 0}
                   />
 
@@ -235,16 +221,6 @@ export default function VaccineForm() {
                       ) : (
                         <Typography variant='body1' className='blue'>
                           Food Allergy: nil
-                        </Typography>
-                      )}
-
-                      {historyForm.PMHXShortAns10 ? (
-                        <Typography variant='body1' className='blue'>
-                          Drug Allergy: {historyForm.PMHXShortAns10}
-                        </Typography>
-                      ) : (
-                        <Typography variant='body1' className='blue'>
-                          Drug Allergy: nil
                         </Typography>
                       )}
                     </>

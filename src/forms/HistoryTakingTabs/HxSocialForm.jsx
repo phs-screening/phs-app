@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Formik, Form, Field, FastField, useFormikContext } from 'formik'
+import { Formik, Form, FastField, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
@@ -41,7 +41,6 @@ const initialValues = {
   SOCIAL13C: '',
   SOCIAL14: '',
   SOCIAL15: '',
-  SOCIAL16: '',
 }
 
 const validationSchema = Yup.object({
@@ -71,7 +70,6 @@ const validationSchema = Yup.object({
   SOCIAL13: Yup.string().required('Required'),
   SOCIAL14: Yup.string().required('Required'),
   SOCIAL15: Yup.string().required('Required'),
-  SOCIAL16: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -143,10 +141,6 @@ const formOptions = {
     },
   ],
   SOCIAL15: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  SOCIAL16: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -487,17 +481,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             <li>Underweight cases (BMI &lt; 18.0 kg/m^2)</li>
             <li>Any other metabolic imbalance</li>
           </ul>
-
-          <Typography fontWeight='bold'>
-            Have you visited any GP or polyclinic in the last 1 year?
-          </Typography>
-          <Field
-            name='SOCIAL16'
-            label='SOCIAL16'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL16}
-            row
-          />
 
           <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}

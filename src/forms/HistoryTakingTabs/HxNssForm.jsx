@@ -77,11 +77,6 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  PMHX10: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-    { label: 'Not answered', value: 'No' },
-  ],
 }
 
 export default function HxNssForm({ changeTab, nextTab }) {
@@ -194,28 +189,6 @@ export default function HxNssForm({ changeTab, nextTab }) {
             <FastField
               name='PMHXShortAns3'
               label='PMHXShortAns3 (Specify food allergies here)'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
-
-          <Typography fontWeight='bold'>
-            Do you have any drug allergies? If yes, please specify.
-          </Typography>
-          <FastField
-            name='PMHX10'
-            label='PMHX10'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX10}
-            row
-          />
-          <PopupText qnNo='PMHX10' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns10'
-              label='PMHXShortAns10 (Specify drug allergies here)'
               component={CustomTextField}
               fullWidth
               multiline

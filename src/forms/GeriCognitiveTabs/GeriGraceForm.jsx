@@ -20,8 +20,6 @@ const validationSchema = Yup.object({
   GRACE1: Yup.string().notRequired(),
   GRACE2: Yup.string().oneOf(['Yes', 'No']).required('Required'),
   GRACE3: Yup.string().notRequired(),
-  GRACE4: Yup.string().oneOf(['Yes', 'No']).required('Required'),
-  GRACE5: Yup.string().notRequired(),
 })
 
 const formName = 'geriGraceForm'
@@ -34,8 +32,6 @@ const GeriGraceForm = () => {
     GRACE1: '',
     GRACE2: '',
     GRACE3: '',
-    GRACE4: '',
-    GRACE5: '',
   })
 
   useEffect(() => {
@@ -45,8 +41,6 @@ const GeriGraceForm = () => {
         GRACE1: savedData.GRACE1 || '',
         GRACE2: savedData.GRACE2 || '',
         GRACE3: savedData.GRACE3 || '',
-        GRACE4: savedData.GRACE4 || '',
-        GRACE5: savedData.GRACE5 || '',
       })
     }
     fetchData()
@@ -115,26 +109,6 @@ const GeriGraceForm = () => {
                   />
                 </PopupText>
 
-                <h3>Referral to Doctor&apos;s Consult?</h3>
-                <p>For geri patients who may be depressed</p>
-                <FastField
-                  name='GRACE4'
-                  label='GRACE4'
-                  component={CustomRadioGroup}
-                  options={radioOptions}
-                  row
-                />
-                <PopupText qnNo='GRACE4' triggerValue='Yes'>
-                  <h3>Reason for referral:</h3>
-                  <FastField
-                    name='GRACE5'
-                    label='Reason for referral'
-                    component={CustomTextField}
-                    fullWidth
-                    multiline
-                    rows={3}
-                  />
-                </PopupText>
               </div>
 
               <ErrorNotification 
