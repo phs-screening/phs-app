@@ -14,7 +14,7 @@ const formName = 'hxVaccineForm'
 
 // Per-vaccine pairs: PMHXVAX(odd) = "received?", PMHXVAX(even) = "interested?"
 // (shown only when the corresponding vaccine was not received / unsure).
-// Pneumococcal (VAX3/4) is only for age > 65; shingles (VAX5/6) only for age > 60.
+// Pneumococcal (VAX3/4) is only for age > 65; shingles (VAX5/6) only for age > 50.
 const initialValues = {
   PMHXVAX1: '',
   PMHXVAX2: '',
@@ -139,8 +139,8 @@ export default function HxVaccineForm({ changeTab, nextTab }) {
             </>
           )}
 
-          {/* Shingles — only for patients over 60 */}
-          {age > 60 && (
+          {/* Shingles — only for patients over 50 */}
+          {age > 50 && (
             <>
               <Typography variant='subtitle1' fontWeight='bold'>
                 Have you received a shingles vaccine?
