@@ -1,8 +1,8 @@
 {
     "salutation" : "Mr/Mrs",
-    "title" : "Laporan Pemeriksaan Kesihatan 2025 Perkhidmatan Kesihatan Awam",
+    "title" : "Laporan Pemeriksaan Kesihatan 2026 Perkhidmatan Kesihatan Awam",
     "dear": "{0} {1} Yang dihormati",
-    "intro": "Terima kasih kerana mengambil bahagian dalam pemeriksaan kesihatan kami di The Frontier CC dan Pusat Perubatan Jurong pada 16 dan 17 Ogos tahun ini. Berikut adalah hasil saringan anda:",
+    "intro": "Terima kasih kerana mengambil bahagian dalam pemeriksaan kesihatan kami di The Frontier CC dan Pusat Perubatan Jurong pada 22 dan 23 Ogos tahun ini. Berikut adalah hasil saringan anda:",
 
     "temp_title": "Suhu",
     "temp_reading": "Suhu anda ialah",
@@ -10,10 +10,10 @@
 
     "bp_title": "Tekanan darah",
     "bp_reading": "Purata bacaan tekanan darah anda ialah ",
-    "bp_tip": "Bacaan tekanan darah normal adalah lebih rendah daripada 130/85mmHg. Oleh kerana tekanan darah dicirikan oleh variasi spontan yang besar, diagnosis tekanan darah tinggi harus berdasarkan beberapa pengukuran tekanan darah yang diambil pada beberapa kesempatan yang berasingan. Ini harus kerap disusuli oleh doktor yang boleh memberikan diagnosis dan pengurusan yang sesuai. Jika purata bacaan tekanan darah anda melebihi 130/85, sila dapatkan nasihat doktor yang boleh menilai dengan lebih baik risiko hipertensi anda.",
+    "bp_tip": "Bacaan tekanan darah normal adalah lebih rendah daripada 130/85 mmHg. Oleh kerana tekanan darah dicirikan oleh variasi spontan yang besar, diagnosis tekanan darah tinggi harus berdasarkan beberapa pengukuran tekanan darah yang diambil pada beberapa kesempatan yang berasingan. Ini harus kerap disusuli oleh doktor yang boleh memberikan diagnosis dan pengurusan yang sesuai. Jika purata bacaan tekanan darah anda melebihi 130/85, sila dapatkan nasihat doktor yang boleh menilai dengan lebih baik risiko hipertensi anda.",
 
     "bmi_title": "Indeks Jisim badan",
-    "bmi_reading": "Ketinggian anda ialah {0}cm dan berat badan anda ialah {1}kg, dengan BMI {2}kg/m2.",
+    "bmi_reading": "Ketinggian anda ialah {0} cm dan berat badan anda ialah {1} kg, dengan BMI {2} kg/m^2.",
     "bmi_tbl_l_header": "Mata potong BMI Asia untuk tindakan",
     "bmi_tbl_r_header": "Risiko Penyakit Kardiovaskular",
     "bmi_tbl_low": "Rendah",
@@ -38,6 +38,18 @@
     "vaccine_2": "Anda telah mengambil vaksin Influenza.",
     "vaccine_3": "Anda telah mengambil vaksin Pneumokokal.",
 
+    "sleep_apnea_title": "Skor Apnea Tidur",
+    "sleep_apnea_reading": "Skor Apnea Tidur anda ialah {0}. ",
+    "sleep_reco_low": "Tiada tindakan selanjutnya disyorkan.",
+    "sleep_reco_medium": "Anda disyorkan untuk membuat pemeriksaan susulan di poliklinik pilihan anda.",
+    "sleep_reco_high": "Anda amat disyorkan untuk membuat susulan di poliklinik pilihan anda.",
+    "sleep_apnea_info": "Skor STOP-BANG menganggarkan risiko seseorang menghidap Apnea Tidur Obstruktif berdasarkan lapan faktor: Berdengkur, Keletihan, Apnea yang diperhatikan, Tekanan darah tinggi, BMI, Umur, Lilitan Leher dan Jantina.",
+    "sleep_tbl_l_header": "Skor STOP-BANG",
+    "sleep_tbl_r_header": "Risiko Apnea Tidur",
+    "sleep_tbl_low": "Rendah",
+    "sleep_tbl_intermediate": "Pertengahan",
+    "sleep_tbl_high": "Tinggi",
+
     "fw_title": "Susulan",
     "fw_intro": "Anda telah menyatakan minat untuk atau mendaftar untuk membuat susulan dengan rakan kongsi luar kami, butiran boleh didapati di bawah:",
     "fw_empty": "You have not indicated or signed-up for any follow-ups.",
@@ -60,6 +72,7 @@
     "fw_aic": "Anda telah menyatakan minat dengan Agensi Penjagaan Bersepadu untuk disusuli. Sila hubungi 1800-650-6060 untuk pertanyaan lanjut.",
     
     "memo_title": "Memo Rujukan",
+    "memo_scoliosis": "Stesen Skoliosis, jika ada:\n\n",
     "memo_audio" : "Audiologi, jika ada:\n\n",
     "memo_audio_1" : "Pasukan audiologi percaya bahawa: {0}\n\n",
     "memo_audio_2" : "Pasukan audiologi telah menulis susulan yang disyorkan: {0}\n\n",
@@ -73,5 +86,5 @@
     "rec": "Anda amat disyorkan untuk mendapatkan susulan berdasarkan hasil pemeriksaan kesihatan anda. \n\nSeperti yang dinyatakan di atas, ahli PHS mungkin akan menghubungi anda tidak lama lagi sebagai satu bentuk susulan dalam masa beberapa minggu, jika anda tidak menarik diri daripada Inisiatif Telekesihatan kami.",
 
     "disclaimer_title": "Penafian Laporan Pemeriksaan Kesihatan",
-    "disclaimer" : "Pemeriksaan kesihatan mungkin mengenal pasti faktor risiko perubatan tertentu, keadaan atau penyakit tetapi tidak bertujuan untuk menjadi pemeriksaan kesihatan yang komprehensif atau menggantikan perundingan perubatan untuk sebarang gejala atau kebimbangan perubatan. Walaupun tiada sebarang penemuan abnormal dalam keputusan saringan anda, kita tidak boleh memberi jaminan bahawa anda tiada penyakit lain. Anda dinasihatkan untuk memperhatikan jika ada sebarang gejala yang berkaitan dengan keadaan ini, dan mendapatkan rawatan perubatan apabila ragu-ragu. Keadaan-keadaan seperti demam dan penyakit lain semasa atau sejurus sebelum masa saringan boleh menjejaskan tafsiran keputusan dan oleh itu anda dinasihatkan untuk berjumpa doktor anda untuk tafsiran laporan kesihatan. Sila pastikan anda memenuhi kriteria kelayakan sebelum anda kembali untuk pemeriksaan kesihatan anda yang seterusnya. \n\nSekiranya anda mempunyai sebarang pertanyaan, sila hubungi kami di hello@publichealthservice.org. Terima kasih kerana mengambil bahagian dalam PHS 2025 dan kami berharap anda telah mendapat manfaat dan akan terus menyokong kami pada masa hadapan. "
+    "disclaimer" : "Pemeriksaan kesihatan mungkin mengenal pasti faktor risiko perubatan tertentu, keadaan atau penyakit tetapi tidak bertujuan untuk menjadi pemeriksaan kesihatan yang komprehensif atau menggantikan perundingan perubatan untuk sebarang gejala atau kebimbangan perubatan. Walaupun tiada sebarang penemuan abnormal dalam keputusan saringan anda, kita tidak boleh memberi jaminan bahawa anda tiada penyakit lain. Anda dinasihatkan untuk memperhatikan jika ada sebarang gejala yang berkaitan dengan keadaan ini, dan mendapatkan rawatan perubatan apabila ragu-ragu. Keadaan-keadaan seperti demam dan penyakit lain semasa atau sejurus sebelum masa saringan boleh menjejaskan tafsiran keputusan dan oleh itu anda dinasihatkan untuk berjumpa doktor anda untuk tafsiran laporan kesihatan. Sila pastikan anda memenuhi kriteria kelayakan sebelum anda kembali untuk pemeriksaan kesihatan anda yang seterusnya. \n\nSekiranya anda mempunyai sebarang pertanyaan, sila hubungi kami di hello@publichealthservice.org. Terima kasih kerana mengambil bahagian dalam PHS 2026 dan kami berharap anda telah mendapat manfaat dan akan terus menyokong kami pada masa hadapan. "
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Formik, Form, Field, FastField, useFormikContext } from 'formik'
+import { Formik, Form, FastField, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
@@ -36,12 +36,8 @@ const initialValues = {
   SOCIALShortAns11: '',
   SOCIAL12: '',
   SOCIAL13: '',
-  SOCIAL13A: '',
-  SOCIAL13B: '',
-  SOCIAL13C: '',
   SOCIAL14: '',
   SOCIAL15: '',
-  SOCIAL16: '',
 }
 
 const validationSchema = Yup.object({
@@ -71,7 +67,6 @@ const validationSchema = Yup.object({
   SOCIAL13: Yup.string().required('Required'),
   SOCIAL14: Yup.string().required('Required'),
   SOCIAL15: Yup.string().required('Required'),
-  SOCIAL16: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -116,18 +111,6 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  SOCIAL13A: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13B: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13C: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
   SOCIAL14: [
     {
       label: 'Yes, at least 20 minutes each time, for 3 or more days per week',
@@ -143,10 +126,6 @@ const formOptions = {
     },
   ],
   SOCIAL15: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  SOCIAL16: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -404,50 +383,24 @@ export default function HxSocialForm({ changeTab, nextTab }) {
               <li> Males: &lt;2 standard drinks per day</li>
               <li> Females: &lt;1 standard drink per day</li>
             </ul>
+            One standard drink contains 10 g of pure alcohol and is approximately:
+            <ul>
+              <li>1 can (330 ml) of regular beer at 5% alcohol</li>
+              <li>Half a glass (100 ml) of wine at 15% alcohol</li>
+              <li>1 shot (30 ml) of spirits at 40% alcohol</li>
+            </ul>
           </Typography>
           <Typography fontWeight='bold' sx={{ mt: 2 }}>
             Do you consume alcoholic drinks?
           </Typography>
           <FastField name='SOCIAL12' label='SOCIAL12' component={CustomTextField} />
 
-          <Typography fontWeight='bold'>
-            Do you consciously try to eat more fruits, vegetables, whole grain and cereals?
-          </Typography>
+          <Typography fontWeight='bold'>Do you think you eat a balanced diet?</Typography>
           <FastField
             name='SOCIAL13'
             label='SOCIAL13'
             component={CustomRadioGroup}
             options={formOptions.SOCIAL13}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Fruits?</Typography>
-          <FastField
-            name='SOCIAL13A'
-            label='SOCIAL13A'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13A}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Vegetables?</Typography>
-          <FastField
-            name='SOCIAL13B'
-            label='SOCIAL13B'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13B}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Whole grains or cereals?</Typography>
-          <FastField
-            name='SOCIAL13C'
-            label='SOCIAL13C'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13C}
-            sx={{ mb: 3 }}
             row
           />
 
@@ -487,17 +440,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             <li>Underweight cases (BMI &lt; 18.0 kg/m^2)</li>
             <li>Any other metabolic imbalance</li>
           </ul>
-
-          <Typography fontWeight='bold'>
-            Have you visited any GP or polyclinic in the last 1 year?
-          </Typography>
-          <Field
-            name='SOCIAL16'
-            label='SOCIAL16'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL16}
-            row
-          />
 
           <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}

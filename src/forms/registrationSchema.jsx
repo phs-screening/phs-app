@@ -47,7 +47,7 @@ export const validationSchema = Yup.object({
 
   registrationQ12: Yup.string()
     .oneOf(
-      ['CHAS Green', 'CHAS Blue', 'CHAS Orange', 'Public Assistance'],
+      ['CHAS Green', 'CHAS Blue', 'CHAS Orange', 'Public Assistance', 'None'],
       'Invalid CHAS status',
     )
     .required('CHAS status is required'),

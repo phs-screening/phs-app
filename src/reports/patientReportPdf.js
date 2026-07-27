@@ -281,17 +281,6 @@ export function addBloodPressure(doc, triage, k) {
   )
 
   doc.addImage(bloodpressureQR, 'png', 165, 75, 32, 32)
-  const original_font_size = doc.getFontSize()
-  doc.setFontSize(8)
-  doc.text(
-    160,
-    110,
-    doc.splitTextToSize(
-      'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
-      40,
-    ),
-  )
-  doc.setFontSize(original_font_size)
 
   var bloodPressure = doc.splitTextToSize(kNewlines((k = k + 2)) + parseFromLangKey('bp_tip'), 150)
   doc.text(10, 10, bloodPressure)

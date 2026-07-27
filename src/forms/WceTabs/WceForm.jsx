@@ -220,20 +220,11 @@ const WceForm = (props) => {
                   ) : null}
 
                   <h2>Family History</h2>
-                  <p className='underlined'>
-                    Is there positive family history{' '}
-                    <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following
-                    cancers?:
-                  </p>
-                  {hxFamily && Array.isArray(hxFamily.FAMILY2) && hxFamily.FAMILY2.length > 0 ? (
-                    hxFamily.FAMILY2.map((item, idx) => (
-                      <p className='blue' key={idx}>
-                        {item}
-                      </p>
-                    ))
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
+                  <p className='underlined'>Does the patient have any relevant family history?</p>
+                  <p className='blue'>{hxFamily?.FAMILY1 || 'nil'}</p>
+                  {hxFamily?.FAMILYShortAns1 ? (
+                    <p className='blue'>{hxFamily.FAMILYShortAns1}</p>
+                  ) : null}
                 </div>
               )}
             </Grid>
