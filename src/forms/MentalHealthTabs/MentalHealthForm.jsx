@@ -24,6 +24,7 @@ const formName = 'mentalHealthForm'
 const validationSchema = Yup.object({
   SAMH1: Yup.string().required(),
   SAMH2: Yup.string().required(),
+  SAMH3: Yup.string().required(),
 })
 
 const MentalHealthForm = () => {
@@ -38,6 +39,7 @@ const MentalHealthForm = () => {
   const [initialValues, setInitialValues] = useState({
     SAMH1: '',
     SAMH2: '',
+    SAMH3: '',
   })
 
   useEffect(() => {
@@ -97,6 +99,15 @@ const MentalHealthForm = () => {
                     <FastField
                       name='SAMH2'
                       label='SAMH2'
+                      component={CustomRadioGroup}
+                      options={yesNo}
+                      row
+                    />
+
+                    <h3>Refer to Doctor&apos;s Station?</h3>
+                    <FastField
+                      name='SAMH3'
+                      label='SAMH3'
                       component={CustomRadioGroup}
                       options={yesNo}
                       row

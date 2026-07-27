@@ -434,7 +434,7 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
             ],
           },
           { text: '', margin: [0, 5] },
-          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ8 ?? NIL}\n`, style: 'normal' },
+          { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ10 ?? NIL}\n`, style: 'normal' },
         ]
       : []),
     { text: '', margin: [0, 5] },

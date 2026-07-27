@@ -369,7 +369,7 @@ const DoctorsConsultForm = () => {
         ) : null}
 
         {!ophthal ? <p className='red'>nil ophthal data!</p> : <></>}
-        {ophthal.OphthalQ9 ? (
+        {ophthal.OphthalQ11 ? (
           <li>
             <p>Visual Check Results.</p>
             <ul>
@@ -402,7 +402,7 @@ const DoctorsConsultForm = () => {
               </li>
               <li>
                 <p>
-                  Type of vision error, if any: <strong>{ophthal.OphthalQ8}</strong>
+                  Type of vision error, if any: <strong>{ophthal.OphthalQ10}</strong>
                 </p>
                 <p>
                   Previous eye surgery or condition:{' '}
@@ -412,10 +412,10 @@ const DoctorsConsultForm = () => {
                 </p>
                 <p>
                   Is currently on any eye review/ consulting any eye specialist:{' '}
-                  <strong>{ophthal.OphthalQ10}</strong>
+                  <strong>{ophthal.OphthalQ8}</strong>
                 </p>
                 <p>
-                  <strong>{ophthal.OphthalQ11}</strong>
+                  <strong>{ophthal.OphthalQ9}</strong>
                 </p>
                 {hcsr ? (
                   <p>

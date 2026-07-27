@@ -36,13 +36,13 @@ const VisualAcuityValues = [
 
 const formOptions = {
   OphthalQ1: YesNo,
-  OphthalQ8: [
+  OphthalQ8: YesNo,
+  OphthalQ10: [
     { label: 'Refractive', value: 'Refractive' },
     { label: 'Non-refractive', value: 'Non-refractive' },
     { label: 'None', value: 'None' },
   ],
-  OphthalQ9: [{ label: "Referred to Doctor's Station", value: "Referred to Doctor's Station" }],
-  OphthalQ10: YesNo,
+  OphthalQ11: [{ label: "Referred to Doctor's Station", value: "Referred to Doctor's Station" }],
   OphthalQ12: YesNo,
   OphthalQ13: YesNo,
 }
@@ -60,13 +60,13 @@ const validationSchema = Yup.object().shape({
   OphthalQ6: Yup.string().required(),
   OphthalQ7: Yup.string(),
   OphthalQ8: Yup.string().required(),
-  OphthalQ9: Yup.array().of(Yup.string()).required(),
-  OphthalQ10: Yup.string().required(),
-  OphthalQ11: Yup.string().when('OphthalQ10', {
+  OphthalQ9: Yup.string().when('OphthalQ8', {
     is: 'Yes',
     then: (schema) => schema.required('Please specify'),
     otherwise: (schema) => schema,
   }),
+  OphthalQ10: Yup.string().required(),
+  OphthalQ11: Yup.array().of(Yup.string()).required(),
   OphthalQ12: Yup.string().required(),
   OphthalQ13: Yup.string().required(),
 })
@@ -90,9 +90,9 @@ const OphthalForm = () => {
     OphthalQ6: saveData.OphthalQ6 || '',
     OphthalQ7: saveData.OphthalQ7 || '',
     OphthalQ8: saveData.OphthalQ8 || '',
-    OphthalQ9: saveData.OphthalQ9 || [],
+    OphthalQ9: saveData.OphthalQ9 || '',
     OphthalQ10: saveData.OphthalQ10 || '',
-    OphthalQ11: saveData.OphthalQ11 || '',
+    OphthalQ11: saveData.OphthalQ11 || [],
     OphthalQ12: saveData.OphthalQ12 || '',
     OphthalQ13: saveData.OphthalQ13 || '',
   }
@@ -202,17 +202,17 @@ const OphthalForm = () => {
                       6. Is participant currently on any eye review/ consulting any eye specialist?
                     </h3>
                     <FastField
-                      name='OphthalQ10'
-                      label='Ophthal Q10'
+                      name='OphthalQ8'
+                      label='Ophthal Q8'
                       component={CustomRadioGroup}
-                      options={formOptions.OphthalQ10}
+                      options={formOptions.OphthalQ8}
                       row
                     />
-                    <PopupText qnNo='OphthalQ10' triggerValue='Yes'>
+                    <PopupText qnNo='OphthalQ8' triggerValue='Yes'>
                       <h4>Please specify:</h4>
                       <FastField
-                        name='OphthalQ11'
-                        label='Ophthal Q11'
+                        name='OphthalQ9'
+                        label='Ophthal Q9'
                         component={CustomTextField}
                         fullWidth
                         multiline
@@ -221,10 +221,10 @@ const OphthalForm = () => {
                     </PopupText>
                     <h3>7. Type of vision error?</h3>
                     <FastField
-                      name='OphthalQ8'
-                      label='Ophthal Q8'
+                      name='OphthalQ10'
+                      label='Ophthal Q10'
                       component={CustomRadioGroup}
-                      options={formOptions.OphthalQ8}
+                      options={formOptions.OphthalQ10}
                       row
                     />
                     <h4>
@@ -232,9 +232,9 @@ const OphthalForm = () => {
                       <u>worse than 6/12</u>
                     </h4>
                     <FastField
-                      name='OphthalQ9'
+                      name='OphthalQ11'
                       component={CustomCheckboxGroup}
-                      options={formOptions.OphthalQ9}
+                      options={formOptions.OphthalQ11}
                       row
                     />
                     <h2>Refractive Error</h2>

@@ -207,9 +207,16 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Are you experiencing any dental concerns (eg. currently experiencing any pain in your
-            mouth area)?
+            Are you experiencing any dental concerns? Refer to the examples below (e.g. cavities,
+            red/swollen or bleeding gums, sensitive or painful teeth, badly decayed or broken teeth,
+            broken/chipped dentures, impacted or painful wisdom tooth, facial swelling, or any
+            emergency indication).
           </Typography>
+          <img
+            src='/images/dentistry_check.png'
+            alt='Reference list of dental concerns'
+            style={{ maxWidth: '100%' }}
+          />
           <FastField
             name='ORAL3'
             label='ORAL3'
