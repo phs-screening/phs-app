@@ -18,11 +18,6 @@ const formName = 'hxNssForm'
 
 const initialValues = {
   PMHX1: '',
-  PMHX2: '',
-  PMHX3: '',
-  PMHXShortAns3: '',
-  PMHX4: '',
-  PMHXShortAns4: '',
   PMHX5: [],
   PMHXShortAns5: '',
   PMHX6: '',
@@ -36,23 +31,11 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   PMHX1: Yup.string().required('Required'),
-  PMHX2: Yup.string().required('Required'),
-  PMHX3: Yup.string().required('Required'),
-  PMHX4: Yup.string().required('Required'),
   PMHX6: Yup.string().required('Required'),
   PMHX7: Yup.string().required('Required'),
 })
 
 const formOptions = {
-  PMHX3: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-    { label: 'Not answered', value: 'No' },
-  ],
-  PMHX4: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
   PMHX5: [
     { label: 'Kidney Disease', value: 'Kidney Disease' },
     { label: 'Hypertension', value: 'Hypertension' },
@@ -152,72 +135,6 @@ export default function HxNssForm({ changeTab, nextTab }) {
             <br />
             e.g. mobility issues, financial issues, fear of doctors/clinics/hospitals etc
           </Typography>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Are you on any long term medications? Are you compliant to your medications?
-          </Typography>
-          <FastField
-            name='PMHX2'
-            component={CustomTextField}
-            label='PMHX2'
-            fullWidth
-            multiline
-            sx={{ mb: 5 }}
-          />
-
-          <Typography variant='subtitle1' color='error' fontWeight='bold' gutterBottom>
-            If a participant is not compliant to medications, do probe further on his/her reasons
-            for not consuming medications as prescribed.
-          </Typography>
-          <Typography gutterBottom>
-            e.g. Medication not effective? Can be managed without medication? Forget to take?
-            Lost/Ran out of medication?
-          </Typography>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Do you have any food allergies? If yes, please specify.
-          </Typography>
-          <FastField
-            name='PMHX3'
-            label='PMHX3'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX3}
-            row
-          />
-          <PopupText qnNo='PMHX3' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns3'
-              label='PMHXShortAns3 (Specify food allergies here)'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Are you on any alternative medicine including traditional chinese medications,
-            homeopathy etc?
-          </Typography>
-          <FastField
-            name='PMHX4'
-            label='PMHX4'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX4}
-            row
-          />
-          <PopupText qnNo='PMHX4' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns4'
-              component={CustomTextField}
-              label='PMHXShortAns4 (Specify alternative medicine here)'
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
 
           <Typography variant='subtitle1' fontWeight='bold'>
             Tick if you have these conditions:

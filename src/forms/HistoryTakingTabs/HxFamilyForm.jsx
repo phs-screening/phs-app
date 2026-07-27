@@ -6,7 +6,6 @@ import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
 import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
-import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
@@ -17,7 +16,6 @@ const formName = 'hxFamilyForm'
 const initialValues = {
   FAMILY1: '',
   FAMILYShortAns1: '',
-  FAMILY2: [],
 }
 
 const validationSchema = Yup.object({
@@ -28,11 +26,6 @@ const formOptions = {
   FAMILY1: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
-  ],
-  FAMILY2: [
-    { label: 'Kidney Disease', value: 'Kidney Disease' },
-    { label: 'Diabetes', value: 'Diabetes' },
-    { label: 'Hypertension', value: 'Hypertension' },
   ],
 }
 
@@ -98,15 +91,7 @@ export default function HxFamilyForm({ changeTab, nextTab }) {
             />
           </PopupText>
 
-          <Typography variant='h6'>Any positive family history for these conditions?</Typography>
-          <FastField
-            name='FAMILY2'
-            label='FAMILY2'
-            component={CustomCheckboxGroup}
-            options={formOptions.FAMILY2}
-          />
-
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
             message="Please fill in all required fields correctly."
           />

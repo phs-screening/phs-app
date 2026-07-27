@@ -36,9 +36,6 @@ const initialValues = {
   SOCIALShortAns11: '',
   SOCIAL12: '',
   SOCIAL13: '',
-  SOCIAL13A: '',
-  SOCIAL13B: '',
-  SOCIAL13C: '',
   SOCIAL14: '',
   SOCIAL15: '',
 }
@@ -113,18 +110,6 @@ const formOptions = {
   SOCIAL13: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
-  ],
-  SOCIAL13A: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13B: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13C: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
   ],
   SOCIAL14: [
     {
@@ -412,36 +397,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             label='SOCIAL13'
             component={CustomRadioGroup}
             options={formOptions.SOCIAL13}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Fruits?</Typography>
-          <FastField
-            name='SOCIAL13A'
-            label='SOCIAL13A'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13A}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Vegetables?</Typography>
-          <FastField
-            name='SOCIAL13B'
-            label='SOCIAL13B'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13B}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Whole grains or cereals?</Typography>
-          <FastField
-            name='SOCIAL13C'
-            label='SOCIAL13C'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13C}
-            sx={{ mb: 3 }}
             row
           />
 

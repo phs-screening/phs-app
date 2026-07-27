@@ -90,24 +90,21 @@ const WceForm = (props) => {
   const [saveData, setSaveData] = useState(initialValues)
   const [reg, setReg] = useState({})
   const [hxSocial, setHxSocial] = useState({})
-  const [hxFamily, setHxFamily] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = getSavedData(patientId, formName)
       const regData = getSavedData(patientId, allForms.registrationForm)
       const hxSocialData = getSavedData(patientId, allForms.hxSocialForm)
-      const hxFamilyData = getSavedData(patientId, allForms.hxFamilyForm)
       const reg = await getSavedData(patientId, 'registrationForm')
       if (reg?.registrationQ5 === 'Male') {
         alert('This patient is not female. Are you sure you want to proceed with the HPV form?')
       }
 
-      Promise.all([savedData, regData, hxSocialData, hxFamilyData]).then((result) => {
+      Promise.all([savedData, regData, hxSocialData]).then((result) => {
         setSaveData({ ...initialValues, ...result[0] })
         setReg(result[1])
         setHxSocial(result[2])
-        setHxFamily(result[3])
         isLoadingSidePanel(false)
       })
     }
@@ -219,21 +216,6 @@ const WceForm = (props) => {
                     <p className='blue'>{hxSocial.SOCIALShortAns3}</p>
                   ) : null}
 
-                  <h2>Family History</h2>
-                  <p className='underlined'>
-                    Is there positive family history{' '}
-                    <span className='red'>(AMONG FIRST DEGREE RELATIVES)</span> for the following
-                    cancers?:
-                  </p>
-                  {hxFamily && Array.isArray(hxFamily.FAMILY2) && hxFamily.FAMILY2.length > 0 ? (
-                    hxFamily.FAMILY2.map((item, idx) => (
-                      <p className='blue' key={idx}>
-                        {item}
-                      </p>
-                    ))
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
                 </div>
               )}
             </Grid>

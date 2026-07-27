@@ -18,8 +18,6 @@ const initialValues = {
   hxHcsrQ2: '',
   hxHcsrQ3: '',
   hxHcsrShortAnsQ3: '',
-  hxHcsrQ4: '',
-  hxHcsrShortAnsQ4: '',
   hxHcsrQ5: '',
   hxHcsrQ6: '',
   hxHcsrQ7: '',
@@ -37,10 +35,6 @@ const validationSchema = Yup.object({
 
 const formOptions = {
   hxHcsrQ3: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  hxHcsrQ4: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -174,29 +168,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
               sx={{ mb: 3, mt: 1 }}
             />
           </PopupText>
-
-          <Typography variant='h4' fontWeight='bold'>
-            Do you have any hearing problems? Please specify if yes.
-          </Typography>
-          <FastField
-            name='hxHcsrQ4'
-            label='hxHcsrQ4'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ4}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Please specify:
-          </Typography>
-          <FastField
-            name='hxHcsrShortAnsQ4'
-            label='hxHcsrShortAnsQ4'
-            component={CustomTextField}
-            fullWidth
-            multiline
-            sx={{ mb: 3, mt: 1 }}
-          />
 
           <Typography variant='h4' fontWeight='bold'>
             If you are 60 and above, do you currently use hearing aids/have been detected to require

@@ -247,9 +247,6 @@ const DietitiansConsultForm = () => {
         Does participant consciously try to the more fruits, vegetables, whole grain & cereals?
       </p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL13}</p> : null}
-      {hxSocial ? <p className='blue'>Fruits: {hxSocial.SOCIAL13A}</p> : null}
-      {hxSocial ? <p className='blue'>Vegetables: {hxSocial.SOCIAL13B}</p> : null}
-      {hxSocial ? <p className='blue'>Whole grain and cereals: {hxSocial.SOCIAL13C}</p> : null}
       <p className='underlined'>
         Does the participant exercise in any form of moderate physical activity for at least 150
         minutes OR intense physical activity at least 75 minutes throuhgout the week?

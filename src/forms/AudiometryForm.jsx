@@ -214,17 +214,6 @@ const AudiometryForm = () => {
               ) : (
                 <div className='summary--question-div'>
                   <h2>Hearing Issues</h2>
-                  <p className='underlined'>Hearing problems</p>
-                  {hcsr && hcsr.hxHcsrQ4 ? (
-                    <p className='blue'>{hcsr.hxHcsrQ4}</p>
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
-                  {hcsr && hcsr.hxHcsrShortAnsQ4 ? (
-                    <p className='blue'>{hcsr.hxHcsrShortAnsQ4}</p>
-                  ) : (
-                    <p className='blue'>nil</p>
-                  )}
                   {<p className='underlined'>Has participant seen an ENT Specialist before?</p>}
                   {hcsr && hcsr.hxHcsrQ13 ? (
                     <p className='blue'>{hcsr.hxHcsrQ13}</p>

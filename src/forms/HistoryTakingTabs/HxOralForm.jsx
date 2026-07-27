@@ -15,7 +15,6 @@ const formName = 'hxOralForm'
 
 const initialValues = {
   ORAL1: '',
-  ORALShortAns1: '',
   ORAL2: '',
   ORAL3: '',
   ORAL4: '',
@@ -116,20 +115,6 @@ export default function HxOralForm({ changeTab, nextTab }) {
             component={CustomRadioGroup}
             options={formOptions.ORAL1}
           />
-
-          <PopupText qnNo='ORAL1' triggerValue='Poor'>
-            <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
-            </Typography>
-            <FastField
-              name='ORALShortAns1'
-              label='ORALShortAns1'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3, mt: 1 }}
-            />
-          </PopupText>
 
           <Typography variant='subtitle1' fontWeight='bold'>
             Do you wear dentures?

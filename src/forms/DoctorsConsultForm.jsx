@@ -442,13 +442,6 @@ const DoctorsConsultForm = () => {
                 <p>
                   Details: <strong>{audio.AudiometryQ12}</strong>
                 </p>
-                {hcsr ? (
-                  <p>
-                    Patient&apos;s indication of hearing problems: <strong>{hcsr.hxHcsrQ4}</strong>
-                  </p>
-                ) : (
-                  <p className='red'>nil hcsr data!</p>
-                )}
               </li>
             </ul>
           </li>
@@ -504,25 +497,6 @@ const DoctorsConsultForm = () => {
               <li>
                 <p>
                   Chronic conditions: <strong>{pmhx.PMHX1}</strong>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Long term medications and compliance: <strong>{pmhx.PMHX2}</strong>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Drug allergies: <strong>{pmhx.PMHX3}</strong>
-                  <br></br>
-                  <strong>{pmhx.PMHXShortAns3}</strong>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Alternative medicine: <strong>{pmhx.PMHX4}</strong>
-                  <br></br>
-                  <strong>{pmhx.PMHXShortAns4}</strong>
                 </p>
               </li>
               <li>

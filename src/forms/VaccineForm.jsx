@@ -42,7 +42,6 @@ export default function VaccineForm() {
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, setLoadingSidePanel] = useState(true)
   const [regi, setRegi] = useState({})
-  const [historyForm, setHistoryForm] = useState({})
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,10 +50,8 @@ export default function VaccineForm() {
       setSaveData(savedData || initialValues)
 
       const regiData = await getSavedData(patientId, allForms.registrationForm)
-      const historyData = await getSavedData(patientId, allForms.hxNssForm)
-      Promise.all([regiData, historyData]).then((result) => {
+      Promise.all([regiData]).then((result) => {
         setRegi(result[0])
-        setHistoryForm(result[1])
         setLoadingSidePanel(false)
       })
     }
@@ -212,23 +209,6 @@ export default function VaccineForm() {
                     </Typography>
                   )}
 
-                  {historyForm ? (
-                    <>
-                      {historyForm.PMHXShortAns3 ? (
-                        <Typography variant='body1' className='blue'>
-                          Food Allergy: {historyForm.PMHXShortAns3}
-                        </Typography>
-                      ) : (
-                        <Typography variant='body1' className='blue'>
-                          Food Allergy: nil
-                        </Typography>
-                      )}
-                    </>
-                  ) : (
-                    <Typography variant='body1' className='red'>
-                      NO HISTORY FORM DATA
-                    </Typography>
-                  )}
                 </div>
               )}
             </Grid>

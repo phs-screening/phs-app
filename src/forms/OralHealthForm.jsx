@@ -270,7 +270,6 @@ const OralHealthForm = () => {
         <>
           <p className='underlined'>Patient&apos;s Oral Health:</p>
           <p className='blue'>{hxOral.ORAL1}</p>
-          <p className='blue'>{hxOral.ORALShortAns1}</p>
 
           <p className='underlined'>Does patient wear dentures?:</p>
           <p className='blue'>{hxOral.ORAL2}</p>
