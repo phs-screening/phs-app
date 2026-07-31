@@ -20,7 +20,9 @@ const toTimelineItem = (station) => ({
 })
 
 const BasicTimeline = (props) => {
-  const [loading, setLoading] = useState(true)
+  const initialSummaryMatchesPatient =
+    props.initialSummary?.patient?.queueNo === props.patientId
+  const [loading, setLoading] = useState(!initialSummaryMatchesPatient)
   const [formDone, setFormDone] = useState({})
   const [timelineItems, setTimelineItems] = useState([])
   const [loadError, setLoadError] = useState('')
@@ -29,6 +31,26 @@ const BasicTimeline = (props) => {
   useEffect(() => {
     let mounted = true
 
+    const applySummary = (summary) => {
+      const activeStations = summary.stations || []
+      const status = {
+        ...(summary.status || {}),
+        eligibleStations: summary.eligibleStations || summary.status?.eligibleStations || [],
+      }
+
+      setTimelineItems(activeStations.map(toTimelineItem))
+      setFormDone(status)
+      setLoadError('')
+      setLoading(false)
+    }
+
+    if (props.initialSummary?.patient?.queueNo === props.patientId) {
+      applySummary(props.initialSummary)
+      return () => {
+        mounted = false
+      }
+    }
+
     const createFormsStatus = async () => {
       setLoading(true)
       setLoadError('')
@@ -36,15 +58,8 @@ const BasicTimeline = (props) => {
       try {
         const summaryRes = await getPatientStationSummary(props.patientId)
         const summary = summaryRes.data || {}
-        const activeStations = summary.stations || []
-        const status = {
-          ...(summary.status || {}),
-          eligibleStations: summary.eligibleStations || summary.status?.eligibleStations || [],
-        }
-
         if (mounted) {
-          setTimelineItems(activeStations.map(toTimelineItem))
-          setFormDone(status)
+          applySummary(summary)
         }
       } catch (err) {
         console.error('Failed to load backend station summary:', err)
@@ -63,7 +78,7 @@ const BasicTimeline = (props) => {
     return () => {
       mounted = false
     }
-  }, [props.patientId])
+  }, [props.initialSummary, props.patientId])
   if (loading) {
     return (
       <div
@@ -106,7 +121,7 @@ const BasicTimeline = (props) => {
 }
 
 const PatientTimeline = (props) => {
-  const { patientId, ...cardProps } = props
+  const { patientId, initialSummary, ...cardProps } = props
   return (
     <Card {...cardProps}>
       <CardHeader title='Patient Dashboard' />
@@ -118,7 +133,7 @@ const PatientTimeline = (props) => {
             position: 'relative',
           }}
         >
-          <BasicTimeline patientId={patientId} />
+          <BasicTimeline patientId={patientId} initialSummary={initialSummary} />
         </Box>
       </CardContent>
       <Divider />
