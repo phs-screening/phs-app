@@ -5,7 +5,10 @@ import { Paper, CircularProgress, Button, Grid } from '@mui/material'
 
 import allForms from '../forms.json'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -65,7 +68,13 @@ const formOptions = {
       value: 'NA (nil shower at home, uses bathtub)',
     },
   ],
-  geriOtQuestionnaireQ14: YesNo,
+  geriOtQuestionnaireQ14: [
+    ...YesNo,
+    {
+      label: 'NA',
+      value: 'NA',
+    },
+  ],
   geriOtQuestionnaireQ15: YesNo,
   geriOtQuestionnaireQ16: YesNo,
   geriOtQuestionnaireQ18: YesNo,
@@ -269,7 +278,7 @@ const GeriOtQuestionnaireForm = (props) => {
         const hxSocialData = await getSavedData(patientId, allForms.hxSocialForm)
 
         const results = await Promise.all([savedData, regData, triageData, hxSocialData])
-        
+
         setInitialValues({ ...generateInitialValues(), ...results[0] })
         setReg(results[1] || {})
         setTriage(results[2] || {})
@@ -404,8 +413,8 @@ const GeriOtQuestionnaireForm = (props) => {
                     )}
                     <h3>3. Are your floor surfaces non slip?</h3>
                     <p>
-                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score &quot;YES&quot; if
-                      kitchen, toilet are non-slip
+                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score
+                      &quot;YES&quot; if kitchen, toilet are non-slip
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ3'
@@ -727,8 +736,8 @@ const GeriOtQuestionnaireForm = (props) => {
                       of falling over?
                     </h3>
                     <p>
-                      <b>Definition:</b> &quot;YES&quot;  when client does NOT need to bend down to feed pets,
-                      clean, refill bowls etc
+                      <b>Definition:</b> &quot;YES&quot; when client does NOT need to bend down to
+                      feed pets, clean, refill bowls etc
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ27'
@@ -749,12 +758,10 @@ const GeriOtQuestionnaireForm = (props) => {
                     <h2>SCORING</h2>
                     <GetScores />
                     <br />
-
-                    <ErrorNotification 
+                    <ErrorNotification
                       show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                      message="Please fill in all required fields correctly."
+                      message='Please fill in all required fields correctly.'
                     />
-
                     <div>
                       {loading || isSubmitting ? (
                         <CircularProgress />
