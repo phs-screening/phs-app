@@ -6,6 +6,11 @@ import {
   getPatientNameMatchesStrict,
   getPreRegDataByIdStrict,
 } from '../services/patientData'
+import {
+  checkInPreRegistrationStrict,
+  findPreRegistrationByQueueStrict,
+  searchPreRegistrationsStrict,
+} from '../services/preRegistrations'
 import { FormContext } from '../api/utils.js'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import {
@@ -72,6 +77,7 @@ const RegisterPatient = (props) => {
   const [patientNamesError, setPatientNamesError] = useState('')
   const [patientMatches, setPatientMatches] = useState([])
   const [patientMatchesError, setPatientMatchesError] = useState('')
+  const [preRegistrationCandidate, setPreRegistrationCandidate] = useState(null)
   const { updatePatientInfo, clearPatient } = useContext(FormContext)
   const navigate = useNavigate()
 
@@ -111,6 +117,7 @@ const RegisterPatient = (props) => {
 
   const handleQueueNumberInput = (event) => {
     const value = event.target.value
+    setPreRegistrationCandidate(null)
     if (value >= 0 || value === '') {
       setValues({
         isQueueNumber: true,
@@ -169,6 +176,13 @@ const RegisterPatient = (props) => {
   const handleSubmitQueueNumber = async () => {
     setIsLoadingQueueNumber(true)
     const value = values.selectedValue
+    setPreRegistrationCandidate(null)
+    if (!Number.isFinite(value)) {
+      alert('Unsuccessful. Please enter a queue number.')
+      setIsLoadingQueueNumber(false)
+      return
+    }
+
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     try {
       const data = await getPreRegDataByIdStrict(value, 'patients')
@@ -181,8 +195,12 @@ const RegisterPatient = (props) => {
         updatePatientInfo(data)
         navigate('/app/dashboard', { replace: true })
       } else {
-        // if response is unsuccessful/id does not exist, show error style/popup.
-        alert('Unsuccessful. There is no patient with this queue number.')
+        const preRegistration = await findPreRegistrationByQueueStrict(value)
+        if (preRegistration) {
+          setPreRegistrationCandidate(preRegistration)
+        } else {
+          alert('Unsuccessful. There is no patient with this queue number.')
+        }
       }
     } catch (error) {
       console.error('Failed to search patient by queue number:', error)
@@ -204,15 +222,32 @@ const RegisterPatient = (props) => {
     }
 
     try {
-      const result = await getPatientNameMatchesStrict({
-        initials: value,
-        page: 1,
-        limit: PATIENT_MATCH_PAGE_LIMIT,
-      })
+      const [patientResult, preRegistrationResult] = await Promise.all([
+        getPatientNameMatchesStrict({
+          initials: value,
+          page: 1,
+          limit: PATIENT_MATCH_PAGE_LIMIT,
+        }),
+        searchPreRegistrationsStrict({
+          initials: value,
+          page: 1,
+          limit: PATIENT_MATCH_PAGE_LIMIT,
+        }),
+      ])
+      const existingQueueNumbers = new Set(
+        patientResult.data.map((patient) => patient.queueNo),
+      )
+      const preRegistrations = preRegistrationResult.data.filter(
+        (patient) => !existingQueueNumbers.has(patient.queueNo),
+      )
+      const matches = [
+        ...patientResult.data,
+        ...preRegistrations,
+      ]
 
-      setPatientMatches(result.data)
+      setPatientMatches(matches)
 
-      if (result.data.length === 0) {
+      if (matches.length === 0) {
         setPatientMatchesError('No patients found with this exact name.')
       }
     } catch (error) {
@@ -229,9 +264,15 @@ const RegisterPatient = (props) => {
     setIsLoadingPatientName(true)
 
     try {
-      updatePatientInfo(patient)
-      await updateAllStationCounts(patient.queueNo)
-      navigate('/app/dashboard', { replace: true })
+      if (patient.preRegistration) {
+        const checkedInPatient = await checkInPreRegistrationStrict(patient.queueNo)
+        updatePatientInfo(checkedInPatient)
+        navigate('/app/reg', { replace: true })
+      } else {
+        updatePatientInfo(patient)
+        await updateAllStationCounts(patient.queueNo)
+        navigate('/app/dashboard', { replace: true })
+      }
     } catch (error) {
       console.error('Failed to select patient by name:', error)
       alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))
@@ -243,6 +284,24 @@ const RegisterPatient = (props) => {
   const handleRegisterNewPatient = () => {
     clearPatient()
     navigate('/app/reg')
+  }
+
+  const handleCheckInPreRegistration = async () => {
+    if (!preRegistrationCandidate) return
+
+    setIsLoadingQueueNumber(true)
+    try {
+      const patient = await checkInPreRegistrationStrict(
+        preRegistrationCandidate.queueNo,
+      )
+      updatePatientInfo(patient)
+      navigate('/app/reg', { replace: true })
+    } catch (error) {
+      console.error('Failed to check in pre-registered patient:', error)
+      alert(toLoadErrorMessage(error, 'Unable to check in this pre-registration. Try again.'))
+    } finally {
+      setIsLoadingQueueNumber(false)
+    }
   }
 
   return (
@@ -314,6 +373,33 @@ const RegisterPatient = (props) => {
                     Search by Queue Number
                   </Button>
                 )}
+                {preRegistrationCandidate && (
+                  <Box>
+                    <Typography variant='h6' gutterBottom>
+                      Pre-registered patient
+                    </Typography>
+                    <Typography>
+                      Queue {preRegistrationCandidate.queueNo}: {preRegistrationCandidate.initials}
+                    </Typography>
+                    <Typography color='textSecondary' variant='body2' sx={{ mb: 1 }}>
+                      Birthday: {formatBirthday(preRegistrationCandidate.birthday)}
+                    </Typography>
+                    {(preRegistrationCandidate.nameMappingWarnings || []).map((warning) => (
+                      <Typography key={warning} color='warning.main' variant='body2'>
+                        {warning}
+                      </Typography>
+                    ))}
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      onClick={handleCheckInPreRegistration}
+                      sx={{ mt: 1 }}
+                      fullWidth
+                    >
+                      Confirm and Check In
+                    </Button>
+                  </Box>
+                )}
               </Stack>
             </Box>
 
@@ -374,6 +460,7 @@ const RegisterPatient = (props) => {
                           <TableCell>ID</TableCell>
                           <TableCell>Name</TableCell>
                           <TableCell>Birthday</TableCell>
+                          <TableCell>Source</TableCell>
                           <TableCell align='right'>Action</TableCell>
                         </TableRow>
                       </TableHead>
@@ -383,6 +470,9 @@ const RegisterPatient = (props) => {
                             <TableCell>{patient.queueNo}</TableCell>
                             <TableCell>{patient.initials}</TableCell>
                             <TableCell>{formatBirthday(patient.birthday)}</TableCell>
+                            <TableCell>
+                              {patient.preRegistration ? 'Pre-registration' : 'Checked in'}
+                            </TableCell>
                             <TableCell align='right'>
                               <Button
                                 size='small'
