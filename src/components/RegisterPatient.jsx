@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import {
   getAllPatientNamesStrict,
   getPatientNameMatchesStrict,
-  getPreRegDataByIdStrict,
 } from '../services/patientData'
+import { getPatientStationSummary } from '../api/stationsApi'
 import { FormContext } from '../api/utils.js'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import {
@@ -28,7 +28,6 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
-import { updateAllStationCounts } from '../services/stationCounts'
 
 const PATIENT_NAME_PAGE_LIMIT = 20
 const PATIENT_MATCH_PAGE_LIMIT = 10
@@ -166,21 +165,30 @@ const RegisterPatient = (props) => {
     return patientNameSearch.trim()
   }
 
+  const openPatientDashboard = async (patientId) => {
+    const response = await getPatientStationSummary(patientId)
+    const stationSummary = response.data || {}
+    const patient = stationSummary.patient
+
+    if (!patient || !('queueNo' in patient || 'patientId' in patient)) {
+      return false
+    }
+
+    updatePatientInfo(patient)
+    navigate('/app/dashboard', {
+      replace: true,
+      state: { stationSummary },
+    })
+    return true
+  }
+
   const handleSubmitQueueNumber = async () => {
     setIsLoadingQueueNumber(true)
     const value = values.selectedValue
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     try {
-      const data = await getPreRegDataByIdStrict(value, 'patients')
-      console.log(data)
-      if (data && 'initials' in data) {
-        updatePatientInfo(data)
-        await updateAllStationCounts(data.queueNo)
-        navigate('/app/dashboard', { replace: true })
-      } else if (data && 'age' in data) {
-        updatePatientInfo(data)
-        navigate('/app/dashboard', { replace: true })
-      } else {
+      const opened = await openPatientDashboard(value)
+      if (!opened) {
         // if response is unsuccessful/id does not exist, show error style/popup.
         alert('Unsuccessful. There is no patient with this queue number.')
       }
@@ -229,9 +237,10 @@ const RegisterPatient = (props) => {
     setIsLoadingPatientName(true)
 
     try {
-      updatePatientInfo(patient)
-      await updateAllStationCounts(patient.queueNo)
-      navigate('/app/dashboard', { replace: true })
+      const opened = await openPatientDashboard(patient.queueNo)
+      if (!opened) {
+        setPatientMatchesError('The selected patient could not be loaded.')
+      }
     } catch (error) {
       console.error('Failed to select patient by name:', error)
       alert(toLoadErrorMessage(error, 'Unable to load patient data. Refresh or try again.'))

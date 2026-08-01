@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { Helmet } from 'react-helmet-async'
 
 import { FormContext } from '../api/utils.js'
-import { getPatientStationEligibility, recalculatePatientStationCounts } from '../api/stationsApi'
+import { getPatientStationEligibility } from '../api/stationsApi'
 
 // Eligibility page
 
@@ -35,10 +35,7 @@ function Eligibility() {
       setLoadError('')
 
       try {
-        const [eligibility] = await Promise.all([
-          getPatientStationEligibility(patientId),
-          recalculatePatientStationCounts(patientId),
-        ])
+        const eligibility = await getPatientStationEligibility(patientId)
         if (mounted) setRows(eligibility.data?.rows || [])
       } catch (error) {
         console.error('Failed to load backend station eligibility:', error)
