@@ -1,16 +1,18 @@
 import React from 'react'
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  getAllPatientNamesStrict,
-  getPatientNameMatchesStrict,
-  getPreRegDataByIdStrict,
-} from '../services/patientData'
+import { getAllPatientNamesStrict, getPatientNameMatchesStrict } from '../services/patientData'
 import {
   checkInPreRegistrationStrict,
   findPreRegistrationByQueueStrict,
   searchPreRegistrationsStrict,
 } from '../services/preRegistrations'
+import { getPatientStationSummary } from '../api/stationsApi'
+import {
+  mergeRegistrationMatches,
+  REGISTRATION_LOOKUP_ACTIONS,
+  resolveRegistrationLookup,
+} from '../services/registrationLookup'
 import { FormContext } from '../api/utils.js'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import {
@@ -33,7 +35,6 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from 'react-feather'
 import Autocomplete from '@mui/material/Autocomplete'
-import { updateAllStationCounts } from '../services/stationCounts'
 
 const PATIENT_NAME_PAGE_LIMIT = 20
 const PATIENT_MATCH_PAGE_LIMIT = 10
@@ -65,6 +66,30 @@ const formatBirthday = (value) => {
   })
 }
 
+const getMatchSource = (match) => {
+  if (match.action === REGISTRATION_LOOKUP_ACTIONS.confirmCheckIn) {
+    return 'Pre-registration'
+  }
+  if (match.action === REGISTRATION_LOOKUP_ACTIONS.resumeRegistration) {
+    return 'Registration incomplete'
+  }
+  if (match.action === REGISTRATION_LOOKUP_ACTIONS.checkInInProgress) {
+    return 'Check-in in progress'
+  }
+  if (match.action === REGISTRATION_LOOKUP_ACTIONS.dataError) {
+    return 'Review required'
+  }
+  return 'Checked in'
+}
+
+const getMatchActionLabel = (action) => {
+  if (action === REGISTRATION_LOOKUP_ACTIONS.confirmCheckIn) return 'Check In'
+  if (action === REGISTRATION_LOOKUP_ACTIONS.resumeRegistration) return 'Resume Registration'
+  if (action === REGISTRATION_LOOKUP_ACTIONS.openDashboard) return 'Open Dashboard'
+  if (action === REGISTRATION_LOOKUP_ACTIONS.checkInInProgress) return 'In Progress'
+  return 'Review Required'
+}
+
 const RegisterPatient = (props) => {
   const [isLoadingQueueNumber, setIsLoadingQueueNumber] = useState(false)
   const [isLoadingPatientName, setIsLoadingPatientName] = useState(false)
@@ -78,6 +103,7 @@ const RegisterPatient = (props) => {
   const [patientMatches, setPatientMatches] = useState([])
   const [patientMatchesError, setPatientMatchesError] = useState('')
   const [preRegistrationCandidate, setPreRegistrationCandidate] = useState(null)
+  const [queueNumberError, setQueueNumberError] = useState('')
   const { updatePatientInfo, clearPatient } = useContext(FormContext)
   const navigate = useNavigate()
 
@@ -118,6 +144,7 @@ const RegisterPatient = (props) => {
   const handleQueueNumberInput = (event) => {
     const value = event.target.value
     setPreRegistrationCandidate(null)
+    setQueueNumberError('')
     if (value >= 0 || value === '') {
       setValues({
         isQueueNumber: true,
@@ -173,34 +200,74 @@ const RegisterPatient = (props) => {
     return patientNameSearch.trim()
   }
 
+  const loadPatientStationSummary = async (patientId) => {
+    try {
+      const response = await getPatientStationSummary(patientId)
+      return response.data || null
+    } catch (error) {
+      if (error?.status === 404) return null
+      throw error
+    }
+  }
+
+  const openPatientDashboard = (stationSummary) => {
+    const patient = stationSummary?.patient
+
+    if (!patient || !('queueNo' in patient || 'patientId' in patient)) {
+      return false
+    }
+
+    updatePatientInfo(patient)
+    navigate('/app/dashboard', {
+      replace: true,
+      state: { stationSummary },
+    })
+    return true
+  }
+
+  const openPreRegistration = async (queueNo) => {
+    const patient = await checkInPreRegistrationStrict(queueNo)
+    updatePatientInfo(patient)
+    navigate('/app/reg', { replace: true })
+  }
+
   const handleSubmitQueueNumber = async () => {
     setIsLoadingQueueNumber(true)
     const value = values.selectedValue
     setPreRegistrationCandidate(null)
+    setQueueNumberError('')
     if (!Number.isFinite(value)) {
       alert('Unsuccessful. Please enter a queue number.')
       setIsLoadingQueueNumber(false)
       return
     }
 
-    // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     try {
-      const data = await getPreRegDataByIdStrict(value, 'patients')
-      console.log(data)
-      if (data && 'initials' in data) {
-        updatePatientInfo(data)
-        await updateAllStationCounts(data.queueNo)
-        navigate('/app/dashboard', { replace: true })
-      } else if (data && 'age' in data) {
-        updatePatientInfo(data)
-        navigate('/app/dashboard', { replace: true })
-      } else {
-        const preRegistration = await findPreRegistrationByQueueStrict(value)
-        if (preRegistration) {
-          setPreRegistrationCandidate(preRegistration)
-        } else {
-          alert('Unsuccessful. There is no patient with this queue number.')
+      const [stationSummary, preRegistration] = await Promise.all([
+        loadPatientStationSummary(value),
+        findPreRegistrationByQueueStrict(value),
+      ])
+      const patient = stationSummary?.patient || null
+      const action = resolveRegistrationLookup(patient, preRegistration)
+
+      if (action === REGISTRATION_LOOKUP_ACTIONS.openDashboard) {
+        if (!openPatientDashboard(stationSummary)) {
+          setQueueNumberError('The patient dashboard could not be loaded.')
         }
+      } else if (action === REGISTRATION_LOOKUP_ACTIONS.confirmCheckIn) {
+        setPreRegistrationCandidate(preRegistration)
+      } else if (action === REGISTRATION_LOOKUP_ACTIONS.resumeRegistration) {
+        await openPreRegistration(value)
+      } else if (action === REGISTRATION_LOOKUP_ACTIONS.checkInInProgress) {
+        setQueueNumberError(
+          'This pre-registration is currently being checked in. Try again shortly.',
+        )
+      } else if (action === REGISTRATION_LOOKUP_ACTIONS.dataError) {
+        setQueueNumberError(
+          'This pre-registration has inconsistent check-in data. Contact an admin.',
+        )
+      } else {
+        setQueueNumberError('There is no patient with this queue number.')
       }
     } catch (error) {
       console.error('Failed to search patient by queue number:', error)
@@ -234,16 +301,7 @@ const RegisterPatient = (props) => {
           limit: PATIENT_MATCH_PAGE_LIMIT,
         }),
       ])
-      const existingQueueNumbers = new Set(
-        patientResult.data.map((patient) => patient.queueNo),
-      )
-      const preRegistrations = preRegistrationResult.data.filter(
-        (patient) => !existingQueueNumbers.has(patient.queueNo),
-      )
-      const matches = [
-        ...patientResult.data,
-        ...preRegistrations,
-      ]
+      const matches = mergeRegistrationMatches(patientResult.data, preRegistrationResult.data)
 
       setPatientMatches(matches)
 
@@ -260,18 +318,26 @@ const RegisterPatient = (props) => {
     }
   }
 
-  const handleSelectPatientMatch = async (patient) => {
+  const handleSelectPatientMatch = async (match) => {
     setIsLoadingPatientName(true)
 
     try {
-      if (patient.preRegistration) {
-        const checkedInPatient = await checkInPreRegistrationStrict(patient.queueNo)
-        updatePatientInfo(checkedInPatient)
-        navigate('/app/reg', { replace: true })
+      if (
+        match.action === REGISTRATION_LOOKUP_ACTIONS.confirmCheckIn ||
+        match.action === REGISTRATION_LOOKUP_ACTIONS.resumeRegistration
+      ) {
+        await openPreRegistration(match.queueNo)
+      } else if (match.action === REGISTRATION_LOOKUP_ACTIONS.openDashboard) {
+        const stationSummary = await loadPatientStationSummary(match.queueNo)
+        if (!stationSummary || !openPatientDashboard(stationSummary)) {
+          setPatientMatchesError('The selected patient could not be loaded.')
+        }
+      } else if (match.action === REGISTRATION_LOOKUP_ACTIONS.checkInInProgress) {
+        setPatientMatchesError(
+          'This pre-registration is currently being checked in. Try again shortly.',
+        )
       } else {
-        updatePatientInfo(patient)
-        await updateAllStationCounts(patient.queueNo)
-        navigate('/app/dashboard', { replace: true })
+        setPatientMatchesError('The selected patient could not be loaded.')
       }
     } catch (error) {
       console.error('Failed to select patient by name:', error)
@@ -291,11 +357,7 @@ const RegisterPatient = (props) => {
 
     setIsLoadingQueueNumber(true)
     try {
-      const patient = await checkInPreRegistrationStrict(
-        preRegistrationCandidate.queueNo,
-      )
-      updatePatientInfo(patient)
-      navigate('/app/reg', { replace: true })
+      await openPreRegistration(preRegistrationCandidate.queueNo)
     } catch (error) {
       console.error('Failed to check in pre-registered patient:', error)
       alert(toLoadErrorMessage(error, 'Unable to check in this pre-registration. Try again.'))
@@ -372,6 +434,11 @@ const RegisterPatient = (props) => {
                   >
                     Search by Queue Number
                   </Button>
+                )}
+                {queueNumberError && (
+                  <Typography color='error' variant='body2'>
+                    {queueNumberError}
+                  </Typography>
                 )}
                 {preRegistrationCandidate && (
                   <Box>
@@ -465,22 +532,24 @@ const RegisterPatient = (props) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {patientMatches.map((patient) => (
-                          <TableRow key={patient.queueNo}>
-                            <TableCell>{patient.queueNo}</TableCell>
-                            <TableCell>{patient.initials}</TableCell>
-                            <TableCell>{formatBirthday(patient.birthday)}</TableCell>
-                            <TableCell>
-                              {patient.preRegistration ? 'Pre-registration' : 'Checked in'}
-                            </TableCell>
+                        {patientMatches.map((match) => (
+                          <TableRow key={match.queueNo}>
+                            <TableCell>{match.queueNo}</TableCell>
+                            <TableCell>{match.initials}</TableCell>
+                            <TableCell>{formatBirthday(match.birthday)}</TableCell>
+                            <TableCell>{getMatchSource(match)}</TableCell>
                             <TableCell align='right'>
                               <Button
                                 size='small'
                                 variant='contained'
-                                onClick={() => handleSelectPatientMatch(patient)}
+                                onClick={() => handleSelectPatientMatch(match)}
+                                disabled={[
+                                  REGISTRATION_LOOKUP_ACTIONS.checkInInProgress,
+                                  REGISTRATION_LOOKUP_ACTIONS.dataError,
+                                ].includes(match.action)}
                                 sx={{ textTransform: 'none' }}
                               >
-                                Select
+                                {getMatchActionLabel(match.action)}
                               </Button>
                             </TableCell>
                           </TableRow>
