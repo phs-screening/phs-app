@@ -15,7 +15,7 @@ import './fieldPadding.css'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
-import { hpvFormQuestionText } from './HpvFormQuestions'
+import { hpvFormQuestionText } from './questions/HpvFormQuestions'
 
 const initialValues = {
   HPV1: '',

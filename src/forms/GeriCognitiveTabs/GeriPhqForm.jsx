@@ -10,7 +10,7 @@ import PopupText from 'src/utils/popupText'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import CustomTextField from '../../components/form-components/CustomTextField.jsx'
-import { geriPhqFormQuestionText } from './GeriPhqFormQuestions'
+import { geriPhqFormQuestionText } from '../questions/GeriPhqFormQuestions'
 
 const formName = 'geriPhqForm'
 

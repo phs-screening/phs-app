@@ -11,7 +11,7 @@ import {
 } from 'src/components/form-components/FormSubmitStatusHost'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { hxScoliosisFormQuestionText } from './HxScoliosisFormQuestions'
+import { hxScoliosisFormQuestionText } from '../questions/HxScoliosisFormQuestions'
 
 const formName = 'hxScoliosisForm'
 

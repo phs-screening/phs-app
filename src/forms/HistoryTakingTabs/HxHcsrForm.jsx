@@ -13,7 +13,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
-import { hxHcsrFormQuestionText } from './HxHcsrFormQuestions'
+import { hxHcsrFormQuestionText } from '../questions/HxHcsrFormQuestions'
 
 const formName = 'hxHcsrForm'
 

@@ -13,7 +13,7 @@ import {
 } from '../../components/form-components/FormSubmitStatusHost.jsx'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
-import { hxOsaFormQuestionText } from './HxOsaFormQuestions'
+import { hxOsaFormQuestionText } from '../questions/HxOsaFormQuestions'
 
 const formName = 'hxOsaForm'
 

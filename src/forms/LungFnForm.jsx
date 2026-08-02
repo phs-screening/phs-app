@@ -20,7 +20,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
 
 import './fieldPadding.css'
-import { lungFnFormQuestionText } from './LungFnFormQuestions'
+import { lungFnFormQuestionText } from './questions/LungFnFormQuestions'
 
 const formName = 'lungFnForm'
 

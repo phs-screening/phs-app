@@ -24,7 +24,7 @@ import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
-import { geriWhFormQuestionText } from './GeriWhFormQuestions'
+import { geriWhFormQuestionText } from '../questions/GeriWhFormQuestions'
 
 const validationSchema = Yup.object({
   WH1: Yup.string().oneOf(['Yes', 'No']).required('Required'),

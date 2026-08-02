@@ -20,7 +20,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
-import { oralHealthFormQuestionText } from './OralHealthFormQuestions'
+import { oralHealthFormQuestionText } from './questions/OralHealthFormQuestions'
 
 const initialValues = {
   DENT1: [],

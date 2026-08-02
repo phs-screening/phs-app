@@ -25,7 +25,7 @@ import {
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
-import { geriInterFormQuestionText } from './GeriInterFormQuestions'
+import { geriInterFormQuestionText } from '../questions/GeriInterFormQuestions'
 
 const responses = ['1 - Hardly ever', '2 - Some of the time', '3 - Often']
 

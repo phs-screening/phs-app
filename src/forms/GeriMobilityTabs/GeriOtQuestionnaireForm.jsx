@@ -17,7 +17,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomNumberField from '../../components/form-components/CustomNumberField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { geriOtQuestionnaireFormQuestionText } from './GeriOtQuestionnaireFormQuestions'
+import { geriOtQuestionnaireFormQuestionText } from '../questions/GeriOtQuestionnaireFormQuestions'
 
 const formName = 'geriOtQuestionnaireForm'
 

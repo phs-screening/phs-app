@@ -19,7 +19,7 @@ import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
-import { ophthalFormQuestionText } from './OphthalFormQuestions'
+import { ophthalFormQuestionText } from './questions/OphthalFormQuestions'
 
 const YesNo = [
   { label: 'Yes', value: 'Yes' },

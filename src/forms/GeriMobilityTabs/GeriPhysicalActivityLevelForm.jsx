@@ -17,7 +17,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup.jsx'
 import CustomTextField from '../../components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { geriPhysicalActivityLevelFormQuestionText } from './GeriPhysicalActivityLevelFormQuestions'
+import { geriPhysicalActivityLevelFormQuestionText } from '../questions/GeriPhysicalActivityLevelFormQuestions'
 
 const formName = 'geriPhysicalActivityLevelForm'
 

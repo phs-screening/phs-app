@@ -15,7 +15,7 @@ import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import '../fieldPadding.css'
 import '../forms.css'
-import { hxGynaeFormQuestionText } from './HxGynaeFormQuestions'
+import { hxGynaeFormQuestionText } from '../questions/HxGynaeFormQuestions'
 
 const formName = 'gynaeForm'
 

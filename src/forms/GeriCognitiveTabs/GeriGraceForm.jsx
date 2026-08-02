@@ -18,7 +18,7 @@ import ErrorNotification from '../../components/form-components/ErrorNotificatio
 
 import PopupText from 'src/utils/popupText'
 import { useNavigate } from 'react-router'
-import { geriGraceFormQuestionText } from './GeriGraceFormQuestions'
+import { geriGraceFormQuestionText } from '../questions/GeriGraceFormQuestions'
 
 const validationSchema = Yup.object({
   GRACE1: Yup.string().notRequired(),

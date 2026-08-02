@@ -18,7 +18,7 @@ import allForms from '../forms.json'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { wceFormQuestionText } from './WceFormQuestions'
+import { wceFormQuestionText } from '../questions/WceFormQuestions'
 
 const formName = 'wceForm'
 

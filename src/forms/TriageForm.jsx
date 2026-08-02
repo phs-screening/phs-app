@@ -20,7 +20,7 @@ import CustomNumberField from '../components/form-components/CustomNumberField'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import DataLoadError from 'src/components/DataLoadError'
-import { triageFormQuestionText } from './TriageFormQuestions'
+import { triageFormQuestionText } from './questions/TriageFormQuestions'
 
 const validationSchema = Yup.object({
   triageQ1: Yup.number()

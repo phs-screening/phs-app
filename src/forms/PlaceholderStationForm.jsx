@@ -15,7 +15,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification.j
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 import './forms.css'
-import { placeholderStationFormQuestionText } from './PlaceholderStationFormQuestions'
+import { placeholderStationFormQuestionText } from './questions/PlaceholderStationFormQuestions'
 
 const initialValues = {
   placeholderCompleted: '',

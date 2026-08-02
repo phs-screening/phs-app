@@ -20,7 +20,7 @@ import CustomTextField from 'src/components/form-components/CustomTextField'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import CustomRadioGroup from 'src/components/form-components/CustomRadioGroup.jsx'
-import { doctorsConsultFormQuestionText } from './DoctorsConsultFormQuestions'
+import { doctorsConsultFormQuestionText } from './questions/DoctorsConsultFormQuestions'
 
 const initialValues = {
   doctorSConsultQ1: '',

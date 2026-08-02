@@ -16,7 +16,7 @@ import '../fieldPadding.css'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { mentalHealthFormQuestionText } from './MentalHealthFormQuestions'
+import { mentalHealthFormQuestionText } from '../questions/MentalHealthFormQuestions'
 
 const yesNo = [
   { label: 'Yes', value: 'Yes' },

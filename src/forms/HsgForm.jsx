@@ -18,7 +18,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import './fieldPadding.css'
 import { useNavigate } from 'react-router'
-import { hsgFormQuestionText } from './HsgFormQuestions'
+import { hsgFormQuestionText } from './questions/HsgFormQuestions'
 
 const validationSchema = Yup.object({
   HSG1: Yup.string()

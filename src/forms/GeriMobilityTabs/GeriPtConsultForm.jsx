@@ -20,7 +20,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { geriPtConsultFormQuestionText } from './GeriPtConsultFormQuestions'
+import { geriPtConsultFormQuestionText } from '../questions/GeriPtConsultFormQuestions'
 
 const formName = 'geriPtConsultForm'
 

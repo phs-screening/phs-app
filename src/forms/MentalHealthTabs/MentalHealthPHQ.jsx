@@ -9,7 +9,7 @@ import '../fieldPadding.css'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
-import { mentalHealthPHQQuestionText } from './MentalHealthPHQQuestions'
+import { mentalHealthPHQQuestionText } from '../questions/MentalHealthPHQQuestions'
 
 const formName = 'geriPhqForm'
 

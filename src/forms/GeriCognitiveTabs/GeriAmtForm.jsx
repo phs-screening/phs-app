@@ -19,7 +19,7 @@ import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
 import allForms from '../forms.json'
-import { geriAmtFormQuestionText } from './GeriAmtFormQuestions'
+import { geriAmtFormQuestionText } from '../questions/GeriAmtFormQuestions'
 
 const formName = 'geriAmtForm'
 

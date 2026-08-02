@@ -17,7 +17,7 @@ import allForms from './forms.json'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
-import { vaccineFormQuestionText } from './VaccineFormQuestions'
+import { vaccineFormQuestionText } from './questions/VaccineFormQuestions'
 
 const formName = 'vaccineForm'
 

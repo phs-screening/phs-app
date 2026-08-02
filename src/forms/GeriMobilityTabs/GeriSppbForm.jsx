@@ -16,7 +16,7 @@ import {
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
-import { geriSppbFormQuestionText } from './GeriSppbFormQuestions'
+import { geriSppbFormQuestionText } from '../questions/GeriSppbFormQuestions'
 
 const formName = 'geriSppbForm'
 

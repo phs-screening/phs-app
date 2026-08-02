@@ -14,7 +14,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from 'src/components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import '../fieldPadding.css'
-import { hxPhqFormQuestionText } from './HxPhqFormQuestions'
+import { hxPhqFormQuestionText } from '../questions/HxPhqFormQuestions'
 
 const formName = 'geriPhqForm'
 

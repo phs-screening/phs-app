@@ -16,7 +16,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification.j
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 import './forms.css'
-import { podiatryFormQuestionText } from './PodiatryFormQuestions'
+import { podiatryFormQuestionText } from './questions/PodiatryFormQuestions'
 
 const formName = 'podiatryForm'
 

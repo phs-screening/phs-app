@@ -15,7 +15,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
-import { hxNssFormQuestionText } from './HxNssFormQuestions'
+import { hxNssFormQuestionText } from '../questions/HxNssFormQuestions'
 
 // IMPORTANT: Formerly NSS, renamed to PMHX as of PHS 2022. MongoDB forms not renamed, only tab name
 const formName = 'hxNssForm'

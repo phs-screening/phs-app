@@ -26,7 +26,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from '../../utils/popupText'
-import { hxOralFormQuestionText } from './HxOralFormQuestions'
+import { hxOralFormQuestionText } from '../questions/HxOralFormQuestions'
 
 const formName = 'hxOralForm'
 

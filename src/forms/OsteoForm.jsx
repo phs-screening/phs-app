@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomNumberField from '../components/form-components/CustomNumberField'
-import { osteoFormQuestionText } from './OsteoFormQuestions'
+import { osteoFormQuestionText } from './questions/OsteoFormQuestions'
 
 const validationSchema = Yup.object({
   BONE1: Yup.string()

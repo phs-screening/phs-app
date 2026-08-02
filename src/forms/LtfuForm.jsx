@@ -13,7 +13,7 @@ import {
   showFormSubmitSuccess,
 } from '../components/form-components/FormSubmitStatusHost.jsx'
 import { getSavedData } from '../services/patientData'
-import { ltfuQuestionText } from './ltfuQuestions'
+import { ltfuQuestionText } from './questions/ltfuQuestions'
 import './fieldPadding.css'
 import './forms.css'
 

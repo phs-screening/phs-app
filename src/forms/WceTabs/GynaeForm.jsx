@@ -19,7 +19,7 @@ import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import PopupText from 'src/utils/popupText'
-import { gynaeFormQuestionText } from './GynaeFormQuestions'
+import { gynaeFormQuestionText } from '../questions/GynaeFormQuestions'
 
 // This file is for the Gynae tab in the WCE station, not to be confused with the Gynae tab in the History Taking station
 

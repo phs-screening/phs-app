@@ -15,7 +15,7 @@ import CustomTextField from '../components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
-import { scoliosisFormQuestionText } from './ScoliosisFormQuestions'
+import { scoliosisFormQuestionText } from './questions/ScoliosisFormQuestions'
 
 const formName = 'scoliosisForm'
 

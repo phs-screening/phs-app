@@ -14,7 +14,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.
 import CustomNumberField from 'src/components/form-components/CustomNumberField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText.jsx'
-import { hxSocialFormQuestionText } from './HxSocialFormQuestions'
+import { hxSocialFormQuestionText } from '../questions/HxSocialFormQuestions'
 
 const formName = 'hxSocialForm'
 

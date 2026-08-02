@@ -15,7 +15,7 @@ import ErrorNotification from '../../components/form-components/ErrorNotificatio
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
-import { hxM4M5ReviewFormQuestionText } from './HxM4M5ReviewFormQuestions'
+import { hxM4M5ReviewFormQuestionText } from '../questions/HxM4M5ReviewFormQuestions'
 //import allForms from '../forms.json'
 
 const formName = 'hxM4M5ReviewForm'

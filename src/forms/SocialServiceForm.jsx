@@ -20,7 +20,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
-import { socialServiceFormQuestionText } from './SocialServiceFormQuestions'
+import { socialServiceFormQuestionText } from './questions/SocialServiceFormQuestions'
 
 const initialValues = {
   socialServiceQ1: '',

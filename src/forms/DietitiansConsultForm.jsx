@@ -18,7 +18,7 @@ import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
-import { dietitiansConsultFormQuestionText } from './DietitiansConsultFormQuestions'
+import { dietitiansConsultFormQuestionText } from './questions/DietitiansConsultFormQuestions'
 
 const initialValues = {
   dietitiansConsultQ1: '',
