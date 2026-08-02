@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Divider, Paper, CircularProgress, Button, Grid, Typography } from '@mui/material'
 
 import { submitForm, calculateSppbScore } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -18,6 +21,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { geriOtConsultFormQuestionText } from './GeriOtConsultFormQuestions'
 
 const formName = 'geriOtConsultForm'
 
@@ -140,7 +144,7 @@ const GeriOtConsultForm = () => {
                 <form onSubmit={handleSubmit} className='fieldPadding'>
                   <div className='form--div'>
                     <h1>OT Consult</h1>
-                    <h3>Memo (for participant):</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ1}</h3>
                     <FastField
                       name='geriOtConsultQ1'
                       label='geri - OT Consult Q1'
@@ -148,7 +152,7 @@ const GeriOtConsultForm = () => {
                       fullWidth
                       multiline
                     />
-                    <h3>To be referred for doctor&apos;s consult (OT)?</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ2}</h3>
                     If referral to long-term OT rehab services is necessary, this will be done
                     through the doctor&apos;s consult route.
                     <br />
@@ -160,7 +164,7 @@ const GeriOtConsultForm = () => {
                       row
                     />
                     <PopupText qnNo='geriOtConsultQ2' triggerValue='Yes'>
-                      <h4>Reasons for referral to Doctor&apos;s consult (OT):</h4>
+                      <h4>{geriOtConsultFormQuestionText.geriOtConsultQ3}</h4>
                       For Referral to Polyclinic for OT Rehabilitation Services
                       <FastField
                         name='geriOtConsultQ3'
@@ -168,7 +172,7 @@ const GeriOtConsultForm = () => {
                         component={CustomTextField}
                       />
                     </PopupText>
-                    <h3>To be referred for social services (OT):</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ4}</h3>
                     <FastField
                       name='geriOtConsultQ4'
                       label='geri - OT Consult Q4'
@@ -177,21 +181,19 @@ const GeriOtConsultForm = () => {
                       row
                     />
                     <PopupText qnNo='geriOtConsultQ4' triggerValue='Yes'>
-                      <h4>Reasons for referral to social services (OT):</h4>
+                      <h4>{geriOtConsultFormQuestionText.geriOtConsultQ5}</h4>
                       <FastField
                         name='geriOtConsultQ5'
                         label='geri - OT Consult Q5'
                         component={CustomTextField}
                       />
                     </PopupText>
-                    <h4>
-                      Which of the following programmes would you recommend the participant for?
-                    </h4>
+                    <h4>{geriOtConsultFormQuestionText.geriOtConsultQ6}</h4>
                     (Please select the most appropriate programme)
                     <br />
                     <FastField
                       name='geriOtConsultQ6'
-                      label='Recommended programme(s)'
+                      label={geriOtConsultFormQuestionText.geriOtConsultQ6Label}
                       component={CustomCheckboxGroup}
                       options={formOptions.geriOtConsultQ6}
                     />
@@ -213,7 +215,7 @@ const GeriOtConsultForm = () => {
                     <p className='underlined'>
                       Note: Age criterion is not applicable for EASE under HIP.
                     </p>
-                    <h3>Is participant eligible for HDB EASE?</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ7}</h3>
                     <FastField
                       name='geriOtConsultQ7'
                       label='geri - OT Consult Q7'
@@ -221,7 +223,7 @@ const GeriOtConsultForm = () => {
                       options={formOptions.geriOtConsultQ7}
                       row
                     />
-                    <h3>Does participant wish to sign up for HDB EASE?</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ8}</h3>
                     <FastField
                       name='geriOtConsultQ8'
                       label='geri - OT Consult Q8'
@@ -229,7 +231,7 @@ const GeriOtConsultForm = () => {
                       options={formOptions.geriOtConsultQ8}
                       row
                     />
-                    <h3>Functional Assessment Report completed & given to participant?</h3>
+                    <h3>{geriOtConsultFormQuestionText.geriOtConsultQ9}</h3>
                     <FastField
                       name='geriOtConsultQ9'
                       label='geriOtConsultQ9'
@@ -239,9 +241,9 @@ const GeriOtConsultForm = () => {
                     />
                   </div>
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

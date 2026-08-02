@@ -10,11 +10,15 @@ import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
+import { dietitiansConsultFormQuestionText } from './DietitiansConsultFormQuestions'
 
 const initialValues = {
   dietitiansConsultQ1: '',
@@ -124,14 +128,13 @@ const DietitiansConsultForm = () => {
     >
       {({ isSubmitting, errors, submitCount }) => (
         <Form className='fieldPadding'>
-
           <div>
             <Typography variant='h2' fontWeight='bold' gutterBottom>
               Dietitian&apos;s Consultation
             </Typography>
 
             <Typography variant='h4' fontWeight='bold'>
-              Has the participant visited the Dietitian&apos;s Consult station?
+              {dietitiansConsultFormQuestionText.dietitiansConsultQ7}
             </Typography>
             <FastField
               name='dietitiansConsultQ7'
@@ -142,7 +145,7 @@ const DietitiansConsultForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Dietitian&apos;s Name:
+              {dietitiansConsultFormQuestionText.dietitiansConsultQ1}
             </Typography>
             <FastField
               name='dietitiansConsultQ1'
@@ -151,9 +154,8 @@ const DietitiansConsultForm = () => {
               multiline
             />
 
-
             <Typography variant='h4' fontWeight='bold'>
-              Notes for participant (if applicable):
+              {dietitiansConsultFormQuestionText.dietitiansConsultQ4}
             </Typography>
             <FastField
               name='dietitiansConsultQ4'
@@ -164,7 +166,7 @@ const DietitiansConsultForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Referred to Polyclinic for follow-up?
+              {dietitiansConsultFormQuestionText.dietitiansConsultQ8}
             </Typography>
             <FastField
               name='dietitiansConsultQ8'
@@ -174,7 +176,7 @@ const DietitiansConsultForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Refer to Doctor&apos;s Station?
+              {dietitiansConsultFormQuestionText.dietitiansConsultQ9}
             </Typography>
             <FastField
               name='dietitiansConsultQ9'
@@ -184,9 +186,9 @@ const DietitiansConsultForm = () => {
             />
           </div>
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <Box mt={2} mb={2}>

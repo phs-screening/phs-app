@@ -7,9 +7,13 @@ import { submitForm } from '../../api/formHelpers.jsx'
 import { FormContext } from '../../api/utils.js'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from '../../components/form-components/FormSubmitStatusHost.jsx'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from '../../components/form-components/FormSubmitStatusHost.jsx'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
+import { hxOsaFormQuestionText } from './HxOsaFormQuestions'
 
 const formName = 'hxOsaForm'
 
@@ -76,28 +80,28 @@ export default function HxOsaForm({ changeTab, nextTab }) {
 
             <FastField
               name='OSA1'
-              label='OSA1 - Do you snore loudly? (Louder than talking or loud enough to be heard through closed doors)'
+              label={hxOsaFormQuestionText.OSA1}
               component={CustomRadioGroup}
               options={yesNoOptions}
               row
             />
             <FastField
               name='OSA2'
-              label='OSA2 - Do you often feel tired, fatigued, or sleepy during the daytime?'
+              label={hxOsaFormQuestionText.OSA2}
               component={CustomRadioGroup}
               options={yesNoOptions}
               row
             />
             <FastField
               name='OSA3'
-              label='OSA3 - Has anyone observed you stop breathing during sleep?'
+              label={hxOsaFormQuestionText.OSA3}
               component={CustomRadioGroup}
               options={yesNoOptions}
               row
             />
             <FastField
               name='OSA4'
-              label='OSA4 - Do you have (or are you being treated for) high blood pressure?'
+              label={hxOsaFormQuestionText.OSA4}
               component={CustomRadioGroup}
               options={yesNoOptions}
               row

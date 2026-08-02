@@ -1,33 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Divider, 
-  Paper, 
-  Grid, 
-  CircularProgress, 
-  Box, 
+import {
+  Divider,
+  Paper,
+  Grid,
+  CircularProgress,
+  Box,
   Button,
   FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormHelperText
+  FormHelperText,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import allForms from '../forms.json'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
+import { geriInterFormQuestionText } from './GeriInterFormQuestions'
 
-const responses = [
-  '1 - Hardly ever',
-  '2 - Some of the time',
-  '3 - Often',
-]
+const responses = ['1 - Hardly ever', '2 - Some of the time', '3 - Often']
 
 const responsesValue = [
   { label: '1 - Hardly ever', value: '1 - Hardly ever' },
@@ -45,10 +45,10 @@ const validationSchema = Yup.object({
 const RadioField = ({ field, form, options, label, ...props }) => {
   const { name } = field
   const hasError = form.touched[name] && form.errors[name]
-  
+
   return (
-    <FormControl component="fieldset" error={hasError} margin="normal" fullWidth>
-      <FormLabel component="legend">{label}</FormLabel>
+    <FormControl component='fieldset' error={hasError} margin='normal' fullWidth>
+      <FormLabel component='legend'>{label}</FormLabel>
       <RadioGroup {...field} {...props}>
         {options.map((option) => (
           <FormControlLabel
@@ -59,9 +59,7 @@ const RadioField = ({ field, form, options, label, ...props }) => {
           />
         ))}
       </RadioGroup>
-      {hasError && (
-        <FormHelperText>{form.errors[name]}</FormHelperText>
-      )}
+      {hasError && <FormHelperText>{form.errors[name]}</FormHelperText>}
     </FormControl>
   )
 }
@@ -138,31 +136,31 @@ const GeriInterForm = () => {
                 <Form className='fieldPadding'>
                   <div className='form--div'>
                     <h1>INTERACTION</h1>
-                    
-                    <h3>How often do you feel that you lack companionship?</h3>
-                    <Field 
-                      name="InterQ1" 
-                      component={RadioField} 
-                      label="Lack companionship" 
-                      options={responsesValue} 
+
+                    <h3>{geriInterFormQuestionText.InterQ1}</h3>
+                    <Field
+                      name='InterQ1'
+                      component={RadioField}
+                      label={geriInterFormQuestionText.InterQ1Label}
+                      options={responsesValue}
                     />
-                    
-                    <h3>How often do you feel left out?</h3>
-                    <Field 
-                      name="InterQ2" 
-                      component={RadioField} 
-                      label="Feel left out" 
-                      options={responsesValue} 
+
+                    <h3>{geriInterFormQuestionText.InterQ2}</h3>
+                    <Field
+                      name='InterQ2'
+                      component={RadioField}
+                      label={geriInterFormQuestionText.InterQ2Label}
+                      options={responsesValue}
                     />
-                    
-                    <h3>How often do you feel isolated from others?</h3>
-                    <Field 
-                      name="InterQ3" 
-                      component={RadioField} 
-                      label="Feel isolated" 
-                      options={responsesValue} 
+
+                    <h3>{geriInterFormQuestionText.InterQ3}</h3>
+                    <Field
+                      name='InterQ3'
+                      component={RadioField}
+                      label={geriInterFormQuestionText.InterQ3Label}
+                      options={responsesValue}
                     />
-                    
+
                     <h3>Score:</h3>
                     <p className='blue'>{getScore(values)} / 9</p>
                   </div>
@@ -172,10 +170,10 @@ const GeriInterForm = () => {
                       <CircularProgress />
                     ) : (
                       <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        size="large"
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        size='large'
                         disabled={isSubmitting}
                       >
                         Submit
@@ -201,8 +199,11 @@ const GeriInterForm = () => {
             <CircularProgress />
           ) : (
             <div className='summary--question-div'>
-              <p>Patient consented to being considered for participation in Long Term Follow-Up (LTFU)?
-                (Patient has to sign and tick Form C)<br></br><strong>{regi.registrationQ20}</strong></p>
+              <p>
+                Patient consented to being considered for participation in Long Term Follow-Up
+                (LTFU)? (Patient has to sign and tick Form C)<br></br>
+                <strong>{regi.registrationQ20}</strong>
+              </p>
             </div>
           )}
         </Grid>

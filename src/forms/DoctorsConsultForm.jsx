@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import { addToDocPdfQueue } from '../services/printQueues'
@@ -17,6 +20,7 @@ import CustomTextField from 'src/components/form-components/CustomTextField'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import CustomRadioGroup from 'src/components/form-components/CustomRadioGroup.jsx'
+import { doctorsConsultFormQuestionText } from './DoctorsConsultFormQuestions'
 
 const initialValues = {
   doctorSConsultQ1: '',
@@ -170,7 +174,7 @@ const DoctorsConsultForm = () => {
           <div className='form--div'>
             <h1>Doctor&apos;s Station</h1>
             <Typography variant='h4' fontWeight='bold'>
-              Doctor&apos;s Name
+              {doctorsConsultFormQuestionText.doctorSConsultQ1}
             </Typography>
             <FastField
               name='doctorSConsultQ1'
@@ -180,7 +184,7 @@ const DoctorsConsultForm = () => {
               multiline
             />
             <Typography variant='h4' fontWeight='bold'>
-              Clinical Findings
+              {doctorsConsultFormQuestionText.doctorSConsultQ2}
             </Typography>
             <FastField
               name='doctorSConsultQ2'
@@ -191,7 +195,7 @@ const DoctorsConsultForm = () => {
               minRows={4}
             />
             <Typography variant='h4' fontWeight='bold'>
-              Doctor&apos;s Memo
+              {doctorsConsultFormQuestionText.doctorSConsultQ3}
             </Typography>
             <FastField
               name='doctorSConsultQ3'
@@ -201,7 +205,7 @@ const DoctorsConsultForm = () => {
               multiline
               minRows={6}
             />
-            <h3>Refer to dietitian?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ4}</h3>
             <FastField
               name='doctorSConsultQ4'
               label='doctorQ4'
@@ -211,7 +215,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ4' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Dietitian referral
+                {doctorsConsultFormQuestionText.doctorSConsultQ5}
               </Typography>
               <FastField
                 name='doctorSConsultQ5'
@@ -222,7 +226,7 @@ const DoctorsConsultForm = () => {
                 minRows={2}
               />
             </PopupText>
-            <h3>Refer to Social Support?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ6}</h3>
             <FastField
               name='doctorSConsultQ6'
               label='doctorQ6'
@@ -232,7 +236,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ6' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Social Support Rreferral
+                {doctorsConsultFormQuestionText.doctorSConsultQ7}
               </Typography>
               <FastField
                 name='doctorSConsultQ7'
@@ -243,7 +247,7 @@ const DoctorsConsultForm = () => {
                 minRows={2}
               />
             </PopupText>
-            <h3>Refer to Mental Health? (and indicated on Form A)</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ13}</h3>
             <FastField
               name='doctorSConsultQ13'
               label='doctorQ13'
@@ -251,7 +255,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultYESNO}
               row
             />
-            <h3>Refer to Dental?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ8}</h3>
             <FastField
               name='doctorSConsultQ8'
               label='doctorQ8'
@@ -261,7 +265,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ8' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Dental referral
+                {doctorsConsultFormQuestionText.doctorSConsultQ9}
               </Typography>
               <FastField
                 name='doctorSConsultQ9'
@@ -273,7 +277,7 @@ const DoctorsConsultForm = () => {
               />
             </PopupText>
 
-            <h3>Does patient require urgent follow up</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ10}</h3>
             <FastField
               name='doctorSConsultQ10'
               label='doctorQ10'
@@ -281,7 +285,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultYESNO}
               row
             />
-            <h3>Completed Doctor&apos;s station. Please check that Form A is filled.</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ11}</h3>
             <FastField
               name='doctorSConsultQ11'
               label='doctorQ11'
@@ -289,7 +293,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultQ11}
             />
 
-            <h3>Does this patient need a memo to be printed?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ12}</h3>
             <FastField
               name='doctorSConsultQ12'
               label='doctorQ12'

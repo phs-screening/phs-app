@@ -1,26 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { 
-  Divider, 
-  Paper, 
-  CircularProgress, 
-  Box, 
-  Button, 
+import {
+  Divider,
+  Paper,
+  CircularProgress,
+  Box,
+  Button,
   TextField,
   FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormHelperText
+  FormHelperText,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
+import { geriWhFormQuestionText } from './GeriWhFormQuestions'
 
 const validationSchema = Yup.object({
   WH1: Yup.string().oneOf(['Yes', 'No']).required('Required'),
@@ -31,10 +35,10 @@ const validationSchema = Yup.object({
 const RadioField = ({ field, form, options, label, ...props }) => {
   const { name } = field
   const hasError = form.touched[name] && form.errors[name]
-  
+
   return (
-    <FormControl component="fieldset" error={hasError} margin="normal">
-      <FormLabel component="legend">{label}</FormLabel>
+    <FormControl component='fieldset' error={hasError} margin='normal'>
+      <FormLabel component='legend'>{label}</FormLabel>
       <RadioGroup {...field} {...props}>
         {options.map((option) => (
           <FormControlLabel
@@ -45,9 +49,7 @@ const RadioField = ({ field, form, options, label, ...props }) => {
           />
         ))}
       </RadioGroup>
-      {hasError && (
-        <FormHelperText>{form.errors[name]}</FormHelperText>
-      )}
+      {hasError && <FormHelperText>{form.errors[name]}</FormHelperText>}
     </FormControl>
   )
 }
@@ -107,23 +109,23 @@ const GeriWhForm = (props) => {
           <Form className='fieldPadding'>
             <div className='form--div'>
               <h1>Whispering Hearts</h1>
-              
-              <h3>Patient has signed up for referral with Whispering Hearts.</h3>
-              <Field 
-                name="WH1" 
-                component={RadioField} 
-                label="Signed up for referral?" 
-                options={radioOptions} 
+
+              <h3>{geriWhFormQuestionText.WH1}</h3>
+              <Field
+                name='WH1'
+                component={RadioField}
+                label={geriWhFormQuestionText.WH1Label}
+                options={radioOptions}
               />
-              
-              <h3>Address of referral</h3>
+
+              <h3>{geriWhFormQuestionText.WH2shortAns}</h3>
               <Field
                 as={TextField}
-                name="WH2shortAns"
-                label="Address of referral"
+                name='WH2shortAns'
+                label={geriWhFormQuestionText.WH2shortAns}
                 fullWidth
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 multiline
                 rows={3}
                 error={touched.WH2shortAns && !!errors.WH2shortAns}
@@ -136,10 +138,10 @@ const GeriWhForm = (props) => {
                 <CircularProgress />
               ) : (
                 <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  size='large'
                   disabled={isSubmitting}
                 >
                   Submit

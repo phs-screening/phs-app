@@ -5,7 +5,10 @@ import * as Yup from 'yup'
 import { Divider, Paper, CircularProgress, Box, Button } from '@mui/material'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -14,6 +17,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup.jsx'
 import CustomTextField from '../../components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { geriPhysicalActivityLevelFormQuestionText } from './GeriPhysicalActivityLevelFormQuestions'
 
 const formName = 'geriPhysicalActivityLevelForm'
 
@@ -134,7 +138,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
               <h1>PHYSICAL ACTIVITY SECTION</h1>
               <h2>PHYSICAL ACTIVITY LEVELS</h2>
 
-              <h3>1. How often do you exercise in a week?</h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ1}</h3>
               <p>
                 If &lt; 3x/week and would like to start exercising more, suggest physiotherapist
                 consultation.
@@ -147,7 +151,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h3>2. How long do you exercise each time?</h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ2}</h3>
               <p>
                 If &lt; 30minutes per session and would like to increase, suggest physiotherapist
                 consultation.
@@ -160,7 +164,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h3>3. What do you do for exercise?</h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ3}</h3>
               <ul className='decrease-left-margin'>
                 <li>Take down salient points.</li>
                 <li>
@@ -180,9 +184,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 fullWidth
               />
 
-              <h3>
-                4. Using the following scale, can you rate the level of exertion when you exercise?
-              </h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ4}</h3>
               <b>PT to note:</b>
               <ol>
                 <li>Achieves less than 150 min moderate intensity per week OR</li>
@@ -201,10 +203,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h3>
-                5. Do you have significant difficulties going about your regular exercise regime? Or
-                do you not know how to start exercising?
-              </h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ5}</h3>
               <p>If yes, REFER FOR PHYSIOTHERAPIST CONSULTATION.</p>
               <FastField
                 name='geriPhysicalActivityLevelQ5'
@@ -214,9 +213,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h3>
-                6. Do you have any history of falls in the past 1 year? If yes, how many falls?
-              </h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ8}</h3>
               <FastField
                 name='geriPhysicalActivityLevelQ8'
                 label='Geri - Physical Activity Level Q8'
@@ -225,7 +222,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h3>7. If yes, were any of the falls injurious?</h3>
+              <h3>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ9}</h3>
               <p>
                 If participant had 2 or more falls, or 1 fall with injury, REFER TO DOCTOR&apos;S
                 CONSULTATION
@@ -238,10 +235,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 row
               />
 
-              <h4>
-                Please elaborate below on the injuries and whether there was medical treatment e.g.
-                seeing Dr/ED dept.
-              </h4>
+              <h4>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ10}</h4>
               <FastField
                 name='geriPhysicalActivityLevelQ10'
                 label='Geri - Physical Activity Level Q10'
@@ -250,7 +244,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 fullWidth
               />
 
-              <h4>Notes:</h4>
+              <h4>{geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ7}</h4>
               <FastField
                 name='geriPhysicalActivityLevelQ7'
                 label='Geri - Physical Activity Level Q7'
@@ -259,7 +253,9 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 fullWidth
               />
 
-              <h3 className='red'>Referral to Physiotherapist Consult</h3>
+              <h3 className='red'>
+                {geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ6}
+              </h3>
               <FastField
                 name='geriPhysicalActivityLevelQ6'
                 label='Geri - Physical Activity Level Q6'
@@ -268,9 +264,9 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
               />
             </div>
 
-            <ErrorNotification 
+            <ErrorNotification
               show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-              message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>

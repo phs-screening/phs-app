@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
+import { hxM4M5ReviewFormQuestionText } from './HxM4M5ReviewFormQuestions'
 //import allForms from '../forms.json'
 
 const formName = 'hxM4M5ReviewForm'
@@ -72,11 +76,7 @@ const HxM4M5ReviewForm = () => {
           <Typography variant='h4'>
             <strong>M4/M5 Review</strong>
           </Typography>
-          <Typography fontWeight='bold'>
-
-            Does the patient need to go for Doctor&apos;s Station?
-
-          </Typography>
+          <Typography fontWeight='bold'>{hxM4M5ReviewFormQuestionText.hxM4M5Q1}</Typography>
           <FastField
             name='hxM4M5Q1'
             label='hxM4M5Q1'
@@ -85,9 +85,9 @@ const HxM4M5ReviewForm = () => {
             row
           />
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>

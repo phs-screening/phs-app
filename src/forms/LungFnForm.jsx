@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Divider, Paper, Grid, CircularProgress, Button, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 
@@ -17,6 +20,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
 
 import './fieldPadding.css'
+import { lungFnFormQuestionText } from './LungFnFormQuestions'
 
 const formName = 'lungFnForm'
 
@@ -64,9 +68,9 @@ const validationSchema = Yup.object({
 function determineLungType(lung5, lung7) {
   const fvcPred = Number(lung5)
   const fevRatio = Number(lung7)
-  
+
   if (isNaN(fvcPred) || isNaN(fevRatio)) return null
-  
+
   if (fvcPred >= 80 && fevRatio < 70) return 'Obstructive Defect'
   if (fvcPred < 80 && fevRatio < 70) return 'Mixed Pattern'
   if (fvcPred < 80 && fevRatio >= 70) return 'Restrictive Defect'
@@ -102,15 +106,15 @@ const LungFnForm = () => {
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
     setSubmitting(true)
-    
+
     try {
-      const finalValues = { 
-        ...values, 
-        LUNG13: determineLungType(values.LUNG5, values.LUNG7) 
+      const finalValues = {
+        ...values,
+        LUNG13: determineLungType(values.LUNG5, values.LUNG7),
       }
-      
+
       const response = await submitForm(finalValues, patientId, formName)
-      
+
       if (response.result) {
         setTimeout(async () => {
           await showFormSubmitSuccess()
@@ -146,9 +150,9 @@ const LungFnForm = () => {
                   <Typography variant='h4' component='h1' gutterBottom>
                     Lung Function
                   </Typography>
-                  
+
                   <Typography variant='h6' component='h3' gutterBottom>
-                    Do you have any flu, fever now?
+                    {lungFnFormQuestionText.LUNG1}
                   </Typography>
                   <FastField
                     name='LUNG1'
@@ -157,10 +161,10 @@ const LungFnForm = () => {
                     options={formOptions.LUNG1}
                     row
                   />
-                  
+
                   <PopupText qnNo='LUNG1' triggerValue='Yes'>
                     <Typography variant='h6' component='h4' gutterBottom>
-                      Please specify why
+                      {lungFnFormQuestionText.LUNGShortAns1}
                     </Typography>
                     <FastField
                       name='LUNGShortAns1'
@@ -172,7 +176,7 @@ const LungFnForm = () => {
                   </PopupText>
 
                   <Typography variant='h6' component='h3' gutterBottom>
-                    Has the patient undergone education for smoking cessation?
+                    {lungFnFormQuestionText.LUNG1a}
                   </Typography>
                   <FastField
                     name='LUNG1a'
@@ -183,7 +187,7 @@ const LungFnForm = () => {
                   />
 
                   <Typography variant='h6' component='h3' gutterBottom>
-                    Lung function test completed?
+                    {lungFnFormQuestionText.LUNG2}
                   </Typography>
                   <FastField
                     name='LUNG2'
@@ -192,10 +196,10 @@ const LungFnForm = () => {
                     options={formOptions.LUNG2}
                     row
                   />
-                  
+
                   <PopupText qnNo='LUNG2' triggerValue='No'>
                     <Typography variant='h6' component='h4' gutterBottom>
-                      Please specify why test was not completed
+                      {lungFnFormQuestionText.LUNGShortAns2}
                     </Typography>
                     <FastField
                       name='LUNGShortAns2'
@@ -205,21 +209,20 @@ const LungFnForm = () => {
                       fullWidth
                     />
                   </PopupText>
-
                 </div>
 
-                <ErrorNotification 
+                <ErrorNotification
                   show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                  message="Please fill in all required fields correctly."
+                  message='Please fill in all required fields correctly.'
                 />
 
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                   {loading || isSubmitting ? (
                     <CircularProgress />
                   ) : (
-                    <Button 
-                      type='submit' 
-                      variant='contained' 
+                    <Button
+                      type='submit'
+                      variant='contained'
                       color='primary'
                       size='large'
                       disabled={isSubmitting}
@@ -228,7 +231,7 @@ const LungFnForm = () => {
                     </Button>
                   )}
                 </Box>
-                
+
                 <br />
                 <Divider />
               </Grid>
@@ -246,44 +249,40 @@ const LungFnForm = () => {
                     <Typography variant='body2' className='underlined'>
                       Currently smoke:
                     </Typography>
-                    <Typography 
-                      variant='body1' 
+                    <Typography
+                      variant='body1'
                       className='blue'
                       sx={{ color: 'primary.main', mb: 1 }}
                     >
                       {social.SOCIAL10 || 'nil'}
                     </Typography>
-                    
+
                     <Typography variant='body2' className='underlined'>
                       Pack-years:
                     </Typography>
-                    <Typography 
-                      variant='body1' 
+                    <Typography
+                      variant='body1'
                       className='blue'
                       sx={{ color: 'primary.main', mb: 1 }}
                     >
                       {social.SOCIALShortAns10 || 'nil'}
                     </Typography>
-                    
+
                     <Typography variant='body2' className='underlined'>
                       Smoked before:
                     </Typography>
-                    <Typography 
-                      variant='body1' 
+                    <Typography
+                      variant='body1'
                       className='blue'
                       sx={{ color: 'primary.main', mb: 1 }}
                     >
                       {social.SOCIAL11 || 'nil'}
                     </Typography>
-                    
+
                     <Typography variant='body2' className='underlined'>
                       Quit history:
                     </Typography>
-                    <Typography 
-                      variant='body1' 
-                      className='blue'
-                      sx={{ color: 'primary.main' }}
-                    >
+                    <Typography variant='body1' className='blue' sx={{ color: 'primary.main' }}>
                       {social.SOCIALShortAns11 || 'nil'}
                     </Typography>
                   </div>

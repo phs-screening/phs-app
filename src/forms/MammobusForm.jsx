@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 import './forms.css'
+import { mammobusFormQuestionText } from './MammobusFormQuestions'
 
 const formName = 'mammobusForm'
 
@@ -73,9 +77,7 @@ const MammobusForm = () => {
           <Typography variant='h4'>
             <strong>Mammobus</strong>
           </Typography>
-          <Typography fontWeight='bold'>
-            Has the patient completed the Mammobus station?
-          </Typography>
+          <Typography fontWeight='bold'>{mammobusFormQuestionText.mammobusQ1}</Typography>
           <FastField
             name='mammobusQ1'
             label='mammobusQ1'
@@ -84,9 +86,9 @@ const MammobusForm = () => {
             row
           />
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>

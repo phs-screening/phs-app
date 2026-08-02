@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
 import CustomTextField from '../components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
+import { scoliosisFormQuestionText } from './ScoliosisFormQuestions'
 
 const formName = 'scoliosisForm'
 
@@ -72,9 +76,7 @@ const ScoliosisForm = () => {
               Scoliosis
             </Typography>
 
-            <Typography fontWeight='bold'>
-              Has the patient completed the Scoliosis station?
-            </Typography>
+            <Typography fontWeight='bold'>{scoliosisFormQuestionText.scoliosisQ1}</Typography>
             <FastField
               name='scoliosisQ1'
               label='scoliosisQ1'
@@ -84,7 +86,7 @@ const ScoliosisForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Doctor&apos;s Memo
+              {scoliosisFormQuestionText.scoliosisQ2}
             </Typography>
             <FastField
               name='scoliosisQ2'

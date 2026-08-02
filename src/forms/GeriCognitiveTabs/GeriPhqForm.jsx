@@ -10,6 +10,7 @@ import PopupText from 'src/utils/popupText'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import CustomTextField from '../../components/form-components/CustomTextField.jsx'
+import { geriPhqFormQuestionText } from './GeriPhqFormQuestions'
 
 const formName = 'geriPhqForm'
 
@@ -132,7 +133,7 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
                   <FastField
                     key={name}
                     name={name}
-                    label={`${i + 1}. ${questionLabels[name]}`}
+                    label={`${i + 1}. ${geriPhqFormQuestionText[name]}`}
                     component={CustomRadioGroup}
                     options={dayRange.map((val) => ({ label: val, value: val }))}
                     row
@@ -152,7 +153,7 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
               >
                 <FastField
                   name='PHQExtra9'
-                  label='*Do you want to take your life now?*'
+                  label={geriPhqFormQuestionText.PHQExtra9}
                   component={CustomRadioGroup}
                   options={yesNo.map((v) => ({ label: v, value: v }))}
                   row
@@ -160,7 +161,10 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
               </PopupText>
               <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
                 <Typography variant='subtitle1' sx={{ color: 'red' }}>
-                  <b>*Patient requires urgent attention, please escalate to supervisor of the station to bring to Doctor&apos;s station*</b>
+                  <b>
+                    *Patient requires urgent attention, please escalate to supervisor of the station
+                    to bring to Doctor&apos;s station*
+                  </b>
                 </Typography>
               </PopupText>
 
@@ -171,12 +175,12 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
 
               <FastField
                 name='PHQ11'
-                label='Do you feel like the patient will benefit from counselling?'
+                label={geriPhqFormQuestionText.PHQ11}
                 component={CustomRadioGroup}
                 options={yesNo.map((v) => ({ label: v, value: v }))}
                 row
               />
-              <Typography variant='subtitle2'>Please specify.</Typography>
+              <Typography variant='subtitle2'>{geriPhqFormQuestionText.PHQShortAns11}</Typography>
               <FastField
                 name='PHQShortAns11'
                 component={CustomTextField}
@@ -195,16 +199,4 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
       </Formik>
     </Paper>
   )
-}
-
-const questionLabels = {
-  PHQ1: 'Little interest or pleasure in doing things',
-  PHQ2: 'Feeling down, depressed or hopeless',
-  PHQ3: 'Trouble falling asleep or staying asleep, or sleeping too much',
-  PHQ4: 'Feeling tired or having little energy',
-  PHQ5: 'Poor appetite or overeating',
-  PHQ6: 'Feeling bad about yourself, or that you are a failure or have let yourself or your family down',
-  PHQ7: 'Trouble concentrating on things, such as reading the newspaper or television',
-  PHQ8: 'Moving or speaking so slowly that other people have noticed? Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual',
-  PHQ9: 'Thoughts that you would be better off dead or hurting yourself in some way',
 }

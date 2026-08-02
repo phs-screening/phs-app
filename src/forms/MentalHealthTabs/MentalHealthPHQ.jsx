@@ -9,6 +9,7 @@ import '../fieldPadding.css'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
+import { mentalHealthPHQQuestionText } from './MentalHealthPHQQuestions'
 
 const formName = 'geriPhqForm'
 
@@ -122,63 +123,63 @@ export default function MentalHealthPHQ() {
             <DisabledWrapper>
               <FastField
                 name='PHQ1'
-                label='1. Little interest or pleasure in doing things'
+                label={mentalHealthPHQQuestionText.PHQ1}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ2'
-                label='2. Feeling down, depressed or hopeless'
+                label={mentalHealthPHQQuestionText.PHQ2}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ3'
-                label='3. Trouble falling asleep or staying asleep, or sleeping too much'
+                label={mentalHealthPHQQuestionText.PHQ3}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ4'
-                label='4. Feeling tired or having little energy'
+                label={mentalHealthPHQQuestionText.PHQ4}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ5'
-                label='5. Poor appetite or overeating'
+                label={mentalHealthPHQQuestionText.PHQ5}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ6'
-                label='6. Feeling bad about yourself, or that you are a failure or have let yourself or your family down'
+                label={mentalHealthPHQQuestionText.PHQ6}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ7'
-                label='7. Trouble concentrating on things, such as reading the newspaper or television'
+                label={mentalHealthPHQQuestionText.PHQ7}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ8'
-                label='8. Moving or speaking so slowly that other people have noticed? Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual'
+                label={mentalHealthPHQQuestionText.PHQ8}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
               />
               <FastField
                 name='PHQ9'
-                label='9. Thoughts that you would be better off dead or hurting yourself in some way'
+                label={mentalHealthPHQQuestionText.PHQ9}
                 component={CustomRadioGroup}
                 options={dayRange.map((val) => ({ label: val, value: val }))}
                 row
@@ -194,7 +195,7 @@ export default function MentalHealthPHQ() {
               >
                 <FastField
                   name='PHQExtra9'
-                  label='*Do you want to take your life now?*'
+                  label={mentalHealthPHQQuestionText.PHQExtra9}
                   component={CustomRadioGroup}
                   options={yesNo.map((v) => ({ label: v, value: v }))}
                   row
@@ -202,7 +203,10 @@ export default function MentalHealthPHQ() {
               </PopupText>
               <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
                 <Typography variant='subtitle1' sx={{ color: 'red' }}>
-                  <b>*Patient requires urgent attention, please escalate to supervisor of the station to bring to Doctor&apos;s station*</b>
+                  <b>
+                    *Patient requires urgent attention, please escalate to supervisor of the station
+                    to bring to Doctor&apos;s station*
+                  </b>
                 </Typography>
               </PopupText>
 
@@ -213,12 +217,14 @@ export default function MentalHealthPHQ() {
 
               <FastField
                 name='PHQ11'
-                label='Do you feel like the patient will benefit from counselling?'
+                label={mentalHealthPHQQuestionText.PHQ11}
                 component={CustomRadioGroup}
                 options={yesNo.map((v) => ({ label: v, value: v }))}
                 row
               />
-              <Typography variant='subtitle2'>Please specify.</Typography>
+              <Typography variant='subtitle2'>
+                {mentalHealthPHQQuestionText.PHQShortAns11}
+              </Typography>
               <FastField name='PHQShortAns11' component={CustomTextField} fullWidth multiline />
               <ErrorMessage name='PHQShortAns11' component='div' style={{ color: 'red' }} />
 
