@@ -235,10 +235,12 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Would you like to go through free Oral Health Education by NUS Dentistry dentists and
-            students?
+            {hxOralFormQuestionText.ORAL5}
           </Typography>
-          <Typography gutterBottom>{hxOralFormQuestionText.ORAL5}</Typography>
+          <Typography gutterBottom>
+            If the patient has any queries regarding dental health, or if you think that the patient
+            would benefit from an Oral Health Consult.
+          </Typography>
           <FastField
             name='ORAL5'
             label='ORAL5'
