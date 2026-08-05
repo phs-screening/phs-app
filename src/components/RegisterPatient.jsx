@@ -39,6 +39,19 @@ import Autocomplete from '@mui/material/Autocomplete'
 const PATIENT_NAME_PAGE_LIMIT = 20
 const PATIENT_MATCH_PAGE_LIMIT = 10
 
+const isPatientNameSearchSpecificEnough = (value) => {
+  const tokens = String(value || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+
+  return tokens.some(
+    (token) =>
+      Array.from(token).length >= 2 ||
+      Array.from(token).some((character) => character.codePointAt(0) > 127),
+  )
+}
+
 const dedupePatientNames = (patients) => {
   const seen = new Set()
 
@@ -159,7 +172,7 @@ const RegisterPatient = (props) => {
     return (
       <TextField
         {...params}
-        label='Patient name'
+        label='Patient name or surname'
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
@@ -188,6 +201,10 @@ const RegisterPatient = (props) => {
   const handlePatientNameSearch = (event, value, reason) => {
     if (reason === 'input' || reason === 'clear') {
       setPatientNameSearch(value)
+      setValues({
+        isQueueNumber: false,
+        selectedValue: null,
+      })
       setPatientMatches([])
       setPatientMatchesError('')
     }
@@ -287,6 +304,11 @@ const RegisterPatient = (props) => {
       setIsLoadingPatientName(false)
       return
     }
+    if (!isPatientNameSearchSpecificEnough(value)) {
+      setPatientMatchesError('Enter at least 2 characters from the patient name.')
+      setIsLoadingPatientName(false)
+      return
+    }
 
     try {
       const [patientResult, preRegistrationResult] = await Promise.all([
@@ -306,7 +328,7 @@ const RegisterPatient = (props) => {
       setPatientMatches(matches)
 
       if (matches.length === 0) {
-        setPatientMatchesError('No patients found with this exact name.')
+        setPatientMatchesError('No patients found matching this name.')
       }
     } catch (error) {
       console.error('Failed to search patient by name:', error)

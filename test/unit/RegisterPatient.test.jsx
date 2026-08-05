@@ -6,7 +6,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import RegisterPatient from '../../src/components/RegisterPatient'
 import { FormContext } from '../../src/api/utils'
 import { getPatientStationSummary } from '../../src/api/stationsApi'
-import { getPatientNameMatchesStrict } from '../../src/services/patientData'
+import {
+  getAllPatientNamesStrict,
+  getPatientNameMatchesStrict,
+} from '../../src/services/patientData'
 import {
   checkInPreRegistrationStrict,
   findPreRegistrationByQueueStrict,
@@ -54,6 +57,7 @@ function renderLookup(updatePatientInfo = vi.fn()) {
 describe('RegisterPatient optimized selection', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    getAllPatientNamesStrict.mockResolvedValue([])
     findPreRegistrationByQueueStrict.mockResolvedValue(null)
     searchPreRegistrationsStrict.mockResolvedValue({ data: [] })
     getPatientNameMatchesStrict.mockResolvedValue({ data: [] })
@@ -154,7 +158,10 @@ describe('RegisterPatient optimized selection', () => {
     checkInPreRegistrationStrict.mockResolvedValue({ queueNo: 22, initials: 'Yeo Z W D' })
     renderLookup()
 
-    await user.type(screen.getByRole('combobox', { name: 'Patient name' }), 'Yeo Z W D')
+    await user.type(
+      screen.getByRole('combobox', { name: 'Patient name or surname' }),
+      'Yeo Z W D',
+    )
     await user.click(screen.getByRole('button', { name: 'Search by Name' }))
 
     const resumeButton = await screen.findByRole('button', { name: 'Resume Registration' })
@@ -162,5 +169,50 @@ describe('RegisterPatient optimized selection', () => {
 
     expect(await screen.findByText('Registration form')).toBeInTheDocument()
     expect(checkInPreRegistrationStrict).toHaveBeenCalledWith(22)
+  })
+
+  it('rejects a single-character-only name search before calling the API', async () => {
+    const user = userEvent.setup()
+    renderLookup()
+
+    await user.type(
+      screen.getByRole('combobox', { name: 'Patient name or surname' }),
+      'A',
+    )
+    await user.click(screen.getByRole('button', { name: 'Search by Name' }))
+
+    expect(
+      screen.getByText('Enter at least 2 characters from the patient name.'),
+    ).toBeInTheDocument()
+    expect(getPatientNameMatchesStrict).not.toHaveBeenCalled()
+    expect(searchPreRegistrationsStrict).not.toHaveBeenCalled()
+  })
+
+  it('does not reuse a selected autocomplete patient after the text is edited', async () => {
+    const user = userEvent.setup()
+    getAllPatientNamesStrict.mockResolvedValue([{ initials: 'Teo Z X' }])
+    renderLookup()
+
+    const nameInput = screen.getByRole('combobox', {
+      name: 'Patient name or surname',
+    })
+    await user.type(nameInput, 'teo')
+    await user.click(await screen.findByRole('option', { name: 'Teo Z X' }))
+    await user.clear(nameInput)
+    await user.type(nameInput, 'lo')
+    await user.click(screen.getByRole('button', { name: 'Search by Name' }))
+
+    await waitFor(() =>
+      expect(getPatientNameMatchesStrict).toHaveBeenCalledWith({
+        initials: 'lo',
+        page: 1,
+        limit: 10,
+      }),
+    )
+    expect(searchPreRegistrationsStrict).toHaveBeenCalledWith({
+      initials: 'lo',
+      page: 1,
+      limit: 10,
+    })
   })
 })
