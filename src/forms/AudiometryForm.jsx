@@ -4,7 +4,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -15,6 +18,7 @@ import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
+import { audiometryFormQuestionText } from './questions/AudiometryFormQuestions'
 
 const YesNo = [
   { value: 'Yes', label: 'Yes' },
@@ -148,7 +152,7 @@ const AudiometryForm = () => {
                 <Form className='fieldPadding'>
                   <div className='form--div'>
                     <h1>AUDIOMETRY</h1>
-                    <h3>Did participant visit Audiometry Booth by NUS audiology team?</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ1}</h3>
                     <FastField
                       name='AudiometryQ1'
                       label='AudiometryQ1'
@@ -157,7 +161,7 @@ const AudiometryForm = () => {
                       row
                     />
                     <h2>External Ear Examination</h2>
-                    <h3>Visual Ear Examination (Left Ear):</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ2}</h3>
                     <FastField
                       name='AudiometryQ2'
                       label='AudiometryQ2'
@@ -166,7 +170,7 @@ const AudiometryForm = () => {
                       row
                     />
 
-                    <h3>Visual Ear Examination (Right Ear)</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ3}</h3>
                     <FastField
                       name='AudiometryQ3'
                       label='AudiometryQ3'
@@ -176,7 +180,7 @@ const AudiometryForm = () => {
                     />
 
                     <h2>Hearing Test</h2>
-                    <h3>Practice Tone (500Hz at 60dB in &quot;better&quot; ear):</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ4}</h3>
                     <FastField
                       name='AudiometryQ4'
                       label='AudiometryQ4'
@@ -185,7 +189,7 @@ const AudiometryForm = () => {
                       row
                     />
 
-                    <h3>Pure Tone Screening at 25dB for Left Ear: </h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ5}</h3>
                     <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
                     <p>Select frequencies</p>
                     <FastField
@@ -195,7 +199,7 @@ const AudiometryForm = () => {
                       options={formOptions.AudiometryQ5}
                     />
 
-                    <h3>Pure Tone Screening at 25dB for Right Ear:</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ6}</h3>
                     <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
                     <p>Select frequencies</p>
                     <FastField
@@ -209,9 +213,7 @@ const AudiometryForm = () => {
                       When senior is found to have abnormal hearing results, please ask the
                       following questions:
                     </h4>
-                    <h3>
-                      Do you have an upcoming appointment with your ear specialist or audiologist?
-                    </h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ9}</h3>
                     <FastField
                       name='AudiometryQ9'
                       label='AudiometryQ9'
@@ -221,7 +223,7 @@ const AudiometryForm = () => {
                     />
 
                     <PopupText qnNo='AudiometryQ9' triggerValue='Yes'>
-                      <h4>If yes, please specify:</h4>
+                      <h4>{audiometryFormQuestionText.AudiometryQ10}</h4>
                       <FastField
                         name='AudiometryQ10'
                         label='AudiometryQ10'
@@ -230,7 +232,7 @@ const AudiometryForm = () => {
                       />
                     </PopupText>
 
-                    <h3>Referred to Doctor&apos;s Consult?</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ11}</h3>
                     <FastField
                       name='AudiometryQ11'
                       label='AudiometryQ11'
@@ -239,10 +241,7 @@ const AudiometryForm = () => {
                       row
                     />
 
-                    <h3>
-                      Please document significant findings from audiometry test and recommended
-                      course of action for participant:
-                    </h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ12}</h3>
                     <FastField
                       name='AudiometryQ12'
                       label='AudiometryQ12'
@@ -254,16 +253,16 @@ const AudiometryForm = () => {
 
                     <FastField
                       name='AudiometryQ13'
-                      label='Assessment Result'
+                      label={audiometryFormQuestionText.AudiometryQ13}
                       component={CustomRadioGroup}
                       options={formOptions.AudiometryQ13}
                       row
                     />
                   </div>
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

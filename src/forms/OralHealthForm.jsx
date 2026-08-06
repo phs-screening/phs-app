@@ -12,11 +12,15 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
+import { oralHealthFormQuestionText } from './questions/OralHealthFormQuestions'
 
 const initialValues = {
   DENT1: [],
@@ -139,7 +143,7 @@ const OralHealthForm = () => {
             </Typography>
 
             <Typography variant='h4' fontWeight='bold'>
-              I have been informed and understand that:
+              {oralHealthFormQuestionText.DENT1}
             </Typography>
             <Typography component='div' gutterBottom>
               <ol type='a'>
@@ -184,7 +188,7 @@ const OralHealthForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Are you on any blood thinners or have any bleeding disorders?
+              {oralHealthFormQuestionText.DENT2}
             </Typography>
             <FastField
               name='DENT2'
@@ -196,7 +200,7 @@ const OralHealthForm = () => {
 
             <PopupText qnNo='DENT2' triggerValue='Yes'>
               <Typography variant='h6' component='h3' fontWeight='bold'>
-                Please specify:
+                {oralHealthFormQuestionText.DENTShortAns2}
               </Typography>
               <FastField
                 name='DENTShortAns2'
@@ -208,7 +212,7 @@ const OralHealthForm = () => {
             </PopupText>
 
             <Typography variant='h4' fontWeight='bold'>
-              Patient has completed Oral Health station?
+              {oralHealthFormQuestionText.DENT3}
             </Typography>
             <FastField
               name='DENT3'
@@ -216,12 +220,11 @@ const OralHealthForm = () => {
               component={CustomCheckboxGroup}
               options={formOptions.DENT3}
             />
-
           </div>
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <Box mt={2} mb={2}>

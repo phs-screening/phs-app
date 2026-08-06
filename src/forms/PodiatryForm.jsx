@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import allForms from './forms.json'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
@@ -13,6 +16,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification.j
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 import './forms.css'
+import { podiatryFormQuestionText } from './questions/PodiatryFormQuestions'
 
 const formName = 'podiatryForm'
 
@@ -71,7 +75,6 @@ const PodiatryForm = () => {
         }
       }}
     >
-
       {({ errors, submitCount, isSubmitting }) => (
         <Paper elevation={2}>
           <Grid display='flex' flexDirection='row'>
@@ -81,9 +84,7 @@ const PodiatryForm = () => {
                   <Typography variant='h4'>
                     <strong>Podiatry</strong>
                   </Typography>
-                  <Typography fontWeight='bold'>
-                    Do you have your diabetic foot screening every year?
-                  </Typography>
+                  <Typography fontWeight='bold'>{podiatryFormQuestionText.podiatryQ1}</Typography>
                   <FastField
                     name='podiatryQ1'
                     label='podiatryQ1'
@@ -92,10 +93,10 @@ const PodiatryForm = () => {
                     row
                   />
 
-                  <ErrorNotification 
-            show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
-          />
+                  <ErrorNotification
+                    show={submitCount > 0 && Object.keys(errors || {}).length > 0}
+                    message='Please fill in all required fields correctly.'
+                  />
 
                   <div>
                     {loading || isSubmitting ? (
