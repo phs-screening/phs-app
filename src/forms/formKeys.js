@@ -11,6 +11,7 @@ export const FORM_COLLECTION_TO_KEY = {
   oralHealthForm: 'oralHealth',
   socialServiceForm: 'socialService',
   mentalHealthForm: 'mentalHealth',
+  ltfuForm: 'ltfu',
   mammobusForm: 'mammobus',
   hpvForm: 'hpv',
   audiometryForm: 'audiometry',

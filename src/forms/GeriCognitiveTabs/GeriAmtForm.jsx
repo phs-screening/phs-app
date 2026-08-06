@@ -1,4 +1,3 @@
-
 import { Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
@@ -6,7 +5,10 @@ import { useNavigate } from 'react-router-dom'
 
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomSelect from '../../components/form-components/CustomSelect'
@@ -17,6 +19,7 @@ import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
 import allForms from '../forms.json'
+import { geriAmtFormQuestionText } from '../questions/GeriAmtFormQuestions'
 
 const formName = 'geriAmtForm'
 
@@ -121,8 +124,8 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 alt='Scoring rubric for geri AMT'
               />
               <h2>
-                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if answered
-                incorrectly.
+                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if
+                answered incorrectly.
               </h2>
 
               {[...Array(10)].map((_, i) => {
@@ -130,7 +133,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 return (
                   <div key={qNum}>
                     <h3>
-                      {`${qNum})`} {`Question ${qNum}`} {getQuestionText(qNum)}
+                      {`${qNum})`} {`Question ${qNum}`} {geriAmtFormQuestionText[`geriAmtQ${qNum}`]}
                     </h3>
                     <Typography variant='body2'>{`Was Q${qNum} answered correctly?`}</Typography>
                     <Field
@@ -156,7 +159,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <h4>AMT Total Score: {getScore(formikProps.values)} /10</h4>
 
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                11) What is your highest education level attained?
+                {geriAmtFormQuestionText.geriAmtQ11}
               </Typography>
               <FastField
                 name='geriAmtQ11'
@@ -169,14 +172,11 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 alt='Eligibility for g-race based on education level'
               />
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                Follow the criteria shown in the image above.
-                <br />
-                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), education level and AMT score, is the patient
-                eligible for G-RACE for MMSE?
+                {geriAmtFormQuestionText.geriAmtQ12(regForm?.registrationQ4)}
               </Typography>
               <Field
                 name='geriAmtQ12'
-                label='geriAmtQ12'
+                label={geriAmtFormQuestionText.geriAmtQ12}
                 component={CustomRadioGroup}
                 options={formOptions.geriAmtQ12}
                 row
@@ -185,7 +185,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
             <ErrorNotification
               show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-             message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <br />
@@ -228,22 +228,6 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
       </Grid>
     </Paper>
   )
-}
-
-const getQuestionText = (qNum) => {
-  const textMap = {
-    1: 'What is the year? 请问今年是什么年份？',
-    2: 'About what time is it? (within 1 hour) 请问现在大约是几点钟（一在一个小时之内）？',
-    3: 'What is your age? 请问您今年几岁？',
-    4: 'What is your date of birth? 请问您的出生日期或生日？',
-    5: 'What is your home address? 请问您的住家地址是在什么地方？',
-    6: 'Where are we now? 请问我们现在正在什么地方？',
-    7: "Who is our country's Prime Minister? 请问新加坡现任总理是哪位？",
-    8: 'What is his/her job? (show picture) 请问图片里的人士很有可能是从事哪种行业？',
-    9: 'Count backwards from 20 to 1. 请您从二十开始，倒数到一。',
-    10: 'Recall memory phase 请您把刚才我要您记住的地址重复一遍。',
-  }
-  return textMap[qNum] || ''
 }
 
 export default GeriAmtForm

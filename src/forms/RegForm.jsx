@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, FastField } from 'formik'
 import { validationSchema } from './registrationSchema'
+import { registrationQuestionText } from './questions/registrationQuestions'
 
 import { Alert, Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
@@ -268,7 +269,7 @@ const RegForm = () => {
             )}
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Salutation 称谓
+              {registrationQuestionText.registrationQ1}
             </Typography>
             <FastField
               name='registrationQ1'
@@ -278,7 +279,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Initials (e.g Chen Ren Ying - Chen R Y, Christie Tan En Ning - Christie T E N)
+              {registrationQuestionText.registrationQ2}
             </Typography>
             <Typography>
               For Indian/Malay/patients with no Chinese name, ask for their preferred name.
@@ -291,7 +292,7 @@ const RegForm = () => {
             <FastField name='registrationQ2' label='' component={CustomTextField} multiline />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Birthday
+              {registrationQuestionText.registrationQ3}
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
@@ -339,7 +340,7 @@ const RegForm = () => {
             </LocalizationProvider>
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Age
+              {registrationQuestionText.registrationQ4}
             </Typography>
             <Typography sx={{ color: 'blue', mb: 2 }}>{patientAge}</Typography>
             {patientAge > 0 && patientAge < 40 && (
@@ -349,7 +350,7 @@ const RegForm = () => {
             )}
 
             <Typography variant='h4' fontWeight='bold'>
-              Gender
+              {registrationQuestionText.registrationQ5}
             </Typography>
             <FastField
               name='registrationQ5'
@@ -360,7 +361,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Race 种族
+              {registrationQuestionText.registrationQ6}
             </Typography>
             <FastField
               name='registrationQ6'
@@ -372,16 +373,16 @@ const RegForm = () => {
             <PopupText qnNo='registrationQ6' triggerValue='Others 其他'>
               <Field
                 name='registrationShortAnsQ6'
-                label='registrationShortAnsQ6'
+                label={registrationQuestionText.registrationShortAnsQ6}
                 component={CustomTextField}
                 multiline
                 rows={2}
-                placeholder='Please specify'
+                placeholder={registrationQuestionText.registrationShortAnsQ6}
               />
             </PopupText>
 
             <Typography variant='h4' fontWeight='bold'>
-              Nationality 国籍
+              {registrationQuestionText.registrationQ7}
             </Typography>
             <Typography sx={{ color: 'red' }}>
               Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this
@@ -395,7 +396,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Are you currently part of HealthierSG?
+              {registrationQuestionText.registrationQ11}
             </Typography>
             <Typography>
               If unsure, access HealthHub through app or Singpass. You are considered to have
@@ -411,7 +412,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              CHAS Status 社保援助计划
+              {registrationQuestionText.registrationQ12}
             </Typography>
             <FastField
               name='registrationQ12'
@@ -421,7 +422,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Pioneer Generation Status 建国一代配套
+              {registrationQuestionText.registrationQ13}
             </Typography>
             <FastField
               name='registrationQ13'
@@ -431,7 +432,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Do you have public assistance card?
+              {registrationQuestionText.registrationQ16}
             </Typography>
             <FastField
               name='registrationQ16'
@@ -442,7 +443,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Preferred Language for Health Report
+              {registrationQuestionText.registrationQ14}
             </Typography>
             <FastField
               name='registrationQ14'
@@ -452,7 +453,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-              Has patient attended any health screenings before? (e.g. Annual Health Screening etc.)
+              {registrationQuestionText.registrationQ18}
             </Typography>
             <FastField
               name='registrationQ18'
@@ -463,7 +464,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Has patient pre-registered for the Mammobus station?
+              {registrationQuestionText.registrationQ19}
             </Typography>
             <FastField
               name='registrationQ19'
@@ -474,7 +475,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Has Form C been signed?
+              {registrationQuestionText.registrationQ20}
             </Typography>
             <FastField
               name='registrationQ20'
@@ -507,7 +508,7 @@ const RegForm = () => {
           <Field
             name='registrationQ17'
             component={CustomCheckbox}
-            label='I agree and consent to the above.'
+            label={registrationQuestionText.registrationQ17}
           />
 
           <Box mt={2} mb={2}>

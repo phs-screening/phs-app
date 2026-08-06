@@ -5,7 +5,10 @@ import { Button, CircularProgress, Paper, Grid } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
@@ -13,6 +16,7 @@ import '../fieldPadding.css'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { mentalHealthFormQuestionText } from '../questions/MentalHealthFormQuestions'
 
 const yesNo = [
   { label: 'Yes', value: 'Yes' },
@@ -86,7 +90,7 @@ const MentalHealthForm = () => {
               <Paper elevation={2}>
                 <Form className='fieldPadding'>
                   <div className='form--div'>
-                    <h3>Patient has attended mental health consultation?</h3>
+                    <h3>{mentalHealthFormQuestionText.SAMH1}</h3>
                     <FastField
                       name='SAMH1'
                       label='SAMH1'
@@ -95,7 +99,7 @@ const MentalHealthForm = () => {
                       row
                     />
 
-                    <h3>Patient has signed up for follow-up with SAMH?</h3>
+                    <h3>{mentalHealthFormQuestionText.SAMH2}</h3>
                     <FastField
                       name='SAMH2'
                       label='SAMH2'
@@ -104,7 +108,7 @@ const MentalHealthForm = () => {
                       row
                     />
 
-                    <h3>Refer to Doctor&apos;s Station?</h3>
+                    <h3>{mentalHealthFormQuestionText.SAMH3}</h3>
                     <FastField
                       name='SAMH3'
                       label='SAMH3'
@@ -116,7 +120,7 @@ const MentalHealthForm = () => {
 
                   <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>
@@ -156,7 +160,12 @@ const MentalHealthForm = () => {
                   )}
 
                   <p className='blue'>PHQ Score: {phq.PHQ10}</p>
-                  {phq.PHQ10 >= 6 ? <p className='red'>Patient meets the PHQ score threshold for referral to SAMH. Patient is recommended to sign up for follow up to SAMH.</p> : null}
+                  {phq.PHQ10 >= 6 ? (
+                    <p className='red'>
+                      Patient meets the PHQ score threshold for referral to SAMH. Patient is
+                      recommended to sign up for follow up to SAMH.
+                    </p>
+                  ) : null}
                   <p className='underlined'>Would the patient benefit from counselling:</p>
                   <p className='blue'>{phq.PHQ11}</p>
                   <p className='blue'>{phq.PHQShortAns11}</p>

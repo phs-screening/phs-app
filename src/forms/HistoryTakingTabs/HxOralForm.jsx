@@ -18,11 +18,15 @@ import {
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from '../../utils/popupText'
+import { hxOralFormQuestionText } from '../questions/HxOralFormQuestions'
 
 const formName = 'hxOralForm'
 
@@ -95,10 +99,7 @@ const oralInspectionGuide = [
   },
   {
     heading: 'Prosthodontics',
-    indications: [
-      'Badly decayed tooth; entire tooth is black.',
-      'Denture broken/chipped/cracked.',
-    ],
+    indications: ['Badly decayed tooth; entire tooth is black.', 'Denture broken/chipped/cracked.'],
   },
   {
     heading: 'OMS (Oral and Maxillofacial Surgery)',
@@ -186,7 +187,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           </Box>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            How is the participant&apos;s Oral Health?
+            {hxOralFormQuestionText.ORAL1}
           </Typography>
           <FastField
             name='ORAL1'
@@ -196,7 +197,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Do you wear dentures?
+            {hxOralFormQuestionText.ORAL2}
           </Typography>
           <FastField
             name='ORAL2'
@@ -207,10 +208,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Are you experiencing any dental concerns? Refer to the examples below (e.g. cavities,
-            red/swollen or bleeding gums, sensitive or painful teeth, badly decayed or broken teeth,
-            broken/chipped dentures, impacted or painful wisdom tooth, facial swelling, or any
-            emergency indication).
+            {hxOralFormQuestionText.ORAL3}
           </Typography>
           <img
             src='/images/dentistry_check.png'
@@ -226,7 +224,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Have you visited a dentist in the past 2 years?
+            {hxOralFormQuestionText.ORAL4}
           </Typography>
           <FastField
             name='ORAL4'
@@ -237,8 +235,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Would you like to go through free Oral Health Education by NUS Dentistry dentists and
-            students?
+            {hxOralFormQuestionText.ORAL5}
           </Typography>
           <Typography gutterBottom>
             If the patient has any queries regarding dental health, or if you think that the patient
@@ -253,7 +250,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
           <PopupText qnNo='ORAL5' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxOralFormQuestionText.ORALShortAns5}
             </Typography>
             <FastField
               name='ORALShortAns5'

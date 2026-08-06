@@ -1,0 +1,18 @@
+export const hxPhqFormQuestionText = {
+  PHQ1: 'Over the last 2 weeks, how often have you been bothered by any of the following problems?',
+  PHQ2: 'PHQ2. Feeling down, depressed or hopeless',
+  PHQ3: 'PHQ3. Trouble falling asleep or staying asleep, or sleeping too much',
+  PHQ4: 'PHQ4. Feeling tired or having little energy',
+  PHQ5: 'PHQ5. Poor appetite or overeating',
+  PHQ6: 'PHQ6. Feeling bad about yourself, or that you are a failure or have let yourself or your family down',
+  PHQ7: 'PHQ7. Trouble concentrating on things, such as reading the newspaper or watching television',
+  PHQ8: 'PHQ8. Moving or speaking so slowly that other people have noticed? Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual',
+  PHQ9: 'PHQ9. Thoughts that you would be better off dead or hurting yourself in some way',
+  PHQextra9: '*Do you want to take your life now?*',
+  GAD1: 'GAD-2 (Anxiety): Over the last 2 weeks, how often have you been bothered by the following problems?',
+  GAD2: 'GAD2. Not being able to stop or control worrying',
+  PHQ11: 'Do you feel like the patient will benefit from counselling?',
+  PHQShortAns11: 'Please specify.',
+  PHQ1Label: 'PHQ1. Little interest or pleasure in doing things',
+  GAD1Label: 'GAD1. Feeling nervous, anxious, or on edge',
+}
