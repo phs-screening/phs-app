@@ -228,10 +228,14 @@ const DietitiansConsultForm = () => {
       {triage ? <p className='blue'>{triage.triageQ13}</p> : null}
       <Divider />
       <h2>Smoking History</h2>
-      <p className='underlined'>Participant currently smokes?</p>
+      <p className='underlined'>Has participant ever smoked?</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10}</p> : null}
-      <p className='underlined'>No. of pack-years:</p>
-      {hxSocial ? <p className='blue'>{hxSocial.SOCIALShortAns10}</p> : null}
+      <p className='underlined'>No. of years smoked:</p>
+      {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10Years}</p> : null}
+      <p className='underlined'>Packs per day:</p>
+      {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10Packs}</p> : null}
+      <p className='underlined'>Years since quitting:</p>
+      {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10End}</p> : null}
       <p className='underlined'>
         Has participant smoked before? For how long and when did they stop?
       </p>

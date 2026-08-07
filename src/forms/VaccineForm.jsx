@@ -25,6 +25,7 @@ const initialValues = {
   VAX1: '',
   VAX2: '',
   VAX3: '',
+  VAX5: '',
 }
 
 const formOptions = {
@@ -38,6 +39,7 @@ const validationSchema = Yup.object({
   VAX1: Yup.string().required(),
   VAX2: Yup.string().required(),
   VAX3: Yup.string().required(),
+  VAX5: Yup.string().required(),
 })
 
 export default function VaccineForm() {
@@ -115,6 +117,17 @@ export default function VaccineForm() {
                   <FastField
                     name='VAX2'
                     label='VAX2'
+                    component={CustomRadioGroup}
+                    options={formOptions.YesNo}
+                    row
+                  />
+
+                  <Typography variant='subtitle1' fontWeight='bold'>
+                    {vaccineFormQuestionText.VAX5}
+                  </Typography>
+                  <FastField
+                    name='VAX5'
+                    label='VAX5'
                     component={CustomRadioGroup}
                     options={formOptions.YesNo}
                     row

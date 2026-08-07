@@ -294,10 +294,14 @@ const OralHealthForm = () => {
 
       {social ? (
         <>
-          <p className='underlined'>Does patient currently smoke:</p>
+          <p className='underlined'>Has patient ever smoked:</p>
           <p className='blue'>{social.SOCIAL10}</p>
-          <p className='underlined'>How many pack-years?:</p>
-          <p className='blue'>{social.SOCIALShortAns10}</p>
+          <p className='underlined'>How many years did the patient smoke?:</p>
+          <p className='blue'>{social.SOCIAL10Years}</p>
+          <p className='underlined'>How many packs per day?:</p>
+          <p className='blue'>{social.SOCIAL10Packs}</p>
+          <p className='underlined'>How many years ago did the patient quit?:</p>
+          <p className='blue'>{social.SOCIAL10End}</p>
 
           <p className='underlined'>
             Has patient smoked before? For how long and when did they stop?:

@@ -69,7 +69,7 @@ const formOptions = {
       value: 'NA (nil shower at home, uses bathtub)',
     },
   ],
-  geriOtQuestionnaireQ14: YesNo,
+  geriOtQuestionnaireQ14: [...YesNo, { label: 'NA', value: 'NA' }],
   geriOtQuestionnaireQ15: YesNo,
   geriOtQuestionnaireQ16: YesNo,
   geriOtQuestionnaireQ18: YesNo,
@@ -784,16 +784,23 @@ const GeriOtQuestionnaireForm = (props) => {
                   )}
 
                   <h2>History</h2>
-                  <p className='underlined'>Does patient currently smoke:</p>
+                  <p className='underlined'>Has patient ever smoked:</p>
                   {social && social.SOCIAL10 ? (
                     <p className='blue'>{social.SOCIAL10}</p>
                   ) : (
                     <p className='blue'>nil</p>
                   )}
 
-                  <p className='underlined'>How many pack-years:</p>
-                  {social && social.SOCIALShortAns10 ? (
-                    <p className='blue'>{social.SOCIALShortAns10}</p>
+                  <p className='underlined'>How many years did the patient smoke:</p>
+                  {social && social.SOCIAL10Years ? (
+                    <p className='blue'>{social.SOCIAL10Years}</p>
+                  ) : (
+                    <p className='blue'>nil</p>
+                  )}
+
+                  <p className='underlined'>How many packs per day:</p>
+                  {social && social.SOCIAL10Packs ? (
+                    <p className='blue'>{social.SOCIAL10Packs}</p>
                   ) : (
                     <p className='blue'>nil</p>
                   )}

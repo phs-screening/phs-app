@@ -200,10 +200,16 @@ const OsteoForm = () => {
                   {social && (
                     <>
                       <p>
-                        Does patient currently smoke: <strong>{String(social.SOCIAL10)}</strong>
+                        Has patient ever smoked: <strong>{String(social.SOCIAL10)}</strong>
                       </p>
                       <p>
-                        How many pack years: <strong>{String(social.SOCIALShortAns10)}</strong>
+                        Years smoked: <strong>{String(social.SOCIAL10Years)}</strong>
+                      </p>
+                      <p>
+                        Packs per day: <strong>{String(social.SOCIAL10Packs)}</strong>
+                      </p>
+                      <p>
+                        Years since quitting: <strong>{String(social.SOCIAL10End)}</strong>
                       </p>
                       <p>
                         Does patient consume alcoholic drinks:{' '}

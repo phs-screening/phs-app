@@ -39,17 +39,18 @@ const initialValues = {
 }
 
 const vaccinationAnswers = ['Yes', 'No', 'Unsure']
+const yesNoAnswers = ['Yes', 'No']
 const requiresVaccinationInterestQuestion = (answer) => ['No', 'Unsure'].includes(answer)
 
 const createValidationSchema = (isPneumococcalEligible, isShinglesEligible) =>
   Yup.object({
     PMHX1: Yup.string().required('Required'),
-    PMHX6: Yup.string().required('Required'),
+    PMHX6: Yup.string().oneOf(yesNoAnswers).required('Required'),
     PMHX7: Yup.string().required('Required'),
     PMHXVAX1: Yup.string().oneOf(vaccinationAnswers).required('Required'),
     PMHXVAX2: Yup.string().when('PMHXVAX1', {
       is: requiresVaccinationInterestQuestion,
-      then: (schema) => schema.oneOf(vaccinationAnswers).required('Required'),
+      then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
       otherwise: (schema) => schema.notRequired(),
     }),
     PMHXVAX3: isPneumococcalEligible
@@ -58,7 +59,7 @@ const createValidationSchema = (isPneumococcalEligible, isShinglesEligible) =>
     PMHXVAX4: isPneumococcalEligible
       ? Yup.string().when('PMHXVAX3', {
           is: requiresVaccinationInterestQuestion,
-          then: (schema) => schema.oneOf(vaccinationAnswers).required('Required'),
+          then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
           otherwise: (schema) => schema.notRequired(),
         })
       : Yup.string().notRequired(),
@@ -68,7 +69,7 @@ const createValidationSchema = (isPneumococcalEligible, isShinglesEligible) =>
     PMHXVAX6: isShinglesEligible
       ? Yup.string().when('PMHXVAX5', {
           is: requiresVaccinationInterestQuestion,
-          then: (schema) => schema.oneOf(vaccinationAnswers).required('Required'),
+          then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
           otherwise: (schema) => schema.notRequired(),
         })
       : Yup.string().notRequired(),
@@ -102,7 +103,9 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
+  YesNo: yesNoAnswers.map((answer) => ({ label: answer, value: answer })),
   vaccination: vaccinationAnswers.map((answer) => ({ label: answer, value: answer })),
+  vaccinationInterest: yesNoAnswers.map((answer) => ({ label: answer, value: answer })),
 }
 
 export default function HxNssForm({ changeTab, nextTab }) {
@@ -223,7 +226,13 @@ export default function HxNssForm({ changeTab, nextTab }) {
           <Typography variant='subtitle1' fontWeight='bold'>
             {hxNssFormQuestionText.PMHX6}
           </Typography>
-          <FastField name='PMHX6' component={CustomTextField} label='PMHX6' fullWidth multiline />
+          <FastField
+            name='PMHX6'
+            component={CustomRadioGroup}
+            label='PMHX6'
+            options={formOptions.YesNo}
+            row
+          />
 
           <Typography variant='subtitle1' fontWeight='bold'>
             {hxNssFormQuestionText.PMHXVAX1}
@@ -248,7 +257,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
               name='PMHXVAX2'
               component={CustomRadioGroup}
               label='PMHXVAX2'
-              options={formOptions.vaccination}
+              options={formOptions.vaccinationInterest}
               row
             />
           </PopupText>
@@ -273,7 +282,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
                   name='PMHXVAX4'
                   component={CustomRadioGroup}
                   label='PMHXVAX4'
-                  options={formOptions.vaccination}
+                  options={formOptions.vaccinationInterest}
                   row
                 />
               </PopupText>
@@ -300,7 +309,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
                   name='PMHXVAX6'
                   component={CustomRadioGroup}
                   label='PMHXVAX6'
-                  options={formOptions.vaccination}
+                  options={formOptions.vaccinationInterest}
                   row
                 />
               </PopupText>

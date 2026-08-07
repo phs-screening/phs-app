@@ -13,6 +13,7 @@ import {
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
+import { getPatientPreRegistrationPrefillStrict } from '../services/preRegistrations'
 import { calculateAgeFromBirthday } from '../utils/calculateAge'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import PopupText from 'src/utils/popupText'
@@ -64,6 +65,9 @@ const RegForm = () => {
   const [patientAge, setPatientAge] = useState(0)
   const [loadError, setLoadError] = useState('')
   const [loadAttempt, setLoadAttempt] = useState(0)
+  const [loadedFromPreRegistration, setLoadedFromPreRegistration] = useState(false)
+  const [nameMappingWarnings, setNameMappingWarnings] = useState([])
+  const [preRegistrationMappingIssues, setPreRegistrationMappingIssues] = useState([])
 
   useEffect(() => {
     let isCurrent = true
@@ -73,11 +77,21 @@ const RegForm = () => {
         isLoading(true)
         setLoadError('')
         console.log('Patient ID: ' + patientId)
-        const res =
-          patientId === -1 || patientId == null
-            ? {}
-            : await getPatientFormDataStrict(patientId, formName)
-        const formData = { ...initialValues, ...(res || {}) }
+        let res = {}
+        let preRegistration = null
+
+        if (patientId !== -1 && patientId != null) {
+          res = await getPatientFormDataStrict(patientId, formName)
+          if (!res) {
+            preRegistration =
+              await getPatientPreRegistrationPrefillStrict(patientId)
+          }
+        }
+
+        const formData = {
+          ...initialValues,
+          ...(res || preRegistration?.registrationData || {}),
+        }
 
         // Calculate age if birthday exists in saved data, otherwise use today
         if (formData.registrationQ3) {
@@ -105,6 +119,13 @@ const RegForm = () => {
 
         if (isCurrent) {
           setSavedData(formData)
+          setLoadedFromPreRegistration(Boolean(!res && preRegistration))
+          setNameMappingWarnings(
+            !res ? preRegistration?.nameMappingWarnings || [] : [],
+          )
+          setPreRegistrationMappingIssues(
+            !res ? preRegistration?.mappingIssues || [] : [],
+          )
         }
       } catch (error) {
         console.error('Failed to load registration form:', error)
@@ -233,6 +254,19 @@ const RegForm = () => {
             <Typography variant='h2' fontWeight='bold' sx={{ mb: 2 }}>
               Registration
             </Typography>
+            {loadedFromPreRegistration && (
+              <>
+                <Alert severity='info' sx={{ mb: 2 }}>
+                  Loaded from pre-registration. Please verify the patient&apos;s name and all
+                  prefilled answers.
+                </Alert>
+                {preRegistrationMappingIssues.length > 0 && (
+                  <Alert severity='warning' sx={{ mb: 2 }}>
+                    Some answers could not be prefilled. Complete all blank required fields.
+                  </Alert>
+                )}
+              </>
+            )}
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
               {registrationQuestionText.registrationQ1}
@@ -250,6 +284,11 @@ const RegForm = () => {
             <Typography>
               For Indian/Malay/patients with no Chinese name, ask for their preferred name.
             </Typography>
+            {nameMappingWarnings.map((warning) => (
+              <Alert key={warning} severity='warning' sx={{ mt: 1, mb: 1 }}>
+                {warning}
+              </Alert>
+            ))}
             <FastField name='registrationQ2' label='' component={CustomTextField} multiline />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
