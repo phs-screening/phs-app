@@ -394,13 +394,13 @@ const DoctorsConsultForm = () => {
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>Without Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ3}</td>
                     <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ4}</td>
+                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ5}</td>
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>With Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ5}</td>
                     <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ6}</td>
+                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ7}</td>
                   </tr>
                 </table>
               </li>
@@ -411,8 +411,11 @@ const DoctorsConsultForm = () => {
                 <p>
                   Previous eye surgery or condition:{' '}
                   <strong>
-                    {ophthal.OphthalQ1}. {ophthal.OphthalQ2}
+                    {ophthal.OphthalQ1}. {ophthal.OphthalQ3}
                   </strong>
+                </p>
+                <p>
+                  Current eye concerns: <strong>{ophthal.OphthalQ2}</strong>
                 </p>
                 <p>
                   Is currently on any eye review/ consulting any eye specialist:{' '}
@@ -525,9 +528,13 @@ const DoctorsConsultForm = () => {
             <ul>
               <li>
                 <p>
-                  Currently Smoking: <strong>{social.SOCIAL10}</strong>
+                  Ever smoked: <strong>{social.SOCIAL10}</strong>
                   <br></br>
-                  <strong>{social.SOCIALShortAns10} pack-years</strong>
+                  Years smoked: <strong>{social.SOCIAL10Years}</strong>
+                  <br></br>
+                  Packs per day: <strong>{social.SOCIAL10Packs}</strong>
+                  <br></br>
+                  Years since quitting: <strong>{social.SOCIAL10End}</strong>
                 </p>
                 <p>
                   Past Smoking: <strong>{social.SOCIAL11}</strong>

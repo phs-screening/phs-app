@@ -53,16 +53,16 @@ const formOptions = {
 
 const validationSchema = Yup.object().shape({
   OphthalQ1: Yup.string().required(),
-  OphthalQ2: Yup.string().when('OphthalQ1', {
-    is: 'Yes (Specify in textbox)',
+  OphthalQ2: Yup.string().required(),
+  OphthalQ3: Yup.string().when('OphthalQ1', {
+    is: 'Yes',
     then: (schema) => schema.required('Please specify the eye condition or surgery'),
-    otherwise: (schema) => schema,
+    otherwise: (schema) => schema.notRequired(),
   }),
-  OphthalQ3: Yup.string().required(),
   OphthalQ4: Yup.string().required(),
   OphthalQ5: Yup.string().required(),
   OphthalQ6: Yup.string().required(),
-  OphthalQ7: Yup.string(),
+  OphthalQ7: Yup.string().required(),
   OphthalQ8: Yup.string().required(),
   OphthalQ9: Yup.string().when('OphthalQ8', {
     is: 'Yes',
@@ -123,7 +123,12 @@ const OphthalForm = () => {
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
-        const response = await submitForm(values, patientId, formName)
+        const submissionValues = {
+          ...values,
+          OphthalQ3: values.OphthalQ1 === 'Yes' ? values.OphthalQ3 : '',
+          OphthalQ9: values.OphthalQ8 === 'Yes' ? values.OphthalQ9 : '',
+        }
+        const response = await submitForm(submissionValues, patientId, formName)
         setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
@@ -153,25 +158,26 @@ const OphthalForm = () => {
                       options={formOptions.OphthalQ1}
                       row
                     />
+                    <h3>{ophthalFormQuestionText.OphthalQ2}</h3>
+                    <FastField
+                      name='OphthalQ2'
+                      label='Ophthal Q2'
+                      component={CustomTextField}
+                      multiline
+                      rows={2}
+                      fullWidth
+                    />
                     <PopupText qnNo='OphthalQ1' triggerValue='Yes'>
-                      <h4>{ophthalFormQuestionText.OphthalQ2}</h4>
+                      <h4>{ophthalFormQuestionText.OphthalQ3}</h4>
                       <FastField
-                        name='OphthalQ2'
-                        label='Ophthal Q2'
+                        name='OphthalQ3'
+                        label='Ophthal Q3'
                         component={CustomTextField}
                         multiline
                         rows={2}
                         fullWidth
                       />
                     </PopupText>
-                    <h3>{ophthalFormQuestionText.OphthalQ3}</h3>
-                    <FastField
-                      name='OphthalQ3'
-                      label='Ophthal Q3'
-                      component={CustomTextField}
-                      type='number'
-                      fullWidth
-                    />
                     <h3>{ophthalFormQuestionText.OphthalQ4}</h3>
                     <FastField
                       name='OphthalQ4'
@@ -192,6 +198,14 @@ const OphthalForm = () => {
                     <FastField
                       name='OphthalQ6'
                       label='Ophthal Q6'
+                      component={CustomTextField}
+                      type='number'
+                      fullWidth
+                    />
+                    <h3>{ophthalFormQuestionText.OphthalQ7}</h3>
+                    <FastField
+                      name='OphthalQ7'
+                      label='Ophthal Q7'
                       component={CustomTextField}
                       type='number'
                       fullWidth

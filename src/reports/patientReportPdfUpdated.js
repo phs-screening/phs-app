@@ -410,13 +410,13 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_t_row'),
-                      `6/${eye.OphthalQ3 ?? PLACEHOLDER3}`,
                       `6/${eye.OphthalQ4 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ5 ?? PLACEHOLDER3}`,
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_b_row'),
-                      `6/${eye.OphthalQ5 ?? PLACEHOLDER3}`,
                       `6/${eye.OphthalQ6 ?? PLACEHOLDER3}`,
+                      `6/${eye.OphthalQ7 ?? PLACEHOLDER3}`,
                     ],
                   ],
                 },

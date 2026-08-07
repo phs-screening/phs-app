@@ -258,14 +258,36 @@ const LungFnForm = () => {
                     </Typography>
 
                     <Typography variant='body2' className='underlined'>
-                      Pack-years:
+                      Years smoked:
                     </Typography>
                     <Typography
                       variant='body1'
                       className='blue'
                       sx={{ color: 'primary.main', mb: 1 }}
                     >
-                      {social.SOCIALShortAns10 || 'nil'}
+                      {social.SOCIAL10Years || 'nil'}
+                    </Typography>
+
+                    <Typography variant='body2' className='underlined'>
+                      Packs per day:
+                    </Typography>
+                    <Typography
+                      variant='body1'
+                      className='blue'
+                      sx={{ color: 'primary.main', mb: 1 }}
+                    >
+                      {social.SOCIAL10Packs || 'nil'}
+                    </Typography>
+
+                    <Typography variant='body2' className='underlined'>
+                      Years since quitting:
+                    </Typography>
+                    <Typography
+                      variant='body1'
+                      className='blue'
+                      sx={{ color: 'primary.main', mb: 1 }}
+                    >
+                      {social.SOCIAL10End || 'nil'}
                     </Typography>
 
                     <Typography variant='body2' className='underlined'>

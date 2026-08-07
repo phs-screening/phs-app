@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Formik, Form, FastField, useFormikContext } from 'formik'
+import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
@@ -32,7 +32,7 @@ const initialValues = {
   SOCIAL10: '',
   SOCIAL10Years: '',
   SOCIAL10Packs: '',
-  SOCIALShortAns10: '',
+  SOCIAL10End: '',
   SOCIAL11: '',
   SOCIALShortAns11: '',
   SOCIAL12: '',
@@ -59,8 +59,14 @@ const validationSchema = Yup.object({
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  SOCIAL11: Yup.string().when('SOCIAL10', {
-    is: 'No',
+  SOCIAL10End: Yup.number().when('SOCIAL10', {
+    is: 'Yes',
+    then: (schema) => schema.required('Required'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  SOCIAL11: Yup.string().required('Required'),
+  SOCIALShortAns11: Yup.string().when('SOCIAL11', {
+    is: 'Yes',
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
@@ -132,15 +138,6 @@ const formOptions = {
   ],
 }
 
-const PackYearsDisplay = () => {
-  const { values } = useFormikContext()
-  const years = Number(values.SOCIAL10Years) || 0
-  const packsPerDay = Number(values.SOCIAL10Packs) || 0
-  const packYears = years * packsPerDay
-
-  return <Typography className='blue'>{packYears}</Typography>
-}
-
 export default function HxSocialForm({ changeTab, nextTab }) {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
@@ -159,14 +156,15 @@ export default function HxSocialForm({ changeTab, nextTab }) {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
+    const submissionValues = {
+      ...values,
+      SOCIAL10Years: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Years : '',
+      SOCIAL10Packs: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Packs : '',
+      SOCIAL10End: values.SOCIAL10 === 'Yes' ? values.SOCIAL10End : '',
+      SOCIALShortAns11: values.SOCIAL11 === 'Yes' ? values.SOCIALShortAns11 : '',
+    }
 
-    // Calculate and submit no. of pack years
-    const years = Number(values.SOCIAL10Years) || 0
-    const packsPerDay = Number(values.SOCIAL10Packs) || 0
-    const packYears = years * packsPerDay
-    values.SOCIALShortAns10 = packYears
-
-    const response = await submitForm(values, patientId, formName)
+    const response = await submitForm(submissionValues, patientId, formName)
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
@@ -331,32 +329,33 @@ export default function HxSocialForm({ changeTab, nextTab }) {
               component={CustomNumberField}
               sx={{ mb: 3, width: '50%' }}
             />
-
-            <Typography fontWeight='bold'>Total pack-years:</Typography>
-            <PackYearsDisplay />
-          </PopupText>
-          <PopupText qnNo='SOCIAL10' triggerValue='No'>
-            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL11}</Typography>
-
+            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL10End}</Typography>
             <FastField
-              name='SOCIAL11'
-              label='SOCIAL11'
-              component={CustomRadioGroup}
-              options={formOptions.SOCIAL11}
-              sx={{ mb: 3 }}
-              row
+              name='SOCIAL10End'
+              label='SOCIAL10End'
+              component={CustomNumberField}
+              sx={{ mb: 3, width: '50%' }}
             />
-            <PopupText qnNo='SOCIAL11' triggerValue='Yes'>
-              <Typography variant='subtitle1' fontWeight='bold'>
-                {hxSocialFormQuestionText.SOCIALShortAns11}
-              </Typography>
-              <FastField
-                name='SOCIALShortAns11'
-                label='SOCIALShortAns11'
-                component={CustomTextField}
-                sx={{ mb: 3, mt: 1 }}
-              />
-            </PopupText>
+          </PopupText>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL11}</Typography>
+          <FastField
+            name='SOCIAL11'
+            label='SOCIAL11'
+            component={CustomRadioGroup}
+            options={formOptions.SOCIAL11}
+            sx={{ mb: 3 }}
+            row
+          />
+          <PopupText qnNo='SOCIAL11' triggerValue='Yes'>
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxSocialFormQuestionText.SOCIALShortAns11}
+            </Typography>
+            <FastField
+              name='SOCIALShortAns11'
+              label='SOCIALShortAns11'
+              component={CustomTextField}
+              sx={{ mb: 3, mt: 1 }}
+            />
           </PopupText>
 
           <Typography>
