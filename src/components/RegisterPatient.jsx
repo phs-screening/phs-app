@@ -39,16 +39,14 @@ import Autocomplete from '@mui/material/Autocomplete'
 const PATIENT_NAME_PAGE_LIMIT = 20
 const PATIENT_MATCH_PAGE_LIMIT = 10
 
-const isPatientNameSearchSpecificEnough = (value) => {
+export const isPatientNameSearchSpecificEnough = (value) => {
   const tokens = String(value || '')
     .trim()
     .split(/\s+/)
     .filter(Boolean)
 
   return tokens.some(
-    (token) =>
-      Array.from(token).length >= 2 ||
-      Array.from(token).some((character) => character.codePointAt(0) > 127),
+    (token) => Array.from(token).length >= 2,
   )
 }
 
@@ -121,6 +119,12 @@ const RegisterPatient = (props) => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (!isPatientNameSearchSpecificEnough(patientNameSearch)) {
+      setPatientNames([])
+      setPatientNamesError('')
+      return undefined
+    }
+
     let isCurrent = true
 
     const getPatientNames = async () => {
@@ -146,7 +150,7 @@ const RegisterPatient = (props) => {
       }
     }
 
-    const timeoutId = setTimeout(getPatientNames, patientNameSearch ? 250 : 0)
+    const timeoutId = setTimeout(getPatientNames, 500)
 
     return () => {
       isCurrent = false

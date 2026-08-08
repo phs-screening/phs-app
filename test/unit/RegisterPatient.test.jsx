@@ -3,7 +3,9 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import RegisterPatient from '../../src/components/RegisterPatient'
+import RegisterPatient, {
+  isPatientNameSearchSpecificEnough,
+} from '../../src/components/RegisterPatient'
 import { FormContext } from '../../src/api/utils'
 import { getPatientStationSummary } from '../../src/api/stationsApi'
 import {
@@ -186,6 +188,64 @@ describe('RegisterPatient optimized selection', () => {
     ).toBeInTheDocument()
     expect(getPatientNameMatchesStrict).not.toHaveBeenCalled()
     expect(searchPreRegistrationsStrict).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['', false],
+    [' ', false],
+    ['A', false],
+    ['A B', false],
+    ['\u674e', false],
+    ['An', true],
+    ['Tan M', true],
+    ['\u674e\u738b', true],
+  ])('validates autocomplete input %j consistently', (value, expected) => {
+    expect(isPatientNameSearchSpecificEnough(value)).toBe(expected)
+  })
+
+  it('waits 500 ms and skips autocomplete below the two-character minimum', async () => {
+    const user = userEvent.setup()
+    renderLookup()
+    const nameInput = screen.getByRole('combobox', {
+      name: 'Patient name or surname',
+    })
+
+    await user.type(nameInput, 'A')
+    await new Promise((resolve) => setTimeout(resolve, 550))
+    expect(getAllPatientNamesStrict).not.toHaveBeenCalled()
+
+    await user.type(nameInput, 'n')
+    await new Promise((resolve) => setTimeout(resolve, 450))
+    expect(getAllPatientNamesStrict).not.toHaveBeenCalled()
+    await new Promise((resolve) => setTimeout(resolve, 100))
+
+    await waitFor(() => expect(getAllPatientNamesStrict).toHaveBeenCalledTimes(1))
+    expect(getAllPatientNamesStrict).toHaveBeenCalledWith('patients', {
+      q: 'An',
+      page: 1,
+      limit: 20,
+    })
+  })
+
+  it('cancels a pending autocomplete request when the input changes', async () => {
+    const user = userEvent.setup()
+    renderLookup()
+    const nameInput = screen.getByRole('combobox', {
+      name: 'Patient name or surname',
+    })
+
+    await user.type(nameInput, 'Ta')
+    await new Promise((resolve) => setTimeout(resolve, 250))
+    await user.clear(nameInput)
+    await user.type(nameInput, 'Chen')
+    await new Promise((resolve) => setTimeout(resolve, 550))
+
+    await waitFor(() => expect(getAllPatientNamesStrict).toHaveBeenCalledTimes(1))
+    expect(getAllPatientNamesStrict).toHaveBeenCalledWith('patients', {
+      q: 'Chen',
+      page: 1,
+      limit: 20,
+    })
   })
 
   it('does not reuse a selected autocomplete patient after the text is edited', async () => {
