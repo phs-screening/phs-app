@@ -3,13 +3,17 @@ import { FastField, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
+import { hxHcsrFormQuestionText } from '../questions/HxHcsrFormQuestions'
 
 const formName = 'hxHcsrForm'
 
@@ -97,7 +101,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold'>
-            Please enter History-taker&apos;s full name
+            {hxHcsrFormQuestionText.hxHcsrQ1}
           </Typography>
           <FastField
             name='hxHcsrQ1'
@@ -118,9 +122,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             brief history. (Please write NIL if otherwise).
           </Typography>
           <Typography gutterBottom variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-            &quot;Do you have any health issues that you are currently concerned about?&quot;
-            <br />
-            &quot;最近有没有哪里不舒服&quot;
+            {hxHcsrFormQuestionText.hxHcsrQ2}
           </Typography>
           <FastField
             name='hxHcsrQ2'
@@ -138,8 +140,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-            Do you have any vision problems? Please specify if yes. Exclude complaints like
-            unspecific itchy eyes etc.
+            {hxHcsrFormQuestionText.hxHcsrQ3}
           </Typography>
           <FastField
             name='hxHcsrQ3'
@@ -151,7 +152,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
 
           <PopupText qnNo='hxHcsrQ3' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxHcsrFormQuestionText.hxHcsrShortAnsQ3}
             </Typography>
             <FastField
               name='hxHcsrShortAnsQ3'
@@ -164,8 +165,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </PopupText>
 
           <Typography variant='h4' fontWeight='bold'>
-            If you are 60 and above, do you currently use hearing aids/have been detected to require
-            hearing aids?
+            {hxHcsrFormQuestionText.hxHcsrQ5}
           </Typography>
           <FastField
             name='hxHcsrQ5'
@@ -176,8 +176,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='h4' fontWeight='bold'>
-            Please indicate if you feel that HEALTH CONCERNS require closer scrutiny by doctors
-            later or if participant strongly insists.
+            {hxHcsrFormQuestionText.hxHcsrQ7}
           </Typography>
           <FastField
             name='hxHcsrQ7'
@@ -189,7 +188,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
 
           <PopupText qnNo='hxHcsrQ7' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxHcsrFormQuestionText.hxHcsrShortAnsQ7}
             </Typography>
             <FastField
               name='hxHcsrShortAnsQ7'
@@ -221,11 +220,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </ul>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Based on&nbsp;
-            <span style={{ color: 'red', textDecoration: 'underline' }}>
-              participant&apos;s health concerns,
-            </span>
-            &nbsp;please rule out red flags <b>(Please write NIL if otherwise)</b>
+            {hxHcsrFormQuestionText.hxhcsrQ8}
           </Typography>
           <FastField
             name='hxhcsrQ8'

@@ -84,7 +84,7 @@ describe('history-taking forms', () => {
     )
 
     const tabLabels = screen.getAllByRole('tab').map((tab) => tab.textContent)
-    expect(tabLabels.indexOf('OSA')).toBe(tabLabels.indexOf('SCOL') + 1)
+    expect(tabLabels.indexOf('OSA')).toBe(tabLabels.indexOf('Scoliosis') + 1)
     expect(tabLabels.indexOf('OSA')).toBeLessThan(tabLabels.indexOf('M4/M5 Review'))
   })
 

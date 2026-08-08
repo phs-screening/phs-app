@@ -14,7 +14,7 @@ import HxNssForm from './HxNssForm.jsx'
 import HxOsaForm from './HxOsaForm.jsx'
 import HxOralForm from './HxOralForm.jsx'
 import HxPhqForm from './HxPhqForm.jsx'
-import HxScoliosis from './HxScoliosis.jsx'
+import HxScoliosisForm from './HxScoliosisForm.jsx'
 import HxSocialForm from './HxSocialForm.jsx'
 import allForms from '../forms.json'
 import { getSavedData } from '../../services/patientData'
@@ -72,7 +72,7 @@ function HxTabsForPatient({ patientId }) {
           <Tab label='Family' {...a11yProps(4)} />
           {isFemale && <Tab label='Gynae' {...a11yProps(5)} />}
           <Tab label='PHQ' {...a11yProps(isFemale ? 6 : 5)} />
-          <Tab label='SCOL' {...a11yProps(isFemale ? 7 : 6)} />
+          <Tab label='Scoliosis' {...a11yProps(isFemale ? 7 : 6)} />
           <Tab label='OSA' {...a11yProps(isFemale ? 8 : 7)} />
           <Tab label='M4/M5 Review' {...a11yProps(isFemale ? 9 : 8)} />
         </Tabs>
@@ -102,7 +102,7 @@ function HxTabsForPatient({ patientId }) {
         <HxPhqForm changeTab={handleChange} nextTab={isFemale ? 7 : 6} />
       </LazyTabPanel>
       <LazyTabPanel key='scoliosis' value={value} index={isFemale ? 7 : 6}>
-        <HxScoliosis changeTab={handleChange} nextTab={isFemale ? 8 : 7} />
+        <HxScoliosisForm changeTab={handleChange} nextTab={isFemale ? 8 : 7} />
       </LazyTabPanel>
       <LazyTabPanel key='osa' value={value} index={isFemale ? 8 : 7}>
         <HxOsaForm changeTab={handleChange} nextTab={isFemale ? 9 : 8} />

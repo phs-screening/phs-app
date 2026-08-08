@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 import './forms.css'
+import { placeholderStationFormQuestionText } from './questions/PlaceholderStationFormQuestions'
 
 const initialValues = {
   placeholderCompleted: '',
@@ -68,7 +72,7 @@ const PlaceholderStationForm = ({ formName, title }) => {
               <strong>{title}</strong>
             </Typography>
             <Typography fontWeight='bold'>
-              Has the patient completed the {title} station?
+              {placeholderStationFormQuestionText.placeholderCompleted(title)}
             </Typography>
             <FastField
               name='placeholderCompleted'

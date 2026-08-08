@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Divider, Paper, Grid, CircularProgress, Button } from '@mui/material'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 
 import { getSavedData } from '../../services/patientData'
@@ -15,6 +18,7 @@ import allForms from '../forms.json'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { wceFormQuestionText } from '../questions/WceFormQuestions'
 
 const formName = 'wceForm'
 
@@ -143,7 +147,7 @@ const WceForm = (props) => {
                   <div className='form--div'>
                     <h1>WCE</h1>
 
-                    <h3>Completed Breast Self Examination station?</h3>
+                    <h3>{wceFormQuestionText.wceQ3}</h3>
                     <Field
                       name='wceQ3'
                       label='WCE Q3'
@@ -151,7 +155,7 @@ const WceForm = (props) => {
                       component={CustomRadioGroup}
                     />
 
-                    <h3>Completed Cervical Education station?</h3>
+                    <h3>{wceFormQuestionText.wceQ4}</h3>
                     <Field
                       name='wceQ4'
                       label='WCE Q4'
@@ -163,9 +167,9 @@ const WceForm = (props) => {
                     <CheckHpvEligibility />
                   </div>
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

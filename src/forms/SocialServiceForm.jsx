@@ -12,11 +12,15 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
+import { socialServiceFormQuestionText } from './questions/SocialServiceFormQuestions'
 
 const initialValues = {
   socialServiceQ1: '',
@@ -153,7 +157,7 @@ const SocialServiceForm = () => {
             </Typography>
 
             <Typography variant='h4' fontWeight='bold' sx={{ mt: 2 }}>
-              Has the participant visited the Social Service station?
+              {socialServiceFormQuestionText.socialServiceQ1}
             </Typography>
             <FastField
               name='socialServiceQ1'
@@ -164,7 +168,7 @@ const SocialServiceForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Brief summary of the participant&apos;s concerns
+              {socialServiceFormQuestionText.socialServiceQ2}
             </Typography>
             <FastField
               name='socialServiceQ2'
@@ -175,8 +179,7 @@ const SocialServiceForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Brief summary of what will be done for the participant (Eg name of scheme participant
-              wants to apply for)
+              {socialServiceFormQuestionText.socialServiceQ3}
             </Typography>
             <FastField
               name='socialServiceQ3'
@@ -187,7 +190,7 @@ const SocialServiceForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Is follow-up required?
+              {socialServiceFormQuestionText.socialServiceQ4}
             </Typography>
             <FastField
               name='socialServiceQ4'
@@ -199,7 +202,7 @@ const SocialServiceForm = () => {
 
             <PopupText qnNo='socialServiceQ4' triggerValue='Yes'>
               <Typography variant='h4' fontWeight='bold'>
-                Brief summary of follow-up for the participant
+                {socialServiceFormQuestionText.socialServiceQ5}
               </Typography>
               <FastField
                 name='socialServiceQ5'
@@ -211,7 +214,7 @@ const SocialServiceForm = () => {
             </PopupText>
 
             <Typography variant='h4' fontWeight='bold'>
-              Completed application for HDB EASE?
+              {socialServiceFormQuestionText.socialServiceQ7}
             </Typography>
             <FastField
               name='socialServiceQ7'
@@ -221,7 +224,7 @@ const SocialServiceForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Completed CHAS application?
+              {socialServiceFormQuestionText.socialServiceQ8}
             </Typography>
             <FastField
               name='socialServiceQ8'
@@ -231,8 +234,7 @@ const SocialServiceForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              If application is unsuccessful, document the reasons below and further follow-up
-              action.
+              {socialServiceFormQuestionText.socialServiceQ9}
             </Typography>
             <FastField
               name='socialServiceQ9'
@@ -243,9 +245,9 @@ const SocialServiceForm = () => {
             />
           </div>
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <Box mt={2} mb={2}>

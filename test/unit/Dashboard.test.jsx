@@ -12,7 +12,12 @@ vi.mock('../../src/services/authSession', () => ({
 }))
 
 vi.mock('../../src/components/dashboard/PatientTimeline', () => ({
-  default: ({ patientId }) => <div>Timeline for {patientId}</div>,
+  default: ({ patientId, initialSummary }) => (
+    <div>
+      Timeline for {patientId}
+      {initialSummary ? ` preloaded ${initialSummary.patient.queueNo}` : ''}
+    </div>
+  ),
 }))
 
 function CurrentPath() {
@@ -20,11 +25,11 @@ function CurrentPath() {
   return <div data-testid='current-path'>{location.pathname}</div>
 }
 
-function renderDashboard(patientId) {
+function renderDashboard(patientId, state) {
   return render(
     <HelmetProvider>
       <FormContext.Provider value={{ patientId }}>
-        <MemoryRouter initialEntries={['/app/dashboard']}>
+        <MemoryRouter initialEntries={[{ pathname: '/app/dashboard', state }]}>
           <Routes>
             <Route path='/app/dashboard' element={<Dashboard />} />
             <Route path='/login' element={<CurrentPath />} />
@@ -71,5 +76,11 @@ describe('Dashboard', () => {
 
     expect(screen.getByText('Timeline for 123')).toBeInTheDocument()
     expect(window.alert).not.toHaveBeenCalled()
+  })
+
+  it('passes a preloaded station summary to the timeline', () => {
+    renderDashboard(123, { stationSummary: { patient: { queueNo: 123 } } })
+
+    expect(screen.getByText('Timeline for 123 preloaded 123')).toBeInTheDocument()
   })
 })

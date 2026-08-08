@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import allForms from '../forms/forms.json'
 import { getSavedData } from '../services/patientData'
@@ -16,6 +19,7 @@ import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
+import { ophthalFormQuestionText } from './questions/OphthalFormQuestions'
 
 const YesNo = [
   { label: 'Yes', value: 'Yes' },
@@ -36,37 +40,37 @@ const VisualAcuityValues = [
 
 const formOptions = {
   OphthalQ1: YesNo,
-  OphthalQ8: [
+  OphthalQ8: YesNo,
+  OphthalQ10: [
     { label: 'Refractive', value: 'Refractive' },
     { label: 'Non-refractive', value: 'Non-refractive' },
     { label: 'None', value: 'None' },
   ],
-  OphthalQ9: [{ label: "Referred to Doctor's Station", value: "Referred to Doctor's Station" }],
-  OphthalQ10: YesNo,
+  OphthalQ11: [{ label: "Referred to Doctor's Station", value: "Referred to Doctor's Station" }],
   OphthalQ12: YesNo,
   OphthalQ13: YesNo,
 }
 
 const validationSchema = Yup.object().shape({
   OphthalQ1: Yup.string().required(),
-  OphthalQ2: Yup.string().when('OphthalQ1', {
-    is: 'Yes (Specify in textbox)',
+  OphthalQ2: Yup.string().required(),
+  OphthalQ3: Yup.string().when('OphthalQ1', {
+    is: 'Yes',
     then: (schema) => schema.required('Please specify the eye condition or surgery'),
-    otherwise: (schema) => schema,
+    otherwise: (schema) => schema.notRequired(),
   }),
-  OphthalQ3: Yup.string().required(),
   OphthalQ4: Yup.string().required(),
   OphthalQ5: Yup.string().required(),
   OphthalQ6: Yup.string().required(),
-  OphthalQ7: Yup.string(),
+  OphthalQ7: Yup.string().required(),
   OphthalQ8: Yup.string().required(),
-  OphthalQ9: Yup.array().of(Yup.string()).required(),
-  OphthalQ10: Yup.string().required(),
-  OphthalQ11: Yup.string().when('OphthalQ10', {
+  OphthalQ9: Yup.string().when('OphthalQ8', {
     is: 'Yes',
     then: (schema) => schema.required('Please specify'),
     otherwise: (schema) => schema,
   }),
+  OphthalQ10: Yup.string().required(),
+  OphthalQ11: Yup.array().of(Yup.string()).required(),
   OphthalQ12: Yup.string().required(),
   OphthalQ13: Yup.string().required(),
 })
@@ -90,9 +94,9 @@ const OphthalForm = () => {
     OphthalQ6: saveData.OphthalQ6 || '',
     OphthalQ7: saveData.OphthalQ7 || '',
     OphthalQ8: saveData.OphthalQ8 || '',
-    OphthalQ9: saveData.OphthalQ9 || [],
+    OphthalQ9: saveData.OphthalQ9 || '',
     OphthalQ10: saveData.OphthalQ10 || '',
-    OphthalQ11: saveData.OphthalQ11 || '',
+    OphthalQ11: saveData.OphthalQ11 || [],
     OphthalQ12: saveData.OphthalQ12 || '',
     OphthalQ13: saveData.OphthalQ13 || '',
   }
@@ -119,7 +123,12 @@ const OphthalForm = () => {
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
-        const response = await submitForm(values, patientId, formName)
+        const submissionValues = {
+          ...values,
+          OphthalQ3: values.OphthalQ1 === 'Yes' ? values.OphthalQ3 : '',
+          OphthalQ9: values.OphthalQ8 === 'Yes' ? values.OphthalQ9 : '',
+        }
+        const response = await submitForm(submissionValues, patientId, formName)
         setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
@@ -141,34 +150,35 @@ const OphthalForm = () => {
                   <div className='form--div'>
                     <h1>VISION SCREENING</h1>
                     <h2>Non-Refractive Error</h2>
-                    <h3>1. Previous eye condition or surgery</h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ1}</h3>
                     <FastField
                       name='OphthalQ1'
-                      label='Previous eye condition or surgery'
+                      label={ophthalFormQuestionText.OphthalQ1Label}
                       component={CustomRadioGroup}
                       options={formOptions.OphthalQ1}
                       row
                     />
+                    <h3>{ophthalFormQuestionText.OphthalQ2}</h3>
+                    <FastField
+                      name='OphthalQ2'
+                      label='Ophthal Q2'
+                      component={CustomTextField}
+                      multiline
+                      rows={2}
+                      fullWidth
+                    />
                     <PopupText qnNo='OphthalQ1' triggerValue='Yes'>
-                      <h4>Explanation</h4>
+                      <h4>{ophthalFormQuestionText.OphthalQ3}</h4>
                       <FastField
-                        name='OphthalQ2'
-                        label='Ophthal Q2'
+                        name='OphthalQ3'
+                        label='Ophthal Q3'
                         component={CustomTextField}
                         multiline
                         rows={2}
                         fullWidth
                       />
                     </PopupText>
-                    <h3>2. Visual acuity (w/o pinhole occluder) - Right Eye 6/__</h3>
-                    <FastField
-                      name='OphthalQ3'
-                      label='Ophthal Q3'
-                      component={CustomTextField}
-                      type='number'
-                      fullWidth
-                    />
-                    <h3>3. Visual acuity (w/o pinhole occluder) - Left Eye 6/__</h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ4}</h3>
                     <FastField
                       name='OphthalQ4'
                       label='Ophthal Q4'
@@ -176,10 +186,7 @@ const OphthalForm = () => {
                       type='number'
                       fullWidth
                     />
-                    <h3>
-                      4. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Right Eye
-                      6/__
-                    </h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ5}</h3>
                     <FastField
                       name='OphthalQ5'
                       label='Ophthal Q5'
@@ -187,10 +194,7 @@ const OphthalForm = () => {
                       type='number'
                       fullWidth
                     />
-                    <h3>
-                      5. Visual acuity (with pinhole) *only if VA w/o pinhole is ≥ 6/12 - Left Eye
-                      6/__
-                    </h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ6}</h3>
                     <FastField
                       name='OphthalQ6'
                       label='Ophthal Q6'
@@ -198,28 +202,15 @@ const OphthalForm = () => {
                       type='number'
                       fullWidth
                     />
-                    <h3>
-                      6. Is participant currently on any eye review/ consulting any eye specialist?
-                    </h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ7}</h3>
                     <FastField
-                      name='OphthalQ10'
-                      label='Ophthal Q10'
-                      component={CustomRadioGroup}
-                      options={formOptions.OphthalQ10}
-                      row
+                      name='OphthalQ7'
+                      label='Ophthal Q7'
+                      component={CustomTextField}
+                      type='number'
+                      fullWidth
                     />
-                    <PopupText qnNo='OphthalQ10' triggerValue='Yes'>
-                      <h4>Please specify:</h4>
-                      <FastField
-                        name='OphthalQ11'
-                        label='Ophthal Q11'
-                        component={CustomTextField}
-                        fullWidth
-                        multiline
-                        rows={2}
-                      />
-                    </PopupText>
-                    <h3>7. Type of vision error?</h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ8}</h3>
                     <FastField
                       name='OphthalQ8'
                       label='Ophthal Q8'
@@ -227,14 +218,30 @@ const OphthalForm = () => {
                       options={formOptions.OphthalQ8}
                       row
                     />
-                    <h4>
-                      Please <u>refer to Doctor&apos;s Consult</u> if pinhole visual acuity is{' '}
-                      <u>worse than 6/12</u>
-                    </h4>
+                    <PopupText qnNo='OphthalQ8' triggerValue='Yes'>
+                      <h4>{ophthalFormQuestionText.OphthalQ9}</h4>
+                      <FastField
+                        name='OphthalQ9'
+                        label='Ophthal Q9'
+                        component={CustomTextField}
+                        fullWidth
+                        multiline
+                        rows={2}
+                      />
+                    </PopupText>
+                    <h3>{ophthalFormQuestionText.OphthalQ10}</h3>
                     <FastField
-                      name='OphthalQ9'
+                      name='OphthalQ10'
+                      label='Ophthal Q10'
+                      component={CustomRadioGroup}
+                      options={formOptions.OphthalQ10}
+                      row
+                    />
+                    <h4>{ophthalFormQuestionText.OphthalQ11}</h4>
+                    <FastField
+                      name='OphthalQ11'
                       component={CustomCheckboxGroup}
-                      options={formOptions.OphthalQ9}
+                      options={formOptions.OphthalQ11}
                       row
                     />
                     <h2>Refractive Error</h2>
@@ -260,14 +267,14 @@ const OphthalForm = () => {
                         or subsidies.
                       </li>
                     </ul>
-                    <h3>1. Does the participant wish to apply for the Senior Mobility Fund?</h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ12}</h3>
                     <FastField
                       name='OphthalQ12'
                       component={CustomRadioGroup}
                       options={formOptions.OphthalQ12}
                       row
                     />
-                    <h3>2. Referred to Social Services?</h3>
+                    <h3>{ophthalFormQuestionText.OphthalQ13}</h3>
                     <FastField
                       name='OphthalQ13'
                       component={CustomRadioGroup}
@@ -278,7 +285,7 @@ const OphthalForm = () => {
 
                   <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>
