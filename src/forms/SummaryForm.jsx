@@ -7,6 +7,7 @@ import { formatBmi, formatGeriVision, formatWceStation } from '../api/formHelper
 import { FormContext } from '../api/utils.js'
 import { getSummaryReportDataStrict } from '../services/patientData'
 import { Button } from '@mui/material'
+import DataLoadError from '../components/DataLoadError'
 
 // TODO: add triage and SACS
 
@@ -181,11 +182,13 @@ const SummaryForm = (props) => {
   return (
     <Paper elevation={2} pt={3} m={3}>
       {loadingPrevData ? (
-        <CircularProgress />
+        <CircularProgress aria-label='Loading screening report data' />
       ) : loadError ? (
-        <Alert severity='error' sx={{ m: 2 }}>
-          {loadError}
-        </Alert>
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setRefresh((currentRefresh) => !currentRefresh)}
+          sx={{ m: 2 }}
+        />
       ) : (
         <Fragment>
           <div>

@@ -10,9 +10,11 @@ import {
   showFormSubmitSuccess,
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
+import DataLoadError from '../../components/DataLoadError.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification.jsx'
-import { getSavedData } from '../../services/patientData'
+import { getPatientFormDataStrict } from '../../services/patientData'
+import { toLoadErrorMessage } from '../../utils/retryRequest.js'
 import '../fieldPadding.css'
 import '../forms.css'
 import { hxM4M5ReviewFormQuestionText } from '../questions/HxM4M5ReviewFormQuestions'
@@ -38,29 +40,55 @@ const formOptions = {
 const HxM4M5ReviewForm = () => {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
+  const [initializing, setInitializing] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchData = async () => {
-      const savedData = await getSavedData(patientId, formName)
+    let isCurrent = true
 
-      setSavedData({ ...initialValues, ...savedData })
+    const fetchData = async () => {
+      try {
+        setInitializing(true)
+        setLoadError('')
+        const savedData = await getPatientFormDataStrict(patientId, formName)
+        if (isCurrent) setSavedData({ ...initialValues, ...(savedData || {}) })
+      } catch (error) {
+        console.error('Failed to load M4/M5 review form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(error, 'Unable to load M4/M5 review data. Refresh or try again.'),
+          )
+        }
+      } finally {
+        if (isCurrent) setInitializing(false)
+      }
     }
 
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
-    const response = await submitForm(values, patientId, formName)
-    setLoading(false)
-    setSubmitting(false)
-    if (response.result) {
-      await showFormSubmitSuccess()
-      navigate('/app/dashboard')
-    } else {
-      showFormSubmitError(`Unsuccessful. ${response.error}`)
+    try {
+      const response = await submitForm(values, patientId, formName)
+      if (response.result) {
+        await showFormSubmitSuccess()
+        navigate('/app/dashboard')
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
+      setLoading(false)
+      setSubmitting(false)
     }
   }
 
@@ -106,7 +134,20 @@ const HxM4M5ReviewForm = () => {
     </Formik>
   )
 
-  return <Paper elevation={2}>{renderForm()}</Paper>
+  return (
+    <Paper elevation={2}>
+      {initializing ? (
+        <CircularProgress aria-label='Loading M4/M5 review data' />
+      ) : loadError ? (
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
+      ) : (
+        renderForm()
+      )}
+    </Paper>
+  )
 }
 
 export default HxM4M5ReviewForm

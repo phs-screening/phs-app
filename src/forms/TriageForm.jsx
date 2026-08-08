@@ -181,25 +181,27 @@ const TriageForm = () => {
     setSubmitting(true)
 
     //calculated values
-    model.triageQ7 = calculateAverage(model.triageQ1, model.triageQ3, model.triageQ5)
-    model.triageQ8 = calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6)
-    model.triageQHRAvg = calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3)
+    const submittedModel = {
+      ...model,
+      triageQ7: calculateAverage(model.triageQ1, model.triageQ3, model.triageQ5),
+      triageQ8: calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6),
+      triageQHRAvg: calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3),
+    }
 
-    const response = await submitForm(model, patientId, formName)
+    try {
+      const response = await submitForm(submittedModel, patientId, formName)
 
-    if (response.result) {
-      isLoading(false)
-      setSubmitting(false)
-      setTimeout(async () => {
+      if (response.result) {
         await showFormSubmitSuccess()
         navigate('/app/dashboard')
-      }, 80)
-    } else {
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
       isLoading(false)
       setSubmitting(false)
-      setTimeout(() => {
-        showFormSubmitError(`Unsuccessful. ${response.error}`)
-      }, 80)
     }
   }
   return (

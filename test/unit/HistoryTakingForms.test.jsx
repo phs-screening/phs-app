@@ -13,9 +13,16 @@ import HxNssForm from '../../src/forms/HistoryTakingTabs/HxNssForm'
 import HxOsaForm from '../../src/forms/HistoryTakingTabs/HxOsaForm'
 import HxOralForm from '../../src/forms/HistoryTakingTabs/HxOralForm'
 import HxSocialForm from '../../src/forms/HistoryTakingTabs/HxSocialForm'
-import { getSavedData } from '../../src/services/patientData'
+import HxM4M5ReviewForm from '../../src/forms/HistoryTakingTabs/HxM4M5ReviewForm'
+import { getPatientFormDataStrict, getSavedData } from '../../src/services/patientData'
 import { submitForm } from '../../src/api/formHelpers.jsx'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from '../../src/components/form-components/FormSubmitStatusHost'
 import customTheme from '../../src/theme'
+import { currentRoute, renderFormWithContext } from '../utils/formTestHarness'
+import { validHcsr } from '../utils/coreFormFixtures'
 
 vi.mock('../../src/api/formHelpers.jsx', () => ({
   submitForm: vi.fn(),
@@ -27,6 +34,7 @@ vi.mock('src/components/form-components/FormSubmitStatusHost', () => ({
 }))
 
 vi.mock('../../src/services/patientData', () => ({
+  getPatientFormDataStrict: vi.fn(),
   getSavedData: vi.fn(),
 }))
 
@@ -35,15 +43,24 @@ function renderHistoryForm(form) {
 }
 
 function mockHistoryData(age, pmhx = {}) {
-  getSavedData.mockImplementation((_patientId, requestedForm) =>
-    Promise.resolve(requestedForm === 'registrationForm' ? { registrationQ4: age } : pmhx),
-  )
+  const loadData = (_patientId, requestedForm) =>
+    Promise.resolve(requestedForm === 'registrationForm' ? { registrationQ4: age } : pmhx)
+  getSavedData.mockImplementation(loadData)
+  getPatientFormDataStrict.mockImplementation(loadData)
 }
 
 async function waitForSavedDataLoads() {
-  await waitFor(() => expect(getSavedData).toHaveBeenCalled())
+  await waitFor(() => {
+    expect(
+      getSavedData.mock.calls.length + getPatientFormDataStrict.mock.calls.length,
+    ).toBeGreaterThan(0)
+  })
   await act(async () => {
-    await Promise.all(getSavedData.mock.results.map(({ value }) => value))
+    await Promise.all(
+      [...getSavedData.mock.results, ...getPatientFormDataStrict.mock.results].map(
+        ({ value }) => value,
+      ),
+    )
   })
 }
 
@@ -51,7 +68,9 @@ describe('history-taking forms', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     getSavedData.mockResolvedValue({})
+    getPatientFormDataStrict.mockResolvedValue({})
     submitForm.mockResolvedValue({ result: true })
+    showFormSubmitSuccess.mockResolvedValue(undefined)
   })
 
   it('uses a full-name prompt and removes HCSR Q4 and Q6', async () => {
@@ -96,7 +115,8 @@ describe('history-taking forms', () => {
       </ThemeProvider>,
     )
 
-    await screen.findByRole('tab', { name: 'Gynae' })
+    await waitForSavedDataLoads()
+    expect(screen.getByRole('tab', { name: 'Gynae' })).toBeInTheDocument()
 
     const tabLabels = screen.getAllByRole('tab').map((tab) => tab.textContent)
     expect(tabLabels.indexOf('OSA')).toBe(tabLabels.indexOf('Scoliosis') + 1)
@@ -263,5 +283,50 @@ describe('history-taking forms', () => {
         'hxNssForm',
       ),
     )
+  })
+
+  it('advances from HCSR only after a successful save', async () => {
+    getPatientFormDataStrict.mockResolvedValue(validHcsr)
+    const changeTab = vi.fn()
+    const user = userEvent.setup()
+    renderHistoryForm(<HxHcsrForm changeTab={changeTab} nextTab={1} />)
+
+    await user.click(await screen.findByRole('button', { name: 'Submit' }))
+
+    await waitFor(() =>
+      expect(submitForm).toHaveBeenCalledWith(validHcsr, 7, 'hxHcsrForm'),
+    )
+    expect(showFormSubmitSuccess).toHaveBeenCalledTimes(1)
+    expect(changeTab).toHaveBeenCalledWith(null, 1)
+  })
+
+  it('does not advance HCSR after a failed save and permits retry', async () => {
+    getPatientFormDataStrict.mockResolvedValue(validHcsr)
+    submitForm.mockResolvedValue({ result: false, error: 'save failed' })
+    const changeTab = vi.fn()
+    const user = userEvent.setup()
+    renderHistoryForm(<HxHcsrForm changeTab={changeTab} nextTab={1} />)
+
+    await user.click(await screen.findByRole('button', { name: 'Submit' }))
+
+    await waitFor(() =>
+      expect(showFormSubmitError).toHaveBeenCalledWith('Unsuccessful. save failed'),
+    )
+    expect(changeTab).not.toHaveBeenCalled()
+    expect(screen.getByDisplayValue('History Taker')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled()
+  })
+
+  it('returns to the dashboard only after the final M4/M5 review saves', async () => {
+    getPatientFormDataStrict.mockResolvedValue({ hxM4M5Q1: 'Yes' })
+    const user = userEvent.setup()
+    renderFormWithContext(<HxM4M5ReviewForm />)
+
+    await user.click(await screen.findByRole('button', { name: 'Submit' }))
+
+    await waitFor(() =>
+      expect(submitForm).toHaveBeenCalledWith({ hxM4M5Q1: 'Yes' }, 7, 'hxM4M5ReviewForm'),
+    )
+    await waitFor(() => expect(currentRoute()).toHaveTextContent('/app/dashboard'))
   })
 })

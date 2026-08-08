@@ -7,12 +7,14 @@ import * as Yup from 'yup'
 import { submitForm } from '../api/formHelpers.jsx'
 import { FormContext } from '../api/utils.js'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
+import DataLoadError from '../components/DataLoadError.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import {
   showFormSubmitError,
   showFormSubmitSuccess,
 } from '../components/form-components/FormSubmitStatusHost.jsx'
-import { getSavedData } from '../services/patientData'
+import { getPatientFormDataStrict } from '../services/patientData'
+import { toLoadErrorMessage } from '../utils/retryRequest.js'
 import { arthritisFormQuestionText } from './questions/ArthritisFormQuestions.js'
 import './fieldPadding.css'
 import './forms.css'
@@ -37,35 +39,70 @@ const yesNoOptions = [
 const ArthritisForm = () => {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
+  const [initializing, setInitializing] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
+    let isCurrent = true
+
     const fetchData = async () => {
-      const data = await getSavedData(patientId, formName)
-      setSavedData({ ...initialValues, ...data })
+      try {
+        setInitializing(true)
+        setLoadError('')
+        const data = await getPatientFormDataStrict(patientId, formName)
+        if (isCurrent) setSavedData({ ...initialValues, ...(data || {}) })
+      } catch (error) {
+        console.error('Failed to load arthritis form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(error, 'Unable to load arthritis data. Refresh or try again.'),
+          )
+        }
+      } finally {
+        if (isCurrent) setInitializing(false)
+      }
     }
 
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
-    const response = await submitForm(values, patientId, formName)
-    setLoading(false)
-    setSubmitting(false)
+    try {
+      const response = await submitForm(values, patientId, formName)
 
-    if (response.result) {
-      await showFormSubmitSuccess()
-      navigate('/app/dashboard', { replace: true })
-    } else {
-      showFormSubmitError(`Unsuccessful. ${response.error}`)
+      if (response.result) {
+        await showFormSubmitSuccess()
+        navigate('/app/dashboard', { replace: true })
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
+      setLoading(false)
+      setSubmitting(false)
     }
   }
 
   return (
     <Paper elevation={2}>
-      <Formik
+      {initializing ? (
+        <CircularProgress aria-label='Loading arthritis data' />
+      ) : loadError ? (
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
+      ) : (
+        <Formik
         initialValues={savedData}
         validationSchema={validationSchema}
         enableReinitialize
@@ -103,7 +140,8 @@ const ArthritisForm = () => {
             <Divider />
           </Form>
         )}
-      </Formik>
+        </Formik>
+      )}
     </Paper>
   )
 }
