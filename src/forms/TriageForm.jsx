@@ -132,6 +132,7 @@ const formName = 'triageForm'
 
 const TriageForm = () => {
   const [loading, isLoading] = useState(false)
+  const [initializing, setInitializing] = useState(true)
   const { patientId } = useContext(FormContext)
   const [saveData, setSaveData] = useState(initialValues)
   const [loadError, setLoadError] = useState('')
@@ -143,7 +144,7 @@ const TriageForm = () => {
 
     const fetchData = async () => {
       try {
-        isLoading(true)
+        setInitializing(true)
         setLoadError('')
         const savedData = await getPatientFormDataStrict(patientId, formName)
         if (isCurrent) {
@@ -158,7 +159,7 @@ const TriageForm = () => {
         }
       } finally {
         if (isCurrent) {
-          isLoading(false)
+          setInitializing(false)
         }
       }
     }
@@ -185,26 +186,27 @@ const TriageForm = () => {
     model.triageQ8 = calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6)
     model.triageQHRAvg = calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3)
 
-    const response = await submitForm(model, patientId, formName)
+    try {
+      const response = await submitForm(model, patientId, formName)
 
-    if (response.result) {
-      isLoading(false)
-      setSubmitting(false)
-      setTimeout(async () => {
+      if (response.result) {
         await showFormSubmitSuccess()
         navigate('/app/dashboard')
-      }, 80)
-    } else {
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
       isLoading(false)
       setSubmitting(false)
-      setTimeout(() => {
-        showFormSubmitError(`Unsuccessful. ${response.error}`)
-      }, 80)
     }
   }
   return (
     <Paper elevation={2} p={0} m={0}>
-      {loadError ? (
+      {initializing ? (
+        <CircularProgress />
+      ) : loadError ? (
         <DataLoadError
           message={loadError}
           onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
@@ -474,7 +476,5 @@ const TriageForm = () => {
     </Paper>
   )
 }
-
-TriageForm.contextType = FormContext
 
 export default TriageForm

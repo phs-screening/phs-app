@@ -1,10 +1,10 @@
 import { getCurrentProfile } from '../api/profilesApi'
 import { clearPersistedPatient } from '../utils/patientPersistence'
 
-const clearAuthSession = () => {
+const clearAuthSession = ({ deferPatientNotification = false } = {}) => {
   localStorage.removeItem('authToken')
   localStorage.removeItem('profile')
-  clearPersistedPatient()
+  clearPersistedPatient({ deferNotification: deferPatientNotification })
 }
 
 const decodeJwtPayload = (token) => {
@@ -46,7 +46,7 @@ export const isLoggedin = () => {
   const token = localStorage.getItem('authToken')
 
   if (!token || isTokenExpired(token)) {
-    clearAuthSession()
+    clearAuthSession({ deferPatientNotification: true })
     return false
   }
 

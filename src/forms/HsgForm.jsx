@@ -11,14 +11,16 @@ import {
   showFormSubmitSuccess,
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
-import { getSavedData } from '../services/patientData'
+import { getPatientFormDataStrict } from '../services/patientData'
+import DataLoadError from '../components/DataLoadError'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import './fieldPadding.css'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { hsgFormQuestionText } from './questions/HsgFormQuestions'
+import { toLoadErrorMessage } from '../utils/retryRequest'
 
 const validationSchema = Yup.object({
   HSG1: Yup.string()
@@ -44,17 +46,39 @@ const initialValues = {
 
 const HsgForm = () => {
   const [loading, isLoading] = useState(false)
+  const [initializing, setInitializing] = useState(true)
   const { patientId } = useContext(FormContext)
   const [saveData, setSaveData] = useState(initialValues)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
+    let isCurrent = true
+
     const fetchData = async () => {
-      const savedData = await getSavedData(patientId, formName)
-      setSaveData({ ...initialValues, ...savedData })
+      try {
+        setInitializing(true)
+        setLoadError('')
+        const savedData = await getPatientFormDataStrict(patientId, formName)
+        if (isCurrent) setSaveData({ ...initialValues, ...(savedData || {}) })
+      } catch (error) {
+        console.error('Failed to load Healthier SG form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(error, 'Unable to load Healthier SG data. Refresh or try again.'),
+          )
+        }
+      } finally {
+        if (isCurrent) setInitializing(false)
+      }
     }
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   // Form options
   const formOptions = {
@@ -72,27 +96,34 @@ const HsgForm = () => {
     isLoading(true)
     setSubmitting(true)
 
-    const response = await submitForm(values, patientId, formName)
+    try {
+      const response = await submitForm(values, patientId, formName)
 
-    if (response.result) {
-      isLoading(false)
-      setSubmitting(false)
-      setTimeout(async () => {
+      if (response.result) {
         await showFormSubmitSuccess()
         navigate('/app/dashboard')
-      }, 80)
-    } else {
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
       isLoading(false)
       setSubmitting(false)
-      setTimeout(() => {
-        showFormSubmitError(`Unsuccessful. ${response.error}`)
-      }, 80)
     }
   }
 
   return (
     <Paper elevation={2} p={0} m={0}>
-      <Formik
+      {initializing ? (
+        <CircularProgress />
+      ) : loadError ? (
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
+      ) : (
+        <Formik
         initialValues={saveData}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -155,11 +186,10 @@ const HsgForm = () => {
             <Divider />
           </Form>
         )}
-      </Formik>
+        </Formik>
+      )}
     </Paper>
   )
 }
-
-HsgForm.contextType = FormContext
 
 export default HsgForm

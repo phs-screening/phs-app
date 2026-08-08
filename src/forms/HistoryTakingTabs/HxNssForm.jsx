@@ -13,7 +13,9 @@ import CustomTextField from 'src/components/form-components/CustomTextField.jsx'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import { getSavedData } from '../../services/patientData'
+import DataLoadError from '../../components/DataLoadError.jsx'
+import { getPatientFormDataStrict } from '../../services/patientData'
+import { toLoadErrorMessage } from '../../utils/retryRequest.js'
 import allForms from '../forms.json'
 import { hxNssFormQuestionText } from '../questions/HxNssFormQuestions'
 
@@ -113,23 +115,49 @@ export default function HxNssForm({ changeTab, nextTab }) {
   const [savedData, setSavedData] = useState(initialValues)
   const [regForm, setRegForm] = useState({})
   const [registrationLoaded, setRegistrationLoaded] = useState(false)
+  const [initializing, setInitializing] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
+    let isCurrent = true
     setRegistrationLoaded(false)
 
     const fetchData = async () => {
-      const [res, regData] = await Promise.all([
-        getSavedData(patientId, formName),
-        getSavedData(patientId, allForms.registrationForm),
-      ])
-      setSavedData({ ...initialValues, ...res })
-      setRegForm(regData || {})
-      setRegistrationLoaded(true)
+      try {
+        setInitializing(true)
+        setLoadError('')
+        const [res, regData] = await Promise.all([
+          getPatientFormDataStrict(patientId, formName),
+          getPatientFormDataStrict(patientId, allForms.registrationForm),
+        ])
+        if (isCurrent) {
+          setSavedData({ ...initialValues, ...(res || {}) })
+          setRegForm(regData || {})
+          setRegistrationLoaded(true)
+        }
+      } catch (error) {
+        console.error('Failed to load past medical history form:', error)
+        if (isCurrent) {
+          setLoadError(
+            toLoadErrorMessage(
+              error,
+              'Unable to load past medical history data. Refresh or try again.',
+            ),
+          )
+        }
+      } finally {
+        if (isCurrent) setInitializing(false)
+      }
     }
 
     fetchData()
-  }, [patientId])
+
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId, loadAttempt])
 
   const patientAge = Number(regForm.registrationQ4)
   const isPneumococcalEligible =
@@ -156,14 +184,19 @@ export default function HxNssForm({ changeTab, nextTab }) {
     }
 
     setLoading(true)
-    const response = await submitForm(submittedValues, patientId, formName)
-    setLoading(false)
-    setSubmitting(false)
-    if (response.result) {
-      await showFormSubmitSuccess()
-      changeTab(null, nextTab)
-    } else {
-      showFormSubmitError(`Unsuccessful. ${response.error}`)
+    try {
+      const response = await submitForm(submittedValues, patientId, formName)
+      if (response.result) {
+        await showFormSubmitSuccess()
+        changeTab(null, nextTab)
+      } else {
+        showFormSubmitError(`Unsuccessful. ${response.error}`)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
+      setLoading(false)
+      setSubmitting(false)
     }
   }
 
@@ -430,5 +463,18 @@ export default function HxNssForm({ changeTab, nextTab }) {
     </Formik>
   )
 
-  return <Paper elevation={2}>{renderForm()}</Paper>
+  return (
+    <Paper elevation={2}>
+      {initializing ? (
+        <CircularProgress />
+      ) : loadError ? (
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
+      ) : (
+        renderForm()
+      )}
+    </Paper>
+  )
 }

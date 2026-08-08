@@ -7,6 +7,7 @@ import { formatBmi, formatGeriVision, formatWceStation } from '../api/formHelper
 import { FormContext } from '../api/utils.js'
 import { getSummaryReportDataStrict } from '../services/patientData'
 import { Button } from '@mui/material'
+import DataLoadError from '../components/DataLoadError'
 
 // TODO: add triage and SACS
 
@@ -183,9 +184,11 @@ const SummaryForm = (props) => {
       {loadingPrevData ? (
         <CircularProgress />
       ) : loadError ? (
-        <Alert severity='error' sx={{ m: 2 }}>
-          {loadError}
-        </Alert>
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setRefresh((currentRefresh) => !currentRefresh)}
+          sx={{ m: 2 }}
+        />
       ) : (
         <Fragment>
           <div>
@@ -203,8 +206,6 @@ const SummaryForm = (props) => {
     </Paper>
   )
 }
-
-SummaryForm.contextType = FormContext
 
 export default function Summaryform(props) {
   const navigate = useNavigate()

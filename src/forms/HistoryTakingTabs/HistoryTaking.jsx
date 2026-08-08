@@ -2,7 +2,6 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import Typography from '@mui/material/Typography'
 import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
 import React, { useState, useContext, useEffect } from 'react'
@@ -33,9 +32,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
+        <Box p={3}>{children}</Box>
       )}
     </div>
   )
@@ -73,7 +70,6 @@ export default function HxTabs() {
     const fetchData = async () => {
       const registrationData = await getSavedData(patientId, allForms.registrationForm)
       setIsFemale(registrationData?.registrationQ5 === 'Female' ? true : false)
-      console.log('isFemale:', registrationData?.registrationQ5)
     }
     fetchData()
   }, [patientId])

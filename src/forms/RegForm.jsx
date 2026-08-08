@@ -153,26 +153,27 @@ const RegForm = () => {
     values.registrationQ3 = birthday.toDate()
     values.registrationQ4 = patientAge
 
-    console.log('Patient ID: ' + patientId)
-    const response = await submitForm(values, patientId, formName)
+    try {
+      console.log('Patient ID: ' + patientId)
+      const response = await submitForm(values, patientId, formName)
+      console.log('test  _' + response.result + ' ' + patientAge)
 
-    console.log('test  _' + response.result + ' ' + patientAge)
-    if (response.result) {
-      setTimeout(async () => {
+      if (response.result) {
         console.log('response data: ' + response.qNum)
         await showFormSubmitSuccess()
         console.log('Successfully submitted form')
         updatePatientInfo({ ...response.data, queueNo: response.qNum })
         navigate('/app/dashboard')
-      }, 80)
-    } else {
-      setTimeout(() => {
+      } else {
         console.log('Form submission failed')
         showFormSubmitError(`Unsuccessful. ${response.error}`)
-      }, 80)
+      }
+    } catch (error) {
+      showFormSubmitError(`Unsuccessful. ${error?.message || String(error)}`)
+    } finally {
+      isLoading(false)
+      setSubmitting(false)
     }
-    isLoading(false)
-    setSubmitting(false)
   }
 
   const formOptions = {

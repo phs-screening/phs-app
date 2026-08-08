@@ -272,6 +272,4 @@ const AudiometryForm = () => {
   )
 }
 
-AudiometryForm.contextType = FormContext
-
 export default AudiometryForm

@@ -8,6 +8,11 @@ export default defineConfig({
     setupFiles: './test/unit/setup.js',
     globals: true,
     clearMocks: true,
+    restoreMocks: true,
+    unstubGlobals: true,
+    maxWorkers: 4,
+    testTimeout: 10_000,
+    slowTestThreshold: 1_000,
     coverage: {
       include: ['src/**/*.{js,jsx}'],
       exclude: [
@@ -16,6 +21,14 @@ export default defineConfig({
         'src/**/*.spec.{js,jsx}',
         'src/api/lang/**',
       ],
+      reporter: ['text', 'json-summary', 'html'],
+      reportOnFailure: true,
+      thresholds: {
+        statements: 30,
+        branches: 25,
+        functions: 31,
+        lines: 30,
+      },
     },
   },
   server: {
@@ -23,16 +36,16 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': 'http://localhost:3000',
-    }
+    },
   },
   build: {
-    outDir: 'build'
+    outDir: 'build',
   },
 
   // Converts absolute imports to relative paths
   resolve: {
     alias: {
-      'src': '/src'
-    }
-  }
+      src: '/src',
+    },
+  },
 })

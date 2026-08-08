@@ -274,6 +274,4 @@ const DietitiansConsultForm = () => {
   )
 }
 
-DietitiansConsultForm.contextType = FormContext
-
 export default DietitiansConsultForm

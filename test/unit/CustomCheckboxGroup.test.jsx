@@ -23,7 +23,7 @@ function renderCheckboxGroup({ form = {}, field = {}, props = {} } = {}) {
     ...form,
   }
 
-  render(
+  const view = render(
     <CustomCheckboxGroup
       field={mergedField}
       form={mergedForm}
@@ -33,7 +33,7 @@ function renderCheckboxGroup({ form = {}, field = {}, props = {} } = {}) {
     />
   )
 
-  return { field: mergedField, form: mergedForm }
+  return { field: mergedField, form: mergedForm, ...view }
 }
 
 describe('CustomCheckboxGroup', () => {
@@ -88,5 +88,12 @@ describe('CustomCheckboxGroup', () => {
     })
 
     expect(screen.getByText('Choose at least one screening')).toBeInTheDocument()
+  })
+
+  it('uses row only for layout and does not forward it to checkbox inputs', () => {
+    renderCheckboxGroup({ props: { row: true } })
+
+    expect(screen.getByRole('checkbox', { name: 'FIT' })).not.toHaveAttribute('row')
+    expect(screen.getByRole('checkbox', { name: 'HPV' })).not.toHaveAttribute('row')
   })
 })

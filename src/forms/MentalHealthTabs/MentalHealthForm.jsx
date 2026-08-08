@@ -229,6 +229,4 @@ const MentalHealthForm = () => {
   )
 }
 
-MentalHealthForm.contextType = FormContext
-
 export default MentalHealthForm

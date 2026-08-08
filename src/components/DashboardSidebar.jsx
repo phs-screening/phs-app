@@ -49,7 +49,7 @@ const items = [
   },
 ]
 
-const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+const DashboardSidebar = ({ onMobileClose = () => {}, openMobile = false }) => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -57,7 +57,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     if (openMobile && onMobileClose) {
       onMobileClose()
     }
-    console.log(patientInfo)
   }, [location.pathname])
 
   const { patientId, patientInfo } = useContext(FormContext)
@@ -183,11 +182,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 DashboardSidebar.propTypes = {
   onMobileClose: PropTypes.func,
   openMobile: PropTypes.bool,
-}
-
-DashboardSidebar.defaultProps = {
-  onMobileClose: () => {},
-  openMobile: false,
 }
 
 export default DashboardSidebar

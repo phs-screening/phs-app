@@ -358,7 +358,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             />
           </PopupText>
 
-          <Typography>
+          <Typography component='div'>
             For the next question:
             <br />
             Appropriate amount of alcohol:

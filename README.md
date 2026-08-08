@@ -5,6 +5,21 @@ Remember to do these:
 - Download the `.env` file into your project folder & do not upload the file into the repository.
 - Execute: `npm install` before running `npm run dev` whenever you pull any changes.
 
+## Required CI Checks
+
+Repository administrators should configure branch protection for `main` to require these GitHub
+Actions checks before merging:
+
+- `Lint`
+- `Unit Tests`
+- `Integration Tests`
+- `Coverage`
+- `Type Check`
+- `Production Build`
+
+The workflow also runs on pushes to `main` and can be started manually. Prettier is not an enforced
+CI check for this repository.
+
 ## Frontend Structure Notes
 
 The frontend is being migrated away from direct MongoDB/collection terminology and toward domain API modules.
