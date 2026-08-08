@@ -12,6 +12,13 @@ vi.mock('../../src/api/profilesApi', () => ({
   getCurrentProfile: vi.fn(),
 }))
 
+const createJwt = (payload) => {
+  const encode = (value) =>
+    btoa(JSON.stringify(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '')
+
+  return `${encode({ alg: 'none', typ: 'JWT' })}.${encode(payload)}.signature`
+}
+
 describe('authSession', () => {
   beforeEach(() => {
     localStorage.clear()
@@ -36,11 +43,24 @@ describe('authSession', () => {
   it('logs out by removing auth session values', async () => {
     localStorage.setItem('authToken', 'token-123')
     localStorage.setItem('profile', '{"name":"Ada"}')
+    localStorage.setItem('selectedPatient', '{"patientId":123,"patientInfo":{"queueNo":123}}')
 
     await logOut()
 
     expect(localStorage.getItem('authToken')).toBeNull()
     expect(localStorage.getItem('profile')).toBeNull()
+    expect(localStorage.getItem('selectedPatient')).toBeNull()
+  })
+
+  it('clears selected patient when an expired token is detected', () => {
+    localStorage.setItem('authToken', createJwt({ exp: Math.floor(Date.now() / 1000) - 60 }))
+    localStorage.setItem('profile', '{"name":"Ada"}')
+    localStorage.setItem('selectedPatient', '{"patientId":123,"patientInfo":{"queueNo":123}}')
+
+    expect(isLoggedin()).toBe(false)
+    expect(localStorage.getItem('authToken')).toBeNull()
+    expect(localStorage.getItem('profile')).toBeNull()
+    expect(localStorage.getItem('selectedPatient')).toBeNull()
   })
 
   it('returns null for getProfile when logged out', async () => {

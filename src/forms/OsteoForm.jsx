@@ -6,7 +6,10 @@ import { Divider, Paper, Grid, CircularProgress, Button, Typography } from '@mui
 
 import allForms from './forms.json'
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -14,6 +17,7 @@ import { useNavigate } from 'react-router'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomNumberField from '../components/form-components/CustomNumberField'
+import { osteoFormQuestionText } from './questions/OsteoFormQuestions'
 
 const validationSchema = Yup.object({
   BONE1: Yup.string()
@@ -103,7 +107,7 @@ const OsteoForm = () => {
                 <form onSubmit={handleSubmit} className='fieldPadding'>
                   <div className='form--div'>
                     <h1>Osteoporosis</h1>
-                    <h3>Based on OSTA, patient&apos;s osteoporosis risk is:</h3>
+                    <h3>{osteoFormQuestionText.BONE1}</h3>
                     <img src='/images/Ost/ost_self_assessment_tool.png' alt='osta' />
                     <br />
 
@@ -115,10 +119,10 @@ const OsteoForm = () => {
                       row
                     />
 
-                    <h3>FRAX Hip Fracture Score</h3>
+                    <h3>{osteoFormQuestionText.BONE3}</h3>
                     <FastField name='BONE3' label='BONE3' component={CustomNumberField} min={0} />
 
-                    <h3>Patient requires a follow up</h3>
+                    <h3>{osteoFormQuestionText.BONE2}</h3>
                     <FastField
                       name='BONE2'
                       label='BONE2'
@@ -196,10 +200,16 @@ const OsteoForm = () => {
                   {social && (
                     <>
                       <p>
-                        Does patient currently smoke: <strong>{String(social.SOCIAL10)}</strong>
+                        Has patient ever smoked: <strong>{String(social.SOCIAL10)}</strong>
                       </p>
                       <p>
-                        How many pack years: <strong>{String(social.SOCIALShortAns10)}</strong>
+                        Years smoked: <strong>{String(social.SOCIAL10Years)}</strong>
+                      </p>
+                      <p>
+                        Packs per day: <strong>{String(social.SOCIAL10Packs)}</strong>
+                      </p>
+                      <p>
+                        Years since quitting: <strong>{String(social.SOCIAL10End)}</strong>
                       </p>
                       <p>
                         Does patient consume alcoholic drinks:{' '}

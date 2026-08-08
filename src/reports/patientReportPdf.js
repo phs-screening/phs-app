@@ -5,12 +5,21 @@ import { bloodpressureQR, bmiQR } from 'src/icons/QRCodes'
 import updatedLogo from 'src/icons/UpdatedIcon'
 import { parseFromLangKey, setLang } from '../api/langutil'
 
-function calculateBMI(heightInCm, weightInKg) {
+function calculateBmiFallback(heightInCm, weightInKg) {
   const height = heightInCm / 100
   const bmi = (weightInKg / height / height).toFixed(1)
 
   return bmi
 }
+
+function resolveBmi(height, weight, savedBmi) {
+  if (savedBmi !== null && savedBmi !== undefined && savedBmi !== '') {
+    return savedBmi
+  }
+
+  return calculateBmiFallback(Number(height), Number(weight))
+}
+
 export function kNewlines(k) {
   const newline = '\n'
   return newline.repeat(k)
@@ -70,7 +79,7 @@ export function generate_pdf(
   k = patient(doc, reg, patients, k)
 
   k = addBloodPressure(doc, triage, k)
-  k = addBmi(doc, k, triage.triageQ10, triage.triageQ11)
+  k = addBmi(doc, k, triage.triageQ10, triage.triageQ11, triage.triageQ12)
 
   k = addOtherScreeningModularities(doc, lung, geriVision, social, k)
   k = testOverflow(doc, k, 10)
@@ -149,9 +158,9 @@ export function patient(doc, reg, patients, k) {
   return k
 }
 
-export function addBmi(doc, k, height, weight) {
+export function addBmi(doc, k, height, weight, savedBmi) {
   //Bmi
-  const bmi = calculateBMI(Number(height), Number(weight))
+  const bmi = resolveBmi(height, weight, savedBmi)
 
   doc.setFont(undefined, 'bold')
   doc.text(10, 10, kNewlines((k = k + 2)) + parseFromLangKey('bmi_title'))
@@ -272,17 +281,6 @@ export function addBloodPressure(doc, triage, k) {
   )
 
   doc.addImage(bloodpressureQR, 'png', 165, 75, 32, 32)
-  const original_font_size = doc.getFontSize()
-  doc.setFontSize(8)
-  doc.text(
-    160,
-    110,
-    doc.splitTextToSize(
-      'https://www.healthhub.sg/a-z/diseases-and-conditions/understanding-blood-pressure-readings',
-      40,
-    ),
-  )
-  doc.setFontSize(original_font_size)
 
   var bloodPressure = doc.splitTextToSize(kNewlines((k = k + 2)) + parseFromLangKey('bp_tip'), 150)
   doc.text(10, 10, bloodPressure)

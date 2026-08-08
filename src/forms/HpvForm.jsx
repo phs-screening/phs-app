@@ -5,13 +5,17 @@ import * as Yup from 'yup'
 import { Paper, CircularProgress, Divider, Button, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
+import { hpvFormQuestionText } from './questions/HpvFormQuestions'
 
 const initialValues = {
   HPV1: '',
@@ -84,9 +88,7 @@ const HpvForm = () => {
             <h1>On-Site HPV Testing</h1>
             <h3>Registration & Testing</h3>
 
-            <Typography variant='h6'>
-              Has the patient completed the registration forms and finished the on-site testing?
-            </Typography>
+            <Typography variant='h6'>{hpvFormQuestionText.HPV1}</Typography>
             <FastField
               name='HPV1'
               label='HPV1'
@@ -96,9 +98,9 @@ const HpvForm = () => {
             />
           </div>
 
-          <ErrorNotification 
+          <ErrorNotification
             show={Object.keys(errors).length > 0 && submitCount > 0}
-            message="Please correct the errors above before submitting."
+            message='Please correct the errors above before submitting.'
           />
 
           <div>

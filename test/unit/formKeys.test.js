@@ -12,6 +12,8 @@ describe('formKeys', () => {
     expect(toFormKey('doctorConsultForm')).toBe('doctorConsult')
     expect(toFormKey('geriMMSEForm')).toBe('geriMmse')
     expect(toFormKey('geriOtConsultForm')).toBe('geriOtConsult')
+    expect(toFormKey('hxOsaForm')).toBe('hxOsa')
+    expect(toFormKey('ltfuForm')).toBe('ltfu')
   })
 
   it('returns the original value when no mapping exists', () => {

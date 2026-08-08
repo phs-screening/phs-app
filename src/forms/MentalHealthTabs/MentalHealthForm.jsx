@@ -5,7 +5,10 @@ import { Button, CircularProgress, Paper, Grid } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
@@ -13,18 +16,48 @@ import '../fieldPadding.css'
 
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { mentalHealthFormQuestionText } from '../questions/MentalHealthFormQuestions'
 
 const yesNo = [
   { label: 'Yes', value: 'Yes' },
   { label: 'No', value: 'No' },
 ]
 
+const dayRange = [
+  '0 - Not at all',
+  '1 - Several days',
+  '2 - More than half the days',
+  '3 - Nearly everyday',
+].map((value) => ({ label: value, value }))
+
+const gadQuestionIds = ['GAD3', 'GAD4', 'GAD5', 'GAD6', 'GAD7']
+const getAnswerScore = (answer) => Number.parseInt(answer, 10) || 0
+
 const formName = 'mentalHealthForm'
 
-const validationSchema = Yup.object({
-  SAMH1: Yup.string().required(),
-  SAMH2: Yup.string().required(),
-})
+const createValidationSchema = (showGadFollowUp) =>
+  Yup.object({
+    SAMH1: Yup.string().required(),
+    SAMH2: Yup.string().required(),
+    SAMH3: Yup.string().required(),
+    ...Object.fromEntries(
+      gadQuestionIds.map((questionId) => [
+        questionId,
+        showGadFollowUp ? Yup.string().required() : Yup.string().notRequired(),
+      ]),
+    ),
+  })
+
+const emptyValues = {
+  GAD3: '',
+  GAD4: '',
+  GAD5: '',
+  GAD6: '',
+  GAD7: '',
+  SAMH1: '',
+  SAMH2: '',
+  SAMH3: '',
+}
 
 const MentalHealthForm = () => {
   const { patientId } = useContext(FormContext)
@@ -35,35 +68,38 @@ const MentalHealthForm = () => {
   const [phq, setPHQ] = useState({})
   const navigate = useNavigate()
 
-  const [initialValues, setInitialValues] = useState({
-    SAMH1: '',
-    SAMH2: '',
-  })
+  const [initialValues, setInitialValues] = useState(emptyValues)
 
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
-      setInitialValues(savedData)
+      setInitialValues({ ...emptyValues, ...(savedData || {}) })
       const regData = getSavedData(patientId, allForms.registrationForm)
       const phqData = getSavedData(patientId, allForms.geriPhqForm)
 
       Promise.all([regData, phqData]).then((result) => {
-        setReg(result[0])
-        setPHQ(result[1])
+        setReg(result[0] || {})
+        setPHQ(result[1] || {})
         isLoadingSidePanel(false)
       })
     }
 
     fetchData()
-  }, [])
+  }, [patientId])
+
+  const gad2Score = getAnswerScore(phq.GAD1) + getAnswerScore(phq.GAD2)
+  const showGadFollowUp = gad2Score >= 3
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={createValidationSchema(showGadFollowUp)}
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
-        const response = await submitForm(values, patientId, formName)
+        const submissionValues = showGadFollowUp
+          ? values
+          : { ...values, ...Object.fromEntries(gadQuestionIds.map((id) => [id, ''])) }
+        const response = await submitForm(submissionValues, patientId, formName)
         setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
@@ -84,7 +120,27 @@ const MentalHealthForm = () => {
               <Paper elevation={2}>
                 <Form className='fieldPadding'>
                   <div className='form--div'>
-                    <h3>Patient has attended mental health consultation?</h3>
+                    {showGadFollowUp && (
+                      <>
+                        <h2>GAD follow-up</h2>
+                        <p>
+                          Over the last 2 weeks, how often have you been bothered by the following
+                          problems?
+                        </p>
+                        {gadQuestionIds.map((questionId) => (
+                          <FastField
+                            key={questionId}
+                            name={questionId}
+                            label={mentalHealthFormQuestionText[questionId]}
+                            component={CustomRadioGroup}
+                            options={dayRange}
+                            row
+                          />
+                        ))}
+                      </>
+                    )}
+
+                    <h3>{mentalHealthFormQuestionText.SAMH1}</h3>
                     <FastField
                       name='SAMH1'
                       label='SAMH1'
@@ -93,10 +149,19 @@ const MentalHealthForm = () => {
                       row
                     />
 
-                    <h3>Patient has signed up for follow-up with SAMH?</h3>
+                    <h3>{mentalHealthFormQuestionText.SAMH2}</h3>
                     <FastField
                       name='SAMH2'
                       label='SAMH2'
+                      component={CustomRadioGroup}
+                      options={yesNo}
+                      row
+                    />
+
+                    <h3>{mentalHealthFormQuestionText.SAMH3}</h3>
+                    <FastField
+                      name='SAMH3'
+                      label='SAMH3'
                       component={CustomRadioGroup}
                       options={yesNo}
                       row
@@ -105,7 +170,7 @@ const MentalHealthForm = () => {
 
                   <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>
@@ -116,7 +181,7 @@ const MentalHealthForm = () => {
                         type='submit'
                         variant='contained'
                         color='primary'
-                        disabled={!isValid || loading}
+                        disabled={!isValid || loading || loadingSidePanel}
                       >
                         Submit
                       </Button>
@@ -145,7 +210,12 @@ const MentalHealthForm = () => {
                   )}
 
                   <p className='blue'>PHQ Score: {phq.PHQ10}</p>
-                  {phq.PHQ10 >= 6 ? <p className='red'>Patient meets the PHQ score threshold for referral to SAMH. Patient is recommended to sign up for follow up to SAMH.</p> : null}
+                  {phq.PHQ10 >= 6 ? (
+                    <p className='red'>
+                      Patient meets the PHQ score threshold for referral to SAMH. Patient is
+                      recommended to sign up for follow up to SAMH.
+                    </p>
+                  ) : null}
                   <p className='underlined'>Would the patient benefit from counselling:</p>
                   <p className='blue'>{phq.PHQ11}</p>
                   <p className='blue'>{phq.PHQShortAns11}</p>

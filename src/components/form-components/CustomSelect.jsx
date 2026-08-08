@@ -7,11 +7,11 @@ const CustomSelect = ({ field, form, options, label, ...props }) => {
 
   return (
     <FormControl fullWidth margin='normal' error={showError} variant='outlined'>
-      {label && (
+      {label ? (
         <InputLabel shrink htmlFor={selectId}>
           {label}
         </InputLabel>
-      )}
+      ) : null}
       <Select
         {...field}
         {...props}

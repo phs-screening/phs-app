@@ -3,17 +3,13 @@ import { useContext, useEffect, useState } from 'react'
 import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 
-import {
-  Divider,
-  Paper,
-  CircularProgress,
-  Button,
-  Typography,
-  Box
-} from '@mui/material'
+import { Divider, Paper, CircularProgress, Button, Typography, Box } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
@@ -22,6 +18,7 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import './fieldPadding.css'
 import { useNavigate } from 'react-router'
+import { hsgFormQuestionText } from './questions/HsgFormQuestions'
 
 const validationSchema = Yup.object({
   HSG1: Yup.string()
@@ -74,9 +71,9 @@ const HsgForm = () => {
   const handleSubmit = async (values, { setSubmitting }) => {
     isLoading(true)
     setSubmitting(true)
-    
+
     const response = await submitForm(values, patientId, formName)
-    
+
     if (response.result) {
       isLoading(false)
       setSubmitting(false)
@@ -107,9 +104,9 @@ const HsgForm = () => {
               <Typography variant='h4' component='h1' gutterBottom>
                 HealthierSG
               </Typography>
-              
+
               <Typography variant='h6' component='h3' gutterBottom>
-                Previously not signed up for HealthierSG and sign-up for HealthierSG today.
+                {hsgFormQuestionText.HSG1}
               </Typography>
 
               <FastField
@@ -121,7 +118,7 @@ const HsgForm = () => {
 
               <PopupText qnNo='HSG1' triggerValue='No, I did not sign up for HSG'>
                 <Typography variant='h6' component='h4' gutterBottom sx={{ mt: 2 }}>
-                  If no, why?
+                  {hsgFormQuestionText.HSG2}
                 </Typography>
                 <FastField
                   name='HSG2'
@@ -133,9 +130,9 @@ const HsgForm = () => {
               </PopupText>
             </div>
 
-            <ErrorNotification 
+            <ErrorNotification
               show={Object.keys(errors).length > 0 && submitCount > 0}
-              message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
@@ -143,10 +140,10 @@ const HsgForm = () => {
                 <CircularProgress />
               ) : (
                 <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  size='large'
                   disabled={isSubmitting}
                 >
                   Submit

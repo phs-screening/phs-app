@@ -1,5 +1,4 @@
 export {
-  calculateBMI,
   calculateSppbScore,
   formatBmi,
   formatGeriVision,

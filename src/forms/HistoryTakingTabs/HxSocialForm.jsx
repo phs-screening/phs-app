@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Formik, Form, Field, FastField, useFormikContext } from 'formik'
+import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 import { Paper, Divider, CircularProgress, Button, Typography } from '@mui/material'
 import { FormContext } from '../../api/utils.js'
@@ -14,6 +14,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup.
 import CustomNumberField from 'src/components/form-components/CustomNumberField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText.jsx'
+import { hxSocialFormQuestionText } from '../questions/HxSocialFormQuestions'
 
 const formName = 'hxSocialForm'
 
@@ -31,17 +32,13 @@ const initialValues = {
   SOCIAL10: '',
   SOCIAL10Years: '',
   SOCIAL10Packs: '',
-  SOCIALShortAns10: '',
+  SOCIAL10End: '',
   SOCIAL11: '',
   SOCIALShortAns11: '',
   SOCIAL12: '',
   SOCIAL13: '',
-  SOCIAL13A: '',
-  SOCIAL13B: '',
-  SOCIAL13C: '',
   SOCIAL14: '',
   SOCIAL15: '',
-  SOCIAL16: '',
 }
 
 const validationSchema = Yup.object({
@@ -62,8 +59,14 @@ const validationSchema = Yup.object({
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  SOCIAL11: Yup.string().when('SOCIAL10', {
-    is: 'No',
+  SOCIAL10End: Yup.number().when('SOCIAL10', {
+    is: 'Yes',
+    then: (schema) => schema.required('Required'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  SOCIAL11: Yup.string().required('Required'),
+  SOCIALShortAns11: Yup.string().when('SOCIAL11', {
+    is: 'Yes',
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
@@ -71,7 +74,6 @@ const validationSchema = Yup.object({
   SOCIAL13: Yup.string().required('Required'),
   SOCIAL14: Yup.string().required('Required'),
   SOCIAL15: Yup.string().required('Required'),
-  SOCIAL16: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -116,18 +118,6 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  SOCIAL13A: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13B: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
-  SOCIAL13C: [
-    { label: '1 serving/day', value: '1 serving/day' },
-    { label: '2 or more servings/day', value: '2 or more servings/day' },
-  ],
   SOCIAL14: [
     {
       label: 'Yes, at least 20 minutes each time, for 3 or more days per week',
@@ -146,19 +136,6 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  SOCIAL16: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-}
-
-const PackYearsDisplay = () => {
-  const { values } = useFormikContext()
-  const years = Number(values.SOCIAL10Years) || 0
-  const packsPerDay = Number(values.SOCIAL10Packs) || 0
-  const packYears = years * packsPerDay
-
-  return <Typography className='blue'>{packYears}</Typography>
 }
 
 export default function HxSocialForm({ changeTab, nextTab }) {
@@ -179,14 +156,15 @@ export default function HxSocialForm({ changeTab, nextTab }) {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
+    const submissionValues = {
+      ...values,
+      SOCIAL10Years: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Years : '',
+      SOCIAL10Packs: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Packs : '',
+      SOCIAL10End: values.SOCIAL10 === 'Yes' ? values.SOCIAL10End : '',
+      SOCIALShortAns11: values.SOCIAL11 === 'Yes' ? values.SOCIALShortAns11 : '',
+    }
 
-    // Calculate and submit no. of pack years
-    const years = Number(values.SOCIAL10Years) || 0
-    const packsPerDay = Number(values.SOCIAL10Packs) || 0
-    const packYears = years * packsPerDay
-    values.SOCIALShortAns10 = packYears
-
-    const response = await submitForm(values, patientId, formName)
+    const response = await submitForm(submissionValues, patientId, formName)
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
@@ -218,8 +196,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Are you currently on any other Government Financial Assistance, other than CHAS and PG
-            (e.g. Public Assistance Scheme)?
+            {hxSocialFormQuestionText.SOCIAL3}
           </Typography>
           <FastField
             name='SOCIAL3'
@@ -231,7 +208,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           />
           <PopupText qnNo='SOCIAL3' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxSocialFormQuestionText.SOCIALShortAns3}
             </Typography>
             <FastField
               name='SOCIALShortAns3'
@@ -242,9 +219,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             />
           </PopupText>
 
-          <Typography fontWeight='bold'>
-            What is the average earnings of participant&apos;s household per month?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL4}</Typography>
           <FastField
             name='SOCIAL4'
             label='SOCIAL4'
@@ -252,9 +227,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             options={formOptions.SOCIAL4}
           />
 
-          <Typography fontWeight='bold'>
-            Number of household members (including yourself)?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL5}</Typography>
           <FastField
             name='SOCIAL5'
             label='SOCIAL5'
@@ -262,10 +235,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             sx={{ width: '50%', mb: 3, mt: 1 }}
           />
 
-          <Typography fontWeight='bold'>
-            If you are currently not on CHAS but qualify, do you want to apply for CHAS card? <br />
-            For SG PRs, they do not qualify. Select &apos;No&apos; if patient is a PR.
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL6}</Typography>
           <FastField
             name='SOCIAL6'
             label='SOCIAL6'
@@ -276,7 +246,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           />
           <PopupText qnNo='SOCIAL6' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxSocialFormQuestionText.SOCIALShortAns6}
             </Typography>
             <FastField
               name='SOCIALShortAns6'
@@ -286,10 +256,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             />
           </PopupText>
 
-          <Typography fontWeight='bold'>
-            Do you need advice on financial schemes that are available in Singapore or require
-            further financial assistance?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL7}</Typography>
           <FastField
             name='SOCIAL7'
             label='SOCIAL7'
@@ -299,7 +266,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           />
           <PopupText qnNo='SOCIAL7' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxSocialFormQuestionText.SOCIALShortAns7}
             </Typography>
             <FastField
               name='SOCIALShortAns7'
@@ -314,7 +281,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           <Typography variant='h4' fontWeight='bold' gutterBottom>
             2. SOCIAL ISSUES
           </Typography>
-          <Typography fontWeight='bold'>Are you a caregiver for a family member?</Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL8}</Typography>
           <FastField
             name='SOCIAL8'
             label='SOCIAL8'
@@ -324,9 +291,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             row
           />
           <PopupText qnNo='SOCIAL8' triggerValue='Yes'>
-            <Typography fontWeight='bold'>
-              Do you feel equipped to provide care to your loved one?
-            </Typography>
+            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL9}</Typography>
             <FastField
               name='SOCIAL9'
               label='SOCIAL9'
@@ -340,7 +305,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           <Typography variant='h4' fontWeight='bold' gutterBottom>
             3. LIFESTYLE
           </Typography>
-          <Typography fontWeight='bold'>Do you currently smoke?</Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL10}</Typography>
           <FastField
             name='SOCIAL10'
             label='SOCIAL10'
@@ -350,50 +315,47 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           />
 
           <PopupText qnNo='SOCIAL10' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify the no. of years smoked:</Typography>
+            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL10Years}</Typography>
             <FastField
               name='SOCIAL10Years'
               label='SOCIAL10Years'
               component={CustomNumberField}
               sx={{ mb: 3, width: '50%' }}
             />
-            <Typography fontWeight='bold'>
-              How many packs per day? (1 pack = 20 cigarettes)
-            </Typography>
+            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL10Packs}</Typography>
             <FastField
               name='SOCIAL10Packs'
               label='SOCIAL10Packs'
               component={CustomNumberField}
               sx={{ mb: 3, width: '50%' }}
             />
-
-            <Typography fontWeight='bold'>Total pack-years:</Typography>
-            <PackYearsDisplay />
-          </PopupText>
-          <PopupText qnNo='SOCIAL10' triggerValue='No'>
-            <Typography fontWeight='bold'>
-              Have you smoked before? For how long and when did you stop?
-            </Typography>
-
+            <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL10End}</Typography>
             <FastField
-              name='SOCIAL11'
-              label='SOCIAL11'
-              component={CustomRadioGroup}
-              options={formOptions.SOCIAL11}
-              sx={{ mb: 3 }}
-              row
+              name='SOCIAL10End'
+              label='SOCIAL10End'
+              component={CustomNumberField}
+              sx={{ mb: 3, width: '50%' }}
             />
-            <PopupText qnNo='SOCIAL11' triggerValue='Yes'>
-              <Typography variant='subtitle1' fontWeight='bold'>
-                Please specify:
-              </Typography>
-              <FastField
-                name='SOCIALShortAns11'
-                label='SOCIALShortAns11'
-                component={CustomTextField}
-                sx={{ mb: 3, mt: 1 }}
-              />
-            </PopupText>
+          </PopupText>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL11}</Typography>
+          <FastField
+            name='SOCIAL11'
+            label='SOCIAL11'
+            component={CustomRadioGroup}
+            options={formOptions.SOCIAL11}
+            sx={{ mb: 3 }}
+            row
+          />
+          <PopupText qnNo='SOCIAL11' triggerValue='Yes'>
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxSocialFormQuestionText.SOCIALShortAns11}
+            </Typography>
+            <FastField
+              name='SOCIALShortAns11'
+              label='SOCIALShortAns11'
+              component={CustomTextField}
+              sx={{ mb: 3, mt: 1 }}
+            />
           </PopupText>
 
           <Typography>
@@ -404,15 +366,19 @@ export default function HxSocialForm({ changeTab, nextTab }) {
               <li> Males: &lt;2 standard drinks per day</li>
               <li> Females: &lt;1 standard drink per day</li>
             </ul>
+            One standard drink contains 10 g of pure alcohol and is approximately:
+            <ul>
+              <li>1 can (330 ml) of regular beer at 5% alcohol</li>
+              <li>Half a glass (100 ml) of wine at 15% alcohol</li>
+              <li>1 shot (30 ml) of spirits at 40% alcohol</li>
+            </ul>
           </Typography>
           <Typography fontWeight='bold' sx={{ mt: 2 }}>
-            Do you consume alcoholic drinks?
+            {hxSocialFormQuestionText.SOCIAL12}
           </Typography>
           <FastField name='SOCIAL12' label='SOCIAL12' component={CustomTextField} />
 
-          <Typography fontWeight='bold'>
-            Do you consciously try to eat more fruits, vegetables, whole grain and cereals?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL13}</Typography>
           <FastField
             name='SOCIAL13'
             label='SOCIAL13'
@@ -421,39 +387,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             row
           />
 
-          <Typography sx={{ fontWeight: 'bold' }}>Fruits?</Typography>
-          <FastField
-            name='SOCIAL13A'
-            label='SOCIAL13A'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13A}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Vegetables?</Typography>
-          <FastField
-            name='SOCIAL13B'
-            label='SOCIAL13B'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13B}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography sx={{ fontWeight: 'bold' }}>Whole grains or cereals?</Typography>
-          <FastField
-            name='SOCIAL13C'
-            label='SOCIAL13C'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL13C}
-            sx={{ mb: 3 }}
-            row
-          />
-
-          <Typography fontWeight='bold'>
-            Do you exercise or participate in physical activity?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL14}</Typography>
           <FastField
             name='SOCIAL14'
             label='SOCIAL14'
@@ -462,9 +396,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             sx={{ mb: 3 }}
           />
 
-          <Typography fontWeight='bold'>
-            Do you feel the patient would benefit from a Dietitian consult?
-          </Typography>
+          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL15}</Typography>
           <FastField
             name='SOCIAL15'
             label='SOCIAL15'
@@ -487,17 +419,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             <li>Underweight cases (BMI &lt; 18.0 kg/m^2)</li>
             <li>Any other metabolic imbalance</li>
           </ul>
-
-          <Typography fontWeight='bold'>
-            Have you visited any GP or polyclinic in the last 1 year?
-          </Typography>
-          <Field
-            name='SOCIAL16'
-            label='SOCIAL16'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL16}
-            row
-          />
 
           <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}

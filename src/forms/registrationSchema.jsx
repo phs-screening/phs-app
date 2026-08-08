@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 export const validationSchema = Yup.object({
   registrationQ1: Yup.string()
-    .oneOf(['Mr', 'Ms', 'Mrs', 'Dr'], 'Invalid salutation')
+    .oneOf(['Mr', 'Ms', 'Mrs', 'Dr', 'Mdm'], 'Invalid salutation')
     .required('Salutation is required'),
 
   registrationQ2: Yup.string().required('Initials are required'),
@@ -41,21 +41,15 @@ export const validationSchema = Yup.object({
     )
     .required('Nationality is required'),
 
-  registrationQ8: Yup.string()
-    .oneOf(
-      ['Single 单身', 'Married 已婚', 'Widowed 已寡', 'Separated 已分居', 'Divorced 已离婚'],
-      'Invalid marital status',
-    )
-    .required('Marital status is required'),
-
-  registrationQ9: Yup.string().required('Occupation is required'),
-
   registrationQ11: Yup.string()
-    .oneOf(['Yes', 'No', 'Unsure'], 'Invalid HealthierSG status')
+    .oneOf(['Yes', 'No'], 'Invalid HealthierSG status')
     .required('HealthierSG status is required'),
 
   registrationQ12: Yup.string()
-    .oneOf(['CHAS Orange', 'CHAS Green', 'CHAS Blue', 'No CHAS'], 'Invalid CHAS status')
+    .oneOf(
+      ['CHAS Green', 'CHAS Blue', 'CHAS Orange', 'Public Assistance', 'None'],
+      'Invalid CHAS status',
+    )
     .required('CHAS status is required'),
 
   registrationQ13: Yup.string()
@@ -64,6 +58,10 @@ export const validationSchema = Yup.object({
       'Invalid pioneer generation status',
     )
     .required('Pioneer generation status is required'),
+
+  registrationQ16: Yup.string()
+    .oneOf(['Yes', 'No'], 'Invalid public assistance card status')
+    .required('Public assistance card status is required'),
 
   registrationQ14: Yup.string()
     .oneOf(['English', 'Mandarin', 'Malay', 'Tamil'], 'Invalid language preference')
@@ -82,10 +80,6 @@ export const validationSchema = Yup.object({
     .required('Indication of mammobus pre-registration status is required'),
 
   registrationQ20: Yup.string()
-    .oneOf(['Yes', 'No'], 'Invalid LTFU consent')
-    .required('LTFU consent is required'),
-
-  registrationQ21: Yup.string().required('Please indicate if the patient can speak either English or Chinese')
+    .oneOf(['Yes', 'No'], 'Please indicate whether Form C has been signed')
+    .required('Form C signing status is required'),
 })
-
-

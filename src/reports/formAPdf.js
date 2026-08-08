@@ -122,11 +122,14 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     '17',
     '18',
     '19',
+    '20',
+    '21',
+    '22',
   ]
 
   const col2Texts = [
     { label: 'Healthier SG Booth', eligibilityKey: 'Healthier SG Booth' },
-    { label: 'Lung Function Testing', eligibilityKey: 'Lung Function Testing' },
+    { label: '365 Cancer Screening', eligibilityKey: '365 Cancer Screening' },
     { label: 'Womens Cancer Education', eligibilityKey: "Women's Cancer Education" },
     { label: 'Podiatry', eligibilityKey: 'Podiatry' },
     {
@@ -142,12 +145,15 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     { label: 'Dental Health', eligibilityKey: 'Oral Health' },
     { label: 'Social Services', eligibilityKey: 'Social Services' },
     { label: 'Mental Health', eligibilityKey: 'Mental Health' },
+    { label: 'Arthritis', eligibilityKey: 'Arthritis' },
     { label: 'Mammobus', eligibilityKey: 'Mammobus' },
     { label: 'HPV On-Site Testing', eligibilityKey: 'HPV On-Site Testing' },
     { label: 'Audiometry', eligibilityKey: 'Audiometry' },
     { label: 'Vaccination', eligibilityKey: 'Vaccination' },
     { label: 'Doctors Station', eligibilityKey: "Doctor's Station" },
     { label: 'Screening Review', eligibilityKey: '' },
+    { label: 'Long Term Follow Up', eligibilityKey: 'Long Term Follow Up' },
+    { label: 'Scoliosis', eligibilityKey: 'Scoliosis' },
   ]
 
   const col5Texts = [
@@ -212,6 +218,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
     { text: '' },
     { text: '' },
     { text: '' },
+    { text: '' },
     { text: 'Part of Geriatric Screening', fontSize: 9 },
     { text: '' },
     {
@@ -219,13 +226,15 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
       fontSize: 9,
     },
     { text: '' },
+    { text: '' },
+    { text: '' },
   ]
 
   const col3Eligible = col2Texts.map(({ eligibilityKey }, i) => {
     if (i >= 6 && i <= 9) {
       return ''
     }
-    if (i === 19) {
+    if (i === 20) {
       return { text: 'YES', alignment: 'center', color: 'blue' }
     }
     const eligibility = eligibilityRows.find((r) => r.name === eligibilityKey)?.eligibility
@@ -285,7 +294,7 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
           { text: col4Eligible[7], fontSize: 9 },
           col5Texts[7],
         ],
-        ...[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].map((i) => [
+        ...[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].map((i) => [
           { text: col1Labels[i], fontSize: 9 },
           { text: col2Texts[i].label, fontSize: 11 },
           { text: col3Eligible[i], fontSize: 9 },

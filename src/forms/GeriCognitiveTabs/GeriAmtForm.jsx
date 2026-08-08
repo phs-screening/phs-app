@@ -1,4 +1,3 @@
-
 import { Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
@@ -6,10 +5,13 @@ import { useNavigate } from 'react-router-dom'
 
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
-import CustomNumberField from '../../components/form-components/CustomNumberField.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
+import CustomSelect from '../../components/form-components/CustomSelect'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import { getSavedData } from '../../services/patientData'
@@ -17,6 +19,7 @@ import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
 import '../forms.css'
 import allForms from '../forms.json'
+import { geriAmtFormQuestionText } from '../questions/GeriAmtFormQuestions'
 
 const formName = 'geriAmtForm'
 
@@ -29,10 +32,7 @@ const validationSchema = Yup.object({
         .required('Required'),
     ]),
   ),
-  geriAmtQ11: Yup.number()
-    .typeError('Must be a number')
-    .min(0, 'Must be at least 0')
-    .required('Required'),
+  geriAmtQ11: Yup.string().oneOf(['Before PSLE', 'After PSLE']).required('Required'),
   geriAmtQ12: Yup.string()
     .oneOf(['Yes (Eligible for G-RACE)', 'No (Not eligible for G-RACE)'])
     .required('Required'),
@@ -42,6 +42,10 @@ const formOptions = {
   YesNo: [
     { label: 'Yes (Answered correctly)', value: 'Yes (Answered correctly)' },
     { label: 'No (Answered incorrectly)', value: 'No (Answered incorrectly)' },
+  ],
+  geriAmtQ11: [
+    { label: 'Before PSLE', value: 'Before PSLE' },
+    { label: 'After PSLE', value: 'After PSLE' },
   ],
   geriAmtQ12: [
     { label: 'Yes (Eligible for G-RACE)', value: 'Yes (Eligible for G-RACE)' },
@@ -65,7 +69,7 @@ const initialValues = {
   geriAmtQ8: '',
   geriAmtQ9: '',
   geriAmtQ10: '',
-  geriAmtQ11: '', // number field, keep as '' for Formik compatibility
+  geriAmtQ11: '',
   geriAmtQ12: '', // Yes/No field
 }
 
@@ -120,8 +124,8 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 alt='Scoring rubric for geri AMT'
               />
               <h2>
-                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if answered
-                incorrectly.
+                Please select &apos;Yes&apos; if participant answered correctly or &apos;No&apos; if
+                answered incorrectly.
               </h2>
 
               {[...Array(10)].map((_, i) => {
@@ -129,7 +133,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 return (
                   <div key={qNum}>
                     <h3>
-                      {`${qNum})`} {`Question ${qNum}`} {getQuestionText(qNum)}
+                      {`${qNum})`} {`Question ${qNum}`} {geriAmtFormQuestionText[`geriAmtQ${qNum}`]}
                     </h3>
                     <Typography variant='body2'>{`Was Q${qNum} answered correctly?`}</Typography>
                     <Field
@@ -155,28 +159,24 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
               <h4>AMT Total Score: {getScore(formikProps.values)} /10</h4>
 
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                11) How many years of education does the patient have?
+                {geriAmtFormQuestionText.geriAmtQ11}
               </Typography>
               <FastField
                 name='geriAmtQ11'
-                component={CustomNumberField}
-                label='geriAmtQ11'
-                placeholder='Enter number of years'
-                fullWidth
+                component={CustomSelect}
+                label=''
+                options={formOptions.geriAmtQ11}
               />
               <img
                 src='../../../images/geri-amt/g-race-criteria.png'
                 alt='Eligibility for g-race based on education level'
               />
               <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                Follow the criteria shown in the image above.
-                <br />
-                12) Based on the patient&apos;s age ({regForm?.registrationQ4}), years of education and AMT score, is the patient
-                eligible for G-RACE for MMSE?
+                {geriAmtFormQuestionText.geriAmtQ12(regForm?.registrationQ4)}
               </Typography>
               <Field
                 name='geriAmtQ12'
-                label='geriAmtQ12'
+                label={geriAmtFormQuestionText.geriAmtQ12}
                 component={CustomRadioGroup}
                 options={formOptions.geriAmtQ12}
                 row
@@ -185,7 +185,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
             <ErrorNotification
               show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-             message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <br />
@@ -228,22 +228,6 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
       </Grid>
     </Paper>
   )
-}
-
-const getQuestionText = (qNum) => {
-  const textMap = {
-    1: 'What is the year? 请问今年是什么年份？',
-    2: 'About what time is it? (within 1 hour) 请问现在大约是几点钟（一在一个小时之内）？',
-    3: 'What is your age? 请问您今年几岁？',
-    4: 'What is your date of birth? 请问您的出生日期或生日？',
-    5: 'What is your home address? 请问您的住家地址是在什么地方？',
-    6: 'Where are we now? 请问我们现在正在什么地方？',
-    7: "Who is our country's Prime Minister? 请问新加坡现任总理是哪位？",
-    8: 'What is his/her job? (show picture) 请问图片里的人士很有可能是从事哪种行业？',
-    9: 'Count backwards from 20 to 1. 请您从二十开始，倒数到一。',
-    10: 'Recall memory phase 请您把刚才我要您记住的地址重复一遍。',
-  }
-  return textMap[qNum] || ''
 }
 
 export default GeriAmtForm

@@ -1,16 +1,19 @@
 import React from 'react'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material'
 
 const CustomRadioGroup = ({ field, form, options, label, ...props }) => {
   const showError = form.errors[field.name] && (form.touched[field.name] || form.submitCount > 0)
 
   return (
-    <FormControl
-      component='fieldset'
-      margin='normal'
-      error={showError}
-    >
-      <FormLabel component='legend'>{label}</FormLabel>
+    <FormControl component='fieldset' margin='normal' error={showError}>
+      {label ? <FormLabel component='legend'>{label}</FormLabel> : null}
       <RadioGroup
         {...field}
         {...props}

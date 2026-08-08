@@ -3,7 +3,10 @@ import { Paper, CircularProgress, Button } from '@mui/material'
 import { Formik, Form, FastField } from 'formik'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -15,13 +18,12 @@ import ErrorNotification from '../../components/form-components/ErrorNotificatio
 
 import PopupText from 'src/utils/popupText'
 import { useNavigate } from 'react-router'
+import { geriGraceFormQuestionText } from '../questions/GeriGraceFormQuestions'
 
 const validationSchema = Yup.object({
   GRACE1: Yup.string().notRequired(),
   GRACE2: Yup.string().oneOf(['Yes', 'No']).required('Required'),
   GRACE3: Yup.string().notRequired(),
-  GRACE4: Yup.string().oneOf(['Yes', 'No']).required('Required'),
-  GRACE5: Yup.string().notRequired(),
 })
 
 const formName = 'geriGraceForm'
@@ -34,8 +36,6 @@ const GeriGraceForm = () => {
     GRACE1: '',
     GRACE2: '',
     GRACE3: '',
-    GRACE4: '',
-    GRACE5: '',
   })
 
   useEffect(() => {
@@ -45,8 +45,6 @@ const GeriGraceForm = () => {
         GRACE1: savedData.GRACE1 || '',
         GRACE2: savedData.GRACE2 || '',
         GRACE3: savedData.GRACE3 || '',
-        GRACE4: savedData.GRACE4 || '',
-        GRACE5: savedData.GRACE5 || '',
       })
     }
     fetchData()
@@ -87,7 +85,7 @@ const GeriGraceForm = () => {
               <div className='form--div'>
                 <h1>G-RACE</h1>
 
-                <h3>MMSE score (_/_):</h3>
+                <h3>{geriGraceFormQuestionText.GRACE1}</h3>
                 <FastField
                   name='GRACE1'
                   label='GRACE1'
@@ -96,7 +94,7 @@ const GeriGraceForm = () => {
                   rows={1}
                 />
 
-                <h3>Need referral to G-RACE associated polyclinics/partners?</h3>
+                <h3>{geriGraceFormQuestionText.GRACE2}</h3>
                 <FastField
                   name='GRACE2'
                   label='GRACE2'
@@ -105,7 +103,7 @@ const GeriGraceForm = () => {
                   row
                 />
                 <PopupText qnNo='GRACE2' triggerValue='Yes'>
-                  <h3>Polyclinic:</h3>
+                  <h3>{geriGraceFormQuestionText.GRACE3}</h3>
                   <FastField
                     name='GRACE3'
                     label='GRACE3'
@@ -114,32 +112,13 @@ const GeriGraceForm = () => {
                     rows={1}
                   />
                 </PopupText>
-
-                <h3>Referral to Doctor&apos;s Consult?</h3>
-                <p>For geri patients who may be depressed</p>
-                <FastField
-                  name='GRACE4'
-                  label='GRACE4'
-                  component={CustomRadioGroup}
-                  options={radioOptions}
-                  row
-                />
-                <PopupText qnNo='GRACE4' triggerValue='Yes'>
-                  <h3>Reason for referral:</h3>
-                  <FastField
-                    name='GRACE5'
-                    label='Reason for referral'
-                    component={CustomTextField}
-                    fullWidth
-                    multiline
-                    rows={3}
-                  />
-                </PopupText>
               </div>
 
-              <ErrorNotification 
-                show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-                message="Please fill in all required fields correctly."
+              <ErrorNotification
+                show={
+                  formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0
+                }
+                message='Please fill in all required fields correctly.'
               />
 
               <div>

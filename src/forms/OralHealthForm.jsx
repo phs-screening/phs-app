@@ -12,19 +12,21 @@ import ErrorNotification from '../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import allForms from './forms.json'
 import './fieldPadding.css'
+import { oralHealthFormQuestionText } from './questions/OralHealthFormQuestions'
 
 const initialValues = {
   DENT1: [],
   DENT2: '',
   DENTShortAns2: '',
   DENT3: [],
-  DENT4: '',
-  DENTShortAns4: '',
 }
 
 const validationSchema = Yup.object({
@@ -42,12 +44,6 @@ const validationSchema = Yup.object({
     .of(Yup.string().oneOf(['Yes']))
     .min(1, 'You must check this box to proceed')
     .required('Required'),
-  DENT4: Yup.string().oneOf(['Yes', 'No']).required('Required'),
-  DENTShortAns4: Yup.string().when('DENT4', {
-    is: 'No',
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema,
-  }),
 })
 
 const formOptions = {
@@ -62,10 +58,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
   ],
   DENT3: [{ label: 'Yes', value: 'Yes' }],
-  DENT4: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No, (specify why)', value: 'No' },
-  ],
 }
 
 const formName = 'oralHealthForm'
@@ -151,7 +143,7 @@ const OralHealthForm = () => {
             </Typography>
 
             <Typography variant='h4' fontWeight='bold'>
-              I have been informed and understand that:
+              {oralHealthFormQuestionText.DENT1}
             </Typography>
             <Typography component='div' gutterBottom>
               <ol type='a'>
@@ -196,7 +188,7 @@ const OralHealthForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Are you on any blood thinners or have any bleeding disorders?
+              {oralHealthFormQuestionText.DENT2}
             </Typography>
             <FastField
               name='DENT2'
@@ -208,7 +200,7 @@ const OralHealthForm = () => {
 
             <PopupText qnNo='DENT2' triggerValue='Yes'>
               <Typography variant='h6' component='h3' fontWeight='bold'>
-                Please specify:
+                {oralHealthFormQuestionText.DENTShortAns2}
               </Typography>
               <FastField
                 name='DENTShortAns2'
@@ -220,7 +212,7 @@ const OralHealthForm = () => {
             </PopupText>
 
             <Typography variant='h4' fontWeight='bold'>
-              Patient has completed Oral Health station?
+              {oralHealthFormQuestionText.DENT3}
             </Typography>
             <FastField
               name='DENT3'
@@ -228,35 +220,11 @@ const OralHealthForm = () => {
               component={CustomCheckboxGroup}
               options={formOptions.DENT3}
             />
-
-            <Typography variant='h4' fontWeight='bold'>
-              Patient has registered with NUS Dentistry for follow-up? If no, why not.
-            </Typography>
-            <FastField
-              name='DENT4'
-              label='DENT4'
-              component={CustomRadioGroup}
-              options={formOptions.DENT4}
-              row
-            />
-
-            <PopupText qnNo='DENT4' triggerValue='No'>
-              <Typography variant='h6' component='h3' gutterBottom>
-                Please specify:
-              </Typography>
-              <FastField
-                name='DENTShortAns4'
-                label='DENTShortAns4'
-                component={CustomTextField}
-                multiline
-                minRows={2}
-              />
-            </PopupText>
           </div>
 
-          <ErrorNotification 
+          <ErrorNotification
             show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-            message="Please fill in all required fields correctly."
+            message='Please fill in all required fields correctly.'
           />
 
           <Box mt={2} mb={2}>
@@ -305,7 +273,6 @@ const OralHealthForm = () => {
         <>
           <p className='underlined'>Patient&apos;s Oral Health:</p>
           <p className='blue'>{hxOral.ORAL1}</p>
-          <p className='blue'>{hxOral.ORALShortAns1}</p>
 
           <p className='underlined'>Does patient wear dentures?:</p>
           <p className='blue'>{hxOral.ORAL2}</p>
@@ -327,10 +294,14 @@ const OralHealthForm = () => {
 
       {social ? (
         <>
-          <p className='underlined'>Does patient currently smoke:</p>
+          <p className='underlined'>Has patient ever smoked:</p>
           <p className='blue'>{social.SOCIAL10}</p>
-          <p className='underlined'>How many pack-years?:</p>
-          <p className='blue'>{social.SOCIALShortAns10}</p>
+          <p className='underlined'>How many years did the patient smoke?:</p>
+          <p className='blue'>{social.SOCIAL10Years}</p>
+          <p className='underlined'>How many packs per day?:</p>
+          <p className='blue'>{social.SOCIAL10Packs}</p>
+          <p className='underlined'>How many years ago did the patient quit?:</p>
+          <p className='blue'>{social.SOCIAL10End}</p>
 
           <p className='underlined'>
             Has patient smoked before? For how long and when did they stop?:

@@ -4,7 +4,10 @@ import { useContext, useEffect, useState } from 'react'
 import PopupText from 'src/utils/popupText.jsx'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import CustomTextField from 'src/components/form-components/CustomTextField.jsx'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
@@ -12,19 +15,14 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import { getSavedData } from '../../services/patientData'
 import allForms from '../forms.json'
+import { hxNssFormQuestionText } from '../questions/HxNssFormQuestions'
 
 // IMPORTANT: Formerly NSS, renamed to PMHX as of PHS 2022. MongoDB forms not renamed, only tab name
 const formName = 'hxNssForm'
 
 const initialValues = {
   PMHX1: '',
-  PMHX2: '',
-  PMHX3: '',
-  PMHXShortAns3: '',
-  PMHX4: '',
-  PMHXShortAns4: '',
   PMHX5: [],
-  PMHXShortAns5: '',
   PMHX6: '',
   PMHX7: '',
   PMHXShortAns7: '',
@@ -32,27 +30,52 @@ const initialValues = {
   PMHXShortAns8: '',
   PMHX9: '',
   PMHXShortAns9: '',
+  PMHXVAX1: '',
+  PMHXVAX2: '',
+  PMHXVAX3: '',
+  PMHXVAX4: '',
+  PMHXVAX5: '',
+  PMHXVAX6: '',
 }
 
-const validationSchema = Yup.object({
-  PMHX1: Yup.string().required('Required'),
-  PMHX2: Yup.string().required('Required'),
-  PMHX3: Yup.string().required('Required'),
-  PMHX4: Yup.string().required('Required'),
-  PMHX6: Yup.string().required('Required'),
-  PMHX7: Yup.string().required('Required'),
-})
+const vaccinationAnswers = ['Yes', 'No', 'Unsure']
+const yesNoAnswers = ['Yes', 'No']
+const requiresVaccinationInterestQuestion = (answer) => ['No', 'Unsure'].includes(answer)
+
+const createValidationSchema = (isPneumococcalEligible, isShinglesEligible) =>
+  Yup.object({
+    PMHX1: Yup.string().required('Required'),
+    PMHX6: Yup.string().oneOf(yesNoAnswers).required('Required'),
+    PMHX7: Yup.string().required('Required'),
+    PMHXVAX1: Yup.string().oneOf(vaccinationAnswers).required('Required'),
+    PMHXVAX2: Yup.string().when('PMHXVAX1', {
+      is: requiresVaccinationInterestQuestion,
+      then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    PMHXVAX3: isPneumococcalEligible
+      ? Yup.string().oneOf(vaccinationAnswers).required('Required')
+      : Yup.string().notRequired(),
+    PMHXVAX4: isPneumococcalEligible
+      ? Yup.string().when('PMHXVAX3', {
+          is: requiresVaccinationInterestQuestion,
+          then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
+          otherwise: (schema) => schema.notRequired(),
+        })
+      : Yup.string().notRequired(),
+    PMHXVAX5: isShinglesEligible
+      ? Yup.string().oneOf(vaccinationAnswers).required('Required')
+      : Yup.string().notRequired(),
+    PMHXVAX6: isShinglesEligible
+      ? Yup.string().when('PMHXVAX5', {
+          is: requiresVaccinationInterestQuestion,
+          then: (schema) => schema.oneOf(yesNoAnswers).required('Required'),
+          otherwise: (schema) => schema.notRequired(),
+        })
+      : Yup.string().notRequired(),
+  })
 
 const formOptions = {
-  PMHX3: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-    { label: 'Not answered', value: 'No' },
-  ],
-  PMHX4: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
   PMHX5: [
     { label: 'Kidney Disease', value: 'Kidney Disease' },
     { label: 'Hypertension', value: 'Hypertension' },
@@ -63,7 +86,10 @@ const formOptions = {
         'Heart disease (includes heart attack, heart failure, heart valve disease, stroke, blood vessel/vascular disease)',
       value: 'Heart disease',
     },
-    { label: 'Others (eg. Fatty liver / respiratory problems)', value: 'Others' },
+    {
+      label: 'Others (e.g. Fatty liver / respiratory / kidney problems)',
+      value: 'Others',
+    },
   ],
   PMHX7: [
     { label: 'Yes', value: 'Yes' },
@@ -77,33 +103,60 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  PMHX10: [
-    { label: 'Yes, please specify', value: 'Yes' },
-    { label: 'No', value: 'No' },
-    { label: 'Not answered', value: 'No' },
-  ],
+  YesNo: yesNoAnswers.map((answer) => ({ label: answer, value: answer })),
+  vaccination: vaccinationAnswers.map((answer) => ({ label: answer, value: answer })),
+  vaccinationInterest: yesNoAnswers.map((answer) => ({ label: answer, value: answer })),
 }
 
 export default function HxNssForm({ changeTab, nextTab }) {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(initialValues)
   const [regForm, setRegForm] = useState({})
+  const [registrationLoaded, setRegistrationLoaded] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setRegistrationLoaded(false)
+
     const fetchData = async () => {
-      const res = await getSavedData(patientId, formName)
-      const regData = await getSavedData(patientId, allForms.registrationForm)
+      const [res, regData] = await Promise.all([
+        getSavedData(patientId, formName),
+        getSavedData(patientId, allForms.registrationForm),
+      ])
       setSavedData({ ...initialValues, ...res })
-      setRegForm(regData)
+      setRegForm(regData || {})
+      setRegistrationLoaded(true)
     }
 
     fetchData()
   }, [patientId])
 
+  const patientAge = Number(regForm.registrationQ4)
+  const isPneumococcalEligible =
+    registrationLoaded && Number.isFinite(patientAge) && patientAge >= 65
+  const isShinglesEligible = registrationLoaded && Number.isFinite(patientAge) && patientAge >= 60
+
   const handleSubmit = async (values, { setSubmitting }) => {
+    const submittedValues = { ...values }
+
+    if (!requiresVaccinationInterestQuestion(submittedValues.PMHXVAX1)) {
+      submittedValues.PMHXVAX2 = ''
+    }
+    if (!isPneumococcalEligible) {
+      submittedValues.PMHXVAX3 = ''
+      submittedValues.PMHXVAX4 = ''
+    } else if (!requiresVaccinationInterestQuestion(submittedValues.PMHXVAX3)) {
+      submittedValues.PMHXVAX4 = ''
+    }
+    if (!isShinglesEligible) {
+      submittedValues.PMHXVAX5 = ''
+      submittedValues.PMHXVAX6 = ''
+    } else if (!requiresVaccinationInterestQuestion(submittedValues.PMHXVAX5)) {
+      submittedValues.PMHXVAX6 = ''
+    }
+
     setLoading(true)
-    const response = await submitForm(values, patientId, formName)
+    const response = await submitForm(submittedValues, patientId, formName)
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
@@ -117,7 +170,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
   const renderForm = () => (
     <Formik
       initialValues={savedData}
-      validationSchema={validationSchema}
+      validationSchema={createValidationSchema(isPneumococcalEligible, isShinglesEligible)}
       enableReinitialize
       onSubmit={handleSubmit}
     >
@@ -128,7 +181,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='subtitle1' fontWeight='bold' gutterBottom>
-            Do you have any chronic conditions? Take a short chronic history summarizing:
+            {hxNssFormQuestionText.PMHX1}
           </Typography>
           <Typography component='ol'>
             <li>Conditions</li>
@@ -159,95 +212,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Are you on any long term medications? Are you compliant to your medications?
-          </Typography>
-          <FastField
-            name='PMHX2'
-            component={CustomTextField}
-            label='PMHX2'
-            fullWidth
-            multiline
-            sx={{ mb: 5 }}
-          />
-
-          <Typography variant='subtitle1' color='error' fontWeight='bold' gutterBottom>
-            If a participant is not compliant to medications, do probe further on his/her reasons
-            for not consuming medications as prescribed.
-          </Typography>
-          <Typography gutterBottom>
-            e.g. Medication not effective? Can be managed without medication? Forget to take?
-            Lost/Ran out of medication?
-          </Typography>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Do you have any food allergies? If yes, please specify.
-          </Typography>
-          <FastField
-            name='PMHX3'
-            label='PMHX3'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX3}
-            row
-          />
-          <PopupText qnNo='PMHX3' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns3'
-              label='PMHXShortAns3 (Specify food allergies here)'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
-
-          <Typography fontWeight='bold'>
-            Do you have any drug allergies? If yes, please specify.
-          </Typography>
-          <FastField
-            name='PMHX10'
-            label='PMHX10'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX10}
-            row
-          />
-          <PopupText qnNo='PMHX10' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns10'
-              label='PMHXShortAns10 (Specify drug allergies here)'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Are you on any alternative medicine including traditional chinese medications,
-            homeopathy etc?
-          </Typography>
-          <FastField
-            name='PMHX4'
-            label='PMHX4'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX4}
-            row
-          />
-          <PopupText qnNo='PMHX4' triggerValue='Yes'>
-            <Typography fontWeight='bold'>Please specify:</Typography>
-            <FastField
-              name='PMHXShortAns4'
-              component={CustomTextField}
-              label='PMHXShortAns4 (Specify alternative medicine here)'
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Tick if you have these conditions:
+            {hxNssFormQuestionText.PMHX5}
           </Typography>
 
           {/* Check if this works in Mongo */}
@@ -258,30 +223,101 @@ export default function HxNssForm({ changeTab, nextTab }) {
             label='PMHX5'
             row
           />
-          {/* <PopupText qnNo='PMHX5' triggerValue='Others'> */}
-          <Typography fontWeight='bold'>Please specify if others:</Typography>
-          <FastField
-            name='PMHXShortAns5'
-            component={CustomTextField}
-            label='PMHXShortAns5 (Specify other conditions here)'
-            fullWidth
-            multiline
-            sx={{ mb: 3 }}
-          />
-          {/* </PopupText> */}
-
           <Typography variant='subtitle1' fontWeight='bold'>
-            If a participant does not elicit any Past Medical History, indicate if they:
-            <ol>
-              <li>Regularly go for screening/blood tests etc.</li>
-              <li>If no, ask why.</li>
-            </ol>
+            {hxNssFormQuestionText.PMHX6}
           </Typography>
-          <FastField name='PMHX6' component={CustomTextField} label='PMHX6' fullWidth multiline />
+          <FastField
+            name='PMHX6'
+            component={CustomRadioGroup}
+            label='PMHX6'
+            options={formOptions.YesNo}
+            row
+          />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Please tick to highlight if you feel Past Medical History requires closer scrutiny by
-            doctors later. Explain reasons for recommendation.
+            {hxNssFormQuestionText.PMHXVAX1}
+          </Typography>
+          <FastField
+            name='PMHXVAX1'
+            component={CustomRadioGroup}
+            label='PMHXVAX1'
+            options={formOptions.vaccination}
+            row
+          />
+          <PopupText qnNo='PMHXVAX1' triggerValue={['No', 'Unsure']}>
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxNssFormQuestionText.PMHXVAX2}
+            </Typography>
+            <Typography gutterBottom>
+              For all vaccines, please advise patient that some vaccines are fully subsidised based
+              on CHAS status and age, and if not charges may apply and they can find out at the
+              vaccine station.
+            </Typography>
+            <FastField
+              name='PMHXVAX2'
+              component={CustomRadioGroup}
+              label='PMHXVAX2'
+              options={formOptions.vaccinationInterest}
+              row
+            />
+          </PopupText>
+
+          {isPneumococcalEligible && (
+            <>
+              <Typography variant='subtitle1' fontWeight='bold'>
+                {hxNssFormQuestionText.PMHXVAX3}
+              </Typography>
+              <FastField
+                name='PMHXVAX3'
+                component={CustomRadioGroup}
+                label='PMHXVAX3'
+                options={formOptions.vaccination}
+                row
+              />
+              <PopupText qnNo='PMHXVAX3' triggerValue={['No', 'Unsure']}>
+                <Typography variant='subtitle1' fontWeight='bold'>
+                  {hxNssFormQuestionText.PMHXVAX4}
+                </Typography>
+                <FastField
+                  name='PMHXVAX4'
+                  component={CustomRadioGroup}
+                  label='PMHXVAX4'
+                  options={formOptions.vaccinationInterest}
+                  row
+                />
+              </PopupText>
+            </>
+          )}
+
+          {isShinglesEligible && (
+            <>
+              <Typography variant='subtitle1' fontWeight='bold'>
+                {hxNssFormQuestionText.PMHXVAX5}
+              </Typography>
+              <FastField
+                name='PMHXVAX5'
+                component={CustomRadioGroup}
+                label='PMHXVAX5'
+                options={formOptions.vaccination}
+                row
+              />
+              <PopupText qnNo='PMHXVAX5' triggerValue={['No', 'Unsure']}>
+                <Typography variant='subtitle1' fontWeight='bold'>
+                  {hxNssFormQuestionText.PMHXVAX6}
+                </Typography>
+                <FastField
+                  name='PMHXVAX6'
+                  component={CustomRadioGroup}
+                  label='PMHXVAX6'
+                  options={formOptions.vaccinationInterest}
+                  row
+                />
+              </PopupText>
+            </>
+          )}
+
+          <Typography variant='subtitle1' fontWeight='bold'>
+            {hxNssFormQuestionText.PMHX7}
           </Typography>
           <Typography variant='subtitle1' fontWeight='bold'>
             For participant with DM, refer to Doctor&apos;s Station if:
@@ -307,7 +343,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
             <FastField
               name='PMHXShortAns7'
               component={CustomTextField}
-              label="PMHXShortAns7 (Explain reasons for recommendation to Doctor's Station)"
+              label={hxNssFormQuestionText.PMHXShortAns7}
               fullWidth
               multiline
               sx={{ mb: 3 }}
@@ -318,8 +354,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
           {regForm.registrationQ4 >= 60 && (
             <>
               <Typography variant='subtitle1' fontWeight='bold'>
-                <span style={{ color: '#d32f2f' }}>For geriatric participants,</span> has the senior
-                seen an ENT specialist before?
+                {hxNssFormQuestionText.PMHX8}
               </Typography>
               <FastField
                 name='PMHX8'
@@ -332,7 +367,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
                 <FastField
                   name='PMHXShortAns8'
                   component={CustomTextField}
-                  label='PMHXShortAns8 (Please specify)'
+                  label={hxNssFormQuestionText.PMHXShortAns8}
                   fullWidth
                   multiline
                   sx={{ mb: 3 }}
@@ -340,8 +375,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
               </PopupText>
 
               <Typography variant='subtitle1' fontWeight='bold'>
-                <span style={{ color: '#d32f2f' }}>For geriatric participants,</span> did he/she
-                answer yes to any of the following questions?
+                {hxNssFormQuestionText.PMHX9}
               </Typography>
               <Typography component='ol' type='a'>
                 <li>Have you had your hearing aids for more than 5 years?</li>
@@ -362,7 +396,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
                 <FastField
                   name='PMHXShortAns9'
                   component={CustomTextField}
-                  label='PMHXShortAns9 (Please specify which questions the patient answered yes to)'
+                  label={hxNssFormQuestionText.PMHXShortAns9}
                   fullWidth
                   multiline
                   sx={{ mb: 3 }}
@@ -380,7 +414,12 @@ export default function HxNssForm({ changeTab, nextTab }) {
             {loading || isSubmitting ? (
               <CircularProgress />
             ) : (
-              <Button type='submit' variant='contained' color='primary'>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                disabled={!registrationLoaded}
+              >
                 Submit
               </Button>
             )}

@@ -27,9 +27,12 @@ const DoctorAdmin = lazy(() => import('src/pages/DoctorAdmin'))
 const FormAAdmin = lazy(() => import('src/pages/FormAAdmin'))
 const SummaryForm = lazy(() => import('src/forms/SummaryForm'))
 const HsgForm = lazy(() => import('./forms/HsgForm'))
+const Cancer365Form = lazy(() => import('./forms/Cancer365Form'))
 const LungFnForm = lazy(() => import('./forms/LungFnForm'))
 const OsteoForm = lazy(() => import('./forms/OsteoForm'))
 const MentalHealthForm = lazy(() => import('./forms/MentalHealthTabs/MentalHealthMain'))
+const ArthritisForm = lazy(() => import('./forms/ArthritisForm'))
+const LtfuForm = lazy(() => import('./forms/LtfuForm'))
 const HpvForm = lazy(() => import('./forms/HpvForm'))
 const VaccineForm = lazy(() => import('./forms/VaccineForm'))
 const WceTabs = lazy(() => import('./forms/WceTabs/WceMain'))
@@ -65,12 +68,14 @@ const routes = [
       { path: 'settings', element: loadable(Settings) },
       { path: 'doctorsconsult', element: loadable(DoctorsConsultForm) },
       { path: 'summary', element: loadable(SummaryForm) },
+      { path: 'ltfu', element: loadable(LtfuForm) },
       { path: 'lungfn', element: loadable(LungFnForm) },
       { path: 'gerimobility', element: loadable(GeriMobilityTabs) },
       { path: 'hxtaking', element: loadable(HxTabs) },
       { path: 'reg', element: loadable(RegForm) },
       { path: 'vax', element: loadable(VaccineForm) },
       { path: 'hsg', element: loadable(HsgForm) },
+      { path: 'cancer365', element: loadable(Cancer365Form) },
       { path: 'fit', element: loadable(FitForm) },
       { path: 'audio', element: loadable(AudiometryForm) },
       { path: 'ophthal', element: loadable(OphthalForm) },
@@ -81,6 +86,7 @@ const routes = [
       { path: 'dietitiansconsultation', element: loadable(DietitiansConsultForm) },
       { path: 'socialservice', element: loadable(SocialServiceForm) },
       { path: 'mentalhealth', element: loadable(MentalHealthForm) },
+      { path: 'arthritis', element: loadable(ArthritisForm) },
       { path: 'oralhealth', element: loadable(OralHealthForm) },
       { path: 'hpv', element: loadable(HpvForm) },
       {

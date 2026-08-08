@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
-    "baseUrl": "."
+    // "baseUrl": "."
   },
   "include": ["src", "src/index.jsx"],
-  "exclude": ["src/api/lang/NotoSansSC-bold.js", "src/api/lang/NotoSansSC-normal.js", "src/api/lang/NotoSansTamil-bold.js", "src/api/lang/NotoSansTamil-normal.js"]
+  "exclude": [
+    "src/api/lang/NotoSansSC-bold.js",
+    "src/api/lang/NotoSansSC-normal.js",
+    "src/api/lang/NotoSansTamil-bold.js",
+    "src/api/lang/NotoSansTamil-normal.js"
+  ]
 }

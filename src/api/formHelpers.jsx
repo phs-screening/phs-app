@@ -64,7 +64,7 @@ export async function submitForm(args, patientId, formCollection) {
 }
 
 export function formatBmi(heightInCm, weightInKg) {
-  const bmi = calculateBMI(heightInCm, weightInKg)
+  const bmi = calculateBmiPreview(heightInCm, weightInKg)
 
   if (bmi > 27.5) {
     return (
@@ -95,7 +95,7 @@ export function formatBmi(heightInCm, weightInKg) {
   }
 }
 
-export function calculateBMI(heightInCm, weightInKg) {
+function calculateBmiPreview(heightInCm, weightInKg) {
   const height = heightInCm / 100
   const bmi = (weightInKg / height / height).toFixed(1)
 

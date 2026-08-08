@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router'
 
 import * as Yup from 'yup'
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 
@@ -13,8 +16,8 @@ import './fieldPadding.css'
 import allForms from './forms.json'
 
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
-import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
+import { vaccineFormQuestionText } from './questions/VaccineFormQuestions'
 
 const formName = 'vaccineForm'
 
@@ -22,7 +25,7 @@ const initialValues = {
   VAX1: '',
   VAX2: '',
   VAX3: '',
-  VAX4: '',
+  VAX5: '',
 }
 
 const formOptions = {
@@ -36,7 +39,7 @@ const validationSchema = Yup.object({
   VAX1: Yup.string().required(),
   VAX2: Yup.string().required(),
   VAX3: Yup.string().required(),
-  VAX4: Yup.string().required(),
+  VAX5: Yup.string().required(),
 })
 
 export default function VaccineForm() {
@@ -45,7 +48,6 @@ export default function VaccineForm() {
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, setLoadingSidePanel] = useState(true)
   const [regi, setRegi] = useState({})
-  const [historyForm, setHistoryForm] = useState({})
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -54,12 +56,8 @@ export default function VaccineForm() {
       setSaveData(savedData || initialValues)
 
       const regiData = await getSavedData(patientId, allForms.registrationForm)
-      const historyData = await getSavedData(patientId, allForms.hxNssForm)
-      Promise.all([regiData, historyData]).then((result) => {
-        setRegi(result[0])
-        setHistoryForm(result[1])
-        setLoadingSidePanel(false)
-      })
+      setRegi(regiData)
+      setLoadingSidePanel(false)
     }
     fetchData()
   }, [patientId])
@@ -67,12 +65,12 @@ export default function VaccineForm() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
     setSubmitting(true)
-    
+
     const response = await submitForm(values, patientId, formName)
-    
+
     setLoading(false)
     setSubmitting(false)
-    
+
     if (response.result) {
       setTimeout(async () => {
         await showFormSubmitSuccess()
@@ -103,7 +101,7 @@ export default function VaccineForm() {
                   </Typography>
 
                   <Typography variant='subtitle1' fontWeight='bold'>
-                    Are you eligible for vaccination?
+                    {vaccineFormQuestionText.VAX1}
                   </Typography>
                   <FastField
                     name='VAX1'
@@ -114,7 +112,7 @@ export default function VaccineForm() {
                   />
 
                   <Typography variant='subtitle1' fontWeight='bold'>
-                    You have received a pneumococcal vaccine.
+                    {vaccineFormQuestionText.VAX2}
                   </Typography>
                   <FastField
                     name='VAX2'
@@ -125,7 +123,18 @@ export default function VaccineForm() {
                   />
 
                   <Typography variant='subtitle1' fontWeight='bold'>
-                    You have received an Influenza vaccine.
+                    {vaccineFormQuestionText.VAX5}
+                  </Typography>
+                  <FastField
+                    name='VAX5'
+                    label='VAX5'
+                    component={CustomRadioGroup}
+                    options={formOptions.YesNo}
+                    row
+                  />
+
+                  <Typography variant='subtitle1' fontWeight='bold'>
+                    {vaccineFormQuestionText.VAX3}
                   </Typography>
                   <FastField
                     name='VAX3'
@@ -135,37 +144,24 @@ export default function VaccineForm() {
                     row
                   />
 
-                  <Typography variant='subtitle1' fontWeight='bold'>
-                    Patient&apos;s Vaccination history
-                  </Typography>
-                  <FastField
-                    name='VAX4'
-                    label='VAX4'
-                    component={CustomTextField}
-                    multiline
-                    minRows={3}
-                  />
-                      
-                  <ErrorNotification 
-                    show={submitCount > 0 && Object.keys(errors).length > 0}
-                  />
+                  <ErrorNotification show={submitCount > 0 && Object.keys(errors).length > 0} />
 
                   <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                     {loading || isSubmitting ? (
                       <CircularProgress />
                     ) : (
-                      <Button 
-                        type="submit" 
-                        variant="contained" 
-                        color="primary"
-                        size="large"
+                      <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        size='large'
                         disabled={isSubmitting}
                       >
                         Submit
                       </Button>
                     )}
                   </Box>
-                  
+
                   <br />
                   <Divider />
                 </Form>
@@ -223,34 +219,6 @@ export default function VaccineForm() {
                   ) : (
                     <Typography variant='body1' className='red'>
                       NO REGI DATA
-                    </Typography>
-                  )}
-
-                  {historyForm ? (
-                    <>
-                      {historyForm.PMHXShortAns3 ? (
-                        <Typography variant='body1' className='blue'>
-                          Food Allergy: {historyForm.PMHXShortAns3}
-                        </Typography>
-                      ) : (
-                        <Typography variant='body1' className='blue'>
-                          Food Allergy: nil
-                        </Typography>
-                      )}
-
-                      {historyForm.PMHXShortAns10 ? (
-                        <Typography variant='body1' className='blue'>
-                          Drug Allergy: {historyForm.PMHXShortAns10}
-                        </Typography>
-                      ) : (
-                        <Typography variant='body1' className='blue'>
-                          Drug Allergy: nil
-                        </Typography>
-                      )}
-                    </>
-                  ) : (
-                    <Typography variant='body1' className='red'>
-                      NO HISTORY FORM DATA
                     </Typography>
                   )}
                 </div>

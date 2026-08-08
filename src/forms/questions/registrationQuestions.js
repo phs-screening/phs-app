@@ -1,0 +1,20 @@
+export const registrationQuestionText = {
+  registrationQ1: 'Salutation 称谓',
+  registrationQ2: 'Initials (e.g Chen Ren Ying - Chen R Y, Christie Tan En Ning - Christie T E N)',
+  registrationQ3: 'Birthday',
+  registrationQ4: 'Age',
+  registrationQ5: 'Gender',
+  registrationQ6: 'Race 种族',
+  registrationShortAnsQ6: 'Please specify',
+  registrationQ7: 'Nationality 国籍',
+  registrationQ11: 'Are you currently part of HealthierSG?',
+  registrationQ12: 'CHAS Status 社保援助计划',
+  registrationQ13: 'Pioneer Generation Status 建国一代配套',
+  registrationQ14: 'Preferred Language for Health Report',
+  registrationQ16: 'Do you have public assistance card?',
+  registrationQ17: 'I agree and consent to the above.',
+  registrationQ18:
+    'Has patient attended any health screenings before? (e.g. Annual Health Screening etc.)',
+  registrationQ19: 'Has patient pre-registered for the Mammobus station?',
+  registrationQ20: 'Has Form C been signed?',
+}

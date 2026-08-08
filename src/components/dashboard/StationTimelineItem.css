@@ -1,0 +1,52 @@
+.station-timeline-item::before {
+  flex: 0.25;
+  padding: 6px 8px;
+}
+
+.station-timeline-card {
+  background-color: #ffffff;
+  border-color: #dfe3e8;
+  text-align: center;
+  margin-left: 30px;
+  margin-right: 60px;
+  transform: translateY(-8px);
+}
+
+.station-timeline-card.station-timeline-card--primary {
+  background-color: #d5eff3;
+  border-color: #20a6cb;
+}
+
+.station-timeline-card.station-timeline-card--error {
+  background-color: #fdf9f9;
+  border-color: #fde9e9;
+}
+
+.station-timeline-card.station-timeline-card--error:hover {
+  background-color: #f1d8d8;
+}
+
+.station-timeline-card.station-timeline-card--grey {
+  background-color: #e4e4e4;
+
+}
+
+.station-timeline-card__action {
+  display: block;
+  padding: 10px 16px;
+  width: 100%;
+}
+
+.station-timeline-card__label {
+  color: #172b4d;
+  display: block;
+  width: 100%;
+}
+
+.station-timeline-card__label.station-timeline-card__label--error {
+  color: #d3aaaa;
+}
+
+.station-timeline-card.station-timeline-card--error:hover .station-timeline-card__label--error {
+  color: #cb4c4c;
+}
