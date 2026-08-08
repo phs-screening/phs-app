@@ -64,6 +64,8 @@ describe('TriageForm', () => {
     getPatientFormDataStrict.mockReturnValue(load.promise)
     renderTriageForm()
 
+    expect(screen.getByRole('progressbar', { name: 'Loading triage data' })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Triage Q15')).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Submit' })).not.toBeInTheDocument()
     load.resolve(validTriage)
 

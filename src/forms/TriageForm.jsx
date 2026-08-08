@@ -132,6 +132,7 @@ const formName = 'triageForm'
 
 const TriageForm = () => {
   const [loading, isLoading] = useState(false)
+  const [initializing, setInitializing] = useState(true)
   const { patientId } = useContext(FormContext)
   const [saveData, setSaveData] = useState(initialValues)
   const [loadError, setLoadError] = useState('')
@@ -143,7 +144,7 @@ const TriageForm = () => {
 
     const fetchData = async () => {
       try {
-        isLoading(true)
+        setInitializing(true)
         setLoadError('')
         const savedData = await getPatientFormDataStrict(patientId, formName)
         if (isCurrent) {
@@ -158,7 +159,7 @@ const TriageForm = () => {
         }
       } finally {
         if (isCurrent) {
-          isLoading(false)
+          setInitializing(false)
         }
       }
     }
@@ -206,7 +207,9 @@ const TriageForm = () => {
   }
   return (
     <Paper elevation={2} p={0} m={0}>
-      {loadError ? (
+      {initializing ? (
+        <CircularProgress aria-label='Loading triage data' />
+      ) : loadError ? (
         <DataLoadError
           message={loadError}
           onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
