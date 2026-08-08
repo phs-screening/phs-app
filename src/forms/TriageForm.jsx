@@ -182,15 +182,12 @@ const TriageForm = () => {
     setSubmitting(true)
 
     //calculated values
-    const submittedModel = {
-      ...model,
-      triageQ7: calculateAverage(model.triageQ1, model.triageQ3, model.triageQ5),
-      triageQ8: calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6),
-      triageQHRAvg: calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3),
-    }
+    model.triageQ7 = calculateAverage(model.triageQ1, model.triageQ3, model.triageQ5)
+    model.triageQ8 = calculateAverage(model.triageQ2, model.triageQ4, model.triageQ6)
+    model.triageQHRAvg = calculateAverage(model.triageQHR1, model.triageQHR2, model.triageQHR3)
 
     try {
-      const response = await submitForm(submittedModel, patientId, formName)
+      const response = await submitForm(model, patientId, formName)
 
       if (response.result) {
         await showFormSubmitSuccess()
@@ -208,7 +205,7 @@ const TriageForm = () => {
   return (
     <Paper elevation={2} p={0} m={0}>
       {initializing ? (
-        <CircularProgress aria-label='Loading triage data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

@@ -95,7 +95,7 @@ const ArthritisForm = () => {
   return (
     <Paper elevation={2}>
       {initializing ? (
-        <CircularProgress aria-label='Loading arthritis data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

@@ -16,6 +16,9 @@ vi.mock('../../src/api/patientsApi', () => ({ createPatient: vi.fn() }))
 vi.mock('@mui/x-date-pickers/LocalizationProvider', () => ({
   LocalizationProvider: ({ children }) => children,
 }))
+vi.mock('@mui/x-date-pickers/internals/demo', () => ({
+  DemoContainer: ({ children }) => children,
+}))
 vi.mock('@mui/x-date-pickers/DatePicker', () => ({
   DatePicker: () => <input aria-label='Birthday' readOnly />,
 }))

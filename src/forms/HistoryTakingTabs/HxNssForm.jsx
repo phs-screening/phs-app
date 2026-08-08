@@ -466,7 +466,7 @@ export default function HxNssForm({ changeTab, nextTab }) {
   return (
     <Paper elevation={2}>
       {initializing ? (
-        <CircularProgress aria-label='Loading past medical history data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

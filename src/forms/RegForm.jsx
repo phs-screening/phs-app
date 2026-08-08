@@ -27,6 +27,7 @@ import CustomSelect from '../components/form-components/CustomSelect'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import DataLoadError from 'src/components/DataLoadError'
 
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -75,6 +76,7 @@ const RegForm = () => {
       try {
         isLoading(true)
         setLoadError('')
+        console.log('Patient ID: ' + patientId)
         let res = {}
         let preRegistration = null
 
@@ -148,20 +150,22 @@ const RegForm = () => {
   const handleSubmit = async (values, { setSubmitting }) => {
     isLoading(true)
     setSubmitting(true)
-    const submittedValues = {
-      ...values,
-      registrationQ3: birthday.toDate(),
-      registrationQ4: patientAge,
-    }
+    values.registrationQ3 = birthday.toDate()
+    values.registrationQ4 = patientAge
 
     try {
-      const response = await submitForm(submittedValues, patientId, formName)
+      console.log('Patient ID: ' + patientId)
+      const response = await submitForm(values, patientId, formName)
+      console.log('test  _' + response.result + ' ' + patientAge)
 
       if (response.result) {
+        console.log('response data: ' + response.qNum)
         await showFormSubmitSuccess()
+        console.log('Successfully submitted form')
         updatePatientInfo({ ...response.data, queueNo: response.qNum })
         navigate('/app/dashboard')
       } else {
+        console.log('Form submission failed')
         showFormSubmitError(`Unsuccessful. ${response.error}`)
       }
     } catch (error) {
@@ -292,7 +296,8 @@ const RegForm = () => {
               {registrationQuestionText.registrationQ3}
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box>
+              <DemoContainer components={['DatePicker']}>
+                <Box>
                   <DatePicker
                     label=''
                     value={birthday}
@@ -331,7 +336,8 @@ const RegForm = () => {
                       {formikProps.errors.registrationQ3}
                     </Typography>
                   )}
-              </Box>
+                </Box>
+              </DemoContainer>
             </LocalizationProvider>
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>

@@ -116,7 +116,7 @@ const HsgForm = () => {
   return (
     <Paper elevation={2} p={0} m={0}>
       {initializing ? (
-        <CircularProgress aria-label='Loading Healthier SG data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

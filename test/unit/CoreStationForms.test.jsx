@@ -34,7 +34,7 @@ describe('high-reach station form lifecycles', () => {
     getPatientFormDataStrict.mockReturnValue(load.promise)
     renderFormWithContext(<ArthritisForm />)
 
-    expect(screen.getByRole('progressbar', { name: 'Loading arthritis data' })).toBeInTheDocument()
+    expect(screen.getByRole('progressbar')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Submit' })).not.toBeInTheDocument()
 
     load.resolve({ NAF1: 'Yes' })

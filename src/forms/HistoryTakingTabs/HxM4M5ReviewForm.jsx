@@ -137,7 +137,7 @@ const HxM4M5ReviewForm = () => {
   return (
     <Paper elevation={2}>
       {initializing ? (
-        <CircularProgress aria-label='Loading M4/M5 review data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

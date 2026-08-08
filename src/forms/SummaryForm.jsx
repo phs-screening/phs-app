@@ -182,7 +182,7 @@ const SummaryForm = (props) => {
   return (
     <Paper elevation={2} pt={3} m={3}>
       {loadingPrevData ? (
-        <CircularProgress aria-label='Loading screening report data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}

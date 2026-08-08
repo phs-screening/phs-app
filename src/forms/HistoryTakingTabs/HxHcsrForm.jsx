@@ -285,7 +285,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
   return (
     <Paper elevation={2}>
       {initializing ? (
-        <CircularProgress aria-label='Loading HCSR data' />
+        <CircularProgress />
       ) : loadError ? (
         <DataLoadError
           message={loadError}
