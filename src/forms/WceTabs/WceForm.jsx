@@ -239,6 +239,4 @@ const WceForm = (props) => {
   )
 }
 
-WceForm.contextType = FormContext
-
 export default WceForm

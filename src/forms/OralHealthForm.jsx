@@ -347,6 +347,4 @@ const OralHealthForm = () => {
   )
 }
 
-OralHealthForm.contextType = FormContext
-
 export default OralHealthForm

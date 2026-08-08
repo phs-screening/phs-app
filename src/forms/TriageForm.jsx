@@ -475,6 +475,4 @@ const TriageForm = () => {
   )
 }
 
-TriageForm.contextType = FormContext
-
 export default TriageForm

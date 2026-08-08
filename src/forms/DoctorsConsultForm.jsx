@@ -584,8 +584,6 @@ const DoctorsConsultForm = () => {
   )
 }
 
-DoctorsConsultForm.contextType = FormContext
-
 export default function DoctorsConsultform(props) {
   const navigate = useNavigate()
   return <DoctorsConsultForm {...props} navigate={navigate} />

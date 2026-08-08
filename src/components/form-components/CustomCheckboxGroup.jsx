@@ -1,7 +1,7 @@
 import React from 'react'
 import { Checkbox, FormControlLabel, FormHelperText, Box, Typography } from '@mui/material'
 
-const CustomCheckboxGroup = ({ field, form, options, label, ...props }) => {
+const CustomCheckboxGroup = ({ field, form, options, label, row = false, ...props }) => {
   const showError = form.errors[field.name] && (form.touched[field.name] || form.submitCount > 0)
   const fieldValue = form.values[field.name] || []
 
@@ -22,21 +22,23 @@ const CustomCheckboxGroup = ({ field, form, options, label, ...props }) => {
           {label}
         </Typography>
       )}
-      {options.map((option) => (
-        <Box key={option.value} sx={{ mt: 1, mb: 1 }}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={fieldValue.includes(option.value)}
-                onChange={() => handleChange(option.value)}
-                color={showError ? 'error' : 'primary'}
-                {...props}
-              />
-            }
-            label={option.label}
-          />
-        </Box>
-      ))}
+      <Box sx={{ display: row ? 'flex' : 'block', flexWrap: 'wrap' }}>
+        {options.map((option) => (
+          <Box key={option.value} sx={{ mt: 1, mb: 1 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={fieldValue.includes(option.value)}
+                  onChange={() => handleChange(option.value)}
+                  color={showError ? 'error' : 'primary'}
+                  {...props}
+                />
+              }
+              label={option.label}
+            />
+          </Box>
+        ))}
+      </Box>
       {showError && <FormHelperText error>{form.errors[field.name]}</FormHelperText>}
     </Box>
   )

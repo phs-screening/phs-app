@@ -160,6 +160,4 @@ const HsgForm = () => {
   )
 }
 
-HsgForm.contextType = FormContext
-
 export default HsgForm

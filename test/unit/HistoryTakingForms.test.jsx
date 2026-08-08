@@ -1,6 +1,6 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
@@ -40,6 +40,13 @@ function mockHistoryData(age, pmhx = {}) {
   )
 }
 
+async function waitForSavedDataLoads() {
+  await waitFor(() => expect(getSavedData).toHaveBeenCalled())
+  await act(async () => {
+    await Promise.all(getSavedData.mock.results.map(({ value }) => value))
+  })
+}
+
 describe('history-taking forms', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -47,16 +54,21 @@ describe('history-taking forms', () => {
     submitForm.mockResolvedValue({ result: true })
   })
 
-  it('uses a full-name prompt and removes HCSR Q4 and Q6', () => {
-    renderHistoryForm(<HxHcsrForm changeTab={vi.fn()} nextTab={1} />)
+  it('uses a full-name prompt and removes HCSR Q4 and Q6', async () => {
+    const { container } = renderHistoryForm(<HxHcsrForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(screen.getByText("Please enter History-taker's full name")).toBeInTheDocument()
     expect(screen.queryByLabelText('hxHcsrQ4')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('hxHcsrQ6')).not.toBeInTheDocument()
+    expect(container.querySelector('ol')?.closest('p')).toBeNull()
   })
 
-  it('removes obsolete PMHX fields and updates PMHX6 wording', () => {
+  it('removes obsolete PMHX fields and updates PMHX6 wording', async () => {
     renderHistoryForm(<HxNssForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(screen.getByText('Do you go for regular health screenings?')).toBeInTheDocument()
     expect(
@@ -71,9 +83,10 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText(/PMHXShortAns5/)).not.toBeInTheDocument()
   })
 
-  it('shows OSA immediately after scoliosis and before M4/M5 review', () => {
+  it('shows OSA immediately after scoliosis and before M4/M5 review', async () => {
     window.scrollTo = vi.fn()
-    render(
+    getSavedData.mockResolvedValue({ registrationQ5: 'Female' })
+    const { container } = render(
       <ThemeProvider theme={customTheme}>
         <FormContext.Provider value={{ patientId: 7 }}>
           <ScrollTopContext.Provider value={{ scrollTop: vi.fn() }}>
@@ -83,9 +96,12 @@ describe('history-taking forms', () => {
       </ThemeProvider>,
     )
 
+    await screen.findByRole('tab', { name: 'Gynae' })
+
     const tabLabels = screen.getAllByRole('tab').map((tab) => tab.textContent)
     expect(tabLabels.indexOf('OSA')).toBe(tabLabels.indexOf('Scoliosis') + 1)
     expect(tabLabels.indexOf('OSA')).toBeLessThan(tabLabels.indexOf('M4/M5 Review'))
+    expect(container.querySelector('p form')).toBeNull()
   })
 
   it('shows and requires all four OSA questions', async () => {
@@ -95,6 +111,8 @@ describe('history-taking forms', () => {
         <HxOsaForm changeTab={vi.fn()} nextTab={1} />
       </MemoryRouter>,
     )
+
+    await waitForSavedDataLoads()
 
     expect(screen.getByText('Obstructive Sleep Apnea (for research)')).toBeInTheDocument()
     expect(
@@ -122,8 +140,10 @@ describe('history-taking forms', () => {
     expect(submitForm).not.toHaveBeenCalled()
   })
 
-  it('updates the Social History diet and alcohol guidance and removes obsolete fields', () => {
+  it('updates the Social History diet and alcohol guidance and removes obsolete fields', async () => {
     renderHistoryForm(<HxSocialForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(screen.getByText('Do you think you eat a balanced diet?')).toBeInTheDocument()
     expect(screen.getByText('1 can (330 ml) of regular beer at 5% alcohol')).toBeInTheDocument()
@@ -133,8 +153,10 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('SOCIAL16')).not.toBeInTheDocument()
   })
 
-  it('limits ORAL1 to Healthy or Poor and removes ORALShortAns1', () => {
+  it('limits ORAL1 to Healthy or Poor and removes ORALShortAns1', async () => {
     renderHistoryForm(<HxOralForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(
       screen.getByRole('table', { name: 'Oral health quick inspection guide' }),
@@ -147,8 +169,10 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('ORALShortAns1')).not.toBeInTheDocument()
   })
 
-  it('updates FAMILY1 wording and removes FAMILY2', () => {
+  it('updates FAMILY1 wording and removes FAMILY2', async () => {
     renderHistoryForm(<HxFamilyForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(
       screen.getByText('Does the patient have any relevant family history?'),
@@ -156,8 +180,10 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('FAMILY2')).not.toBeInTheDocument()
   })
 
-  it('uses the 1–8 August 2026 menstrual-period window for GYNAE16', () => {
+  it('uses the 1–8 August 2026 menstrual-period window for GYNAE16', async () => {
     renderHistoryForm(<HxGynaeForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitForSavedDataLoads()
 
     expect(
       screen.getByText(
@@ -177,7 +203,7 @@ describe('history-taking forms', () => {
       mockHistoryData(age)
       renderHistoryForm(<HxNssForm changeTab={vi.fn()} nextTab={1} />)
 
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled())
+      await waitForSavedDataLoads()
 
       expect(
         screen.getByText('Have you received the influenza vaccine in the last year?'),
@@ -199,7 +225,7 @@ describe('history-taking forms', () => {
     })
     renderHistoryForm(<HxNssForm changeTab={vi.fn()} nextTab={1} />)
 
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled())
+    await waitForSavedDataLoads()
     expect(screen.getByText('PMHXVAX2')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Submit' }))
@@ -223,7 +249,7 @@ describe('history-taking forms', () => {
     })
     renderHistoryForm(<HxNssForm changeTab={vi.fn()} nextTab={1} />)
 
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled())
+    await waitForSavedDataLoads()
     await user.click(screen.getByRole('button', { name: 'Submit' }))
 
     await waitFor(() =>

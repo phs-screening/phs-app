@@ -20,9 +20,9 @@ const CustomRadioGroup = ({ field, form, options, label, ...props }) => {
         value={field.value || ''}
         onChange={(event) => form.setFieldValue(field.name, event.target.value)}
       >
-        {options.map((option) => (
+        {options.map((option, index) => (
           <FormControlLabel
-            key={option.value}
+            key={`${field.name}-${option.label}-${index}`}
             value={option.value}
             control={<Radio />}
             label={option.label}

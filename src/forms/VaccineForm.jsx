@@ -230,5 +230,3 @@ export default function VaccineForm() {
     </Paper>
   )
 }
-
-VaccineForm.contextType = FormContext

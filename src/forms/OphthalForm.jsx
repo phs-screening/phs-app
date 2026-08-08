@@ -331,6 +331,4 @@ const OphthalForm = () => {
   )
 }
 
-OphthalForm.contextType = FormContext
-
 export default OphthalForm

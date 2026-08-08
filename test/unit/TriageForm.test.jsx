@@ -1,6 +1,7 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import TriageForm from '../../src/forms/TriageForm'
 import { FormContext } from '../../src/api/utils'
@@ -39,13 +40,16 @@ describe('TriageForm', () => {
   })
 
   it('shows the Comm member warning only when Q9 is Yes', async () => {
+    const user = userEvent.setup()
     renderTriageForm()
 
     await screen.findByLabelText('Triage Q15')
     expect(screen.queryByText('Please inform a Comm member immediately.')).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('radio', { name: 'Yes' }))
+    await user.click(screen.getByRole('radio', { name: 'Yes' }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Please inform a Comm member immediately.')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Please inform a Comm member immediately.',
+    )
   })
 })

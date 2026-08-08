@@ -35,4 +35,20 @@ describe('patientPersistence', () => {
     expect(listener).toHaveBeenCalledTimes(1)
     window.removeEventListener(PATIENT_CLEARED_EVENT, listener)
   })
+
+  it('can defer the cleared event until after the current render work', async () => {
+    const listener = vi.fn()
+    window.addEventListener(PATIENT_CLEARED_EVENT, listener)
+    savePersistedPatient(123, { queueNo: 123 })
+
+    clearPersistedPatient({ deferNotification: true })
+
+    expect(localStorage.getItem('selectedPatient')).toBeNull()
+    expect(listener).not.toHaveBeenCalled()
+
+    await Promise.resolve()
+
+    expect(listener).toHaveBeenCalledTimes(1)
+    window.removeEventListener(PATIENT_CLEARED_EVENT, listener)
+  })
 })

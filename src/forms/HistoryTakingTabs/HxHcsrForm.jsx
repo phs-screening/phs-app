@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Divider, Paper, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Divider, Paper, Typography } from '@mui/material'
 import { FastField, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
 import * as Yup from 'yup'
@@ -90,14 +90,14 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           <Typography variant='h4' gutterBottom>
             <strong>PARTICIPANT IDENTIFICATION</strong>
           </Typography>
-          <Typography gutterBottom>
-            <span style={{ color: 'error', fontWeight: 'bold' }}>
+          <Typography component='div' gutterBottom>
+            <Box component='div' sx={{ color: 'error', fontWeight: 'bold' }}>
               Please verify participant&apos;s identity using:
               <ol type='A'>
                 <li>APP ID on wristband</li>
                 <li>INITIALS</li>
               </ol>
-            </span>{' '}
+            </Box>
           </Typography>
 
           <Typography variant='h4' fontWeight='bold'>

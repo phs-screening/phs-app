@@ -1,8 +1,8 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles'
 import shadows from './shadows'
 import typography from './typography'
 
-const customTheme = createTheme(adaptV4Theme({
+const customTheme = createTheme({
   components: {
     '*': {
       boxSizing: 'border-box',
@@ -54,6 +54,6 @@ const customTheme = createTheme(adaptV4Theme({
   },
   shadows,
   typography,
-}))
+})
 
 export default customTheme

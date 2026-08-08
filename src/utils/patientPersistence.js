@@ -25,7 +25,14 @@ export function savePersistedPatient(patientId, patientInfo = {}) {
   )
 }
 
-export function clearPersistedPatient() {
+export function clearPersistedPatient({ deferNotification = false } = {}) {
   localStorage.removeItem(STORAGE_KEY)
-  window.dispatchEvent(new Event(PATIENT_CLEARED_EVENT))
+  const notifyPatientCleared = () => window.dispatchEvent(new Event(PATIENT_CLEARED_EVENT))
+
+  if (deferNotification) {
+    queueMicrotask(notifyPatientCleared)
+    return
+  }
+
+  notifyPatientCleared()
 }

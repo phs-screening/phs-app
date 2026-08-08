@@ -71,4 +71,18 @@ describe('CustomRadioGroup', () => {
 
     expect(screen.getByText('Consent is required')).toBeInTheDocument()
   })
+
+  it('renders legacy options that share a persisted value without key warnings', () => {
+    renderRadioGroup({
+      props: {
+        options: [
+          { value: 'Never before', label: 'Never before' },
+          { value: 'Never before', label: 'Not answered' },
+        ],
+      },
+    })
+
+    expect(screen.getByRole('radio', { name: 'Never before' })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Not answered' })).toBeInTheDocument()
+  })
 })

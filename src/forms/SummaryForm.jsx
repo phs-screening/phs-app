@@ -204,8 +204,6 @@ const SummaryForm = (props) => {
   )
 }
 
-SummaryForm.contextType = FormContext
-
 export default function Summaryform(props) {
   const navigate = useNavigate()
   return <SummaryForm {...props} navigate={navigate} />

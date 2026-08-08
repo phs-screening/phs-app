@@ -15,9 +15,9 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:unit": "vitest run test/unit",
-    "test:unit:ci": "vitest run test/unit --coverage",
+    "test:unit:ci": "vitest run test/unit",
     "test:integration": "vitest run test/integration",
-    "test:integration:ci": "vitest run test/integration --coverage",
+    "test:integration:ci": "vitest run test/integration",
     "test:run": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage"

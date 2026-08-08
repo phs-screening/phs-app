@@ -227,5 +227,4 @@ const OsteoForm = () => {
   )
 }
 
-OsteoForm.contextType = FormContext
 export default OsteoForm

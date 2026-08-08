@@ -433,6 +433,4 @@ const SocialServiceForm = () => {
   )
 }
 
-SocialServiceForm.contextType = FormContext
-
 export default SocialServiceForm
