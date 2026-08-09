@@ -1,12 +1,10 @@
 import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import Typography from '@mui/material/Typography'
 import { styled } from '@mui/system'
-import PropTypes from 'prop-types'
 import React, { useState, useContext, useEffect } from 'react'
 import { ScrollTopContext, FormContext } from '../../api/utils.js'
+import LazyTabPanel from '../../components/form-components/LazyTabPanel.jsx'
 import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import HxFamilyForm from './HxFamilyForm.jsx'
 import HxGynaeForm from './HxGynaeForm.jsx'
@@ -20,32 +18,6 @@ import HxScoliosisForm from './HxScoliosisForm.jsx'
 import HxSocialForm from './HxSocialForm.jsx'
 import allForms from '../forms.json'
 import { getSavedData } from '../../services/patientData'
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-}
 
 function a11yProps(index) {
   return {
@@ -61,12 +33,11 @@ const HxWrapper = styled('div')(
 `,
 )
 
-export default function HxTabs() {
+function HxTabsForPatient({ patientId }) {
   const [value, setValue] = useState(0)
   const [isFemale, setIsFemale] = useState(false)
   const { scrollTop } = useContext(ScrollTopContext)
   const wrapperRef = useScrollToTopOnChange(value, scrollTop)
-  const { patientId } = useContext(FormContext)
 
   // Fetches regForm data to show hxGynae tab based on whether patient is female or not
   useEffect(() => {
@@ -100,45 +71,51 @@ export default function HxTabs() {
           <Tab label='Oral' {...a11yProps(3)} />
           <Tab label='Family' {...a11yProps(4)} />
           {isFemale && <Tab label='Gynae' {...a11yProps(5)} />}
-          <Tab label='PHQ' {...a11yProps(6)} />
-          <Tab label='Scoliosis' {...a11yProps(7)} />
-          <Tab label='OSA' {...a11yProps(8)} />
-          <Tab label='M4/M5 Review' {...a11yProps(9)} />
+          <Tab label='PHQ' {...a11yProps(isFemale ? 6 : 5)} />
+          <Tab label='Scoliosis' {...a11yProps(isFemale ? 7 : 6)} />
+          <Tab label='OSA' {...a11yProps(isFemale ? 8 : 7)} />
+          <Tab label='M4/M5 Review' {...a11yProps(isFemale ? 9 : 8)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <LazyTabPanel key='hcsr' value={value} index={0}>
         <HxHcsrForm changeTab={handleChange} nextTab={1} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
+      </LazyTabPanel>
+      <LazyTabPanel key='pmhx' value={value} index={1}>
         <HxNssForm changeTab={handleChange} nextTab={2} />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
+      </LazyTabPanel>
+      <LazyTabPanel key='social' value={value} index={2}>
         <HxSocialForm changeTab={handleChange} nextTab={3} />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
+      </LazyTabPanel>
+      <LazyTabPanel key='oral' value={value} index={3}>
         <HxOralForm changeTab={handleChange} nextTab={4} />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
+      </LazyTabPanel>
+      <LazyTabPanel key='family' value={value} index={4}>
         <HxFamilyForm changeTab={handleChange} nextTab={5} />
-      </TabPanel>
+      </LazyTabPanel>
       {/* Only show hxGynae form if the patient is female */}
       {isFemale && (
-        <TabPanel value={value} index={5}>
+        <LazyTabPanel key='gynae' value={value} index={5}>
           <HxGynaeForm changeTab={handleChange} nextTab={6} />
-        </TabPanel>
+        </LazyTabPanel>
       )}
-      <TabPanel value={value} index={isFemale ? 6 : 5}>
+      <LazyTabPanel key='phq' value={value} index={isFemale ? 6 : 5}>
         <HxPhqForm changeTab={handleChange} nextTab={isFemale ? 7 : 6} />
-      </TabPanel>
-      <TabPanel value={value} index={isFemale ? 7 : 6}>
+      </LazyTabPanel>
+      <LazyTabPanel key='scoliosis' value={value} index={isFemale ? 7 : 6}>
         <HxScoliosisForm changeTab={handleChange} nextTab={isFemale ? 8 : 7} />
-      </TabPanel>
-      <TabPanel value={value} index={isFemale ? 8 : 7}>
+      </LazyTabPanel>
+      <LazyTabPanel key='osa' value={value} index={isFemale ? 8 : 7}>
         <HxOsaForm changeTab={handleChange} nextTab={isFemale ? 9 : 8} />
-      </TabPanel>
-      <TabPanel value={value} index={isFemale ? 9 : 8}>
+      </LazyTabPanel>
+      <LazyTabPanel key='review' value={value} index={isFemale ? 9 : 8}>
         <HxM4M5ReviewForm />
-      </TabPanel>
+      </LazyTabPanel>
     </HxWrapper>
   )
+}
+
+export default function HxTabs() {
+  const { patientId } = useContext(FormContext)
+
+  return <HxTabsForPatient key={patientId} patientId={patientId} />
 }

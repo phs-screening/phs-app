@@ -1,38 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { styled } from '@mui/system'
-import { AppBar, Tabs, Tab, Typography, Box, Paper } from '@mui/material'
+import { AppBar, Tabs, Tab, Paper } from '@mui/material'
 
-import { ScrollTopContext } from '../../api/utils.js'
+import { FormContext, ScrollTopContext } from '../../api/utils.js'
+import LazyTabPanel from '../../components/form-components/LazyTabPanel.jsx'
 import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import WceForm from './WceForm.jsx'
 import GynaeForm from './GynaeForm.jsx'
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography component='div'>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-}
 
 function a11yProps(index) {
   return {
@@ -46,7 +20,7 @@ const WceWrapper = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }))
 
-export default function WceTabs() {
+function WceTabsForPatient() {
   const [value, setValue] = React.useState(0)
   const { scrollTop } = React.useContext(ScrollTopContext)
   const wrapperRef = useScrollToTopOnChange(value, scrollTop)
@@ -65,13 +39,19 @@ export default function WceTabs() {
         </Tabs>
       </AppBar>
       <Paper elevation={2}>
-        <TabPanel value={value} index={0}>
+        <LazyTabPanel value={value} index={0}>
           <WceForm changeTab={handleChange} nextTab={1} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
+        </LazyTabPanel>
+        <LazyTabPanel value={value} index={1}>
           <GynaeForm changeTab={handleChange} nextTab={2} />
-        </TabPanel>
+        </LazyTabPanel>
       </Paper>
     </WceWrapper>
   )
+}
+
+export default function WceTabs() {
+  const { patientId } = React.useContext(FormContext)
+
+  return <WceTabsForPatient key={patientId} />
 }

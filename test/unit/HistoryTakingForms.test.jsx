@@ -88,6 +88,35 @@ describe('history-taking forms', () => {
     expect(tabLabels.indexOf('OSA')).toBeLessThan(tabLabels.indexOf('M4/M5 Review'))
   })
 
+  it('lazily adds the female Gynae tab with matching accessible panel indices', async () => {
+    const user = userEvent.setup()
+    window.scrollTo = vi.fn()
+    getSavedData.mockImplementation((_patientId, requestedForm) =>
+      Promise.resolve(requestedForm === 'registrationForm' ? { registrationQ5: 'Female' } : {}),
+    )
+
+    render(
+      <ThemeProvider theme={customTheme}>
+        <FormContext.Provider value={{ patientId: 7 }}>
+          <ScrollTopContext.Provider value={{ scrollTop: vi.fn() }}>
+            <HxTabs />
+          </ScrollTopContext.Provider>
+        </FormContext.Provider>
+      </ThemeProvider>,
+    )
+
+    const gynaeTab = await screen.findByRole('tab', { name: 'Gynae' })
+    const phqTab = screen.getByRole('tab', { name: 'PHQ' })
+
+    expect(gynaeTab).toHaveAttribute('aria-controls', 'simple-tabpanel-5')
+    expect(phqTab).toHaveAttribute('id', 'simple-tab-6')
+    expect(screen.queryByText('GYNECOLOGY')).not.toBeInTheDocument()
+
+    await user.click(gynaeTab)
+
+    expect(await screen.findByText('GYNECOLOGY')).toBeInTheDocument()
+  })
+
   it('shows and requires all four OSA questions', async () => {
     const user = userEvent.setup()
     renderHistoryForm(
@@ -103,17 +132,13 @@ describe('history-taking forms', () => {
       ),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(
-        'OSA2 - Do you often feel tired, fatigued, or sleepy during the daytime?',
-      ),
+      screen.getByText('OSA2 - Do you often feel tired, fatigued, or sleepy during the daytime?'),
     ).toBeInTheDocument()
     expect(
       screen.getByText('OSA3 - Has anyone observed you stop breathing during sleep?'),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(
-        'OSA4 - Do you have (or are you being treated for) high blood pressure?',
-      ),
+      screen.getByText('OSA4 - Do you have (or are you being treated for) high blood pressure?'),
     ).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Submit' }))
