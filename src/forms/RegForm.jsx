@@ -49,7 +49,6 @@ const initialValues = {
   registrationQ16: '',
   registrationQ14: '',
   registrationQ17: false,
-  registrationQ18: '',
   registrationQ19: '',
   registrationQ20: '',
 }
@@ -92,6 +91,7 @@ const RegForm = () => {
           ...initialValues,
           ...(res || preRegistration?.registrationData || {}),
         }
+        delete formData.registrationQ18
 
         // Calculate age if birthday exists in saved data, otherwise use today
         if (formData.registrationQ3) {
@@ -224,10 +224,6 @@ const RegForm = () => {
       { label: 'Tamil', value: 'Tamil' },
     ],
     registrationQ16: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
-    registrationQ18: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
     ],
@@ -450,17 +446,6 @@ const RegForm = () => {
               label=''
               component={CustomRadioGroup}
               options={formOptions.registrationQ14}
-            />
-
-            <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-              {registrationQuestionText.registrationQ18}
-            </Typography>
-            <FastField
-              name='registrationQ18'
-              label=''
-              component={CustomRadioGroup}
-              options={formOptions.registrationQ18}
-              row
             />
 
             <Typography variant='h4' fontWeight='bold'>

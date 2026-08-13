@@ -24,8 +24,6 @@ const initialValues = {
   PMHX1: '',
   PMHX5: [],
   PMHX6: '',
-  PMHX7: '',
-  PMHXShortAns7: '',
   PMHX8: '',
   PMHXShortAns8: '',
   PMHX9: '',
@@ -46,7 +44,6 @@ const createValidationSchema = (isPneumococcalEligible, isShinglesEligible) =>
   Yup.object({
     PMHX1: Yup.string().required('Required'),
     PMHX6: Yup.string().oneOf(yesNoAnswers).required('Required'),
-    PMHX7: Yup.string().required('Required'),
     PMHXVAX1: Yup.string().oneOf(vaccinationAnswers).required('Required'),
     PMHXVAX2: Yup.string().when('PMHXVAX1', {
       is: requiresVaccinationInterestQuestion,
@@ -91,10 +88,6 @@ const formOptions = {
       value: 'Others',
     },
   ],
-  PMHX7: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
   PMHX8: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
@@ -123,7 +116,10 @@ export default function HxNssForm({ changeTab, nextTab }) {
         getSavedData(patientId, formName),
         getSavedData(patientId, allForms.registrationForm),
       ])
-      setSavedData({ ...initialValues, ...res })
+      const formData = { ...initialValues, ...res }
+      delete formData.PMHX7
+      delete formData.PMHXShortAns7
+      setSavedData(formData)
       setRegForm(regData || {})
       setRegistrationLoaded(true)
     }
@@ -315,40 +311,6 @@ export default function HxNssForm({ changeTab, nextTab }) {
               </PopupText>
             </>
           )}
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxNssFormQuestionText.PMHX7}
-          </Typography>
-          <Typography variant='subtitle1' fontWeight='bold'>
-            For participant with DM, refer to Doctor&apos;s Station if:
-          </Typography>
-          <ul>
-            <li>Symptomatic, and non-compliant</li>
-            <li>Asymptomatic, and non-compliant</li>
-          </ul>
-          <Typography>
-            Also refer to Doctor&apos;s Station if participant has not been diagnosed with DM, but
-            has signs of DM (polyuria, polydipsia, periphery neuropathy, blurring of vision etc.)
-          </Typography>
-
-          <FastField
-            name='PMHX7'
-            label='PMHX7'
-            component={CustomRadioGroup}
-            options={formOptions.PMHX7}
-            row
-          />
-
-          <PopupText qnNo='PMHX7' triggerValue='Yes'>
-            <FastField
-              name='PMHXShortAns7'
-              component={CustomTextField}
-              label={hxNssFormQuestionText.PMHXShortAns7}
-              fullWidth
-              multiline
-              sx={{ mb: 3 }}
-            />
-          </PopupText>
 
           {/* For participants who are 60 and above, show PMHX8 and PMHX9 */}
           {regForm.registrationQ4 >= 60 && (

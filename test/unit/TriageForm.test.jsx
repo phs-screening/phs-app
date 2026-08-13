@@ -48,4 +48,30 @@ describe('TriageForm', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Please inform a Comm member immediately.')
   })
+
+  it('flags temperature at 38 or above without flagging an empty value', async () => {
+    renderTriageForm()
+
+    const temperature = await screen.findByLabelText('Triage Q14')
+    expect(screen.queryByText('Patient temperature needs closer scrutiny.')).not.toBeInTheDocument()
+
+    fireEvent.change(temperature, { target: { value: '37.9' } })
+    expect(screen.queryByText('Patient temperature needs closer scrutiny.')).not.toBeInTheDocument()
+
+    fireEvent.change(temperature, { target: { value: '38' } })
+    expect(screen.getByText('Patient temperature needs closer scrutiny.')).toBeInTheDocument()
+  })
+
+  it('flags SpO2 at 94 or below without flagging an empty value', async () => {
+    renderTriageForm()
+
+    const spo2 = await screen.findByLabelText('Triage Q16')
+    expect(screen.queryByText('Patient SpO2 needs closer scrutiny.')).not.toBeInTheDocument()
+
+    fireEvent.change(spo2, { target: { value: '95' } })
+    expect(screen.queryByText('Patient SpO2 needs closer scrutiny.')).not.toBeInTheDocument()
+
+    fireEvent.change(spo2, { target: { value: '94' } })
+    expect(screen.getByText('Patient SpO2 needs closer scrutiny.')).toBeInTheDocument()
+  })
 })

@@ -10,9 +10,6 @@ export const hxNssFormQuestionText = {
   PMHXVAX4: 'Would you be interested in receiving the vaccine?',
   PMHXVAX5: 'Have you received the shingles vaccine?',
   PMHXVAX6: 'Would you be interested in receiving the vaccine?',
-  PMHX7:
-    'Please tick to highlight if you feel Past Medical History requires closer scrutiny by doctors later. Explain reasons for recommendation.',
-  PMHXShortAns7: "PMHXShortAns7 (Explain reasons for recommendation to Doctor's Station)",
   PMHX8: (
     <>
       <span style={{ color: '#d32f2f' }}>For geriatric participants,</span> has the senior seen an

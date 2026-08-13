@@ -109,6 +109,12 @@ function IsHighBP({ systolic, diastolic }) {
   )
 }
 
+function meetsNumericThreshold(value, predicate) {
+  if (value === '' || value == null) return false
+  const numericValue = Number(value)
+  return Number.isFinite(numericValue) && predicate(numericValue)
+}
+
 function calculateAverage(reading1, reading2, reading3) {
   const num1 = parseFloat(reading1) || 0
   const num2 = parseFloat(reading2) || 0
@@ -437,10 +443,20 @@ const TriageForm = () => {
                   min={0}
                   step={0.1}
                 />
+                {meetsNumericThreshold(values.triageQ14, (temperature) => temperature >= 38) && (
+                  <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Patient temperature needs closer scrutiny.
+                  </Alert>
+                )}
 
                 <h2>6) Oxygen Saturation</h2>
                 <h3>{triageFormQuestionText.triageQ16}</h3>
                 <Field name='triageQ16' component={CustomNumberField} label='Triage Q16' min={0} />
+                {meetsNumericThreshold(values.triageQ16, (spo2) => spo2 <= 94) && (
+                  <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Patient SpO2 needs closer scrutiny.
+                  </Alert>
+                )}
               </div>
 
               {/* Display form errors */}
