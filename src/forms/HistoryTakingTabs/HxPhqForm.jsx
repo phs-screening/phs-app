@@ -5,12 +5,16 @@ import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import PopupText from 'src/utils/popupText.jsx'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from 'src/components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import '../fieldPadding.css'
+import { hxPhqFormQuestionText } from '../questions/HxPhqFormQuestions'
 
 const formName = 'geriPhqForm'
 
@@ -57,6 +61,8 @@ const initialValues = {
   PHQ8: '',
   PHQ9: '',
   PHQextra9: '',
+  GAD1: '',
+  GAD2: '',
   PHQ10: 0,
   PHQ11: '',
   PHQShortAns11: '',
@@ -128,6 +134,8 @@ const validationSchema = Yup.object({
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
+  GAD1: Yup.string().required('Required'),
+  GAD2: Yup.string().required('Required'),
   PHQ11: Yup.string().required('Required'),
 })
 
@@ -222,20 +230,19 @@ export default function HxPhqForm({ changeTab, nextTab }) {
               **When asking these questions, please let patient know that it can be sensitive**
             </Typography>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Over the last 2 weeks, how often have you been bothered by any of the following
-              problems?
+              {hxPhqFormQuestionText.PHQ1}
             </Typography>
 
             <FastField
               name='PHQ1'
-              label='PHQ1. Little interest or pleasure in doing things'
+              label={hxPhqFormQuestionText.PHQ1Label}
               component={CustomRadioGroup}
               options={formOptions.DAYRANGE}
               row
             />
             <FastField
               name='PHQ2'
-              label='PHQ2. Feeling down, depressed or hopeless'
+              label={hxPhqFormQuestionText.PHQ2}
               component={CustomRadioGroup}
               options={formOptions.DAYRANGE}
               row
@@ -246,7 +253,7 @@ export default function HxPhqForm({ changeTab, nextTab }) {
               <>
                 <FastField
                   name='PHQ3'
-                  label='PHQ3. Trouble falling asleep or staying asleep, or sleeping too much'
+                  label={hxPhqFormQuestionText.PHQ3}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
@@ -254,42 +261,42 @@ export default function HxPhqForm({ changeTab, nextTab }) {
 
                 <FastField
                   name='PHQ4'
-                  label='PHQ4. Feeling tired or having little energy'
+                  label={hxPhqFormQuestionText.PHQ4}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
                 />
                 <FastField
                   name='PHQ5'
-                  label='PHQ5. Poor appetite or overeating'
+                  label={hxPhqFormQuestionText.PHQ5}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
                 />
                 <FastField
                   name='PHQ6'
-                  label='PHQ6. Feeling bad about yourself, or that you are a failure or have let yourself or your family down'
+                  label={hxPhqFormQuestionText.PHQ6}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
                 />
                 <FastField
                   name='PHQ7'
-                  label='PHQ7. Trouble concentrating on things, such as reading the newspaper or watching television'
+                  label={hxPhqFormQuestionText.PHQ7}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
                 />
                 <FastField
                   name='PHQ8'
-                  label='PHQ8. Moving or speaking so slowly that other people have noticed? Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual'
+                  label={hxPhqFormQuestionText.PHQ8}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
                 />
                 <FastField
                   name='PHQ9'
-                  label='PHQ9. Thoughts that you would be better off dead or hurting yourself in some way'
+                  label={hxPhqFormQuestionText.PHQ9}
                   component={CustomRadioGroup}
                   options={formOptions.DAYRANGE}
                   row
@@ -305,7 +312,7 @@ export default function HxPhqForm({ changeTab, nextTab }) {
                 >
                   <FastField
                     name='PHQextra9'
-                    label='*Do you want to take your life now?*'
+                    label={hxPhqFormQuestionText.PHQextra9}
                     component={CustomRadioGroup}
                     options={formOptions.PHQextra9}
                     row
@@ -324,16 +331,34 @@ export default function HxPhqForm({ changeTab, nextTab }) {
 
             <GetScore />
 
+            <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2 }}>
+              {hxPhqFormQuestionText.GAD1}
+            </Typography>
+            <FastField
+              name='GAD1'
+              label={hxPhqFormQuestionText.GAD1Label}
+              component={CustomRadioGroup}
+              options={formOptions.DAYRANGE}
+              row
+            />
+            <FastField
+              name='GAD2'
+              label={hxPhqFormQuestionText.GAD2}
+              component={CustomRadioGroup}
+              options={formOptions.DAYRANGE}
+              row
+            />
+
             <FastField
               name='PHQ11'
-              label='Do you feel like the patient will benefit from counselling?'
+              label={hxPhqFormQuestionText.PHQ11}
               component={CustomRadioGroup}
               options={formOptions.PHQ11}
               row
             />
 
             <PopupText qnNo='PHQ11' triggerValue='Yes'>
-              <Typography variant='subtitle2'>Please specify.</Typography>
+              <Typography variant='subtitle2'>{hxPhqFormQuestionText.PHQShortAns11}</Typography>
               <FastField
                 name='PHQShortAns11'
                 label='PHQShortAns11'

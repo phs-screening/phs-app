@@ -4,7 +4,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -13,33 +16,15 @@ import allForms from './forms.json'
 import PopupText from 'src/utils/popupText'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import CustomTextField from '../components/form-components/CustomTextField'
-import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../components/form-components/ErrorNotification'
+import { audiometryFormQuestionText } from './questions/AudiometryFormQuestions'
 
 const YesNo = [
   { value: 'Yes', label: 'Yes' },
   { value: 'No', label: 'No' },
 ]
 
-const PassRefer = [
-  { value: 'Pass', label: 'Pass' },
-  { value: 'Refer', label: 'Refer' },
-]
-
-const FreqAudible = [
-  { value: '500Hz', label: '500Hz' },
-  { value: '1000Hz', label: '1000Hz' },
-  { value: '2000Hz', label: '2000Hz' },
-  { value: '4000Hz', label: '4000Hz' },
-]
-
 const formOptions = {
-  AudiometryQ1: YesNo,
-  AudiometryQ2: PassRefer,
-  AudiometryQ3: PassRefer,
-  AudiometryQ4: PassRefer,
-  AudiometryQ5: FreqAudible,
-  AudiometryQ6: FreqAudible,
   AudiometryQ9: YesNo,
   AudiometryQ11: YesNo,
   AudiometryQ13: [
@@ -57,14 +42,12 @@ const formOptions = {
 }
 
 const validationSchema = Yup.object().shape({
-  AudiometryQ1: Yup.string().required(),
-  AudiometryQ2: Yup.string().required(),
-  AudiometryQ3: Yup.string().required(),
-  AudiometryQ4: Yup.string().required(),
-  AudiometryQ5: Yup.array().required().of(Yup.string()),
-  AudiometryQ6: Yup.array().required().of(Yup.string()),
   AudiometryQ9: Yup.string().required(),
-  AudiometryQ10: Yup.string(),
+  AudiometryQ10: Yup.string().when('AudiometryQ9', {
+    is: 'Yes',
+    then: (schema) => schema.required('Please specify'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   AudiometryQ11: Yup.string().required(),
   AudiometryQ12: Yup.string().required(),
   AudiometryQ13: Yup.string().required(),
@@ -81,8 +64,6 @@ const AudiometryForm = () => {
   const [pmhx, setPMHX] = useState({})
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, setLoadingSidePanel] = useState(true)
-  // const [dataLoaded, setDataLoaded] = useState(false)
-  const [setDataLoaded] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,19 +81,12 @@ const AudiometryForm = () => {
       setHcsr(hcsrResult || {})
       setPMHX(pmhxResult || {})
 
-      setDataLoaded(true)
       setLoadingSidePanel(false)
     }
     fetchData()
   }, [patientId])
 
   const initialValues = {
-    AudiometryQ1: saveData.AudiometryQ1 || '',
-    AudiometryQ2: saveData.AudiometryQ2 || '',
-    AudiometryQ3: saveData.AudiometryQ3 || '',
-    AudiometryQ4: saveData.AudiometryQ4 || '',
-    AudiometryQ5: saveData.AudiometryQ5 || [],
-    AudiometryQ6: saveData.AudiometryQ6 || [],
     AudiometryQ9: saveData.AudiometryQ9 || '',
     AudiometryQ10: saveData.AudiometryQ10 || '',
     AudiometryQ11: saveData.AudiometryQ11 || '',
@@ -127,7 +101,11 @@ const AudiometryForm = () => {
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
-        const response = await submitForm(values, patientId, formName)
+        const submissionValues = {
+          ...values,
+          AudiometryQ10: values.AudiometryQ9 === 'Yes' ? values.AudiometryQ10 : '',
+        }
+        const response = await submitForm(submissionValues, patientId, formName)
         setTimeout(async () => {
           setLoading(false)
           setSubmitting(false)
@@ -148,70 +126,11 @@ const AudiometryForm = () => {
                 <Form className='fieldPadding'>
                   <div className='form--div'>
                     <h1>AUDIOMETRY</h1>
-                    <h3>Did participant visit Audiometry Booth by NUS audiology team?</h3>
-                    <FastField
-                      name='AudiometryQ1'
-                      label='AudiometryQ1'
-                      component={CustomRadioGroup}
-                      options={formOptions.AudiometryQ1}
-                      row
-                    />
-                    <h2>External Ear Examination</h2>
-                    <h3>Visual Ear Examination (Left Ear):</h3>
-                    <FastField
-                      name='AudiometryQ2'
-                      label='AudiometryQ2'
-                      component={CustomRadioGroup}
-                      options={formOptions.AudiometryQ2}
-                      row
-                    />
-
-                    <h3>Visual Ear Examination (Right Ear)</h3>
-                    <FastField
-                      name='AudiometryQ3'
-                      label='AudiometryQ3'
-                      component={CustomRadioGroup}
-                      options={formOptions.AudiometryQ3}
-                      row
-                    />
-
-                    <h2>Hearing Test</h2>
-                    <h3>Practice Tone (500Hz at 60dB in &quot;better&quot; ear):</h3>
-                    <FastField
-                      name='AudiometryQ4'
-                      label='AudiometryQ4'
-                      component={CustomRadioGroup}
-                      options={formOptions.AudiometryQ4}
-                      row
-                    />
-
-                    <h3>Pure Tone Screening at 25dB for Left Ear: </h3>
-                    <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
-                    <p>Select frequencies</p>
-                    <FastField
-                      name='AudiometryQ5'
-                      label='AudiometryQ5'
-                      component={CustomCheckboxGroup}
-                      options={formOptions.AudiometryQ5}
-                    />
-
-                    <h3>Pure Tone Screening at 25dB for Right Ear:</h3>
-                    <p>(Tick checkbox for Response, DO NOT tick checkbox if NO response):</p>
-                    <p>Select frequencies</p>
-                    <FastField
-                      name='AudiometryQ6'
-                      label='AudiometryQ6'
-                      component={CustomCheckboxGroup}
-                      options={formOptions.AudiometryQ6}
-                    />
-
                     <h4>
                       When senior is found to have abnormal hearing results, please ask the
                       following questions:
                     </h4>
-                    <h3>
-                      Do you have an upcoming appointment with your ear specialist or audiologist?
-                    </h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ9}</h3>
                     <FastField
                       name='AudiometryQ9'
                       label='AudiometryQ9'
@@ -221,7 +140,7 @@ const AudiometryForm = () => {
                     />
 
                     <PopupText qnNo='AudiometryQ9' triggerValue='Yes'>
-                      <h4>If yes, please specify:</h4>
+                      <h4>{audiometryFormQuestionText.AudiometryQ10}</h4>
                       <FastField
                         name='AudiometryQ10'
                         label='AudiometryQ10'
@@ -230,7 +149,7 @@ const AudiometryForm = () => {
                       />
                     </PopupText>
 
-                    <h3>Referred to Doctor&apos;s Consult?</h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ11}</h3>
                     <FastField
                       name='AudiometryQ11'
                       label='AudiometryQ11'
@@ -239,10 +158,7 @@ const AudiometryForm = () => {
                       row
                     />
 
-                    <h3>
-                      Please document significant findings from audiometry test and recommended
-                      course of action for participant:
-                    </h3>
+                    <h3>{audiometryFormQuestionText.AudiometryQ12}</h3>
                     <FastField
                       name='AudiometryQ12'
                       label='AudiometryQ12'
@@ -254,16 +170,16 @@ const AudiometryForm = () => {
 
                     <FastField
                       name='AudiometryQ13'
-                      label='Assessment Result'
+                      label={audiometryFormQuestionText.AudiometryQ13}
                       component={CustomRadioGroup}
                       options={formOptions.AudiometryQ13}
                       row
                     />
                   </div>
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

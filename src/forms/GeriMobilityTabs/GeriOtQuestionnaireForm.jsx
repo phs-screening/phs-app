@@ -5,7 +5,10 @@ import { Paper, CircularProgress, Button, Grid } from '@mui/material'
 
 import allForms from '../forms.json'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -14,6 +17,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomNumberField from '../../components/form-components/CustomNumberField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { geriOtQuestionnaireFormQuestionText } from '../questions/GeriOtQuestionnaireFormQuestions'
 
 const formName = 'geriOtQuestionnaireForm'
 
@@ -65,7 +69,7 @@ const formOptions = {
       value: 'NA (nil shower at home, uses bathtub)',
     },
   ],
-  geriOtQuestionnaireQ14: YesNo,
+  geriOtQuestionnaireQ14: [...YesNo, { label: 'NA', value: 'NA' }],
   geriOtQuestionnaireQ15: YesNo,
   geriOtQuestionnaireQ16: YesNo,
   geriOtQuestionnaireQ18: YesNo,
@@ -269,7 +273,7 @@ const GeriOtQuestionnaireForm = (props) => {
         const hxSocialData = await getSavedData(patientId, allForms.hxSocialForm)
 
         const results = await Promise.all([savedData, regData, triageData, hxSocialData])
-        
+
         setInitialValues({ ...generateInitialValues(), ...results[0] })
         setReg(results[1] || {})
         setTriage(results[2] || {})
@@ -364,7 +368,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       be a concern.
                     </p>
                     <h2>HOME ENVIRONMENT (LIVING ROOM / HOME ENTRANCE)</h2>
-                    <h3>1. Are your walkways free of cords and other clutter?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ1}</h3>
                     <p>
                       <b>Definition:</b> No cords / clutter that obstruct door opening / closing or
                       in the walkway. No items behind / in front of doors that prevent them from
@@ -377,7 +381,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ1}
                       row
                     />
-                    <h3>2. Are your floor coverings in good condition?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ2}</h3>
                     <p>
                       <b>Definition:</b> Carpets / mats are flat on the ground. No cracked / missing
                       tiles including stair coverings
@@ -391,7 +395,7 @@ const GeriOtQuestionnaireForm = (props) => {
                     />
                     {values.geriOtQuestionnaireQ2 === 'No' && (
                       <>
-                        <h4>Please specify:</h4>
+                        <h4>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ33}</h4>
                         <FastField
                           name='geriOtQuestionnaireQ33'
                           label='geriOtQuestionnaireQ33'
@@ -402,10 +406,10 @@ const GeriOtQuestionnaireForm = (props) => {
                         />
                       </>
                     )}
-                    <h3>3. Are your floor surfaces non slip?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ3}</h3>
                     <p>
-                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score &quot;YES&quot; if
-                      kitchen, toilet are non-slip
+                      <b>Definition:</b> Score &quot;NO&quot; if kitchen, toilet are non-slip, Score
+                      &quot;YES&quot; if kitchen, toilet are non-slip
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ3'
@@ -414,7 +418,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ3}
                       row
                     />
-                    <h3>4. Are your loose mats securely fixed to the floor?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ4}</h3>
                     <p>
                       <b>Definition:</b> If backings of mats are safely taped/nailed to the ground
                     </p>
@@ -425,7 +429,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ4}
                       row
                     />
-                    <h3>5. Can you get in and out of bed easily and safely?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ5}</h3>
                     <p>
                       <b>Definition:</b> Bed is of adequate height and firmness, without the need to
                       pull self up with the aid of bedside furniture.
@@ -437,7 +441,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ5}
                       row
                     />
-                    <h3>6. Can you get up from your chair/sofa easily?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ6}</h3>
                     <p>
                       <b>Definition:</b> Chair / sofa is of adequate height, arm rests are
                       accessible to push from, and seat cushion not too soft or deep
@@ -449,7 +453,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ6}
                       row
                     />
-                    <h3>7. Are the lights at home bright enough for you to see clearly?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ7}</h3>
                     <p>
                       <b>Definition:</b> No shadows thrown across the room. No excessive glare
                     </p>
@@ -460,7 +464,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ7}
                       row
                     />
-                    <h3>8. Can you switch a light on easily from your bed?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ8}</h3>
                     <p>
                       <b>Definition: </b> Client does not need to get out of bed to switch on a
                       light. Has flashlight or bedside lamp
@@ -472,10 +476,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ8}
                       row
                     />
-                    <h3>
-                      9. Are the paths, steps, entrances outside (at your corridor) well lit at
-                      night?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ9}</h3>
                     <p>
                       <b>Definition:</b> Light exists at the back and front of doors. Lift lobbies
                       and corridors have sufficient lighting to ambulate
@@ -487,7 +488,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ9}
                       row
                     />
-                    <h3>Notes (Q1 - 9, Living room/ Home entrance):</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ10}</h3>
                     <FastField
                       name='geriOtQuestionnaireQ10'
                       label='geriOtQuestionnaireQ10'
@@ -497,7 +498,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       fullWidth
                     />
                     <h2>HOME ENVIRONMENT (TOILET)</h2>
-                    <h3>10. Are you able to get on and out of the toilet easily and safely?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ11}</h3>
                     <p>
                       <b>Definition:</b> Toilet seat is of adequate height, does not need to hold
                       onto sink / towel rail / toilet paper holder to stand. Grab bars are present
@@ -510,7 +511,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ11}
                       row
                     />
-                    <h3>11. Are you able to get in and out of the bath easily and safely?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ12}</h3>
                     <p>
                       <b>Definition:</b> Client is able to step over bathtub and lower themselves
                       without grabbing onto furniture
@@ -522,10 +523,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ12}
                       row
                     />
-                    <h3>
-                      12. Are you able to walk in and out of the shower kerb / toilet kerb easily
-                      and safely?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ13}</h3>
                     <p>
                       <b>Definition:</b> Client can step over kerbs / recesses without the need to
                       hold onto anything
@@ -537,9 +535,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ13}
                       row
                     />
-                    <h3>
-                      13. Are there stable grab bars / rails for you to hold in the shower / bath?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ14}</h3>
                     <p>
                       <b>Definition:</b> Grab bars EXCLUDING towel rails, sink, toilet paper holder.
                     </p>
@@ -550,7 +546,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ14}
                       row
                     />
-                    <h3>14. Are there any non-slip mats in the shower area?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ15}</h3>
                     <p>
                       <b>Definition:</b> Well maintained slip resistant rubber mats / non slip
                       strips / non slip floor application on the floor / bathtub.
@@ -562,7 +558,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ15}
                       row
                     />
-                    <h3>15. Is the toilet close by / adjunct to the bedroom?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ16}</h3>
                     <p>
                       <b>Definition:</b> Less than 2 door distance away (including bathroom door)
                     </p>
@@ -573,7 +569,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ16}
                       row
                     />
-                    <h3>Notes (Q10 - 15, Toilet):</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ17}</h3>
                     <FastField
                       name='geriOtQuestionnaireQ17'
                       label='geriOtQuestionnaireQ17'
@@ -583,11 +579,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       fullWidth
                     />
                     <h2>HOME ENVIRONMENT (KITCHEN AND LIVING ROOM)</h2>
-                    <h3>
-                      16. Can you reach items in the kitchen that are used regularly without
-                      climbing, bending or flexing your trunk such that you will not lose your
-                      balance?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ18}</h3>
                     <p>
                       <b>Definition:</b> Cupboards are accessible at shoulder and knee height -
                       without the need to use chairs / stepladders to reach items
@@ -599,9 +591,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ18}
                       row
                     />
-                    <h3>
-                      17. Can you carry your meals from the kitchen to the dining table easily?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ19}</h3>
                     <p>
                       <b>Definition:</b> Meals can be carried safely, transported using trolley to
                       wherever the client usually consumes meals
@@ -613,10 +603,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ19}
                       row
                     />
-                    <h3>
-                      18. Does your house have any grab bars extending along the length of the steps
-                      / kerbs?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ20}</h3>
                     <p>
                       <b>Definition:</b> Grab bars must be easily gribbed, secure, robust throughout
                       the steps / kerbs
@@ -628,10 +615,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ20}
                       row
                     />
-                    <h3>
-                      19. Does your apartment entrance have grab bars that extend the entire steps /
-                      kerbs?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ21}</h3>
                     <p>
                       <b>Definition:</b> Steps = more than 2 steps consecutively with a change in
                       floor level Definition: Grab bars must be easily gripped, firmly fixed, robust
@@ -644,10 +628,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ21}
                       row
                     />
-                    <h3>
-                      20. Can you easily and safely go up and down the steps in and outside your
-                      house?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ22}</h3>
                     <p>
                       <b>Definition:</b> Steps are not too high, narrow, uneven for feet to be
                       firmly placed.
@@ -665,10 +646,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ22}
                       row
                     />
-                    <h3>
-                      21. Are the edges of the steps / stairs (inside and outside your house) easily
-                      identified?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ23}</h3>
                     <p>
                       <b>Definition:</b> No patterned floor coverings, tiles, that could obscure the
                       edge of step with sufficient lighting of the stairs / steps
@@ -680,7 +658,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ23}
                       row
                     />
-                    <h3>22. Can you use the entrance of doors safely and easily?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ24}</h3>
                     <p>
                       <b>Definition:</b> Locks and bolts can be used without the need to bend down
                       or over reach. There is a landing such that the client does not need to
@@ -693,10 +671,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ24}
                       row
                     />
-                    <h3>
-                      23. Are the paths in your house and outside your house in good condition and
-                      free of clutter?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ25}</h3>
                     <p>
                       <b>Definition:</b> No cracked / loose pathway / neighbors plants or furniture
                       on walkways
@@ -708,7 +683,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ25}
                       row
                     />
-                    <h3>24. Are you using non-slip / well fitting slippers/shoes at home?</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ26}</h3>
                     <p>
                       <b>Definition:</b> Supportive, firmly fitting shoes / slippers with low heels
                       and non-slip soles.
@@ -722,13 +697,10 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ26}
                       row
                     />
-                    <h3>
-                      25. If there are pets - can you care for them without bending down OR at risk
-                      of falling over?
-                    </h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ27}</h3>
                     <p>
-                      <b>Definition:</b> &quot;YES&quot;  when client does NOT need to bend down to feed pets,
-                      clean, refill bowls etc
+                      <b>Definition:</b> &quot;YES&quot; when client does NOT need to bend down to
+                      feed pets, clean, refill bowls etc
                     </p>
                     <FastField
                       name='geriOtQuestionnaireQ27'
@@ -737,7 +709,7 @@ const GeriOtQuestionnaireForm = (props) => {
                       options={formOptions.geriOtQuestionnaireQ27}
                       row
                     />
-                    <h3>Notes (Q16 - 25, Kitchen and Living Environment):</h3>
+                    <h3>{geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ28}</h3>
                     <FastField
                       name='geriOtQuestionnaireQ28'
                       label='geriOtQuestionnaireQ28'
@@ -749,12 +721,10 @@ const GeriOtQuestionnaireForm = (props) => {
                     <h2>SCORING</h2>
                     <GetScores />
                     <br />
-
-                    <ErrorNotification 
+                    <ErrorNotification
                       show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                      message="Please fill in all required fields correctly."
+                      message='Please fill in all required fields correctly.'
                     />
-
                     <div>
                       {loading || isSubmitting ? (
                         <CircularProgress />
@@ -814,16 +784,23 @@ const GeriOtQuestionnaireForm = (props) => {
                   )}
 
                   <h2>History</h2>
-                  <p className='underlined'>Does patient currently smoke:</p>
+                  <p className='underlined'>Has patient ever smoked:</p>
                   {social && social.SOCIAL10 ? (
                     <p className='blue'>{social.SOCIAL10}</p>
                   ) : (
                     <p className='blue'>nil</p>
                   )}
 
-                  <p className='underlined'>How many pack-years:</p>
-                  {social && social.SOCIALShortAns10 ? (
-                    <p className='blue'>{social.SOCIALShortAns10}</p>
+                  <p className='underlined'>How many years did the patient smoke:</p>
+                  {social && social.SOCIAL10Years ? (
+                    <p className='blue'>{social.SOCIAL10Years}</p>
+                  ) : (
+                    <p className='blue'>nil</p>
+                  )}
+
+                  <p className='underlined'>How many packs per day:</p>
+                  {social && social.SOCIAL10Packs ? (
+                    <p className='blue'>{social.SOCIAL10Packs}</p>
                   ) : (
                     <p className='blue'>nil</p>
                   )}

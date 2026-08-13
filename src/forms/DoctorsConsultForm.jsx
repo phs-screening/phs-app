@@ -6,7 +6,10 @@ import * as Yup from 'yup'
 import { Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material'
 
 import { submitForm } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
 import { addToDocPdfQueue } from '../services/printQueues'
@@ -17,6 +20,7 @@ import CustomTextField from 'src/components/form-components/CustomTextField'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import PopupText from '../utils/popupText'
 import CustomRadioGroup from 'src/components/form-components/CustomRadioGroup.jsx'
+import { doctorsConsultFormQuestionText } from './questions/DoctorsConsultFormQuestions'
 
 const initialValues = {
   doctorSConsultQ1: '',
@@ -97,6 +101,7 @@ const DoctorsConsultForm = () => {
 
       const loadPastForms = async () => {
         const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
+        const hcsrReviewData = getSavedData(patientId, allForms.hxHcsrReviewForm)
         const ophthalData = getSavedData(patientId, allForms.ophthalForm)
         const audioData = getSavedData(patientId, allForms.audiometryForm)
         const lungData = getSavedData(patientId, allForms.lungForm)
@@ -107,6 +112,7 @@ const DoctorsConsultForm = () => {
 
         Promise.all([
           hcsrData,
+          hcsrReviewData,
           ophthalData,
           audioData,
           lungData,
@@ -115,14 +121,14 @@ const DoctorsConsultForm = () => {
           pmhxData,
           socialData,
         ]).then((result) => {
-          setHcsr(result[0])
-          setOphthal(result[1])
-          setAudio(result[2])
-          setLung(result[3])
-          setPHQ(result[4])
-          setTriage(result[5])
-          setPMHX(result[6])
-          setSocial(result[7])
+          setHcsr({ ...(result[0] || {}), ...(result[1] || {}) })
+          setOphthal(result[2])
+          setAudio(result[3])
+          setLung(result[4])
+          setPHQ(result[5])
+          setTriage(result[6])
+          setPMHX(result[7])
+          setSocial(result[8])
           setLoadingSidePanel(false)
         })
       }
@@ -170,7 +176,7 @@ const DoctorsConsultForm = () => {
           <div className='form--div'>
             <h1>Doctor&apos;s Station</h1>
             <Typography variant='h4' fontWeight='bold'>
-              Doctor&apos;s Name
+              {doctorsConsultFormQuestionText.doctorSConsultQ1}
             </Typography>
             <FastField
               name='doctorSConsultQ1'
@@ -180,7 +186,7 @@ const DoctorsConsultForm = () => {
               multiline
             />
             <Typography variant='h4' fontWeight='bold'>
-              Clinical Findings
+              {doctorsConsultFormQuestionText.doctorSConsultQ2}
             </Typography>
             <FastField
               name='doctorSConsultQ2'
@@ -191,7 +197,7 @@ const DoctorsConsultForm = () => {
               minRows={4}
             />
             <Typography variant='h4' fontWeight='bold'>
-              Doctor&apos;s Memo
+              {doctorsConsultFormQuestionText.doctorSConsultQ3}
             </Typography>
             <FastField
               name='doctorSConsultQ3'
@@ -201,7 +207,7 @@ const DoctorsConsultForm = () => {
               multiline
               minRows={6}
             />
-            <h3>Refer to dietitian?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ4}</h3>
             <FastField
               name='doctorSConsultQ4'
               label='doctorQ4'
@@ -211,7 +217,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ4' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Dietitian referral
+                {doctorsConsultFormQuestionText.doctorSConsultQ5}
               </Typography>
               <FastField
                 name='doctorSConsultQ5'
@@ -222,7 +228,7 @@ const DoctorsConsultForm = () => {
                 minRows={2}
               />
             </PopupText>
-            <h3>Refer to Social Support?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ6}</h3>
             <FastField
               name='doctorSConsultQ6'
               label='doctorQ6'
@@ -232,7 +238,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ6' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Social Support Rreferral
+                {doctorsConsultFormQuestionText.doctorSConsultQ7}
               </Typography>
               <FastField
                 name='doctorSConsultQ7'
@@ -243,7 +249,7 @@ const DoctorsConsultForm = () => {
                 minRows={2}
               />
             </PopupText>
-            <h3>Refer to Mental Health? (and indicated on Form A)</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ13}</h3>
             <FastField
               name='doctorSConsultQ13'
               label='doctorQ13'
@@ -251,7 +257,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultYESNO}
               row
             />
-            <h3>Refer to Dental?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ8}</h3>
             <FastField
               name='doctorSConsultQ8'
               label='doctorQ8'
@@ -261,7 +267,7 @@ const DoctorsConsultForm = () => {
             />
             <PopupText qnNo='doctorSConsultQ8' triggerValue='Yes'>
               <Typography variant='h6' component='h3' gutterBottom>
-                Reason for Dental referral
+                {doctorsConsultFormQuestionText.doctorSConsultQ9}
               </Typography>
               <FastField
                 name='doctorSConsultQ9'
@@ -273,7 +279,7 @@ const DoctorsConsultForm = () => {
               />
             </PopupText>
 
-            <h3>Does patient require urgent follow up</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ10}</h3>
             <FastField
               name='doctorSConsultQ10'
               label='doctorQ10'
@@ -281,7 +287,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultYESNO}
               row
             />
-            <h3>Completed Doctor&apos;s station. Please check that Form A is filled.</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ11}</h3>
             <FastField
               name='doctorSConsultQ11'
               label='doctorQ11'
@@ -289,7 +295,7 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultQ11}
             />
 
-            <h3>Does this patient need a memo to be printed?</h3>
+            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ12}</h3>
             <FastField
               name='doctorSConsultQ12'
               label='doctorQ12'
@@ -369,7 +375,7 @@ const DoctorsConsultForm = () => {
         ) : null}
 
         {!ophthal ? <p className='red'>nil ophthal data!</p> : <></>}
-        {ophthal.OphthalQ9 ? (
+        {ophthal.OphthalQ11 ? (
           <li>
             <p>Visual Check Results.</p>
             <ul>
@@ -390,32 +396,35 @@ const DoctorsConsultForm = () => {
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>Without Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ3}</td>
                     <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ4}</td>
+                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ5}</td>
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>With Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ5}</td>
                     <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ6}</td>
+                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ7}</td>
                   </tr>
                 </table>
               </li>
               <li>
                 <p>
-                  Type of vision error, if any: <strong>{ophthal.OphthalQ8}</strong>
+                  Type of vision error, if any: <strong>{ophthal.OphthalQ10}</strong>
                 </p>
                 <p>
                   Previous eye surgery or condition:{' '}
                   <strong>
-                    {ophthal.OphthalQ1}. {ophthal.OphthalQ2}
+                    {ophthal.OphthalQ1}. {ophthal.OphthalQ3}
                   </strong>
                 </p>
                 <p>
-                  Is currently on any eye review/ consulting any eye specialist:{' '}
-                  <strong>{ophthal.OphthalQ10}</strong>
+                  Current eye concerns: <strong>{ophthal.OphthalQ2}</strong>
                 </p>
                 <p>
-                  <strong>{ophthal.OphthalQ11}</strong>
+                  Is currently on any eye review/ consulting any eye specialist:{' '}
+                  <strong>{ophthal.OphthalQ8}</strong>
+                </p>
+                <p>
+                  <strong>{ophthal.OphthalQ9}</strong>
                 </p>
                 {hcsr ? (
                   <p>
@@ -504,11 +513,6 @@ const DoctorsConsultForm = () => {
                   Regular screening: <strong>{pmhx.PMHX6}</strong>
                 </p>
               </li>
-              <li>
-                <p>
-                  Reason for referral: <strong>{pmhx.PMHXShortAns7}</strong>
-                </p>
-              </li>
             </ul>
           </li>
         ) : (
@@ -521,9 +525,13 @@ const DoctorsConsultForm = () => {
             <ul>
               <li>
                 <p>
-                  Currently Smoking: <strong>{social.SOCIAL10}</strong>
+                  Ever smoked: <strong>{social.SOCIAL10}</strong>
                   <br></br>
-                  <strong>{social.SOCIALShortAns10} pack-years</strong>
+                  Years smoked: <strong>{social.SOCIAL10Years}</strong>
+                  <br></br>
+                  Packs per day: <strong>{social.SOCIAL10Packs}</strong>
+                  <br></br>
+                  Years since quitting: <strong>{social.SOCIAL10End}</strong>
                 </p>
                 <p>
                   Past Smoking: <strong>{social.SOCIAL11}</strong>

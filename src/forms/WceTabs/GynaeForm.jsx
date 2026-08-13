@@ -5,7 +5,10 @@ import { Paper, CircularProgress, Button, Divider, Typography, Alert } from '@mu
 import { useNavigate } from 'react-router'
 
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -16,6 +19,7 @@ import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import PopupText from 'src/utils/popupText'
+import { gynaeFormQuestionText } from '../questions/GynaeFormQuestions'
 
 // This file is for the Gynae tab in the WCE station, not to be confused with the Gynae tab in the History Taking station
 
@@ -155,15 +159,19 @@ const GynaeForm = () => {
           <form onSubmit={handleSubmit} className='form--div fieldPadding'>
             <h1>Gynecology</h1>
 
-            <Alert severity="warning" sx={{ mb: 3 }}>
-              <Typography variant='h6' component='h3' sx={{ color: 'error.main', fontWeight: 'bold' }}>
+            <Alert severity='warning' sx={{ mb: 3 }}>
+              <Typography
+                variant='h6'
+                component='h3'
+                sx={{ color: 'error.main', fontWeight: 'bold' }}
+              >
                 Only ask if participant is female
               </Typography>
             </Alert>
 
             <FastField
               name='GYNAE1'
-              label='Are you menopaused? (i.e. > 1 year from your last menstrual period)'
+              label={gynaeFormQuestionText.GYNAE1}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -172,14 +180,14 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE1' triggerValue='Yes'>
               <FastField
                 name='GYNAE2'
-                label='Do you have any postmenopausal bleeding? (bleeding after menopause)'
+                label={gynaeFormQuestionText.GYNAE2}
                 component={CustomRadioGroup}
                 options={formOptions.yesNo}
                 row
               />
               <FastField
                 name='GYNAEShortAns2'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns2}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -188,7 +196,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE3'
-              label='Do you have any abnormal per vaginal bleeding? e.g. bleeding between periods, prolonged menses, bleeding after intercourse'
+              label={gynaeFormQuestionText.GYNAE3}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -196,7 +204,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE3' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns3'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns3}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -205,7 +213,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE4'
-              label='Do you have irregular period or less than 4 menstrual cycles a year?'
+              label={gynaeFormQuestionText.GYNAE4}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -213,7 +221,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE4' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns4'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns4}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -222,7 +230,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE5'
-              label='Do you have any menstrual concerns such as extremely heavy menses/severe pain during menses?'
+              label={gynaeFormQuestionText.GYNAE5}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -230,7 +238,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE5' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns5'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns5}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -239,7 +247,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE6'
-              label='Do you feel any abnormal abdominal masses?'
+              label={gynaeFormQuestionText.GYNAE6}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -247,7 +255,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE6' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns6'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns6}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -256,7 +264,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE7'
-              label='Do you have any new onset abdominal pain/bloatedness?'
+              label={gynaeFormQuestionText.GYNAE7}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -264,7 +272,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE7' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns7'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns7}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -273,7 +281,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE8'
-              label='Do you have any fertility concerns or any difficulties conceiving after trying for more than 1 year?'
+              label={gynaeFormQuestionText.GYNAE8}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -281,14 +289,14 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE8' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns8'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns8}
                 component={CustomTextField}
                 multiline
                 rows={3}
               />
               <FastField
                 name='GYNAE9'
-                label='If so, are you keen to investigate for the cause of subfertility and to pursue fertility treatment?'
+                label={gynaeFormQuestionText.GYNAE9}
                 component={CustomRadioGroup}
                 options={formOptions.yesNo}
                 row
@@ -297,7 +305,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE10'
-              label='Do you have any urinary symptoms such as urinary leakage, recurrent urinary infection, urgency or nocturia?'
+              label={gynaeFormQuestionText.GYNAE10}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -305,7 +313,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE10' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns10'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns10}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -314,7 +322,7 @@ const GynaeForm = () => {
 
             <FastField
               name='GYNAE11'
-              label='Do you feel any lump in vagina or have any pelvic organ prolapse?'
+              label={gynaeFormQuestionText.GYNAE11}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -322,21 +330,18 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE11' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns11'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns11}
                 component={CustomTextField}
                 multiline
                 rows={3}
               />
             </PopupText>
 
-            <h3>
-              Based on Advanced Gynae Screening, please kindly refer her to the following
-              gynecological service for further evaluation:
-            </h3>
+            <h3>{gynaeFormQuestionText.GYNAE13}</h3>
 
             <FastField
               name='GYNAE13'
-              label='Referral was given'
+              label={gynaeFormQuestionText.GYNAE13Label}
               component={CustomRadioGroup}
               options={formOptions.yesNo}
               row
@@ -344,7 +349,7 @@ const GynaeForm = () => {
             <PopupText qnNo='GYNAE13' triggerValue='Yes'>
               <FastField
                 name='GYNAEShortAns13'
-                label='Please specify:'
+                label={gynaeFormQuestionText.GYNAEShortAns13}
                 component={CustomTextField}
                 multiline
                 rows={3}
@@ -353,7 +358,7 @@ const GynaeForm = () => {
 
             <ErrorNotification
               show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-              message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <div>

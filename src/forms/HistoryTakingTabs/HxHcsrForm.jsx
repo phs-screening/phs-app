@@ -3,13 +3,17 @@ import { FastField, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 import PopupText from 'src/utils/popupText'
+import { hxHcsrFormQuestionText } from '../questions/HxHcsrFormQuestions'
 
 const formName = 'hxHcsrForm'
 
@@ -19,8 +23,6 @@ const initialValues = {
   hxHcsrQ3: '',
   hxHcsrShortAnsQ3: '',
   hxHcsrQ5: '',
-  hxHcsrQ7: '',
-  hxHcsrShortAnsQ7: '',
   hxhcsrQ8: '',
 }
 
@@ -28,7 +30,6 @@ const validationSchema = Yup.object({
   hxHcsrQ1: Yup.string().required('Required'),
   hxHcsrQ2: Yup.string().required('Required'),
   hxHcsrQ3: Yup.string().required('Required'),
-  hxHcsrQ7: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -41,10 +42,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
     { label: 'Not Applicable (under 60)', value: 'Not Applicable (under 60)' },
   ],
-  hxHcsrQ7: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
 }
 
 export default function HxHcsrForm({ changeTab, nextTab }) {
@@ -55,7 +52,10 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSavedData(patientId, formName)
-      setSavedData({ ...initialValues, ...res })
+      const formData = { ...initialValues, ...res }
+      delete formData.hxHcsrQ7
+      delete formData.hxHcsrShortAnsQ7
+      setSavedData(formData)
     }
 
     fetchData()
@@ -97,7 +97,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold'>
-            Please enter History-taker&apos;s full name
+            {hxHcsrFormQuestionText.hxHcsrQ1}
           </Typography>
           <FastField
             name='hxHcsrQ1'
@@ -118,9 +118,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             brief history. (Please write NIL if otherwise).
           </Typography>
           <Typography gutterBottom variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-            &quot;Do you have any health issues that you are currently concerned about?&quot;
-            <br />
-            &quot;最近有没有哪里不舒服&quot;
+            {hxHcsrFormQuestionText.hxHcsrQ2}
           </Typography>
           <FastField
             name='hxHcsrQ2'
@@ -138,8 +136,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-            Do you have any vision problems? Please specify if yes. Exclude complaints like
-            unspecific itchy eyes etc.
+            {hxHcsrFormQuestionText.hxHcsrQ3}
           </Typography>
           <FastField
             name='hxHcsrQ3'
@@ -151,7 +148,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
 
           <PopupText qnNo='hxHcsrQ3' triggerValue='Yes'>
             <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
+              {hxHcsrFormQuestionText.hxHcsrShortAnsQ3}
             </Typography>
             <FastField
               name='hxHcsrShortAnsQ3'
@@ -164,8 +161,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </PopupText>
 
           <Typography variant='h4' fontWeight='bold'>
-            If you are 60 and above, do you currently use hearing aids/have been detected to require
-            hearing aids?
+            {hxHcsrFormQuestionText.hxHcsrQ5}
           </Typography>
           <FastField
             name='hxHcsrQ5'
@@ -174,32 +170,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             options={formOptions.hxHcsrQ5}
             row
           />
-
-          <Typography variant='h4' fontWeight='bold'>
-            Please indicate if you feel that HEALTH CONCERNS require closer scrutiny by doctors
-            later or if participant strongly insists.
-          </Typography>
-          <FastField
-            name='hxHcsrQ7'
-            label='hxHcsrQ7'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ7}
-            row
-          />
-
-          <PopupText qnNo='hxHcsrQ7' triggerValue='Yes'>
-            <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
-            </Typography>
-            <FastField
-              name='hxHcsrShortAnsQ7'
-              label='hxHcsrShortAnsQ7'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3, mt: 1 }}
-            />
-          </PopupText>
 
           <Typography variant='h4' fontWeight='bold'>
             Below is a non-exhaustive list of possible red flags:
@@ -221,11 +191,7 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
           </ul>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Based on&nbsp;
-            <span style={{ color: 'red', textDecoration: 'underline' }}>
-              participant&apos;s health concerns,
-            </span>
-            &nbsp;please rule out red flags <b>(Please write NIL if otherwise)</b>
+            {hxHcsrFormQuestionText.hxhcsrQ8}
           </Typography>
           <FastField
             name='hxhcsrQ8'

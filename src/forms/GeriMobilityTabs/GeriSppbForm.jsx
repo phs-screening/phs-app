@@ -9,10 +9,14 @@ import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
 
 import { submitForm, calculateSppbScore } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
+import { geriSppbFormQuestionText } from '../questions/GeriSppbFormQuestions'
 
 const formName = 'geriSppbForm'
 
@@ -135,14 +139,12 @@ const GeriSppbForm = (props) => {
             <Typography variant='h6' fontWeight='bold'>
               1) REPEATED CHAIR STANDS
             </Typography>
-            <Typography fontWeight='bold'>
-              Time taken in seconds (only if 5 chair stands were completed):
-            </Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ1}</Typography>
             <Field name='geriSppbQ1' label='geriSppbQ1' component={CustomNumberField} />
-            <Typography fontWeight='bold'>Number of chairs completed:</Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ13}</Typography>
             <Field name='geriSppbQ13' label='geriSppbQ13' component={CustomNumberField} />
             <Typography color='blue' fontWeight='bold'>
-              Score for REPEATED CHAIR STANDS (out of 4):
+              {geriSppbFormQuestionText.geriSppbQ2}
             </Typography>
             <Field
               name='geriSppbQ2'
@@ -157,18 +159,14 @@ const GeriSppbForm = (props) => {
             <Typography variant='h6' fontWeight='bold'>
               2) BALANCE
             </Typography>
-            <Typography fontWeight='bold'>
-              2a) Side-by-side Stand Time held for in seconds:
-            </Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ3}</Typography>
             <Field name='geriSppbQ3' label='geriSppbQ3' component={CustomNumberField} />
-            <Typography fontWeight='bold'>
-              2b) Semi-tandem Stand - Time held for in seconds:
-            </Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ4}</Typography>
             <Field name='geriSppbQ4' label='geriSppbQ4' component={CustomNumberField} />
-            <Typography fontWeight='bold'>2c) Tandem Stand - Time held for in seconds:</Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ5}</Typography>
             <Field name='geriSppbQ5' label='geriSppbQ5' component={CustomNumberField} />
             <Typography color='blue' fontWeight='bold'>
-              Score for BALANCE (out of 4):
+              {geriSppbFormQuestionText.geriSppbQ6}
             </Typography>
             <Field
               name='geriSppbQ6'
@@ -183,10 +181,10 @@ const GeriSppbForm = (props) => {
             <Typography variant='h6' fontWeight='bold'>
               3) 3m WALK
             </Typography>
-            <Typography fontWeight='bold'>Time taken in seconds:</Typography>
+            <Typography fontWeight='bold'>{geriSppbFormQuestionText.geriSppbQ7}</Typography>
             <Field name='geriSppbQ7' label='geriSppbQ7' component={CustomNumberField} />
             <Typography color='blue' fontWeight='bold'>
-              Score for 3m WALK (out of 4):
+              {geriSppbFormQuestionText.geriSppbQ8}
             </Typography>
             <Field
               name='geriSppbQ8'
@@ -204,8 +202,8 @@ const GeriSppbForm = (props) => {
 
             <br />
 
-            <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2}}>
-              Fall Risk Level:
+            <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2 }}>
+              {geriSppbFormQuestionText.geriSppbQ10}
             </Typography>
             <Field
               name='geriSppbQ10'
@@ -216,7 +214,7 @@ const GeriSppbForm = (props) => {
             />
 
             <Typography variant='h6' fontWeight='bold' color='red'>
-              Referral to Physiotherapist and Occupational Therapist Consult
+              {geriSppbFormQuestionText.geriSppbQ11}
             </Typography>
             <Field
               name='geriSppbQ11'
@@ -227,19 +225,19 @@ const GeriSppbForm = (props) => {
             />
 
             <Typography variant='h6' fontWeight='bold'>
-              Notes:
+              {geriSppbFormQuestionText.geriSppbQ12}
             </Typography>
             <Field name='geriSppbQ12' label='geriSppbQ12' component={CustomTextField} />
 
             <br />
 
-            <ErrorNotification 
+            <ErrorNotification
               show={formikProps.submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-              message="Please fill in all required fields correctly."
+              message='Please fill in all required fields correctly.'
             />
 
             <br />
-            
+
             <div>
               {loading ? (
                 <CircularProgress />

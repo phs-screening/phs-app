@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, FastField } from 'formik'
 import { validationSchema } from './registrationSchema'
+import { registrationQuestionText } from './questions/registrationQuestions'
 
 import { Alert, Divider, Paper, CircularProgress, Button, TextField, Typography, Box } from '@mui/material'
 
@@ -12,6 +13,7 @@ import {
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
+import { getPatientPreRegistrationPrefillStrict } from '../services/preRegistrations'
 import { calculateAgeFromBirthday } from '../utils/calculateAge'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import PopupText from 'src/utils/popupText'
@@ -47,7 +49,6 @@ const initialValues = {
   registrationQ16: '',
   registrationQ14: '',
   registrationQ17: false,
-  registrationQ18: '',
   registrationQ19: '',
   registrationQ20: '',
 }
@@ -63,6 +64,9 @@ const RegForm = () => {
   const [patientAge, setPatientAge] = useState(0)
   const [loadError, setLoadError] = useState('')
   const [loadAttempt, setLoadAttempt] = useState(0)
+  const [loadedFromPreRegistration, setLoadedFromPreRegistration] = useState(false)
+  const [nameMappingWarnings, setNameMappingWarnings] = useState([])
+  const [preRegistrationMappingIssues, setPreRegistrationMappingIssues] = useState([])
 
   useEffect(() => {
     let isCurrent = true
@@ -72,11 +76,22 @@ const RegForm = () => {
         isLoading(true)
         setLoadError('')
         console.log('Patient ID: ' + patientId)
-        const res =
-          patientId === -1 || patientId == null
-            ? {}
-            : await getPatientFormDataStrict(patientId, formName)
-        const formData = { ...initialValues, ...(res || {}) }
+        let res = {}
+        let preRegistration = null
+
+        if (patientId !== -1 && patientId != null) {
+          res = await getPatientFormDataStrict(patientId, formName)
+          if (!res) {
+            preRegistration =
+              await getPatientPreRegistrationPrefillStrict(patientId)
+          }
+        }
+
+        const formData = {
+          ...initialValues,
+          ...(res || preRegistration?.registrationData || {}),
+        }
+        delete formData.registrationQ18
 
         // Calculate age if birthday exists in saved data, otherwise use today
         if (formData.registrationQ3) {
@@ -104,6 +119,13 @@ const RegForm = () => {
 
         if (isCurrent) {
           setSavedData(formData)
+          setLoadedFromPreRegistration(Boolean(!res && preRegistration))
+          setNameMappingWarnings(
+            !res ? preRegistration?.nameMappingWarnings || [] : [],
+          )
+          setPreRegistrationMappingIssues(
+            !res ? preRegistration?.mappingIssues || [] : [],
+          )
         }
       } catch (error) {
         console.error('Failed to load registration form:', error)
@@ -205,10 +227,6 @@ const RegForm = () => {
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
     ],
-    registrationQ18: [
-      { label: 'Yes', value: 'Yes' },
-      { label: 'No', value: 'No' },
-    ],
     registrationQ19: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
@@ -232,9 +250,22 @@ const RegForm = () => {
             <Typography variant='h2' fontWeight='bold' sx={{ mb: 2 }}>
               Registration
             </Typography>
+            {loadedFromPreRegistration && (
+              <>
+                <Alert severity='info' sx={{ mb: 2 }}>
+                  Loaded from pre-registration. Please verify the patient&apos;s name and all
+                  prefilled answers.
+                </Alert>
+                {preRegistrationMappingIssues.length > 0 && (
+                  <Alert severity='warning' sx={{ mb: 2 }}>
+                    Some answers could not be prefilled. Complete all blank required fields.
+                  </Alert>
+                )}
+              </>
+            )}
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Salutation 称谓
+              {registrationQuestionText.registrationQ1}
             </Typography>
             <FastField
               name='registrationQ1'
@@ -244,15 +275,20 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Initials (e.g Chen Ren Ying - Chen R Y, Christie Tan En Ning - Christie T E N)
+              {registrationQuestionText.registrationQ2}
             </Typography>
             <Typography>
               For Indian/Malay/patients with no Chinese name, ask for their preferred name.
             </Typography>
+            {nameMappingWarnings.map((warning) => (
+              <Alert key={warning} severity='warning' sx={{ mt: 1, mb: 1 }}>
+                {warning}
+              </Alert>
+            ))}
             <FastField name='registrationQ2' label='' component={CustomTextField} multiline />
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Birthday
+              {registrationQuestionText.registrationQ3}
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
@@ -300,7 +336,7 @@ const RegForm = () => {
             </LocalizationProvider>
 
             <Typography variant='h4' fontWeight='bold' gutterBottom>
-              Age
+              {registrationQuestionText.registrationQ4}
             </Typography>
             <Typography sx={{ color: 'blue', mb: 2 }}>{patientAge}</Typography>
             {patientAge > 0 && patientAge < 40 && (
@@ -310,7 +346,7 @@ const RegForm = () => {
             )}
 
             <Typography variant='h4' fontWeight='bold'>
-              Gender
+              {registrationQuestionText.registrationQ5}
             </Typography>
             <FastField
               name='registrationQ5'
@@ -321,7 +357,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Race 种族
+              {registrationQuestionText.registrationQ6}
             </Typography>
             <FastField
               name='registrationQ6'
@@ -333,16 +369,16 @@ const RegForm = () => {
             <PopupText qnNo='registrationQ6' triggerValue='Others 其他'>
               <Field
                 name='registrationShortAnsQ6'
-                label='registrationShortAnsQ6'
+                label={registrationQuestionText.registrationShortAnsQ6}
                 component={CustomTextField}
                 multiline
                 rows={2}
-                placeholder='Please specify'
+                placeholder={registrationQuestionText.registrationShortAnsQ6}
               />
             </PopupText>
 
             <Typography variant='h4' fontWeight='bold'>
-              Nationality 国籍
+              {registrationQuestionText.registrationQ7}
             </Typography>
             <Typography sx={{ color: 'red' }}>
               Please Note: Non Singapore Citizens/ Non-PRs are unfortunately not eligible for this
@@ -356,7 +392,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Are you currently part of HealthierSG?
+              {registrationQuestionText.registrationQ11}
             </Typography>
             <Typography>
               If unsure, access HealthHub through app or Singpass. You are considered to have
@@ -372,7 +408,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              CHAS Status 社保援助计划
+              {registrationQuestionText.registrationQ12}
             </Typography>
             <FastField
               name='registrationQ12'
@@ -382,7 +418,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Pioneer Generation Status 建国一代配套
+              {registrationQuestionText.registrationQ13}
             </Typography>
             <FastField
               name='registrationQ13'
@@ -392,7 +428,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Do you have public assistance card?
+              {registrationQuestionText.registrationQ16}
             </Typography>
             <FastField
               name='registrationQ16'
@@ -403,7 +439,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Preferred Language for Health Report
+              {registrationQuestionText.registrationQ14}
             </Typography>
             <FastField
               name='registrationQ14'
@@ -412,19 +448,8 @@ const RegForm = () => {
               options={formOptions.registrationQ14}
             />
 
-            <Typography variant='h4' fontWeight='bold' sx={{ mt: 4 }}>
-              Has patient attended any health screenings before? (e.g. Annual Health Screening etc.)
-            </Typography>
-            <FastField
-              name='registrationQ18'
-              label=''
-              component={CustomRadioGroup}
-              options={formOptions.registrationQ18}
-              row
-            />
-
             <Typography variant='h4' fontWeight='bold'>
-              Has patient pre-registered for the Mammobus station?
+              {registrationQuestionText.registrationQ19}
             </Typography>
             <FastField
               name='registrationQ19'
@@ -435,7 +460,7 @@ const RegForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              Has Form C been signed?
+              {registrationQuestionText.registrationQ20}
             </Typography>
             <FastField
               name='registrationQ20'
@@ -468,7 +493,7 @@ const RegForm = () => {
           <Field
             name='registrationQ17'
             component={CustomCheckbox}
-            label='I agree and consent to the above.'
+            label={registrationQuestionText.registrationQ17}
           />
 
           <Box mt={2} mb={2}>

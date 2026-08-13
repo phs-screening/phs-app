@@ -71,15 +71,11 @@ export const validationSchema = Yup.object({
     .oneOf([true], 'You must agree to the PDPA terms')
     .required('PDPA agreement is required'),
 
-  registrationQ18: Yup.string()
-    .oneOf(['Yes', 'No'], 'Please indicate if you have attended any health screenings before')
-    .required('Health screening history is required'),
-
   registrationQ19: Yup.string()
     .oneOf(['Yes', 'No'], 'Please indicate if you have pre-registered for the Mammobus station')
     .required('Indication of mammobus pre-registration status is required'),
 
   registrationQ20: Yup.string()
-    .oneOf(['Yes', 'No'], 'Invalid LTFU consent')
-    .required('LTFU consent is required'),
+    .oneOf(['Yes', 'No'], 'Please indicate whether Form C has been signed')
+    .required('Form C signing status is required'),
 })

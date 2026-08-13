@@ -5,7 +5,10 @@ import * as Yup from 'yup'
 import { Divider, Paper, CircularProgress, Button, Typography } from '@mui/material'
 
 import { submitForm, calculateSppbScore } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import '../fieldPadding.css'
@@ -17,6 +20,7 @@ import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
 import CustomTextField from '../../components/form-components/CustomTextField'
 import CustomCheckboxGroup from '../../components/form-components/CustomCheckboxGroup'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
+import { geriPtConsultFormQuestionText } from '../questions/GeriPtConsultFormQuestions'
 
 const formName = 'geriPtConsultForm'
 
@@ -184,14 +188,14 @@ const GeriPtConsultForm = (props) => {
                 <form onSubmit={handleSubmit} className='fieldPadding'>
                   <div className='form--div'>
                     <h1>PT Consult</h1>
-                    <h3>Memo (for participant):</h3>
+                    <h3>{geriPtConsultFormQuestionText.geriPtConsultQ1}</h3>
                     <FastField
                       name='geriPtConsultQ1'
                       label='geriPtConsultQ1'
                       component={CustomTextField}
                     />
 
-                    <h3>To be referred for doctor&apos;s consult (PT)?</h3>
+                    <h3>{geriPtConsultFormQuestionText.geriPtConsultQ2}</h3>
                     <FastField
                       name='geriPtConsultQ2'
                       label='geriPtConsultQ2'
@@ -200,7 +204,7 @@ const GeriPtConsultForm = (props) => {
                       row
                     />
 
-                    <h4>Reasons for referral to Doctor&apos;s consult (PT):</h4>
+                    <h4>{geriPtConsultFormQuestionText.geriPtConsultQ3}</h4>
                     <FastField
                       name='geriPtConsultQ3'
                       label='geriPtConsultQ3'
@@ -208,14 +212,14 @@ const GeriPtConsultForm = (props) => {
                       options={formOptions.geriPtConsultQ3}
                     />
 
-                    <h4>Please specify (if others):</h4>
+                    <h4>{geriPtConsultFormQuestionText.geriPtConsultQ8}</h4>
                     <FastField
                       name='geriPtConsultQ8'
-                      label='Please specify (if others)'
+                      label={geriPtConsultFormQuestionText.geriPtConsultQ8}
                       component={CustomTextField}
                     />
 
-                    <h3>To be referred for social support (PT):</h3>
+                    <h3>{geriPtConsultFormQuestionText.geriPtConsultQ4}</h3>
                     <FastField
                       name='geriPtConsultQ4'
                       label='geriPtConsultQ4'
@@ -224,7 +228,7 @@ const GeriPtConsultForm = (props) => {
                       row
                     />
 
-                    <h4>Please specify:</h4>
+                    <h4>{geriPtConsultFormQuestionText.geriPtConsultQ5}</h4>
                     <FastField
                       name='geriPtConsultQ5'
                       label='geriPtConsultQ5'
@@ -234,9 +238,9 @@ const GeriPtConsultForm = (props) => {
 
                   <br />
 
-                  <ErrorNotification 
+                  <ErrorNotification
                     show={submitCount > 0 && Object.keys(errors || {}).length > 0}
-                    message="Please fill in all required fields correctly."
+                    message='Please fill in all required fields correctly.'
                   />
 
                   <div>

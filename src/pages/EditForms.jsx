@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography, TextField, Button, InputAdornment, SvgIcon, CircularProgress } from '@mui/material'
 import { isAdmin } from '../services/authSession'
-import { getPreRegDataByIdStrict } from '../services/patientData'
+import { getPatientStationSummary } from '../api/stationsApi'
 import { toLoadErrorMessage } from '../utils/retryRequest'
 import { useNavigate } from 'react-router-dom'
 import { Search as SearchIcon } from 'react-feather'
 import { FormContext } from '../api/utils'
-import { updateAllStationCounts } from '../services/stationCounts'
 
 const ManageVolunteers = () => {
   const navigate = useNavigate()
@@ -43,11 +42,12 @@ const ManageVolunteers = () => {
     // if response is successful, update state for curr id and redirect to dashboard timeline for specific id
     try {
       setLoading(true)
-      const data = await getPreRegDataByIdStrict(value, 'patients')
+      const response = await getPatientStationSummary(value)
+      const stationSummary = response.data || {}
+      const data = stationSummary.patient
       if (data && 'initials' in data) {
         updatePatientInfo(data)
-        await updateAllStationCounts(data.queueNo ?? data.patientId)
-        navigate('/app/dashboard', { replace: true })
+        navigate('/app/dashboard', { replace: true, state: { stationSummary } })
       } else {
         // if response is unsuccessful/id does not exist, show error style/popup.
         alert('Unsuccessful. There is no patient with this queue number.')

@@ -18,11 +18,13 @@ import {
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import CustomRadioGroup from '../../components/form-components/CustomRadioGroup'
-import CustomTextField from '../../components/form-components/CustomTextField'
 import ErrorNotification from '../../components/form-components/ErrorNotification'
-import PopupText from '../../utils/popupText'
+import { hxOralFormQuestionText } from '../questions/HxOralFormQuestions'
 
 const formName = 'hxOralForm'
 
@@ -30,17 +32,12 @@ const initialValues = {
   ORAL1: '',
   ORAL2: '',
   ORAL3: '',
-  ORAL4: '',
-  ORAL5: '',
-  ORALShortAns5: '',
 }
 
 const validationSchema = Yup.object({
   ORAL1: Yup.string().oneOf(['Healthy', 'Poor']).required('Required'),
   ORAL2: Yup.string().required('Required'),
   ORAL3: Yup.string().required('Required'),
-  ORAL4: Yup.string().required('Required'),
-  ORAL5: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -53,14 +50,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
   ],
   ORAL3: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  ORAL4: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
-  ORAL5: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -95,10 +84,7 @@ const oralInspectionGuide = [
   },
   {
     heading: 'Prosthodontics',
-    indications: [
-      'Badly decayed tooth; entire tooth is black.',
-      'Denture broken/chipped/cracked.',
-    ],
+    indications: ['Badly decayed tooth; entire tooth is black.', 'Denture broken/chipped/cracked.'],
   },
   {
     heading: 'OMS (Oral and Maxillofacial Surgery)',
@@ -117,7 +103,11 @@ export default function HxOralForm({ changeTab, nextTab }) {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSavedData(patientId, formName)
-      setSavedData({ ...initialValues, ...res })
+      const formData = { ...initialValues, ...res }
+      delete formData.ORAL4
+      delete formData.ORAL5
+      delete formData.ORALShortAns5
+      setSavedData(formData)
     }
 
     fetchData()
@@ -186,7 +176,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           </Box>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            How is the participant&apos;s Oral Health?
+            {hxOralFormQuestionText.ORAL1}
           </Typography>
           <FastField
             name='ORAL1'
@@ -196,7 +186,7 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Do you wear dentures?
+            {hxOralFormQuestionText.ORAL2}
           </Typography>
           <FastField
             name='ORAL2'
@@ -207,9 +197,13 @@ export default function HxOralForm({ changeTab, nextTab }) {
           />
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            Are you experiencing any dental concerns (eg. currently experiencing any pain in your
-            mouth area)?
+            {hxOralFormQuestionText.ORAL3}
           </Typography>
+          <img
+            src='/images/dentistry_check.png'
+            alt='Reference list of dental concerns'
+            style={{ maxWidth: '100%' }}
+          />
           <FastField
             name='ORAL3'
             label='ORAL3'
@@ -217,46 +211,6 @@ export default function HxOralForm({ changeTab, nextTab }) {
             options={formOptions.ORAL3}
             row
           />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Have you visited a dentist in the past 2 years?
-          </Typography>
-          <FastField
-            name='ORAL4'
-            label='ORAL4'
-            component={CustomRadioGroup}
-            options={formOptions.ORAL4}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            Would you like to go through free Oral Health Education by NUS Dentistry dentists and
-            students?
-          </Typography>
-          <Typography gutterBottom>
-            If the patient has any queries regarding dental health, or if you think that the patient
-            would benefit from an Oral Health Consult.
-          </Typography>
-          <FastField
-            name='ORAL5'
-            label='ORAL5'
-            component={CustomRadioGroup}
-            options={formOptions.ORAL5}
-            row
-          />
-          <PopupText qnNo='ORAL5' triggerValue='Yes'>
-            <Typography variant='subtitle1' fontWeight='bold'>
-              Please specify:
-            </Typography>
-            <FastField
-              name='ORALShortAns5'
-              label='ORALShortAns5'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3, mt: 1 }}
-            />
-          </PopupText>
 
           <Typography variant='subtitle1' fontWeight='bold'>
             The dental examination booth will only provide <u>simple dental screening</u>, there

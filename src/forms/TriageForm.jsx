@@ -7,7 +7,10 @@ import { Alert, Typography } from '@mui/material'
 import { Divider, Paper, CircularProgress, Button, Box, Grid } from '@mui/material'
 
 import { submitForm, formatBmi } from '../api/formHelpers.jsx'
-import { showFormSubmitError, showFormSubmitSuccess } from 'src/components/form-components/FormSubmitStatusHost'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getPatientFormDataStrict } from '../services/patientData'
 import { toLoadErrorMessage } from '../utils/retryRequest'
@@ -17,6 +20,7 @@ import CustomNumberField from '../components/form-components/CustomNumberField'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
 import ErrorNotification from 'src/components/form-components/ErrorNotification'
 import DataLoadError from 'src/components/DataLoadError'
+import { triageFormQuestionText } from './questions/TriageFormQuestions'
 
 const validationSchema = Yup.object({
   triageQ1: Yup.number()
@@ -103,6 +107,12 @@ function IsHighBP({ systolic, diastolic }) {
       <br />
     </Fragment>
   )
+}
+
+function meetsNumericThreshold(value, predicate) {
+  if (value === '' || value == null) return false
+  const numericValue = Number(value)
+  return Number.isFinite(numericValue) && predicate(numericValue)
 }
 
 function calculateAverage(reading1, reading2, reading3) {
@@ -201,7 +211,10 @@ const TriageForm = () => {
   return (
     <Paper elevation={2} p={0} m={0}>
       {loadError ? (
-        <DataLoadError message={loadError} onRetry={() => setLoadAttempt((attempt) => attempt + 1)} />
+        <DataLoadError
+          message={loadError}
+          onRetry={() => setLoadAttempt((attempt) => attempt + 1)}
+        />
       ) : (
         <Formik
           initialValues={saveData}
@@ -211,229 +224,265 @@ const TriageForm = () => {
         >
           {({ values, isSubmitting, submitCount, ...formikProps }) => (
             <Form>
-            <div className='form--div'>
-              <h1>Triage</h1>
-              <h2>VITALS</h2>
-              <h2>1) BLOOD PRESSURE</h2>
-              <p>
-                (Before measuring BP: ensure no caffeine, anxiety, running and smoking in the last
-                30 minutes.)
-              </p>
+              <div className='form--div'>
+                <h1>Triage</h1>
+                <h2>VITALS</h2>
+                <h2>1) BLOOD PRESSURE</h2>
+                <p>
+                  (Before measuring BP: ensure no caffeine, anxiety, running and smoking in the last
+                  30 minutes.)
+                </p>
 
-              <Grid container spacing={1}>
-                {/* First readings in the first row */}
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    1st Reading Systolic (mmHg)
-                  </Typography>
-                  <Field name='triageQ1' component={CustomNumberField} label='Triage Q1' min={0} />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    1st Reading Diastolic (mmHg)
-                  </Typography>
-                  <Field name='triageQ2' component={CustomNumberField} label='Triage Q2' min={0} />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    1st Reading Heart Rate (bpm)
-                  </Typography>
-                  <Field
-                    name='triageQHR1'
-                    component={CustomNumberField}
-                    label='TriageQHR1'
-                    min={0}
-                  />
+                <Grid container spacing={1}>
+                  {/* First readings in the first row */}
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ1}
+                    </Typography>
+                    <Field
+                      name='triageQ1'
+                      component={CustomNumberField}
+                      label='Triage Q1'
+                      min={0}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ2}
+                    </Typography>
+                    <Field
+                      name='triageQ2'
+                      component={CustomNumberField}
+                      label='Triage Q2'
+                      min={0}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQHR1}
+                    </Typography>
+                    <Field
+                      name='triageQHR1'
+                      component={CustomNumberField}
+                      label='TriageQHR1'
+                      min={0}
+                    />
+                  </Grid>
+
+                  {/* First row warnings for high BP */}
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP systolic={values.triageQ1} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP diastolic={values.triageQ2} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
+
+                  {/* Second readings in the second row */}
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ3}
+                    </Typography>
+                    <Field
+                      name='triageQ3'
+                      component={CustomNumberField}
+                      label='Triage Q3'
+                      min={0}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ4}
+                    </Typography>
+                    <Field
+                      name='triageQ4'
+                      component={CustomNumberField}
+                      label='Triage Q4'
+                      min={0}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQHR2}
+                    </Typography>
+                    <Field
+                      name='triageQHR2'
+                      component={CustomNumberField}
+                      label='TriageQHR2'
+                      min={0}
+                    />
+                  </Grid>
+                  {/* Second row warnings for high BP */}
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP systolic={values.triageQ3} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP diastolic={values.triageQ4} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
+
+                  {/* Optional third readings in the third row */}
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ5}
+                    </Typography>
+                    <Field
+                      name='triageQ5'
+                      component={CustomNumberField}
+                      label='Triage Q5'
+                      min={0}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQ6}
+                    </Typography>
+                    <Field
+                      name='triageQ6'
+                      component={CustomNumberField}
+                      label='Triage Q6'
+                      min={0}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
+                      {triageFormQuestionText.triageQHR3}
+                    </Typography>
+                    <Field
+                      name='triageQHR3'
+                      component={CustomNumberField}
+                      label='TriageQHR3'
+                      min={0}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP systolic={values.triageQ5} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
+                    <IsHighBP diastolic={values.triageQ6} />
+                  </Grid>
+                  <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
                 </Grid>
 
-                {/* First row warnings for high BP */}
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP systolic={values.triageQ1} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP diastolic={values.triageQ2} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
+                <h3>Average Reading Systolic (average of closest 2 readings):</h3>
+                <h3>
+                  Calculated Average: &nbsp;
+                  {calculateAverage(values.triageQ1, values.triageQ3, values.triageQ5)}
+                </h3>
+                <br />
 
-                {/* Second readings in the second row */}
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    2nd Reading Systolic (mmHg)
-                  </Typography>
-                  <Field name='triageQ3' component={CustomNumberField} label='Triage Q3' min={0} />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    2nd Reading Diastolic (mmHg)
-                  </Typography>
-                  <Field name='triageQ4' component={CustomNumberField} label='Triage Q4' min={0} />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    2nd Reading Heart Rate (bpm)
-                  </Typography>
-                  <Field
-                    name='triageQHR2'
-                    component={CustomNumberField}
-                    label='TriageQHR2'
-                    min={0}
-                  />
-                </Grid>
-                {/* Second row warnings for high BP */}
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP systolic={values.triageQ3} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP diastolic={values.triageQ4} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
+                <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
+                <h3>
+                  Calculated Average: &nbsp;
+                  {calculateAverage(values.triageQ2, values.triageQ4, values.triageQ6)}
+                </h3>
+                <br />
 
-                {/* Optional third readings in the third row */}
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    3rd Reading Systolic (Only if 1st and 2nd systolic reading differ by{' '}
-                    <b>&gt;5mmHg</b>)
-                  </Typography>
-                  <Field name='triageQ5' component={CustomNumberField} label='Triage Q5' min={0} />
-                </Grid>
+                <h3>Average Reading Heart Rate (average of closest 2 readings):</h3>
+                <h3>
+                  Calculated Average: &nbsp;
+                  {calculateAverage(values.triageQHR1, values.triageQHR2, values.triageQHR3)}
+                </h3>
+                <br />
 
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    3rd Reading Diastolic (ONLY if 1st and 2nd diastolic reading differ by{' '}
-                    <b>&gt;5mmHg</b>)
-                  </Typography>
-                  <Field name='triageQ6' component={CustomNumberField} label='Triage Q6' min={0} />
-                </Grid>
+                <h3>Hypertension criteria:</h3>
+                <ul>
+                  <li>Younger participants: BP &gt; 140/90</li>
+                  <li>Participants &gt; 80 years old: BP &gt; 150/90</li>
+                  <li>CKD w proteinuria (mod to severe albuminuria): &gt; 130/80</li>
+                  <li>DM: &gt; 130/80</li>
+                </ul>
 
-                <Grid item xs={12} sm={4}>
-                  <Typography variant='h6' component='h3' sx={{ fontWeight: 'bold' }}>
-                    3rd Reading Heart Rate (ONLY if 1st and 2nd heart rate reading differ by{' '}
-                    <b>&gt;5bpm</b>)
-                  </Typography>
-                  <Field
-                    name='triageQHR3'
-                    component={CustomNumberField}
-                    label='TriageQHR3'
-                    min={0}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP systolic={values.triageQ5} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}>
-                  <IsHighBP diastolic={values.triageQ6} />
-                </Grid>
-                <Grid item xs={12} sm={4} sx={{ mt: -2 }}></Grid>
-              </Grid>
+                <h3>Malignant criteria:</h3>
+                <ul>
+                  <li>BP &gt; 180/120</li>
+                </ul>
+                <Typography fontWeight='bold' variant='h4'>
+                  {triageFormQuestionText.triageQ9}
+                </Typography>
 
-              <h3>Average Reading Systolic (average of closest 2 readings):</h3>
-              <h3>
-                Calculated Average: &nbsp;
-                {calculateAverage(values.triageQ1, values.triageQ3, values.triageQ5)}
-              </h3>
-              <br />
+                <Field
+                  name='triageQ9'
+                  component={CustomRadioGroup}
+                  label='Triage Q9'
+                  options={formOptions.triageQ9}
+                  row
+                />
+                {values.triageQ9 === 'Yes' && (
+                  <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Please inform a Comm member immediately.
+                  </Alert>
+                )}
 
-              <h3>Average Reading Diastolic (average of closest 2 readings):</h3>
-              <h3>
-                Calculated Average: &nbsp;
-                {calculateAverage(values.triageQ2, values.triageQ4, values.triageQ6)}
-              </h3>
-              <br />
+                <h2>2) BMI</h2>
+                <h3>{triageFormQuestionText.triageQ10}</h3>
+                <Field name='triageQ10' component={CustomNumberField} label='Triage Q10' min={0} />
 
-              <h3>Average Reading Heart Rate (average of closest 2 readings):</h3>
-              <h3>
-                Calculated Average: &nbsp;
-                {calculateAverage(values.triageQHR1, values.triageQHR2, values.triageQHR3)}
-              </h3>
-              <br />
+                <h3>{triageFormQuestionText.triageQ11}</h3>
+                <Field name='triageQ11' component={CustomNumberField} label='Triage Q11' min={0} />
 
-              <h3>Hypertension criteria:</h3>
-              <ul>
-                <li>Younger participants: BP &gt; 140/90</li>
-                <li>Participants &gt; 80 years old: BP &gt; 150/90</li>
-                <li>CKD w proteinuria (mod to severe albuminuria): &gt; 130/80</li>
-                <li>DM: &gt; 130/80</li>
-              </ul>
+                <h3>BMI:</h3>
+                <CalcBMI values={values} />
 
-              <h3>Malignant criteria:</h3>
-              <ul>
-                <li>BP &gt; 180/120</li>
-              </ul>
-              <Typography fontWeight='bold' variant='h4'>
-                 Q9. Does the patient&apos;s blood pressure require closer scrutiny by doctors later?
-                (e.g. Systolic above 180/120)
-              </Typography>
+                <h2>3) Waist Circumference</h2>
+                <h3>{triageFormQuestionText.triageQ13}</h3>
+                <Field name='triageQ13' component={CustomNumberField} label='Triage Q13' min={0} />
 
-              <Field
-                name='triageQ9'
-                component={CustomRadioGroup}
-                label='Triage Q9'
-                options={formOptions.triageQ9}
-                row
+                <h2>4) Neck Circumference</h2>
+                <h3>{triageFormQuestionText.triageQ15}</h3>
+                <Field name='triageQ15' component={CustomNumberField} label='Triage Q15' min={0} />
+
+                <h2>5) Ear Temperature Taking</h2>
+                <h3>{triageFormQuestionText.triageQ14}</h3>
+                <Field
+                  name='triageQ14'
+                  component={CustomNumberField}
+                  label='Triage Q14'
+                  min={0}
+                  step={0.1}
+                />
+                {meetsNumericThreshold(values.triageQ14, (temperature) => temperature >= 38) && (
+                  <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Patient temperature needs closer scrutiny.
+                  </Alert>
+                )}
+
+                <h2>6) Oxygen Saturation</h2>
+                <h3>{triageFormQuestionText.triageQ16}</h3>
+                <Field name='triageQ16' component={CustomNumberField} label='Triage Q16' min={0} />
+                {meetsNumericThreshold(values.triageQ16, (spo2) => spo2 <= 94) && (
+                  <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Patient SpO2 needs closer scrutiny.
+                  </Alert>
+                )}
+              </div>
+
+              {/* Display form errors */}
+              <ErrorNotification
+                show={submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
+                message='Please fill in all required fields correctly.'
               />
-              {values.triageQ9 === 'Yes' && (
-                <Alert severity='error' sx={{ mb: 2, fontWeight: 'bold' }}>
-                  Please inform a Comm member immediately.
-                </Alert>
-              )}
 
-              <h2>2) BMI</h2>
-              <h3>Height (in cm)</h3>
-              <Field name='triageQ10' component={CustomNumberField} label='Triage Q10' min={0} />
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                {loading || isSubmitting ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    color='primary'
+                    size='large'
+                    disabled={isSubmitting}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </Box>
 
-              <h3>Weight (in kg)</h3>
-              <Field name='triageQ11' component={CustomNumberField} label='Triage Q11' min={0} />
-
-              <h3>BMI:</h3>
-              <CalcBMI values={values} />
-
-              <h2>3) Waist Circumference</h2>
-              <h3>Waist Circumference (in cm)</h3>
-              <Field name='triageQ13' component={CustomNumberField} label='Triage Q13' min={0} />
-
-              <h2>4) Neck Circumference</h2>
-              <h3>Neck Circumference (in cm)</h3>
-              <Field name='triageQ15' component={CustomNumberField} label='Triage Q15' min={0} />
-
-              <h2>5) Ear Temperature Taking</h2>
-              <h3>Temperature (in Celsius)</h3>
-              <Field
-                name='triageQ14'
-                component={CustomNumberField}
-                label='Triage Q14'
-                min={0}
-                step={0.1}
-              />
-
-              <h2>6) Oxygen Saturation</h2>
-              <h3>SpO2 (%)</h3>
-              <Field name='triageQ16' component={CustomNumberField} label='Triage Q16' min={0} />
-            </div>
-
-            {/* Display form errors */}
-            <ErrorNotification
-              show={submitCount > 0 && Object.keys(formikProps.errors || {}).length > 0}
-              message="Please fill in all required fields correctly."
-            />
-
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-              {loading || isSubmitting ? (
-                <CircularProgress />
-              ) : (
-                <Button
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  size='large'
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </Button>
-              )}
-            </Box>
-
-            <br />
-            <Divider />
+              <br />
+              <Divider />
             </Form>
           )}
         </Formik>
