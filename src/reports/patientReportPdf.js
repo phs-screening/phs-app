@@ -425,18 +425,8 @@ export function addFollowUp(
     reg.registrationQ15 == 'Yes',
     parseFromLangKey('fw_phlebotomy'),
   )
-  k = followUpWith(
-    doc,
-    k,
-    trip,
-    indent + 5,
-    reg.registrationQ15 == 'Yes',
-    parseFromLangKey('fw_phlebotomy_1', reg.registrationQ18),
-    'm',
-  )
   // `You had your blood drawn and registered for follow up at our partner Phlebotomy Clinic.
   // When your results are ready for collection, our PHS volunteers will call you to remind you.
-  // You have indicated your preferred clinic to be ${reg.registrationQ18}`)
   // FIT
   k = followUpWith(doc, k, trip, indent, fit.fitQ2 == 'Yes', parseFromLangKey('fw_fit'))
   // 'You signed up for FIT home kits to be delivered to you, '

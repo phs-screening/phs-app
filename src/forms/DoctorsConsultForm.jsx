@@ -101,6 +101,7 @@ const DoctorsConsultForm = () => {
 
       const loadPastForms = async () => {
         const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
+        const hcsrReviewData = getSavedData(patientId, allForms.hxHcsrReviewForm)
         const ophthalData = getSavedData(patientId, allForms.ophthalForm)
         const audioData = getSavedData(patientId, allForms.audiometryForm)
         const lungData = getSavedData(patientId, allForms.lungForm)
@@ -111,6 +112,7 @@ const DoctorsConsultForm = () => {
 
         Promise.all([
           hcsrData,
+          hcsrReviewData,
           ophthalData,
           audioData,
           lungData,
@@ -119,14 +121,14 @@ const DoctorsConsultForm = () => {
           pmhxData,
           socialData,
         ]).then((result) => {
-          setHcsr(result[0])
-          setOphthal(result[1])
-          setAudio(result[2])
-          setLung(result[3])
-          setPHQ(result[4])
-          setTriage(result[5])
-          setPMHX(result[6])
-          setSocial(result[7])
+          setHcsr({ ...(result[0] || {}), ...(result[1] || {}) })
+          setOphthal(result[2])
+          setAudio(result[3])
+          setLung(result[4])
+          setPHQ(result[5])
+          setTriage(result[6])
+          setPMHX(result[7])
+          setSocial(result[8])
           setLoadingSidePanel(false)
         })
       }
@@ -509,11 +511,6 @@ const DoctorsConsultForm = () => {
               <li>
                 <p>
                   Regular screening: <strong>{pmhx.PMHX6}</strong>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Reason for referral: <strong>{pmhx.PMHXShortAns7}</strong>
                 </p>
               </li>
             </ul>

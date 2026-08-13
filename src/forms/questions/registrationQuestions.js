@@ -13,8 +13,6 @@ export const registrationQuestionText = {
   registrationQ14: 'Preferred Language for Health Report',
   registrationQ16: 'Do you have public assistance card?',
   registrationQ17: 'I agree and consent to the above.',
-  registrationQ18:
-    'Has patient attended any health screenings before? (e.g. Annual Health Screening etc.)',
   registrationQ19: 'Has patient pre-registered for the Mammobus station?',
   registrationQ20: 'Has Form C been signed?',
 }

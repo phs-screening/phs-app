@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { FormContext, ScrollTopContext } from '../../src/api/utils'
 import HxTabs from '../../src/forms/HistoryTakingTabs/HistoryTaking'
 import HxHcsrForm from '../../src/forms/HistoryTakingTabs/HxHcsrForm'
+import HxHcsrReviewForm from '../../src/forms/HistoryTakingTabs/HxHcsrReviewForm'
 import HxFamilyForm from '../../src/forms/HistoryTakingTabs/HxFamilyForm'
 import HxGynaeForm from '../../src/forms/HistoryTakingTabs/HxGynaeForm'
 import HxNssForm from '../../src/forms/HistoryTakingTabs/HxNssForm'
@@ -53,6 +54,7 @@ describe('history-taking forms', () => {
     expect(screen.getByText("Please enter History-taker's full name")).toBeInTheDocument()
     expect(screen.queryByLabelText('hxHcsrQ4')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('hxHcsrQ6')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('hxHcsrQ7')).not.toBeInTheDocument()
   })
 
   it('removes obsolete PMHX fields and updates PMHX6 wording', () => {
@@ -68,6 +70,8 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('PMHX3')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('PMHX4')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('PMHX10')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('PMHX7')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('PMHXShortAns7')).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/PMHXShortAns5/)).not.toBeInTheDocument()
   })
 
@@ -85,7 +89,23 @@ describe('history-taking forms', () => {
 
     const tabLabels = screen.getAllByRole('tab').map((tab) => tab.textContent)
     expect(tabLabels.indexOf('OSA')).toBe(tabLabels.indexOf('Scoliosis') + 1)
-    expect(tabLabels.indexOf('OSA')).toBeLessThan(tabLabels.indexOf('M4/M5 Review'))
+    expect(tabLabels.indexOf('HCSR Review')).toBe(tabLabels.indexOf('OSA') + 1)
+    expect(tabLabels.indexOf('M4/M5 Review')).toBe(tabLabels.indexOf('HCSR Review') + 1)
+  })
+
+  it('moves HCSR Q7 to its own form and preloads legacy answers', async () => {
+    getSavedData.mockImplementation((_patientId, requestedForm) =>
+      Promise.resolve(
+        requestedForm === 'hxHcsrForm'
+          ? { hxHcsrQ7: 'Yes', hxHcsrShortAnsQ7: 'Legacy reason' }
+          : {},
+      ),
+    )
+    renderHistoryForm(<HxHcsrReviewForm changeTab={vi.fn()} nextTab={1} />)
+
+    expect(await screen.findByText('HEALTH CONCERNS REVIEW')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Yes' })).toBeChecked())
+    expect(screen.getByDisplayValue('Legacy reason')).toBeInTheDocument()
   })
 
   it('shows and requires all four OSA questions', async () => {
@@ -145,6 +165,9 @@ describe('history-taking forms', () => {
     expect(screen.getByRole('radio', { name: 'Poor' })).toBeInTheDocument()
     expect(screen.queryByRole('radio', { name: 'Moderate' })).not.toBeInTheDocument()
     expect(screen.queryByLabelText('ORALShortAns1')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('ORAL4')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('ORAL5')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('ORALShortAns5')).not.toBeInTheDocument()
   })
 
   it('updates FAMILY1 wording and removes FAMILY2', () => {
@@ -194,7 +217,6 @@ describe('history-taking forms', () => {
     mockHistoryData(59, {
       PMHX1: 'None',
       PMHX6: 'Yes',
-      PMHX7: 'No',
       PMHXVAX1: 'No',
     })
     renderHistoryForm(<HxNssForm changeTab={vi.fn()} nextTab={1} />)
@@ -213,7 +235,6 @@ describe('history-taking forms', () => {
     mockHistoryData(65, {
       PMHX1: 'None',
       PMHX6: 'Yes',
-      PMHX7: 'No',
       PMHXVAX1: 'Yes',
       PMHXVAX2: 'Yes',
       PMHXVAX3: 'Yes',

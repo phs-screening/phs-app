@@ -23,8 +23,6 @@ const initialValues = {
   hxHcsrQ3: '',
   hxHcsrShortAnsQ3: '',
   hxHcsrQ5: '',
-  hxHcsrQ7: '',
-  hxHcsrShortAnsQ7: '',
   hxhcsrQ8: '',
 }
 
@@ -32,7 +30,6 @@ const validationSchema = Yup.object({
   hxHcsrQ1: Yup.string().required('Required'),
   hxHcsrQ2: Yup.string().required('Required'),
   hxHcsrQ3: Yup.string().required('Required'),
-  hxHcsrQ7: Yup.string().required('Required'),
 })
 
 const formOptions = {
@@ -45,10 +42,6 @@ const formOptions = {
     { label: 'No', value: 'No' },
     { label: 'Not Applicable (under 60)', value: 'Not Applicable (under 60)' },
   ],
-  hxHcsrQ7: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
 }
 
 export default function HxHcsrForm({ changeTab, nextTab }) {
@@ -59,7 +52,10 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSavedData(patientId, formName)
-      setSavedData({ ...initialValues, ...res })
+      const formData = { ...initialValues, ...res }
+      delete formData.hxHcsrQ7
+      delete formData.hxHcsrShortAnsQ7
+      setSavedData(formData)
     }
 
     fetchData()
@@ -174,31 +170,6 @@ export default function HxHcsrForm({ changeTab, nextTab }) {
             options={formOptions.hxHcsrQ5}
             row
           />
-
-          <Typography variant='h4' fontWeight='bold'>
-            {hxHcsrFormQuestionText.hxHcsrQ7}
-          </Typography>
-          <FastField
-            name='hxHcsrQ7'
-            label='hxHcsrQ7'
-            component={CustomRadioGroup}
-            options={formOptions.hxHcsrQ7}
-            row
-          />
-
-          <PopupText qnNo='hxHcsrQ7' triggerValue='Yes'>
-            <Typography variant='subtitle1' fontWeight='bold'>
-              {hxHcsrFormQuestionText.hxHcsrShortAnsQ7}
-            </Typography>
-            <FastField
-              name='hxHcsrShortAnsQ7'
-              label='hxHcsrShortAnsQ7'
-              component={CustomTextField}
-              fullWidth
-              multiline
-              sx={{ mb: 3, mt: 1 }}
-            />
-          </PopupText>
 
           <Typography variant='h4' fontWeight='bold'>
             Below is a non-exhaustive list of possible red flags:

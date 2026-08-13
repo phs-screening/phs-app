@@ -40,6 +40,7 @@ export const FORM_COLLECTION_TO_KEY = {
   hxSocialForm: 'hxSocial',
   hxFamilyForm: 'hxFamily',
   hxHcsrForm: 'hxHcsr',
+  hxHcsrReviewForm: 'hxHcsrReview',
   hxOralForm: 'hxOral',
   hxScoliosisForm: 'hxScoliosis',
   hxVaccineForm: 'hxVaccine',

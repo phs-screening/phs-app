@@ -281,11 +281,6 @@ const OralHealthForm = () => {
           </p>
           <p className='blue'>{hxOral.ORAL3}</p>
 
-          <p className='underlined'>Has patient visited a dentist in the past 1 year?:</p>
-          <p className='blue'>{hxOral.ORAL4}</p>
-          <p className='underlined'>Is patient going from a Oral Health Consult?:</p>
-          <p className='blue'>{hxOral.ORAL5}</p>
-          <p className='blue'>{hxOral.ORALShortAns5}</p>
         </>
       ) : (
         <p className='red'>nil hxOral data!</p>
