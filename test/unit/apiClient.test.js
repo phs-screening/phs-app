@@ -93,20 +93,61 @@ describe('apiClient', () => {
     })
   })
 
-  it('preserves the session when the API denies an action with 403', async () => {
+  it('clears the session when authentication fails with 401', async () => {
+    window.history.pushState({}, '', '/login')
+    localStorage.setItem('authToken', 'invalid-token')
+    localStorage.setItem('profile', JSON.stringify({ is_admin: false }))
+    fetch.mockResolvedValue(
+      mockResponse({
+        ok: false,
+        status: 401,
+        body: '{"error":"Invalid or expired token"}',
+      }),
+    )
+
+    await expect(apiGet('/profile')).rejects.toMatchObject({
+      message: 'Invalid or expired token',
+      status: 401,
+    })
+
+    expect(localStorage.getItem('authToken')).toBeNull()
+    expect(localStorage.getItem('profile')).toBeNull()
+  })
+
+  it('preserves the session when an authenticated user is denied with 403', async () => {
     localStorage.setItem('authToken', 'token-789')
     localStorage.setItem('profile', JSON.stringify({ is_admin: false }))
     fetch.mockResolvedValue(
       mockResponse({
         ok: false,
         status: 403,
+        body: '{"error":"Admin access required"}',
+      }),
+    )
+
+    await expect(apiPost('/deleteAccount', { username: 'user@example.com' })).rejects.toMatchObject({
+      message: 'Admin access required',
+      status: 403,
+    })
+
+    expect(localStorage.getItem('authToken')).toBe('token-789')
+    expect(localStorage.getItem('profile')).toBe(JSON.stringify({ is_admin: false }))
+  })
+
+  it('preserves the session when a duplicate form submission returns 409', async () => {
+    localStorage.setItem('authToken', 'token-789')
+    localStorage.setItem('profile', JSON.stringify({ is_admin: false }))
+    fetch.mockResolvedValue(
+      mockResponse({
+        ok: false,
+        status: 409,
         body: '{"error":"This form has already been submitted."}',
       }),
     )
 
     await expect(apiPost('/patients/1/forms/registration', {})).rejects.toMatchObject({
       message: 'This form has already been submitted.',
-      status: 403,
+      status: 409,
     })
 
     expect(localStorage.getItem('authToken')).toBe('token-789')
