@@ -50,7 +50,7 @@ async function requestWithAuth(path, options = {}) {
 
   const data = await parseResponse(res)
 
-  if (!res.ok && [401, 403].includes(res.status)) {
+  if (!res.ok && res.status === 401) {
     await logOut()
     if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
       window.location.assign('/login')

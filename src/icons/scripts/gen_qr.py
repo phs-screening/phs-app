@@ -4,8 +4,8 @@ import qrcode, base64, io
 ## Change the links here, do not change anything else
 links = {
     "bloodpressureQR": "https://www.myheart.org.sg/heart-news/blood-pressure-reading/",
-    "bmiQR":           "https://www.myheart.org.sg/heart-news/blood-pressure-reading/",
-    "tempQR":          "https://www.myheart.org.sg/heart-news/blood-pressure-reading/",
+    "bmiQR":           "https://www.myheart.org.sg/tools-resources/bmi-calculator/",
+    "tempQR":          "https://www.healthhub.sg/health-conditions/fever",
 }
 
 def data_url(url):
