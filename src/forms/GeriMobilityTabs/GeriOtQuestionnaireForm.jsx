@@ -118,6 +118,7 @@ const formOptions = {
       value: 'NA (nil pets / animals at home)',
     },
   ],
+  geriOtQuestionnaireQ34: YesNo,
 }
 
 const validationSchema = Yup.object({
@@ -200,11 +201,12 @@ const validationSchema = Yup.object({
     .required(),
   geriOtQuestionnaireQ28: Yup.string(),
   geriOtQuestionnaireQ33: Yup.string(),
+  geriOtQuestionnaireQ34: Yup.string().oneOf(['Yes', 'No']).required(),
 })
 
 const generateInitialValues = () => {
   const values = {}
-  for (let i = 1; i <= 33; i++) {
+  for (let i = 1; i <= 34; i++) {
     values[`geriOtQuestionnaireQ${i}`] = ''
   }
   return values
@@ -254,7 +256,7 @@ const calculateScores = (values) => {
 
 const GeriOtQuestionnaireForm = (props) => {
   const { patientId } = useContext(FormContext)
-  const { changeTab, nextTab } = props
+  const { changeTab, nextTab, onReferralSubmitted } = props
 
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, setLoadingSidePanel] = useState(true)
@@ -335,6 +337,7 @@ const GeriOtQuestionnaireForm = (props) => {
 
           if (response.result) {
             await showFormSubmitSuccess()
+            onReferralSubmitted?.(values.geriOtQuestionnaireQ34)
             changeTab(null, nextTab)
           } else {
             showFormSubmitError(`Unsuccessful. ${response.error}`)
@@ -721,6 +724,16 @@ const GeriOtQuestionnaireForm = (props) => {
                     <h2>SCORING</h2>
                     <GetScores />
                     <br />
+                    <h3 className='red'>
+                      {geriOtQuestionnaireFormQuestionText.geriOtQuestionnaireQ34}
+                    </h3>
+                    <FastField
+                      name='geriOtQuestionnaireQ34'
+                      label='geriOtQuestionnaireQ34'
+                      component={CustomRadioGroup}
+                      options={formOptions.geriOtQuestionnaireQ34}
+                      row
+                    />
                     <ErrorNotification
                       show={submitCount > 0 && Object.keys(errors || {}).length > 0}
                       message='Please fill in all required fields correctly.'

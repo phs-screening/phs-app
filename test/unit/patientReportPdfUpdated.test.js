@@ -19,7 +19,11 @@ import msMy from '../../src/api/lang/ms_my.json'
 import taIn from '../../src/api/lang/ta_in.json'
 import zhCn from '../../src/api/lang/zh_cn.json'
 import { setLangUpdated } from '../../src/api/langutil'
-import { memoSection, sleepApneaSection } from '../../src/reports/patientReportPdfUpdated'
+import {
+  memoSection,
+  sleepApneaSection,
+  vaccineSection,
+} from '../../src/reports/patientReportPdfUpdated'
 
 function getScoliosisMemo(scoliosisData = {}) {
   const section = memoSection(scoliosisData, {}, {}, {}, {}, {})
@@ -68,6 +72,39 @@ describe('patientReportPdfUpdated memoSection', () => {
     setLangUpdated(language)
 
     expect(getScoliosisMemo({ scoliosisQ2: 'Memo' })).toBe(`${heading}Memo`)
+  })
+})
+
+describe('patientReportPdfUpdated vaccineSection', () => {
+  it('renders eligibility and every vaccine taken using the station field mapping', () => {
+    setLangUpdated('english')
+
+    const text = vaccineSection({ VAX1: 'Yes', VAX2: 'Yes', VAX3: 'Yes', VAX5: 'Yes' })
+      .map((item) => item.text)
+      .filter(Boolean)
+
+    expect(text).toEqual([
+      enUs.vaccine_title,
+      `${enUs.vaccine_1}\n`,
+      `${enUs.vaccines_taken_title}\n`,
+      `${enUs.vaccine_2}\n`,
+      `${enUs.vaccine_3}\n`,
+      `${enUs.vaccine_5}\n`,
+    ])
+  })
+
+  it('states when no vaccines were recorded as taken', () => {
+    setLangUpdated('english')
+
+    const text = vaccineSection({ VAX1: 'No', VAX2: 'No', VAX3: 'No', VAX5: 'No' })
+      .map((item) => item.text)
+      .filter(Boolean)
+
+    expect(text).toEqual([
+      enUs.vaccine_title,
+      `${enUs.vaccines_taken_title}\n`,
+      `${enUs.vaccine_none}\n`,
+    ])
   })
 })
 

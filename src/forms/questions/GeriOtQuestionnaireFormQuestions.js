@@ -39,4 +39,5 @@ export const geriOtQuestionnaireFormQuestionText = {
   geriOtQuestionnaireQ27:
     '25. If there are pets - can you care for them without bending down OR at risk of falling over?',
   geriOtQuestionnaireQ28: 'Notes (Q16 - 25, Kitchen and Living Environment):',
+  geriOtQuestionnaireQ34: 'Refer to OT consult?',
 }

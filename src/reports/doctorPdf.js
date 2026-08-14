@@ -16,7 +16,7 @@ export const generateDoctorPdf = async (entry) => {
             width: 'auto',
             stack: [
               {
-                text: 'PHS 2025',
+                text: 'PHS 2026',
                 bold: true,
                 fontSize: 16,
                 alignment: 'center',
@@ -103,7 +103,7 @@ export const generateDoctorPdf = async (entry) => {
         width: 100,
       },
       {
-        text: 'Public Health Service 2025 [\u00A0\u00A0]',
+        text: 'Public Health Service 2026 [\u00A0\u00A0]',
         alignment: 'right',
         fontSize: 9,
       },

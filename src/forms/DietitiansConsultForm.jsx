@@ -66,7 +66,6 @@ const DietitiansConsultForm = () => {
   const [saveData, setSaveData] = useState(initialValues)
 
   // forms to retrieve for side panel
-  const [doctorConsult, setDoctorConsult] = useState({})
   const [triage, setTriage] = useState({})
   const [hxSocial, setSocial] = useState({})
 
@@ -76,14 +75,12 @@ const DietitiansConsultForm = () => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
       const loadPastForms = async () => {
-        const doctorConsultData = getSavedData(patientId, allForms.doctorConsultForm)
         const triageData = getSavedData(patientId, allForms.triageForm)
         const socialData = getSavedData(patientId, allForms.hxSocialForm)
 
-        Promise.all([doctorConsultData, triageData, socialData]).then((result) => {
-          setDoctorConsult(result[0])
-          setTriage(result[1])
-          setSocial(result[2])
+        Promise.all([triageData, socialData]).then((result) => {
+          setTriage(result[0])
+          setSocial(result[1])
         })
         isLoadingSidePanel(false)
       }
@@ -209,10 +206,6 @@ const DietitiansConsultForm = () => {
 
   const renderSidePanel = () => (
     <div className='summary--question-div'>
-      <h2>Doctor&apos;s Consult</h2>
-      <p className='underlined'>Reasons for referral from Doctor&apos;s Consult</p>
-      {doctorConsult ? <p className='blue'>{doctorConsult.doctorSConsultQ5}</p> : null}
-      <Divider />
       <h2>Blood Pressure</h2>
       <p className='underlined'>Average Reading Systolic (average of closest 2 readings)</p>
       Systolic BP:

@@ -111,7 +111,7 @@ const getTotalFrailScaleScore = (doc) => {
 
 const GeriPtConsultForm = (props) => {
   const { patientId } = useContext(FormContext)
-  const { changeTab, nextTab } = props
+  const { changeTab, nextTab, onSubmitted } = props
   const [loading, isLoading] = useState(false)
   const [initialValues, setInitialValues] = useState({
     geriPtConsultQ1: '',
@@ -173,7 +173,11 @@ const GeriPtConsultForm = (props) => {
           setSubmitting(false)
           if (response.result) {
             await showFormSubmitSuccess()
-            changeTab(null, nextTab)
+            if (onSubmitted) {
+              onSubmitted()
+            } else {
+              changeTab(null, nextTab)
+            }
           } else {
             showFormSubmitError(`Unsuccessful. ${response.error}`)
           }

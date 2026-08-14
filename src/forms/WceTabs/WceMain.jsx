@@ -6,7 +6,6 @@ import { AppBar, Tabs, Tab, Typography, Box, Paper } from '@mui/material'
 import { ScrollTopContext } from '../../api/utils.js'
 import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
 import WceForm from './WceForm.jsx'
-import GynaeForm from './GynaeForm.jsx'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -61,15 +60,11 @@ export default function WceTabs() {
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='WCE tabs'>
           <Tab label='WCE' {...a11yProps(0)} />
-          <Tab label='Gynae' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <Paper elevation={2}>
         <TabPanel value={value} index={0}>
-          <WceForm changeTab={handleChange} nextTab={1} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <GynaeForm changeTab={handleChange} nextTab={2} />
+          <WceForm />
         </TabPanel>
       </Paper>
     </WceWrapper>
