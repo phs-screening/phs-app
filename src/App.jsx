@@ -51,6 +51,24 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    const handleNumberInputWheel = (event) => {
+      if (
+        event.target instanceof HTMLInputElement &&
+        event.target.type === 'number' &&
+        document.activeElement === event.target
+      ) {
+        event.target.blur()
+      }
+    }
+
+    document.addEventListener('wheel', handleNumberInputWheel, true)
+
+    return () => {
+      document.removeEventListener('wheel', handleNumberInputWheel, true)
+    }
+  }, [])
+
   const updatePatientId = (new_id) => {
     setPatientId(new_id)
     if (new_id === -1) {
