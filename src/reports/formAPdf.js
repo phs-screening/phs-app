@@ -1,8 +1,7 @@
 import allForms from '../forms/forms.json'
 import { checkedBox, uncheckedBox } from '../icons/checked'
 import pic1 from '../icons/pic1-forma'
-import pic2 from '../icons/pic2-forma'
-import { getPatientStationEligibility } from '../api/stationsApi'
+import { getPatientStationSummary } from '../api/stationsApi'
 import { getSavedData, getSavedPatientData } from '../services/patientData'
 import pdfMake from './pdfMake'
 
@@ -13,7 +12,7 @@ export const generateFormAPdf = async (patientId) => {
     getSavedData(patientId, allForms.triageForm),
   ])
 
-  const eligibilityRows = await getFormAEligibilityRows(patientId)
+  const stations = await getFormAStations(patientId)
   const patient = await getSavedPatientData(patientId, 'patients')
 
   const docDefinition = {
@@ -39,13 +38,15 @@ export const generateFormAPdf = async (patientId) => {
     defaultStyle: {
       fontSize: 10,
     },
-    pageMargins: [40, 60, 40, 60],
+    pageMargins: [40, 45, 40, 35],
+    footer: floorPlanFooter,
     content: [
       patientIdSection(patient),
       chasStatusSection(reg),
       pioneerGenSection(reg),
+      publicAssistanceSection(reg),
       triageTableSection(triage),
-      eligibilitySection(eligibilityRows, pmhx),
+      eligibilitySection(stations, pmhx),
       ...picSections(),
     ],
   }
@@ -57,15 +58,15 @@ export const generateFormAPdf = async (patientId) => {
   pdfMake.createPdf(docDefinition).download(fileName)
 }
 
-async function getFormAEligibilityRows(patientId) {
-  const eligibility = await getPatientStationEligibility(patientId)
-  const rows = eligibility.data?.rows || []
+async function getFormAStations(patientId) {
+  const summary = await getPatientStationSummary(patientId)
+  const stations = summary.data?.stations || []
 
-  if (rows.length === 0) {
-    throw new Error('Backend returned no station eligibility rows.')
+  if (stations.length === 0) {
+    throw new Error('Backend returned no station flow.')
   }
 
-  return rows
+  return stations
 }
 
 function patientIdSection(patient) {
@@ -83,7 +84,7 @@ function patientIdSection(patient) {
   }
 }
 
-function eligibilitySection(eligibilityRows, pmhx = {}) {
+function eligibilitySection(stations, pmhx = {}) {
   const isNutritionistEligible =
     pmhx?.PMHX5?.includes('Hypertension') ||
     pmhx?.PMHX5?.includes('Hyperlipidemia') ||
@@ -101,163 +102,82 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
           ? 'Dietitians'
           : ''
 
-  const col1Labels = [
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '',
-    '',
-    '',
-    '',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-  ]
-
-  const col2Texts = [
-    { label: 'Healthier SG Booth', eligibilityKey: 'Healthier SG Booth' },
-    { label: '365 Cancer Screening', eligibilityKey: '365 Cancer Screening' },
-    { label: 'Womens Cancer Education', eligibilityKey: "Women's Cancer Education" },
-    { label: 'Podiatry', eligibilityKey: 'Podiatry' },
-    {
+  const stationConfig = {
+    mammobus: {
+      number: '1a',
+      label: 'Mammobus',
+      details: {
+        text: 'Mammobus is located at the Community Centre (CC) carpark.',
+        fontSize: 9,
+      },
+    },
+    hsg: {
+      number: '4',
+      label: 'Healthier SG Booth',
+      details: {
+        stack: [
+          {
+            columns: [
+              { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
+              { text: 'Have not previously been enrolled in HSG', fontSize: 9 },
+            ],
+          },
+        ],
+      },
+    },
+    cancer365: { number: '5', label: '365 Cancer Screening' },
+    oralhealth: { number: '6', label: 'Dental Health' },
+    vax: { number: '7', label: 'Vaccination' },
+    scoliosis: { number: '8', label: 'Scoliosis' },
+    podiatry: { number: '9', label: 'Podiatry' },
+    dietitiansconsult: {
+      number: '10',
       label: 'Nutr. /Diet. Consult',
-      eligibilityKey: "Nutritionist's/Dietitian's Consult",
+      details: dietText
+        ? { text: `Eligible for: ${dietText}`, fontSize: 9, bold: true }
+        : { text: '' },
     },
-    { label: 'Geriatic Screening', eligibilityKey: 'Geriatric Screening' },
-    { label: '    Cognitive Function', eligibilityKey: 'Geriatric Screening' },
-    { label: '    Mobility', eligibilityKey: 'Geriatric Screening' },
-    { label: '', eligibilityKey: '' },
-    { label: '', eligibilityKey: '' },
-    { label: 'Visual Acuity', eligibilityKey: 'Ophthalmology' },
-    { label: 'Dental Health', eligibilityKey: 'Oral Health' },
-    { label: 'Social Services', eligibilityKey: 'Social Services' },
-    { label: 'Mental Health', eligibilityKey: 'Mental Health' },
-    { label: 'Arthritis', eligibilityKey: 'Arthritis' },
-    { label: 'Mammobus', eligibilityKey: 'Mammobus' },
-    { label: 'HPV On-Site Testing', eligibilityKey: 'HPV On-Site Testing' },
-    { label: 'Audiometry', eligibilityKey: 'Audiometry' },
-    { label: 'Vaccination', eligibilityKey: 'Vaccination' },
-    { label: 'Doctors Station', eligibilityKey: "Doctor's Station" },
-    { label: 'Screening Review', eligibilityKey: '' },
-    { label: 'Long Term Follow Up', eligibilityKey: 'Long Term Follow Up' },
-    { label: 'Scoliosis', eligibilityKey: 'Scoliosis' },
-  ]
+    wce: { number: '11', label: 'WCE & A' },
+    gericog: {
+      number: '12',
+      label: 'Geriatric Screening',
+      details: { text: '>= 60 years old', fontSize: 9 },
+    },
+    ophthal: { number: '12b', label: 'Visual Acuity' },
+    hpv: { number: '13', label: 'HPV On-Site Testing' },
+    audio: {
+      number: '14',
+      label: 'Audiometry',
+      details: { text: 'Part of Geriatric Screening', fontSize: 9 },
+    },
+    socialservice: { number: '15', label: 'Social Services' },
+    mentalhealth: { number: '16', label: 'Mental Health' },
+    arthritis: { number: '17', label: 'Arthritis' },
+    doctorsconsult: {
+      number: '18',
+      label: 'Doctors Station',
+      details: {
+        text: 'Please refer above to part 15A for details on reason(s) for recommendation',
+        fontSize: 9,
+      },
+    },
+    screeningreview: { number: '19', label: 'Screening Review' },
+    ltfu: { number: '19c', label: 'Long Term Follow Up' },
+  }
 
-  const col5Texts = [
-    {
-      stack: [
-        {
-          columns: [
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
-            { text: 'Have not previously been enrolled in HSG', fontSize: 9 },
-          ],
-        },
-      ],
-    },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    dietText ? { text: `Eligible for: ${dietText}`, fontSize: 9, bold: true } : { text: '' },
-    {
-      stack: [
-        {
-          columns: [
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
-            { text: '>= 60 years old', fontSize: 9 },
-          ],
-        },
-      ],
-    },
-    { text: '' },
-    {
-      rowSpan: 3,
-      stack: [
-        {
-          columns: [
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 2, 0] },
-            { text: 'OT Questionnaire (HOMEFAST)', fontSize: 9, margin: [0, 0, 0, 4] },
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 2, 0] },
-            { text: 'PT Questionnaire (PAL Qx)', fontSize: 9, margin: [0, 0, 0, 4] },
-          ],
-        },
-        {
-          columns: [
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 2, 0] },
-            { text: 'Physical Tests (SPPB)', fontSize: 9, margin: [0, 0, 0, 4] },
-          ],
-        },
-        {
-          columns: [
-            { text: 'Recommended for:', margin: [-2, 0, 2, 0], fontSize: 9 },
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 2, 0] },
-            { text: 'PT Consult', fontSize: 9 },
-            { image: uncheckedBox, width: 10, margin: [-2, 0, 2, 0] },
-            { text: 'OT Consult', fontSize: 9 },
-          ],
-        },
-      ],
-    },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-    { text: 'Part of Geriatric Screening', fontSize: 9 },
-    { text: '' },
-    {
-      text: 'Please refer above to part 15A for details on reason(s) for recommendation',
-      fontSize: 9,
-    },
-    { text: '' },
-    { text: '' },
-    { text: '' },
-  ]
+  const rows = stations.flatMap((station) => {
+    const config = stationConfig[station.key]
+    if (!config) return []
 
-  const col3Eligible = col2Texts.map(({ eligibilityKey }, i) => {
-    if (i >= 6 && i <= 9) {
-      return ''
-    }
-    if (i === 20) {
-      return { text: 'YES', alignment: 'center', color: 'blue' }
-    }
-    const eligibility = eligibilityRows.find((r) => r.name === eligibilityKey)?.eligibility
-    return {
-      text: eligibility,
-      alignment: 'center',
-      color: eligibility === 'YES' ? 'blue' : 'red',
-    }
-  })
-
-  const col4Eligible = col2Texts.map((_, i) => {
-    if (i == 8) {
-      return 'PT Consult:    YES   /   NO'
-    } else if (i == 9) {
-      return 'OT Consult:    YES   /   NO'
-    } else {
-      return { text: 'YES          /          NO', alignment: 'center' }
-    }
+    const eligibility = station.eligible ? 'YES' : 'NO'
+    return [{ ...config, eligibility }]
   })
 
   const sectionTable = {
     table: {
-      widths: ['3%', '19%', '15%', '15%', '48%'],
+      widths: ['4%', '18%', '15%', '15%', '48%'],
+      dontBreakRows: true,
+      keepWithHeaderRows: 1,
       body: [
         [
           { text: '', bold: true, fontSize: 10 },
@@ -266,40 +186,17 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
           { text: 'COMPLETED?', bold: true, fontSize: 9, alignment: 'center' },
           { text: 'Details', bold: true, fontSize: 9 },
         ],
-        ...[0, 1, 2, 3, 4].map((i) => [
-          { text: col1Labels[i], fontSize: 10 },
-          { text: col2Texts[i].label, fontSize: 11 },
-          { text: col3Eligible[i], fontSize: 9 },
-          { text: col4Eligible[i], fontSize: 9 },
-          col5Texts[i],
-        ]),
-        [
-          { text: 9, fontSize: 10, rowSpan: 5 },
-          { text: col2Texts[5].label, fontSize: 11 },
-          { ...col3Eligible[5], fontSize: 9, alignment: 'center', rowSpan: 5 },
-          { text: col4Eligible[5], fontSize: 9 },
-          col5Texts[5],
-        ],
-        [
-          { text: '', fontSize: 10 },
-          { text: col2Texts[6].label, fontSize: 9, preserveLeadingSpaces: true },
-          '',
-          { text: col4Eligible[6], fontSize: 9 },
-          col5Texts[6],
-        ],
-        [
-          { text: '', fontSize: 10 },
-          { text: col2Texts[7].label, fontSize: 9, rowSpan: 3, preserveLeadingSpaces: true },
-          '',
-          { text: col4Eligible[7], fontSize: 9 },
-          col5Texts[7],
-        ],
-        ...[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].map((i) => [
-          { text: col1Labels[i], fontSize: 9 },
-          { text: col2Texts[i].label, fontSize: 11 },
-          { text: col3Eligible[i], fontSize: 9 },
-          { text: col4Eligible[i], fontSize: 9 },
-          col5Texts[i],
+        ...rows.map((row) => [
+          { text: row.number, fontSize: 10 },
+          { text: row.label, fontSize: 10 },
+          {
+            text: row.eligibility,
+            fontSize: 9,
+            alignment: 'center',
+            color: row.eligibility === 'YES' ? 'blue' : 'red',
+          },
+          { text: 'YES          /          NO', fontSize: 9, alignment: 'center' },
+          row.details || { text: '' },
         ]),
       ],
     },
@@ -308,6 +205,8 @@ function eligibilitySection(eligibilityRows, pmhx = {}) {
       vLineWidth: () => 0.5,
       hLineColor: () => 'black',
       vLineColor: () => 'black',
+      paddingTop: () => 1,
+      paddingBottom: () => 1,
     },
     margin: [0, 5, 0, 5],
   }
@@ -434,6 +333,40 @@ function pioneerGenSection(reg) {
   return pioneerSection
 }
 
+function publicAssistanceSection(reg) {
+  const publicAssistance = reg?.registrationQ16
+  const publicAssistanceOptions = {
+    yes: publicAssistance === 'Yes' ? checkedBox : uncheckedBox,
+    no: publicAssistance === 'No' ? checkedBox : uncheckedBox,
+  }
+
+  return {
+    columns: [
+      {
+        text: 'Public Assistance Card:',
+        style: 'sectionSubheader',
+        width: 'auto',
+      },
+      {
+        columns: [
+          { image: `${publicAssistanceOptions.yes} `, width: 10 },
+          { text: 'Yes', style: 'checkboxLabel' },
+        ],
+        width: 'auto',
+      },
+      {
+        columns: [
+          { image: `${publicAssistanceOptions.no} `, width: 10 },
+          { text: 'No', style: 'checkboxLabel' },
+        ],
+        width: 'auto',
+      },
+    ],
+    columnGap: 15,
+    margin: [0, 0, 0, 10],
+  }
+}
+
 function formatTriage(triage = {}) {
   const {
     triageQ1,
@@ -553,17 +486,51 @@ function triageTableSection(triage = {}) {
   }
 }
 
-let formAImages = [pic1, pic2]
+let formAImages = [pic1]
+
+function floorPlanFooter(currentPage, pageCount) {
+  if (currentPage !== pageCount) return null
+
+  return {
+    table: {
+      widths: ['*'],
+      body: [
+        [
+          {
+            text: [
+              { text: 'Disclaimer: ', bold: true },
+              {
+                text: 'Mammobus is located at the Community Centre (CC) carpark and is not shown on this floor plan.',
+              },
+            ],
+            fillColor: '#FFF4CC',
+            color: '#5C3B00',
+            fontSize: 9,
+            alignment: 'center',
+            margin: [5, 3, 5, 3],
+          },
+        ],
+      ],
+    },
+    layout: {
+      hLineColor: () => '#B7791F',
+      vLineColor: () => '#B7791F',
+      hLineWidth: () => 0.75,
+      vLineWidth: () => 0.75,
+    },
+    margin: [190, 0, 190, 0],
+  }
+}
 
 function picSections() {
   return formAImages
     .filter((img) => !!img)
-    .map((img, index) => ({
-      ...(index > 0 ? { pageBreak: 'before' } : {}),
+    .map((img) => ({
+      pageBreak: 'before',
       stack: [
         {
           image: img,
-          width: 700,
+          fit: [700, 470],
           alignment: 'center',
         },
       ],

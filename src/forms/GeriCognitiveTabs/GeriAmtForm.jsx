@@ -1,7 +1,8 @@
-import { Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
+import { Box, Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import dayjs from 'dayjs'
 
 import * as Yup from 'yup'
 import { submitForm } from '../../api/formHelpers.jsx'
@@ -58,6 +59,12 @@ const getScore = (values) => {
     (v) => v === 'Yes (Answered correctly)',
   ).length
 }
+
+const formatDateOfBirth = (value) => {
+  const date = dayjs(value)
+  return date.isValid() ? date.format('D MMMM YYYY') : 'Not available'
+}
+
 const initialValues = {
   geriAmtQ1: '',
   geriAmtQ2: '',
@@ -119,6 +126,15 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
           <Form className='fieldPadding'>
             <div className='form--div'>
               <h1>ABBREVIATED MENTAL TEST (for dementia)</h1>
+              <Typography sx={{ fontWeight: 'bold', mb: 2 }}>
+                Before you start the AMT, please (1) ask for the participant&apos;s NRIC to refer to
+                their address for a later question and (2) tell them to remember the phrase
+                &quot;37 Bukit Timah Road&quot;.
+                <br />
+                <br />
+                If the participant does not have their NRIC with them, we can ask for their postal
+                code.
+              </Typography>
               <img
                 src='../../../images/geri-amt/scoring-rubric.png'
                 alt='Scoring rubric for geri AMT'
@@ -135,6 +151,26 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                     <h3>
                       {`${qNum})`} {`Question ${qNum}`} {geriAmtFormQuestionText[`geriAmtQ${qNum}`]}
                     </h3>
+                    {qNum === 8 && (
+                      <Box
+                        component='img'
+                        src='/images/geri-amt/q8-occupation.jpg'
+                        alt='Doctor and nurse shown for AMT question 8'
+                        sx={{
+                          display: 'block',
+                          width: '100%',
+                          maxWidth: 520,
+                          height: 'auto',
+                          mx: 'auto',
+                          mb: 2,
+                        }}
+                      />
+                    )}
+                    {qNum === 10 && (
+                      <Typography variant='subtitle1' sx={{ fontWeight: 'bold', mb: 1 }}>
+                        &quot;37 Bukit Timah Road&quot;
+                      </Typography>
+                    )}
                     <Typography variant='body2'>{`Was Q${qNum} answered correctly?`}</Typography>
                     <Field
                       name={`geriAmtQ${qNum}`}
@@ -207,9 +243,18 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
   const renderSidePanel = () => (
     <div className='summary--question-div'>
-      <h2>Patient Registration</h2>
-      <p className='underlined'>Patient&apos;s Age</p>
-      {regForm ? <p className='blue'>{regForm.registrationQ4}</p> : null}
+      <h2>AMT References</h2>
+      <p className='underlined'>Question 3: Age</p>
+      <p className='blue'>{regForm?.registrationQ4 ?? 'Not available'}</p>
+      <Divider />
+      <p className='underlined'>Question 4: Date of Birth</p>
+      <p className='blue'>{formatDateOfBirth(regForm?.registrationQ3)}</p>
+      <Divider />
+      <p className='underlined'>Question 5: Home Address</p>
+      <p>Refer to the participant&apos;s NRIC. If unavailable, ask for their postal code.</p>
+      <Divider />
+      <p className='underlined'>Question 10: Recall Phrase</p>
+      <p className='blue'>&quot;37 Bukit Timah Road&quot;</p>
       <Divider />
     </div>
   )

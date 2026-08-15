@@ -1,6 +1,7 @@
 import React from 'react'
-import { Fragment, useContext, useEffect, useState } from 'react'
-import { Formik, useFormikContext, Field } from 'formik'
+import { useContext, useEffect, useState } from 'react'
+import { Formik, Field } from 'formik'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { Divider, Paper, Grid, CircularProgress, Button } from '@mui/material'
@@ -33,62 +34,27 @@ const formOptions = {
     { label: 'No', value: 'No' },
     { label: 'Not Applicable', value: 'Not Applicable' },
   ],
+  wceQ13: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
 }
 
 const validationSchema = Yup.object({
   wceQ3: Yup.string().required(),
   wceQ4: Yup.string().required(),
+  wceQ13: Yup.string().required(),
 })
 
 const initialValues = {
   wceQ3: '',
   wceQ4: '',
+  wceQ13: '',
 }
 
-// HPV Eligibility Checker Component
-function CheckHpvEligibility() {
-  const { values } = useFormikContext()
-  const { wceQ8, wceQ9, wceQ10, wceQ11, wceQ12 } = values
-
-  if (
-    (wceQ8 === '5 years or longer' || wceQ8 === 'Never before') &&
-    wceQ9 === 'Yes' &&
-    wceQ10 === 'No' &&
-    (wceQ11 === '3 years or longer' || wceQ11 === 'Never before')
-  ) {
-    if (wceQ12 === 'Yes') {
-      return (
-        <Fragment>
-          <p className='blue'>
-            Patient is eligibile for HPV Test at both off-site clinic site and on-site
-          </p>
-        </Fragment>
-      )
-    } else if (wceQ12 === 'No') {
-      return (
-        <Fragment>
-          <p className='blue'>Patient is eligibile for HPV Test only at off-site clinic site</p>
-        </Fragment>
-      )
-    } else {
-      return (
-        <Fragment>
-          <p className='red'>ERROR</p>
-        </Fragment>
-      )
-    }
-  } else {
-    return (
-      <Fragment>
-        <p className='blue'>Patient is not eligibile for HPV Test</p>
-      </Fragment>
-    )
-  }
-}
-
-const WceForm = (props) => {
+const WceForm = () => {
   const { patientId } = useContext(FormContext)
-  const { changeTab, nextTab } = props
+  const navigate = useNavigate()
   const [loading, isLoading] = useState(false)
   const [loadingSidePanel, isLoadingSidePanel] = useState(true)
   const [saveData, setSaveData] = useState(initialValues)
@@ -131,7 +97,7 @@ const WceForm = (props) => {
           setSubmitting(false)
           if (response.result) {
             await showFormSubmitSuccess()
-            changeTab(null, nextTab)
+            navigate('/app/dashboard')
           } else {
             showFormSubmitError(`Unsuccessful. ${response.error}`)
           }
@@ -163,8 +129,13 @@ const WceForm = (props) => {
                       component={CustomRadioGroup}
                     />
 
-                    <h3>HPV Test Eligibility</h3>
-                    <CheckHpvEligibility />
+                    <h3>{wceFormQuestionText.wceQ13}</h3>
+                    <Field
+                      name='wceQ13'
+                      label='WCE Q13'
+                      options={formOptions.wceQ13}
+                      component={CustomRadioGroup}
+                    />
                   </div>
 
                   <ErrorNotification

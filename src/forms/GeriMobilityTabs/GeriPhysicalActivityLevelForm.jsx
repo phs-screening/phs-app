@@ -59,6 +59,10 @@ const formOptions = {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
+  geriPhysicalActivityLevelQ11: [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ],
 }
 
 const validationSchema = Yup.object({
@@ -87,9 +91,10 @@ const validationSchema = Yup.object({
     .required(),
   geriPhysicalActivityLevelQ10: Yup.string(),
   geriPhysicalActivityLevelQ7: Yup.string(),
+  geriPhysicalActivityLevelQ11: Yup.string().oneOf(['Yes', 'No']).required(),
 })
 
-const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
+const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab, onReferralSubmitted }) => {
   const { patientId } = useContext(FormContext)
   const [loading, setLoading] = useState(false)
   const [initialValues, setInitialValues] = useState({
@@ -103,6 +108,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
     geriPhysicalActivityLevelQ8: '',
     geriPhysicalActivityLevelQ9: '',
     geriPhysicalActivityLevelQ10: '',
+    geriPhysicalActivityLevelQ11: '',
   })
 
   useEffect(() => {
@@ -124,6 +130,7 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
         setLoading(false)
         if (response.result) {
           await showFormSubmitSuccess()
+          onReferralSubmitted?.(values.geriPhysicalActivityLevelQ11)
           changeTab(null, nextTab)
         } else {
           showFormSubmitError(`Unsuccessful. ${response.error}`)
@@ -261,6 +268,17 @@ const GeriPhysicalActivityLevelForm = ({ changeTab, nextTab }) => {
                 label='Geri - Physical Activity Level Q6'
                 component={CustomCheckboxGroup}
                 options={formOptions.geriPhysicalActivityLevelQ6}
+              />
+
+              <h3 className='red'>
+                {geriPhysicalActivityLevelFormQuestionText.geriPhysicalActivityLevelQ11}
+              </h3>
+              <FastField
+                name='geriPhysicalActivityLevelQ11'
+                label='geriPhysicalActivityLevelQ11'
+                component={CustomRadioGroup}
+                options={formOptions.geriPhysicalActivityLevelQ11}
+                row
               />
             </div>
 

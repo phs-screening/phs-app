@@ -160,7 +160,8 @@ export async function generate_pdf_updated(
   content.push(...temperatureSection(triage))
   content.push(...bloodPressureSection(triage))
   content.push(...bmiSection(triage.triageQ10, triage.triageQ11, triage.triageQ12))
-  content.push(...otherScreeningModularitiesSection(reg, geriVision, podiatry, vaccine))
+  content.push(...otherScreeningModularitiesSection(reg, geriVision, podiatry))
+  content.push(...vaccineSection(vaccine))
   content.push(...sleepApneaSection(hxOsa, reg, triage, triage.triageQ12))
   //content.push({ text: '', pageBreak: 'before' })
   content.push(
@@ -380,7 +381,7 @@ export function bmiSection(height, weight, bmiString) {
   ]
 }
 
-export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
+export function otherScreeningModularitiesSection(reg, eye, podiatry) {
   return [
     { text: parseFromLangKey('other_title'), style: 'subheader' },
     { text: `${parseFromLangKey('other_eye')}\n`, style: 'normal' },
@@ -441,15 +442,36 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry, vaccine) {
     ...(podiatry?.podiatryQ1 === 'Yes'
       ? [{ text: `${parseFromLangKey('podiatry_screening_true')}\n`, style: 'normal' }]
       : []),
+  ]
+}
+
+export function vaccineSection(vaccine = {}) {
+  const vaccinesTaken = [
+    ['VAX2', 'vaccine_2'],
+    ['VAX3', 'vaccine_3'],
+    ['VAX5', 'vaccine_5'],
+  ].filter(([field]) => vaccine?.[field] === 'Yes')
+
+  return [
+    { text: parseFromLangKey('vaccine_title'), style: 'subheader' },
     ...(vaccine?.VAX1 === 'Yes'
       ? [{ text: `${parseFromLangKey('vaccine_1')}\n`, style: 'normal' }]
       : []),
-    ...(vaccine?.VAX2 === 'Yes'
-      ? [{ text: `${parseFromLangKey('vaccine_2')}\n`, style: 'normal', margin: [20, 0, 0, 0] }]
-      : []),
-    ...(vaccine?.VAX3 === 'Yes'
-      ? [{ text: `${parseFromLangKey('vaccine_3')}\n`, style: 'normal', margin: [20, 0, 0, 20] }]
-      : []),
+    { text: `${parseFromLangKey('vaccines_taken_title')}\n`, style: 'normal', bold: true },
+    ...(vaccinesTaken.length > 0
+      ? vaccinesTaken.map(([, translationKey]) => ({
+          text: `${parseFromLangKey(translationKey)}\n`,
+          style: 'normal',
+          margin: [20, 0, 0, 0],
+        }))
+      : [
+          {
+            text: `${parseFromLangKey('vaccine_none')}\n`,
+            style: 'normal',
+            margin: [20, 0, 0, 0],
+          },
+        ]),
+    { text: '', margin: [0, 5] },
   ]
 }
 

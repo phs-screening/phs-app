@@ -6,10 +6,7 @@ import * as Yup from 'yup'
 import { Divider, Paper, Grid, CircularProgress, Button, Typography, Box } from '@mui/material'
 
 import CustomCheckboxGroup from '../components/form-components/CustomCheckboxGroup'
-import CustomRadioGroup from '../components/form-components/CustomRadioGroup'
-import CustomTextField from '../components/form-components/CustomTextField'
 import ErrorNotification from '../components/form-components/ErrorNotification'
-import PopupText from 'src/utils/popupText'
 
 import { submitForm } from '../api/formHelpers.jsx'
 import {
@@ -24,8 +21,6 @@ import { oralHealthFormQuestionText } from './questions/OralHealthFormQuestions'
 
 const initialValues = {
   DENT1: [],
-  DENT2: '',
-  DENTShortAns2: '',
   DENT3: [],
 }
 
@@ -34,12 +29,6 @@ const validationSchema = Yup.object({
     .of(Yup.string().oneOf(['I have been informed and understand.']))
     .min(1, 'You must check this box to proceed')
     .required('Required'),
-  DENT2: Yup.string().oneOf(['Yes', 'No']).required('Required'),
-  DENTShortAns2: Yup.string().when('DENT2', {
-    is: 'Yes',
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema,
-  }),
   DENT3: Yup.array()
     .of(Yup.string().oneOf(['Yes']))
     .min(1, 'You must check this box to proceed')
@@ -52,10 +41,6 @@ const formOptions = {
       label: 'I have been informed and understand.',
       value: 'I have been informed and understand.',
     },
-  ],
-  DENT2: [
-    { label: 'Yes, (please specify)', value: 'Yes' },
-    { label: 'No', value: 'No' },
   ],
   DENT3: [{ label: 'Yes', value: 'Yes' }],
 }
@@ -96,7 +81,10 @@ const OralHealthForm = () => {
         })
         isLoadingSidePanel(false)
       }
-      setSaveData(savedData || initialValues)
+      const currentData = { ...(savedData || {}) }
+      delete currentData.DENT2
+      delete currentData.DENTShortAns2
+      setSaveData({ ...initialValues, ...currentData })
       loadPastForms()
     }
     fetchData()
@@ -188,30 +176,6 @@ const OralHealthForm = () => {
             />
 
             <Typography variant='h4' fontWeight='bold'>
-              {oralHealthFormQuestionText.DENT2}
-            </Typography>
-            <FastField
-              name='DENT2'
-              label='DENT2'
-              component={CustomRadioGroup}
-              options={formOptions.DENT2}
-              row
-            />
-
-            <PopupText qnNo='DENT2' triggerValue='Yes'>
-              <Typography variant='h6' component='h3' fontWeight='bold'>
-                {oralHealthFormQuestionText.DENTShortAns2}
-              </Typography>
-              <FastField
-                name='DENTShortAns2'
-                label='DENTShortAns2'
-                component={CustomTextField}
-                multiline
-                minRows={2}
-              />
-            </PopupText>
-
-            <Typography variant='h4' fontWeight='bold'>
               {oralHealthFormQuestionText.DENT3}
             </Typography>
             <FastField
@@ -250,8 +214,6 @@ const OralHealthForm = () => {
         <>
           <p className='underlined'>Is patient refered to Dental:</p>
           <p className='blue'>{doctorConsult.doctorSConsultQ8 ? 'Yes' : 'No'}</p>
-          <p className='underlined'>Reason for referral:</p>
-          <p className='blue'>{doctorConsult.doctorSConsultQ9}</p>
           <p className='underlined'>Does patient require urgent follow up?</p>
           <p className='blue'>{doctorConsult.doctorSConsultQ10}</p>
         </>

@@ -97,7 +97,7 @@ const GeriSppbForm = (props) => {
   const { patientId } = useContext(FormContext)
   const [initialValues, setInitialValues] = useState(initialEmptyValues)
   const [loading, setLoading] = useState(false)
-  const { changeTab, nextTab } = props
+  const { changeTab, nextTab, onSubmitted } = props
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,7 +123,11 @@ const GeriSppbForm = (props) => {
         setLoading(false)
         if (response.result) {
           await showFormSubmitSuccess()
-          changeTab(null, nextTab)
+          if (onSubmitted) {
+            onSubmitted(values)
+          } else {
+            changeTab(null, nextTab)
+          }
         } else {
           showFormSubmitError(`Unsuccessful. ${response.error}`)
         }
@@ -213,6 +217,11 @@ const GeriSppbForm = (props) => {
               row
             />
 
+            <Typography variant='h6' fontWeight='bold'>
+              {geriSppbFormQuestionText.geriSppbQ12}
+            </Typography>
+            <Field name='geriSppbQ12' label='geriSppbQ12' component={CustomTextField} />
+
             <Typography variant='h6' fontWeight='bold' color='red'>
               {geriSppbFormQuestionText.geriSppbQ11}
             </Typography>
@@ -223,11 +232,6 @@ const GeriSppbForm = (props) => {
               options={formOptions.geriSppbQ11}
               row
             />
-
-            <Typography variant='h6' fontWeight='bold'>
-              {geriSppbFormQuestionText.geriSppbQ12}
-            </Typography>
-            <Field name='geriSppbQ12' label='geriSppbQ12' component={CustomTextField} />
 
             <br />
 

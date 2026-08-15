@@ -6,8 +6,11 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import { ScrollTopContext } from '../../api/utils.js'
+import { useNavigate } from 'react-router-dom'
+import { FormContext, ScrollTopContext } from '../../api/utils.js'
 import useScrollToTopOnChange from '../../hooks/useScrollToTopOnChange.js'
+import { getSavedData } from '../../services/patientData'
+import allForms from '../forms.json'
 import GeriPhysicalActivityLevelForm from './GeriPhysicalActivityLevelForm.jsx'
 import GeriOtQuestionnaireForm from './GeriOtQuestionnaireForm.jsx'
 import GeriSppbForm from './GeriSppbForm.jsx'
@@ -55,41 +58,133 @@ const GeriMobilityWrapper = styled('div')(
 )
 
 export default function GeriMobilityTabs() {
-  const [value, setValue] = React.useState(0)
+  const [activeTab, setActiveTab] = React.useState('physical')
+  const [physicalPtReferral, setPhysicalPtReferral] = React.useState(false)
+  const [sppbPtReferral, setSppbPtReferral] = React.useState(false)
+  const [homefastOtReferral, setHomefastOtReferral] = React.useState(false)
+  const { patientId } = React.useContext(FormContext)
   const { scrollTop } = React.useContext(ScrollTopContext)
+  const navigate = useNavigate()
+
+  const showPtConsult = physicalPtReferral || sppbPtReferral
+  const showOtConsult = homefastOtReferral
+  const availableTabs = React.useMemo(
+    () => [
+      { key: 'physical', label: 'Physical Activity Level' },
+      { key: 'homefast', label: 'Homefast' },
+      { key: 'sppb', label: 'SPPB' },
+      ...(showPtConsult ? [{ key: 'pt', label: 'PT Consult' }] : []),
+      ...(showOtConsult ? [{ key: 'ot', label: 'OT Consult' }] : []),
+    ],
+    [showPtConsult, showOtConsult],
+  )
+  const value = Math.max(
+    availableTabs.findIndex(({ key }) => key === activeTab),
+    0,
+  )
   const wrapperRef = useScrollToTopOnChange(value, scrollTop)
+
+  React.useEffect(() => {
+    let isCurrent = true
+    setPhysicalPtReferral(false)
+    setSppbPtReferral(false)
+    setHomefastOtReferral(false)
+    setActiveTab('physical')
+
+    const loadReferrals = async () => {
+      try {
+        const [physical, homefast, sppb] = await Promise.all([
+          getSavedData(patientId, allForms.geriPhysicalActivityLevelForm),
+          getSavedData(patientId, allForms.geriOtQuestionnaireForm),
+          getSavedData(patientId, allForms.geriSppbForm),
+        ])
+        if (!isCurrent) return
+
+        setPhysicalPtReferral(physical?.geriPhysicalActivityLevelQ11 === 'Yes')
+        setHomefastOtReferral(homefast?.geriOtQuestionnaireQ34 === 'Yes')
+        setSppbPtReferral(sppb?.geriSppbQ11 === 'Yes')
+      } catch (error) {
+        console.error('Failed to load Geriatrics Mobility referrals:', error)
+      }
+    }
+
+    loadReferrals()
+    return () => {
+      isCurrent = false
+    }
+  }, [patientId])
+
+  React.useEffect(() => {
+    if (!availableTabs.some(({ key }) => key === activeTab)) {
+      setActiveTab('physical')
+    }
+  }, [activeTab, availableTabs])
 
   const handleChange = (event, newValue) => {
     scrollTop()
-    setValue(newValue)
+    const nextTab = availableTabs[newValue]
+    if (nextTab) {
+      setActiveTab(nextTab.key)
+    }
+  }
+
+  const handleSppbSubmitted = (values) => {
+    const referredBySppb = values.geriSppbQ11 === 'Yes'
+    setSppbPtReferral(referredBySppb)
+
+    if (physicalPtReferral || referredBySppb) {
+      setActiveTab('pt')
+    } else if (homefastOtReferral) {
+      setActiveTab('ot')
+    } else {
+      navigate('/app/dashboard')
+    }
+  }
+
+  const handlePtConsultSubmitted = () => {
+    if (homefastOtReferral) {
+      setActiveTab('ot')
+    } else {
+      navigate('/app/dashboard')
+    }
   }
 
   return (
     <GeriMobilityWrapper ref={wrapperRef}>
       <AppBar position='static' color='default'>
         <Tabs value={value} onChange={handleChange} aria-label='GeriMobility tabs'>
-          <Tab label='Physical Activity Level' {...a11yProps(0)} />
-          <Tab label='Homefast' {...a11yProps(1)} />
-          <Tab label='SPPB' {...a11yProps(2)} />
-          <Tab label='PT Consult' {...a11yProps(3)} />
-          <Tab label='OT Consult' {...a11yProps(4)} />
+          {availableTabs.map(({ key, label }, index) => (
+            <Tab key={key} label={label} {...a11yProps(index)} />
+          ))}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <GeriPhysicalActivityLevelForm changeTab={handleChange} nextTab={1} />
+        <GeriPhysicalActivityLevelForm
+          changeTab={handleChange}
+          nextTab={1}
+          onReferralSubmitted={(answer) => setPhysicalPtReferral(answer === 'Yes')}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <GeriOtQuestionnaireForm changeTab={handleChange} nextTab={2} />
+        <GeriOtQuestionnaireForm
+          changeTab={handleChange}
+          nextTab={2}
+          onReferralSubmitted={(answer) => setHomefastOtReferral(answer === 'Yes')}
+        />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <GeriSppbForm changeTab={handleChange} nextTab={3} />
+        <GeriSppbForm changeTab={handleChange} nextTab={3} onSubmitted={handleSppbSubmitted} />
       </TabPanel>
-      <TabPanel value={value} index={3}>
-        <GeriPtConsultForm changeTab={handleChange} nextTab={4} />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <GeriOtConsultForm />
-      </TabPanel>
+      {showPtConsult && (
+        <TabPanel value={value} index={availableTabs.findIndex(({ key }) => key === 'pt')}>
+          <GeriPtConsultForm onSubmitted={handlePtConsultSubmitted} />
+        </TabPanel>
+      )}
+      {showOtConsult && (
+        <TabPanel value={value} index={availableTabs.findIndex(({ key }) => key === 'ot')}>
+          <GeriOtConsultForm />
+        </TabPanel>
+      )}
     </GeriMobilityWrapper>
   )
 }

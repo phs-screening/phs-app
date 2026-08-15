@@ -9,6 +9,6 @@ export const geriSppbFormQuestionText = {
   geriSppbQ7: 'Time taken in seconds:',
   geriSppbQ8: 'Score for 3m WALK (out of 4):',
   geriSppbQ10: 'Fall Risk Level:',
-  geriSppbQ11: 'Referral to Physiotherapist and Occupational Therapist Consult',
+  geriSppbQ11: 'Refer to PT consult?',
   geriSppbQ12: 'Notes:',
 }

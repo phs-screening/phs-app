@@ -26,12 +26,9 @@ const initialValues = {
   doctorSConsultQ1: '',
   doctorSConsultQ2: '',
   doctorSConsultQ3: '',
-  doctorSConsultQ4: '',
-  doctorSConsultQ5: '',
   doctorSConsultQ6: '',
   doctorSConsultQ7: '',
   doctorSConsultQ8: '',
-  doctorSConsultQ9: '',
   doctorSConsultQ10: '',
   doctorSConsultQ11: '',
   doctorSConsultQ12: '',
@@ -42,12 +39,6 @@ const validationSchema = Yup.object().shape({
   doctorSConsultQ1: Yup.string().required('This field is required'),
   doctorSConsultQ2: Yup.string().required('This field is required'),
   doctorSConsultQ3: Yup.string().required('This field is required'),
-  doctorSConsultQ4: Yup.string().required('This field is required'),
-  doctorSConsultQ5: Yup.string().when('doctorSConsultQ4', {
-    is: 'Yes',
-    then: (schema) => schema.required('Reason is required when referral is selected'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
   doctorSConsultQ6: Yup.string().required('This field is required'),
   doctorSConsultQ7: Yup.string().when('doctorSConsultQ6', {
     is: 'Yes',
@@ -56,11 +47,6 @@ const validationSchema = Yup.object().shape({
   }),
   doctorSConsultQ13: Yup.string().required('This field is required'),
   doctorSConsultQ8: Yup.string().required('This field is required'),
-  doctorSConsultQ9: Yup.string().when('doctorSConsultQ8', {
-    is: 'Yes',
-    then: (schema) => schema.required('Reason is required when referral is selected'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
   doctorSConsultQ10: Yup.string().required('This field is required'),
   doctorSConsultQ11: Yup.string().required('This field is required'),
   doctorSConsultQ12: Yup.string().required('This field is required'),
@@ -97,7 +83,11 @@ const DoctorsConsultForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
-      setSaveData({ ...initialValues, ...savedData })
+      const currentData = { ...savedData }
+      delete currentData.doctorSConsultQ4
+      delete currentData.doctorSConsultQ5
+      delete currentData.doctorSConsultQ9
+      setSaveData({ ...initialValues, ...currentData })
 
       const loadPastForms = async () => {
         const hcsrData = getSavedData(patientId, allForms.hxHcsrForm)
@@ -207,27 +197,6 @@ const DoctorsConsultForm = () => {
               multiline
               minRows={6}
             />
-            <h3>{doctorsConsultFormQuestionText.doctorSConsultQ4}</h3>
-            <FastField
-              name='doctorSConsultQ4'
-              label='doctorQ4'
-              component={CustomRadioGroup}
-              options={formOptions.doctorSConsultYESNO}
-              row
-            />
-            <PopupText qnNo='doctorSConsultQ4' triggerValue='Yes'>
-              <Typography variant='h6' component='h3' gutterBottom>
-                {doctorsConsultFormQuestionText.doctorSConsultQ5}
-              </Typography>
-              <FastField
-                name='doctorSConsultQ5'
-                label='doctorQ5'
-                component={CustomTextField}
-                fullWidth
-                multiline
-                minRows={2}
-              />
-            </PopupText>
             <h3>{doctorsConsultFormQuestionText.doctorSConsultQ6}</h3>
             <FastField
               name='doctorSConsultQ6'
@@ -265,20 +234,6 @@ const DoctorsConsultForm = () => {
               options={formOptions.doctorSConsultYESNO}
               row
             />
-            <PopupText qnNo='doctorSConsultQ8' triggerValue='Yes'>
-              <Typography variant='h6' component='h3' gutterBottom>
-                {doctorsConsultFormQuestionText.doctorSConsultQ9}
-              </Typography>
-              <FastField
-                name='doctorSConsultQ9'
-                label='doctorQ9'
-                component={CustomTextField}
-                fullWidth
-                multiline
-                minRows={2}
-              />
-            </PopupText>
-
             <h3>{doctorsConsultFormQuestionText.doctorSConsultQ10}</h3>
             <FastField
               name='doctorSConsultQ10'

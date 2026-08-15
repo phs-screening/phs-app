@@ -13,4 +13,5 @@ export const geriPhysicalActivityLevelFormQuestionText = {
     'Please elaborate below on the injuries and whether there was medical treatment e.g. seeing Dr/ED dept.',
   geriPhysicalActivityLevelQ7: 'Notes:',
   geriPhysicalActivityLevelQ6: 'Referral to Physiotherapist Consult',
+  geriPhysicalActivityLevelQ11: 'Refer to PT consult?',
 }

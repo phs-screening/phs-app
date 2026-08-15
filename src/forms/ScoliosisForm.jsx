@@ -22,6 +22,7 @@ const formName = 'scoliosisForm'
 const initialValues = {
   scoliosisQ1: '',
   scoliosisQ2: '',
+  scoliosisQ3: '',
 }
 
 const completionOptions = [
@@ -32,6 +33,7 @@ const completionOptions = [
 const validationSchema = Yup.object({
   scoliosisQ1: Yup.string().required('Required'),
   scoliosisQ2: Yup.string(),
+  scoliosisQ3: Yup.string().oneOf(['Yes', 'No']).required('Required'),
 })
 
 const ScoliosisForm = () => {
@@ -95,6 +97,15 @@ const ScoliosisForm = () => {
               fullWidth
               multiline
               minRows={6}
+            />
+
+            <Typography fontWeight='bold'>{scoliosisFormQuestionText.scoliosisQ3}</Typography>
+            <FastField
+              name='scoliosisQ3'
+              label='scoliosisQ3'
+              component={CustomRadioGroup}
+              options={completionOptions}
+              row
             />
 
             <ErrorNotification
