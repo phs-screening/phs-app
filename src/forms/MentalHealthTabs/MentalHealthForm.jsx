@@ -212,8 +212,8 @@ const MentalHealthForm = () => {
                   <p className='blue'>PHQ Score: {phq.PHQ10}</p>
                   {phq.PHQ10 >= 6 ? (
                     <p className='red'>
-                      Patient meets the PHQ score threshold for referral to SAMH. Patient is
-                      recommended to sign up for follow up to SAMH.
+                      Patient meets the PHQ score threshold for referral to NTUC Health. Patient is
+                      recommended to sign up for follow up to NTUC Health.
                     </p>
                   ) : null}
                   <p className='underlined'>Would the patient benefit from counselling:</p>

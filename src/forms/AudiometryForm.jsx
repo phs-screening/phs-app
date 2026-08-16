@@ -25,6 +25,7 @@ const YesNo = [
 ]
 
 const formOptions = {
+  PMHX8: YesNo,
   AudiometryQ9: YesNo,
   AudiometryQ11: YesNo,
   AudiometryQ13: [
@@ -86,7 +87,13 @@ const AudiometryForm = () => {
     fetchData()
   }, [patientId])
 
+  // PMHX8 moved here from the PMHx tab; fall back to the legacy hxNssForm value
+  // so participants screened before the move still show their recorded answer.
+  const pmhx8Source = Object.prototype.hasOwnProperty.call(saveData, 'PMHX8') ? saveData : pmhx
+
   const initialValues = {
+    PMHX8: pmhx8Source?.PMHX8 || '',
+    PMHXShortAns8: pmhx8Source?.PMHXShortAns8 || '',
     AudiometryQ9: saveData.AudiometryQ9 || '',
     AudiometryQ10: saveData.AudiometryQ10 || '',
     AudiometryQ11: saveData.AudiometryQ11 || '',
@@ -103,6 +110,7 @@ const AudiometryForm = () => {
         setLoading(true)
         const submissionValues = {
           ...values,
+          PMHXShortAns8: values.PMHX8 === 'Yes' ? values.PMHXShortAns8 : '',
           AudiometryQ10: values.AudiometryQ9 === 'Yes' ? values.AudiometryQ10 : '',
         }
         const response = await submitForm(submissionValues, patientId, formName)
@@ -126,6 +134,25 @@ const AudiometryForm = () => {
                 <Form className='fieldPadding'>
                   <div className='form--div'>
                     <h1>AUDIOMETRY</h1>
+                    <h3>{audiometryFormQuestionText.PMHX8}</h3>
+                    <FastField
+                      name='PMHX8'
+                      label='PMHX8'
+                      component={CustomRadioGroup}
+                      options={formOptions.PMHX8}
+                      row
+                    />
+
+                    <PopupText qnNo='PMHX8' triggerValue='Yes'>
+                      <FastField
+                        name='PMHXShortAns8'
+                        label={audiometryFormQuestionText.PMHXShortAns8}
+                        component={CustomTextField}
+                        fullWidth
+                        multiline
+                      />
+                    </PopupText>
+
                     <h4>
                       When senior is found to have abnormal hearing results, please ask the
                       following questions:
@@ -237,12 +264,6 @@ const AudiometryForm = () => {
                         detected to require hearing aids?
                       </p>
                       <p className='blue'>{pmhx.PMHX13}</p>
-
-                      <p className='underlined'>
-                        For geriatric participants, has the senior seen an ENT specialist before?
-                      </p>
-                      <p className='blue'>{pmhx.PMHX8}</p>
-                      <p className='blue'>{pmhx.PMHXShortAns8}</p>
 
                       <p className='underlined'>
                         <span className='red'>For geriatric participants,</span> did he/she answer

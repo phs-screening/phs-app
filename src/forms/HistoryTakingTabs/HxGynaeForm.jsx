@@ -29,14 +29,23 @@ const initialValues = {
   GYNAE18: '',
 }
 
+// GYNAE17 gates the rest of the form: the remaining questions are only asked
+// when the participant has indicated interest in the HPV test under SCS.
+const requiredWhenInterested = () =>
+  Yup.string().when('GYNAE17', {
+    is: 'Yes',
+    then: (schema) => schema.required('Required'),
+    otherwise: (schema) => schema.notRequired(),
+  })
+
 const validationSchema = Yup.object({
-  GYNAE12: Yup.string().required('Required'),
-  GYNAE13: Yup.string().required('Required'),
-  GYNAE14: Yup.string().required('Required'),
-  GYNAE15: Yup.string().required('Required'),
-  GYNAE16: Yup.string().required('Required'),
-  GYNAE17: Yup.string().required('Required'),
-  GYNAE18: Yup.string().required('Required'),
+  GYNAE17: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+  GYNAE12: requiredWhenInterested(),
+  GYNAE13: requiredWhenInterested(),
+  GYNAE14: requiredWhenInterested(),
+  GYNAE15: requiredWhenInterested(),
+  GYNAE16: requiredWhenInterested(),
+  GYNAE18: requiredWhenInterested(),
 })
 
 const formOptions = {
@@ -48,19 +57,11 @@ const formOptions = {
     { label: 'Never before', value: 'Never before' },
     { label: 'Less than 5 years ago', value: 'Less than 5 years ago' },
     { label: '5 years or longer', value: '5 years or longer' },
-    { label: 'Not answered', value: 'Never before' },
   ],
   GYNAE13: [
     { label: 'Never before', value: 'Never before' },
     { label: 'Within the last 3 years', value: 'Within the last 3 years' },
     { label: '3 years or longer', value: '3 years or longer' },
-    { label: 'Not answered', value: 'Never before' },
-  ],
-  GYNAE17: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-    { label: 'Not answered', value: 'No' },
-    { label: 'Not Applicable', value: 'Not Applicable' },
   ],
 }
 
@@ -79,8 +80,23 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
   }, [patientId])
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    // Only GYNAE17 is asked when the participant is not interested; clear the rest
+    // so a changed answer never leaves stale values behind.
+    const submittedValues =
+      values.GYNAE17 === 'Yes'
+        ? values
+        : {
+            ...values,
+            GYNAE12: '',
+            GYNAE13: '',
+            GYNAE14: '',
+            GYNAE15: '',
+            GYNAE16: '',
+            GYNAE18: '',
+          }
+
     setLoading(true)
-    const response = await submitForm(values, patientId, formName)
+    const response = await submitForm(submittedValues, patientId, formName)
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
@@ -108,81 +124,84 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
           </Typography>
 
           <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE12}
-          </Typography>
-          <FastField
-            name='GYNAE12'
-            label='GYNAE12'
-            component={CustomRadioGroup}
-            options={formOptions.GYNAE12}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE13}
-          </Typography>
-          <FastField
-            name='GYNAE13'
-            label='GYNAE13'
-            component={CustomRadioGroup}
-            options={formOptions.GYNAE13}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE14}
-          </Typography>
-          <FastField
-            name='GYNAE14'
-            label='GYNAE14'
-            component={CustomRadioGroup}
-            options={formOptions.YESNO}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE15}
-          </Typography>
-          <FastField
-            name='GYNAE15'
-            label='GYNAE15'
-            component={CustomRadioGroup}
-            options={formOptions.YESNO}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE16}
-          </Typography>
-          <FastField
-            name='GYNAE16'
-            label='GYNAE16'
-            component={CustomRadioGroup}
-            options={formOptions.YESNO}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
             {hxGynaeFormQuestionText.GYNAE17}
           </Typography>
           <FastField
             name='GYNAE17'
             label='GYNAE17'
             component={CustomRadioGroup}
-            options={formOptions.GYNAE17}
-            row
-          />
-
-          <Typography variant='subtitle1' fontWeight='bold'>
-            {hxGynaeFormQuestionText.GYNAE18}
-          </Typography>
-          <FastField
-            name='GYNAE18'
-            label='GYNAE18'
-            component={CustomRadioGroup}
             options={formOptions.YESNO}
             row
           />
+
+          {/* The rest of the gynae history is only asked when GYNAE17 is Yes. */}
+          <PopupText qnNo='GYNAE17' triggerValue='Yes'>
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE12}
+            </Typography>
+            <FastField
+              name='GYNAE12'
+              label='GYNAE12'
+              component={CustomRadioGroup}
+              options={formOptions.GYNAE12}
+              row
+            />
+
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE13}
+            </Typography>
+            <FastField
+              name='GYNAE13'
+              label='GYNAE13'
+              component={CustomRadioGroup}
+              options={formOptions.GYNAE13}
+              row
+            />
+
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE14}
+            </Typography>
+            <FastField
+              name='GYNAE14'
+              label='GYNAE14'
+              component={CustomRadioGroup}
+              options={formOptions.YESNO}
+              row
+            />
+
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE15}
+            </Typography>
+            <FastField
+              name='GYNAE15'
+              label='GYNAE15'
+              component={CustomRadioGroup}
+              options={formOptions.YESNO}
+              row
+            />
+
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE16}
+            </Typography>
+            <FastField
+              name='GYNAE16'
+              label='GYNAE16'
+              component={CustomRadioGroup}
+              options={formOptions.YESNO}
+              row
+            />
+
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxGynaeFormQuestionText.GYNAE18}
+            </Typography>
+            <FastField
+              name='GYNAE18'
+              label='GYNAE18'
+              component={CustomRadioGroup}
+              options={formOptions.YESNO}
+              row
+            />
+          </PopupText>
 
           <ErrorNotification
             show={Object.keys(errors).length > 0 && submitCount > 0}

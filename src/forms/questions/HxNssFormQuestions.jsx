@@ -10,13 +10,6 @@ export const hxNssFormQuestionText = {
   PMHXVAX4: 'Would you be interested in receiving the vaccine?',
   PMHXVAX5: 'Have you received the shingles vaccine?',
   PMHXVAX6: 'Would you be interested in receiving the vaccine?',
-  PMHX8: (
-    <>
-      <span style={{ color: '#d32f2f' }}>For geriatric participants,</span> has the senior seen an
-      ENT specialist before?
-    </>
-  ),
-  PMHXShortAns8: 'PMHXShortAns8 (Please specify)',
   PMHX9: (
     <>
       <span style={{ color: '#d32f2f' }}>For geriatric participants,</span> did he/she answer yes to

@@ -290,23 +290,6 @@ const LungFnForm = () => {
                       {social.SOCIAL10End || 'nil'}
                     </Typography>
 
-                    <Typography variant='body2' className='underlined'>
-                      Smoked before:
-                    </Typography>
-                    <Typography
-                      variant='body1'
-                      className='blue'
-                      sx={{ color: 'primary.main', mb: 1 }}
-                    >
-                      {social.SOCIAL11 || 'nil'}
-                    </Typography>
-
-                    <Typography variant='body2' className='underlined'>
-                      Quit history:
-                    </Typography>
-                    <Typography variant='body1' className='blue' sx={{ color: 'primary.main' }}>
-                      {social.SOCIALShortAns11 || 'nil'}
-                    </Typography>
                   </div>
                 )}
               </Grid>

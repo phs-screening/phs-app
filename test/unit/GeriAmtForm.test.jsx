@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FormContext } from '../../src/api/utils'
 import GeriAmtForm from '../../src/forms/GeriCognitiveTabs/GeriAmtForm'
+import { hasFailedAmt, AMT_PASS_MARK } from '../../src/forms/questions/GeriAmtFormQuestions'
 import { getSavedData } from '../../src/services/patientData'
 
 vi.mock('../../src/services/patientData', () => ({
@@ -44,5 +45,34 @@ describe('GeriAmtForm', () => {
     expect(screen.getAllByText('"37 Bukit Timah Road"')).toHaveLength(2)
     expect(screen.getByText('6 May 1950')).toBeInTheDocument()
     expect(screen.getByText('76')).toBeInTheDocument()
+  })
+})
+
+describe('AMT pass mark by education level', () => {
+  it('passes at 7/10 and above for Before PSLE', () => {
+    expect(AMT_PASS_MARK['Before PSLE']).toBe(7)
+    expect(hasFailedAmt(6, 'Before PSLE')).toBe(true)
+    expect(hasFailedAmt(7, 'Before PSLE')).toBe(false)
+    expect(hasFailedAmt(10, 'Before PSLE')).toBe(false)
+  })
+
+  it('passes at 9/10 and above for After PSLE', () => {
+    expect(AMT_PASS_MARK['After PSLE']).toBe(9)
+    expect(hasFailedAmt(8, 'After PSLE')).toBe(true)
+    expect(hasFailedAmt(9, 'After PSLE')).toBe(false)
+    expect(hasFailedAmt(10, 'After PSLE')).toBe(false)
+  })
+
+  it('applies the stricter mark only to After PSLE', () => {
+    // A score of 7 or 8 passes Before PSLE but fails After PSLE.
+    for (const score of [7, 8]) {
+      expect(hasFailedAmt(score, 'Before PSLE')).toBe(false)
+      expect(hasFailedAmt(score, 'After PSLE')).toBe(true)
+    }
+  })
+
+  it('does not treat an unanswered education level as a failure', () => {
+    expect(hasFailedAmt(0, '')).toBe(false)
+    expect(hasFailedAmt(0, undefined)).toBe(false)
   })
 })

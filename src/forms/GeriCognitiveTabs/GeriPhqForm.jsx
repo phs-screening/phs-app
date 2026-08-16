@@ -64,7 +64,7 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
     PHQ7: '',
     PHQ8: '',
     PHQ9: '',
-    PHQextra9: '',
+    PHQExtra9: '',
     PHQ11: '',
     PHQShortAns11: '',
   }

@@ -33,11 +33,9 @@ const initialValues = {
   SOCIAL10Years: '',
   SOCIAL10Packs: '',
   SOCIAL10End: '',
-  SOCIAL11: '',
-  SOCIALShortAns11: '',
   SOCIAL12: '',
+  SOCIALShortAns12: '',
   SOCIAL13: '',
-  SOCIAL14: '',
   SOCIAL15: '',
 }
 
@@ -64,15 +62,13 @@ const validationSchema = Yup.object({
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  SOCIAL11: Yup.string().required('Required'),
-  SOCIALShortAns11: Yup.string().when('SOCIAL11', {
+  SOCIAL12: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+  SOCIALShortAns12: Yup.string().when('SOCIAL12', {
     is: 'Yes',
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  SOCIAL12: Yup.string().required('Required'),
   SOCIAL13: Yup.string().required('Required'),
-  SOCIAL14: Yup.string().required('Required'),
   SOCIAL15: Yup.string().required('Required'),
 })
 
@@ -110,27 +106,13 @@ const formOptions = {
     { label: 'Yes, please specify', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
-  SOCIAL11: [
+  SOCIAL12: [
     { label: 'Yes, please specify', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
   SOCIAL13: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
-  ],
-  SOCIAL14: [
-    {
-      label: 'Yes, at least 20 minutes each time, for 3 or more days per week',
-      value: 'Yes, at least 20 minutes each time, for 3 or more days per week',
-    },
-    {
-      label: 'Yes, at least 20 minutes each time, for less than 3 days per week',
-      value: 'Yes, at least 20 minutes each time, for less than 3 days per week',
-    },
-    {
-      label: 'No participation of at least 20 minutes each time',
-      value: 'No participation of at least 20 minutes each time',
-    },
   ],
   SOCIAL15: [
     { label: 'Yes', value: 'Yes' },
@@ -148,7 +130,11 @@ export default function HxSocialForm({ changeTab, nextTab }) {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
       const regForm = await getSavedData(patientId, 'registrationForm')
-      setSavedData({ ...initialValues, ...savedData })
+      const formData = { ...initialValues, ...savedData }
+      delete formData.SOCIAL11
+      delete formData.SOCIALShortAns11
+      delete formData.SOCIAL14
+      setSavedData(formData)
       setRegForm(regForm)
     }
     fetchData()
@@ -161,7 +147,7 @@ export default function HxSocialForm({ changeTab, nextTab }) {
       SOCIAL10Years: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Years : '',
       SOCIAL10Packs: values.SOCIAL10 === 'Yes' ? values.SOCIAL10Packs : '',
       SOCIAL10End: values.SOCIAL10 === 'Yes' ? values.SOCIAL10End : '',
-      SOCIALShortAns11: values.SOCIAL11 === 'Yes' ? values.SOCIALShortAns11 : '',
+      SOCIALShortAns12: values.SOCIAL12 === 'Yes' ? values.SOCIALShortAns12 : '',
     }
 
     const response = await submitForm(submissionValues, patientId, formName)
@@ -337,26 +323,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
               sx={{ mb: 3, width: '50%' }}
             />
           </PopupText>
-          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL11}</Typography>
-          <FastField
-            name='SOCIAL11'
-            label='SOCIAL11'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL11}
-            sx={{ mb: 3 }}
-            row
-          />
-          <PopupText qnNo='SOCIAL11' triggerValue='Yes'>
-            <Typography variant='subtitle1' fontWeight='bold'>
-              {hxSocialFormQuestionText.SOCIALShortAns11}
-            </Typography>
-            <FastField
-              name='SOCIALShortAns11'
-              label='SOCIALShortAns11'
-              component={CustomTextField}
-              sx={{ mb: 3, mt: 1 }}
-            />
-          </PopupText>
 
           <Typography>
             For the next question:
@@ -376,7 +342,27 @@ export default function HxSocialForm({ changeTab, nextTab }) {
           <Typography fontWeight='bold' sx={{ mt: 2 }}>
             {hxSocialFormQuestionText.SOCIAL12}
           </Typography>
-          <FastField name='SOCIAL12' label='SOCIAL12' component={CustomTextField} />
+          <FastField
+            name='SOCIAL12'
+            label='SOCIAL12'
+            component={CustomRadioGroup}
+            options={formOptions.SOCIAL12}
+            sx={{ mb: 3 }}
+            row
+          />
+          <PopupText qnNo='SOCIAL12' triggerValue='Yes'>
+            <Typography variant='subtitle1' fontWeight='bold'>
+              {hxSocialFormQuestionText.SOCIALShortAns12}
+            </Typography>
+            <FastField
+              name='SOCIALShortAns12'
+              label='SOCIALShortAns12'
+              component={CustomTextField}
+              fullWidth
+              multiline
+              sx={{ mb: 3, mt: 1 }}
+            />
+          </PopupText>
 
           <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL13}</Typography>
           <FastField
@@ -385,15 +371,6 @@ export default function HxSocialForm({ changeTab, nextTab }) {
             component={CustomRadioGroup}
             options={formOptions.SOCIAL13}
             row
-          />
-
-          <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL14}</Typography>
-          <FastField
-            name='SOCIAL14'
-            label='SOCIAL14'
-            component={CustomRadioGroup}
-            options={formOptions.SOCIAL14}
-            sx={{ mb: 3 }}
           />
 
           <Typography fontWeight='bold'>{hxSocialFormQuestionText.SOCIAL15}</Typography>

@@ -24,8 +24,6 @@ const initialValues = {
   PMHX1: '',
   PMHX5: [],
   PMHX6: '',
-  PMHX8: '',
-  PMHXShortAns8: '',
   PMHX9: '',
   PMHXShortAns9: '',
   PMHXVAX1: '',
@@ -88,10 +86,6 @@ const formOptions = {
       value: 'Others',
     },
   ],
-  PMHX8: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
   PMHX9: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
@@ -119,6 +113,9 @@ export default function HxNssForm({ changeTab, nextTab }) {
       const formData = { ...initialValues, ...res }
       delete formData.PMHX7
       delete formData.PMHXShortAns7
+      // PMHX8 now lives on the Audiometry form as its first question.
+      delete formData.PMHX8
+      delete formData.PMHXShortAns8
       setSavedData(formData)
       setRegForm(regData || {})
       setRegistrationLoaded(true)
@@ -312,30 +309,9 @@ export default function HxNssForm({ changeTab, nextTab }) {
             </>
           )}
 
-          {/* For participants who are 60 and above, show PMHX8 and PMHX9 */}
+          {/* For participants who are 60 and above, show PMHX9 */}
           {regForm.registrationQ4 >= 60 && (
             <>
-              <Typography variant='subtitle1' fontWeight='bold'>
-                {hxNssFormQuestionText.PMHX8}
-              </Typography>
-              <FastField
-                name='PMHX8'
-                component={CustomRadioGroup}
-                label='PMHX8'
-                options={formOptions.PMHX8}
-                row
-              />
-              <PopupText qnNo='PMHX8' triggerValue='Yes'>
-                <FastField
-                  name='PMHXShortAns8'
-                  component={CustomTextField}
-                  label={hxNssFormQuestionText.PMHXShortAns8}
-                  fullWidth
-                  multiline
-                  sx={{ mb: 3 }}
-                />
-              </PopupText>
-
               <Typography variant='subtitle1' fontWeight='bold'>
                 {hxNssFormQuestionText.PMHX9}
               </Typography>

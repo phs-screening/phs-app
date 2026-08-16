@@ -8,7 +8,7 @@ export const hxPhqFormQuestionText = {
   PHQ7: 'PHQ7. Trouble concentrating on things, such as reading the newspaper or watching television',
   PHQ8: 'PHQ8. Moving or speaking so slowly that other people have noticed? Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual',
   PHQ9: 'PHQ9. Thoughts that you would be better off dead or hurting yourself in some way',
-  PHQextra9: '*Do you want to take your life now?*',
+  PHQExtra9: '*Do you want to take your life now?*',
   GAD1: 'GAD-2 (Anxiety): Over the last 2 weeks, how often have you been bothered by the following problems?',
   GAD2: 'GAD2. Not being able to stop or control worrying',
   PHQ11: 'Do you feel like the patient will benefit from counselling?',
