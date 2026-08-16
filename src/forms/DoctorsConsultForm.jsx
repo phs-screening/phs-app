@@ -305,13 +305,13 @@ const DoctorsConsultForm = () => {
               )}
             </li>
             <li>
-              {geriPHQ && geriPHQ.PHQextra9 ? (
+              {geriPHQ && geriPHQ.PHQExtra9 ? (
                 <p>
                   When asked &apos;Do you want to take your life now&apos;, patient said{' '}
-                  <strong>{geriPHQ.PHQextra9}</strong>
+                  <strong>{geriPHQ.PHQExtra9}</strong>
                 </p>
               ) : (
-                <p className='red'>nil PHQextra9 data!</p>
+                <p className='red'>nil PHQExtra9 data!</p>
               )}
             </li>
           </ul>
@@ -488,20 +488,12 @@ const DoctorsConsultForm = () => {
                   <br></br>
                   Years since quitting: <strong>{social.SOCIAL10End}</strong>
                 </p>
-                <p>
-                  Past Smoking: <strong>{social.SOCIAL11}</strong>
-                  <br></br>
-                  <strong>{social.SOCIALShortAns11}</strong>
-                </p>
               </li>
               <li>
                 <p>
                   Alcohol: <strong>{social.SOCIAL12}</strong>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Exercise: <strong>{social.SOCIAL14}</strong>
+                  <br></br>
+                  <strong>{social.SOCIALShortAns12}</strong>
                 </p>
               </li>
             </ul>

@@ -12,4 +12,19 @@ export const geriAmtFormQuestionText = {
   geriAmtQ11: '11) What is your highest education level attained?',
   geriAmtQ12: (age) =>
     `Follow the criteria shown in the image above. 12) Based on the patient's age (${age}), education level and AMT score, is the patient eligible for G-RACE for MMSE?`,
+  geriAmtQ13: '13) Refer to DementiaSG?',
+}
+
+// AMT pass mark depends on schooling: >= 7/10 for Before PSLE (under 6 years of
+// education), >= 9/10 for After PSLE. Anything below is a fail, which is the only
+// case where a DementiaSG referral applies.
+export const AMT_PASS_MARK = {
+  'Before PSLE': 7,
+  'After PSLE': 9,
+}
+
+export const hasFailedAmt = (score, educationLevel) => {
+  const passMark = AMT_PASS_MARK[educationLevel]
+  if (passMark === undefined) return false
+  return score < passMark
 }

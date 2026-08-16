@@ -229,25 +229,16 @@ const DietitiansConsultForm = () => {
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10Packs}</p> : null}
       <p className='underlined'>Years since quitting:</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL10End}</p> : null}
-      <p className='underlined'>
-        Has participant smoked before? For how long and when did they stop?
-      </p>
-      {hxSocial ? <p className='blue'>{hxSocial.SOCIAL11}</p> : null}
-      <p className='underlined'>Participant specifies:</p>
-      {hxSocial ? <p className='blue'>{hxSocial.SOCIALShortAns11}</p> : null}
       <Divider />
       <h2>Alcohol history</h2>
       <p className='underlined'>Alcohol consumption</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL12}</p> : null}
+      <p className='underlined'>Amount consumed:</p>
+      {hxSocial ? <p className='blue'>{hxSocial.SOCIALShortAns12}</p> : null}
       <Divider />
       <h2>Diet</h2>
       <p className='underlined'>Does the participant think they eat a balanced diet?</p>
       {hxSocial ? <p className='blue'>{hxSocial.SOCIAL13}</p> : null}
-      <p className='underlined'>
-        Does the participant exercise in any form of moderate physical activity for at least 150
-        minutes OR intense physical activity at least 75 minutes throuhgout the week?
-      </p>
-      {hxSocial ? <p className='blue'>{hxSocial.SOCIAL14}</p> : null}
     </div>
   )
 

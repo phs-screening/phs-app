@@ -25,27 +25,44 @@ const pointsMap = {
   '3 - Nearly everyday': 3,
 }
 
+// Referral cutoff for the Mental Health station. PHQ-2 (PHQ1 + PHQ2) and GAD-2
+// (GAD1 + GAD2) are each scored out of 6; either reaching 3 refers the patient.
+// Must stay in step with the `mentalHealth` rule in the backend stationEligibility.
+export const REFERRAL_CUTOFF = 3
+
+const sumScore = (values, qns) => qns.reduce((acc, qn) => acc + (pointsMap[values[qn]] || 0), 0)
+
+// PHQ-4 = PHQ-2 (depression) + GAD-2 (anxiety), each scored out of 6 and each
+// evaluated independently: whichever sub-scale reaches the cutoff decides what
+// the patient is referred to the Mental Health station for.
+export const referralReason = (phq2, gad2) => {
+  const depression = phq2 >= REFERRAL_CUTOFF
+  const anxiety = gad2 >= REFERRAL_CUTOFF
+  if (depression && anxiety) return 'depression and anxiety'
+  if (depression) return 'depression'
+  if (anxiety) return 'anxiety'
+  return null
+}
+
 const GetScore = () => {
   const { values } = useFormikContext()
-  const [score, setScore] = useState(0)
-  let condition = ''
-
-  useEffect(() => {
-    const qns = ['PHQ1', 'PHQ2', 'PHQ3', 'PHQ4', 'PHQ5', 'PHQ6', 'PHQ7', 'PHQ8', 'PHQ9']
-    const total = qns.reduce((acc, qn) => acc + (pointsMap[values[qn]] || 0), 0)
-    setScore(total)
-  }, [values])
-
-  if (score >= 20) condition = 'Severe Depression'
-  else if (score >= 15) condition = 'Moderately Severe Depression'
-  else if (score >= 10) condition = 'Moderate Depression'
-  else if (score >= 5) condition = 'Mild Depression'
+  const phq2 = sumScore(values, ['PHQ1', 'PHQ2'])
+  const gad2 = sumScore(values, ['GAD1', 'GAD2'])
+  const reason = referralReason(phq2, gad2)
 
   return (
-    <Typography variant='subtitle1' sx={{ color: score >= 10 ? 'red' : 'blue' }}>
-      Score: {score} / 27{score >= 10 ? ' - Patient fails PHQ, score is 10 and above' : ''}
+    <Typography variant='subtitle1' sx={{ color: reason ? 'red' : 'blue' }}>
+      PHQ-2 score: {phq2} / 6 (depression)
       <br />
-      {score >= 5 ? `Patient is at risk of ${condition}` : ''}
+      GAD-2 score: {gad2} / 6 (anxiety)
+      {reason ? (
+        <>
+          <br />
+          <b>Refer to Mental Health for {reason}.</b>
+        </>
+      ) : (
+        ''
+      )}
     </Typography>
   )
 }
@@ -53,14 +70,8 @@ const GetScore = () => {
 const initialValues = {
   PHQ1: '',
   PHQ2: '',
-  PHQ3: '',
-  PHQ4: '',
-  PHQ5: '',
-  PHQ6: '',
-  PHQ7: '',
-  PHQ8: '',
   PHQ9: '',
-  PHQextra9: '',
+  PHQExtra9: '',
   GAD1: '',
   GAD2: '',
   PHQ10: 0,
@@ -71,66 +82,16 @@ const initialValues = {
 const validationSchema = Yup.object({
   PHQ1: Yup.string().required('Required'),
   PHQ2: Yup.string().required('Required'),
-  PHQ3: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  PHQ4: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  PHQ5: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  PHQ6: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  PHQ7: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  PHQ8: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
-    then: (schema) => schema.required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  // PHQ9 is only asked once PHQ-2 reaches the referral cutoff.
   PHQ9: Yup.string().when(['PHQ1', 'PHQ2'], {
-    is: (phq1, phq2) => {
-      const score = (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0)
-      return score >= 2
-    },
+    is: (phq1, phq2) =>
+      (pointsMap[phq1] || 0) + (pointsMap[phq2] || 0) >= REFERRAL_CUTOFF,
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  PHQextra9: Yup.string().when(['PHQ9'], {
-    is: (phq9) => {
-      return (pointsMap[phq9] || 0) >= 1
-    },
+  // Asked whenever PHQ9 is anything other than "Not at all".
+  PHQExtra9: Yup.string().when(['PHQ9'], {
+    is: (phq9) => (pointsMap[phq9] || 0) >= 1,
     then: (schema) => schema.required('Required'),
     otherwise: (schema) => schema.notRequired(),
   }),
@@ -146,7 +107,7 @@ const formOptions = {
     { label: '2 - More than half the days', value: '2 - More than half the days' },
     { label: '3 - Nearly everyday', value: '3 - Nearly everyday' },
   ],
-  PHQextra9: [
+  PHQExtra9: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ],
@@ -171,18 +132,15 @@ export default function HxPhqForm({ changeTab, nextTab }) {
   }, [patientId])
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    const pointsMap = {
-      '0 - Not at all': 0,
-      '1 - Several days': 1,
-      '2 - More than half the days': 2,
-      '3 - Nearly everyday': 3,
+    // PHQ10 is the running PHQ total. History taking only contributes PHQ1, PHQ2
+    // and PHQ9; PHQ3-PHQ8 are added when the Mental Health station completes them.
+    const submittedValues = {
+      ...values,
+      PHQ10: sumScore(values, ['PHQ1', 'PHQ2', 'PHQ9']),
     }
-    const qns = ['PHQ1', 'PHQ2', 'PHQ3', 'PHQ4', 'PHQ5', 'PHQ6', 'PHQ7', 'PHQ8', 'PHQ9']
-    const score = qns.reduce((acc, qn) => acc + (pointsMap[values[qn]] || 0), 0)
-    values.PHQ10 = score
 
     setLoading(true)
-    const response = await submitForm(values, patientId, formName)
+    const response = await submitForm(submittedValues, patientId, formName)
     setLoading(false)
     setSubmitting(false)
     if (response.result) {
@@ -209,12 +167,12 @@ export default function HxPhqForm({ changeTab, nextTab }) {
         errors,
         ...formikProps
       }) => {
-        const score = (pointsMap[values.PHQ1] || 0) + (pointsMap[values.PHQ2] || 0)
+        const score = sumScore(values, ['PHQ1', 'PHQ2'])
 
-        // Resets PHQ3 to PHQ9 if the score of PHQ1 + PHQ2 is less than 3
+        // Clear PHQ9 and its follow-up if PHQ-2 drops back below the cutoff.
         useEffect(() => {
-          if (score < 2) {
-            ;['PHQ3', 'PHQ4', 'PHQ5', 'PHQ6', 'PHQ7', 'PHQ8', 'PHQ9', 'PHQextra9'].forEach((qn) => {
+          if (score < REFERRAL_CUTOFF) {
+            ;['PHQ9', 'PHQExtra9'].forEach((qn) => {
               setFieldValue(qn, '', false)
               setFieldTouched(qn, false, false)
             })
@@ -248,52 +206,10 @@ export default function HxPhqForm({ changeTab, nextTab }) {
               row
             />
 
-            {/* *PHQ3 - PHQ9 will only be rendered if the score of PHQ1 + PHQ2 >= 3*/}
-            {score >= 2 && (
+            {/* PHQ9 is only asked once PHQ-2 reaches the referral cutoff.
+                PHQ3 - PHQ8 are asked at the Mental Health station. */}
+            {score >= REFERRAL_CUTOFF && (
               <>
-                <FastField
-                  name='PHQ3'
-                  label={hxPhqFormQuestionText.PHQ3}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
-
-                <FastField
-                  name='PHQ4'
-                  label={hxPhqFormQuestionText.PHQ4}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
-                <FastField
-                  name='PHQ5'
-                  label={hxPhqFormQuestionText.PHQ5}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
-                <FastField
-                  name='PHQ6'
-                  label={hxPhqFormQuestionText.PHQ6}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
-                <FastField
-                  name='PHQ7'
-                  label={hxPhqFormQuestionText.PHQ7}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
-                <FastField
-                  name='PHQ8'
-                  label={hxPhqFormQuestionText.PHQ8}
-                  component={CustomRadioGroup}
-                  options={formOptions.DAYRANGE}
-                  row
-                />
                 <FastField
                   name='PHQ9'
                   label={hxPhqFormQuestionText.PHQ9}
@@ -311,14 +227,14 @@ export default function HxPhqForm({ changeTab, nextTab }) {
                   ]}
                 >
                   <FastField
-                    name='PHQextra9'
-                    label={hxPhqFormQuestionText.PHQextra9}
+                    name='PHQExtra9'
+                    label={hxPhqFormQuestionText.PHQExtra9}
                     component={CustomRadioGroup}
-                    options={formOptions.PHQextra9}
+                    options={formOptions.PHQExtra9}
                     row
                   />
                 </PopupText>
-                <PopupText qnNo='PHQextra9' triggerValue='Yes'>
+                <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
                   <Typography variant='subtitle1' sx={{ color: 'red' }}>
                     <b>
                       *Patient requires urgent attention, please escalate to supervisor of the
@@ -328,8 +244,6 @@ export default function HxPhqForm({ changeTab, nextTab }) {
                 </PopupText>
               </>
             )}
-
-            <GetScore />
 
             <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2 }}>
               {hxPhqFormQuestionText.GAD1}
@@ -348,6 +262,9 @@ export default function HxPhqForm({ changeTab, nextTab }) {
               options={formOptions.DAYRANGE}
               row
             />
+
+            {/* Shown after both sub-scales are asked so the referral reflects them. */}
+            <GetScore />
 
             <FastField
               name='PHQ11'

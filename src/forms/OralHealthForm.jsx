@@ -236,8 +236,6 @@ const OralHealthForm = () => {
           <p className='underlined'>Patient&apos;s Oral Health:</p>
           <p className='blue'>{hxOral.ORAL1}</p>
 
-          <p className='underlined'>Does patient wear dentures?:</p>
-          <p className='blue'>{hxOral.ORAL2}</p>
           <p className='underlined'>
             Is patient currently experiencing any pain in their mouth area?:
           </p>
@@ -259,12 +257,6 @@ const OralHealthForm = () => {
           <p className='blue'>{social.SOCIAL10Packs}</p>
           <p className='underlined'>How many years ago did the patient quit?:</p>
           <p className='blue'>{social.SOCIAL10End}</p>
-
-          <p className='underlined'>
-            Has patient smoked before? For how long and when did they stop?:
-          </p>
-          <p className='blue'>{social.SOCIAL11}</p>
-          <p className='blue'>{social.SOCIALShortAns11}</p>
         </>
       ) : (
         <p className='red'>nil social data!</p>

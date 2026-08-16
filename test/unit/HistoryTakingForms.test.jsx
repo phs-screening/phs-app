@@ -151,20 +151,33 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('SOCIAL13B')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('SOCIAL13C')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('SOCIAL16')).not.toBeInTheDocument()
+
+    // SOCIAL11 duplicated the structured SOCIAL10 smoking history; SOCIAL14 was dropped.
+    expect(screen.queryByLabelText('SOCIAL11')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('SOCIALShortAns11')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('SOCIAL14')).not.toBeInTheDocument()
+
+    // SOCIAL12 is now Yes/No, with the amount asked only when the answer is Yes.
+    expect(screen.getByText('Do you consume alcoholic drinks?')).toBeInTheDocument()
+    expect(screen.queryByLabelText('SOCIALShortAns12')).not.toBeInTheDocument()
   })
 
   it('limits ORAL1 to Healthy or Poor and removes ORALShortAns1', () => {
     renderHistoryForm(<HxOralForm changeTab={vi.fn()} nextTab={1} />)
 
+    // The emergency indications and inspection guide are now only shown via the
+    // dentistry_check.png reference image, which duplicated both verbatim.
     expect(
-      screen.getByRole('table', { name: 'Oral health quick inspection guide' }),
-    ).toBeInTheDocument()
-    expect(screen.getByText('Emergency Indications')).toBeInTheDocument()
-    expect(screen.getByText('OMS (Oral and Maxillofacial Surgery)')).toBeInTheDocument()
+      screen.queryByRole('table', { name: 'Oral health quick inspection guide' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText('Emergency Indications')).not.toBeInTheDocument()
+    expect(screen.queryByText('OMS (Oral and Maxillofacial Surgery)')).not.toBeInTheDocument()
+    expect(screen.getByAltText('Reference list of dental concerns')).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: 'Healthy' })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: 'Poor' })).toBeInTheDocument()
     expect(screen.queryByRole('radio', { name: 'Moderate' })).not.toBeInTheDocument()
     expect(screen.queryByLabelText('ORALShortAns1')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('ORAL2')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('ORAL4')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('ORAL5')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('ORALShortAns5')).not.toBeInTheDocument()
@@ -179,14 +192,31 @@ describe('history-taking forms', () => {
     expect(screen.queryByLabelText('FAMILY2')).not.toBeInTheDocument()
   })
 
-  it('uses the 1–8 August 2026 menstrual-period window for GYNAE16', () => {
+  it('asks GYNAE17 first and only reveals the rest once the answer is Yes', async () => {
+    const user = userEvent.setup()
     renderHistoryForm(<HxGynaeForm changeTab={vi.fn()} nextTab={1} />)
 
+    expect(screen.getByText('Indicated interest for HPV Test under SCS?')).toBeInTheDocument()
     expect(
-      screen.getByText(
+      screen.queryByText(
+        /Was your last menstrual period within the window where the first day falls between 1 Aug 2026 and 8 Aug 2026?/,
+      ),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getAllByRole('radio', { name: 'Yes' })[0])
+
+    expect(
+      await screen.findByText(
         /Was your last menstrual period within the window where the first day falls between 1 Aug 2026 and 8 Aug 2026?/,
       ),
     ).toBeInTheDocument()
+  })
+
+  it('drops the Not answered and Not Applicable options from the gynae form', () => {
+    renderHistoryForm(<HxGynaeForm changeTab={vi.fn()} nextTab={1} />)
+
+    expect(screen.queryByRole('radio', { name: 'Not answered' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('radio', { name: 'Not Applicable' })).not.toBeInTheDocument()
   })
 
   it.each([

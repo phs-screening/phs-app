@@ -22,10 +22,8 @@ export const hxSocialFormQuestionText = {
   SOCIAL10Years: 'Please specify the no. of years smoked:',
   SOCIAL10Packs: 'How many packs per day? (1 pack = 20 cigarettes)',
   SOCIAL10End: 'If you have quit smoking, how many years have you quit for?',
-  SOCIAL11: 'Have you smoked before? For how long and when did you stop?',
-  SOCIALShortAns11: 'Please specify:',
   SOCIAL12: 'Do you consume alcoholic drinks?',
+  SOCIALShortAns12: 'Please specify how much:',
   SOCIAL13: 'Do you think you eat a balanced diet?',
-  SOCIAL14: 'Do you exercise or participate in physical activity?',
   SOCIAL15: 'Do you feel the patient would benefit from a Dietitian consult?',
 }
