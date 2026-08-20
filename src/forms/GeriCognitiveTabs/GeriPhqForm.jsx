@@ -5,6 +5,10 @@ import * as Yup from 'yup'
 import { FormContext } from '../../api/utils.js'
 import { getSavedData } from '../../services/patientData'
 import { submitForm } from '../../api/formHelpers.jsx'
+import {
+  showFormSubmitError,
+  showFormSubmitSuccess,
+} from 'src/components/form-components/FormSubmitStatusHost'
 import '../fieldPadding.css'
 import PopupText from 'src/utils/popupText'
 
@@ -50,9 +54,17 @@ const GetScore = () => {
   )
 }
 
+const pointsMap = {
+  '0 - Not at all': 0,
+  '1 - Several days': 1,
+  '2 - More than half the days': 2,
+  '3 - Nearly everyday': 3,
+}
+
 export default function GeriPhqForm({ changeTab, nextTab }) {
   const { patientId } = useContext(FormContext)
   const [savedData, setSavedData] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const initialValues = {
     PHQ1: '',
@@ -69,19 +81,16 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
     PHQShortAns11: '',
   }
 
+  // PHQ9 is the only field entered here. Everything else is History Taking data
+  // shown for reference, and PHQ3-PHQ8 are no longer collected at all — requiring
+  // them would make this form permanently unsubmittable.
   const validationSchema = Yup.object({
-    PHQ1: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ2: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ3: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ4: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ5: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ6: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ7: Yup.string().oneOf(dayRange).required('Required'),
-    PHQ8: Yup.string().oneOf(dayRange).required('Required'),
     PHQ9: Yup.string().oneOf(dayRange).required('Required'),
-    PHQExtra9: Yup.string().oneOf(yesNo).optional(),
-    PHQ11: Yup.string().oneOf(yesNo).required('Required'),
-    PHQShortAns11: Yup.string().optional(),
+    PHQExtra9: Yup.string().when('PHQ9', {
+      is: (phq9) => Boolean(phq9) && phq9 !== '0 - Not at all',
+      then: (schema) => schema.oneOf(yesNo).required('Required'),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   })
 
   useEffect(() => {
@@ -103,18 +112,43 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
     return <CircularProgress />
   }
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    // Only PHQ9 and its follow-up are entered here; the rest is reference data
+    // from History Taking and must not be written back.
+    const submittedValues = {
+      PHQ9: values.PHQ9,
+      PHQExtra9: values.PHQ9 === '0 - Not at all' ? '' : values.PHQExtra9,
+      // Keep the running PHQ total in step with the answer just recorded.
+      PHQ10:
+        (pointsMap[values.PHQ1] || 0) +
+        (pointsMap[values.PHQ2] || 0) +
+        (pointsMap[values.PHQ9] || 0),
+    }
+
+    setLoading(true)
+    const response = await submitForm(submittedValues, patientId, formName)
+    setLoading(false)
+    setSubmitting(false)
+    if (response.result) {
+      await showFormSubmitSuccess()
+      if (changeTab) changeTab(null, nextTab)
+    } else {
+      showFormSubmitError(`Unsuccessful. ${response.error}`)
+    }
+  }
+
   return (
     <Paper elevation={2}>
       <Formik
         initialValues={savedData}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={() => {}}
+        onSubmit={handleSubmit}
       >
-        {(handleSubmit, errors, submitCount) => (
+        {({ isSubmitting, errors, submitCount }) => (
           <Form className='fieldPadding'>
             <Typography variant='h6' color='error' fontWeight='bold'>
-              **This form is duplicate of the HX PHQ form (read-only)**
+              **PHQ1-PHQ8 are from History Taking. Please complete PHQ9 below.**
             </Typography>
             <Typography variant='subtitle1' fontWeight='bold'>
               Over the last 2 weeks, how often have you been bothered by any of the following
@@ -127,47 +161,55 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
               </Typography>
             )}
 
+            {/* PHQ1-PHQ8 are recorded at History Taking and shown here for reference only. */}
             <DisabledWrapper>
-              {['PHQ1', 'PHQ2', 'PHQ3', 'PHQ4', 'PHQ5', 'PHQ6', 'PHQ7', 'PHQ8', 'PHQ9'].map(
-                (name, i) => (
-                  <FastField
-                    key={name}
-                    name={name}
-                    label={`${i + 1}. ${geriPhqFormQuestionText[name]}`}
-                    component={CustomRadioGroup}
-                    options={dayRange.map((val) => ({ label: val, value: val }))}
-                    row
-                  />
-                ),
-              )}
-
-              <br />
-
-              <PopupText
-                qnNo='PHQ9'
-                triggerValue={[
-                  '1 - Several days',
-                  '2 - More than half the days',
-                  '3 - Nearly everyday',
-                ]}
-              >
+              {['PHQ1', 'PHQ2', 'PHQ3', 'PHQ4', 'PHQ5', 'PHQ6', 'PHQ7', 'PHQ8'].map((name, i) => (
                 <FastField
-                  name='PHQExtra9'
-                  label={geriPhqFormQuestionText.PHQExtra9}
+                  key={name}
+                  name={name}
+                  label={`${i + 1}. ${geriPhqFormQuestionText[name]}`}
                   component={CustomRadioGroup}
-                  options={yesNo.map((v) => ({ label: v, value: v }))}
+                  options={dayRange.map((val) => ({ label: val, value: val }))}
                   row
                 />
-              </PopupText>
-              <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
-                <Typography variant='subtitle1' sx={{ color: 'red' }}>
-                  <b>
-                    *Patient requires urgent attention, please escalate to supervisor of the station
-                    to bring to Doctor&apos;s station*
-                  </b>
-                </Typography>
-              </PopupText>
+              ))}
+            </DisabledWrapper>
 
+            {/* PHQ9 is entered at this station. */}
+            <Typography variant='subtitle1' fontWeight='bold' sx={{ mt: 2 }}>
+              Please complete the following:
+            </Typography>
+            <FastField
+              name='PHQ9'
+              label={`9. ${geriPhqFormQuestionText.PHQ9}`}
+              component={CustomRadioGroup}
+              options={dayRange.map((val) => ({ label: val, value: val }))}
+              row
+            />
+
+            {/* Follow-up to PHQ9, so it is entered here too. */}
+            <PopupText
+              qnNo='PHQ9'
+              triggerValue={['1 - Several days', '2 - More than half the days', '3 - Nearly everyday']}
+            >
+              <FastField
+                name='PHQExtra9'
+                label={geriPhqFormQuestionText.PHQExtra9}
+                component={CustomRadioGroup}
+                options={yesNo.map((v) => ({ label: v, value: v }))}
+                row
+              />
+            </PopupText>
+            <PopupText qnNo='PHQExtra9' triggerValue='Yes'>
+              <Typography variant='subtitle1' sx={{ color: 'red' }}>
+                <b>
+                  *Patient requires urgent attention, please escalate to supervisor of the station to
+                  bring to Doctor&apos;s station*
+                </b>
+              </Typography>
+            </PopupText>
+
+            <DisabledWrapper>
               <Typography variant='subtitle1' fontWeight='bold'>
                 Score:
               </Typography>
@@ -190,10 +232,21 @@ export default function GeriPhqForm({ changeTab, nextTab }) {
               />
               <ErrorMessage name='PHQShortAns11' component='div' style={{ color: 'red' }} />
 
-              <Typography variant='body2' color='text.secondary'>
-                This form is read-only. Please edit the HX PHQ form instead.
-              </Typography>
             </DisabledWrapper>
+
+            <Typography variant='body2' color='text.secondary' sx={{ mt: 2 }}>
+              Greyed-out answers were recorded at History Taking and cannot be edited here.
+            </Typography>
+
+            <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+              {loading || isSubmitting ? (
+                <CircularProgress />
+              ) : (
+                <Button type='submit' variant='contained' color='primary'>
+                  Submit
+                </Button>
+              )}
+            </div>
           </Form>
         )}
       </Formik>
