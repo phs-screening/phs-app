@@ -14,7 +14,7 @@ export const ophthalFormQuestionText = {
   OphthalQ11: (
     <>
       Please <u>refer to Doctor&apos;s Consult</u> if pinhole visual acuity is{' '}
-      <u>worse than 6/12</u>
+      <u>worse than 6/12</u> and <u>does not correct with pinhole</u>
     </>
   ),
   OphthalQ12: '1. Does the participant wish to apply for the Senior Mobility Fund?',

@@ -1,7 +1,6 @@
 import { Box, Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 
 import * as Yup from 'yup'
@@ -28,8 +27,6 @@ import {
 
 const formName = 'geriAmtForm'
 
-const AMT_QUESTION_NAMES = Array.from({ length: 10 }, (_, i) => `geriAmtQ${i + 1}`)
-
 const validationSchema = Yup.object({
   ...Object.fromEntries(
     Array.from({ length: 10 }, (_, i) => [
@@ -40,19 +37,7 @@ const validationSchema = Yup.object({
     ]),
   ),
   geriAmtQ11: Yup.string().oneOf(['Before PSLE', 'After PSLE']).required('Required'),
-  geriAmtQ12: Yup.string()
-    .oneOf(['Yes (Eligible for G-RACE)', 'No (Not eligible for G-RACE)'])
-    .required('Required'),
-  // Only asked when the AMT is failed, so only required then.
-  geriAmtQ13: Yup.string().when(['geriAmtQ11', ...AMT_QUESTION_NAMES], {
-    is: (...answers) => {
-      const educationLevel = answers[0]
-      const score = answers.slice(1).filter((v) => v === 'Yes (Answered correctly)').length
-      return hasFailedAmt(score, educationLevel)
-    },
-    then: (schema) => schema.oneOf(['Yes', 'No']).required('Required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  geriAmtQ12: Yup.string().oneOf(['Yes', 'No']).required('Required'),
 })
 
 const formOptions = {
@@ -64,13 +49,9 @@ const formOptions = {
     { label: 'Before PSLE', value: 'Before PSLE' },
     { label: 'After PSLE', value: 'After PSLE' },
   ],
-  geriAmtQ13: [
+  geriAmtQ12: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
-  ],
-  geriAmtQ12: [
-    { label: 'Yes (Eligible for G-RACE)', value: 'Yes (Eligible for G-RACE)' },
-    { label: 'No (Not eligible for G-RACE)', value: 'No (Not eligible for G-RACE)' },
   ],
 }
 
@@ -97,8 +78,7 @@ const initialValues = {
   geriAmtQ9: '',
   geriAmtQ10: '',
   geriAmtQ11: '',
-  geriAmtQ12: '', // Yes/No field
-  geriAmtQ13: '', // DementiaSG referral; only asked when the AMT is failed
+  geriAmtQ12: '', // DSG referral decision, Yes/No
 }
 
 const GeriAmtForm = ({ changeTab, nextTab }) => {
@@ -107,7 +87,6 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
   const [regForm, setRegForm] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loadingSidePanel, setLoadingSidePanel] = useState(true)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,23 +105,16 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
       initialValues={savedData}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        // A DementiaSG referral only stands while the AMT is failed; if the score
-        // or education level later changes to a pass, drop the stale answer.
-        const submittedValues = hasFailedAmt(getScore(values), values.geriAmtQ11)
-          ? values
-          : { ...values, geriAmtQ13: '' }
-
         setLoading(true)
-        const response = await submitForm(submittedValues, patientId, formName)
+        const response = await submitForm(values, patientId, formName)
         setLoading(false)
+        setSubmitting(false)
         if (response.result) {
           await showFormSubmitSuccess()
-          // If patient is eligible for G-RACE, navigate to next tab. If not, navigate to PatientTimeline.
-          if (values.geriAmtQ12 === 'Yes (Eligible for G-RACE)') {
-            changeTab(null, nextTab)
-          } else if (values.geriAmtQ12 === 'No (Not eligible for G-RACE)') {
-            navigate('/app/dashboard')
-          }
+          // geriAmtQ12 now records the DSG referral rather than G-RACE eligibility,
+          // so it no longer decides where to go next. Continue to the G-RACE tab,
+          // which stays reachable for whoever needs it.
+          changeTab(null, nextTab)
         } else {
           showFormSubmitError(`Unsuccessful. ${response.error}`)
         }
@@ -234,19 +206,8 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
                 src='../../../images/geri-amt/g-race-criteria.png'
                 alt='Eligibility for g-race based on education level'
               />
-              <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
-                {geriAmtFormQuestionText.geriAmtQ12(regForm?.registrationQ4)}
-              </Typography>
-              <Field
-                name='geriAmtQ12'
-                label={geriAmtFormQuestionText.geriAmtQ12}
-                component={CustomRadioGroup}
-                options={formOptions.geriAmtQ12}
-                row
-              />
-
-              {/* DementiaSG referral is only offered when the AMT is failed. The
-                  pass mark depends on schooling: >= 7/10 Before PSLE, >= 9/10 After. */}
+              {/* Pass mark depends on schooling: >= 7/10 Before PSLE, >= 9/10 After.
+                  Shown as guidance for the referral decision below. */}
               {(() => {
                 const score = getScore(formikProps.values)
                 const educationLevel = formikProps.values.geriAmtQ11
@@ -255,33 +216,23 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
 
                 const failed = hasFailedAmt(score, educationLevel)
                 return (
-                  <>
-                    <Typography sx={{ fontWeight: 'bold', mt: 3, color: failed ? 'red' : 'green' }}>
-                      AMT {failed ? 'FAILED' : 'PASSED'}: scored {score}/10, pass mark is {passMark}
-                      /10 for {educationLevel}.
-                    </Typography>
-                    {failed ? (
-                      <>
-                        <Typography sx={{ fontWeight: 'bold', mt: 2 }}>
-                          {geriAmtFormQuestionText.geriAmtQ13}
-                        </Typography>
-                        <Field
-                          name='geriAmtQ13'
-                          label='geriAmtQ13'
-                          component={CustomRadioGroup}
-                          options={formOptions.geriAmtQ13}
-                          row
-                        />
-                      </>
-                    ) : (
-                      <Typography sx={{ mt: 1 }}>
-                        No DementiaSG referral &mdash; only participants who fail the AMT are
-                        referred.
-                      </Typography>
-                    )}
-                  </>
+                  <Typography sx={{ fontWeight: 'bold', mt: 3, color: failed ? 'red' : 'green' }}>
+                    AMT {failed ? 'FAILED' : 'PASSED'}: scored {score}/10, pass mark is {passMark}/10
+                    for {educationLevel}.
+                  </Typography>
                 )
               })()}
+
+              <Typography sx={{ fontWeight: 'bold', mt: 3 }}>
+                {geriAmtFormQuestionText.geriAmtQ12}
+              </Typography>
+              <Field
+                name='geriAmtQ12'
+                label='geriAmtQ12'
+                component={CustomRadioGroup}
+                options={formOptions.geriAmtQ12}
+                row
+              />
             </div>
 
             <ErrorNotification

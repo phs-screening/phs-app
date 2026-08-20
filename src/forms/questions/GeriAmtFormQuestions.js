@@ -10,9 +10,8 @@ export const geriAmtFormQuestionText = {
   geriAmtQ9: 'Count backwards from 20 to 1. 请您从二十开始，倒数到一。',
   geriAmtQ10: 'Recall memory phase 请您把刚才我要您记住的地址重复一遍。',
   geriAmtQ11: '11) What is your highest education level attained?',
-  geriAmtQ12: (age) =>
-    `Follow the criteria shown in the image above. 12) Based on the patient's age (${age}), education level and AMT score, is the patient eligible for G-RACE for MMSE?`,
-  geriAmtQ13: '13) Refer to DementiaSG?',
+  geriAmtQ12:
+    "12) Based on the patient's years of education and AMT score, do you need to refer to DSG?",
 }
 
 // AMT pass mark depends on schooling: >= 7/10 for Before PSLE (under 6 years of
