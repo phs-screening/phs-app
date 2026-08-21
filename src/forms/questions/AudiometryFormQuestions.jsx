@@ -14,4 +14,5 @@ export const audiometryFormQuestionText = {
   AudiometryQ12:
     'Please document significant findings from audiometry test and recommended course of action for participant:',
   AudiometryQ13: 'Assessment Result',
+  AudiometryQ14: 'Advised to schedule consult with Polyclinic?',
 }

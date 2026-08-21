@@ -28,6 +28,7 @@ const formOptions = {
   PMHX8: YesNo,
   AudiometryQ9: YesNo,
   AudiometryQ11: YesNo,
+  AudiometryQ14: YesNo,
   AudiometryQ13: [
     {
       value:
@@ -52,6 +53,7 @@ const validationSchema = Yup.object().shape({
   AudiometryQ11: Yup.string().required(),
   AudiometryQ12: Yup.string().required(),
   AudiometryQ13: Yup.string().required(),
+  AudiometryQ14: Yup.string().required(),
 })
 
 const formName = 'audiometryForm'
@@ -99,6 +101,7 @@ const AudiometryForm = () => {
     AudiometryQ11: saveData.AudiometryQ11 || '',
     AudiometryQ12: saveData.AudiometryQ12 || '',
     AudiometryQ13: saveData.AudiometryQ13 || '',
+    AudiometryQ14: saveData.AudiometryQ14 || '',
   }
 
   return (
@@ -182,6 +185,15 @@ const AudiometryForm = () => {
                       label='AudiometryQ11'
                       component={CustomRadioGroup}
                       options={formOptions.AudiometryQ11}
+                      row
+                    />
+
+                    <h3>{audiometryFormQuestionText.AudiometryQ14}</h3>
+                    <FastField
+                      name='AudiometryQ14'
+                      label='AudiometryQ14'
+                      component={CustomRadioGroup}
+                      options={formOptions.AudiometryQ14}
                       row
                     />
 

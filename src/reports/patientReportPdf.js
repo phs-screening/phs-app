@@ -4,6 +4,7 @@ import { autoTable } from 'jspdf-autotable'
 import { bloodpressureQR, bmiQR } from 'src/icons/QRCodes'
 import updatedLogo from 'src/icons/UpdatedIcon'
 import { parseFromLangKey, setLang } from '../api/langutil'
+import { getMentalHealthReportAnswer } from './mentalHealthReportAnswers'
 
 function calculateBmiFallback(heightInCm, weightInKg) {
   const height = heightInCm / 100
@@ -457,7 +458,14 @@ export function addFollowUp(
   // - Contact us: 1800-KIDNEYS / 1800-5436397`
 
   // MENTAL
-  k = followUpWith(doc, k, trip, indent, mental.SAMH2 == 'Yes', parseFromLangKey('fw_samh'))
+  k = followUpWith(
+    doc,
+    k,
+    trip,
+    indent,
+    getMentalHealthReportAnswer(mental, 2) == 'Yes',
+    parseFromLangKey('fw_samh'),
+  )
 
   // GRACE
   k = followUpWith(

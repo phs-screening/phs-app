@@ -12,6 +12,7 @@ import {
 import { FormContext } from '../api/utils.js'
 import allForms from './forms.json'
 import CustomRadioGroup from '../components/form-components/CustomRadioGroup.jsx'
+import CustomTextField from '../components/form-components/CustomTextField.jsx'
 import ErrorNotification from '../components/form-components/ErrorNotification.jsx'
 import { getSavedData } from '../services/patientData'
 import './fieldPadding.css'
@@ -22,17 +23,27 @@ const formName = 'podiatryForm'
 
 const initialValues = {
   podiatryQ1: '',
+  podiatryQ2: '',
+  podiatryQ3: '',
+  podiatryQ4: '',
 }
 
 const validationSchema = Yup.object({
   podiatryQ1: Yup.string().required('Required'),
+  podiatryQ2: Yup.string().required('Required'),
+  podiatryQ3: Yup.string().required('Required'),
+  podiatryQ4: Yup.string().trim().required('Required'),
 })
 
+const yesNo = [
+  { label: 'Yes', value: 'Yes' },
+  { label: 'No', value: 'No' },
+]
+
 const formOptions = {
-  podiatryQ1: [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ],
+  podiatryQ1: yesNo,
+  podiatryQ2: yesNo,
+  podiatryQ3: yesNo,
 }
 
 const PodiatryForm = () => {
@@ -84,6 +95,15 @@ const PodiatryForm = () => {
                   <Typography variant='h4'>
                     <strong>Podiatry</strong>
                   </Typography>
+                  <Typography fontWeight='bold'>{podiatryFormQuestionText.podiatryQ2}</Typography>
+                  <FastField
+                    name='podiatryQ2'
+                    label='podiatryQ2'
+                    component={CustomRadioGroup}
+                    options={formOptions.podiatryQ2}
+                    row
+                  />
+
                   <Typography fontWeight='bold'>{podiatryFormQuestionText.podiatryQ1}</Typography>
                   <FastField
                     name='podiatryQ1'
@@ -91,6 +111,25 @@ const PodiatryForm = () => {
                     component={CustomRadioGroup}
                     options={formOptions.podiatryQ1}
                     row
+                  />
+
+                  <Typography fontWeight='bold'>{podiatryFormQuestionText.podiatryQ3}</Typography>
+                  <FastField
+                    name='podiatryQ3'
+                    label='podiatryQ3'
+                    component={CustomRadioGroup}
+                    options={formOptions.podiatryQ3}
+                    row
+                  />
+
+                  <Typography fontWeight='bold'>{podiatryFormQuestionText.podiatryQ4}</Typography>
+                  <FastField
+                    name='podiatryQ4'
+                    label='podiatryQ4'
+                    component={CustomTextField}
+                    fullWidth
+                    multiline
+                    rows={3}
                   />
 
                   <ErrorNotification

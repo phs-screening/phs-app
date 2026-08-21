@@ -37,9 +37,9 @@ const formName = 'mentalHealthForm'
 
 const createValidationSchema = (showGadFollowUp) =>
   Yup.object({
-    SAMH1: Yup.string().required(),
-    SAMH2: Yup.string().required(),
-    SAMH3: Yup.string().required(),
+    NTUC1: Yup.string().required(),
+    NTUC2: Yup.string().required(),
+    NTUC3: Yup.string().required(),
     ...Object.fromEntries(
       gadQuestionIds.map((questionId) => [
         questionId,
@@ -54,9 +54,20 @@ const emptyValues = {
   GAD5: '',
   GAD6: '',
   GAD7: '',
-  SAMH1: '',
-  SAMH2: '',
-  SAMH3: '',
+  NTUC1: '',
+  NTUC2: '',
+  NTUC3: '',
+}
+
+const normalizeSavedData = (savedData = {}) => {
+  const { SAMH1, SAMH2, SAMH3, ...currentData } = savedData
+  return {
+    ...emptyValues,
+    ...currentData,
+    NTUC1: currentData.NTUC1 ?? SAMH1 ?? '',
+    NTUC2: currentData.NTUC2 ?? SAMH2 ?? '',
+    NTUC3: currentData.NTUC3 ?? SAMH3 ?? '',
+  }
 }
 
 const MentalHealthForm = () => {
@@ -73,7 +84,7 @@ const MentalHealthForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       const savedData = await getSavedData(patientId, formName)
-      setInitialValues({ ...emptyValues, ...(savedData || {}) })
+      setInitialValues(normalizeSavedData(savedData || {}))
       const regData = getSavedData(patientId, allForms.registrationForm)
       const phqData = getSavedData(patientId, allForms.geriPhqForm)
 
@@ -140,28 +151,28 @@ const MentalHealthForm = () => {
                       </>
                     )}
 
-                    <h3>{mentalHealthFormQuestionText.SAMH1}</h3>
+                    <h3>{mentalHealthFormQuestionText.NTUC1}</h3>
                     <FastField
-                      name='SAMH1'
-                      label='SAMH1'
+                      name='NTUC1'
+                      label='NTUC1'
                       component={CustomRadioGroup}
                       options={yesNo}
                       row
                     />
 
-                    <h3>{mentalHealthFormQuestionText.SAMH2}</h3>
+                    <h3>{mentalHealthFormQuestionText.NTUC2}</h3>
                     <FastField
-                      name='SAMH2'
-                      label='SAMH2'
+                      name='NTUC2'
+                      label='NTUC2'
                       component={CustomRadioGroup}
                       options={yesNo}
                       row
                     />
 
-                    <h3>{mentalHealthFormQuestionText.SAMH3}</h3>
+                    <h3>{mentalHealthFormQuestionText.NTUC3}</h3>
                     <FastField
-                      name='SAMH3'
-                      label='SAMH3'
+                      name='NTUC3'
+                      label='NTUC3'
                       component={CustomRadioGroup}
                       options={yesNo}
                       row
