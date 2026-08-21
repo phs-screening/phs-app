@@ -54,9 +54,10 @@ describe('station form updates', () => {
     expect(screen.queryByText('HPV Test Eligibility')).not.toBeInTheDocument()
   })
 
-  it('names NTUC Health in the SAMH2 question', () => {
-    expect(mentalHealthFormQuestionText.SAMH2).toBe(
+  it('uses the NTUC2 question code for NTUC Health follow-up', () => {
+    expect(mentalHealthFormQuestionText.NTUC2).toBe(
       'Patient has signed up for follow-up with NTUC Health?',
     )
+    expect(mentalHealthFormQuestionText).not.toHaveProperty('SAMH2')
   })
 })

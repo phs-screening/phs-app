@@ -1,6 +1,7 @@
 import { Box, Button, CircularProgress, Paper, Typography, Grid, Divider } from '@mui/material'
 import { FastField, Field, Form, Formik } from 'formik'
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 
 import * as Yup from 'yup'
@@ -81,8 +82,9 @@ const initialValues = {
   geriAmtQ12: '', // DSG referral decision, Yes/No
 }
 
-const GeriAmtForm = ({ changeTab, nextTab }) => {
+const GeriAmtForm = () => {
   const { patientId } = useContext(FormContext)
+  const navigate = useNavigate()
   const [savedData, setSavedData] = useState(initialValues)
   const [regForm, setRegForm] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -111,10 +113,7 @@ const GeriAmtForm = ({ changeTab, nextTab }) => {
         setSubmitting(false)
         if (response.result) {
           await showFormSubmitSuccess()
-          // geriAmtQ12 now records the DSG referral rather than G-RACE eligibility,
-          // so it no longer decides where to go next. Continue to the G-RACE tab,
-          // which stays reachable for whoever needs it.
-          changeTab(null, nextTab)
+          navigate('/app/dashboard')
         } else {
           showFormSubmitError(`Unsuccessful. ${response.error}`)
         }

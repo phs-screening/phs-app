@@ -2,6 +2,7 @@ import { bloodpressureQR, bmiQR, tempQR } from 'src/icons/QRCodes'
 import updatedLogo from 'src/icons/UpdatedIcon'
 import { normalizeLangName, parseFromLangKey, setLangUpdated } from '../api/langutil'
 import pdfMake from './pdfMake'
+import { getMentalHealthReportAnswer } from './mentalHealthReportAnswers'
 
 const FONT_FILES = {
   tamilRegular: {
@@ -576,7 +577,7 @@ export function followUpSection(
   }
 
   let mentalString = null
-  if (mental.SAMH2 == 'Yes') {
+  if (getMentalHealthReportAnswer(mental, 2) == 'Yes') {
     mentalString = `${parseFromLangKey('fw_samh')}\n`
   }
 
