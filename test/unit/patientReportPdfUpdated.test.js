@@ -243,3 +243,65 @@ describe('otherScreeningModularitiesSection — Ophthal remarks table', () => {
     expect(findRemarksTable(section)).toBeUndefined()
   })
 })
+
+describe('Ophthal: blank readings show ___ and remarks explain them', () => {
+  const REG = { registrationQ4: 65 }
+
+  const acuityRows = (section) => {
+    const block = section.find((item) => item?.columns?.[0]?.table)
+    return block.columns[0].table.body
+  }
+  const remarksRows = (section) => {
+    const table = section.find((item) => item?.table?.body?.[0]?.[0]?.text === 'Remarks')
+    return table ? table.table.body.slice(1) : null
+  }
+
+  it('renders 6/___ for every blank reading while showing both remarks', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      REG,
+      {
+        OphthalQ4: '',
+        OphthalQ5: '',
+        OphthalQ6: '',
+        OphthalQ7: '',
+        OphthalQ4Remark: 'Right eye: unable to test',
+        OphthalQ5Remark: 'Left eye: patient declined',
+      },
+      {},
+    )
+
+    const [, withoutPinhole, withPinhole] = acuityRows(section)
+    expect(withoutPinhole.slice(1)).toEqual(['6/___', '6/___'])
+    expect(withPinhole.slice(1)).toEqual(['6/___', '6/___'])
+
+    expect(remarksRows(section).map(([label, remark]) => [label.text, remark.text])).toEqual([
+      ['Right Eye', 'Right eye: unable to test'],
+      ['Left Eye', 'Left eye: patient declined'],
+    ])
+  })
+
+  it('mixes recorded and blank readings correctly', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      REG,
+      { OphthalQ4: '12', OphthalQ5: '', OphthalQ5Remark: 'Left eye: prosthetic' },
+      {},
+    )
+
+    const [, withoutPinhole] = acuityRows(section)
+    expect(withoutPinhole.slice(1)).toEqual(['6/12', '6/___'])
+
+    // Only the eye that has a remark is listed.
+    expect(remarksRows(section).map(([label]) => label.text)).toEqual(['Left Eye'])
+  })
+
+  it('still shows ___ when a reading is blank and no remark was given', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(REG, { OphthalQ4: '', OphthalQ5: '6' }, {})
+
+    const [, withoutPinhole] = acuityRows(section)
+    expect(withoutPinhole.slice(1)).toEqual(['6/___', '6/6'])
+    expect(remarksRows(section)).toBeNull()
+  })
+})
