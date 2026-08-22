@@ -60,7 +60,9 @@ export const ophthalValidationSchema = Yup.object().shape({
     otherwise: (schema) => schema.notRequired(),
   }),
   OphthalQ4: Yup.string().required(),
+  OphthalQ4Remark: Yup.string().notRequired(),
   OphthalQ5: Yup.string().required(),
+  OphthalQ5Remark: Yup.string().notRequired(),
   OphthalQ6: Yup.string().notRequired(),
   OphthalQ7: Yup.string().notRequired(),
   OphthalQ8: Yup.string().required(),
@@ -90,7 +92,9 @@ const OphthalForm = () => {
     OphthalQ2: saveData.OphthalQ2 || '',
     OphthalQ3: saveData.OphthalQ3 || '',
     OphthalQ4: saveData.OphthalQ4 || '',
+    OphthalQ4Remark: saveData.OphthalQ4Remark || '',
     OphthalQ5: saveData.OphthalQ5 || '',
+    OphthalQ5Remark: saveData.OphthalQ5Remark || '',
     OphthalQ6: saveData.OphthalQ6 || '',
     OphthalQ7: saveData.OphthalQ7 || '',
     OphthalQ8: saveData.OphthalQ8 || '',
@@ -184,7 +188,16 @@ const OphthalForm = () => {
                       label='Ophthal Q4'
                       component={CustomTextField}
                       type='number'
+                      placeholder='___'
                       fullWidth
+                    />
+                    <h3>{ophthalFormQuestionText.OphthalQ4Remark}</h3>
+                    <FastField
+                      name='OphthalQ4Remark'
+                      label='Ophthal Q4 Remark'
+                      component={CustomTextField}
+                      fullWidth
+                      multiline
                     />
                     <h3>{ophthalFormQuestionText.OphthalQ5}</h3>
                     <FastField
@@ -192,7 +205,16 @@ const OphthalForm = () => {
                       label='Ophthal Q5'
                       component={CustomTextField}
                       type='number'
+                      placeholder='___'
                       fullWidth
+                    />
+                    <h3>{ophthalFormQuestionText.OphthalQ5Remark}</h3>
+                    <FastField
+                      name='OphthalQ5Remark'
+                      label='Ophthal Q5 Remark'
+                      component={CustomTextField}
+                      fullWidth
+                      multiline
                     />
                     <h3>{ophthalFormQuestionText.OphthalQ6}</h3>
                     <FastField
@@ -200,6 +222,7 @@ const OphthalForm = () => {
                       label='Ophthal Q6'
                       component={CustomTextField}
                       type='number'
+                      placeholder='___'
                       fullWidth
                     />
                     <h3>{ophthalFormQuestionText.OphthalQ7}</h3>
@@ -208,6 +231,7 @@ const OphthalForm = () => {
                       label='Ophthal Q7'
                       component={CustomTextField}
                       type='number'
+                      placeholder='___'
                       fullWidth
                     />
                     <h3>{ophthalFormQuestionText.OphthalQ8}</h3>

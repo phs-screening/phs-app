@@ -162,6 +162,7 @@ export async function generate_pdf_updated(
   content.push(...temperatureSection(triage))
   content.push(...bloodPressureSection(triage))
   content.push(...bmiSection(triage.triageQ10, triage.triageQ11, triage.triageQ12))
+  content.push({ text: '', pageBreak: 'before' })
   content.push(...otherScreeningModularitiesSection(reg, geriVision, podiatry))
   content.push(...vaccineSection(vaccine))
   content.push(...sleepApneaSection(hxOsa, reg, triage, triage.triageQ12))
@@ -437,6 +438,41 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry) {
             ],
           },
           { text: '', margin: [0, 5] },
+          // Remarks table. Rows with a blank remark are dropped, and the whole
+          // table is omitted when neither eye has one.
+          ...(() => {
+            const remarkRows = [
+              ['Right Eye', eye.OphthalQ4Remark],
+              ['Left Eye', eye.OphthalQ5Remark],
+            ].filter(([, remark]) => typeof remark === 'string' && remark.trim() !== '')
+
+            if (remarkRows.length === 0) return []
+
+            return [
+              {
+                table: {
+                  widths: ['auto', '*'],
+                  body: [
+                    [
+                      { text: 'Remarks', style: 'tableHeader', bold: true },
+                      { text: '', style: 'tableHeader' },
+                    ],
+                    ...remarkRows.map(([eyeLabel, remark]) => [
+                      { text: eyeLabel, bold: true },
+                      { text: remark },
+                    ]),
+                  ],
+                },
+                layout: {
+                  hLineWidth: () => 0.5,
+                  vLineWidth: () => 0.5,
+                  hLineColor: () => 'black',
+                  vLineColor: () => 'black',
+                },
+                margin: [0, 0, 0, 5],
+              },
+            ]
+          })(),
           { text: `${parseFromLangKey('other_eye_error')} ${eye.OphthalQ10 ?? NIL}\n`, style: 'normal' },
         ]
       : []),

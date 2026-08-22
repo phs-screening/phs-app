@@ -21,6 +21,7 @@ import zhCn from '../../src/api/lang/zh_cn.json'
 import { setLangUpdated } from '../../src/api/langutil'
 import {
   memoSection,
+  otherScreeningModularitiesSection,
   sleepApneaSection,
   vaccineSection,
 } from '../../src/reports/patientReportPdfUpdated'
@@ -181,5 +182,64 @@ describe('patientReportPdfUpdated sleepApneaSection', () => {
     const tableRows = getSleepApneaSection()[3].table.body.slice(1)
 
     expect(tableRows.map(([scoreRange]) => scoreRange)).toEqual(['0 - 2', '3 - 5', '6 - 8'])
+  })
+})
+
+describe('otherScreeningModularitiesSection — Ophthal remarks table', () => {
+  const REG = { registrationQ4: 65 } // the eye section only renders for 60+
+
+  const findRemarksTable = (section) =>
+    section.find((item) => item?.table?.body?.[0]?.[0]?.text === 'Remarks')
+
+  it('omits the table entirely when neither remark is filled in', () => {
+    setLangUpdated('english')
+    expect(findRemarksTable(otherScreeningModularitiesSection(REG, { OphthalQ4: '12' }, {}))).toBeUndefined()
+  })
+
+  it('omits the table when remarks are blank or whitespace only', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      REG,
+      { OphthalQ4Remark: '', OphthalQ5Remark: '   ' },
+      {},
+    )
+    expect(findRemarksTable(section)).toBeUndefined()
+  })
+
+  it('renders only the filled row when one remark is present', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      REG,
+      { OphthalQ4Remark: 'Unable to test, patient uncooperative', OphthalQ5Remark: '' },
+      {},
+    )
+    const rows = findRemarksTable(section).table.body.slice(1)
+    expect(rows).toHaveLength(1)
+    expect(rows[0][0].text).toBe('Right Eye')
+    expect(rows[0][1].text).toBe('Unable to test, patient uncooperative')
+  })
+
+  it('renders both rows when both remarks are present', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      REG,
+      { OphthalQ4Remark: 'right note', OphthalQ5Remark: 'left note' },
+      {},
+    )
+    const rows = findRemarksTable(section).table.body.slice(1)
+    expect(rows.map(([label, remark]) => [label.text, remark.text])).toEqual([
+      ['Right Eye', 'right note'],
+      ['Left Eye', 'left note'],
+    ])
+  })
+
+  it('does not render the eye section at all under 60', () => {
+    setLangUpdated('english')
+    const section = otherScreeningModularitiesSection(
+      { registrationQ4: 45 },
+      { OphthalQ4Remark: 'ignored' },
+      {},
+    )
+    expect(findRemarksTable(section)).toBeUndefined()
   })
 })
