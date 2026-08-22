@@ -141,7 +141,31 @@ function eligibilitySection(stations, pmhx = {}) {
     gericog: {
       number: '12',
       label: 'Geriatric Screening',
-      details: { text: '>= 60 years old', fontSize: 9 },
+      details: {
+        stack: [
+          { text: '>= 60 years old', fontSize: 9 },
+          ...[
+            'OT Questionnaire (HOMEFAST)',
+            'PT Questionnaire (PAL Qx)',
+            'Physical Tests (SPPB)',
+          ].map((label) => ({
+            columns: [
+              { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
+              { text: label, fontSize: 9 },
+            ],
+          })),
+          { text: 'Recommendation:', fontSize: 9, bold: true, margin: [0, 2, 0, 0] },
+          {
+            columns: [
+              { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
+              { text: 'PT consult', fontSize: 9, width: 'auto', margin: [0, 0, 12, 0] },
+              { image: uncheckedBox, width: 10, margin: [-2, 0, 5, 0] },
+              { text: 'OT consult', fontSize: 9, width: 'auto' },
+              { text: '' },
+            ],
+          },
+        ],
+      },
     },
     ophthal: { number: '12b', label: 'Visual Acuity' },
     hpv: { number: '13', label: 'HPV On-Site Testing' },
