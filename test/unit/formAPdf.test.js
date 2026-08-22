@@ -134,8 +134,24 @@ describe('generateFormAPdf', () => {
       'Long Term Follow Up',
     ])
     expect(stationRows.every(([, modality]) => modality.fontSize === 10)).toBe(true)
-    expect(JSON.stringify(eligibilityTable)).not.toMatch(/Cognitive|Mobility|PT Consult|OT Consult/)
+    // Geriatrics is a single "Geriatric Screening" row — the Cognitive/Mobility
+    // split is not surfaced on Form A.
+    expect(JSON.stringify(eligibilityTable)).not.toMatch(/Cognitive|Mobility/)
     expect(stationRows[0][4].text).toBe('Mammobus is located at the Community Centre (CC) carpark.')
+
+    // Geriatric Screening lists the three mobility assessments, then a
+    // Recommendation line with PT/OT consult tick boxes. All boxes print unticked.
+    const geriDetails = stationRows.find(([, modality]) => modality.text === 'Geriatric Screening')[4]
+    expect(geriDetails.stack[0].text).toBe('>= 60 years old')
+    expect(geriDetails.stack.slice(1, 4).map((row) => row.columns[1].text)).toEqual([
+      'OT Questionnaire (HOMEFAST)',
+      'PT Questionnaire (PAL Qx)',
+      'Physical Tests (SPPB)',
+    ])
+    expect(geriDetails.stack[4].text).toBe('Recommendation:')
+    const recommendation = geriDetails.stack[5].columns
+    expect(recommendation.map((c) => c.text).filter(Boolean)).toEqual(['PT consult', 'OT consult'])
+    expect(JSON.stringify(geriDetails).match(/unchecked-box/g)).toHaveLength(5)
 
     const publicAssistance = docDefinition.content.find(
       (section) => section.columns?.[0]?.text === 'Public Assistance Card:',
