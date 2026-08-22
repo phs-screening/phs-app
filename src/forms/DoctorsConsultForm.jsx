@@ -12,6 +12,7 @@ import {
 } from 'src/components/form-components/FormSubmitStatusHost'
 import { FormContext } from '../api/utils.js'
 import { getSavedData } from '../services/patientData'
+import { formatVisualAcuity } from '../utils/visualAcuity'
 import { addToDocPdfQueue } from '../services/printQueues'
 import './fieldPadding.css'
 import allForms from './forms.json'
@@ -351,13 +352,21 @@ const DoctorsConsultForm = () => {
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>Without Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ4}</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ5}</td>
+                    <td style={{ border: '1px solid black' }}>
+                      {formatVisualAcuity(ophthal.OphthalQ4)}
+                    </td>
+                    <td style={{ border: '1px solid black' }}>
+                      {formatVisualAcuity(ophthal.OphthalQ5)}
+                    </td>
                   </tr>
                   <tr style={{ border: '1px solid black' }}>
                     <td style={{ border: '1px solid black' }}>With Pinhole Occluder</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ6}</td>
-                    <td style={{ border: '1px solid black' }}>6/{ophthal.OphthalQ7}</td>
+                    <td style={{ border: '1px solid black' }}>
+                      {formatVisualAcuity(ophthal.OphthalQ6)}
+                    </td>
+                    <td style={{ border: '1px solid black' }}>
+                      {formatVisualAcuity(ophthal.OphthalQ7)}
+                    </td>
                   </tr>
                 </table>
               </li>

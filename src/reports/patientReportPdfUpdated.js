@@ -3,6 +3,7 @@ import updatedLogo from 'src/icons/UpdatedIcon'
 import { normalizeLangName, parseFromLangKey, setLangUpdated } from '../api/langutil'
 import pdfMake from './pdfMake'
 import { getMentalHealthReportAnswer } from './mentalHealthReportAnswers'
+import { formatVisualAcuity } from '../utils/visualAcuity'
 
 const FONT_FILES = {
   tamilRegular: {
@@ -412,13 +413,13 @@ export function otherScreeningModularitiesSection(reg, eye, podiatry) {
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_t_row'),
-                      `6/${eye.OphthalQ4 ?? PLACEHOLDER3}`,
-                      `6/${eye.OphthalQ5 ?? PLACEHOLDER3}`,
+                      formatVisualAcuity(eye.OphthalQ4),
+                      formatVisualAcuity(eye.OphthalQ5),
                     ],
                     [
                       parseFromLangKey('other_eye_tbl_b_row'),
-                      `6/${eye.OphthalQ6 ?? PLACEHOLDER3}`,
-                      `6/${eye.OphthalQ7 ?? PLACEHOLDER3}`,
+                      formatVisualAcuity(eye.OphthalQ6),
+                      formatVisualAcuity(eye.OphthalQ7),
                     ],
                   ],
                 },
