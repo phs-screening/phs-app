@@ -23,14 +23,21 @@ const initialValues = {
   hxHcsrShortAnsQ7: '',
 }
 
+const MAYBE_M4M5 = 'Maybe(Refer to M4/M5)'
+
+// "Yes" refers to the Doctor's Station via the backend eligibility rule; "Maybe"
+// defers that decision to the M4/M5 Review tab instead. Both ask for a reason.
+const REASON_REQUIRED_ANSWERS = ['Yes', MAYBE_M4M5]
+
 const validationSchema = Yup.object({
-  hxHcsrQ7: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+  hxHcsrQ7: Yup.string().oneOf(['Yes', 'No', MAYBE_M4M5]).required('Required'),
 })
 
 const formOptions = {
   hxHcsrQ7: [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
+    { label: MAYBE_M4M5, value: MAYBE_M4M5 },
   ],
 }
 
@@ -60,7 +67,9 @@ export default function HxHcsrReviewForm({ changeTab, nextTab }) {
   const handleSubmit = async (values, { setSubmitting }) => {
     const submittedValues = {
       ...values,
-      hxHcsrShortAnsQ7: values.hxHcsrQ7 === 'Yes' ? values.hxHcsrShortAnsQ7 : '',
+      hxHcsrShortAnsQ7: REASON_REQUIRED_ANSWERS.includes(values.hxHcsrQ7)
+        ? values.hxHcsrShortAnsQ7
+        : '',
     }
     setLoading(true)
     const response = await submitForm(submittedValues, patientId, formName)
@@ -98,7 +107,7 @@ export default function HxHcsrReviewForm({ changeTab, nextTab }) {
               row
             />
 
-            <PopupText qnNo='hxHcsrQ7' triggerValue='Yes'>
+            <PopupText qnNo='hxHcsrQ7' triggerValue={REASON_REQUIRED_ANSWERS}>
               <Typography variant='subtitle1' fontWeight='bold'>
                 {hxHcsrFormQuestionText.hxHcsrShortAnsQ7}
               </Typography>
