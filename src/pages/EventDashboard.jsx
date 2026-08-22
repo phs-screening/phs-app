@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 import { RefreshCw } from 'react-feather'
 import { getEventDashboardSummary, getIncompletePatients } from '../api/eventDashboardApi'
+import { getPrintedFormAPdfQueue } from '../services/printQueues'
 
 const LIMIT = 25
 
@@ -95,19 +96,47 @@ const EventDashboard = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const loadDashboard = async ({ nextPage = page, nextQuery = activeQuery } = {}) => {
+  const loadDashboard = async ({
+    nextPage = page,
+    nextQuery = activeQuery,
+    refreshMetrics = true,
+  } = {}) => {
     setLoading(true)
     setError('')
 
     try {
-      const [summaryResponse, patientsResponse] = await Promise.all([
-        getEventDashboardSummary(),
-        getIncompletePatients({ q: nextQuery, page: nextPage, limit: LIMIT }),
-      ])
+      const patientsRequest = getIncompletePatients({
+        q: nextQuery,
+        page: nextPage,
+        limit: LIMIT,
+      })
 
-      setSummary(summaryResponse.data)
-      setPatients(patientsResponse.data || [])
-      setPagination(patientsResponse.pagination || { page: nextPage, totalPages: 0, total: 0 })
+      if (refreshMetrics) {
+        const [summaryResponse, patientsResponse, printedFormAResponse] = await Promise.all([
+          getEventDashboardSummary(),
+          patientsRequest,
+          getPrintedFormAPdfQueue({ page: 1, limit: 1, includePagination: true }),
+        ])
+        const completedPatients = printedFormAResponse.pagination?.total || 0
+        const registeredPatients = summaryResponse.data?.registeredPatients || 0
+
+        setSummary({
+          ...summaryResponse.data,
+          completedPatients,
+          screeningPatients: Math.max(registeredPatients - completedPatients, 0),
+        })
+        setPatients(patientsResponse.data || [])
+        setPagination(
+          patientsResponse.pagination || { page: nextPage, totalPages: 0, total: 0 },
+        )
+      } else {
+        const patientsResponse = await patientsRequest
+
+        setPatients(patientsResponse.data || [])
+        setPagination(
+          patientsResponse.pagination || { page: nextPage, totalPages: 0, total: 0 },
+        )
+      }
     } catch (e) {
       setError(e.message || 'Unable to load event dashboard.')
     } finally {
@@ -124,12 +153,12 @@ const EventDashboard = () => {
     const nextQuery = query.trim()
     setActiveQuery(nextQuery)
     setPage(1)
-    loadDashboard({ nextPage: 1, nextQuery })
+    loadDashboard({ nextPage: 1, nextQuery, refreshMetrics: false })
   }
 
   const handlePageChange = (event, nextPage) => {
     setPage(nextPage)
-    loadDashboard({ nextPage })
+    loadDashboard({ nextPage, refreshMetrics: false })
   }
 
   const refreshedAt = summary?.refreshedAt
@@ -184,7 +213,10 @@ const EventDashboard = () => {
                 <MetricCard label='Still Screening' value={summary?.screeningPatients ?? '-'} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <MetricCard label='Completed' value={summary?.completedPatients ?? '-'} />
+                <MetricCard
+                  label='Completed (Form A Printed)'
+                  value={summary?.completedPatients ?? '-'}
+                />
               </Grid>
             </Grid>
 
