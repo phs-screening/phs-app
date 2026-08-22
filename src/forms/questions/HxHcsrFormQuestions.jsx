@@ -15,7 +15,7 @@ export const hxHcsrFormQuestionText = {
   hxHcsrQ5:
     'If you are 60 and above, do you currently use hearing aids/have been detected to require hearing aids?',
   hxHcsrQ7:
-    'Please indicate if you feel that HEALTH CONCERNS require closer scrutiny by doctors later or if participant strongly insists.',
+    'From the history taken, do you feel that HEALTH CONCERNS require closer scrutiny by doctors later or if participant strongly insists.',
   hxHcsrShortAnsQ7: 'Please specify:',
   hxhcsrQ8: (
     <>
