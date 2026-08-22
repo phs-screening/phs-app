@@ -59,9 +59,11 @@ export const ophthalValidationSchema = Yup.object().shape({
     then: (schema) => schema.required('Please specify the eye condition or surgery'),
     otherwise: (schema) => schema.notRequired(),
   }),
-  OphthalQ4: Yup.string().required(),
+  // All four acuity readings are optional; an unrecorded one renders as 6/___
+  // on the report, and the remark fields explain why it was not taken.
+  OphthalQ4: Yup.string().notRequired(),
   OphthalQ4Remark: Yup.string().notRequired(),
-  OphthalQ5: Yup.string().required(),
+  OphthalQ5: Yup.string().notRequired(),
   OphthalQ5Remark: Yup.string().notRequired(),
   OphthalQ6: Yup.string().notRequired(),
   OphthalQ7: Yup.string().notRequired(),
