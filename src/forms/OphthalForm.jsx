@@ -51,7 +51,7 @@ const formOptions = {
   OphthalQ13: YesNo,
 }
 
-const validationSchema = Yup.object().shape({
+export const ophthalValidationSchema = Yup.object().shape({
   OphthalQ1: Yup.string().required(),
   OphthalQ2: Yup.string().required(),
   OphthalQ3: Yup.string().when('OphthalQ1', {
@@ -61,8 +61,8 @@ const validationSchema = Yup.object().shape({
   }),
   OphthalQ4: Yup.string().required(),
   OphthalQ5: Yup.string().required(),
-  OphthalQ6: Yup.string().required(),
-  OphthalQ7: Yup.string().required(),
+  OphthalQ6: Yup.string().notRequired(),
+  OphthalQ7: Yup.string().notRequired(),
   OphthalQ8: Yup.string().required(),
   OphthalQ9: Yup.string().when('OphthalQ8', {
     is: 'Yes',
@@ -119,7 +119,7 @@ const OphthalForm = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={ophthalValidationSchema}
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true)
