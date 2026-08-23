@@ -24,7 +24,7 @@ const initialValues = {
   GYNAE13: '',
   GYNAE14: '',
   GYNAE15: '',
-  GYNAE16: '',
+  GYNAE16: 'Yes',
   GYNAE17: '',
   GYNAE18: '',
 }
@@ -44,7 +44,6 @@ const validationSchema = Yup.object({
   GYNAE13: requiredWhenInterested(),
   GYNAE14: requiredWhenInterested(),
   GYNAE15: requiredWhenInterested(),
-  GYNAE16: requiredWhenInterested(),
   GYNAE18: requiredWhenInterested(),
 })
 
@@ -73,7 +72,7 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSavedData(patientId, formName)
-      setSavedData({ ...initialValues, ...res })
+      setSavedData({ ...initialValues, ...res, GYNAE16: 'Yes' })
     }
 
     fetchData()
@@ -84,14 +83,14 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
     // so a changed answer never leaves stale values behind.
     const submittedValues =
       values.GYNAE17 === 'Yes'
-        ? values
+        ? { ...values, GYNAE16: 'Yes' }
         : {
             ...values,
             GYNAE12: '',
             GYNAE13: '',
             GYNAE14: '',
             GYNAE15: '',
-            GYNAE16: '',
+            GYNAE16: 'Yes',
             GYNAE18: '',
           }
 
@@ -175,17 +174,6 @@ export default function HxGynaeForm({ changeTab, nextTab }) {
             <FastField
               name='GYNAE15'
               label='GYNAE15'
-              component={CustomRadioGroup}
-              options={formOptions.YESNO}
-              row
-            />
-
-            <Typography variant='subtitle1' fontWeight='bold'>
-              {hxGynaeFormQuestionText.GYNAE16}
-            </Typography>
-            <FastField
-              name='GYNAE16'
-              label='GYNAE16'
               component={CustomRadioGroup}
               options={formOptions.YESNO}
               row
