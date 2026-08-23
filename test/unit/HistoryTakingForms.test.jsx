@@ -207,9 +207,61 @@ describe('history-taking forms', () => {
 
     expect(
       await screen.findByText(
-        /Was your last menstrual period within the window where the first day falls between 1 Aug 2026 and 8 Aug 2026?/,
+        'Is patient indicated for on-site testing? Please circle On-Site Testing on Form A as well',
       ),
     ).toBeInTheDocument()
+    expect(screen.queryByLabelText('GYNAE16')).not.toBeInTheDocument()
+  })
+
+  it('defaults removed GYNAE16 to Yes even when legacy saved data contains No', async () => {
+    const user = userEvent.setup()
+    getSavedData.mockResolvedValue({
+      GYNAE12: 'Never before',
+      GYNAE13: 'Never before',
+      GYNAE14: 'Yes',
+      GYNAE15: 'No',
+      GYNAE16: 'No',
+      GYNAE17: 'Yes',
+      GYNAE18: 'Yes',
+    })
+    renderHistoryForm(<HxGynaeForm changeTab={vi.fn()} nextTab={1} />)
+
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('radio', { name: 'Never before' }).every((radio) => radio.checked),
+      ).toBe(true),
+    )
+    expect(screen.queryByLabelText('GYNAE16')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
+
+    await waitFor(() =>
+      expect(submitForm).toHaveBeenCalledWith(
+        expect.objectContaining({ GYNAE16: 'Yes' }),
+        7,
+        'gynaeForm',
+      ),
+    )
+  })
+
+  it('submits the GYNAE16 compatibility value when HPV testing is declined', async () => {
+    const user = userEvent.setup()
+    renderHistoryForm(<HxGynaeForm changeTab={vi.fn()} nextTab={1} />)
+
+    await user.click(screen.getByRole('radio', { name: 'No' }))
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
+
+    await waitFor(() =>
+      expect(submitForm).toHaveBeenCalledWith(
+        expect.objectContaining({
+          GYNAE12: '',
+          GYNAE16: 'Yes',
+          GYNAE18: '',
+        }),
+        7,
+        'gynaeForm',
+      ),
+    )
   })
 
   it('drops the Not answered and Not Applicable options from the gynae form', () => {
